@@ -54,8 +54,9 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         vm.MeetComps = e.response;
         if (vm.MeetComps.length == 0)
             kendo.alert('There is no meet comp in the file to upload!');
-        else
-            vm.SpreadSheetRowsCount = vm.MeetComps.length;
+        else {
+            vm.SpreadSheetRowsCount = vm.MeetComps.length + 1;//With header      
+        }
     }
 
     vm.onError = function (e) {
@@ -147,9 +148,8 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
 
     vm.ValidateSheet = function () {
         if (vm.MeetCompValidation != null) {
-            vm.MeetComps = vm.MeetCompValidation.ValidatedMeetComps;           
-            //vm.dataSourceSpreadSheet.read();
-            vm.DeleteSpreadsheetAutoHeader();
+            vm.MeetComps = vm.MeetCompValidation.ValidatedMeetComps;
+            vm.LoadDataToSpreadsheet();
 
             if (vm.MeetCompValidation.HasInvalidMeetComp) {
                 var sheet = vm.spreadsheet.activeSheet();
@@ -186,6 +186,15 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
                     from: "IS_VALID_BENCH(B1,F1)",
                     allowNulls: true,
                     messageTemplate: "Comp Bench should be greater than zero for server product!"
+                });
+
+                sheet.range("D1:D" + vm.SpreadSheetRowsCount).validation({
+                    dataType: "custom",
+                    from: "REGEXP_MATCH_MONEY(D1)",
+                    allowNulls: true,
+                    type: "reject",
+                    titleTemplate: "Invalid Price",
+                    messageTemplate: "Format of the price is invalid. This should be greater than zero."
                 });
 
                 var maxItemsSize = 5;
@@ -242,82 +251,36 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         if (widget === vm.spreadsheet) {
             var sheets = vm.spreadsheet.sheets();
             vm.spreadsheet.activeSheet(sheets[0]);
-            var sheet = vm.spreadsheet.activeSheet();
-            sheet.setDataSource(vm.dataSourceSpreadSheet, ["CUST_NM", "HIER_VAL_NM", "MEET_COMP_PRD", "MEET_COMP_PRC", "IA_BNCH", "COMP_BNCH"]);
+            var sheet = vm.spreadsheet.activeSheet();            
             sheet.columnWidth(0, 160);
             sheet.columnWidth(1, 160);
             sheet.columnWidth(2, 160);
             for (var i = 6; i < 50; i++)
                 sheet.hideColumn(i);
-            vm.DeleteSpreadsheetAutoHeader();
+
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[6]).find("div").html("Meet Comp Price");
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
+            $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
+
+            vm.LoadDataToSpreadsheet();
         }
     });
 
-    vm.DeleteSpreadsheetAutoHeader = function () {
-        var sheet = vm.spreadsheet.activeSheet();
-
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[6]).find("div").html("Meet Comp Price");
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
-        $($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
-
-        for (i = 0; i < vm.MeetComps.length; i++) {
-            var row = i + 1;
-            sheet.range("A" + row).value(vm.MeetComps[i].CUST_NM);
-            sheet.range("B" + row).value(vm.MeetComps[i].HIER_VAL_NM);
-            sheet.range("C" + row).value(vm.MeetComps[i].MEET_COMP_PRD);
-            sheet.range("D" + row).value(vm.MeetComps[i].MEET_COMP_PRC);
-            sheet.range("E" + row).value(vm.MeetComps[i].IA_BNCH);
-            sheet.range("F" + row).value(vm.MeetComps[i].COMP_BNCH);
+    vm.LoadDataToSpreadsheet = function () {
+        if (vm.MeetComps.length > 0) {    
+            var sheet = vm.spreadsheet.activeSheet();
+            sheet.setDataSource(vm.MeetComps, ["CUST_NM", "HIER_VAL_NM", "MEET_COMP_PRD", "MEET_COMP_PRC", "IA_BNCH", "COMP_BNCH"]);
+            //Auto header will be created as 1st row. This is not actual data
+            sheet.deleteRow(0);  
         }
-        // Not sure why the below has issues on row deletion, but replaced everything below with above lines and tested...
-        //sheet.deleteRow(0);
-        //sheet.range("A1:C" + vm.SpreadSheetRowsCount).color("black");
-        //sheet.range("A1:C" + vm.SpreadSheetRowsCount).textAlign("left");
-        //sheet.range("D1:F" + vm.SpreadSheetRowsCount).textAlign("right");
-        //sheet.range("D1:D" + vm.SpreadSheetRowsCount).format("$#,##0.00");
-        //sheet.range("D1:D" + vm.SpreadSheetRowsCount).validation({
-        //    dataType: "custom",
-        //    from: "REGEXP_MATCH_MONEY(D1)",
-        //    allowNulls: true,
-        //    type: "reject",
-        //    titleTemplate: "Invalid Price",
-        //    messageTemplate: "Format of the price is invalid. This should be greater than zero."
-        //});
-        //sheet.range("E1:F" + vm.SpreadSheetRowsCount).format("#");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[0]).find("div").html("Customer");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Product Name (Only Processor, Lvl 4)");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[4]).find("div").html("Meet Comp Sku");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[6]).find("div").html("Meet Comp Price");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[8]).find("div").html("IA Bench");
-        //$($("#spreadsheetMeetComp .k-spreadsheet-column-header").find("div")[10]).find("div").html("Comp Bench");
-
-        //var i;
-        //if (vm.MeetComps.length > vm.SpreadSheetRowsCount - 2) {
-        //    for (i = vm.SpreadSheetRowsCount - 2; i <= vm.MeetComps.length; i++) {
-        //        sheet.range("A" + i).value(vm.MeetComps[i - 1].CUST_NM);
-        //        sheet.range("B" + i).value(vm.MeetComps[i - 1].HIER_VAL_NM);
-        //        sheet.range("C" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRD);
-        //        sheet.range("D" + i).value(vm.MeetComps[i - 1].MEET_COMP_PRC);
-        //        sheet.range("E" + i).value(vm.MeetComps[i - 1].IA_BNCH);
-        //        sheet.range("F" + i).value(vm.MeetComps[i - 1].COMP_BNCH);
-        //    }
-        //}
     }
 
     kendo.spreadsheet.defineFunction("REGEXP_MATCH_MONEY", function (str) {
         return $.isNumeric(str) && parseFloat(str) > 0;
     }).args([["str", "string"]]);
-
-    vm.dataSourceSpreadSheet = new kendo.data.DataSource({
-        transport: {
-            read: function (e) {
-                e.success(vm.MeetComps);
-            }
-        }
-    });
 
     vm.CloseWindow = function () {
         $uibModalInstance.close();
@@ -337,4 +300,4 @@ function BulkUploadMeetCompModalController($rootScope, $location, meetCompServic
         }
         return retString;
     }
-}
+}  

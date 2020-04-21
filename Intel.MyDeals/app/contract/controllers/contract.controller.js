@@ -2459,6 +2459,21 @@
             return result;
         }
 
+        function validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
+            if (Object.keys(dictCustDivision).length == 1 && custDiv.indexOf("/") !== -1
+                && baseCustDiv.split("/").length == custDiv.split("/").length) {
+                var divs = custDiv.split("/");
+                for (var z = 0; z < divs.length; z++) {
+                    if (baseCustDiv.indexOf(divs[z]) == -1) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else { return false }
+        }
+
+
         // **** SAVE CONTRACT Methods ****
         //
         $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
@@ -2597,7 +2612,14 @@
                                 if (isHybridPS) {
                                     dictRebateType[sData[s]["REBATE_TYPE"]] = s;
                                     dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
-                                    dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                    var isCustDivValid = validateCustomerDivision(dictCustDivision, sData[0]["CUST_ACCNT_DIV"], sData[s]["CUST_ACCNT_DIV"]);
+                                    if (isCustDivValid)
+                                    {
+                                        dictCustDivision[sData[0]["CUST_ACCNT_DIV"]] = s;
+                                    }
+                                    else {
+                                        dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                    }
                                     dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
                                     if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
                                         dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
