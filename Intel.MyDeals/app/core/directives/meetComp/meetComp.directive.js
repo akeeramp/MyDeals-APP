@@ -1182,23 +1182,43 @@
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG == "Y")) {
                                 }
                                 else {
-                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                        .Where(function (x) {
-                                            return (
-                                                x.GRP_PRD_SID == options.model.GRP_PRD_SID && 
-                                                x.GRP == options.model.GRP
-                                            );
-                                        })
-                                        .GroupBy(function (x) {
-                                            return (x.COMP_SKU);
-                                        })
-                                        .Select(function (x) {
-                                            return {
-                                                'COMP_SKU': x.source[0].COMP_SKU,
-                                                'key': x.source[0].RW_NM,
-                                                'RW_NM': x.source[0].RW_NM
-                                            };
-                                        }).ToArray();
+                                    if (options.model.GRP != "PRD") {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (
+                                                    x.GRP_PRD_SID == options.model.GRP_PRD_SID
+                                                );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_SKU);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_SKU': x.source[0].COMP_SKU,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    } else {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (
+                                                    x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.GRP == options.model.GRP
+                                                );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_SKU);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_SKU': x.source[0].COMP_SKU,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    }
+                                    
 
                                     $('<input id="compSKUEditor" validationMessage="* field is required" placeholder="Enter Comp SKU.."' +
                                         ' name="' + options.field + '" />')
@@ -1313,23 +1333,41 @@
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.COMP_SKU.length !== 0)) {
                                 }
                                 else {
-
-                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                        .Where(function (x) {
-                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
-                                                x.COMP_PRC != null &&
-                                                x.GRP == options.model.GRP);
-                                        })
-                                        .GroupBy(function (x) {
-                                            return (x.COMP_PRC);
-                                        })
-                                        .Select(function (x) {
-                                            return {
-                                                'COMP_PRC': x.source[0].COMP_PRC,
-                                                'key': x.source[0].RW_NM,
-                                                'RW_NM': x.source[0].RW_NM
-                                            };
-                                        }).ToArray();
+                                    if (options.model.GRP != "PRD") {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.COMP_PRC != null );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_PRC);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_PRC': x.source[0].COMP_PRC,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    } else {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.COMP_PRC != null &&
+                                                    x.GRP == options.model.GRP);
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_PRC);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_PRC': x.source[0].COMP_PRC,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    }
+                                    
 
                                     $('<input id="COMP_PRC' + options.field + '"  data-bind="value:' + options.field + '"/>')
                                         .appendTo(container)
