@@ -3267,7 +3267,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.child.setRowIdStyle(data);
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
-                $timeout(function () {
+                //$timeout(function () {
                     $scope.$root.pc.add($scope.pcCookUI.stop());
 
                     if (saveOnContinue) {
@@ -3284,7 +3284,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         kendo.alert("All of the products looks good.");
                         root.setBusy("", "");
                     }
-                }, 20);
+                //}, 20);
             }
             else {
                 root.setBusy("", "");
@@ -3436,7 +3436,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.child.setRowIdStyle(data);
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
-                        $timeout(function () {
+                        //$timeout(function () {
                             if (saveOnContinue) {
                                 if (transformResult.AbortProgration) {
                                     return true;
@@ -3454,7 +3454,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 root.setBusy("", "");
                             }
-                        }, 20);
+                        //}, 20);
                     } else {
                         $timeout(function () {
                             validateSingleRowProducts(data[currentRow - 1], currentRow);
