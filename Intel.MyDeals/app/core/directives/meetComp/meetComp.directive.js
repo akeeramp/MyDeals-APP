@@ -32,7 +32,7 @@
                     COMP_SKU: 7,
                     COMP_PRC: 7,
                     IA_BNCH: 9,
-                    COMP_BNCH: 9,
+                    COMP_BNCH: 10,
                     COMP_OVRRD_FLG: 13,
                     COMP_OVRRD_RSN: 13
                 };
@@ -996,6 +996,14 @@
                                 ]
                             };
 
+                            //Setting DICT for Confrim box
+                            $scope.msgDescDict = {
+                                'COMP_SKU_NEW': 'You have entered a new Meet Comp SKU and price. Please make sure to store the Meet Comp SKU and price source in My Deals or in a legal approved repository as required by the MCA guidelines. Also, work with your Division Approver so they can update the necessary documentation.',
+                                'COMP_SKU_UPD': 'You have overwritten the pre-populated Meet Comp Price. Please make sure to store the Meet Comp price source in My Deals or in a legal approved repository as required by the MCA guidelines.',
+                                'IA_BNCH': 'You have overwritten the pre-populated IA Bench. Please make sure to store the IA Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.',
+                                'COMP_BNCH': 'You have overwritten the pre-populated Comp Bench. Please make sure to store the Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.'
+                            };
+
                             function editorIABench(container, options) {
                                 // Remove the role conditions once security configured
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG === "Y"
@@ -1008,64 +1016,75 @@
                                             decimals: 2,
                                             min: 0.00,
                                             change: function (e) {
-                                                if (options.model.IA_BNCH > 0) {
-                                                    $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
-                                                    addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "IA_BNCH");
-                                                    var isUpdated = false;
-                                                    if (options.model.GRP == "PRD") {
-                                                        var selData = [];
-                                                        if (options.model.IS_SELECTED) {
-                                                            selData = getProductLineData();
-                                                        }
-                                                        if (selData.length > 0) {
-                                                            isUpdated = true;
-                                                            for (var cntData = 0; selData.length > cntData; cntData++) {
-                                                                var temp_grp_prd = selData[cntData].GRP_PRD_SID;
+                                                if ($scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH != options.model.IA_BNCH) {
+                                                    kendo.confirm($scope.msgDescDict['IA_BNCH'])
+                                                        .done(function () {
+                                                            if (options.model.IA_BNCH > 0) {
+                                                                $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                                addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "IA_BNCH");
+                                                                var isUpdated = false;
+                                                                if (options.model.GRP == "PRD") {
+                                                                    var selData = [];
+                                                                    if (options.model.IS_SELECTED) {
+                                                                        selData = getProductLineData();
+                                                                    }
+                                                                    if (selData.length > 0) {
+                                                                        isUpdated = true;
+                                                                        for (var cntData = 0; selData.length > cntData; cntData++) {
+                                                                            var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
-                                                                //Updating Product Line
-                                                                if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
-                                                                    $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
-                                                                    addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "IA_BNCH");
+                                                                            //Updating Product Line
+                                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
+                                                                                $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "IA_BNCH");
+                                                                            }
+
+                                                                            //Updating Deal line
+                                                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                                .Where(function (x) {
+                                                                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                                                                })
+                                                                                .ToArray();
+
+                                                                            for (var i = 0; i < tempData.length; i++) {
+                                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                            .Where(function (x) {
+                                                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                                                            })
+                                                                            .ToArray();
+
+                                                                        for (var i = 0; i < tempData.length; i++) {
+                                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
+                                                                        }
+
+                                                                        if (tempData.length > 0) {
+                                                                            isUpdated = true;
+                                                                        }
+                                                                    }
+                                                                    //Retaining the same expand
+                                                                    if (isUpdated) {
+                                                                        expandSelected("IA_BNCH", options.model.RW_NM);
+                                                                    }
                                                                 }
-
-                                                                //Updating Deal line
-                                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                    .Where(function (x) {
-                                                                        return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
-                                                                    })
-                                                                    .ToArray();
-
-                                                                for (var i = 0; i < tempData.length; i++) {
-                                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
-                                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
-                                                                }
                                                             }
-                                                        }
-                                                        else {
-                                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                .Where(function (x) {
-                                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
-                                                                })
-                                                                .ToArray();
-
-                                                            for (var i = 0; i < tempData.length; i++) {
-                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
-                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
+                                                            else {
+                                                                return false;
                                                             }
-
-                                                            if (tempData.length > 0) {
-                                                                isUpdated = true;
-                                                            }
-                                                        }
-                                                        //Retaining the same expand
-                                                        if (isUpdated) {
-                                                            expandSelected("IA_BNCH", options.model.RW_NM);
-                                                        }
-                                                    }
+                                                        })
+                                                        .fail(function () {
+                                                            $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(9)").text($scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH);
+                                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH;
+                                                            options.model.IA_BNCH = $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH;
+                                                        });
                                                 }
-                                                else {
-                                                    return false;
-                                                }
+                                                
                                             }
                                         });
                                 }
@@ -1082,67 +1101,78 @@
                                             decimals: 2,
                                             min: 0.00,
                                             change: function (e) {
-                                                if (options.model.COMP_BNCH > 0) {
-                                                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
-                                                    addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_BNCH");
-                                                    var isUpdated = false;
+                                                if ($scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH != options.model.COMP_BNCH) {
+                                                    kendo.confirm($scope.msgDescDict['COMP_BNCH'])
+                                                        .done(function () {
+                                                            if (options.model.COMP_BNCH > 0) {
+                                                                $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                                addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_BNCH");
+                                                                var isUpdated = false;
 
-                                                    if (options.model.GRP == "PRD") {
-                                                        var selData = [];
-                                                        if (options.model.IS_SELECTED) {
-                                                            selData = getProductLineData();
-                                                        }
-                                                        if (selData.length > 0) {
-                                                            isUpdated = true;
-                                                            for (var cntData = 0; selData.length > cntData; cntData++) {
-                                                                var temp_grp_prd = selData[cntData].GRP_PRD_SID;
+                                                                if (options.model.GRP == "PRD") {
+                                                                    var selData = [];
+                                                                    if (options.model.IS_SELECTED) {
+                                                                        selData = getProductLineData();
+                                                                    }
+                                                                    if (selData.length > 0) {
+                                                                        isUpdated = true;
+                                                                        for (var cntData = 0; selData.length > cntData; cntData++) {
+                                                                            var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
-                                                                //Updating Product Line
-                                                                if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
-                                                                    $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
-                                                                    addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_BNCH");
+                                                                            //Updating Product Line
+                                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
+                                                                                $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_BNCH");
+                                                                            }
+
+                                                                            //Updating Deal line
+                                                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                                .Where(function (x) {
+                                                                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                                                                })
+                                                                                .ToArray();
+
+                                                                            for (var i = 0; i < tempData.length; i++) {
+                                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                            .Where(function (x) {
+                                                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                                                            })
+                                                                            .ToArray();
+
+                                                                        for (var i = 0; i < tempData.length; i++) {
+                                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
+                                                                        }
+
+                                                                        if (tempData.length > 0) {
+                                                                            isUpdated = true;
+                                                                        }
+                                                                    }
+
+                                                                    //Retaining the same expand
+                                                                    if (isUpdated) {
+                                                                        expandSelected("COMP_BNCH", options.model.RW_NM);
+                                                                    }
+
                                                                 }
-
-                                                                //Updating Deal line
-                                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                    .Where(function (x) {
-                                                                        return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
-                                                                    })
-                                                                    .ToArray();
-
-                                                                for (var i = 0; i < tempData.length; i++) {
-                                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
-                                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
-                                                                }
                                                             }
-                                                        }
-                                                        else {
-                                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                .Where(function (x) {
-                                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
-                                                                })
-                                                                .ToArray();
-
-                                                            for (var i = 0; i < tempData.length; i++) {
-                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
-                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
+                                                            else {
+                                                                return false;
                                                             }
-
-                                                            if (tempData.length > 0) {
-                                                                isUpdated = true;
-                                                            }
-                                                        }
-
-                                                        //Retaining the same expand
-                                                        if (isUpdated) {
-                                                            expandSelected("COMP_BNCH", options.model.RW_NM);
-                                                        }
-
-                                                    }
+                                                        })
+                                                        .fail(function () {
+                                                            $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(10)").text($scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH);
+                                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH;
+                                                            options.model.COMP_BNCH = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH;
+                                                        });
                                                 }
-                                                else {
-                                                    return false;
-                                                }
+                                                
                                             }
                                         });
                                 }
@@ -1152,20 +1182,43 @@
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG == "Y")) {
                                 }
                                 else {
-                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                        .Where(function (x) {
-                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID);
-                                        })
-                                        .GroupBy(function (x) {
-                                            return (x.COMP_SKU);
-                                        })
-                                        .Select(function (x) {
-                                            return {
-                                                'COMP_SKU': x.source[0].COMP_SKU,
-                                                'key': x.source[0].RW_NM,
-                                                'RW_NM': x.source[0].RW_NM
-                                            };
-                                        }).ToArray();
+                                    if (options.model.GRP != "PRD") {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (
+                                                    x.GRP_PRD_SID == options.model.GRP_PRD_SID
+                                                );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_SKU);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_SKU': x.source[0].COMP_SKU,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    } else {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (
+                                                    x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.GRP == options.model.GRP
+                                                );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_SKU);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_SKU': x.source[0].COMP_SKU,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    }
+                                    
 
                                     $('<input id="compSKUEditor" validationMessage="* field is required" placeholder="Enter Comp SKU.."' +
                                         ' name="' + options.field + '" />')
@@ -1186,8 +1239,18 @@
                                                 $scope.selectedCust = options.model.CUST_NM_SID;
                                                 $scope.curentRow = options.model.RW_NM;
                                                 if (selectedIndx == -1 && $scope.selectedCustomerText.trim().length > 0) {
-                                                    $scope.addSKUForCustomer("0", options.model.IS_SELECTED);
-                                                    options.model.COMP_SKU = $scope.selectedCustomerText.trim();
+                                                    //TODO: Confirmation BOX
+                                                    kendo.confirm($scope.msgDescDict['COMP_SKU_NEW'])
+                                                        .done(function () {
+                                                            $scope.addSKUForCustomer("0", options.model.IS_SELECTED);
+                                                            options.model.COMP_SKU = $scope.selectedCustomerText.trim();
+                                                        })
+                                                        .fail(function () {
+                                                            $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(6)").text($scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU);
+                                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU;
+                                                            options.model.COMP_SKU = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU;
+                                                        });
+                                                    
                                                 }
                                                 else if (selectedIndx > -1 && $scope.selectedCustomerText.trim().length > 0) {
                                                     var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
@@ -1270,21 +1333,41 @@
                                 if (!(canUpdateMeetCompSKUPriceBench && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.COMP_SKU.length !== 0)) {
                                 }
                                 else {
-
-                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                        .Where(function (x) {
-                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.COMP_PRC != null);
-                                        })
-                                        .GroupBy(function (x) {
-                                            return (x.COMP_PRC);
-                                        })
-                                        .Select(function (x) {
-                                            return {
-                                                'COMP_PRC': x.source[0].COMP_PRC,
-                                                'key': x.source[0].RW_NM,
-                                                'RW_NM': x.source[0].RW_NM
-                                            };
-                                        }).ToArray();
+                                    if (options.model.GRP != "PRD") {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.COMP_PRC != null );
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_PRC);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_PRC': x.source[0].COMP_PRC,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    } else {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                    x.COMP_PRC != null &&
+                                                    x.GRP == options.model.GRP);
+                                            })
+                                            .GroupBy(function (x) {
+                                                return (x.COMP_PRC);
+                                            })
+                                            .Select(function (x) {
+                                                return {
+                                                    'COMP_PRC': x.source[0].COMP_PRC,
+                                                    'key': x.source[0].RW_NM,
+                                                    'RW_NM': x.source[0].RW_NM
+                                                };
+                                            }).ToArray();
+                                    }
+                                    
 
                                     $('<input id="COMP_PRC' + options.field + '"  data-bind="value:' + options.field + '"/>')
                                         .appendTo(container)
@@ -1298,75 +1381,101 @@
                                                 data: tempData
                                             },
                                             change: function (e) {
-                                                if (isNaN(options.model.COMP_PRC) || options.model.COMP_PRC == null) {
-                                                    if (e.sender._old) {
-                                                        options.model.COMP_PRC = e.sender._old;
-                                                    }
-                                                    else {
-                                                        options.model.COMP_PRC = null;
-                                                    }                                                    
+                                                var objItem = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    .Where(function (x) {
+                                                        return (
+                                                            x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                                            x.COMP_SKU == options.model.COMP_SKU
+                                                        );
+                                                    })
+                                                    .ToArray();
+
+                                                //Set AMT
+                                                var itm_amt = 0;
+                                                if (objItem.length > 0) {
+                                                    itm_amt = objItem[0].COMP_PRC;
                                                 }
-                                                if (options.model.COMP_PRC > 0) {
-                                                    var tempData = [];
-                                                    var isUpdated = false;
-                                                    if (options.model.GRP == "PRD") {
-                                                        var selData = [];
-                                                        if (options.model.IS_SELECTED) {
-                                                            selData = getProductLineData();
-                                                        }
-                                                        if (selData.length > 0) {
-                                                            isUpdated = true;
-                                                            for (var cntData = 0; selData.length > cntData; cntData++) {
-                                                                var temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
-                                                                //Updating Product Line
-                                                                if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
-                                                                    $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                                                    addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_PRC");
+                                                
+                                                if (itm_amt !== options.model.COMP_PRC && options.model.COMP_PRC != null ) {
+                                                    kendo.confirm($scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC == null ? $scope.msgDescDict['COMP_SKU_NEW'] : $scope.msgDescDict['COMP_SKU_UPD'])
+                                                        .done(function () {
+                                                            if (isNaN(options.model.COMP_PRC) || options.model.COMP_PRC == null) {
+                                                                if (e.sender._old) {
+                                                                    options.model.COMP_PRC = e.sender._old;
                                                                 }
-
-                                                                //Updating Deal line
-                                                                tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                    .Where(function (x) {
-                                                                        return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                                                                    })
-                                                                    .ToArray();
-
-                                                                for (var i = 0; i < tempData.length; i++) {
-                                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                                else {
+                                                                    options.model.COMP_PRC = null;
                                                                 }
                                                             }
-                                                        }
-                                                        else {
-                                                            tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                                .Where(function (x) {
-                                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                                                                })
-                                                                .ToArray();
+                                                            if (options.model.COMP_PRC > 0) {
+                                                                var tempData = [];
+                                                                var isUpdated = false;
+                                                                if (options.model.GRP == "PRD") {
+                                                                    var selData = [];
+                                                                    if (options.model.IS_SELECTED) {
+                                                                        selData = getProductLineData();
+                                                                    }
+                                                                    if (selData.length > 0) {
+                                                                        isUpdated = true;
+                                                                        for (var cntData = 0; selData.length > cntData; cntData++) {
+                                                                            var temp_grp_prd = selData[cntData].GRP_PRD_SID;
 
-                                                            for (var i = 0; i < tempData.length; i++) {
-                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                                            //Updating Product Line
+                                                                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                                                                $scope.meetCompMasterdata[selData[cntData].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                                addToUpdateList($scope.meetCompMasterdata[selData[cntData].RW_NM - 1], "COMP_PRC");
+                                                                            }
+
+                                                                            //Updating Deal line
+                                                                            tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                                .Where(function (x) {
+                                                                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                                                                })
+                                                                                .ToArray();
+
+                                                                            for (var i = 0; i < tempData.length; i++) {
+                                                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    else {
+                                                                        tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                                            .Where(function (x) {
+                                                                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                                                            })
+                                                                            .ToArray();
+
+                                                                        for (var i = 0; i < tempData.length; i++) {
+                                                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                                        }
+
+                                                                        if (tempData.length > 0) {
+                                                                            isUpdated = true;
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                                addToUpdateList(options.model, "COMP_PRC");
+
+                                                                //Retaining the same expand
+                                                                if (isUpdated) {
+                                                                    expandSelected("COMP_PRC", options.model.RW_NM);
+                                                                }
                                                             }
-
-                                                            if (tempData.length > 0) {
-                                                                isUpdated = true;
+                                                            else {
+                                                                return false;
                                                             }
-                                                        }
-                                                    }
-
-                                                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                                    addToUpdateList(options.model, "COMP_PRC");
-
-                                                    //Retaining the same expand
-                                                    if (isUpdated) {
-                                                        expandSelected("COMP_PRC", options.model.RW_NM);
-                                                    }
+                                                        })
+                                                        .fail(function () {
+                                                            $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(7)").text($scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC == null ? "" : "$" + $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC);     
+                                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC;
+                                                            options.model.COMP_PRC = $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC;
+                                                        });
                                                 }
-                                                else {
-                                                    return false;
-                                                }
+                                                
                                             }
                                         });
                                 }
