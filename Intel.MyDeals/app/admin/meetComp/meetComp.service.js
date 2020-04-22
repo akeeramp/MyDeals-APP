@@ -8,27 +8,37 @@
     // Minification safe dependency injection
     meetCompService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
-    function meetCompService($http, dataService, logger, $q) {        
+    function meetCompService($http, dataService, logger, $q) {
         var apiBaseUrl = "api/MeetComp/";
 
         var service = {
             getMeetCompData: getMeetCompData,
             activateDeactivateMeetComp: activateDeactivateMeetComp,
-            getMeetCompDIMData: getMeetCompDIMData
+            getMeetCompDIMData: getMeetCompDIMData,
+            validateMeetComps: validateMeetComps,
+            uploadMeetComp: uploadMeetComp,
         }
 
         return service;
 
+        function uploadMeetComp(lstMeetComps) {
+            return dataService.post(apiBaseUrl + 'UploadMeetComp', lstMeetComps);
+        }
+
+        function validateMeetComps(lstMeetComps) {
+            return dataService.post(apiBaseUrl + 'ValidateMeetComps', lstMeetComps);
+        }
+
         function getMeetCompData(data) {
-            return dataService.post(apiBaseUrl + 'GetMeetCompData', data );
+            return dataService.post(apiBaseUrl + 'GetMeetCompData', data);
         }
 
         function getMeetCompDIMData(cid, mode) {
             return dataService.get(apiBaseUrl + 'GetMeetCompDIMData' + "/" + cid + "/" + mode);
-        }        
+        }
 
         function activateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND) {
-            return dataService.post(apiBaseUrl + 'ActivateDeactivateMeetComp/' + MEET_COMP_SID + "/" + ACTV_IND );
+            return dataService.post(apiBaseUrl + 'ActivateDeactivateMeetComp/' + MEET_COMP_SID + "/" + ACTV_IND);
         }
     }
 })();

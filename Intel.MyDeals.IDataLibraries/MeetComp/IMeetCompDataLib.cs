@@ -10,7 +10,7 @@ namespace Intel.MyDeals.IDataLibrary
 
 
         List<MEET_COMP_DIM> GetMeetCompDIMData(int CUST_MBR_SID, string MODE);
-        
+
 
         List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND);
 
@@ -19,5 +19,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, int OBJ_TYPE_ID, List<MeetCompUpdate> mcu);
 
         List<DealDeatils> GetDealDetails(int DEAL_OBJ_SID, int GRP_PRD_SID, string DEAL_PRD_TYPE);
+        List<MeetCompProductValidation> GetValidProducts(List<string> lstProducts);
+        bool UploadMeetComp(List<MeetComp> lstMeetComp);
     }
 }

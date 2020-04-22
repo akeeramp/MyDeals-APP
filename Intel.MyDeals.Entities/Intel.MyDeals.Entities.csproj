@@ -97,6 +97,7 @@
     <Compile Include="Helpers\FixesHelpers.cs" />
     <Compile Include="JMS.cs" />
     <Compile Include="LogPerformanceTime.cs" />
+    <Compile Include="MeetComp.cs" />
     <Compile Include="Notification\MessageCenterPayload.cs" />
     <Compile Include="Notification\NotificationSubscriptions.cs" />
     <Compile Include="OP ExtensionMethods\AvmforceMode.cs" />
