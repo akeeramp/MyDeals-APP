@@ -11,8 +11,8 @@
         <div class="row" style="padding-bottom:50px">
             <div class="col-md-8">
                 <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
-                    <div ng-if="value.type == 'BUTTONGROUP'" ng-hide="vm.autofillData.ISTENDER && key == 'REBATE_TYPE'">
-
+                    <div ng-if="value.type == 'BUTTONGROUP'" 
+                         ng-hide="vm.autofillData.ISTENDER && (key == 'REBATE_TYPE' || key == 'AR_SETTLEMENT_LVL' || key == 'PERIOD_PROFILE')">
                         <div op-control-data-element
                              op-class="'md intel'"
                              ng-model="vm.autofillData.DEFAULT"

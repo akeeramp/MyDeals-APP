@@ -47,13 +47,24 @@
             } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = "Overarching Maximum Dollars must be blank or > 0";
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
-            } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" || vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
+            } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "Overarching Maximum Volume must be blank or > 0";
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = true;
             } else {
+                // Is Tender Rules Force Value Checks
+                if (vm.autofillData.ISTENDER === "1") {
+                    if (vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "Issue Credit to Billing Sold To") { 
+                        vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "Issue Credit to Billing Sold To";
+                    }
+                    if (vm.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Bi-Weekly (2 weeks)") { 
+                        vm.autofillData.DEFAULT.PERIOD_PROFILE.value = "Bi-Weekly (2 weeks)";
+                    }
+                }
                 var returnVal = vm.autofillData.DEFAULT;
                 $uibModalInstance.close(returnVal);
             }
+            
         };
 
         vm.close = function () {
