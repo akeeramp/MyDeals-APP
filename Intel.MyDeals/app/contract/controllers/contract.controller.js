@@ -4164,7 +4164,7 @@
 
             if ($scope.isValid) {
                 if ($scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && $scope.contractData.CUST_ACCNT_DIV == "") {
-                    kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                    kendo.confirm("The division is blank. Do you intend for this contract to apply to all divisions ?").then(function () {
                         if ($scope.isCopyContract) {
                             $scope.copyContract();
                         } else {

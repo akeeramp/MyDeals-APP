@@ -3782,7 +3782,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
-                context.callback(selectedItem);
+                if (selectedItem == "") {
+                    kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                        context.callback(selectedItem);
+                    }, function () {
+                        context.callback(cellCurrVal);
+                    });
+                }
+                else {
+                    context.callback(selectedItem);
+                }
             }, function () { });
         }
     });
