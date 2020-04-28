@@ -495,6 +495,36 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Validate Period Profile",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PERIOD_PROFILE)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckPeriodProfile,
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.PERIOD_PROFILE })
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Validate AR Settlement Level",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.AR_SETTLEMENT_LVL)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckArSettlementLevel,
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.AR_SETTLEMENT_LVL })
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Validate Target Regions",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },

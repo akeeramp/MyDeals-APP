@@ -34,20 +34,20 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return; 
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return;
 
             string newStage = string.Empty;
 
-            if (opDeType == OpDataElementType.CNTRCT.ToString()) 
+            if (opDeType == OpDataElementType.CNTRCT.ToString())
             {
                 newStage = WorkFlowStages.InComplete;
             }
-            else if (opDeType == OpDataElementType.PRC_ST.ToString()) 
+            else if (opDeType == OpDataElementType.PRC_ST.ToString())
             {
                 newStage = WorkFlowStages.Draft;
                 if (role == RoleTypes.GA) newStage = WorkFlowStages.Requested;
             }
-            else if (opDeType == OpDataElementType.WIP_DEAL.ToString()) 
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
             {
                 newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
@@ -78,6 +78,42 @@ namespace Intel.MyDeals.BusinessRules
             else
             {
                 if (match.DROP_DOWN != null && userConsumtionReason != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
+                {
+                    de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
+                }
+            }
+        }
+
+        public static void CheckPeriodProfile(this IOpDataElement de, params object[] args)
+        {
+            CheckDropDownValues(de, AttributeCodes.PERIOD_PROFILE, "Period Profile");
+        }
+
+        public static void CheckArSettlementLevel(this IOpDataElement de, params object[] args)
+        {
+            CheckDropDownValues(de, AttributeCodes.AR_SETTLEMENT_LVL, "AR Settlement Level");
+        }
+
+        //This is for Deal editor + Table editor
+        static void CheckDropDownValues(this IOpDataElement de, string strAttributeCode, string stTitle)
+        {
+            if (de == null) return;
+
+            string userDealCombType = de.AtrbValue.ToString();
+
+            List<BasicDropdown> validDealCombTypes = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == strAttributeCode).ToList();
+
+            BasicDropdown match = validDealCombTypes.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userDealCombType.ToUpper());
+
+            if (userDealCombType == null || userDealCombType == "")
+            {
+                if (!de.IsReadOnly) de.AddMessage(string.Format("Cannot leave {0} blank.", stTitle));
+            }
+            else if (match == null)  //no match
+                de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list.", stTitle));
+            else
+            {
+                if (match.DROP_DOWN != null && userDealCombType != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
                 {
                     de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
                 }
@@ -125,14 +161,14 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> geosList = newGeoString.Split(',').ToList();
 
-			// Check that thse geos are valid
-			Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
+            // Check that thse geos are valid
+            Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
             foreach (string geo in geosList)
             {
                 if (validGeoValues.ContainsKey(geo.ToUpper()))
                 {
-					// set to db's stored value capitalization syntax
-					string posMatch = validGeoValues[geo.ToUpper()];
+                    // set to db's stored value capitalization syntax
+                    string posMatch = validGeoValues[geo.ToUpper()];
                     geoString = geoString.Replace(geo, posMatch);
                 }
                 else
@@ -151,8 +187,8 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-			// Blended GEO, can not mix WW and other Geo
-			if (isBlendedGeo)
+            // Blended GEO, can not mix WW and other Geo
+            if (isBlendedGeo)
             {
                 // Is "WorldWide" inside brackets?
                 string wwRegex = @"\[((.*)" + ww + @"(.*))\]";
@@ -206,7 +242,7 @@ namespace Intel.MyDeals.BusinessRules
             allSegs.AddRange(validMrktSeg);
 
             //check to ensure user entries are valid market segments and set to db's stored value capitalization syntax
-            for (var s=0; s<userMrktSegs.Count; s++)
+            for (var s = 0; s < userMrktSegs.Count; s++)
             {
                 BasicDropdown dbSeg = allSegs.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userMrktSegs[s].ToUpper());
                 if (dbSeg == null)  //no match
