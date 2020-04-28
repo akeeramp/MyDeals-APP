@@ -3782,7 +3782,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
-                if (selectedItem == "") {
+                if (colName === "CUST_ACCNT_DIV" && $scope.contractData.CUST_ACCNT_DIV != "" && selectedItem == "") {
                     kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
                         context.callback(selectedItem);
                     }, function () {
