@@ -84,42 +84,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckPeriodProfile(this IOpDataElement de, params object[] args)
-        {
-            CheckDropDownValues(de, AttributeCodes.PERIOD_PROFILE, "Period Profile");
-        }
-
-        public static void CheckArSettlementLevel(this IOpDataElement de, params object[] args)
-        {
-            CheckDropDownValues(de, AttributeCodes.AR_SETTLEMENT_LVL, "AR Settlement Level");
-        }
-
-        //This is for Deal editor + Table editor
-        static void CheckDropDownValues(this IOpDataElement de, string strAttributeCode, string stTitle)
-        {
-            if (de == null) return;
-
-            string userDealCombType = de.AtrbValue.ToString();
-
-            List<BasicDropdown> validDealCombTypes = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == strAttributeCode).ToList();
-
-            BasicDropdown match = validDealCombTypes.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userDealCombType.ToUpper());
-
-            if (userDealCombType == null || userDealCombType == "")
-            {
-                if (!de.IsReadOnly) de.AddMessage(string.Format("Cannot leave {0} blank.", stTitle));
-            }
-            else if (match == null)  //no match
-                de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list.", stTitle));
-            else
-            {
-                if (match.DROP_DOWN != null && userDealCombType != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
-                {
-                    de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
-                }
-            }
-        }
-
         public static void CheckDealCombType(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

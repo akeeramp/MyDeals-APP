@@ -893,63 +893,37 @@ namespace Intel.MyDeals.BusinessRules
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
-        //This is only for Table editor. Deal editor will be read-only
         public static void CheckDropDownValues(params object[] args)
         {
-            Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
-            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, "Payout Based On");
-            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, "Program Payment");
-            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, "Rebate Type");
-            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, "Media");
-            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, "Server Deal Type");
+            List<string> eligibleDropDowns = new List<string>
+            {
+                AttributeCodes.PAYOUT_BASED_ON,
+                AttributeCodes.PROGRAM_PAYMENT,
+                AttributeCodes.REBATE_TYPE,
+                AttributeCodes.PROD_INCLDS
+            };
             CheckDropDownValues(eligibleDropDowns, args);
-
-            eligibleDropDowns.Clear();
-            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, "Bid Geo");
-            CheckDropDownMultiValues(eligibleDropDowns, args);
         }
 
-        static void CheckDropDownValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
+        public static void CheckDropDownValues(List<string> eligibleDropDowns, params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns.Keys))
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns))
             {
-                if (de.AtrbValue.ToString().Trim() != string.Empty)
+                List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                if (string.IsNullOrEmpty(matchedValue))
                 {
-                    List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
-                    string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-                    if (string.IsNullOrEmpty(matchedValue))
-                    {
-                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
-                    }
-                    else
-                    {
-                        if (matchedValue != de.AtrbValue.ToString())
-                        {
-                            // strings match but case is different
-                            de.AtrbValue = matchedValue;
-                        }
-                    }
+                    de.AddMessage("Please enter a valid value.");
                 }
-            }
-        }
-
-        static void CheckDropDownMultiValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns.Keys))
-            {
-                if (de.AtrbValue.ToString().Trim() != string.Empty)
+                else
                 {
-                    List<string> dropDowns = DataCollections.GetDropdowns().Where(d => d.dropdownCategory == (de.AtrbCd == AttributeCodes.QLTR_BID_GEO ? "Geo" : de.AtrbCd) && d.active == 1).Select(d => d.dropdownName).ToList();
-                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.ToUpper()).Except(dropDowns.Select(d => d.ToUpper())).ToList();
-                    if (unMatchedValues.Count > 0)
+                    if (matchedValue != de.AtrbValue.ToString())
                     {
-                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
+                        // strings match but case is different
+                        de.AtrbValue = matchedValue;
                     }
                 }
             }
