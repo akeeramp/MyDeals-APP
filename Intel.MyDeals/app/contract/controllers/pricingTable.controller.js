@@ -1909,7 +1909,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             root.curPricingTable[key] = "Bi-Weekly (2 weeks)";  //root.contractData.Customer.DFLT_PERD_PRFL;
                                         } break;
                                         case "AR_SETTLEMENT_LVL": {
-                                            root.curPricingTable[key] = "Cash";  //root.contractData.Customer.DFLT_AR_SETL_LVL;
+                                            root.curPricingTable[key] = "Issue Credit to Billing Sold To";  //root.contractData.Customer.DFLT_AR_SETL_LVL;
                                         } break;
                                     }
                                 }
