@@ -432,7 +432,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="DropDown Value Validations",
                     ActionRule = MyDcActions.CheckDropDownValues,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
