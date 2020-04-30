@@ -4557,7 +4557,7 @@
                     }
                 });
 
-            // Check if selected deal type
+            // Check if there is a selected deal type
             if ($scope.newPricingTable.OBJ_SET_TYPE_CD == "") {
                 $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
                 $scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
