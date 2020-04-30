@@ -4613,10 +4613,15 @@
                         if (!!newValue["AR_SETTLEMENT_LVL"]) {
                             // Set AR_SETTLEMENT_LVL to customer default first, and if that is blank, then fall back on deal level rules
                             var newArSettlementValue = ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
-                            if (newArSettlementValue == "")
-                                newArSettlementValue = ($scope.newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" || $scope.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
-                                    ? "Issue Credit to Billing Sold To"
-                                    : "Issue Credit to Default Sold To by Region";
+                            if ($scope.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") { // If this is cust default, force it blank
+                                newArSettlementValue = "";
+                            } else {
+                                if (newArSettlementValue == "")
+                                    newArSettlementValue = ($scope.newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                                            $scope.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                        ? "Issue Credit to Billing Sold To"
+                                        : "Issue Credit to Default Sold To by Region";
+                            }
                             newValue["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
                         }
                     }
@@ -4644,14 +4649,19 @@
                         var newArSettlementValue = $scope.currentPricingTable["AR_SETTLEMENT_LVL"] != ""
                             ? $scope.currentPricingTable["AR_SETTLEMENT_LVL"]
                             : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
-                        if (newArSettlementValue == "") // If no auto fill or customer default, default to Deal values
-                            newArSettlementValue = ($scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" || $scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
-                                ? "Issue Credit to Billing Sold To"
-                                : "Issue Credit to Default Sold To by Region";
+                        if (newArSettlementValue == $scope.contractData.Customer.DFLT_AR_SETL_LVL && $scope.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") {
+                            newArSettlementValue = "";
+                        } else {
+                            if (newArSettlementValue == "") // If no auto fill or customer default, default to Deal values
+                                newArSettlementValue = ($scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                                        $scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                    ? "Issue Credit to Billing Sold To"
+                                    : "Issue Credit to Default Sold To by Region";
+                        }
                         newValue["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
                     }
-                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = $scope.currentPricingTable["REBATE_OA_MAX_VOL"]
-                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = $scope.currentPricingTable["REBATE_OA_MAX_AMT"]
+                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = $scope.currentPricingTable["REBATE_OA_MAX_VOL"];
+                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = $scope.currentPricingTable["REBATE_OA_MAX_AMT"];
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)
