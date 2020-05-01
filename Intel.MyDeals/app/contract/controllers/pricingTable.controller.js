@@ -2090,8 +2090,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
     }
 
+    //To Remove Ghost Rows from the pricing table
+    function RemoveGhostRows() {
+        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
+            if ($scope.pricingTableData.PRC_TBL_ROW.length != root.spreadDs._data.length) {
+                if (i < root.spreadDs._data.length) {
+                    if (root.spreadDs._data[i].DC_ID != $scope.pricingTableData.PRC_TBL_ROW[i].DC_ID) {
+                        $scope.pricingTableData.PRC_TBL_ROW.splice(i, 1);
+                        i--;
+                    }
+                }
+                else {
+                    $scope.pricingTableData.PRC_TBL_ROW.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
+
     function spreadDsSync() {
         root.spreadDs.sync();
+        if ($scope.pricingTableData.PRC_TBL_ROW.length > root.spreadDs._data.length) {
+            RemoveGhostRows()
+        }
 
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
