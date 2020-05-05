@@ -167,7 +167,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
-                new MyOpRule 
+                new MyOpRule
                 {
                     Title="End Vol must be greater than start vol",
                     ActionRule = MyDcActions.CompareStartEndVol,
@@ -175,14 +175,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
-                new MyOpRule 
-                { 
-                    Title="Tier Numbers must match Tier Level", 
-                    ActionRule = MyDcActions.ValidateTierNumber, 
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }, 
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() }, 
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate } 
-                }, 
+                new MyOpRule
+                {
+                    Title="Tier Numbers must match Tier Level",
+                    ActionRule = MyDcActions.ValidateTierNumber,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
                 new MyOpRule
                 {
                     Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
@@ -301,7 +301,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Deal End Date should be earlier than OEM EOL Platform Date",
                     ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any()
                         && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.END_DT),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -318,7 +318,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Make sure OEM Platform EOL Date is later than OEM Platform Launch Date",
                     ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any() 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any()
                         && dc.IsDateBefore(AttributeCodes.OEM_PLTFRM_EOL_DT, AttributeCodes.OEM_PLTFRM_LNCH_DT),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -432,7 +432,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="DropDown Value Validations",
                     ActionRule = MyDcActions.CheckDropDownValues,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule

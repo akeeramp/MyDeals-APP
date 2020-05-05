@@ -63,6 +63,17 @@ namespace Intel.MyDeals.BusinessLogic
                 Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
         }
 
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd INCLUDING INACTIVE ENTRIES
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsWithInactives(string atrbCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd).OrderBy(d => d.ORD);
+        }
+
         public IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd)
         {
             atrbCd = atrbCd.ToUpper();

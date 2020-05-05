@@ -1,5 +1,8 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.Opaque;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Web.Http;
 
@@ -22,13 +25,25 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
-        public string SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
+        public string SaveSalesForceTenderData(JObject jsonDataPacket)
         {
-            // User and Password validate here.......
-            // 1. With authorise attribute
-            Guid saveSuccessful = _integrationLib.SaveSalesForceTenderData(jsonDataPacket);
-
-            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; ;
+            Guid saveSuccessful;
+            try
+            {
+                var jsonData = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket.ToString());
+                OpLogPerf.Log(jsonDataPacket.ToString(), LogCategory.Information);
+               //TenderTransferRootObject jsonDataPacket
+               // User and Password validate here.......
+               // 1. With authorise attribute
+               saveSuccessful = _integrationLib.SaveSalesForceTenderData(jsonData);
+            }
+            catch(Exception ex)
+            {
+                OpLogPerf.Log($"Tenders JSON payload: {jsonDataPacket.ToString()} | Message: {ex.Message}| Innerexception: {ex.InnerException}" +
+                    $" | Stack Trace{ex.StackTrace}", LogCategory.Error);
+                throw ex;
+            }
+            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; 
         }
 
         //[Route("ExecuteSalesForceTenderData")]

@@ -97,7 +97,7 @@
                 serverFiltering: true,
                 transport: {
                     read: {
-                        url: "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL"
+                        url: "/api/Dropdown/GetDropdownsWithInactives/AR_SETTLEMENT_LVL"
                     }
                 }
             },

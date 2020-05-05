@@ -34,20 +34,20 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return; 
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return;
 
             string newStage = string.Empty;
 
-            if (opDeType == OpDataElementType.CNTRCT.ToString()) 
+            if (opDeType == OpDataElementType.CNTRCT.ToString())
             {
                 newStage = WorkFlowStages.InComplete;
             }
-            else if (opDeType == OpDataElementType.PRC_ST.ToString()) 
+            else if (opDeType == OpDataElementType.PRC_ST.ToString())
             {
                 newStage = WorkFlowStages.Draft;
                 if (role == RoleTypes.GA) newStage = WorkFlowStages.Requested;
             }
-            else if (opDeType == OpDataElementType.WIP_DEAL.ToString()) 
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
             {
                 newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
@@ -125,14 +125,14 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> geosList = newGeoString.Split(',').ToList();
 
-			// Check that thse geos are valid
-			Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
+            // Check that thse geos are valid
+            Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
             foreach (string geo in geosList)
             {
                 if (validGeoValues.ContainsKey(geo.ToUpper()))
                 {
-					// set to db's stored value capitalization syntax
-					string posMatch = validGeoValues[geo.ToUpper()];
+                    // set to db's stored value capitalization syntax
+                    string posMatch = validGeoValues[geo.ToUpper()];
                     geoString = geoString.Replace(geo, posMatch);
                 }
                 else
@@ -151,8 +151,8 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-			// Blended GEO, can not mix WW and other Geo
-			if (isBlendedGeo)
+            // Blended GEO, can not mix WW and other Geo
+            if (isBlendedGeo)
             {
                 // Is "WorldWide" inside brackets?
                 string wwRegex = @"\[((.*)" + ww + @"(.*))\]";
@@ -206,7 +206,7 @@ namespace Intel.MyDeals.BusinessRules
             allSegs.AddRange(validMrktSeg);
 
             //check to ensure user entries are valid market segments and set to db's stored value capitalization syntax
-            for (var s=0; s<userMrktSegs.Count; s++)
+            for (var s = 0; s < userMrktSegs.Count; s++)
             {
                 BasicDropdown dbSeg = allSegs.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userMrktSegs[s].ToUpper());
                 if (dbSeg == null)  //no match

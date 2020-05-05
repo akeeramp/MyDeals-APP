@@ -2460,17 +2460,22 @@
         }
 
         function validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
-            if (Object.keys(dictCustDivision).length == 1 && custDiv.indexOf("/") !== -1
-                && baseCustDiv.split("/").length == custDiv.split("/").length) {
-                var divs = custDiv.split("/");
-                for (var z = 0; z < divs.length; z++) {
-                    if (baseCustDiv.indexOf(divs[z]) == -1) {
-                        return false;
+            if (baseCustDiv != null && custDiv != null) {
+                if (Object.keys(dictCustDivision).length == 1 && baseCustDiv.indexOf("/") !== -1 && custDiv.indexOf("/") !== -1
+                    && baseCustDiv.split("/").length == custDiv.split("/").length) {
+                    var divs = custDiv.split("/");
+                    for (var z = 0; z < divs.length; z++) {
+                        if (baseCustDiv.indexOf(divs[z]) == -1) {
+                            return false;
+                        }
                     }
+                    return true;
                 }
-                return true;
+                else { return false }
             }
-            else { return false }
+            else {
+                return false;
+            }
         }
 
 
@@ -4164,7 +4169,7 @@
 
             if ($scope.isValid) {
                 if ($scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && $scope.contractData.CUST_ACCNT_DIV == "") {
-                    kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                    kendo.confirm("The division is blank. Do you intend for this contract to apply to all divisions ?").then(function () {
                         if ($scope.isCopyContract) {
                             $scope.copyContract();
                         } else {
@@ -4557,7 +4562,7 @@
                     }
                 });
 
-            // Check if selected deal type
+            // Check if there is a selected deal type
             if ($scope.newPricingTable.OBJ_SET_TYPE_CD == "") {
                 $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
                 $scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
@@ -4606,12 +4611,24 @@
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
                     if ($scope.isTenderContract) { // Tenders are defaulted ALWAYS
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
-                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Cash";
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Issue Credit to Billing Sold To";
                     } else {
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
                             ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
-                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value =
-                            ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) {
+                            // Set AR_SETTLEMENT_LVL to customer default first, and if that is blank, then fall back on deal level rules
+                            var newArSettlementValue = ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                            if ($scope.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") { // If this is cust default, force it blank
+                                newArSettlementValue = "";
+                            } else {
+                                if (newArSettlementValue == "")
+                                    newArSettlementValue = ($scope.newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                                            $scope.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                        ? "Issue Credit to Billing Sold To"
+                                        : "Issue Credit to Default Sold To by Region";
+                            }
+                            newValue["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
+                        }
                     }
                     if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = "";
                     if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = "";
@@ -4632,9 +4649,24 @@
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = $scope.currentPricingTable["NUM_OF_TIERS"] != "" ? $scope.currentPricingTable["NUM_OF_TIERS"] : "1";
                     if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = $scope.currentPricingTable["SERVER_DEAL_TYPE"];
                     if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"] != "" ? $scope.currentPricingTable["PERIOD_PROFILE"] : $scope.contractData.Customer.DFLT_PERD_PRFL;
-                    if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = $scope.currentPricingTable["AR_SETTLEMENT_LVL"] != "" ? $scope.currentPricingTable["AR_SETTLEMENT_LVL"] : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
-                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = $scope.currentPricingTable["REBATE_OA_MAX_VOL"]
-                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = $scope.currentPricingTable["REBATE_OA_MAX_AMT"]
+                    if (!!newValue["AR_SETTLEMENT_LVL"]) {
+                        // Set AR_SETTLEMENT_LVL to Auto Fill values first, then customer default, and if still blank, then fall back on deal level rules
+                        var newArSettlementValue = $scope.currentPricingTable["AR_SETTLEMENT_LVL"] != ""
+                            ? $scope.currentPricingTable["AR_SETTLEMENT_LVL"]
+                            : $scope.contractData.Customer.DFLT_AR_SETL_LVL;
+                        if (newArSettlementValue == $scope.contractData.Customer.DFLT_AR_SETL_LVL && $scope.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") {
+                            newArSettlementValue = "";
+                        } else {
+                            if (newArSettlementValue == "") // If no auto fill or customer default, default to Deal values
+                                newArSettlementValue = ($scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                                        $scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                    ? "Issue Credit to Billing Sold To"
+                                    : "Issue Credit to Default Sold To by Region";
+                        }
+                        newValue["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
+                    }
+                    if (!!newValue["REBATE_OA_MAX_VOL"]) newValue["REBATE_OA_MAX_VOL"].value = $scope.currentPricingTable["REBATE_OA_MAX_VOL"];
+                    if (!!newValue["REBATE_OA_MAX_AMT"]) newValue["REBATE_OA_MAX_AMT"].value = $scope.currentPricingTable["REBATE_OA_MAX_AMT"];
                 }
             } else {
                 // TODO: Hook these up to service (add service into injection and physical files)
