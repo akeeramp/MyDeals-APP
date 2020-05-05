@@ -2460,17 +2460,22 @@
         }
 
         function validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
-            if (Object.keys(dictCustDivision).length == 1 && custDiv.indexOf("/") !== -1
-                && baseCustDiv.split("/").length == custDiv.split("/").length) {
-                var divs = custDiv.split("/");
-                for (var z = 0; z < divs.length; z++) {
-                    if (baseCustDiv.indexOf(divs[z]) == -1) {
-                        return false;
+            if (baseCustDiv != null && custDiv != null) {
+                if (Object.keys(dictCustDivision).length == 1 && baseCustDiv.indexOf("/") !== -1 && custDiv.indexOf("/") !== -1
+                    && baseCustDiv.split("/").length == custDiv.split("/").length) {
+                    var divs = custDiv.split("/");
+                    for (var z = 0; z < divs.length; z++) {
+                        if (baseCustDiv.indexOf(divs[z]) == -1) {
+                            return false;
+                        }
                     }
+                    return true;
                 }
-                return true;
+                else { return false }
             }
-            else { return false }
+            else {
+                return false;
+            }
         }
 
 

@@ -1106,21 +1106,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.child.setRowIdStyle(data);
 
                                 }
-                                , function (response) { // Cancel Merge
-                                    // Find all occurances with deal-grp-nm
-                                    for (var i = data.length - 1; i >= 0; i--) {
-                                        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
-                                            // Don't clear the existing
-                                            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
-                                                continue;
+                                    , function (response) { // Cancel Merge
+                                        // Find all occurances with deal-grp-nm
+                                        for (var i = data.length - 1; i >= 0; i--) {
+                                            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+                                                // Don't clear the existing
+                                                if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
+                                                    continue;
+                                                }
+                                                // Clear
+                                                data[i]["DEAL_GRP_NM"] = "";
+                                                data[i]["dirty"] = true;
                                             }
-                                            // Clear
-                                            data[i]["DEAL_GRP_NM"] = "";
-                                            data[i]["dirty"] = true;
                                         }
+                                        spreadDsSync();
                                     }
-                                    spreadDsSync();
-                                }
                                 );
                         }
                     }
@@ -1306,10 +1306,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             },
                                 5);
                         },
-                        function () {
-                            $(".k-button[title=Undo]").click();
-                            syncUndoRedoCounters();
-                        });
+                            function () {
+                                $(".k-button[title=Undo]").click();
+                                syncUndoRedoCounters();
+                            });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
                     $timeout(function () {
@@ -2293,8 +2293,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }, {
-                layout: true
-            });
+            layout: true
+        });
     }
     $scope.$on('saveWithWarnings',
         function (event, args) {
@@ -3289,22 +3289,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 //$timeout(function () {
-                    $scope.$root.pc.add($scope.pcCookUI.stop());
+                $scope.$root.pc.add($scope.pcCookUI.stop());
 
-                    if (saveOnContinue) {
-                        if (!publishWipDeals) {
-                            root.validatePricingTable();
-                        } else {
-                            root.publishWipDealsBase();
-                        } // Call Save and Validate API from Contract Manager
+                if (saveOnContinue) {
+                    if (!publishWipDeals) {
+                        root.validatePricingTable();
                     } else {
-                        if ($scope.$root.pc !== null) {
-                            $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                            $scope.$root.pc = null;
-                        }
-                        kendo.alert("All of the products looks good.");
-                        root.setBusy("", "");
+                        root.publishWipDealsBase();
+                    } // Call Save and Validate API from Contract Manager
+                } else {
+                    if ($scope.$root.pc !== null) {
+                        $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                        $scope.$root.pc = null;
                     }
+                    kendo.alert("All of the products looks good.");
+                    root.setBusy("", "");
+                }
                 //}, 20);
             }
             else {
@@ -3458,23 +3458,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
                         //$timeout(function () {
-                            if (saveOnContinue) {
-                                if (transformResult.AbortProgration) {
-                                    return true;
-                                }
-                                if (!publishWipDeals) {
-                                    root.validatePricingTable();
-                                } else {
-                                    root.publishWipDealsBase();
-                                } // Call Save and Validate API from Contract Manager
-                            } else {
-                                if ($scope.$root.pc !== null) {
-                                    $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
-                                    $scope.$root.pc = null;
-                                }
-
-                                root.setBusy("", "");
+                        if (saveOnContinue) {
+                            if (transformResult.AbortProgration) {
+                                return true;
                             }
+                            if (!publishWipDeals) {
+                                root.validatePricingTable();
+                            } else {
+                                root.publishWipDealsBase();
+                            } // Call Save and Validate API from Contract Manager
+                        } else {
+                            if ($scope.$root.pc !== null) {
+                                $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
+                                $scope.$root.pc = null;
+                            }
+
+                            root.setBusy("", "");
+                        }
                         //}, 20);
                     } else {
                         $timeout(function () {
@@ -3662,12 +3662,52 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
-        ValidateProducts(data, false, true);
+       
+        var iscustdivnull = isCustDivisonNull(data);
+        if (iscustdivnull) {
+            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                ValidateProducts(data, false, true);
+            }, function () {
+                return;
+            });
+        }
+        else {
+            ValidateProducts(data, false, true);
+        }
     }
 
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
-        ValidateProducts(data, true, true);
+        
+        var iscustdivnull = isCustDivisonNull(data)
+        if (iscustdivnull) {
+            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                ValidateProducts(data, true, true);
+            }, function () {
+                $scope.setBusy("", "");
+                return;
+            });
+        }
+        else {
+            ValidateProducts(data, true, true);
+        }
+
+    }
+
+    function isCustDivisonNull(data) {
+        if ($scope.contractData.CUST_ACCNT_DIV != "") {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        else {
+            return false;
+        }
     }
 
     // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
