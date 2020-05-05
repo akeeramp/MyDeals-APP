@@ -27,14 +27,14 @@ namespace Intel.MyDeals.VistexService
         public const char TestPipelines = 'X';
     }
 
-    class VistexParams
+    public class VistexParams
     {
         public int sleepSeconds = 0;
         public JobMode jobMode = JobMode.UNKNOWN;
         public char jobType = JobModeCode.SendDealsVistex; // Default to run as SendDealsVistex is nothing is passed
         public bool pauseOnEnd = false;
         public bool displayHelpOnly = false;
-        public bool outputLogging = false;
+        public bool outputLogging = true;
         public bool diagnosticsMode = false;
         public bool noSAP = false;
         public bool autoMode = false;

@@ -57,6 +57,7 @@ namespace Intel.MyDeals.Entities
         public string BatchMessage { get; set; }
         public string BatchName { get; set; }
         public string BatchStatus { get; set; }
+        public List<string> MessageLog { get; set; }
     }
 
     public class VistexSendVertical

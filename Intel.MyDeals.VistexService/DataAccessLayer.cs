@@ -57,6 +57,7 @@ namespace Intel.MyDeals.VistexService
         #region MyDeals Data Fetch Calls
         public static async Task<VistexDFDataResponseObject> GetVistexDataOutBound(string dataType, string runMode) //VTX_OBJ: DEALS
         {
+            VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDataOutBound - Initiated");
             VistexDFDataResponseObject records = new VistexDFDataResponseObject();
             VistexDFDataResponseObject blah = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
@@ -69,16 +70,15 @@ namespace Intel.MyDeals.VistexService
                 if (response.IsSuccessStatusCode)
                 {
                     xmlRecords = await response.Content.ReadAsStringAsync();
+                    VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDataOutBound - Success");
                 }
                 
-                blah = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
-                //VistexDFDataResponseObject arg = blah.FirstOrDefault();
-                //return records = JsonConvert.DeserializeObject<List<VistexDFDataResponseObject>>(xmlRecords);
-                //return blah;
+                blah = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);                
             }
             catch (Exception ex)
             {
-                //JmsQCommon.HandleException(ex);
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: GetVistexDataOutBound - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDataOutBound - Completed");
             }
 
             return blah;
@@ -87,6 +87,7 @@ namespace Intel.MyDeals.VistexService
 
         public static async Task<VistexDFDataResponseObject> GetVistexVerticalStageData(string runMode) //VTX_OBJ: Vertical
         {
+            VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexVerticalStageData - Initiated");
             VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
             try
@@ -96,13 +97,15 @@ namespace Intel.MyDeals.VistexService
                 if (response.IsSuccessStatusCode)
                 {
                     xmlRecords = await response.Content.ReadAsStringAsync();
+                    VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexVerticalStageData - Success");
                 }
                 
                 retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
             }
             catch (Exception ex)
             {
-                //JmsQCommon.HandleException(ex);
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: GetVistexVerticalStageData - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexVerticalStageData - Completed");
             }
 
             return retRecord;
@@ -111,6 +114,7 @@ namespace Intel.MyDeals.VistexService
 
         public static async Task<VistexDFDataResponseObject> GetVistexDFStageData(string runMode) //VTX_OBJ: CUSTOMER, PRODUCTS
         {
+            VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDFStageData - Initiated");
             VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
             var xmlRecords = string.Empty;
             try
@@ -120,16 +124,15 @@ namespace Intel.MyDeals.VistexService
                 if (response.IsSuccessStatusCode)
                 {
                     xmlRecords = await response.Content.ReadAsStringAsync();
+                    VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDFStageData - Success");
                 }
-                else
-                {
-                    //JmsQCommon.HandleException(new Exception("GetPricingRecordsXml - " + response.ReasonPhrase + " Url" + response.RequestMessage));
-                }
+                
                 retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
             }
             catch (Exception ex)
             {
-                //JmsQCommon.HandleException(ex);
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: GetVistexDFStageData - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Data Access Layer - GetVistexDFStageData - Completed");
             }
 
             return retRecord;

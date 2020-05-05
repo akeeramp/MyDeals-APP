@@ -82,17 +82,18 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="jsonData"></param>
         /// <param name="mode"></param>
         /// <returns></returns>
-        public Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
-        {
+        public Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode, VistexDFDataResponseObject responseObject) //VTX_OBJ: CUSTOMER, PRODUCTS, DEALS, VERTICAL
+        {            
             //URL Setting - Reading from Key Value Pair 
             string url = GetVistexUrlByMode(mode);
-
+            //Adding Log
+            responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Data Library Layer - PublishToSapPoDCPV: SAP PO Module Initiated") + Environment.NewLine);
             // Create a request using a URL that can receive a post.   
             WebRequest request = WebRequest.Create(url);
             request.Credentials = GetVistexCredentials(url);
             // Set the Method property of the request to POST.  
             request.Method = "POST";
-
+            responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Data Library Layer - PublishToSapPoDCPV: SAP PO Module Initiated - Credentials Added") + Environment.NewLine);
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             // Create POST data and convert it to a byte array.  
@@ -114,7 +115,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 WebResponse response = request.GetResponse(); // Get the response.
                 responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Data Library Layer - PublishToSapPoDCPV: SAP PO Connection Made - Response Received") + Environment.NewLine);
                 // Get the stream containing content returned by the server.  
                 // The using block ensures the stream is automatically closed.
                 using (dataStream = response.GetResponseStream())
@@ -125,16 +126,19 @@ namespace Intel.MyDeals.DataLibrary
                     string responseFromServer = reader.ReadToEnd();
                     // Display the content.  
                     responseObjectDictionary["Data"] = responseFromServer;
+                    //Logging
+                    responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}- {2}", DateTime.Now, "Data Library Layer - PublishToSapPoDCPV: SAP PO Connection Made - Response Received: ", responseObjectDictionary["Status"]) + Environment.NewLine);
                 }
 
             }
             catch (Exception ex)
             {
-                OpLogPerf.Log($"Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}", LogCategory.Error);
+                OpLogPerf.Log($"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}", LogCategory.Error);
                 responseObjectDictionary.Add("Status", ex.Message);
                 responseObjectDictionary.Add("Message", ex.Message);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}- {2}", DateTime.Now, "Data Library Layer: SAP PO Connection Exception - Exception Received: ", $"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}") + Environment.NewLine);
             }
-
+            //responseObjectDictionary.Add("Log", string.Join(",", logMsg.ToArray()));
             return responseObjectDictionary;
         }
 
@@ -192,7 +196,6 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-
         public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
         {
             // Add type_int_dictionary here later
@@ -202,7 +205,7 @@ namespace Intel.MyDeals.DataLibrary
                 var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
                 {
                     in_btch_id = btchId,
-                    in_rqst_sts = rqstStatus,
+                    in_rqst_sts = rqstStatus,                    
                 };
                 DataAccess.ExecuteNonQuery(cmd);
             }
