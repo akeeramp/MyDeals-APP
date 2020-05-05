@@ -159,6 +159,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/rules/ruleDetailsModal.controller.js"
                 , "~/app/admin/rules/rules.service.js"
                 , "~/app/admin/rules/rulesSimulationModal.controller.js"
+                , "~/app/admin/meetComp/bulkUploadMeetCompModal.controller.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.service.js"
                 , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"

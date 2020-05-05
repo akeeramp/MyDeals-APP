@@ -8,14 +8,15 @@
         .run(SetRequestVerificationToken);
 
     SetRequestVerificationToken.$inject = ['$http'];
-    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout', '$q'];
+    meetCompController.$inject = ['$scope', 'dataService', 'meetCompService', 'logger', '$localStorage', 'confirmationModal', '$linq', 'gridConstants', '$timeout', '$q', '$uibModal'];
 
-    function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q) { 
+    function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q, $uibModal) {
         var vm = this;
+        vm.HasBulkUploadAccess = window.usrRole == "DA";
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {
-            	var newState = msg != undefined && msg !== "";
-            	if (isShowFunFact == null) { isShowFunFact = false; }
+                var newState = msg != undefined && msg !== "";
+                if (isShowFunFact == null) { isShowFunFact = false; }
 
                 // if no change in state, simple update the text
                 if ($scope.isBusy === newState) {
@@ -43,9 +44,24 @@
             });
         }
         vm.isAcess = false;
-        
+
+        vm.OpenBulkUploadMeetCompModal = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/meetComp/bulkUploadMeetCompModal.html',
+                controller: 'BulkUploadMeetCompModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                windowClass: 'prdSelector-modal-window'
+            });
+
+            modalInstance.result.then(function (returnData) {
+            }, function () { });
+        }
+
         if ((usrRole == 'GA' && isSuper) || usrRole == 'DA' || usrRole == 'Legal' || usrRole == 'SA') {
-            vm.isAcess = true;            
+            vm.isAcess = true;
         }
         else {
             vm.isAcessMessage = 'You don\'t have access to view this page.  Only SuperGA, DA, Legal, or SA users are allowed.';
@@ -97,7 +113,7 @@
             }
 
             var getCustomerDIMData = function () {
-                var cid = $scope.selectedCustomerId == '' ? - 1 : $scope.selectedCustomerId;                
+                var cid = $scope.selectedCustomerId == '' ? - 1 : $scope.selectedCustomerId;
 
                 meetCompService.getMeetCompDIMData(cid, 'DIM')
                     .then(function (response) {
@@ -110,7 +126,7 @@
                             var comboCustomer = $("#comboCustomer").data("kendoComboBox");
                             comboCustomer.text("ALL CUSTOMER");
                         }
-                        
+
                     }, function (response) {
                         logger.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
                     });
@@ -151,10 +167,10 @@
                         getCustomerDIMData(vm.selectedCustomerID, 'DIM');
                         $scope.loading = true;
                         $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
-                        $scope.meetCompProdCatName.read();                        
+                        $scope.meetCompProdCatName.read();
                     }
                     else {
-                        vm.selectedCustomerID = -1;                        
+                        vm.selectedCustomerID = -1;
                     }
 
                     reset();
@@ -208,8 +224,8 @@
                         $scope.meetCompBrandName.read();
                     }
                     else {
-                        vm.selectedProdCatName = -1;                        
-                    }                    
+                        vm.selectedProdCatName = -1;
+                    }
                 }
             };
 
@@ -237,7 +253,7 @@
                                 vm.selectedBrandName = brandName[0].BRND_NM;
                                 $scope.selectProdName.read();
                             }
-                            else {                                
+                            else {
                                 var comboBrndName = $("#comboBrndName").data("kendoComboBox");
                                 comboBrndName.value();
                                 comboBrndName.text("");
@@ -245,7 +261,7 @@
                                 comboBrndName.enable(true);
 
                                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
-                                comboProdName.value([]);                                
+                                comboProdName.value([]);
                                 comboProdName.trigger("change");
 
                             }
@@ -275,7 +291,7 @@
                                 comboBrndName.value();
                                 comboBrndName.text("");
                                 vm.selectedBrandName = -1;
-                                comboBrndName.enable(true);                                
+                                comboBrndName.enable(true);
                             }
                             e.success(brandName);
                         }
@@ -298,7 +314,7 @@
 
                     }
                     else {
-                        vm.selectedBrandName = -1;                        
+                        vm.selectedBrandName = -1;
                     }
 
                     //resetting Prod Name
@@ -359,7 +375,7 @@
 
                     }
                     else {
-                        vm.selectedProductName = -1;                        
+                        vm.selectedProductName = -1;
                     }
 
                 }
@@ -459,7 +475,7 @@
 
                 var comboProdName = $("#comboProdName").data("kendoMultiSelect");
                 comboProdName.value([]);
-                comboProdName.trigger("change");                
+                comboProdName.trigger("change");
 
                 //Reset grid to Blank
                 vm.meetCompMasterData = [];
@@ -483,9 +499,9 @@
                             MEET_COMP_SID: {
                                 editable: false, nullable: true
                             },
-                            CUST_NM: { validation: { required: true }, type:"string" },
+                            CUST_NM: { validation: { required: true }, type: "string" },
                             PRD_CAT_NM: { validation: { required: true }, type: "string" },
-                            HIER_VAL_NM: { validation: { required: true }, type: "string"  },                            
+                            HIER_VAL_NM: { validation: { required: true }, type: "string" },
                             ACTV_IND: { validation: { required: true }, type: "boolean" },
                             MEET_COMP_PRD: { editable: false, validation: { required: false } },
                             MEET_COMP_PRC: { editable: false, validation: { required: true }, type: "number" },
@@ -568,13 +584,13 @@
                 meetCompService.activateDeactivateMeetComp(dataItem.MEET_COMP_SID, dataItem.ACTV_IND)
                     .then(function (response) {
                         if (response.data[0].MEET_COMP_SID > 0) {
-                            var CHG_DTM = moment(response.data[0].CHG_DTM).format("l"); 
+                            var CHG_DTM = moment(response.data[0].CHG_DTM).format("l");
                             dataItem.CHG_EMP_NM = usrName;
                             dataItem.CHG_DTM = CHG_DTM;
                             var grid = $('#grid').data('kendoGrid');
                             var tempGroup = grid.dataSource.group();
                             grid.dataSource.group([]);
-                            $("#grid").find("tr[data-uid='" + dataItem.uid + "'] td:eq(11)").text(CHG_DTM);                            
+                            $("#grid").find("tr[data-uid='" + dataItem.uid + "'] td:eq(11)").text(CHG_DTM);
                             grid.dataSource.group(tempGroup);
                             //vm.dataSource.read();
                             $scope.isBusy = false;

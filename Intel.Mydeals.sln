@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 1 Data Access Layer", "Intel MyDeals 1 Data Access Layer", "{A18EE0E6-6970-447C-94BD-B363F7D2C433}"
 EndProject
@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Antlr3.Runtime.dll = Shared Libraries\Antlr3.Runtime.dll
 		Shared Libraries\Apache.NMS.ActiveMQ.dll = Shared Libraries\Apache.NMS.ActiveMQ.dll
 		Shared Libraries\Apache.NMS.dll = Shared Libraries\Apache.NMS.dll
+		Shared Libraries\EPPlus.dll = Shared Libraries\EPPlus.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.dll = Shared Libraries\ICSharpCode.SharpZipLib.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.pdb = Shared Libraries\ICSharpCode.SharpZipLib.pdb
 		Shared Libraries\Intel.Opaque.Config.dll = Shared Libraries\Intel.Opaque.Config.dll
@@ -304,81 +305,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection_tfs04
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
-		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
-		SccProjectName1 = Intel.MyDeals.DataAccessLib
-		SccLocalPath1 = Intel.MyDeals.DataAccessLib
-		SccProjectUniqueName2 = Intel.MyDeals.Entities\\Intel.MyDeals.Entities.csproj
-		SccProjectTopLevelParentUniqueName2 = Intel.Mydeals.sln
-		SccProjectName2 = Intel.MyDeals.Entities
-		SccLocalPath2 = Intel.MyDeals.Entities
-		SccProjectUniqueName3 = Intel.MyDeals.DataLibrary\\Intel.MyDeals.DataLibrary.csproj
-		SccProjectTopLevelParentUniqueName3 = Intel.Mydeals.sln
-		SccProjectName3 = Intel.MyDeals.DataLibrary
-		SccLocalPath3 = Intel.MyDeals.DataLibrary
-		SccProjectUniqueName4 = Intel.MyDeals.BusinessLogic\\Intel.MyDeals.BusinessLogic.csproj
-		SccProjectTopLevelParentUniqueName4 = Intel.Mydeals.sln
-		SccProjectName4 = Intel.MyDeals.BusinessLogic
-		SccLocalPath4 = Intel.MyDeals.BusinessLogic
-		SccProjectUniqueName5 = Intel.MyDeals.BusinessRules\\Intel.MyDeals.BusinessRules.csproj
-		SccProjectTopLevelParentUniqueName5 = Intel.Mydeals.sln
-		SccProjectName5 = Intel.MyDeals.BusinessRules
-		SccLocalPath5 = Intel.MyDeals.BusinessRules
-		SccProjectUniqueName6 = Intel.MyDeals.App\\Intel.MyDeals.App.csproj
-		SccProjectTopLevelParentUniqueName6 = Intel.Mydeals.sln
-		SccProjectName6 = Intel.MyDeals.App
-		SccLocalPath6 = Intel.MyDeals.App
-		SccProjectUniqueName7 = Intel.MyDeals\\Intel.MyDeals.csproj
-		SccProjectName7 = Intel.MyDeals
-		SccLocalPath7 = Intel.MyDeals
-		SccProjectUniqueName8 = Intel.MyDeals.Tests\\Intel.MyDeals.Tests.csproj
-		SccProjectName8 = Intel.MyDeals.Tests
-		SccLocalPath8 = Intel.MyDeals.Tests
-		SccProjectUniqueName9 = Intel.MyDeals.Entities.Test\\Intel.MyDeals.Entities.Test.csproj
-		SccProjectTopLevelParentUniqueName9 = Intel.Mydeals.sln
-		SccProjectName9 = Intel.MyDeals.Entities.Test
-		SccLocalPath9 = Intel.MyDeals.Entities.Test
-		SccProjectUniqueName10 = Intel.MyDeals.DataLibrary.Test\\Intel.MyDeals.DataLibrary.Test.csproj
-		SccProjectTopLevelParentUniqueName10 = Intel.Mydeals.sln
-		SccProjectName10 = Intel.MyDeals.DataLibrary.Test
-		SccLocalPath10 = Intel.MyDeals.DataLibrary.Test
-		SccProjectUniqueName11 = Intel.MyDeals.BusinessLogic.Test\\Intel.MyDeals.BusinessLogic.Test.csproj
-		SccProjectTopLevelParentUniqueName11 = Intel.Mydeals.sln
-		SccProjectName11 = Intel.MyDeals.BusinessLogic.Test
-		SccLocalPath11 = Intel.MyDeals.BusinessLogic.Test
-		SccProjectUniqueName12 = Intel.MyDeals.App.Test\\Intel.MyDeals.App.Test.csproj
-		SccProjectTopLevelParentUniqueName12 = Intel.Mydeals.sln
-		SccProjectName12 = Intel.MyDeals.App.Test
-		SccLocalPath12 = Intel.MyDeals.App.Test
-		SccProjectUniqueName13 = Intel.MyDeals.IBusinessLogic\\Intel.MyDeals.IBusinessLogic.csproj
-		SccProjectTopLevelParentUniqueName13 = Intel.Mydeals.sln
-		SccProjectName13 = Intel.MyDeals.IBusinessLogic
-		SccLocalPath13 = Intel.MyDeals.IBusinessLogic
-		SccProjectUniqueName14 = DependencyResolver\\Intel.MyDeals.DependencyResolver.csproj
-		SccProjectTopLevelParentUniqueName14 = Intel.Mydeals.sln
-		SccProjectName14 = DependencyResolver
-		SccLocalPath14 = DependencyResolver
-		SccProjectUniqueName15 = Intel.MyDeals.IDataLibraries\\Intel.MyDeals.IDataLibrary.csproj
-		SccProjectTopLevelParentUniqueName15 = Intel.Mydeals.sln
-		SccProjectName15 = Intel.MyDeals.IDataLibraries
-		SccLocalPath15 = Intel.MyDeals.IDataLibraries
-		SccProjectUniqueName16 = Intel.Mydeals.JMSQueue\\Intel.Mydeals.JMSQueue.csproj
-		SccProjectTopLevelParentUniqueName16 = Intel.Mydeals.sln
-		SccProjectName16 = Intel.Mydeals.JMSQueue
-		SccLocalPath16 = Intel.Mydeals.JMSQueue
-		SccProjectUniqueName17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle\\Intel.MyDeals.CacheRecycle.csproj
-		SccProjectTopLevelParentUniqueName17 = Intel.Mydeals.sln
-		SccProjectName17 = Intel.MyDeals.Utilities/Intel.MyDeals.CacheRecycle
-		SccLocalPath17 = Intel.MyDeals.Utilities\\Intel.MyDeals.CacheRecycle
-		SccProjectUniqueName18 = Intel.MyDeals.BusinessRules.Test\\Intel.MyDeals.BusinessRules.Test.csproj
-		SccProjectTopLevelParentUniqueName18 = Intel.Mydeals.sln
-		SccProjectName18 = Intel.MyDeals.BusinessRules.Test
-		SccLocalPath18 = Intel.MyDeals.BusinessRules.Test
+		SolutionGuid = {F8CF4824-A23A-46E1-B2E5-37D50759EDF8}
 	EndGlobalSection
 EndGlobal

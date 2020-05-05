@@ -1,9 +1,14 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy"  is-show-fun-fact="isBusyShowFunFact"></loading-panel>
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" ng-show="isBusy" is-show-fun-fact="isBusyShowFunFact"></loading-panel>
 <div class="col-md-12">
-    <h2>Meet Comp</h2>
+    <div class="col-md-9">
+        <h2>Meet Comp</h2>
+    </div>
+    <div class="col-md-3" ng-if="vm.HasBulkUploadAccess">
+        <button ng-click="vm.OpenBulkUploadMeetCompModal()" class="btn btn-primary" style="float:right; margin-top: 15px">Upload Meet Comp</button>
+    </div>
 </div>
 <div class="col-md-12" ng-if="vm.isAcess === false" style="padding-top: 10px;">
-    <div class="alert alert-danger" >
+    <div class="alert alert-danger">
         {{vm.isAcessMessage}}
     </div>
 </div>
@@ -54,6 +59,7 @@
     .k-reset {
         font-weight: bold !important;
     }
+
     .ss-loading-panel {
         background-color: #ffffff;
         margin-top: 200px !important;
@@ -64,8 +70,8 @@
         padding: 10px;
         border: 2px #0071C5 solid;
     }
+
     .errorCode {
         border: 1px solid red !important;
     }
 </style>
-

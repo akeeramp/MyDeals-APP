@@ -166,7 +166,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID, string MODE, int OBJ_TYPE_ID)
         {
             OpLog.Log("GetMeetCompProductDetails");
-            
+
             var ret = new List<MeetCompResult>();
             var cmd = new Procs.dbo.PR_MYDL_GET_MEET_COMP { };
 
@@ -433,6 +433,101 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+
+        public List<MeetCompProductValidation> GetValidProducts(List<string> lstProducts)
+        {
+            lstProducts.ForEach(x => x = x.Trim().ToLower());
+            lstProducts.RemoveAll(x => x == string.Empty);
+            List<MeetCompProductValidation> lstValidProducts = new List<MeetCompProductValidation>();
+            Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD cmd = new Procs.dbo.PR_MYDL_MEET_COMP_PRD_VLD()
+            {
+                in_prd_nm_list = new type_list(lstProducts.ToArray())
+            };
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+                int IDX_SRV_TYP = DB.GetReaderOrdinal(rdr, "SVR_TYP");
+
+                while (rdr.Read())
+                {
+                    lstValidProducts.Add(new MeetCompProductValidation
+                    {
+                        ProductId = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                        ProductName = ((IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM)).ToLower(),
+                        IsServerProduct = ((IDX_SRV_TYP < 0 || rdr.IsDBNull(IDX_SRV_TYP)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SRV_TYP)) > 0
+                    });
+                } // while
+            }
+
+            return lstValidProducts;
+        }
+
+        public bool UploadMeetComp(List<MeetComp> lstMeetComp)
+        {
+            bool isProccessed = false;
+            try
+            {
+                List<MeetCompProductValidation> lstValidProducts = GetValidProducts(lstMeetComp.Select(x => x.HIER_VAL_NM.Trim().ToLower()).ToList());
+                List<MyCustomersInformation> lstMyCustomersInformation = DataCollections.GetMyCustomers().CustomerInfo;
+                in_t_meet_comp dt = new in_t_meet_comp();
+                lstMeetComp.ForEach(x =>
+                {
+                    //Allow to all customer if cutomer name is empty
+                    x.CUST_MBR_SID = x.CUST_NM.Trim() == string.Empty ? 1 : lstMyCustomersInformation.Where(y => y.CUST_NM.ToLower() == x.CUST_NM.Trim().ToLower()).First().CUST_SID;
+                    foreach (var product in lstValidProducts.Where(y => y.ProductName == x.HIER_VAL_NM.Trim().ToLower()))
+                    {
+                        decimal? dblCompBench = product.IsServerProduct ? Math.Round(x.COMP_BNCH, 0) : default(System.Decimal?);
+                        decimal? dblIABench = product.IsServerProduct ? Math.Round(x.IA_BNCH, 0) : default(System.Decimal?);
+                        dt.AddRow(new MeetCompUpdate
+                        {
+                            COMP_BNCH = dblCompBench,
+                            IA_BNCH = dblIABench,
+                            COMP_PRC = x.MEET_COMP_PRC,
+                            COMP_SKU = x.MEET_COMP_PRD,
+                            CUST_NM_SID = x.CUST_MBR_SID,
+                            GRP_PRD_SID = product.ProductId.ToString(),
+                            GRP = string.Empty, //Dummy value since type is not null
+                            DEAL_PRD_TYPE = string.Empty, //Dummy value since type is not null
+                            PRD_CAT_NM = string.Empty, //Dummy value since type is not null
+                            GRP_PRD_NM = string.Empty, //Dummy value since type is not null
+                            DEAL_OBJ_SID = 0, //Dummy value since type is not null
+                            MEET_COMP_UPD_FLG = 'T', //Dummy value since type is not null
+                        });
+                    }
+                });
+
+                Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP cmd = new Procs.dbo.PR_MYDL_BLK_UPD_MEET_COMP()
+                {
+                    l_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    var_meet_comp = dt
+                };
+
+                DataAccess.ExecuteNonQuery(cmd);
+                isProccessed = true;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            };
+            return isProccessed;
+        }
+
+    }
+
+    public class DistinctItemComparerMeetComp : IEqualityComparer<MeetComp>
+    {
+        public bool Equals(MeetComp x, MeetComp y)
+        {
+            return x.CUST_NM == y.CUST_NM && x.HIER_VAL_NM == y.HIER_VAL_NM && x.MEET_COMP_PRD == y.MEET_COMP_PRD && x.MEET_COMP_PRC == y.MEET_COMP_PRC && x.IA_BNCH == y.IA_BNCH && x.COMP_BNCH == y.COMP_BNCH;
+        }
+
+        public int GetHashCode(MeetComp obj)
+        {
+            return obj.CUST_NM.GetHashCode() ^ obj.HIER_VAL_NM.GetHashCode() ^ obj.MEET_COMP_PRD.GetHashCode() ^ obj.MEET_COMP_PRC.GetHashCode() ^ obj.IA_BNCH.GetHashCode() ^ obj.COMP_BNCH.GetHashCode();
         }
     }
 }

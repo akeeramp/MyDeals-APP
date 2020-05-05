@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Runtime.Serialization;
 
@@ -18,7 +19,7 @@ namespace Intel.MyDeals.Entities
         protected override void Init()
         {
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)            
-            this.Columns.Add("GRP", typeof(string));            
+            this.Columns.Add("GRP", typeof(string));
             this.Columns.Add("CUST_NM_SID", typeof(int));
             this.Columns.Add("DEAL_PRD_TYPE", typeof(string));
             this.Columns.Add("PRD_CAT_NM", typeof(string));
@@ -40,8 +41,8 @@ namespace Intel.MyDeals.Entities
         public void AddRow(MeetCompUpdate itm)
         {
             if (itm == null) { return; }
-            var r = this.NewRow();            
-            r["GRP"] = itm.GRP;                
+            var r = this.NewRow();
+            r["GRP"] = itm.GRP;
             r["CUST_NM_SID"] = itm.CUST_NM_SID;
             r["DEAL_PRD_TYPE"] = itm.DEAL_PRD_TYPE;
             r["PRD_CAT_NM"] = itm.PRD_CAT_NM;
@@ -50,11 +51,17 @@ namespace Intel.MyDeals.Entities
             r["DEAL_OBJ_SID"] = itm.DEAL_OBJ_SID;
             r["COMP_SKU"] = itm.COMP_SKU;
             r["COMP_PRC"] = itm.COMP_PRC;
-            r["COMP_BNCH"] = itm.COMP_BNCH;
-            r["IA_BNCH"] = itm.IA_BNCH;
+            if (itm.COMP_BNCH.HasValue)
+                r["COMP_BNCH"] = itm.COMP_BNCH.Value;
+            else
+                r["COMP_BNCH"] = DBNull.Value;
+            if (itm.IA_BNCH.HasValue)
+                r["IA_BNCH"] = itm.IA_BNCH.Value;
+            else
+                r["IA_BNCH"] = DBNull.Value;
             r["COMP_OVRRD_RSN"] = itm.COMP_OVRRD_RSN;
             r["COMP_OVRRD_FLG"] = itm.COMP_OVRRD_FLG;
-            r["MEET_COMP_UPD_FLG"] = itm.MEET_COMP_UPD_FLG;           
+            r["MEET_COMP_UPD_FLG"] = itm.MEET_COMP_UPD_FLG;
             this.Rows.Add(r);
         }
 
@@ -77,8 +84,14 @@ namespace Intel.MyDeals.Entities
                 r["DEAL_OBJ_SID"] = itm.DEAL_OBJ_SID;
                 r["COMP_SKU"] = itm.COMP_SKU;
                 r["COMP_PRC"] = itm.COMP_PRC;
-                r["COMP_BNCH"] = itm.COMP_BNCH;
-                r["IA_BNCH"] = itm.IA_BNCH;
+                if (itm.COMP_BNCH.HasValue)
+                    r["COMP_BNCH"] = itm.COMP_BNCH.Value;
+                else
+                    r["COMP_BNCH"] = DBNull.Value;
+                if (itm.IA_BNCH.HasValue)
+                    r["IA_BNCH"] = itm.IA_BNCH.Value;
+                else
+                    r["IA_BNCH"] = DBNull.Value;
                 r["COMP_OVRRD_RSN"] = itm.COMP_OVRRD_RSN;
                 r["COMP_OVRRD_FLG"] = itm.COMP_OVRRD_FLG;
                 r["MEET_COMP_UPD_FLG"] = itm.MEET_COMP_UPD_FLG;

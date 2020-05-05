@@ -3,8 +3,10 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -12,6 +14,77 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class FilesDataLib : IFilesDataLib
     {
+        public List<MeetComp> ExtractMeetCompFile(byte[] fileData)
+        {
+            List<MeetComp> lstRtn = new List<MeetComp>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
+
+                        if (iRows >= 2 && iColumns >= 6)
+                        {
+                            // loop through the worksheet rows and columns
+                            for (int i = 2; i <= iRows; i++)
+                            {
+                                decimal dblMeetCompPrc = 0;
+                                decimal dblIABench = 0;
+                                decimal dblCompBench = 0;
+
+                                decimal.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString() : "0", out dblMeetCompPrc);
+                                decimal.TryParse(worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString() : "0", out dblIABench);
+                                decimal.TryParse(worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString() : "0", out dblCompBench);
+
+                                lstRtn.Add(new MeetComp
+                                {
+                                    CUST_NM = worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString() : string.Empty,
+                                    HIER_VAL_NM = worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString() : string.Empty,
+                                    MEET_COMP_PRD = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString() : string.Empty,
+                                    MEET_COMP_PRC = dblMeetCompPrc,
+                                    IA_BNCH = dblIABench,
+                                    COMP_BNCH = dblCompBench
+                                });
+                            }
+                        }
+
+                    }
+                }
+            }
+            return lstRtn.Distinct(new DistinctItemComparerMeetComp()).ToList();
+        }
+
+        public FileAttachmentData GetMeetCompTemplateFile()
+        {
+            FileAttachmentData fileAttachmentData = new FileAttachmentData();
+            fileAttachmentData.FILE_NM = "MeetComp.xlsx";
+            fileAttachmentData.IS_COMPRS = false;
+            string strTemplateContent = string.Join("\n", string.Join("\t", "Customer", "Deal Product", "Meet Comp Sku", "Meet Comp Price", "IA Bench", "Comp Bench"));
+            string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets.Add("MeetComp");
+                excelWorksheet.Cells["A1"].LoadFromArrays(arrTemplate);
+                double dblMaxWidthOfColumn = 300;
+                for (int iColumnCount = 1; iColumnCount <= arrTemplate[0].Length; iColumnCount++)
+                {
+                    excelWorksheet.Column(iColumnCount).AutoFit();
+                    if (excelWorksheet.Column(iColumnCount).Width > dblMaxWidthOfColumn)
+                        excelWorksheet.Column(iColumnCount).Width = dblMaxWidthOfColumn;
+                }
+                excelWorksheet.Row(1).Style.Font.Bold = true;
+                excelWorksheet.View.FreezePanes(2, 1);
+                fileAttachmentData.FILE_DATA = excelPackage.GetAsByteArray();
+            }
+            return fileAttachmentData;
+        }
+
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>

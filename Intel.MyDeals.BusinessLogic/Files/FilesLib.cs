@@ -23,6 +23,16 @@ namespace Intel.MyDeals.BusinessLogic
             _filesDataLib = new FilesDataLib();
         }
 
+        public List<MeetComp> ExtractMeetCompFile(byte[] fileData)
+        {
+            return _filesDataLib.ExtractMeetCompFile(fileData);
+        }
+
+        public FileAttachmentData GetMeetCompTemplateFile()
+        {
+            return _filesDataLib.GetMeetCompTemplateFile();
+        }
+
         /// <summary>
         /// Save the specified files as attachments
         /// </summary>
@@ -68,7 +78,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (de == null)
             {
-                dc.DataElements.Add (new OpDataElement {
+                dc.DataElements.Add(new OpDataElement
+                {
                     DcID = deCust.DcID,
                     DcType = deCust.DcType,
                     DcParentType = deCust.DcParentType,
