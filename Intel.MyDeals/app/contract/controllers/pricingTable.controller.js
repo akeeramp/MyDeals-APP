@@ -3700,10 +3700,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
                     return true;
                 }
-                else {
-                    return false;
-                }
             }
+            return false;
         }
         else {
             return false;
@@ -3843,6 +3841,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
+                //When save & Validate button disabled, if user removed all the elements from multi selector selectedItem value will be "".
+                //In the above scenario as the value is ""(empty),save & button is not getting enabled.so if any change on multi selector compare it previous and enabled.
+                if (cellCurrVal != selectedItem) {
+                    root._dirty = true;
+                }
                 if (colName === "CUST_ACCNT_DIV" && $scope.contractData.CUST_ACCNT_DIV != "" && selectedItem == "") {
                     kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
                         context.callback(selectedItem);
