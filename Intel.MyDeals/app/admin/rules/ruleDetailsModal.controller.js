@@ -434,6 +434,15 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             lookupText: "value",
             lookupValue: "value",
             lookupUrl: "/api/Dropdown/GetDictDropDown/PCSR_NBR"
+        },
+        {
+            field: "QLTR_BID_GEO",
+            title: "Bid Geo",
+            type: "list",
+            width: 150,
+            lookupText: "dropdownName",
+            lookupValue: "dropdownName",
+            lookupUrl: "/api/Dropdown/GetGeosDropdowns"
         }
     ];
 
