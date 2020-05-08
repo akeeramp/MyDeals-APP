@@ -5986,7 +5986,7 @@ div.k-scheduler-marquee:after {
     font-weight: normal;
     font-size: 14px;
     font-weight: 600;
-    text-transform: capitalize;
+    text-transform: none;
     color: #1a3e6f;     
 }
 .k-header, .k-grid-header-wrap, .k-grid .k-grouping-header, .k-grid-header, .k-pager-wrap, .k-pager-wrap .k-textbox, .k-pager-wrap .k-link, .k-gantt-toolbar .k-state-default, .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
