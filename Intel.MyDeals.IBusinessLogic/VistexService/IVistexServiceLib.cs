@@ -9,9 +9,9 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IVistexServiceLib
     {
-        VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode);
+        VistexDFDataResponseObject GetVistexDealOutBoundData(string packetType, string runMode, VistexDFDataResponseObject responseObj);
 
-        VistexDFDataResponseObject GetVistexDataOutBound(string packetType);
+        VistexDFDataResponseObject GetVistexDataOutBound(string packetType, VistexDFDataResponseObject responseObj);
 
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
 
@@ -19,7 +19,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj);
 
-        VistexDFDataResponseObject GetVistexStageData(string runMode);
+        VistexDFDataResponseObject GetVistexStageData(string runMode, VistexDFDataResponseObject responseObj);
 
         Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
 

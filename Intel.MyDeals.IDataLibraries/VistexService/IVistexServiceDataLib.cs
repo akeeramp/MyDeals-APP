@@ -12,7 +12,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<VistexQueueObject> GetVistexDataOutBound(string packetType);
 
         void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
-
+        
         VistexDFDataLoadObject GetVistexDFStageData(string runMode);
 
         void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj);
@@ -25,6 +25,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         CredentialCache GetVistexCredentials(string url);
 
-        Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode);
+        Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode, VistexDFDataResponseObject responseObject);
     }
 }

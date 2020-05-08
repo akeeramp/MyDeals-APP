@@ -211,6 +211,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             dicAttr.Add("MTRL_ID", "Material Id");
             dicAttr.Add("DEAL_PRD_NM", "Level 4");
             dicAttr.Add("PCSR_NBR", "Processor Number");
+            dicAttr.Add("QLTR_BID_GEO", "Bid Geo");
             return dicAttr;
         }
     }
