@@ -16,11 +16,14 @@
         vm.dealtypes = [];
         vm.onlyAllDeal = [];
         vm.groupsDataSource = [];
+        vm.custsDataSource = [];
         vm.nonCorpInheritableValues = [];
         vm.selectedInheritanceGroup = "";
+        vm.selectedInheritanceCust = "";
 
         vm.selectedATRB_SID = 0;
         vm.selectedOBJ_SET_TYPE_SID = 0;
+        vm.selectedCUST_MBR_SID = 1;
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -94,6 +97,7 @@
                         ATRB_LKUP_SID: { editable: false },
                         OBJ_SET_TYPE_SID: { validation: { required: true } },
                         OBJ_SET_TYPE_CD: { validation: { required: true } },
+                        CUST_MBR_SID: { validation: { required: true } },
                         CUST_NM: { validation: { required: true } },
                         ATRB_SID: { validation: { required: true } },
                         ATRB_CD: { validation: { required: true } },
@@ -149,6 +153,16 @@
         }
         getGroupsDataSource();
 
+        function getCustsDataSource() {
+            dropdownsService.getCustsDropdowns(true)
+                .then(function (response) {
+                    vm.custsDataSource = response.data;
+                }, function (response) {
+                    logger.error("Unable to get Dropdown Customers.", response, response.statusText);
+                });
+        }
+        getCustsDataSource();
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
@@ -169,14 +183,18 @@
                 if (e.model.isNew() == false) { //edit case: prevent edit of these fields except during creation
                     $('input[name=DROP_DOWN]').parent().html(e.model.DROP_DOWN);
                     $('input[name=OBJ_SET_TYPE_SID]').parent().html(e.model.OBJ_SET_TYPE_CD);
+                    $('input[name=CUST_MBR_SID]').parent().html(e.model.CUST_MBR_SID);
                     $('input[name=ATRB_SID]').parent().html(e.model.ATRB_CD);
                 } else {    //new entry case: all fields are editable
                     $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").select(0);
                     $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
                     vm.selectedOBJ_SET_TYPE_SID = $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID;
+                    $("#CUST_MBR_SID").data("kendoDropDownList").select(0);
+                    $("#CUST_MBR_SID").data("kendoDropDownList").trigger("change");
+                    vm.selectedCUST_MBR_SID = $("#CUST_MBR_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID;
                     $("#ATRB_SID").data("kendoDropDownList").select(0);
                     $("#ATRB_SID").data("kendoDropDownList").trigger("change");
-                    vm.selectedATRB_SID = $("#ATRB_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID
+                    vm.selectedATRB_SID = $("#ATRB_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID;
                 }
             },
             destroy: function (e) {
@@ -278,6 +296,36 @@
                     }
                 },
                 {
+                    field: "CUST_MBR_SID", //Dropdown Group
+                    title: "Customer",
+                    editor: function (container) { // use a dropdownlist as an editor
+                        // create an input element with id and name set as the bound field (CUST_MBR_SID)
+                        var input = $('<input id="CUST_MBR_SID" name="CUST_MBR_SID">');
+                        // append to the editor container
+                        input.appendTo(container);
+
+                        // initialize a dropdownlist
+                        input.kendoDropDownList({
+                            dataTextField: "dropdownName",
+                            dataValueField: "dropdownID",
+                            dataSource: vm.custsDataSource, // bind it to the dealtype datasource
+                            select: onCustChange
+                        }).appendTo(container);
+                    },
+                    template: "#= CUST_NM #",
+                    filterable: {
+                        ui: custFilter,
+                        extra: false,
+                        operators: {
+                            string: {
+                                eq: "Is equal to",
+                                neq: "Not equal to",
+                                isempty: "Is empty"
+                            }
+                        }
+                    }
+                },
+                {
                     field: "DROP_DOWN",
                     title: "Value",
                     filterable: { multi: true, search: true }
@@ -311,6 +359,14 @@
             });
         }
 
+        function custFilter(element) {
+            element.kendoDropDownList({
+                dataTextField: "dropdownName",
+                dataValueField: "dropdownID",
+                dataSource: vm.custsDataSource
+            });
+        }
+
         function setNonCorpInheritableValues(data) {
             //list of basic dropdown objects
             for (var i = 0; i <= data.length; i++) {
@@ -328,6 +384,7 @@
                     continue;
                 } else {
                     if (gridData[i]["OBJ_SET_TYPE_SID"] == vm.selectedOBJ_SET_TYPE_SID &&
+                        gridData[i]["CUST_MBR_SID"] == vm.selectedCUST_MBR_SID &&
                         gridData[i]["ATRB_SID"] == vm.selectedATRB_SID &&
                         gridData[i]["DROP_DOWN"] == val) {
                         //if there is an existing basic dropdown with identical deal type, grouping, and value, return false
@@ -352,6 +409,12 @@
             vm.selectedOBJ_SET_TYPE_SID = e.dataItem.dropdownID;
         }
 
+        function onCustChange(e) {
+            //TODO: notify user that their choice may set other dropdowns to inactive if there is overlap - should we just refresh the entire grid?
+            //Note: kendo select event being called twice? once on click and once on deselect
+            vm.selectedCUST_MBR_SID = e.dataItem.dropdownID;
+        }
+
         function onGroupChange(e) {
             //Note: kendo select event being called twice? once on click and once on deselect
             if (e.dataItem.allDealFlag == 0) {
@@ -364,7 +427,7 @@
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").text(vm.onlyAllDeal[0].dropdownName);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").value(vm.onlyAllDeal[0].dropdownID);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
-                vm.selectedOBJ_SET_TYPE_SID = vm.onlyAllDeal[0].dropdownID
+                vm.selectedOBJ_SET_TYPE_SID = vm.onlyAllDeal[0].dropdownID;
             }
 
             vm.selectedATRB_SID = e.dataItem.dropdownID;

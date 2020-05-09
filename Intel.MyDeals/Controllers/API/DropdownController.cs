@@ -72,6 +72,42 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetDropdownsWithCustomer/{atrbCd}/{custNm}")]
+        public IEnumerable<BasicDropdown> GetDropdownsWithCustomer(string atrbCd, string custNm)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdownsWithCustomer(atrbCd, custNm)
+                , $"Unable to get Customer level Dropdowns for {atrbCd} and {custNm}"
+            );
+        }
+
+        [Authorize]
+        [Route("GetDropdownsWithCustomerId/{atrbCd}/{custId}")]
+        public IEnumerable<BasicDropdown> GetDropdownsWithCustomerId(string atrbCd, int custId)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdownsWithCustomerId(atrbCd, custId)
+                , $"Unable to get Customer level Dropdowns for {atrbCd} and {custId}"
+            );
+        }
+
+        [Authorize]
+        [Route("GetDropdownsByCustomerOnly/{atrbCd}/{custNm}")]
+        public IEnumerable<BasicDropdown> GetDropdownsByCustomerOnly(string atrbCd, string custNm)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdownsByCustomerOnly(atrbCd, custNm)
+                , $"Unable to get Customer only level Dropdowns for {atrbCd} and {custNm}"
+            );
+        }
+
+        [Authorize]
+        [Route("GetDropdownsByCustomerOnlyId/{atrbCd}/{custId}")]
+        public IEnumerable<BasicDropdown> GetDropdownsByCustomerOnlyId(string atrbCd, int custId)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdownsByCustomerOnlyId(atrbCd, custId)
+                , $"Unable to get Customer level Dropdowns for {atrbCd} and {custId}"
+            );
+        }
+
+        [Authorize]
         [Route("GetFilteredRebateTypes/{isTender}/{dealtypeCd}")]
         public IEnumerable<BasicDropdown> GetFilteredRebateTypes(bool isTender, string dealtypeCd)
         {
@@ -180,18 +216,27 @@ namespace Intel.MyDeals.Controllers.API
             );
 		}
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//[Authorize]
-		//[Route("GetRetailPull")]
-		//[HttpPost]
-		//public List<Dropdown> GetRetailPullFromSDM(RetailPullParams filterData)
-		//{
-		//	return SafeExecutor(() => _dropdownLib.GetRetailPullSDMDropdown(filterData)
-		//		, $"Unable to get Retail Pull for product"
-		//	);
-		//}
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //[Authorize]
+        //[Route("GetRetailPull")]
+        //[HttpPost]
+        //public List<Dropdown> GetRetailPullFromSDM(RetailPullParams filterData)
+        //{
+        //	return SafeExecutor(() => _dropdownLib.GetRetailPullSDMDropdown(filterData)
+        //		, $"Unable to get Retail Pull for product"
+        //	);
+        //}
 
-		[Authorize]
+        [Authorize]
+        [Route("GetCustomersList")]
+        public List<Dropdown> GetCustomersList()
+        {
+            return SafeExecutor(() => _dropdownLib.GetCustomersDropdown()
+                , $"Unable to get Sold To Ids for the contract's customer"
+            );
+        }
+
+        [Authorize]
 		[Route("GetSoldToIds/{custId}")]
 		public List<Dropdown> GetSoldToIds(int custId)
 		{
