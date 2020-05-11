@@ -182,9 +182,36 @@
 
         }
         //Business Purpose: For Hybrid Pricing Strategy only Deal type is ECAP
+        $scope.HybridDealType = [];
+        $scope.HybridDealType.push({
+            DEAL_TYPE: "ECAP",
+            IS_HYBRID_PRC_STRAT: 'active',
+            UI_ENABLED: true,
+            UI_VISIBLE: true
+        });
+        $scope.HybridDealType.push({
+            DEAL_TYPE: "KIT",
+            IS_HYBRID_PRC_STRAT: 'disabled',
+            UI_ENABLED: false,
+            UI_VISIBLE: true
+        });
+        $scope.HybridDealType.push({
+            DEAL_TYPE: "PROGRAM",
+            IS_HYBRID_PRC_STRAT: 'disabled',
+            UI_ENABLED: false,
+            UI_VISIBLE: false
+        });
+        $scope.HybridDealType.push({
+            DEAL_TYPE: "VOL TIER",
+            IS_HYBRID_PRC_STRAT: 'disabled',
+            UI_ENABLED: false,
+            UI_VISIBLE: false
+        });
+        
         $scope.disableLinks = function (val) {
             var IS_HYBRID_PRC_STRAT = false;
             $scope.isActiveDefault = '';
+            $scope.uiVisible = true;
             for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
                 if ($scope.contractData.PRC_ST[i].DC_ID == $scope.curPricingStrategy.DC_ID) {
                     IS_HYBRID_PRC_STRAT = $scope.contractData.PRC_ST[i].IS_HYBRID_PRC_STRAT; //IS_HYBRID_PRC_STRAT = 1 in case Hybrid Pricing Strategy 
@@ -193,13 +220,15 @@
             }
             //return true or false for UI Visibility
             if (IS_HYBRID_PRC_STRAT == "1") {
-                if (val.replace(/_/g, ' ') == "ECAP" || val.replace(/_/g, ' ') == "KIT") {
-                    $scope.isActiveDefault = val.replace(/_/g, ' ') == "ECAP" ? 'active' : 'disabled';
-                    return val.replace(/_/g, ' ') == "ECAP" ? true : false; //Return true for ECAP false for KIT so that KIT will be disabled
+                for (var index = 0; index < $scope.HybridDealType.length; index++) {
+                    if (val.replace(/_/g, ' ') == $scope.HybridDealType[index].DEAL_TYPE) {
+                        $scope.isActiveDefault = $scope.HybridDealType[index].IS_HYBRID_PRC_STRAT;
+                        $scope.uiVisible = $scope.HybridDealType[index].UI_VISIBLE;
+                        return $scope.HybridDealType[index].UI_ENABLED; //Return true for ECAP false for KIT so that KIT will be disabled
+                    }                    
                 }
-                else {
-                    return false;
-                }
+                return false;
+                
             }
             return true;  
         }

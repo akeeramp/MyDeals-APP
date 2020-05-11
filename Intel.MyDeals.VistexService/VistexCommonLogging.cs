@@ -244,6 +244,62 @@ namespace Intel.MyDeals.VistexService
             }
         }
 
+        /// <summary>
+        /// Write to event logger
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <param name="appName"></param>
+        /// <param name="eventType"></param>
+        /// <returns></returns>
+        public static bool WriteToEventLog(Exception ex, string appName, EventLogEntryType eventType)
+        {
+            // Get all error data for log
+            string eventViewerEntry = "Message:\r\n" +
+                ex.Message + "\r\n\r\n" +
+                "Source:\r\n" +
+                ex.Source + "\r\n\r\n" +
+                "Stack trace:\r\n" +
+                ex.StackTrace + "\r\n\r\n" +
+                "ToString():\r\n" +
+                ex;
+
+            var eventLog = new EventLog();
+
+            try
+            {
+                // If a log with the name of the app does not exist, create it
+                if (!(EventLog.SourceExists(appName)))
+                {
+                    EventLog.CreateEventSource(appName, appName);
+                }
+
+                eventLog.Log = appName;
+                eventLog.Source = appName;
+                eventLog.WriteEntry(eventViewerEntry, eventType);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static void HandleException(Exception ex, bool logToDB)
+        {
+            // log exception to Event Viewer
+
+            WriteToEventLog(ex, appName, EventLogEntryType.Error);
+
+            try
+            {
+                SendDebugMail("MyDeals-VTX Error", ex.ToString());
+            }
+            catch (Exception mailException)
+            {
+                WriteToEventLog(mailException, appName, EventLogEntryType.Error);
+            }            
+        }
+
         public static void SendDebugMail(string subject, string body)
         {
             if (String.IsNullOrEmpty(subject)) { subject = String.Format("Message From {0}", appName); }

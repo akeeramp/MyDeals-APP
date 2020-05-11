@@ -32,7 +32,7 @@
                     <div class="clearboth"></div>
                 </div>
                 <!--ang-if="value.name == 'ECAP'"-->
-                <div ng-if="value.name == 'KIT' && isActiveDefault == 'disabled'" class="fl circleWithText" style="cursor: not-allowed;">
+                <div ng-if="uiVisible == true && isActiveDefault == 'disabled'" class="fl circleWithText" style="cursor: not-allowed;">
                     <div class="fl textCircle" style="background-color: #cccccc;">{{ value._custom.ltr }}</div>
                     <div class="fl textName" style="color: #cccccc;" title="Not Allowed">{{ removeBlanks(value.name) }}</div>
                     <div class="clearboth"></div>

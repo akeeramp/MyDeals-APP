@@ -133,10 +133,10 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-                OpLogPerf.Log($"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}", LogCategory.Error);
+                OpLogPerf.Log($"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
                 responseObjectDictionary.Add("Status", ex.Message);
                 responseObjectDictionary.Add("Message", ex.Message);
-                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}- {2}", DateTime.Now, "Data Library Layer: SAP PO Connection Exception - Exception Received: ", $"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace} | Response {responseObjectDictionary["Status"]}") + Environment.NewLine);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}- {2}", DateTime.Now, "Data Library Layer: SAP PO Connection Exception - Exception Received: ", $"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}") + Environment.NewLine);
             }
             //responseObjectDictionary.Add("Log", string.Join(",", logMsg.ToArray()));
             return responseObjectDictionary;
