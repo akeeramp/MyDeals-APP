@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 9:48:56 AM
+File Updated: 5/11/2020 2:14:15 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -553,6 +553,54 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_PLATFORM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
+			ATRB_DESC = "Consumption Customer Platform",
+			ATRB_LBL = "Consumption Customer Platform",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3456,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_RPT_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
+			ATRB_DESC = "Consumption Customer Reported Geo",
+			ATRB_LBL = "Consumption Customer Reported Geo",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3458,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_SEGMENT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_SEGMENT",
+			ATRB_DESC = "Consumption Customer Segment",
+			ATRB_LBL = "Consumption Customer Segment",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3457,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute CONSUMPTION_REASON = new MyDealsAttribute()
 		{

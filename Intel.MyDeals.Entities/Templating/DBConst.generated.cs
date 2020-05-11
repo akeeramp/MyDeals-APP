@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 9:47:15 AM
+File Updated: 5/11/2020 2:13:33 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -325,6 +325,33 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string COMPETITIVE_PRICE = "COMPETITIVE_PRICE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3456
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_PLATFORM = "CONSUMPTION_CUST_PLATFORM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3458
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_RPT_GEO = "CONSUMPTION_CUST_RPT_GEO";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3457
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_SEGMENT = "CONSUMPTION_CUST_SEGMENT";
 
 		///<summary>
 		/// DIM_SID: 3
