@@ -177,7 +177,31 @@
         }
 
         $scope.removeBlanks = function (val) {
+
             return val.replace(/_/g, ' ');
+
+        }
+        //Business Purpose: For Hybrid Pricing Strategy only Deal type is ECAP
+        $scope.disableLinks = function (val) {
+            var IS_HYBRID_PRC_STRAT = false;
+            $scope.isActiveDefault = '';
+            for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
+                if ($scope.contractData.PRC_ST[i].DC_ID == $scope.curPricingStrategy.DC_ID) {
+                    IS_HYBRID_PRC_STRAT = $scope.contractData.PRC_ST[i].IS_HYBRID_PRC_STRAT; //IS_HYBRID_PRC_STRAT = 1 in case Hybrid Pricing Strategy 
+                    break;
+                }
+            }
+            //return true or false for UI Visibility
+            if (IS_HYBRID_PRC_STRAT == "1") {
+                if (val.replace(/_/g, ' ') == "ECAP" || val.replace(/_/g, ' ') == "KIT") {
+                    $scope.isActiveDefault = val.replace(/_/g, ' ') == "ECAP" ? 'active' : 'disabled';
+                    return val.replace(/_/g, ' ') == "ECAP" ? true : false; //Return true for ECAP false for KIT so that KIT will be disabled
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;  
         }
 
         $scope.enableDealEditorTab = function () {
