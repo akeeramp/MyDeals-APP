@@ -209,27 +209,30 @@
         });
         
         $scope.disableLinks = function (val) {
-            var IS_HYBRID_PRC_STRAT = false;
-            $scope.isActiveDefault = '';
-            $scope.uiVisible = true;
-            for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
-                if ($scope.contractData.PRC_ST[i].DC_ID == $scope.curPricingStrategy.DC_ID) {
-                    IS_HYBRID_PRC_STRAT = $scope.contractData.PRC_ST[i].IS_HYBRID_PRC_STRAT; //IS_HYBRID_PRC_STRAT = 1 in case Hybrid Pricing Strategy 
-                    break;
+            if ($scope.contractData.PRC_ST) {
+                var IS_HYBRID_PRC_STRAT = false;
+                $scope.isActiveDefault = '';
+                $scope.uiVisible = true;
+                for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
+                    if ($scope.contractData.PRC_ST[i].DC_ID == $scope.curPricingStrategy.DC_ID) {
+                        IS_HYBRID_PRC_STRAT = $scope.contractData.PRC_ST[i].IS_HYBRID_PRC_STRAT; //IS_HYBRID_PRC_STRAT = 1 in case Hybrid Pricing Strategy 
+                        break;
+                    }
+                }
+                //return true or false for UI Visibility
+                if (IS_HYBRID_PRC_STRAT == "1") {
+                    for (var index = 0; index < $scope.HybridDealType.length; index++) {
+                        if (val.replace(/_/g, ' ') == $scope.HybridDealType[index].DEAL_TYPE) {
+                            $scope.isActiveDefault = $scope.HybridDealType[index].IS_HYBRID_PRC_STRAT;
+                            $scope.uiVisible = $scope.HybridDealType[index].UI_VISIBLE;
+                            return $scope.HybridDealType[index].UI_ENABLED; //Return true for ECAP false for KIT so that KIT will be disabled
+                        }
+                    }
+                    return false;
+
                 }
             }
-            //return true or false for UI Visibility
-            if (IS_HYBRID_PRC_STRAT == "1") {
-                for (var index = 0; index < $scope.HybridDealType.length; index++) {
-                    if (val.replace(/_/g, ' ') == $scope.HybridDealType[index].DEAL_TYPE) {
-                        $scope.isActiveDefault = $scope.HybridDealType[index].IS_HYBRID_PRC_STRAT;
-                        $scope.uiVisible = $scope.HybridDealType[index].UI_VISIBLE;
-                        return $scope.HybridDealType[index].UI_ENABLED; //Return true for ECAP false for KIT so that KIT will be disabled
-                    }                    
-                }
-                return false;
-                
-            }
+            
             return true;  
         }
 
