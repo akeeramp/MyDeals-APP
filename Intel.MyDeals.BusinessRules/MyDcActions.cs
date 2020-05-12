@@ -1448,7 +1448,7 @@ namespace Intel.MyDeals.BusinessRules
             // WIP always is "Draft" and PS depends on the users workflow
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
-            // set WIP Stages to Draft for a redeal if they already aren't there
+            // set WIP Stages to Draft for a re-deal if they already aren't there
             if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
             {
                 r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
@@ -1457,7 +1457,7 @@ namespace Intel.MyDeals.BusinessRules
                     : WorkFlowStages.Draft);
             }
 
-            if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
+            if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set re-deal date only if this came from active since it will drive the tracker effective from/to date calc.
             {
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
@@ -1465,15 +1465,15 @@ namespace Intel.MyDeals.BusinessRules
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {
                     string tracker = de.AtrbValue.ToString();
-                    if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
+                    if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in re-deal visual state
                     {
                         de.AtrbValue = tracker + "*";
-                        setRedealFlag = true; // If there is a tracker change, this is hard redeal and subject to rollback
+                        setRedealFlag = true; // If there is a tracker change, this is hard re-deal and subject to rollback
                     }
                 }
 
                 // If this is a hard rollback, set it so that Cancel/delete/rollback flags can be set in UI.  Rollup will set parents as needed.  Tenders in Offer will not have
-                // tracker and will be cancel in redeal states since the no longer have a level 6 object tied to them until they actually win.
+                // tracker and will be cancel in re-deal states since the no longer have a level 6 object tied to them until they actually win.
                 IOpDataElement rde = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
                 if (rde != null)
                 {

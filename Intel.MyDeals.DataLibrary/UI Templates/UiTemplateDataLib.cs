@@ -97,7 +97,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST },
                 DataType = "string",
-                Label = "Terms",
+                Label = "Additional T's And C's",
                 Width = 150
             });
 
@@ -990,7 +990,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 200,
                 IsDimKey = false,
-                Label = "Additional Ts and Cs",
+                Label = "Additional T's And C's",
                 DataType = "string",
                 IsRequired = false
             });
@@ -2202,7 +2202,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3569,
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Additional Ts and Cs",
+                Label = "Additional T's And C's",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 180,
