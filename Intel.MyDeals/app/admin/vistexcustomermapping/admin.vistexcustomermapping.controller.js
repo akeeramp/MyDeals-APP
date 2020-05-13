@@ -157,7 +157,7 @@
                     title: "Is Vistex Customer",
                     width: "20%",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
-                    editor: gridUtils.boolEditor,
+                    editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     attributes: { style: "text-align: center;" }
                 },
                 { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
