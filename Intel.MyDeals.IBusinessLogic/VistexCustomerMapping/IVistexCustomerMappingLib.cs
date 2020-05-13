@@ -6,8 +6,8 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IVistexCustomerMappingLib
     {
         
-        List<VistexCustomerMapping> GetVistexCustomerMapping(bool getCachedResult = true);
+        List<VistexCustomerMappingWrapper> GetVistexCustomerMapping(bool getCachedResult = true);
 
-        List<VistexCustomerMapping> SetVistexCustomerMapping(CrudModes mode, VistexCustomerMapping data);
+        List<VistexCustomerMappingWrapper> SetVistexCustomerMapping(CrudModes mode, VistexCustomerMapping data);
     }
 }

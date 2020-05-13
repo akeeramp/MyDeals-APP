@@ -12,4 +12,10 @@ namespace Intel.MyDeals.Entities
     {
         public List<VerticalSecurityItem> VerticalInfo { get; set; }
     }
+
+    public class VistexCustomerMappingWrapper
+    {
+        public VistexCustomerMapping VistexCustomerInfo { get; set; }
+        public string[] CustomerReportedGeos { get; set; }
+    }
 }
