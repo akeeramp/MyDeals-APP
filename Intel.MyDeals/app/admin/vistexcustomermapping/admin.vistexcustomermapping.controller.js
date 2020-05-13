@@ -58,11 +58,11 @@
                 update: function (e) {
                     var validationMessages = [];
 
-                    if (e.data.VISTEX_CUST_FLAG && (e.data.DFLT_PERD_PRFL == null || e.data.DFLT_PERD_PRFL == ''))
+                    if (e.data.VistexCustomerInfo.VISTEX_CUST_FLAG && (e.data.VistexCustomerInfo.DFLT_PERD_PRFL == null || e.data.VistexCustomerInfo.DFLT_PERD_PRFL == ''))
                         validationMessages.push("Default value of <b>Period Profile</b> cannot be empty for Vistex customer!");
-                    if (e.data.DFLT_PERD_PRFL != null && e.data.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === e.data.DFLT_PERD_PRFL).length == 0)
+                    if (e.data.VistexCustomerInfo.DFLT_PERD_PRFL != null && e.data.VistexCustomerInfo.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_PERD_PRFL).length == 0)
                         validationMessages.push("Please provide valid <b>Period Profile</b>");
-                    if (e.data.DFLT_AR_SETL_LVL != null && e.data.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevel.filter(x => x.DROP_DOWN === e.data.DFLT_AR_SETL_LVL).length == 0)
+                    if (e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != null && e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevel.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL).length == 0)
                         validationMessages.push("Please select valid <b>AR Settlement</b>");
 
                     if (validationMessages.length == 0) {
