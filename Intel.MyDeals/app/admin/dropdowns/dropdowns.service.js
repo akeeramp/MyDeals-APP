@@ -19,6 +19,11 @@
             updateBasicDropdowns: updateBasicDropdowns,
             deleteBasicDropdowns: deleteBasicDropdowns,
             insertBasicDropdowns: insertBasicDropdowns,
+            getDropdown: getDropdown
+        }
+
+        function getDropdown(strDropDownType) {
+            return dataService.get(apiBaseUrl + strDropDownType);
         }
 
         function getBasicDropdowns(isForceReGet) {

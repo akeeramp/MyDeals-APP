@@ -504,25 +504,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // If no data was returned, we should redirect back to PTR
         if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
-            $state.go('contract.manager.strategy',
-                {
-                    cid: $scope.contractData.DC_ID,
-                    sid: $scope.curPricingStrategyId,
-                    pid: $scope.curPricingTableId
-                },
-                { reload: true });
+                $state.go('contract.manager.strategy',
+                    {
+                        cid: $scope.contractData.DC_ID,
+                        sid: $scope.curPricingStrategyId,
+                        pid: $scope.curPricingTableId
+                    },
+                    { reload: true });
         }
 
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true, true);
     }
 
     function anyPtrDirtyValidation() {
+        var validServerType = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+            function (x) {
+                return x._behaviors.isError.SERVER_DEAL_TYPE === true;
+            }).ToArray();
+
         var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
             function (x) {
                 return x.PASSED_VALIDATION === "Dirty";
             }).ToArray();
 
-        return dirtyItems.length > 0;
+        return dirtyItems.length > validServerType.length;
     }
 
     function getFormatedGeos(geos) {
