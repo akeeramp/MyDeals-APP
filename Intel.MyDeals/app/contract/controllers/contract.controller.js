@@ -75,7 +75,7 @@
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         //Tender only columns for PRC_TBL_ROW
-        $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO"];
+        $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO", "QUOTE_LN_ID"];
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
@@ -582,11 +582,11 @@
             // Set dates Max and Min Values for numeric text box
             // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
             $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;
-            $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 21;
+            $scope.contractData.MaxYear = parseInt(moment("2099").format("YYYY"));
 
             // Set the initial Max and Min date, actual dates will be updated as per the selected customer
             $scope.contractData.MinDate = moment().subtract(6, 'years').format('l');
-            $scope.contractData.MaxDate = moment().add(21, 'years').format('l');
+            $scope.contractData.MaxDate = moment("2099").format('l');
 
             // If new contract... default customer to the last customer used on the dashboard
             if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
@@ -904,8 +904,8 @@
             if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
                 getCurrentQuarterDetails();
             } else {
-                if (moment($scope.contractData.END_DT) > moment($scope.contractData.START_DT).add(10, 'years')) {
-                    $scope.contractData.END_DT = moment($scope.contractData.START_DT).add(10, 'years').format("MM/DD/YYYY");
+                if (moment($scope.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                    $scope.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
                 }
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
                 updateQuarterByDates('END_DT', $scope.contractData.END_DT);
@@ -4186,7 +4186,12 @@
                 $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "Please select a valid customer";
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = true;
                 $scope.isValid = false;
-            } else {
+            } else if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                $scope.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 2099/12/31";
+                $scope.contractData._behaviors.isError["END_DT"] = true;
+                $scope.isValid = false;
+            }
+            else {
                 $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "";
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = false;
             }
