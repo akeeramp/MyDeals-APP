@@ -78,7 +78,7 @@
         $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO"];
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
-                                            
+
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         else if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
@@ -207,7 +207,7 @@
             UI_ENABLED: false,
             UI_VISIBLE: false
         });
-        
+
         $scope.disableLinks = function (val) {
             if ($scope.contractData.PRC_ST) {
                 var IS_HYBRID_PRC_STRAT = false;
@@ -232,8 +232,8 @@
 
                 }
             }
-            
-            return true;  
+
+            return true;
         }
 
         $scope.enableDealEditorTab = function () {
@@ -730,9 +730,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -794,9 +794,9 @@
                         },
                             500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -840,9 +840,9 @@
                             unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
                         }, 500);
                     },
-                    function (response) {
-                        errInGettingDates(response);
-                    });
+                        function (response) {
+                            errInGettingDates(response);
+                        });
             }
 
             var errInGettingDates = function (response) {
@@ -1058,12 +1058,12 @@
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                            function (response) {
-                                logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                $scope.initComplete = true;
-                                hasFiles = false;
-                            });
+                                function (response) {
+                                    logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                    $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                    $scope.initComplete = true;
+                                    hasFiles = false;
+                                });
                     }
                 }
             },
@@ -1097,12 +1097,12 @@
                             // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                             $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                         },
-                        function (response) {
-                            logger.error("Unable to delete attachment.", null, "Delete failed");
+                            function (response) {
+                                logger.error("Unable to delete attachment.", null, "Delete failed");
 
-                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
-                        });
+                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                                $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                            });
                 }
             }
         ];
@@ -1711,7 +1711,7 @@
             if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
             if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
             if (!!nptDefaults["REBATE_OA_MAX_VOL"]) nptDefaults["REBATE_OA_MAX_VOL"].value = pt["REBATE_OA_MAX_VOL"];
-            if (!!nptDefaults["REBATE_OA_MAX_AMT"]) nptDefaults["REBATE_OA_MAX_AMT"].value = pt["REBATE_OA_MAX_AMT"];     
+            if (!!nptDefaults["REBATE_OA_MAX_AMT"]) nptDefaults["REBATE_OA_MAX_AMT"].value = pt["REBATE_OA_MAX_AMT"];
             //not sure if necessary, javascript pass by value/reference always throwing me off. :(
             $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
@@ -3240,7 +3240,8 @@
                     $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
 
                     var anyWarnings = false;
-
+                    var totalWarnings = 0
+                    var totalserverWarnings = 0;
                     pc.mark("Constructing returnset");
                     if (!!data.PRC_TBL_ROW) {
                         data.PRC_TBL_ROW = $scope.pivotData(data.PRC_TBL_ROW);
@@ -3249,7 +3250,13 @@
                                 // check for pivots
                                 data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             }
-                            if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
+                            if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) {
+                                anyWarnings = true;
+                                totalWarnings++;
+                            }
+                            if (data.PRC_TBL_ROW[i]._behaviors !== undefined && data.PRC_TBL_ROW[i]._behaviors.isError.SERVER_DEAL_TYPE) {
+                                totalserverWarnings++;
+                            }
                         }
 
                         $scope.updateResults(data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
@@ -3344,9 +3351,14 @@
 
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
-                        $timeout(function () {
-                            $scope.setBusy("", "");
-                        }, 2000);
+                        if (toState == "contract.manager.strategy.wip" && toParams != undefined && totalWarnings == totalserverWarnings) {
+                            $state.go(toState, toParams, { reload: true });
+                        }
+                        else {
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                        }
                     }
 
                     if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {
@@ -4684,7 +4696,7 @@
                             } else {
                                 if (newArSettlementValue == "")
                                     newArSettlementValue = ($scope.newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
-                                            $scope.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                        $scope.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
                                         ? "Issue Credit to Billing Sold To"
                                         : "Issue Credit to Default Sold To by Region";
                             }
@@ -4720,7 +4732,7 @@
                         } else {
                             if (newArSettlementValue == "") // If no auto fill or customer default, default to Deal values
                                 newArSettlementValue = ($scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
-                                        $scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                    $scope.currentPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
                                     ? "Issue Credit to Billing Sold To"
                                     : "Issue Credit to Default Sold To by Region";
                         }

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/27/2020 1:46:08 PM
+File Updated: 5/11/2020 2:14:15 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -553,6 +553,54 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_PLATFORM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
+			ATRB_DESC = "Consumption Customer Platform",
+			ATRB_LBL = "Consumption Customer Platform",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3456,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_RPT_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
+			ATRB_DESC = "Consumption Customer Reported Geo",
+			ATRB_LBL = "Consumption Customer Reported Geo",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3458,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_SEGMENT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_SEGMENT",
+			ATRB_DESC = "Consumption Customer Segment",
+			ATRB_LBL = "Consumption Customer Segment",
+			ATRB_MAX_LEN = 40,
+			ATRB_SID = 3457,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute CONSUMPTION_REASON = new MyDealsAttribute()
 		{
@@ -1236,6 +1284,38 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "PRD",
 			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_AR_SETL_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_AR_SETL_LVL",
+			ATRB_DESC = "Vistex Customer Default AR Settlement Level",
+			ATRB_LBL = "Vistex Customer Default AR Settlement Level",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2026,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_CUST_RPT_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_CUST_RPT_GEO",
+			ATRB_DESC = "Vistex Customer Default Customer Reported Geo",
+			ATRB_LBL = "Vistex Customer Default Customer Reported Geo",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2027,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
@@ -3718,7 +3798,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3734,7 +3814,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/27/2020 1:37:01 PM
+File Updated: 5/11/2020 2:13:33 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -325,6 +325,33 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string COMPETITIVE_PRICE = "COMPETITIVE_PRICE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3456
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_PLATFORM = "CONSUMPTION_CUST_PLATFORM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3458
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_RPT_GEO = "CONSUMPTION_CUST_RPT_GEO";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3457
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_CUST_SEGMENT = "CONSUMPTION_CUST_SEGMENT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -712,6 +739,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DEVICE_TYPE = "DEVICE_TYPE";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2026
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_AR_SETL_LVL = "DFLT_AR_SETL_LVL";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2027
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_CUST_RPT_GEO = "DFLT_CUST_RPT_GEO";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -2743,6 +2788,8 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
 		public const string DEAL_ATRB_IGNR = "DEAL_ATRB_IGNR";
+		public const string DSA_MAX_JSON_SIZE_MB = "DSA_MAX_JSON_SIZE_MB";
+		public const string DSA_RQST_RSPN_LOG_DAYS = "DSA_RQST_RSPN_LOG_DAYS";
 		public const string ECAP_KIT_MIGRATION = "ECAP_KIT_MIGRATION";
 		public const string ECAP_MIGRATION = "ECAP_MIGRATION";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";

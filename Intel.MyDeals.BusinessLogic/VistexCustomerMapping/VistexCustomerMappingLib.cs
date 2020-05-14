@@ -18,7 +18,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="vistexCustomerMappingDataLib"></param>
         /// <param name="dataCollectionsDataLib"></param>
-        public VistexCustomerMappingLib(IVistexCustomerMappingDataLib vistexCustomerMappingDataLib,IDataCollectionsDataLib dataCollectionsDataLib)
+        public VistexCustomerMappingLib(IVistexCustomerMappingDataLib vistexCustomerMappingDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
         {
             _vistexCustomerMappingDataLib = vistexCustomerMappingDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
@@ -36,10 +36,19 @@ namespace Intel.MyDeals.BusinessLogic
         /// Get All Vistex Customer Mappings 
         /// </summary>
         /// <returns>List of Vistex Customer Mappings Data </returns>
-        public List<VistexCustomerMapping> GetVistexCustomerMapping(bool getCachedResult = true)
+        public List<VistexCustomerMappingWrapper> GetVistexCustomerMapping(bool getCachedResult = true)
         {
-            return !getCachedResult ? _vistexCustomerMappingDataLib.GetVistexCustomerMappings() : _dataCollectionsDataLib.GetVistexCustomerMappings();
-
+            List<VistexCustomerMapping> lstVistexCustomerMapping = !getCachedResult ? _vistexCustomerMappingDataLib.GetVistexCustomerMappings() : _dataCollectionsDataLib.GetVistexCustomerMappings();
+            List<VistexCustomerMappingWrapper> lstVistexCustomerMappingWrapper = new List<VistexCustomerMappingWrapper>();
+            lstVistexCustomerMapping.ForEach(x =>
+            {
+                lstVistexCustomerMappingWrapper.Add(new VistexCustomerMappingWrapper
+                {
+                    VistexCustomerInfo = x,
+                    CustomerReportedGeos = x.DFLT_CUST_RPT_GEO.Split(',')
+                });
+            });
+            return lstVistexCustomerMappingWrapper;
         }
 
         /// <summary>
@@ -48,11 +57,19 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="mode"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public List<VistexCustomerMapping> SetVistexCustomerMapping(CrudModes mode, VistexCustomerMapping data)
+        public List<VistexCustomerMappingWrapper> SetVistexCustomerMapping(CrudModes mode, VistexCustomerMapping data)
         {
-            return _vistexCustomerMappingDataLib.SetVistexCustomerMapping(mode, data);
+            List<VistexCustomerMapping> lstVistexCustomerMapping = _vistexCustomerMappingDataLib.SetVistexCustomerMapping(mode, data);
+            List<VistexCustomerMappingWrapper> lstVistexCustomerMappingWrapper = new List<VistexCustomerMappingWrapper>();
+            lstVistexCustomerMapping.ForEach(x =>
+            {
+                lstVistexCustomerMappingWrapper.Add(new VistexCustomerMappingWrapper
+                {
+                    VistexCustomerInfo = x,
+                    CustomerReportedGeos = x.DFLT_CUST_RPT_GEO.Split(',')
+                });
+            });
+            return lstVistexCustomerMappingWrapper;
         }
-
-
     }
 }
