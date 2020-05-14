@@ -904,8 +904,8 @@
             if ($scope.contractData.DC_ID <= 0 && $scope.isCopyContract === false) {
                 getCurrentQuarterDetails();
             } else {
-                if (moment($scope.contractData.END_DT) > moment($scope.contractData.START_DT).add(10, 'years')) {
-                    $scope.contractData.END_DT = moment($scope.contractData.START_DT).add(10, 'years').format("MM/DD/YYYY");
+                if (moment($scope.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                    $scope.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
                 }
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
                 updateQuarterByDates('END_DT', $scope.contractData.END_DT);
@@ -4174,7 +4174,12 @@
                 $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "Please select a valid customer";
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = true;
                 $scope.isValid = false;
-            } else {
+            } else if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                $scope.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 2099/12/31";
+                $scope.contractData._behaviors.isError["END_DT"] = true;
+                $scope.isValid = false;
+            }
+            else {
                 $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "";
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = false;
             }
