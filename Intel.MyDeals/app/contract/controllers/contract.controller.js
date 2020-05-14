@@ -75,7 +75,7 @@
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         //Tender only columns for PRC_TBL_ROW
-        $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO"];
+        $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_PROJECT", "QLTR_BID_GEO", "QUOTE_LN_ID"];
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
