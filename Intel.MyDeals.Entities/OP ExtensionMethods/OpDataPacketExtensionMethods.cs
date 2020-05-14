@@ -208,6 +208,9 @@ namespace Intel.MyDeals.Entities
                 //}
                 dc.AddTimelineComment("Tracker number(s) generated");
 
+
+                // Tracker Split as a user selected date happens here, LAST_TRKR_START_DT_CHK is the bounds that users cannot pass with 
+                // LAST_REDEAL_DT to limit the tracker effective start date at re-deal completion
                 IOpDataElement deDealStartDate = dc.GetDataElement(AttributeCodes.START_DT);
                 IOpDataElement deCurrentTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
                 IOpDataElement deLastTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
@@ -215,31 +218,12 @@ namespace Intel.MyDeals.Entities
                 if (deLastTrackerSetDate == null)
                 {
                     dc.DataElements.Add(AddNewEmptyAttribute(Attributes.LAST_TRKR_START_DT_CHK, dc));
-                    //dc.DataElements.Add(new OpDataElement
-                    //{
-                    //    DcID = dc.DcID,
-                    //    DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
-                    //    DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
-                    //    DcParentID = dc.DcParentID,
-                    //    AtrbID = Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
-                    //    AtrbValue = "",
-                    //    OrigAtrbValue = "",
-                    //    PrevAtrbValue = "",
-                    //    AtrbCd = Attributes.LAST_TRKR_START_DT_CHK.ATRB_COL_NM,
-                    //    State = OpDataElementState.Unchanged
-                    //});
                     deLastTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
                 }
 
-                //Attributes.SYS_COMMENTS.ATRB_SID
-                deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate == null || deCurrentTrackerSetDate.AtrbValue.ToString() != ""
+                deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate == null || deCurrentTrackerSetDate.AtrbValue.ToString() == ""
                     ? deDealStartDate.AtrbValue
                     : deCurrentTrackerSetDate.AtrbValue;
-                //dc.SetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK, "Hello"); // Doesn't like this - need to create a DE if this is null
-                int j = 0;
-                //deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate.AtrbValue.ToString() != ""
-                //    ? deDealStartDate.AtrbValue
-                //    : deCurrentTrackerSetDate.AtrbValue;
             }
 
             if (packet.PacketType == OpDataElementType.WIP_DEAL) packet.ResetRedealFlagsOnActive(dealIds);
