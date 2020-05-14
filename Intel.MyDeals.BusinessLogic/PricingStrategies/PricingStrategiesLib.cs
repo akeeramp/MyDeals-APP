@@ -369,6 +369,9 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.IN_REDEAL.ATRB_SID,
                     Attributes.HAS_TRACKER.ATRB_SID,
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.START_DT.ATRB_SID,
+                    Attributes.LAST_REDEAL_DT.ATRB_SID,
+                    Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
                     Attributes.OBJ_PATH_HASH.ATRB_SID
                 };
 

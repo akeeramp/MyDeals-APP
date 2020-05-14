@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 2:14:15 PM
+File Updated: 5/13/2020 4:25:41 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2657,6 +2657,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Redeal Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3673,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute LAST_TRKR_START_DT_CHK = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_TRKR_START_DT_CHK",
+			ATRB_DESC = "Prior Tracker Start Date for Checks",
+			ATRB_LBL = "Prior Tracker Start Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3655,
 			DATA_TYPE_CD = "DATE",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,

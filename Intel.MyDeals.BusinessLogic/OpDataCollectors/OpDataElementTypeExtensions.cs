@@ -278,6 +278,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.CUST_MBR_SID.ATRB_SID,
                 Attributes.IN_REDEAL.ATRB_SID,
                 Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.LAST_REDEAL_DT.ATRB_SID,
+                Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
                 Attributes.SYS_COMMENTS.ATRB_SID
             };
 

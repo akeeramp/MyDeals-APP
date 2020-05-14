@@ -315,6 +315,12 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_TRKR_START_DT_CHK": {
+                        "Groups": ["Backdate"]
+                    },
                     "REBATE_DEAL_ID": {
                         "Groups": ["All"]
                     },
@@ -462,6 +468,12 @@
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_TRKR_START_DT_CHK": {
                         "Groups": ["Backdate"]
                     },
                     "FRCST_VOL": {
@@ -698,6 +710,12 @@
                     //    "Groups": ["Retail Cycle"]
                     //},
                     "BACK_DATE_RSN": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_TRKR_START_DT_CHK": {
                         "Groups": ["Backdate"]
                     },
                     "FRCST_VOL": {
@@ -982,6 +1000,12 @@
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Backdate"]
+                    },
+                    "LAST_TRKR_START_DT_CHK": {
                         "Groups": ["Backdate"]
                     },
                     "REBATE_DEAL_ID": {

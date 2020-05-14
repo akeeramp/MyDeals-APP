@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 2:13:33 PM
+File Updated: 5/13/2020 4:25:07 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1513,6 +1513,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string LAST_REDEAL_DT = "LAST_REDEAL_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3655
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string LAST_TRKR_START_DT_CHK = "LAST_TRKR_START_DT_CHK";
 
 		///<summary>
 		/// DIM_SID: 30

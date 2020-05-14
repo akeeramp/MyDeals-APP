@@ -2603,6 +2603,34 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = true
             });
 
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3673,
+                AtrbCd = AttributeCodes.LAST_REDEAL_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_REDEAL_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Re-deal On Date",
+                IsFilterable = false,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(LAST_REDEAL_DT)#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3655,
+                AtrbCd = AttributeCodes.LAST_TRKR_START_DT_CHK,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'LAST_TRKR_START_DT_CHK', \"date:'MM/dd/yyyy'\")#",
+                Label = "Last Tracker Start Date",
+                IsFilterable = false,
+                IsReadOnly = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(LAST_TRKR_START_DT_CHK)#"
+            });
+
             //items.Add(new UiTemplateContainerItem  // WIP All types
             //{
             //    Id = 0,
