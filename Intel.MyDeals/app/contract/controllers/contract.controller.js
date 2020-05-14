@@ -582,11 +582,11 @@
             // Set dates Max and Min Values for numeric text box
             // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
             $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;
-            $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 21;
+            $scope.contractData.MaxYear = parseInt(moment("2099").format("YYYY"));
 
             // Set the initial Max and Min date, actual dates will be updated as per the selected customer
             $scope.contractData.MinDate = moment().subtract(6, 'years').format('l');
-            $scope.contractData.MaxDate = moment().add(21, 'years').format('l');
+            $scope.contractData.MaxDate = moment("2099").format('l');
 
             // If new contract... default customer to the last customer used on the dashboard
             if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
