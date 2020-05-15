@@ -3,6 +3,7 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
+using System.Linq;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -39,9 +40,8 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public IEnumerable<VistexCustomerMappingWrapper> UpdateVistexCustomer(VistexCustomerMappingWrapper data)
         {
-            data.VistexCustomerInfo.DFLT_CUST_RPT_GEO = string.Join(",", data.CustomerReportedGeos);
-            return SafeExecutor(() => _vistexCustomerMappingLib.SetVistexCustomerMapping(CrudModes.Update, data.VistexCustomerInfo)
-            , "Unable to get Customers");
+            data.VistexCustomerInfo.DFLT_CUST_RPT_GEO = string.Join(",", data.CustomerReportedGeos.OrderBy(x => x));
+            return SafeExecutor(() => _vistexCustomerMappingLib.SetVistexCustomerMapping(CrudModes.Update, data.VistexCustomerInfo), "Unable to update Customers");
         }
     }
 }
