@@ -387,6 +387,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Deal End Date can't be greater than twenty years from Start Date",
+                    ActionRule = MyDcActions.CheckMaxDealEndDate,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW,OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
                     Title="Ceiling Volume Tender Validation",
                     ActionRule = MyDcActions.CheckCeilingVolume,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },

@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender', 'isOEM'];
+	DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender', 'isOEM', 'dealProgPayment', 'dealStartDt'];
 
-function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender, isOEM) {
+	function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender, isOEM, dealProgPayment, dealStartDt) {
     var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
     $ctrl.placeholderText = "Click to Select...";
@@ -62,7 +62,11 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 				$ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 			    $ctrl.isValidDate = false;
 			}
-			if ((($ctrl.isStartDate && value < new Date(contractStartDate)) || (!$ctrl.isStartDate && value > new Date(contractEndDate))) && contractIsTender !== '1') {
+			if (!$ctrl.isStartDate && value > new Date(moment(dealStartDt).add(20, 'years').format('l')) && dealProgPayment == "Backend" && contractIsTender !== "1") {
+				$ctrl.errorMsg = "Deal End Date should not be greater than " + moment(contractStartDate).add(20, 'years').format("MM/DD/YYYY");
+				$ctrl.isValidDate = false;
+			}
+			else if ((($ctrl.isStartDate && value < new Date(contractStartDate)) || (!$ctrl.isStartDate && value > new Date(contractEndDate))) && contractIsTender !== '1') {
 				$ctrl.errorMsg = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'Add To Grid', if you want to proceed.";
 				$ctrl.isDateOverlap = true;
 			}

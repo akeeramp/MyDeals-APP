@@ -2963,6 +2963,17 @@
                             }
                         }
 
+                        if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && isTenderFlag !== "1") {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_DT'] = true;
+                                gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date should not be greater than (" + moment(gData[i]["START_DT"]).add(20, 'years').format("MM/DD/YYYY") + ")";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Deal End Date should not be greater than (" + moment(gData[i]["START_DT"]).add(20, 'years').format("MM/DD/YYYY") + ")");
+                            }
+                        }
+
                         var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
                         for (var key in fields) {
                             if (fields.hasOwnProperty(key)) {

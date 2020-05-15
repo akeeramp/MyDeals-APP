@@ -1007,6 +1007,26 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckMaxDealEndDate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
+            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
+
+            var MaxdeEnddt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(20);
+            if (dcEn > MaxdeEnddt && progPayment == "Backend")
+            {
+                deEnd.AddMessage("Deal End Date should not be greater than " + MaxdeEnddt);
+            }
+
+        }
+
         public static void CheckFrontendConsumption(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
