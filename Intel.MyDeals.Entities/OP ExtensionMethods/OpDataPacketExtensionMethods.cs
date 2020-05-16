@@ -221,9 +221,13 @@ namespace Intel.MyDeals.Entities
                     deLastTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
                 }
 
-                deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate == null || deCurrentTrackerSetDate.AtrbValue.ToString() == ""
-                    ? deDealStartDate.AtrbValue
-                    : deCurrentTrackerSetDate.AtrbValue;
+                if (deDealStartDate != null && deCurrentTrackerSetDate != null) // Safety check for forced re-deals of existing deals - shouldn't happen once data is populated
+                {
+                    deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate == null ||
+                                                     deCurrentTrackerSetDate.AtrbValue.ToString() == ""
+                        ? deDealStartDate.AtrbValue
+                        : deCurrentTrackerSetDate.AtrbValue;
+                }
             }
 
             if (packet.PacketType == OpDataElementType.WIP_DEAL) packet.ResetRedealFlagsOnActive(dealIds);
