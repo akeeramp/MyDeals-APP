@@ -124,6 +124,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule // Allow edits only in re-deal cases
+                {
+                    Title="Readonly if NO Tracker Exists and Is in Re-Deal",
+                    ActionRule = MyDcActions.ReadOnlyIfNotInRedeal,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.LAST_REDEAL_DT }
+                        }
+                    }
+                },
                 //new MyOpRule
                 //{
                 //    Title="Readonly if contract # is positive",

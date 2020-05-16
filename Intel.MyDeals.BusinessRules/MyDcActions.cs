@@ -783,6 +783,24 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfNotInRedeal(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealHasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                if (dealHasTracker == "0" || dealStage != WorkFlowStages.Draft)
+                {
+                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                    if (de != null) de.IsReadOnly = true;
+                }
+            }
+        }
+
         public static void ReadOnlyFrontendWithNoTracker(params object[] args) // Set to read only if there is not a tracker and deal is frontend (DE38457)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -965,7 +983,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase)) return;
 
             // Billing dates should be only for deals which have Payout Based on = Consumption ?? Yes.
@@ -973,7 +991,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
-            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT).ToString();
+            //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
             // For front end YCS2 do not check for billing dates
 
@@ -1013,16 +1031,16 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
 
-            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
-            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
+            DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+            DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
 
-            var MaxdeEnddt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(20);
-            if (dcEn > MaxdeEnddt && progPayment == "Backend")
+            DateTime maxEndDt = startDate.AddYears(20);
+            if (endDate > maxEndDt && progPayment == "Backend")
             {
-                deEnd.AddMessage("Deal End Date should not be greater than " + MaxdeEnddt);
+                deEndDate.AddMessage("Deal End Date should not be greater than " + maxEndDt.ToString("MM/dd/yyyy"));
             }
 
         }
@@ -1904,6 +1922,34 @@ namespace Intel.MyDeals.BusinessRules
                         endDate.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
                     }
                 }
+            }
+        }
+
+        public static void RedealNoEarlierThenPrevious(params object[] args)
+        {
+            // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+            IOpDataElement lastTrackerStartDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
+            IOpDataElement dealStartDateDe = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement dealEndDateDe = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            if (userEnteredRedealDateDe == null || userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
+
+            DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
+            DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
+            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null?  
+                DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()): 
+                DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
+
+            if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
+                || DateTime.Compare(dealEndDate, userEnteredRedealDate) < 0) // OR User Entered is later then the End Date, toss an error
+            {
+                //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
+                userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and " 
+                                                   + dealEndDate.ToString("MM/dd/yyyy") + ".  Date reset to original value.");
             }
         }
 

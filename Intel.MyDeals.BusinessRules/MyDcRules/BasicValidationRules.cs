@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
 using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
@@ -339,6 +338,13 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_DT) && !de.IsDateInPast()).Any()
                     // Change to this is Jyoti asks for Tracker only implement of this:
                     //AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                },
+                new MyOpRule
+                {
+                    Title="User Set Re-Deal cannot be before Previous Re-deal Date",
+                    ActionRule = MyDcActions.RedealNoEarlierThenPrevious,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
                 {
