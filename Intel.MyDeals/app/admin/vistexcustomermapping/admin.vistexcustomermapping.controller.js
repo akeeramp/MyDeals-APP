@@ -200,7 +200,8 @@
                     width: "20%",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
-                    attributes: { style: "text-align: center;" }
+                    attributes: { style: "text-align: center;" },
+                    headerTemplate: '<span title="This is some definition for a Vistex Customer.">Is Vistex Customer <i class="intelicon-help" style="font-size: 15px !important"></i></span>'
                 },
                 { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
                 { field: "DFLT_AR_SETL_LVL", title: "AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
