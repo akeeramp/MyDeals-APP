@@ -1040,7 +1040,7 @@ namespace Intel.MyDeals.BusinessRules
             DateTime maxEndDt = startDate.AddYears(20);
             if (endDate > maxEndDt && progPayment == "Backend")
             {
-                deEndDate.AddMessage("Deal End Date should not be greater than " + maxEndDt.ToString("MM/dd/yyyy"));
+                deEndDate.AddMessage("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
             }
 
         }

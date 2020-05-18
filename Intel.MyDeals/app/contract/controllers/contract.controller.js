@@ -2860,9 +2860,9 @@
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                         sData[s]._behaviors.isError['END_DT'] = true;
-                                        sData[s]._behaviors.validMsg['END_DT'] = "Deal End Date should not be greater than (" + moment(tblStartDate).add(20, 'years').format("MM/DD/YYYY") + ")";
+                                        sData[s]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("Deal End Date should not be greater than (" + moment(tblStartDate).add(20, 'years').format("MM/DD/YYYY") + ")");
+                                        errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
                                     }
 
                                 }
@@ -2980,9 +2980,9 @@
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                 gData[i]._behaviors.isError['END_DT'] = true;
-                                gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date should not be greater than (" + moment(gData[i]["START_DT"]).add(20, 'years').format("MM/DD/YYYY") + ")";
+                                gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Deal End Date should not be greater than (" + moment(gData[i]["START_DT"]).add(20, 'years').format("MM/DD/YYYY") + ")");
+                                errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
                             }
                         }
 
