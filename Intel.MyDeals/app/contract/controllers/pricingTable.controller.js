@@ -3889,9 +3889,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get selected cell
             var currColIndex = context.range._ref.col;
 
-            //Get Selected Row
-            var currRowIndex = context.range._ref.row - 1;
-
             // Get column name out of selected cell
             var letter = (currColIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + currColIndex - 26) : String.fromCharCode(intA + currColIndex);
 
@@ -3906,8 +3903,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
-            var dealProgPayment = $scope.$parent.$parent.pricingTableData.PRC_TBL_ROW[currRowIndex].PROGRAM_PAYMENT;
-            var dealStartDt = moment($scope.$parent.$parent.pricingTableData.PRC_TBL_ROW[currRowIndex].START_DT).format("l");
 
             var isOEM = colName === "OEM_PLTFRM_LNCH_DT" || colName === "OEM_PLTFRM_EOL_DT"; // Remove message if it is one of thexse cols
 
@@ -3941,12 +3936,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     },
                     isOEM: function () {
                         return isOEM;
-                    },
-                    dealProgPayment: function () {
-                        return dealProgPayment;
-                    },
-                    dealStartDt: function () {
-                        return dealStartDt;
                     }
                 }
             });

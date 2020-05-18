@@ -2838,6 +2838,7 @@
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
+                                    var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
                                     var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
                                     var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
                                     var isTenderFlag = "0";
@@ -2853,6 +2854,17 @@
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                     }
+
+                                    if (moment(tblEndDate).isAfter(moment(tblStartDate).add(20, 'years')) && sData[s]["PROGRAM_PAYMENT"] == "Backend"  && isTenderFlag !== "1") {
+                                        if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                        sData[s]._behaviors.isError['END_DT'] = true;
+                                        sData[s]._behaviors.validMsg['END_DT'] = "Deal End Date should not be greater than (" + moment(tblStartDate).add(20, 'years').format("MM/DD/YYYY") + ")";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("Deal End Date should not be greater than (" + moment(tblStartDate).add(20, 'years').format("MM/DD/YYYY") + ")");
+                                    }
+
                                 }
                                 //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                 //{
@@ -2963,7 +2975,7 @@
                             }
                         }
 
-                        if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && isTenderFlag !== "1") {
+                        if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
                             if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
