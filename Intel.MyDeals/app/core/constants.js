@@ -987,9 +987,6 @@
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
-                    "QUOTE_LN_ID": {
-                        "Groups": ["Deal Info"]
-                    },
                     "REBATE_BILLING_START": {
                         "Groups": ["Consumption"]
                     },
