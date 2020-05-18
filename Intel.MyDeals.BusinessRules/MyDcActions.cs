@@ -1940,7 +1940,7 @@ namespace Intel.MyDeals.BusinessRules
 
             DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
             DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
-            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null?  
+            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != ""?  
                 DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()): 
                 DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
 
