@@ -209,7 +209,7 @@
         });
 
         $scope.disableLinks = function (val) {
-            if ($scope.contractData.PRC_ST) {
+            if ($scope.contractData.PRC_ST && $scope.curPricingStrategy != null && $scope.curPricingStrategy.DC_ID != undefined) {
                 var IS_HYBRID_PRC_STRAT = false;
                 $scope.isActiveDefault = '';
                 $scope.uiVisible = true;
