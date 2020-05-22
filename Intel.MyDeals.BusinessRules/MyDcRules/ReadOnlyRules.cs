@@ -257,6 +257,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.OEM_PLTFRM_LNCH_DT,
                                 AttributeCodes.PERIOD_PROFILE,
                                 AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.TERMS }
                         }
                     }
@@ -583,7 +586,14 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.REBATE_BILLING_START, AttributeCodes.REBATE_BILLING_END, AttributeCodes.CONSUMPTION_REASON, AttributeCodes.CONSUMPTION_REASON_CMNT }
+                            Target = new[] { AttributeCodes.REBATE_BILLING_START,
+                                AttributeCodes.REBATE_BILLING_END,
+                                AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT
+                            }
                         }
                     }
                 },
