@@ -19,17 +19,10 @@
 
         var vm = this;
         //Keep as variable to avoid request everytime
-        vm.CustomerReportedGeos = [];
         vm.PeriodProfile = [];
         vm.ARSettlementLevel = [];
 
         vm.InitiateDropDowns = function () {
-            dropdownsService.getDropdown('GetGeosDropdowns').then(function (response) {
-                vm.CustomerReportedGeos = response.data;
-            }, function (response) {
-                logger.error("Unable to get reported geos.", response, response.statusText);
-            });
-
             dropdownsService.getDropdown('GetDropdowns/PERIOD_PROFILE').then(function (response) {
                 vm.PeriodProfile = response.data;
             }, function (response) {
@@ -130,20 +123,24 @@
         };
 
         vm.CustomerReportedGeoOptions = {
+            id: "cmbCustomerReportedGeo",
             placeholder: "Select Customer Reported Geo",
             dataSource: {
                 type: "json",
-                serverFiltering: true,
                 transport: {
-                    read: function (e) {
-                        e.success(vm.CustomerReportedGeos);
+                    read: {
+                        url: "" //This will be set at runtime based on customer
                     }
                 }
             },
             autoBind: true,
-            dataTextField: "dropdownName",
-            dataValueField: "dropdownName",
-            valuePrimitive: true
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true,
+            autoClose: false,
+            filter: "contains",
+            enableSelectAll: true,
+            enableDeselectAll: true
         };
 
         vm.PeriodProfileDropDownEditor = function (container, options) {
@@ -155,7 +152,26 @@
         }
 
         vm.CustomerReportedGeoDropDownEditor = function (container, options) {
-            var editor = $('<select kendo-multi-select k-options="vm.CustomerReportedGeoOptions" name="' + options.field + '" k-auto-close="false" style="width:100%"></select>').appendTo(container);
+            vm.CustomerReportedGeoOptions.dataSource.transport.read.url = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/" + options.model.CUST_MBR_SID
+            var editor = $('<div style="width:100%">'
+                + '<div style="text-align:center;" ng-if="vm.CustomerReportedGeoOptions.enableSelectAll || vm.CustomerReportedGeoOptions.enableDeselectAll">'
+                + '<button style="width:35%" ng-if="vm.CustomerReportedGeoOptions.enableSelectAll" ng-click="vm.SelecAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;'
+                + '<button style="width:35%" ng-click="vm.DeSelecAllCustomerReportedGeos()" ng-if="vm.CustomerReportedGeoOptions.enableDeselectAll" class="btn btn-primary">Deselect All</button></div>'
+                + '<div><select kendo-multi-select id="' + vm.CustomerReportedGeoOptions.id + '" k-options="vm.CustomerReportedGeoOptions" name="' + options.field + '"></select></div>'
+                + '</div>').appendTo(container);
+        }
+
+        vm.SelecAllCustomerReportedGeos = function (CustomerReportedGeos) {
+            $.each($('#' + vm.CustomerReportedGeoOptions.id + '_listbox .k-item'), function (index, value) {
+                if ($(this).hasClass('k-state-selected') == false)
+                    $(this).click();
+            });
+        }
+
+        vm.DeSelecAllCustomerReportedGeos = function () {
+            $.each($('#' + vm.CustomerReportedGeoOptions.id + '_listbox .k-state-selected'), function (index, value) {
+                $(this).click();
+            });
         }
 
         vm.gridOptions = {
