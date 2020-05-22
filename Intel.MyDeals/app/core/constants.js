@@ -312,6 +312,15 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -465,6 +474,15 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
@@ -647,6 +665,15 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
                     //"COST_TEST_RESULT": {
@@ -997,6 +1024,15 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
