@@ -220,7 +220,7 @@
                 },
                 { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
                 { field: "DFLT_AR_SETL_LVL", title: "AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
-                { field: "CustomerReportedGeos", headerTemplate: '<span title="Consumption Customer Reported Geo">Cons Cust Reported Geo</span>', template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>", filterable: { multi: true, search: true }, editor: vm.CustomerReportedGeoDropDownEditor }
+                { field: "CustomerReportedGeos", headerTemplate: '<span title="Consumption Customer Reported Geo">Consumption Cust Reported Geo</span>', template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>", filterable: { multi: true, search: true }, editor: vm.CustomerReportedGeoDropDownEditor }
             ]
         }
     }
