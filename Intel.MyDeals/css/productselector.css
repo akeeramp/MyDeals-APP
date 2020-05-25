@@ -7,6 +7,10 @@
     overflow: hidden;
 }
 
+#prodGrid > .k-auto-scrollable {
+    min-height: 280px;
+  }
+
     .prodSelectorSearch .prod-autocomplete {
         padding-top: 0;
         padding-bottom: 0;
@@ -325,7 +329,7 @@ a.prdAnchor {
 
 .prodSelector .prodSelector-grid .k-grid-content {
     height: calc(85vh - 480px);
-    min-height: 200px;
+    min-height: 270px;
     max-height: calc(85vh - 385px);
 }
 
@@ -600,7 +604,7 @@ input[type=checkbox].with-sm-font {
 }
 
     .arcAnimate.animate {
-        /*transform: rotate(180deg);*/
+        /*transform: rotate(180deg);
         transition: all .6s;
         transform-origin: 50% 50%;
         opacity: 0;
