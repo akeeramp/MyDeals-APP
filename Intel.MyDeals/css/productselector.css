@@ -7,10 +7,6 @@
     overflow: hidden;
 }
 
-#prodGrid > .k-auto-scrollable {
-    min-height: 280px;
-  }
-
     .prodSelectorSearch .prod-autocomplete {
         padding-top: 0;
         padding-bottom: 0;
@@ -321,10 +317,10 @@ a.prdAnchor {
 .prodSelector.modal-body {
     padding-top: 2px;
     padding-bottom: 0px;
-    min-height: 300px;
+    min-height: 365px;
     max-height: calc(85vh - 365px);
     height: calc(85vh - 365px);
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .prodSelector .prodSelector-grid .k-grid-content {
