@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/13/2020 4:25:07 PM
+File Updated: 5/26/2020 9:51:33 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -766,6 +766,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DFLT_PERD_PRFL = "DFLT_PERD_PRFL";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2028
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_TNDR_AR_SETL_LVL = "DFLT_TNDR_AR_SETL_LVL";
 
 		///<summary>
 		/// DIM_SID: 3
