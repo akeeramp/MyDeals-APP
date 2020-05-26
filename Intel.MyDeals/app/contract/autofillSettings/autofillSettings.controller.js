@@ -54,8 +54,9 @@
             } else {
                 // Is Tender Rules Force Value Checks
                 if (vm.autofillData.ISTENDER === "1") {
-                    if (vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "Issue Credit to Billing Sold To") { 
-                        vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "Issue Credit to Billing Sold To";
+                    // For Tenders, default to blank and let priceTable.controller.js handle setting it
+                    if (vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") { 
+                        vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "";
                     }
                     if (vm.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Bi-Weekly (2 weeks)") { 
                         vm.autofillData.DEFAULT.PERIOD_PROFILE.value = "Bi-Weekly (2 weeks)";

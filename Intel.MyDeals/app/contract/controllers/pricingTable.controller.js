@@ -1914,7 +1914,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             root.curPricingTable[key] = "Bi-Weekly (2 weeks)";  //root.contractData.Customer.DFLT_PERD_PRFL;
                                         } break;
                                         case "AR_SETTLEMENT_LVL": {
-                                            root.curPricingTable[key] = "Issue Credit to Billing Sold To";  //root.contractData.Customer.DFLT_AR_SETL_LVL;
+                                            // Default to customer tender value or system wide tender value, safety check for "User Select" value
+                                            var newTenderArSettlementValue = (root.contractData.Customer == undefined
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
+                                                "Issue Credit to Billing Sold To" : root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL;
+                                            root.curPricingTable[key] = newTenderArSettlementValue; 
                                         } break;
                                     }
                                 }

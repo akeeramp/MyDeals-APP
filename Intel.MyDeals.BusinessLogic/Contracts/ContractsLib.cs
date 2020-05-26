@@ -300,6 +300,12 @@ namespace Intel.MyDeals.BusinessLogic
             return contractId; // Send back the new contract ID here
         }
 
+        private MyCustomersInformation LookupCustomerInformation(int custId)
+        {
+            MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
+            return singleCustomer;
+        }
+
         private PRD_TRANSLATION_RESULTS LookupProducts(string usrInputProd, string strtDt, string endDt, string geoCombined, int custId, int contractId)
         {
             PRD_TRANSLATION_RESULTS retItem = new PRD_TRANSLATION_RESULTS();
@@ -425,6 +431,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Product Check END
 
+            MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
+            // TODO:  Change to DFLT_AR_SETL_LVL => DFLT_TNDR_AR_SETL_LVL once it is brought into customers proc - 3 places below
+            string defArSettlementLvl =
+                requestedCustomerInfo.DFLT_AR_SETL_LVL == "User Select on Deal Creation" || requestedCustomerInfo.DFLT_AR_SETL_LVL == "" 
+                    ? "Issue Credit to Billing Sold To" 
+                    : requestedCustomerInfo.DFLT_AR_SETL_LVL;
+
             OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
             testPSData.Add("DC_ID", -201 - currRecord); // first record save is -201, others should be -202...
             testPSData.Add("dc_type", "PRC_ST");
@@ -474,7 +487,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPTRData.Add("PROD_INCLDS", "Tray");
             testPTRData.Add("PASSED_VALIDATION", "Complete");
             testPTRData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
-            testPTRData.Add("AR_SETTLEMENT_LVL", "Issue Credit to Billing Sold To");
+            testPTRData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
             testPTRData.Add("SYS_COMMENT", "SalesForce Created Pricing Table Row: i3-8300");
             testData.PricingTableRow.Add(testPTRData);
 
@@ -516,7 +529,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("SALESFORCE_ID", dealSfId); // Sales Force ID 3715
             testDealData.Add("QUOTE_LN_ID", quoteLineId); // Quote Line ID 3716
             testDealData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
-            testDealData.Add("AR_SETTLEMENT_LVL", "Issue Credit to Billing Sold To");
+            testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: i3-8300");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "Yes");

@@ -4705,9 +4705,10 @@
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
-                    if ($scope.isTenderContract) { // Tenders are defaulted ALWAYS
+                    if ($scope.isTenderContract) { // Tenders come in without a customer defined immediately
+                        // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
-                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Issue Credit to Billing Sold To";
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = ""; // Old value "Issue Credit to Billing Sold To"
                     } else {
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
                             ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
