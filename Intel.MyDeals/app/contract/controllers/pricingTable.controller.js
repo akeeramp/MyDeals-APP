@@ -1917,6 +1917,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             // Default to customer tender value or system wide tender value, safety check for "User Select" value
                                             var newTenderArSettlementValue = (root.contractData.Customer == undefined
                                                     || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === ""
                                                     || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
                                                 "Issue Credit to Billing Sold To" : root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL;
                                             root.curPricingTable[key] = newTenderArSettlementValue; 

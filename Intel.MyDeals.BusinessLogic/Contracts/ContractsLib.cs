@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
