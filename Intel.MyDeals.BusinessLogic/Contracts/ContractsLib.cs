@@ -429,11 +429,10 @@ namespace Intel.MyDeals.BusinessLogic
             // Product Check END
 
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
-            // TODO:  Change to DFLT_AR_SETL_LVL => DFLT_TNDR_AR_SETL_LVL once it is brought into customers proc - 3 places below
             string defArSettlementLvl =
-                requestedCustomerInfo.DFLT_AR_SETL_LVL == "User Select on Deal Creation" || requestedCustomerInfo.DFLT_AR_SETL_LVL == "" 
+                requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == "User Select on Deal Creation" || requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == "" 
                     ? "Issue Credit to Billing Sold To" 
-                    : requestedCustomerInfo.DFLT_AR_SETL_LVL;
+                    : requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL;
 
             OpDataCollectorFlattenedItem testPSData = new OpDataCollectorFlattenedItem();
             testPSData.Add("DC_ID", -201 - currRecord); // first record save is -201, others should be -202...
