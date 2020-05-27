@@ -6,9 +6,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants']
+    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$linq']
 
-    function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants) {
+    function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants, $linq) {
 
         $scope.accessAllowed = true;
         if (!(window.usrRole === 'SA' || window.isDeveloper)) {
@@ -33,6 +33,13 @@
                 vm.ARSettlementLevel = response.data;
             }, function (response) {
                 logger.error("Unable to get AR Settelment Levels.", response, response.statusText);
+            });
+
+            dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
+                vm.TenderARSettlementLevel = $linq.Enumerable().From(response.data).Where(
+                    function (x) {
+                        return x.ACTV_IND === true;
+                    }).ToArray();
             });
         }
 
@@ -80,6 +87,7 @@
                         VISTEX_CUST_FLAG: { from: "VistexCustomerInfo.VISTEX_CUST_FLAG", type: "boolean" },
                         DFLT_PERD_PRFL: { from: "VistexCustomerInfo.DFLT_PERD_PRFL", editable: true, nullable: true },
                         DFLT_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_AR_SETL_LVL", editable: true, nullable: true },
+                        DFLT_TNDR_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL", editable: true, nullable: true },
                         CustomerReportedGeos: { editable: true, nullable: true }
                     }
                 }
@@ -122,6 +130,24 @@
             valuePrimitive: true
         };
 
+        vm.TenderARSettlementLevelOptions = {
+            placeholder: "Select Tender AR Settlement Level",
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        e.success(vm.TenderARSettlementLevel);
+                    }
+                }
+            },
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true
+        };
+
         vm.CustomerReportedGeoOptions = {
             id: "cmbCustomerReportedGeo",
             placeholder: "Select Customer Reported Geo",
@@ -149,6 +175,10 @@
 
         vm.ARSettlementLevelDropDownEditor = function (container, options) {
             var AREditor = $('<select kendo-combo-box k-options="vm.ARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.TenderARSettlementLevelDropDownEditor = function (container, options) {
+            var TenderAREditor = $('<select kendo-combo-box k-options="vm.TenderARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.CustomerReportedGeoDropDownEditor = function (container, options) {
@@ -219,7 +249,8 @@
                     attributes: { style: "text-align: center;" }
                 },
                 { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
-                { field: "DFLT_AR_SETL_LVL", title: "AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
+                { field: "DFLT_TNDR_AR_SETL_LVL", title: "Tenders AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.TenderARSettlementLevelDropDownEditor },
+                { field: "DFLT_AR_SETL_LVL", title: "Non-Tenders AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
                 { field: "CustomerReportedGeos", headerTemplate: '<span title="Consumption Customer Reported Geo">Consumption Cust Reported Geo</span>', template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>", filterable: { multi: true, search: true }, editor: vm.CustomerReportedGeoDropDownEditor }
             ]
         }
