@@ -1,12 +1,13 @@
 ﻿(function () {
     'use strict';
+
     angular
         .module('app.admin')
         .controller('VistexcustomermappingController', VistexcustomermappingController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$linq']
+    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$linq'];
 
     function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants, $linq) {
 
@@ -18,7 +19,7 @@
         }
 
         var vm = this;
-        //Keep as variable to avoid request everytime
+        //Keep as variable to avoid request every time
         vm.PeriodProfile = [];
         vm.ARSettlementLevel = [];
 
@@ -32,7 +33,7 @@
             dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
                 vm.ARSettlementLevel = response.data;
             }, function (response) {
-                logger.error("Unable to get AR Settelment Levels.", response, response.statusText);
+                logger.error("Unable to get AR Settlement Levels.", response, response.statusText);
             });
 
             dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
@@ -229,7 +230,7 @@
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" },
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "100px"
                 },
                 {
                     field: "CUST_MBR_SID",
@@ -238,20 +239,45 @@
                 },
                 {
                     field: "CUST_NM",
-                    title: "Customer Name"
+                    title: "Customer Name",
+                    width: "230px"
                 },
                 {
                     field: "VISTEX_CUST_FLAG",
-                    headerTemplate: '<span title="This is some definition for a Vistex Customer.">Is Vistex Customer <i class="intelicon-help" style="font-size: 15px !important"></i></span>',
-                    width: "200px",
+                    // Use this pattern for hover-over helps, remove Title:
+                    //headerTemplate: 'Is Vistex Customer <span title="This is some definition for a Vistex Customer."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
+                    title: "Is Vistex Customer", 
+                    width: "180px",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     attributes: { style: "text-align: center;" }
                 },
-                { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
-                { field: "DFLT_TNDR_AR_SETL_LVL", title: "Tenders AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.TenderARSettlementLevelDropDownEditor },
-                { field: "DFLT_AR_SETL_LVL", title: "Non-Tenders AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
-                { field: "CustomerReportedGeos", headerTemplate: '<span title="Consumption Customer Reported Geo">Consumption Cust Reported Geo</span>', template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>", filterable: { multi: true, search: true }, editor: vm.CustomerReportedGeoDropDownEditor }
+                {
+                    field: "DFLT_PERD_PRFL",
+                    title: "Period Profile",
+                    width: "235px",
+                    filterable: { multi: true, search: true },
+                    editor: vm.PeriodProfileDropDownEditor
+                },
+                {
+                    field: "DFLT_TNDR_AR_SETL_LVL",
+                    title: "Tenders AR Settlement Level",
+                    filterable: { multi: true, search: true },
+                    editor: vm.TenderARSettlementLevelDropDownEditor
+                },
+                {
+                    field: "DFLT_AR_SETL_LVL",
+                    title: "Non-Tenders AR Settlement Level",
+                    filterable: { multi: true, search: true },
+                    editor: vm.ARSettlementLevelDropDownEditor
+                },
+                {
+                    field: "CustomerReportedGeos",
+                    title: "Consumption Customer Reported Geo",
+                    template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>",
+                    filterable: { multi: true, search: true },
+                    editor: vm.CustomerReportedGeoDropDownEditor
+                }
             ]
         }
     }

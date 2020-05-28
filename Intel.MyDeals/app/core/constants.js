@@ -186,6 +186,9 @@
                     "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "OBJ_SET_TYPE_CD": {
                         "Groups": ["All"]
                     },
@@ -324,12 +327,6 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "LAST_REDEAL_DT": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_TRKR_START_DT_CHK": {
-                        "Groups": ["Backdate"]
-                    },
                     "REBATE_DEAL_ID": {
                         "Groups": ["All"]
                     },
@@ -396,6 +393,9 @@
                         "Groups": ["All"]
                     },
                     "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "LAST_REDEAL_DT": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {
@@ -486,12 +486,6 @@
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_REDEAL_DT": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_TRKR_START_DT_CHK": {
                         "Groups": ["Backdate"]
                     },
                     "FRCST_VOL": {
@@ -587,6 +581,9 @@
                         "Groups": ["All"]
                     },
                     "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "LAST_REDEAL_DT": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {
@@ -739,12 +736,6 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "LAST_REDEAL_DT": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_TRKR_START_DT_CHK": {
-                        "Groups": ["Backdate"]
-                    },
                     "FRCST_VOL": {
                         "Groups": ["RPU"]
                     },
@@ -841,6 +832,9 @@
                         "Groups": ["All"]
                     },
                     "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "LAST_REDEAL_DT": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {
@@ -1036,12 +1030,6 @@
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_REDEAL_DT": {
-                        "Groups": ["Backdate"]
-                    },
-                    "LAST_TRKR_START_DT_CHK": {
                         "Groups": ["Backdate"]
                     },
                     "REBATE_DEAL_ID": {

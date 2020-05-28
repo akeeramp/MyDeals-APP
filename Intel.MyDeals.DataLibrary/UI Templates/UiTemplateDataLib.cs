@@ -2654,10 +2654,10 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.LAST_REDEAL_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_REDEAL_DT', \"date:'MM/dd/yyyy'\")#",
-                Label = "Re-deal On Date",
+                Label = "Effective Tracker Start Date",
                 IsFilterable = false,
                 IsSortable = true,
-                Width = 100,
+                Width = 120,
                 IsRequired = false,
                 ExcelTemplate = "#=gridUtils.formatDate(LAST_REDEAL_DT)#"
             });

@@ -81,7 +81,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
         if (consumptionFields.contains($ctrl.colName)) {
             var multiSelectData = $("#MultiSelectSelections").data("kendoTreeView");
             if (multiSelectData !== undefined && multiSelectData.dataSource != undefined) {
-                $ctrl.isEmptyList = (multiSelectData.dataSource._data.length = 0); // Post Admin Message if dropdown length = 0
+                $ctrl.isEmptyList = (multiSelectData.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
             }
         }
     });
