@@ -8,12 +8,12 @@ SetRequestVerificationToken.$inject = ['$http'];
 
 MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues', 'colName', 'isBlendedGeo'];
 
-function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName, isBlendedGeo) {
+function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectService, items, cellCurrValues, colName, isBlendedGeo) {
 	var $ctrl = this;
-	var GEO = "GEO_COMBINED";
-	var MRKT_SEG = "MRKT_SEG";
-	var CORP = "CUST_ACCNT_DIV";
-	var CONSUMPTION_FIELDS = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO"];
+	var geo = "GEO_COMBINED";
+	var mrktSeg = "MRKT_SEG";
+	var corp = "CUST_ACCNT_DIV";
+	var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO"];
 
 	$ctrl.multiSelectPopUpModal = items;
 	$ctrl.popupResult = [];
@@ -21,15 +21,10 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	$ctrl.colName = colName;
     $ctrl.placeholderText = "Click to Select...";
 
-    $ctrl.isGeo = (colName === GEO);
-    $ctrl.isCorp = (colName === CORP);
+    $ctrl.isGeo = (colName === geo);
+    $ctrl.isCorp = (colName === corp);
     $ctrl.isGeoBlend = isBlendedGeo;
-
-    if (CONSUMPTION_FIELDS.contains($ctrl.colName)) {
-        $ctrl.isEmptyList = false;
-    } else {
-        $ctrl.isEmptyList = false;
-    } 
+    $ctrl.isEmptyList = false; // Set to false for non-consumption by default - proper set in $uibModalInstance.rendered.then for consumption
 
     $ctrl.EnterPressed = function (event) {
     // KeyCode 13 is 'Enter'
@@ -82,12 +77,12 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 		$uibModalInstance.dismiss();
     };
 
-    $uibModalInstance.rendered.then(function () {
-        var multiSelectData = $("#MultiSelectSelections").data("kendoTreeView");
-        if (multiSelectData !== undefined && multiSelectData.dataSource != undefined) {
-            // Add a negation to make this proper, it always displays message now..
-            // $ctrl.isEmptyList = !(multiSelectData.dataSource._data.length > 0);
-            $ctrl.isEmptyList = (multiSelectData.dataSource._data.length > 0);
+	$uibModalInstance.rendered.then(function () {
+        if (consumptionFields.contains($ctrl.colName)) {
+            var multiSelectData = $("#MultiSelectSelections").data("kendoTreeView");
+            if (multiSelectData !== undefined && multiSelectData.dataSource != undefined) {
+                $ctrl.isEmptyList = (multiSelectData.dataSource._data.length = 0); // Post Admin Message if dropdown length = 0
+            }
         }
     });
 
@@ -106,10 +101,10 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			else {
 				// HACK: These get called twice because we set newValue via $ctrl.popupResult.MultiSelectSelections directly instead 
 			    // of newValue. However, we need to do this otherwise the newValue will not necessarily change  in the MrktSegMultiSelectService
-				if ($ctrl.colName === MRKT_SEG) {
-					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
+				if ($ctrl.colName === mrktSeg) {
+					$ctrl.popupResult.MultiSelectSelections = mrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
 				} else if (($ctrl.isGeo) && (!$ctrl.isGeoBlend)) {
-					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);
+					$ctrl.popupResult.MultiSelectSelections = mrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);
 				}
 			}
 
