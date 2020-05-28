@@ -2792,6 +2792,26 @@
                             }
                         }
 
+                        if (sData[s]["END_CUSTOMER_RETAIL"] != undefined && sData[s]["END_CUSTOMER_RETAIL"] != null) {
+                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 40) {
+                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                            }
+                            else {
+
+                                if (sData[s]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    delete sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                    delete sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                                }
+                                sData[s]["END_CUSTOMER_RETAIL"] = sData[s]["END_CUSTOMER_RETAIL"].toString().toUpperCase();                              
+                            }
+                        }
+
                         if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
                         sData[s].dc_type = "PRC_TBL_ROW";
@@ -2983,6 +3003,26 @@
                                 gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+                            }
+                        }
+
+                        if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                            if (gData[i]["END_CUSTOMER_RETAIL"].length > 40) {
+                                if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                    gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                    gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                                }
+                            }
+                            else {
+                                if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                    delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                                }
+                                gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString().toUpperCase();
                             }
                         }
 
