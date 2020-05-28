@@ -243,7 +243,7 @@
                 {
                     field: "VISTEX_CUST_FLAG",
                     headerTemplate: '<span title="This is some definition for a Vistex Customer.">Is Vistex Customer <i class="intelicon-help" style="font-size: 15px !important"></i></span>',
-                    width: "20%",
+                    width: "200px",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     attributes: { style: "text-align: center;" }
