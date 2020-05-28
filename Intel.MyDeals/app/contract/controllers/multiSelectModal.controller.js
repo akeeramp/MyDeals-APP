@@ -24,6 +24,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
     $ctrl.isGeo = (colName === GEO);
     $ctrl.isCorp = (colName === CORP);
     $ctrl.isGeoBlend = isBlendedGeo;
+
     if (CONSUMPTION_FIELDS.contains($ctrl.colName)) {
         $ctrl.isEmptyList = false;
     } else {
@@ -79,11 +80,20 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 
 	$ctrl.cancel = function () {
 		$uibModalInstance.dismiss();
-	};
+    };
+
+    $uibModalInstance.rendered.then(function () {
+        var multiSelectData = $("#MultiSelectSelections").data("kendoTreeView");
+        if (multiSelectData !== undefined && multiSelectData.dataSource != undefined) {
+            // Add a negation to make this proper, it always displays message now..
+            // $ctrl.isEmptyList = !(multiSelectData.dataSource._data.length > 0);
+            $ctrl.isEmptyList = (multiSelectData.dataSource._data.length > 0);
+        }
+    });
 
     // Watch for user changing global auto-fill default values
 	$scope.$watch('$ctrl.popupResult.MultiSelectSelections',
-		function (newValue, oldValue, el) {
+        function (newValue, oldValue, el) {
 			if (oldValue === newValue) return;
 
 			if (oldValue === undefined || newValue === undefined) return;
