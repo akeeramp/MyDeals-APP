@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$linq'];
+    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants'];
 
-    function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants, $linq) {
+    function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants) {
 
         $scope.accessAllowed = true;
         if (!(window.usrRole === 'SA' || window.isDeveloper)) {
@@ -22,6 +22,7 @@
         //Keep as variable to avoid request every time
         vm.PeriodProfile = [];
         vm.ARSettlementLevel = [];
+        vm.TenderARSettlementLevel = [];
 
         vm.InitiateDropDowns = function () {
             dropdownsService.getDropdown('GetDropdowns/PERIOD_PROFILE').then(function (response) {
@@ -32,15 +33,9 @@
 
             dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
                 vm.ARSettlementLevel = response.data;
+                vm.TenderARSettlementLevel = response.data.filter(x => x.ACTV_IND == true);
             }, function (response) {
                 logger.error("Unable to get AR Settlement Levels.", response, response.statusText);
-            });
-
-            dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
-                vm.TenderARSettlementLevel = $linq.Enumerable().From(response.data).Where(
-                    function (x) {
-                        return x.ACTV_IND === true;
-                    }).ToArray();
             });
         }
 
@@ -64,7 +59,9 @@
                     if (e.data.VistexCustomerInfo.DFLT_PERD_PRFL != null && e.data.VistexCustomerInfo.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_PERD_PRFL).length == 0)
                         validationMessages.push("Please provide valid <b>Period Profile</b>");
                     if (e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != null && e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevel.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL).length == 0)
-                        validationMessages.push("Please select valid <b>AR Settlement</b>");
+                        validationMessages.push("Please select a valid <b>Non-Tenders AR Settlement Level</b>");
+                    if (e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL != null && e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL).length == 0)
+                        validationMessages.push("Please select a valid <b>Tenders AR Settlement Level</b>");
 
                     if (validationMessages.length == 0) {
                         vistexcustomermappingService.UpdateVistexCustomer(e.data)
