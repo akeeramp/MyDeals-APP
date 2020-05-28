@@ -13,6 +13,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	var GEO = "GEO_COMBINED";
 	var MRKT_SEG = "MRKT_SEG";
 	var CORP = "CUST_ACCNT_DIV";
+	var CONSUMPTION_FIELDS = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO"];
 
 	$ctrl.multiSelectPopUpModal = items;
 	$ctrl.popupResult = [];
@@ -23,9 +24,14 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
     $ctrl.isGeo = (colName === GEO);
     $ctrl.isCorp = (colName === CORP);
     $ctrl.isGeoBlend = isBlendedGeo;
-	
+    if (CONSUMPTION_FIELDS.contains($ctrl.colName)) {
+        $ctrl.isEmptyList = false;
+    } else {
+        $ctrl.isEmptyList = false;
+    } 
+
     $ctrl.EnterPressed = function (event) {
-    //KeyCode 13 is 'Enter'
+    // KeyCode 13 is 'Enter'
         if (event.keyCode === 13) {
             $ctrl.ok();
         }
@@ -62,7 +68,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
             }
 		}
 
-		// Turn returnVal into a string rather than an array to prevent Kendo's drag-to-copy spreadsheet errors
+		// Turn returnVal into a string rather than an array to prevent Kendo UIs drag-to-copy spreadsheet errors
 		if (Array.isArray(returnVal)) {
 			returnVal = returnVal.toString();
 		}
@@ -75,8 +81,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 		$uibModalInstance.dismiss();
 	};
 
-
-	//watch for user changing global auto-fill default values
+    // Watch for user changing global auto-fill default values
 	$scope.$watch('$ctrl.popupResult.MultiSelectSelections',
 		function (newValue, oldValue, el) {
 			if (oldValue === newValue) return;
@@ -90,7 +95,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			}
 			else {
 				// HACK: These get called twice because we set newValue via $ctrl.popupResult.MultiSelectSelections directly instead 
-				// of newValue. However, we need to do this otherwise the newValue will not neccessarly change  in the MrktSegMultiSelectService
+			    // of newValue. However, we need to do this otherwise the newValue will not necessarily change  in the MrktSegMultiSelectService
 				if ($ctrl.colName === MRKT_SEG) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
 				} else if (($ctrl.isGeo) && (!$ctrl.isGeoBlend)) {

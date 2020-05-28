@@ -8,6 +8,9 @@
 			<span ng-if="$ctrl.isGeo">
 				If blending, Worldwide will not be blended with any geos.
 			</span>
+            <span ng-if="$ctrl.isEmptyList" style="color:red;">
+                There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.
+            </span>
 		</p>
 
         <div op-control-flat
