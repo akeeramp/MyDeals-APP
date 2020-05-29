@@ -16,6 +16,7 @@
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
+        var verticalsWithFamilyLevelSelectionECAP = ["Nand (SSD)"] 
         var isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
@@ -241,7 +242,7 @@
                     return {
                         name: i.FMLY_NM,
                         path: i.HIER_NM_HASH,
-                        allowMultiple: (i.PRD_CAT_NM == 'NAND (SSD)' && (dealType == 'ECAP' || dealType == 'KIT')) ? true : vm.enableMultipleSelection,
+                        allowMultiple: (arrayContainsString(verticalsWithFamilyLevelSelectionECAP, familyName[0].PRD_CAT_NM) && (dealType == 'ECAP' || dealType == 'KIT')) ? true : vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -1073,7 +1074,7 @@
             productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, vm.dealType).then(function (response) {
                 vm.selectPath(0, true);
                 vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
-                if (vm.enableMultipleSelection) {
+                if (vm.enableMultipleSelection || ((response.data[0].PRD_CAT_NM == 'NAND (SSD)' && response.data[0].FMLY_NM != 'NA' && response.data[0].PRD_ATRB_SID == 7005) && (vm.dealType == 'ECAP' || vm.dealType == 'KIT'))) {
                     vm.suggestionText = response.data.length === 0 ? "No products found." : "Product(s) found for \"" + vm.userInput + "\"";
                     vm.suggestedProducts = response.data;
                     vm.showSuggestions = true;
