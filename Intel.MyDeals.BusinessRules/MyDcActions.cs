@@ -747,35 +747,43 @@ namespace Intel.MyDeals.BusinessRules
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue != "")
-                {
-                    string strDcType = r.Dc.DcType;
-                    if (s == AttributeCodes.AR_SETTLEMENT_LVL && (strDcType == OpDataElementType.PRC_TBL_ROW.ToString() || strDcType == OpDataElementType.WIP_DEAL.ToString()))
-                    {
-                        if (((strDcType == OpDataElementType.PRC_TBL_ROW.ToString() || strDcType == OpDataElementType.WIP_DEAL.ToString()) && !r.Dc.HasTracker())
-                            || (strDcType == OpDataElementType.WIP_DEAL.ToString() && r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD).Equals(WorkFlowStages.Active) && !de.AtrbValue.ToString().Equals("Cash"))
-                            || (strDcType == OpDataElementType.WIP_DEAL.ToString() && !r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD).Equals(WorkFlowStages.Active)))
-                            de.IsReadOnly = false;
-                        else if (r.Dc.HasTracker()) de.IsReadOnly = true;
-                    }
-                    else if (r.Dc.HasTracker()) de.IsReadOnly = true;
-                }
+                if (de != null && de.AtrbValue != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
             }
         }
 
-        static string[] strElligibleArSettlementLevelForUpdateAfterApproval = new string[] { "Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region" };
-        public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
+        public static void ReadOnlyIfHasTrackerAndSettlementIsCash(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            if (r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD).Equals(WorkFlowStages.Active))
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
-                foreach (var s in r.Rule.OpRuleActions[0].Target)
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
                 {
-                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                    if (de != null && de.HasOrigValueChanged && !strElligibleArSettlementLevelForUpdateAfterApproval.Contains(de.AtrbValue.ToString()) && de.ValidationMessage == string.Empty)
-                        de.AddMessage(string.Concat("AR Settelment Level can be updated between <b>\"</b>", string.Join(" <b>/</b> ", strElligibleArSettlementLevelForUpdateAfterApproval), "<b>\"</b> for active deals"));
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
+        public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
+        {
+            // This rule should only allow changes for AR_SETTLEMENT_LVL after has tracker for one issue type to another, but not to cash
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] strTestingValues = new string[] { "Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region" };
+
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+            if (deArSettlementLvl != null && deArSettlementLvl.HasValueChanged && r.Dc.HasTracker())
+            {
+                // If the original value was Cash, then you can't change it anyhow due to read only rule, we only want cases where the original
+                // value was a testing target string (something with Issue flavor) and has been changed
+                if (strTestingValues.Contains(deArSettlementLvl.OrigAtrbValue.ToString()) && deArSettlementLvl.AtrbValue.ToString() == "Cash")
+                {
+                    deArSettlementLvl.AddMessage(string.Concat("AR Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
+                    deArSettlementLvl.AtrbValue = deArSettlementLvl.OrigAtrbValue;
+                    deArSettlementLvl.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
                 }
             }
         }
@@ -925,8 +933,8 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CUST_ACCNT_DIV,
                 AttributeCodes.GEO_COMBINED,
                 AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.PERIOD_PROFILE,
-                //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been hanlded in UI as PTE
+                AttributeCodes.PERIOD_PROFILE
+                //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
             };
 
             string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
