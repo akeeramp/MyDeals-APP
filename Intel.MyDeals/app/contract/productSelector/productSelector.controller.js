@@ -241,7 +241,7 @@
                     return {
                         name: i.FMLY_NM,
                         path: i.HIER_NM_HASH,
-                        allowMultiple: vm.enableMultipleSelection,
+                        allowMultiple: (i.PRD_CAT_NM == 'NAND (SSD)' && (dealType == 'ECAP' || dealType == 'KIT')) ? true : vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -1430,7 +1430,7 @@
                 return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
             }
             var errorMessage = "";
-            var cap = productJson.CAP.toString();
+            var cap = CAP ? productJson.CAP.toString() : '';
             if (cap.toUpperCase() == "NO CAP") {
                 errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
             }
