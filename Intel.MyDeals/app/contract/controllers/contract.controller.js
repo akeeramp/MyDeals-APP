@@ -79,6 +79,8 @@
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
+        var editableArSettlementLevelAfterApproval = ["Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region"];
+
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         else if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
@@ -2963,6 +2965,7 @@
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
+                    var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                     for (var i = 0; i < gData.length; i++) {
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
@@ -3069,6 +3072,22 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT']);
                             }
+                        }
+
+                        if (hasInvalidArSettlementForHybirdDeals) {
+                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+
+                        //Readonly will be true if AR_SETTLEMENT_LVL is "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region", It will be false for others
+                        if (hasInvalidArSettlementForHybirdDeals == false && gData[i].WF_STG_CD == "Active" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                            && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
+                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settelment Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
                     }
                 }

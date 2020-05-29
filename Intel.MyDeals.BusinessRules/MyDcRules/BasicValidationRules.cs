@@ -450,6 +450,22 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="AR Settlement Level Validation for Active Deals",
+                    ActionRule = MyDcActions.ValidateArSettlementLevelForActiveDeal,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Customer Division Value Validations",
                     ActionRule = MyDcActions.CheckCustDivValues,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
