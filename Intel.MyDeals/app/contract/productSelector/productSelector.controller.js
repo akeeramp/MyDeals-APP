@@ -1430,7 +1430,7 @@
                 return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
             }
             var errorMessage = "";
-            var cap = CAP ? productJson.CAP.toString() : '';
+            var cap = (productJson.CAP != null) ? productJson.CAP.toString() : 'NO CAP';
             if (cap.toUpperCase() == "NO CAP") {
                 errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
             }
