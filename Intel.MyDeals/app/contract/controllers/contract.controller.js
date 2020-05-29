@@ -2597,7 +2597,7 @@
                 source = "PRC_TBL";
 
                 if ($scope.spreadDs !== undefined) {
-                    // sync all detail data sources into main grid datasource for a single save
+                    // sync all detail data sources into main grid data source for a single save
                     var data = cleanupData($scope.spreadDs._data);
                     // TODO: Temp fix till sync function is updated
 
@@ -2907,6 +2907,17 @@
                                 //    }
                                 //}
                             }
+
+                            // PTR Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                            // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
+                            var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(sData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                            if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                                && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
+                                sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                            }
                         }
                         //}
                         if (forceValidation) {
@@ -2934,8 +2945,8 @@
                             }
                         }
                     }
-                    // We should denormalize pricing table row only when we are hitting MT
-                    // If there are errors dont denormalize, else PricingTableRow and spreadSheet data will be different
+                    // We should de-normalize pricing table row only when we are hitting MT
+                    // If there are errors don't de-normalize, else PricingTableRow and spreadSheet data will be different
                     if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
                         sData = $scope.deNormalizeData(util.deepClone(sData));
                     }
@@ -3038,12 +3049,12 @@
                             }
                         }
 
-                        // This is silly hardcoding because these are not in our template and they are used by DSA only - set them to proper dates.
+                        // This is silly hard-coding because these are not in our template and they are used by DSA only - set them to proper dates.
                         if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
 
-                        // Hybrid pricing stratergy logic for DEAL_COMB_TYPE
+                        // Hybrid pricing strategy logic for DEAL_COMB_TYPE
                         if (isHybridPricingStatergy) {
                             dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
                             if (Object.keys(dictGroupType).length > 1) {
@@ -3081,11 +3092,12 @@
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
 
-                        //Readonly will be true if AR_SETTLEMENT_LVL is "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region", It will be false for others
-                        if (hasInvalidArSettlementForHybirdDeals == false && gData[i].WF_STG_CD == "Active" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                        // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                        // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
+                        if (hasInvalidArSettlementForHybirdDeals == false && gData[i].HAS_TRACKER == "1" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
                             && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
                             gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settelment Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
