@@ -26,6 +26,7 @@ namespace Intel.MyDeals.BusinessRules
                 //    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
                 //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 //},
+
                 new MyOpRule
                 {
                     Title="Must have a positive Num Tiers value",
@@ -41,6 +42,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Enforce Required Fields",
@@ -56,6 +58,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Must have a positive value",
@@ -72,6 +75,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Forecast Volume must have a positive or zero value",
@@ -88,6 +92,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Value cannot be negative",
@@ -104,6 +109,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Rate must have a positive value",
@@ -114,6 +120,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
                 },
+
                 new MyOpRule
                 {
                     Title="Must be greater than 0 Start Vol",
@@ -123,6 +130,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
                 },
+
                 new MyOpRule
                 {
                     Title="Must be greater than 0 End Vol",
@@ -132,6 +140,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
                 },
+
                 new MyOpRule
                 {
                     Title="Rollup Error Message",
@@ -139,6 +148,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnPostValidate },
                 },
+
                 new MyOpRule
                 {
                     Title="Quantity must be greater than 0",
@@ -148,6 +158,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.QTY)
                 },
+
                 new MyOpRule
                 {
                     Title="Tiered ECAP value check",
@@ -157,6 +168,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.ECAP_PRICE)
                 },
+
                 new MyOpRule
                 {
                     Title="Qty must be a whole number",
@@ -166,6 +178,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
+
                 new MyOpRule
                 {
                     Title="End Vol must be greater than start vol",
@@ -174,6 +187,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Tier Numbers must match Tier Level",
@@ -182,12 +196,14 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
-                    Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to redeal messages
+                    Title="Clear SYS_COMMENTS field upon load", // This rule is to clear out original SYS_COMMENT that gets pre-pended to re-deal messages
                     ActionRule = MyDcActions.ClearSysComments,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Atrb Changes for TimeLine",
@@ -195,6 +211,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Major Changes",
@@ -202,6 +219,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Major Wrong Way Changes to Update Tracker",
@@ -209,6 +227,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Product changes in WIP",
@@ -216,6 +235,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Expire Flag",
@@ -223,6 +243,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
                 new MyOpRule
                 {
                     Title="Check for Major Change by adding Pricing Table",
@@ -230,6 +251,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate ECAP Price",
@@ -238,6 +260,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Does not exceed max character limit",
@@ -254,6 +277,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
@@ -262,6 +286,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Title already exists check",
@@ -275,10 +300,13 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.CheckDuplicateObjectTitle,
                             Args = new object[] { "Title already exists in system" },
-                            Target = new[] { AttributeCodes.TITLE }
+                            Target = new[] {
+                                AttributeCodes.TITLE
+                            }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Make sure End Date is later than Start Date",
@@ -295,6 +323,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Deal End Date should be earlier than OEM EOL Platform Date",
@@ -312,6 +341,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Make sure OEM Platform EOL Date is later than OEM Platform Launch Date",
@@ -329,6 +359,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="End Date in Past can only Extend",
@@ -339,6 +370,7 @@ namespace Intel.MyDeals.BusinessRules
                     // Change to this is Jyoti asks for Tracker only implement of this:
                     //AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
                 },
+
                 new MyOpRule
                 {
                     Title="User Set Re-Deal cannot be before Previous Re-deal Date",
@@ -346,6 +378,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Blank Profile Values for Hybrid Deals",
@@ -353,6 +386,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
                 new MyOpRule
                 {
                     Title="Default Workflow on Save",
@@ -368,6 +402,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Volume Validation",
@@ -375,6 +410,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Tier Volume Validations",
@@ -383,6 +419,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Frontend can't be consumption",
@@ -391,6 +428,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Deal End Date can't be greater than twenty years from Start Date",
@@ -398,6 +436,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW,OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
+
                 new MyOpRule
                 {
                     Title="Ceiling Volume Tender Validation",
@@ -405,6 +444,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Frontend can't be created without Sold To and Price Grp Code",
@@ -413,6 +453,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Billing Date Validations",
@@ -420,6 +461,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Overarching Validation",
@@ -427,6 +469,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Overarching Validation in PTR",
@@ -434,6 +477,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Server Deal Type Validation",
@@ -441,6 +485,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="DropDown Value Validations",
@@ -448,6 +493,24 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
                 },
+
+                new MyOpRule
+                {
+                    Title="AR Settlement Level Validation for Active Deals",
+                    ActionRule = MyDcActions.ValidateArSettlementLevelForActiveDeal,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
+                        }
+                    }
+                },
+
                 new MyOpRule
                 {
                     Title="Customer Division Value Validations",
@@ -455,6 +518,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Market Segments",
@@ -470,12 +534,14 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.CheckGeos,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Consumption Reason",
@@ -491,6 +557,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Group Type",
@@ -506,6 +573,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Target Regions",
@@ -521,6 +589,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Check Tender Settings",
@@ -528,6 +597,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }
                 },
+
                 new MyOpRule
                 {
                     Title="Validate Product Json",
@@ -535,6 +605,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }
                 },
+
                 new MyOpRule
                 {
                     Title="Program NRE/MDF Deals default to Additive",
@@ -543,6 +614,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
@@ -551,6 +623,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Adjusted ECAP Units must have a positive value",
@@ -558,6 +631,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="KIT Product Spreadsheet validations",
@@ -566,6 +640,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="KIT Product Grid validations",
@@ -574,6 +649,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Frontend XOA3 L1/L2 product validation",
@@ -582,6 +658,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                 },
+
                 new MyOpRule
                 {
                     Title="Improperly removed CAP value check",
@@ -590,6 +667,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
                 new MyOpRule
                 {
                     Title="Incorrect CAP dates check",
@@ -598,6 +676,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString(), OpDataElementSetType.ECAP.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
+
 				//new MyOpRule
 				//{
 				//	Title="Qty cannot be negative",
@@ -615,6 +694,7 @@ namespace Intel.MyDeals.BusinessRules
 				//		}
 				//	}
 				//},
+
                 new MyOpRule
                 {
                     Title="Translate PRODUCT_FILTER to English",
@@ -622,6 +702,7 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnDealListLoad },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }
                 },
+
                 new MyOpRule
                 {
                     Title="Apply Tender Bid Actions ",
@@ -630,6 +711,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() , OpDataElementSetType.KIT.ToString() }
                 },
+
                 new MyOpRule
                 {
                     Title="KIT ECAP equal to total discounts per line check",
@@ -638,20 +720,24 @@ namespace Intel.MyDeals.BusinessRules
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad }
                 },
+
                 new MyOpRule
                 {
-                    Title="SUBKIT ECAP equal to total discounts per line check",
+                    Title="SUB-KIT ECAP equal to total discounts per line check",
                     ActionRule = MyDcActions.ValidateSubKitRebateBundleDiscount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate, MyRulesTrigger.OnLoad }
                 },
+
                 new MyOpRule
                 {
                     Title="Add Timeline Comments for New Items",
                     ActionRule = MyDcActions.NewObjTimeLineComment,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 }
+
+
             };
         }
     }

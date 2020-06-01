@@ -751,6 +751,43 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfHasTrackerAndSettlementIsCash(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
+                {
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
+        public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
+        {
+            // This rule should only allow changes for AR_SETTLEMENT_LVL after has tracker for one issue type to another, but not to cash
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] strTestingValues = new string[] { "Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region" };
+
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+            if (deArSettlementLvl != null && deArSettlementLvl.HasValueChanged && r.Dc.HasTracker())
+            {
+                // If the original value was Cash, then you can't change it anyhow due to read only rule, we only want cases where the original
+                // value was a testing target string (something with Issue flavor) and has been changed
+                if (strTestingValues.Contains(deArSettlementLvl.OrigAtrbValue.ToString()) && deArSettlementLvl.AtrbValue.ToString() == "Cash")
+                {
+                    deArSettlementLvl.AddMessage(string.Concat("AR Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
+                    deArSettlementLvl.AtrbValue = deArSettlementLvl.OrigAtrbValue;
+                    deArSettlementLvl.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
+                }
+            }
+        }
+
         public static void ReadOnlyStartDateIfIsInPastAndHasTracker(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -896,8 +933,9 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CUST_ACCNT_DIV,
                 AttributeCodes.GEO_COMBINED,
                 AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.PERIOD_PROFILE,
-                AttributeCodes.AR_SETTLEMENT_LVL };
+                AttributeCodes.PERIOD_PROFILE
+                //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
+            };
 
             string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
 
@@ -910,7 +948,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
-        
+
         public static void CheckDropDownValues(params object[] args)
         {
             Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
@@ -1940,15 +1978,15 @@ namespace Intel.MyDeals.BusinessRules
 
             DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
             DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
-            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != ""?  
-                DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()): 
+            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != "" ?
+                DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()) :
                 DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
 
             if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
                 || DateTime.Compare(dealEndDate, userEnteredRedealDate) < 0) // OR User Entered is later then the End Date, toss an error
             {
                 //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
-                userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and " 
+                userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and "
                                                    + dealEndDate.ToString("MM/dd/yyyy") + ".  Date reset to original value.");
             }
         }

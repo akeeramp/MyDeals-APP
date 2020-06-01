@@ -20,7 +20,6 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
 
-                // HAS TRACKER RULES
 				new MyOpRule // Set to read only if you have a TRACKER NUMBER
                 {
                     Title="Readonly if Tracker Exists",
@@ -46,10 +45,12 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
-                                AttributeCodes.PAYOUT_BASED_ON }
+                                AttributeCodes.PAYOUT_BASED_ON
+                            }
                         }
                     }
                 },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
                 {
                     Title="Readonly if Tracker Exists Table Row Only",
@@ -67,16 +68,17 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROD_INCLDS,
                                 AttributeCodes.PTR_USER_PRD,
                                 AttributeCodes.QTY,
-                                AttributeCodes.DEAL_GRP_NM}
+                                AttributeCodes.DEAL_GRP_NM
+                            }
                         }
                     }
                 },
 
-                new MyOpRule // Set to read only if you have a TRACKER NUMBER
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER and the value has been populated
                 {
                     Title="Readonly if Tracker Exists and Value is Populated",
                     ActionRule = MyDcActions.ReadOnlyIfValueIsPopulatedAndHasTracker,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -85,11 +87,31 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.AR_SETTLEMENT_LVL}
+                                AttributeCodes.PERIOD_PROFILE
+                            }
                         }
                     }
                 },
+
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER and AR_SETTLEMENT_LVL is Cash
+                {
+                    Title="Readonly if Tracker Exists and Value is Cash",
+                    ActionRule = MyDcActions.ReadOnlyIfHasTrackerAndSettlementIsCash,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.AR_SETTLEMENT_LVL
+                            }
+                        }
+                    }
+                },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
                     Title="Readonly Start Date if Tracker Exists and Is In Past",
@@ -103,10 +125,12 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.START_DT }
+                                AttributeCodes.START_DT
+                            }
                         }
                     }
                 },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
                     Title="Readonly End Date if Tracker Exists and Is In Past X Days",
@@ -120,10 +144,12 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.END_DT }
+                                AttributeCodes.END_DT
+                            }
                         }
                     }
                 },
+
                 new MyOpRule // Allow edits only in re-deal cases
                 {
                     Title="Readonly if NO Tracker Exists and Is in Re-Deal",
@@ -136,10 +162,12 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.LAST_REDEAL_DT }
+                                AttributeCodes.LAST_REDEAL_DT
+                            }
                         }
                     }
                 },
+
                 //new MyOpRule
                 //{
                 //    Title="Readonly if contract # is positive",
@@ -158,6 +186,7 @@ namespace Intel.MyDeals.BusinessRules
                 //        }
                 //    }
                 //},
+
                 new MyOpRule
                 {
                     Title="Readonly for Frontend With No Tracker (Expire YCS2 Flag)",
@@ -165,6 +194,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly for Overarching Max Volume and Dollar for Non Hybrid Deals if they dont contain any value",
@@ -172,6 +202,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly for Frontend With Tracker",
@@ -179,6 +210,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if Not Backend and has tracker",
@@ -192,10 +224,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.EXPIRE_YCS2 }
+                            Target = new[] {
+                                AttributeCodes.EXPIRE_YCS2
+                            }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if Deal is Soft Expired",
@@ -209,10 +244,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.EXPIRE_YCS2 }
+                            Target = new[] {
+                                AttributeCodes.EXPIRE_YCS2
+                            }
                         }
                     }
                 },
+
                 new MyOpRule // Set to read only if the deal has been cancelled (has a tracker + stage is cancelled)
                 {
                     Title="Readonly if Cancelled",
@@ -260,26 +298,12 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
-                                AttributeCodes.TERMS }
+                                AttributeCodes.TERMS
+                            }
                         }
                     }
                 },
-                //new MyOpRule
-                //{
-                //    Title="Readonly if Deal on Hold",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && de.AtrbValue != null && String.Equals(de.AtrbValue.ToString(),"Hold", StringComparison.OrdinalIgnoreCase) && dc.DcID > 0).Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetReadOnly,
-                //            Target = new[] { AttributeCodes.DEAL_GRP_EXCLDS, AttributeCodes.DEAL_GRP_CMNT }
-                //        }
-                //    }
-                //},
+
                 new MyOpRule
                 {
                     Title="Readonly if TENDER",
@@ -294,8 +318,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.PERIOD_PROFILE,
                                 AttributeCodes.AR_SETTLEMENT_LVL
@@ -303,6 +326,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if not TENDER",
@@ -317,8 +341,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] 
-                            {
+                            Target = new[] {
                                 AttributeCodes.QLTR_BID_GEO,
                                 AttributeCodes.QLTR_PROJECT,
                                 AttributeCodes.END_CUSTOMER_RETAIL
@@ -326,6 +349,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Read Only and Blank value if Rebate Type is...",
@@ -341,13 +365,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.PERIOD_PROFILE
                             }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Read Only for Vistex Hybrid Deals...",
@@ -363,6 +387,7 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
+
                 new MyOpRule
                 {
                     // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all
@@ -377,10 +402,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.DEAL_SOLD_TO_ID }
+                            Target = new[] {
+                                AttributeCodes.DEAL_SOLD_TO_ID
+                            }
                         }
                     }
                 },
+
                 new MyOpRule // Set to read only if Frontend
                 {
                     Title="Readonly if Frontend Deal",
@@ -394,8 +422,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.ON_ADD_DT,
                                 AttributeCodes.TRGT_RGN,
                                 AttributeCodes.REBATE_BILLING_START,
@@ -407,6 +434,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule // Set to read only if Expire YCS2 flag is Yes
                 {
                     Title="Readonly if Expire YCS2 flag is Yes",
@@ -421,13 +449,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.EXPIRE_YCS2
-                            } // Items to set readonly
+                            } 
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if no chipset",
@@ -441,14 +469,14 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.CS_SHIP_AHEAD_STRT_DT,
                                 AttributeCodes.CS_SHIP_AHEAD_END_DT
-                            } // Items to set reasonly
+                            } 
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly WIP/Deal ALWAYS",
@@ -460,8 +488,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.BLLG_DT,
                                 AttributeCodes.CAP,
                                 AttributeCodes.CAP_END_DT,
@@ -505,6 +532,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly ALWAYS",
@@ -515,13 +543,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.SYS_COMMENTS
                             }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly PTR ALWAYS",
@@ -533,14 +561,14 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[]
-                            {
+                            Target = new[] {
                                 AttributeCodes.DC_ID,
                                 AttributeCodes.TIER_NBR
                             }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly backdate if in the past",
@@ -553,10 +581,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.BACK_DATE_RSN }
+                            Target = new[] {
+                                AttributeCodes.BACK_DATE_RSN
+                            }
                         }
                     }
                 },
+
                 //new MyOpRule
                 //{
                 //    Title="Readonly Exclude Group Based on Stage",
@@ -573,6 +604,7 @@ namespace Intel.MyDeals.BusinessRules
                 //        }
                 //    }
                 //},
+
                 new MyOpRule // DE30320 - Consumption Reason and Consumption Reason Comment fields should not be editable when Pay Out Based On = Billings : Error found in US53631: VOL TIER DEAL::Kendo Grid Validation + previous rule
                 {
                     Title="Readonly if Not Consumption",
@@ -586,7 +618,8 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.REBATE_BILLING_START,
+                            Target = new[] {
+                                AttributeCodes.REBATE_BILLING_START,
                                 AttributeCodes.REBATE_BILLING_END,
                                 AttributeCodes.CONSUMPTION_REASON,
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,
@@ -597,6 +630,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if Not Backend (YCS2 only)", // This is being opened up for XAO3 deals, used to shut it down for all front end (DE20600)
@@ -610,10 +644,13 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.VOLUME }
+                            Target = new[] {
+                                AttributeCodes.VOLUME
+                            }
                         }
                     }
                 },
+
                 new MyOpRule
                 {
                     Title="Readonly if geo is WW",
@@ -627,27 +664,14 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.TRGT_RGN }
+                            Target = new[] {
+                                AttributeCodes.TRGT_RGN
+                            }
                         }
                     }
                 },
-				// TODO: maybe have or not???
-				//new MyOpRule
-    //            {
-    //                Title="Readonly if not Additive or Non Additive",
-    //                ActionRule = MyDcActions.ExecuteActions,
-    //                Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-    //                InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-    //                AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.DEAL_COMB_TYPE) && de.AtrbValue != null && !String.Equals(de.AtrbValue.ToString(), "Additive", StringComparison.OrdinalIgnoreCase) && !String.Equals(de.AtrbValue.ToString(), "Non Additive", StringComparison.OrdinalIgnoreCase)).Any(), // (!string.Equals(de.AtrbValue.ToString(), "Additive", StringComparison.OrdinalIgnoreCase)) && !string.Equals(de.AtrbValue.ToString(), "Non Additive", StringComparison.OrdinalIgnoreCase)).Any(),
-				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-    //                {
-    //                    new OpRuleAction<IOpDataElement>
-    //                    {
-    //                        Action = BusinessLogicDeActions.SetReadOnly,
-    //                        Target = new[] {AttributeCodes.DEAL_GRP_EXCLDS }
-    //                    }
-    //                }
-    //            }
+
+
             };
         }
     }
