@@ -560,6 +560,22 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Validate Consumption Reason Comments for Other",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_REASON) && de.HasValue("Other")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckConsumptionReasonCmnt,
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.CONSUMPTION_REASON_CMNT })
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Validate Group Type",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },

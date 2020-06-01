@@ -107,11 +107,12 @@ namespace Intel.MyDeals.BusinessRules
                 //}
             }
 
+            // Consumption Reason no longer defaults to None as per US681744 - Vistex: Edits to Consumption Reason Dropdown
             // Consumption Reason
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
-            {
-                item[AttributeCodes.CONSUMPTION_REASON] = "None";
-            }
+            //if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
+            //{
+            //    item[AttributeCodes.CONSUMPTION_REASON] = "None";
+            //}
 
             // Expire YCS2
             if ((r.Dc.DcType == "ECAP" || r.Dc.DcType == "KIT") && string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_YCS2)))
@@ -160,7 +161,7 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
+                // && dcPrevSt != dcItemSt  -- removed because it was causing validation issues.
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
@@ -192,7 +193,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (item[AttributeCodes.HAS_SUBKIT].ToString() == "0")
                 {
-                    // Clear out subkit attributes if user changes products to make it ineligible for subkits
+                    // Clear out subkit attributes if user changes products to make it ineligible for sub-kits
                     item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
                 }
                 else
