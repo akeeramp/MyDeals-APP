@@ -1498,7 +1498,7 @@
                                                     $scope.wipData[dsIndex]["WF_STG_CD"] = "Won";
                                                     $scope.wipData[dsIndex]["bid_actions"] = [];
                                                     $scope.wipData[dsIndex]["BID_ACTNS"] = [];
-                                                    if (details[$scope.wipData[dsIndex].DC_ID] !== undefined) $scope.wipData[dsIndex]["TRKR_NBR"] = { "20___0": details[$scope.wipData[dsIndex].DC_ID].join(", ") }
+                                                    if (details[$scope.wipData[dsIndex].DC_ID] !== undefined) $scope.wipData[dsIndex]["TRKR_NBR"] = details[$scope.wipData[dsIndex].DC_ID];
                                                 }
 
                                             } else {
