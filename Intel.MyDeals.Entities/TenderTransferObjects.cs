@@ -189,75 +189,73 @@ namespace Intel.MyDeals.Entities
 
         public class RecordDetails
         {
-            public SBQQQuoteC SBQQ__Quote__c { get; set; }
+            public Quote quote { get; set; }
 
-            public class SBQQQuoteC
+            public class Quote
             {
                 public string Id { get; set; }
                 public string Name { get; set; }
-                public string Pricing_Folio_ID_Nm__c { get; set; }
-                public SBQQAccountC SBQQ__Account__c { get; set; }
-                public string Pricing_Deal_Type_Nm__c { get; set; }
-                public string Pricing_Customer_Nm__c { get; set; }
-                public string Pricing_Project_Name_Nm__c { get; set; }
-                public string Pricing_ShipmentStDate_Dt__c { get; set; }
-                public string Pricing_ShipmentEndDate_Dt__c { get; set; }
-                public string Pricing_Server_Deal_Type_Nm__c { get; set; }
-                public string Pricing_Region_Nm__c { get; set; }
-                public List<SBQQQuoteLineC> SBQQ__QuoteLine__c { get; set; }
-                public List<PricingCommentsC> Pricing_Comments__c { get; set; }
+                public string FolioID { get; set; }
+                public Account account { get; set; }
+                public string DealType { get; set; }
+                public string EndCustomer { get; set; }
+                public string EndCustomerCountry { get; set; }
+                public string ProjectName { get; set; }
+                public string ShipmentStartDate { get; set; }
+                public string ShipmentEndDate { get; set; }
+                public string ServerDealType { get; set; }
+                public string Region { get; set; }
+                public List<QuoteLine> quoteLine { get; set; }
 
-                public class SBQQAccountC
+                public class Account
                 {
                     public string Id { get; set; }
                     public string Name { get; set; }
-                    public string Core_CIM_ID__c { get; set; }
+                    public string CIMId { get; set; }
                 }
 
-                public class SBQQQuoteLineC
+                public class QuoteLine
                 {
                     public string Id { get; set; }
                     public string Name { get; set; }
-                    public string Pricing_Deal_RFQ_Status_Nm__c { get; set; }
+                    public string ReferenceQuoteLineNumebr { get; set; }
+                    public string Status { get; set; }
+                    public string DealRFQStatus { get; set; }
+                    public string QuoteLineNumber { get; set; }
                     public string Pricing_ECAP_Price__c { get; set; }
-                    public string Pricing_Meet_Comp_Price_Amt__c { get; set; }
-                    public string Pricing_Unit_Qty__c { get; set; }
-                    public string Pricing_Deal_RFQ_Id__c { get; set; }
-                    public string Pricing_Status_Nm__c { get; set; }
-                    public SBQQProductC SBQQ__Product__c { get; set; }
-                    public PricingCompetetorProductC Pricing_Competetor_Product__c { get; set; }
-                    public List<PricingPerformanceMetricC> Pricing_Performance_Metric__c { get; set; }
+                    public string MeetCompPrice { get; set; }
+                    public string IntegrationStatus { get; set; }
+                    public string ApprovedStartDate { get; set; }
+                    public string ApprovedQuantity { get; set; }
+                    public string ApprovedEndDate { get; set; }
+                    public string ApprovedECAPPrice { get; set; }
+                    public string DealRFQId { get; set; }
+                    public Product product { get; set; }
+                    public CompetetorProduct competetorProduct { get; set; }
+                    public List<PerformanceMetric> performanceMetric { get; set; }
 
-                    public class SBQQProductC
+                    public class Product
                     {
                         public string Id { get; set; }
                         public string Name { get; set; }
-                        public string Core_Product_Name_EPM_ID__c { get; set; }
+                        public string ProductNameEPMID { get; set; }
                     }
 
-                    public class PricingCompetetorProductC
+                    public class CompetetorProduct
                     {
                         public string Id { get; set; }
                         public string Name { get; set; }
                     }
 
-                    public class PricingPerformanceMetricC
+                    public class PerformanceMetric
                     {
                         public string Id { get; set; }
                         public string Name { get; set; }
-                        public string Pricing_Performance_Metric_Nm__c { get; set; }
-                        public string Pricing_Intel_SKU_Performance_Nbr__c { get; set; }
-                        public string Pricing_Comp_SKU_Performance_Nbr__c { get; set; }
-                        public string Pricing_Weighting_Pct__c { get; set; }
+                        public string performanceMetric { get; set; }
+                        public string IntelSKUPerformance { get; set; }
+                        public string CompSKUPerformance { get; set; }
+                        public string Weighting { get; set; }
                     }
-                }
-
-                public class PricingCommentsC
-                {
-                    public string Id { get; set; }
-                    public string Name { get; set; }
-                    public string Pricing_Question__c { get; set; }
-                    public string Pricing_Answer__c { get; set; }
                 }
             }
         }

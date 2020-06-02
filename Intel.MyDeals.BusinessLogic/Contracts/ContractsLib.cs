@@ -244,9 +244,9 @@ namespace Intel.MyDeals.BusinessLogic
             testData.Contract = new OpDataCollectorFlattenedList();
 
             // Pull needed data out of JSON
-            string strtDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentStDate_Dt__c;
-            string endDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentEndDate_Dt__c;
-            string quoteLineId = workRecordDataFields.recordDetails.SBQQ__Quote__c.Name;
+            string strtDt = workRecordDataFields.recordDetails.quote.ShipmentStartDate;
+            string endDt = workRecordDataFields.recordDetails.quote.ShipmentEndDate;
+            string quoteLineId = workRecordDataFields.recordDetails.quote.Name;
             string contractTitle = "SalesForce Contract - " + quoteLineId + " - " + contractSfId;
 
             // Place into standard tender header packet
@@ -385,28 +385,28 @@ namespace Intel.MyDeals.BusinessLogic
             testData.PricingTableRow = new OpDataCollectorFlattenedList();
             testData.WipDeals = new OpDataCollectorFlattenedList();
 
-            string strtDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentStDate_Dt__c; //02/28/2019
-            string endDt = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_ShipmentEndDate_Dt__c; //02/28/2019
-            string endCust = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Customer_Nm__c; //Facebook
-            string prjNm = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Project_Name_Nm__c; //FMH
-            string svrType = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Server_Deal_Type_Nm__c; //HPC
-            string rgn = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Region_Nm__c; //EMEA
-            string dealType = workRecordDataFields.recordDetails.SBQQ__Quote__c.Pricing_Deal_Type_Nm__c; //ECAP
+            string strtDt = workRecordDataFields.recordDetails.quote.ShipmentStartDate; //02/28/2019
+            string endDt = workRecordDataFields.recordDetails.quote.ShipmentEndDate; //02/28/2019
+            string endCust = workRecordDataFields.recordDetails.quote.EndCustomer; //Facebook
+            string prjNm = workRecordDataFields.recordDetails.quote.ProjectName; //FMH
+            string svrType = workRecordDataFields.recordDetails.quote.ServerDealType; //HPC
+            string rgn = workRecordDataFields.recordDetails.quote.Region; //EMEA
+            string dealType = workRecordDataFields.recordDetails.quote.DealType; //ECAP
             // Embedded Array Items
-            string quoteLineId = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Name; //QL-0200061
-            string ecapPrice = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_ECAP_Price__c; //100
-            string qty = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Unit_Qty__c; //300
-            string usrPrdNm = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].SBQQ__Product__c.Name; //Intel® Xeon® Processor E7-8870 v4 (50M Cache, 2.10 GHz)
-            string prdLkupNbr = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].SBQQ__Product__c.Core_Product_Name_EPM_ID__c; //192283
-            string meetCompPrc = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Meet_Comp_Price_Amt__c; //90
-            string compPrd = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord].Pricing_Competetor_Product__c.Name; // Diplocotus
+            string quoteLineId = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].Name; //QL-0200061
+            string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].Pricing_ECAP_Price__c; //100
+            string qty = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].ApprovedQuantity; //300
+            string usrPrdNm = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].product.Name; //Intel® Xeon® Processor E7-8870 v4 (50M Cache, 2.10 GHz)
+            string prdLkupNbr = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].product.ProductNameEPMID; //192283
+            string meetCompPrc = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].MeetCompPrice; //90
+            string compPrd = workRecordDataFields.recordDetails.quote.quoteLine[currRecord].competetorProduct.Name; // Diplocotus
             // Rest are meet comp - take only the first one
-            string perfMetric = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
-                .Pricing_Performance_Metric__c[0].Pricing_Performance_Metric_Nm__c; // SpecInt
-            string intelSku = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
-                .Pricing_Performance_Metric__c[0].Pricing_Intel_SKU_Performance_Nbr__c; // 10
-            string compSku = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[currRecord]
-                .Pricing_Performance_Metric__c[0].Pricing_Comp_SKU_Performance_Nbr__c; // 9
+            string perfMetric = workRecordDataFields.recordDetails.quote.quoteLine[currRecord]
+                .performanceMetric[0].performanceMetric; // SpecInt
+            string intelSku = workRecordDataFields.recordDetails.quote.quoteLine[currRecord]
+                .performanceMetric[0].IntelSKUPerformance; // 10
+            string compSku = workRecordDataFields.recordDetails.quote.quoteLine[currRecord]
+                .performanceMetric[0].CompSKUPerformance; // 9
 
             // Product Check START
             // Get product item here - clean up the MyTranslatedProduct function, expect null back if no product matched
@@ -733,11 +733,11 @@ namespace Intel.MyDeals.BusinessLogic
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
                 // expect that we might have more then one deal, so walk through those records
-                for (int i = 0; i < workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c.Count(); i++)
+                for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
                 {
-                    string salesForceIdCntrct = workRecordDataFields.recordDetails.SBQQ__Quote__c.Id;
-                    string salesForceIdDeal = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__QuoteLine__c[i].Id;
-                    string custCimId = workRecordDataFields.recordDetails.SBQQ__Quote__c.SBQQ__Account__c.Core_CIM_ID__c; // empty string still returns Dell ID
+                    string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+                    string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
+                    string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
 
                     custId = jmsDataLib.FetchCustFromCimId(custCimId); // update the customer ID based on CIM ID
 
