@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 2:14:15 PM
+File Updated: 5/26/2020 9:29:07 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -559,7 +559,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
 			ATRB_DESC = "Consumption Customer Platform",
 			ATRB_LBL = "Consumption Customer Platform",
-			ATRB_MAX_LEN = 40,
+			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3456,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -575,7 +575,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
 			ATRB_DESC = "Consumption Customer Reported Geo",
 			ATRB_LBL = "Consumption Customer Reported Geo",
-			ATRB_MAX_LEN = 40,
+			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3458,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -591,7 +591,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "CONSUMPTION_CUST_SEGMENT",
 			ATRB_DESC = "Consumption Customer Segment",
 			ATRB_LBL = "Consumption Customer Segment",
-			ATRB_MAX_LEN = 40,
+			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3457,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -1329,6 +1329,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Vistex Customer Default Period Profile",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2025,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_TNDR_AR_SETL_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_TNDR_AR_SETL_LVL",
+			ATRB_DESC = "Vistex Customer Default Tender AR Settlement Level",
+			ATRB_LBL = "Vistex Customer Default Tender AR Settlement Level",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2028,
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
@@ -2657,6 +2673,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Redeal Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3673,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute LAST_TRKR_START_DT_CHK = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_TRKR_START_DT_CHK",
+			ATRB_DESC = "Prior Tracker Start Date for Checks",
+			ATRB_LBL = "Prior Tracker Start Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3655,
 			DATA_TYPE_CD = "DATE",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,

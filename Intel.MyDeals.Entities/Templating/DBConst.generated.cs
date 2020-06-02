@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2020 2:13:33 PM
+File Updated: 5/26/2020 9:51:33 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -768,6 +768,15 @@ namespace Intel.MyDeals.Entities {
 		public const string DFLT_PERD_PRFL = "DFLT_PERD_PRFL";
 
 		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2028
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_TNDR_AR_SETL_LVL = "DFLT_TNDR_AR_SETL_LVL";
+
+		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 66
@@ -1513,6 +1522,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string LAST_REDEAL_DT = "LAST_REDEAL_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3655
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string LAST_TRKR_START_DT_CHK = "LAST_TRKR_START_DT_CHK";
 
 		///<summary>
 		/// DIM_SID: 30

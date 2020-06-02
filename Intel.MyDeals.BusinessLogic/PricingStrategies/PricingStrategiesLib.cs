@@ -369,6 +369,9 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.IN_REDEAL.ATRB_SID,
                     Attributes.HAS_TRACKER.ATRB_SID,
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                    Attributes.START_DT.ATRB_SID,
+                    Attributes.LAST_REDEAL_DT.ATRB_SID,
+                    Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
                     Attributes.OBJ_PATH_HASH.ATRB_SID
                 };
 
@@ -660,13 +663,15 @@ namespace Intel.MyDeals.BusinessLogic
 
                 MyDealsData retMyDealsData = OpDataElementType.WIP_DEAL.UpdateAtrbValue(contractToken, data.Select(t => t.DC_ID).ToList(), Attributes.WF_STG_CD, actn, actn == WorkFlowStages.Won);
 
-                List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
-
-                Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
-                foreach (OpDataElement de in trkrs)
+                //Flattend the data and pass Trackers as object to UI
+                OpDataCollectorFlattenedDictList flatDictList = retMyDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
+                OpDataCollectorFlattenedList rtn = flatDictList.ToHierarchialList(OpDataElementType.WIP_DEAL);
+                Dictionary<int, object> dictTrkrs = new Dictionary<int, object>();
+                foreach (OpDataCollectorFlattenedItem item in rtn)
                 {
-                    if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
-                    dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                    int dcid = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                    var trackers = item[AttributeCodes.TRKR_NBR];
+                    if (!dictTrkrs.ContainsKey(dcid)) dictTrkrs.Add(dcid, trackers);
                 }
 
                 // Apply messaging

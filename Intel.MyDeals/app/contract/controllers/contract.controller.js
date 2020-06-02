@@ -79,6 +79,8 @@
         $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
+        var editableArSettlementLevelAfterApproval = ["Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region"];
+
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         else if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
@@ -209,7 +211,7 @@
         });
 
         $scope.disableLinks = function (val) {
-            if ($scope.contractData.PRC_ST) {
+            if ($scope.contractData.PRC_ST && $scope.curPricingStrategy != null && $scope.curPricingStrategy.DC_ID != undefined) {
                 var IS_HYBRID_PRC_STRAT = false;
                 $scope.isActiveDefault = '';
                 $scope.uiVisible = true;
@@ -2595,7 +2597,7 @@
                 source = "PRC_TBL";
 
                 if ($scope.spreadDs !== undefined) {
-                    // sync all detail data sources into main grid datasource for a single save
+                    // sync all detail data sources into main grid data source for a single save
                     var data = cleanupData($scope.spreadDs._data);
                     // TODO: Temp fix till sync function is updated
 
@@ -2792,6 +2794,26 @@
                             }
                         }
 
+                        if (sData[s]["END_CUSTOMER_RETAIL"] != undefined && sData[s]["END_CUSTOMER_RETAIL"] != null) {
+                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 40) {
+                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                            }
+                            else {
+
+                                if (sData[s]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    delete sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                    delete sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                                }
+                                sData[s]["END_CUSTOMER_RETAIL"] = sData[s]["END_CUSTOMER_RETAIL"].toString().toUpperCase();                              
+                            }
+                        }
+
                         if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
                         sData[s].dc_type = "PRC_TBL_ROW";
@@ -2838,6 +2860,7 @@
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
+                                    var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
                                     var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
                                     var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
                                     var isTenderFlag = "0";
@@ -2853,6 +2876,17 @@
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                     }
+
+                                    if (moment(tblEndDate).isAfter(moment(tblStartDate).add(20, 'years')) && sData[s]["PROGRAM_PAYMENT"] == "Backend"  && isTenderFlag !== "1") {
+                                        if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                        sData[s]._behaviors.isError['END_DT'] = true;
+                                        sData[s]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+                                    }
+
                                 }
                                 //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                 //{
@@ -2872,6 +2906,17 @@
                                 //        errs.PRC_TBL_ROW.push("OEM Platform EOL Date cannot be earlier than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                 //    }
                                 //}
+                            }
+
+                            // PTR Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                            // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
+                            var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(sData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                            if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                                && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
+                                sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
                         }
                         //}
@@ -2900,8 +2945,8 @@
                             }
                         }
                     }
-                    // We should denormalize pricing table row only when we are hitting MT
-                    // If there are errors dont denormalize, else PricingTableRow and spreadSheet data will be different
+                    // We should de-normalize pricing table row only when we are hitting MT
+                    // If there are errors don't de-normalize, else PricingTableRow and spreadSheet data will be different
                     if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
                         sData = $scope.deNormalizeData(util.deepClone(sData));
                     }
@@ -2931,6 +2976,7 @@
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
+                    var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                     for (var i = 0; i < gData.length; i++) {
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
@@ -2963,6 +3009,37 @@
                             }
                         }
 
+                        if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_DT'] = true;
+                                gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+                            }
+                        }
+
+                        if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                            if (gData[i]["END_CUSTOMER_RETAIL"].length > 40) {
+                                if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                    gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                    gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                                }
+                            }
+                            else {
+                                if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                    delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                                }
+                                gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString().toUpperCase();
+                            }
+                        }
+
                         var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
                         for (var key in fields) {
                             if (fields.hasOwnProperty(key)) {
@@ -2972,12 +3049,12 @@
                             }
                         }
 
-                        // This is silly hardcoding because these are not in our template and they are used by DSA only - set them to proper dates.
+                        // This is silly hard-coding because these are not in our template and they are used by DSA only - set them to proper dates.
                         if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
 
-                        // Hybrid pricing stratergy logic for DEAL_COMB_TYPE
+                        // Hybrid pricing strategy logic for DEAL_COMB_TYPE
                         if (isHybridPricingStatergy) {
                             dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
                             if (Object.keys(dictGroupType).length > 1) {
@@ -3006,6 +3083,23 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT']);
                             }
+                        }
+
+                        if (hasInvalidArSettlementForHybirdDeals) {
+                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+
+                        // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                        // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
+                        if (hasInvalidArSettlementForHybirdDeals == false && gData[i].HAS_TRACKER == "1" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                            && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
+                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
                     }
                 }
@@ -4682,9 +4776,10 @@
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
-                    if ($scope.isTenderContract) { // Tenders are defaulted ALWAYS
+                    if ($scope.isTenderContract) { // Tenders come in without a customer defined immediately
+                        // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
-                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = "Issue Credit to Billing Sold To";
+                        if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = ""; // Old value "Issue Credit to Billing Sold To"
                     } else {
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
                             ($scope.contractData.Customer == undefined) ? "" : $scope.contractData.Customer.DFLT_PERD_PRFL;
@@ -5309,7 +5404,7 @@
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "AR_SETTLEMENT_LVL", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
-                        "CONSUMPTION_REASON_CMNT", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
+                        "CONSUMPTION_REASON_CMNT", "CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
                     var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions", "CNTRCT_OBJ_SID"];

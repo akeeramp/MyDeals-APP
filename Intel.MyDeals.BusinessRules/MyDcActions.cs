@@ -107,11 +107,12 @@ namespace Intel.MyDeals.BusinessRules
                 //}
             }
 
+            // Consumption Reason no longer defaults to None as per US681744 - Vistex: Edits to Consumption Reason Dropdown
             // Consumption Reason
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
-            {
-                item[AttributeCodes.CONSUMPTION_REASON] = "None";
-            }
+            //if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
+            //{
+            //    item[AttributeCodes.CONSUMPTION_REASON] = "None";
+            //}
 
             // Expire YCS2
             if ((r.Dc.DcType == "ECAP" || r.Dc.DcType == "KIT") && string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_YCS2)))
@@ -160,7 +161,7 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
+                // && dcPrevSt != dcItemSt  -- removed because it was causing validation issues.
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
@@ -192,7 +193,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (item[AttributeCodes.HAS_SUBKIT].ToString() == "0")
                 {
-                    // Clear out subkit attributes if user changes products to make it ineligible for subkits
+                    // Clear out subkit attributes if user changes products to make it ineligible for sub-kits
                     item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
                 }
                 else
@@ -751,6 +752,43 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfHasTrackerAndSettlementIsCash(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
+                {
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
+        public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
+        {
+            // This rule should only allow changes for AR_SETTLEMENT_LVL after has tracker for one issue type to another, but not to cash
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] strTestingValues = new string[] { "Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region" };
+
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+            if (deArSettlementLvl != null && deArSettlementLvl.HasValueChanged && r.Dc.HasTracker())
+            {
+                // If the original value was Cash, then you can't change it anyhow due to read only rule, we only want cases where the original
+                // value was a testing target string (something with Issue flavor) and has been changed
+                if (strTestingValues.Contains(deArSettlementLvl.OrigAtrbValue.ToString()) && deArSettlementLvl.AtrbValue.ToString() == "Cash")
+                {
+                    deArSettlementLvl.AddMessage(string.Concat("AR Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
+                    deArSettlementLvl.AtrbValue = deArSettlementLvl.OrigAtrbValue;
+                    deArSettlementLvl.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
+                }
+            }
+        }
+
         public static void ReadOnlyStartDateIfIsInPastAndHasTracker(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -780,6 +818,24 @@ namespace Intel.MyDeals.BusinessRules
                 bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
 
                 if (de != null && de.AtrbValue != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfNotInRedeal(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealHasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                if (dealHasTracker == "0" || dealStage != WorkFlowStages.Draft)
+                {
+                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                    if (de != null) de.IsReadOnly = true;
+                }
             }
         }
 
@@ -878,8 +934,9 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CUST_ACCNT_DIV,
                 AttributeCodes.GEO_COMBINED,
                 AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.PERIOD_PROFILE,
-                AttributeCodes.AR_SETTLEMENT_LVL };
+                AttributeCodes.PERIOD_PROFILE
+                //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
+            };
 
             string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
 
@@ -892,7 +949,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
-        
+
         public static void CheckDropDownValues(params object[] args)
         {
             Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
@@ -965,7 +1022,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase)) return;
 
             // Billing dates should be only for deals which have Payout Based on = Consumption ?? Yes.
@@ -973,7 +1030,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
-            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT).ToString();
+            //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
             // For front end YCS2 do not check for billing dates
 
@@ -1005,6 +1062,26 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
+        }
+
+        public static void CheckMaxDealEndDate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+            DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+
+            DateTime maxEndDt = startDate.AddYears(20);
+            if (endDate > maxEndDt && progPayment == "Backend")
+            {
+                deEndDate.AddMessage("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+            }
+
         }
 
         public static void CheckFrontendConsumption(params object[] args)
@@ -1884,6 +1961,34 @@ namespace Intel.MyDeals.BusinessRules
                         endDate.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
                     }
                 }
+            }
+        }
+
+        public static void RedealNoEarlierThenPrevious(params object[] args)
+        {
+            // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+            IOpDataElement lastTrackerStartDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
+            IOpDataElement dealStartDateDe = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement dealEndDateDe = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            if (userEnteredRedealDateDe == null || userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
+
+            DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
+            DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
+            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != "" ?
+                DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()) :
+                DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
+
+            if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
+                || DateTime.Compare(dealEndDate, userEnteredRedealDate) < 0) // OR User Entered is later then the End Date, toss an error
+            {
+                //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
+                userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and "
+                                                   + dealEndDate.ToString("MM/dd/yyyy") + ".  Date reset to original value.");
             }
         }
 

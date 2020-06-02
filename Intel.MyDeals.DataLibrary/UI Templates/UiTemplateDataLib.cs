@@ -1991,6 +1991,52 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3456,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Consumption Customer Platform",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_PLATFORM')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_PLATFORM/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3457,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Consumption Customer Segment",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_SEGMENT')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_SEGMENT/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Consumption Cust Reported Geo</span>",
+                //Label = "Consumption Cust Reported Geo",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
 
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -2601,6 +2647,34 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 ExcelTemplate = "#=AR_SETTLEMENT_LVL#",
                 IsRequired = true
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3673,
+                AtrbCd = AttributeCodes.LAST_REDEAL_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_REDEAL_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Effective Tracker Start Date",
+                IsFilterable = false,
+                IsSortable = true,
+                Width = 120,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(LAST_REDEAL_DT)#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3655,
+                AtrbCd = AttributeCodes.LAST_TRKR_START_DT_CHK,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'LAST_TRKR_START_DT_CHK', \"date:'MM/dd/yyyy'\")#",
+                Label = "Last Tracker Start Date",
+                IsFilterable = false,
+                IsReadOnly = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = false,
+                ExcelTemplate = "#=gridUtils.formatDate(LAST_TRKR_START_DT_CHK)#"
             });
 
             //items.Add(new UiTemplateContainerItem  // WIP All types

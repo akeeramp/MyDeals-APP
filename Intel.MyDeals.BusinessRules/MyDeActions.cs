@@ -84,6 +84,16 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckConsumptionReasonCmnt(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            if (de.AtrbValue.ToString() == "")
+            {
+                if (!de.IsReadOnly) de.AddMessage("Cannot leave Consumption Reason Comment blank if Consumption Reason is 'Other'.");
+            }
+        }
+
         public static void CheckDealCombType(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

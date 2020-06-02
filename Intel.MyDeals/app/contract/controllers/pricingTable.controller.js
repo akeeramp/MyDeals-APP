@@ -1914,7 +1914,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             root.curPricingTable[key] = "Bi-Weekly (2 weeks)";  //root.contractData.Customer.DFLT_PERD_PRFL;
                                         } break;
                                         case "AR_SETTLEMENT_LVL": {
-                                            root.curPricingTable[key] = "Issue Credit to Billing Sold To";  //root.contractData.Customer.DFLT_AR_SETL_LVL;
+                                            // Default to customer tender value or system wide tender value, safety check for "User Select" value
+                                            var newTenderArSettlementValue = (root.contractData.Customer == undefined
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === ""
+                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
+                                                "Issue Credit to Billing Sold To" : root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL;
+                                            root.curPricingTable[key] = newTenderArSettlementValue; 
                                         } break;
                                     }
                                 }
@@ -3903,6 +3909,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
+
             var isOEM = colName === "OEM_PLTFRM_LNCH_DT" || colName === "OEM_PLTFRM_EOL_DT"; // Remove message if it is one of thexse cols
 
             // check dates against contract - Tender contracts don't observe start/end date within contract.

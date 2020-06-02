@@ -1219,7 +1219,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 if (col.uiType === "ComboBox" || col.uiType === "DROPDOWN") {
 
-                    // Note: we shouldnt put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
+                    // Note: we shouldn't put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
                     if (col.field === "RETAIL_CYCLE") {
 
                         var retailPullParams = {
@@ -1297,19 +1297,26 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //		}
                     //	});
 
-                    ////Note: this was second approach - this appending apprach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
+                    //Note: this was second approach - this appending approach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
                     var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
 
                 } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
-                    //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
+                    //note: as this is a reusable directive we probably shouldn't put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
                         openTargetRegionModal(container, col);
                     }
                     else if (options.field.toUpperCase() === "MRKT_SEG") {
                         openMarketSegmentModal(container, col);
                     }
+                    else if (options.field.toUpperCase() === "CONSUMPTION_CUST_PLATFORM"
+                        || options.field.toUpperCase() === "CONSUMPTION_CUST_SEGMENT"
+                        || options.field.toUpperCase() === "CONSUMPTION_CUST_RPT_GEO") {
+                        var cur_cust_mbr_sid = options.model["CUST_MBR_SID"];
+                        openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
+                    }
+
                     //else if (options.field.toUpperCase() === "DEAL_GRP_EXCLDS") {
                     //    openDealGroupModal(container, col);
                     //}
@@ -1333,7 +1340,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.scheduleEditor = function (container, options) {
-                var numTiers = options.model.NUM_OF_TIERS; // DE21100 - Was reading from autofill field ($scope.root.curPricingTable.NUM_OF_TIERS) which is not correct
+                var numTiers = options.model.NUM_OF_TIERS; // DE21100 - Was reading from auto-fill field ($scope.root.curPricingTable.NUM_OF_TIERS) which is not correct
 
                 var tmplt = '<table>';
                 var fields = [
@@ -3071,7 +3078,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             function openMarketSegmentModal(container, col) {
                 var containerDataItem = angular.element(container).scope().dataItem;
-                console.log(col)
+                console.log(col);
 
                 var mrktSegModal = $uibModal.open({
                     backdrop: 'static',
@@ -3125,6 +3132,66 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     function () {
                     });
             }
+
+
+
+            // ===================================================================================
+            // Generalized Multi-select for Consumption Customer fields.  This leverages the customer level
+            // dropdown API calls and appends the customer ID to the tail of the lookup.  fieldNameString
+            // is the name of the attribute field being used.  Everything else is basic MarketSegment-style selector.
+            function openConsumptionPlatformModal(container, col, fieldNameString, cur_cust_mbr_sid) {
+                var containerDataItem = angular.element(container).scope().dataItem;
+                console.log(col);
+
+                var custPlatformModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'multiSelectModal',
+                    controller: 'MultiSelectModalCtrl',
+                    controllerAs: '$ctrl',
+                    windowClass: 'multiselect-modal-window',
+                    size: 'md',
+
+                    resolve: {
+                        items: function () {
+                            return {
+                                'label': col.title,
+                                'uiType': col.uiType,
+                                'opLookupUrl': col.lookupUrl + cur_cust_mbr_sid,
+                                'opLookupText': col.lookupText,
+                                'opLookupValue': col.lookupValue
+                            };
+                        },
+                        cellCurrValues: function () {
+                            //if (typeof containerDataItem.CONSUMPTION_CUST_PLATFORM == "string") { // Original pattern for reference
+                            if (typeof containerDataItem[fieldNameString] == "string") {
+                                return containerDataItem[fieldNameString].split(",").map(function (item) {
+                                    return item.trim();
+                                });
+                            } else {
+                                return containerDataItem[fieldNameString].map(function (item) {
+                                    return item.trim();
+                                });
+                            }
+                        },
+                        colName: function () {
+                            return fieldNameString;
+                        },
+                        isBlendedGeo: function () {
+                            return false;
+                        }
+                    }
+                });
+
+                custPlatformModal.result.then(
+                    function (mySegments) { //returns as an array
+                        containerDataItem[fieldNameString] = mySegments;
+
+                        $scope.saveFunctions(containerDataItem, fieldNameString, containerDataItem[fieldNameString]);
+                    },
+                    function () {
+                    });
+            }
+            // ===================================================================================
 
             //function openDealGroupModal(container, col) {
             //    var containerDataItem = angular.element(container).scope().dataItem;

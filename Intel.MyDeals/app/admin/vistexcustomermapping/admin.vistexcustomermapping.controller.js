@@ -1,12 +1,13 @@
 ﻿(function () {
     'use strict';
+
     angular
         .module('app.admin')
         .controller('VistexcustomermappingController', VistexcustomermappingController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants']
+    VistexcustomermappingController.$inject = ['vistexcustomermappingService', 'dropdownsService', '$scope', 'logger', 'gridConstants'];
 
     function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants) {
 
@@ -18,18 +19,12 @@
         }
 
         var vm = this;
-        //Keep as variable to avoid request everytime
-        vm.CustomerReportedGeos = [];
+        //Keep as variable to avoid request every time
         vm.PeriodProfile = [];
         vm.ARSettlementLevel = [];
+        vm.TenderARSettlementLevel = [];
 
         vm.InitiateDropDowns = function () {
-            dropdownsService.getDropdown('GetGeosDropdowns').then(function (response) {
-                vm.CustomerReportedGeos = response.data;
-            }, function (response) {
-                logger.error("Unable to get reported geos.", response, response.statusText);
-            });
-
             dropdownsService.getDropdown('GetDropdowns/PERIOD_PROFILE').then(function (response) {
                 vm.PeriodProfile = response.data;
             }, function (response) {
@@ -38,8 +33,9 @@
 
             dropdownsService.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL').then(function (response) {
                 vm.ARSettlementLevel = response.data;
+                vm.TenderARSettlementLevel = response.data.filter(x => x.ACTV_IND == true);
             }, function (response) {
-                logger.error("Unable to get AR Settelment Levels.", response, response.statusText);
+                logger.error("Unable to get AR Settlement Levels.", response, response.statusText);
             });
         }
 
@@ -63,7 +59,9 @@
                     if (e.data.VistexCustomerInfo.DFLT_PERD_PRFL != null && e.data.VistexCustomerInfo.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_PERD_PRFL).length == 0)
                         validationMessages.push("Please provide valid <b>Period Profile</b>");
                     if (e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != null && e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevel.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_AR_SETL_LVL).length == 0)
-                        validationMessages.push("Please select valid <b>AR Settlement</b>");
+                        validationMessages.push("Please select a valid <b>Non-Tenders AR Settlement Level</b>");
+                    if (e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL != null && e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === e.data.VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL).length == 0)
+                        validationMessages.push("Please select a valid <b>Tenders AR Settlement Level</b>");
 
                     if (validationMessages.length == 0) {
                         vistexcustomermappingService.UpdateVistexCustomer(e.data)
@@ -87,6 +85,7 @@
                         VISTEX_CUST_FLAG: { from: "VistexCustomerInfo.VISTEX_CUST_FLAG", type: "boolean" },
                         DFLT_PERD_PRFL: { from: "VistexCustomerInfo.DFLT_PERD_PRFL", editable: true, nullable: true },
                         DFLT_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_AR_SETL_LVL", editable: true, nullable: true },
+                        DFLT_TNDR_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL", editable: true, nullable: true },
                         CustomerReportedGeos: { editable: true, nullable: true }
                     }
                 }
@@ -129,21 +128,43 @@
             valuePrimitive: true
         };
 
-        vm.CustomerReportedGeoOptions = {
-            placeholder: "Select Customer Reported Geo",
+        vm.TenderARSettlementLevelOptions = {
+            placeholder: "Select Tender AR Settlement Level",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
                 transport: {
                     read: function (e) {
-                        e.success(vm.CustomerReportedGeos);
+                        e.success(vm.TenderARSettlementLevel);
+                    }
+                }
+            },
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true
+        };
+
+        vm.CustomerReportedGeoOptions = {
+            id: "cmbCustomerReportedGeo",
+            placeholder: "Select Customer Reported Geo",
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: "" //This will be set at runtime based on customer
                     }
                 }
             },
             autoBind: true,
-            dataTextField: "dropdownName",
-            dataValueField: "dropdownName",
-            valuePrimitive: true
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true,
+            autoClose: false,
+            filter: "contains",
+            enableSelectAll: true,
+            enableDeselectAll: true
         };
 
         vm.PeriodProfileDropDownEditor = function (container, options) {
@@ -154,8 +175,31 @@
             var AREditor = $('<select kendo-combo-box k-options="vm.ARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
+        vm.TenderARSettlementLevelDropDownEditor = function (container, options) {
+            var TenderAREditor = $('<select kendo-combo-box k-options="vm.TenderARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
         vm.CustomerReportedGeoDropDownEditor = function (container, options) {
-            var editor = $('<select kendo-multi-select k-options="vm.CustomerReportedGeoOptions" name="' + options.field + '" k-auto-close="false" style="width:100%"></select>').appendTo(container);
+            vm.CustomerReportedGeoOptions.dataSource.transport.read.url = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/" + options.model.CUST_MBR_SID
+            var editor = $('<div style="width:100%">'
+                + '<div style="text-align:center;" ng-if="vm.CustomerReportedGeoOptions.enableSelectAll || vm.CustomerReportedGeoOptions.enableDeselectAll">'
+                + '<button style="width:35%" ng-if="vm.CustomerReportedGeoOptions.enableSelectAll" ng-click="vm.SelecAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;'
+                + '<button style="width:35%" ng-click="vm.DeSelecAllCustomerReportedGeos()" ng-if="vm.CustomerReportedGeoOptions.enableDeselectAll" class="btn btn-primary">Deselect All</button></div>'
+                + '<div><select kendo-multi-select id="' + vm.CustomerReportedGeoOptions.id + '" k-options="vm.CustomerReportedGeoOptions" name="' + options.field + '"></select></div>'
+                + '</div>').appendTo(container);
+        }
+
+        vm.SelecAllCustomerReportedGeos = function (CustomerReportedGeos) {
+            $.each($('#' + vm.CustomerReportedGeoOptions.id + '_listbox .k-item'), function (index, value) {
+                if ($(this).hasClass('k-state-selected') == false)
+                    $(this).click();
+            });
+        }
+
+        vm.DeSelecAllCustomerReportedGeos = function () {
+            $.each($('#' + vm.CustomerReportedGeoOptions.id + '_listbox .k-state-selected'), function (index, value) {
+                $(this).click();
+            });
         }
 
         vm.gridOptions = {
@@ -183,7 +227,7 @@
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" },
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "100px"
                 },
                 {
                     field: "CUST_MBR_SID",
@@ -192,19 +236,45 @@
                 },
                 {
                     field: "CUST_NM",
-                    title: "Customer Name"
+                    title: "Customer Name",
+                    width: "230px"
                 },
                 {
                     field: "VISTEX_CUST_FLAG",
-                    title: "Is Vistex Customer",
-                    width: "20%",
+                    // Use this pattern for hover-over helps, remove Title:
+                    //headerTemplate: 'Is Vistex Customer <span title="This is some definition for a Vistex Customer."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
+                    title: "Is Vistex Customer", 
+                    width: "180px",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     attributes: { style: "text-align: center;" }
                 },
-                { field: "DFLT_PERD_PRFL", title: "Period Profile", filterable: { multi: true, search: true }, editor: vm.PeriodProfileDropDownEditor },
-                { field: "DFLT_AR_SETL_LVL", title: "AR Settlement Level", filterable: { multi: true, search: true }, editor: vm.ARSettlementLevelDropDownEditor },
-                { field: "CustomerReportedGeos", title: "Consumption Customer Reported Geo", template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>", filterable: { multi: true, search: true }, editor: vm.CustomerReportedGeoDropDownEditor }
+                {
+                    field: "DFLT_PERD_PRFL",
+                    title: "Period Profile",
+                    width: "235px",
+                    filterable: { multi: true, search: true },
+                    editor: vm.PeriodProfileDropDownEditor
+                },
+                {
+                    field: "DFLT_TNDR_AR_SETL_LVL",
+                    title: "Tenders AR Settlement Level",
+                    filterable: { multi: true, search: true },
+                    editor: vm.TenderARSettlementLevelDropDownEditor
+                },
+                {
+                    field: "DFLT_AR_SETL_LVL",
+                    title: "Non-Tenders AR Settlement Level",
+                    filterable: { multi: true, search: true },
+                    editor: vm.ARSettlementLevelDropDownEditor
+                },
+                {
+                    field: "CustomerReportedGeos",
+                    title: "Consumption Customer Reported Geo",
+                    template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>",
+                    filterable: { multi: true, search: true },
+                    editor: vm.CustomerReportedGeoDropDownEditor
+                }
             ]
         }
     }
