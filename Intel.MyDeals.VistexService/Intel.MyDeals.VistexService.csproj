@@ -32,6 +32,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'cons|AnyCPU' ">
+    <OutputPath>bin\App.cons.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'cinr|AnyCPU' ">
+    <OutputPath>bin\App.cinr.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'itt|AnyCPU' ">
+    <OutputPath>bin\App.itt.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'utt|AnyCPU' ">
+    <OutputPath>bin\App.utt.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ciar|AnyCPU' ">
+    <OutputPath>bin\App.debug.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'prod|AnyCPU' ">
+    <OutputPath>bin\App.prod.config\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Intel.MyDeals.Entities">
       <HintPath>..\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll</HintPath>
@@ -74,8 +92,23 @@
     <Compile Include="VistexParams.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.ciar.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.cinr.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="App.cons.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.itt.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.utt.config">
+      <DependentUpon>App.config</DependentUpon>
     </None>
     <None Include="RunCommands\VISTEXSapPoUploadCustomer.cmd" />
     <None Include="RunCommands\VISTEXSapPoUploadDeal.cmd" />
@@ -90,4 +123,31 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="App_config_AfterCompile" AfterTargets="AfterBuild">
+    <!--Generate transformed app config in the intermediate directory-->
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\Dev\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\dev\$(TargetFileName).config" Transform="App.dev.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\itt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\itt\$(TargetFileName).config" Transform="App.itt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\utt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\utt\$(TargetFileName).config" Transform="App.utt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cons\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cons\$(TargetFileName).config" Transform="App.cons.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\perf\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\perf\$(TargetFileName).config" Transform="App.perf.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\ciar\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\ciar\$(TargetFileName).config" Transform="App.ciar.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cinr\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cinr\$(TargetFileName).config" Transform="App.cinr.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\prod\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\prod\$(TargetFileName).config" Transform="App.prod.config" />
+    <!--Force build process to use the transformed configuration file from now on.-->
+    <!--<ItemGroup>
+      <AppConfigWithTargetPath Remove="App.config" />
+      <AppConfigWithTargetPath Include="$(IntermediateOutputPath)$(TargetFileName).config">
+        <TargetPath>$(TargetFileName).config</TargetPath>
+      </AppConfigWithTargetPath>
+    </ItemGroup>-->
+  </Target>
 </Project>

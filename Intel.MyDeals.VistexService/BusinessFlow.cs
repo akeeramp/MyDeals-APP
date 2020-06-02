@@ -26,6 +26,8 @@ namespace Intel.MyDeals.VistexService
                     Console.WriteLine("Data pushed to SAP Completed, Status: " + dataRecord.BatchStatus + " - " + dataRecord.BatchMessage);
                     VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Success");
                 }
+                VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                VistexCommonLogging.SendMail(runMode == "P" ? "Product" : "Customer", dataRecord, null);
             }
             catch (Exception ex)
             {
@@ -33,6 +35,7 @@ namespace Intel.MyDeals.VistexService
                 //Additionmal Logging
                 VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendDFDataToSapPo - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
                 VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Exception");
+                VistexCommonLogging.HandleException(ex, true, runMode == "P" ? "Product" : "Customer");
             }
 
 
@@ -58,6 +61,7 @@ namespace Intel.MyDeals.VistexService
                     VistexCommonLogging.WriteToLog("Business Flow - SendDealsDataToSapPo - Success");
                 }
                 VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                VistexCommonLogging.SendMail("Deals", dataRecord, null);
             }
             catch (Exception ex)
             {
@@ -65,6 +69,7 @@ namespace Intel.MyDeals.VistexService
                 //Additionmal Logging
                 VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendDealsDataToSapPo - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
                 VistexCommonLogging.WriteToLog("Business Flow - SendDealsDataToSapPo - Exception");
+                VistexCommonLogging.HandleException(ex, true, "Deals");
             }
         }
 
@@ -72,6 +77,7 @@ namespace Intel.MyDeals.VistexService
         {
             try
             {
+                List<string> lstStatus = new List<string>();
                 VistexCommonLogging.WriteToLog("Business Flow - SendVerticalsToSapPo - Initiated");
                 VistexDFDataResponseObject records = new VistexDFDataResponseObject();
                 while (true)
@@ -80,16 +86,19 @@ namespace Intel.MyDeals.VistexService
                     VistexCommonLogging.WriteToLog("Batch ID: " + records.BatchId);
                     VistexCommonLogging.WriteToLog("Batch Status: " + records.BatchStatus);
 
-                    if (records.BatchId == "0" || records.BatchStatus == "ERROR" || records.BatchId == null)
+                    if (records.BatchId == "0" || records.BatchId == "-1" || records.BatchStatus == "ERROR" || records.BatchId == null)
                     {
                         Console.WriteLine("There is no outbound data to push..");
                         VistexCommonLogging.WriteToLogObject(records.MessageLog);
                         VistexCommonLogging.WriteToLog("Business Flow - SendVerticalsToSapPo - Success");
+                        VistexCommonLogging.SendMail("Product-Vertical", records, lstStatus);//
                         break;
                     }
                     else
                     {
                         Console.WriteLine("Batch Id: " + records.BatchId + "  " + "Status: " + records.BatchStatus + " " + "Message: " + records.BatchMessage);
+                        lstStatus.Add("Batch ID: " + records.BatchId);
+                        lstStatus.Add("Batch Status: " + records.BatchId + Environment.NewLine);
                         VistexCommonLogging.WriteToLogObject(records.MessageLog);
                     }
                 }
@@ -100,6 +109,7 @@ namespace Intel.MyDeals.VistexService
                 //Additionmal Logging
                 VistexCommonLogging.WriteToLog("Exception Received: "+ "Thrown from: SendVerticalsToSapPo - Vistex Business Flow Error: "+ ex.Message + " |Innerexception: " + ex.InnerException+ " | Stack Trace: " +ex.StackTrace);
                 VistexCommonLogging.WriteToLog("Business Flow - SendVerticalsToSapPo - Exception");
+                VistexCommonLogging.HandleException(ex, true, "Product-Vertical");
             }
 
             return true;

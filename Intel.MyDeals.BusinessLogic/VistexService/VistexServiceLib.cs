@@ -60,6 +60,7 @@ namespace Intel.MyDeals.BusinessLogic
                     responseObj.BatchName = "VISTEX_DEALS";
                     responseObj.BatchId = "0";
                     responseObj.BatchMessage = "No data to be Uploaded";
+                    responseObj.BatchStatus = "PROCESSED";
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: - No Deal Found - Success ") + Environment.NewLine);
 
                 }
@@ -113,6 +114,7 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj.BatchName = "PRODUCT_VERTICAL";
                 responseObj.BatchId = "0";
                 responseObj.BatchMessage = "No Vertical to be Uploaded";
+                responseObj.BatchStatus = "PROCESSED";
             }
             else
             {
@@ -163,7 +165,7 @@ namespace Intel.MyDeals.BusinessLogic
                 else
                 {
                     VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
-                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData("+runMode+") - " + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Initiated ") + Environment.NewLine);
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData(" + runMode + ") - " + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Initiated ") + Environment.NewLine);
                     dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData(" + runMode + ") -" + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Done ") + Environment.NewLine);
 
@@ -172,6 +174,7 @@ namespace Intel.MyDeals.BusinessLogic
                         responseObj.BatchName = runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD";
                         responseObj.BatchId = "0";
                         responseObj.BatchMessage = "No data to be Uploaded";
+                        responseObj.BatchStatus = "PROCESSED";
                     }
                     else
                     {
@@ -179,11 +182,12 @@ namespace Intel.MyDeals.BusinessLogic
                         responseObj = ConnectSAPPOandResponse(jsonData, runMode, dataRecord.BatchId.ToString(), responseObj);
                         //UpDate Status
                         UpdateVistexDFStageData(responseObj);
+
                     }
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: Status - Done") + Environment.NewLine);
                 }
-                responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: Status - Done") + Environment.NewLine);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 responseObj.BatchName = runMode == "C" ? "CUSTOMER_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "PRODUCT_BRD";
                 responseObj.BatchId = "-1";

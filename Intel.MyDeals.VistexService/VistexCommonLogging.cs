@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using Intel.Opaque.Tools;
 using System.Configuration;
 using Intel.Opaque;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.VistexService
 {
@@ -145,11 +146,15 @@ namespace Intel.MyDeals.VistexService
 
         ///Write API call logs
         public static void WriteToLogObject(List<string> msg)
-        {            
-            foreach (string message in msg)
+        {
+            if(msg != null)
             {
-                File.AppendAllText(Intel.MyDeals.VistexService.Program._logFile, message);
-            }            
+                foreach (string message in msg)
+                {
+                    File.AppendAllText(Intel.MyDeals.VistexService.Program._logFile, message);
+                }
+            }
+                      
         }
 
         public static void DumpLoggingDetails(string app_name, VistexParams myArgs)
@@ -284,7 +289,7 @@ namespace Intel.MyDeals.VistexService
             }
         }
 
-        public static void HandleException(Exception ex, bool logToDB)
+        public static void HandleException(Exception ex, bool logToDB, string runMode)
         {
             // log exception to Event Viewer
 
@@ -292,7 +297,7 @@ namespace Intel.MyDeals.VistexService
 
             try
             {
-                SendDebugMail("MyDeals-VTX Error", ex.ToString());
+                SendDebugMail(runMode, ex.ToString());
             }
             catch (Exception mailException)
             {
@@ -300,11 +305,72 @@ namespace Intel.MyDeals.VistexService
             }            
         }
 
-        public static void SendDebugMail(string subject, string body)
+        /// <summary>
+        /// Send mail 
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        public static void SendMail(string runMode, VistexDFDataResponseObject responseObj, List<string> lstStatus)
         {
-            if (String.IsNullOrEmpty(subject)) { subject = String.Format("Message From {0}", appName); }
+            responseObj.BatchStatus = responseObj.BatchStatus == "PROCESSED" ? "Success" : responseObj.BatchStatus;
+            string subject = String.Format("MyDeals-VTX [{0}] [Status: {1}] [ENV: {2}]", runMode, responseObj.BatchStatus, VistexCommonLogging.GetAppSetting("ENV")); 
+            
+            StringBuilder sb = new StringBuilder();
 
-            subject = emailSubjectHeader + subject;
+            if(runMode != "Product-Vertical")
+            {
+                //Add Batch ID:
+                sb.AppendLine("Batch ID: " + responseObj.BatchId);
+                //Add Batch Status
+                sb.AppendLine("Batch Status: " + responseObj.BatchStatus);
+            }
+            else
+            {
+                foreach(string itm in lstStatus)
+                {
+                    sb.AppendLine(itm);                    
+                }
+            }
+
+            sb.AppendLine(responseObj.BatchMessage);
+
+            string to_email = "";
+
+            try
+            {
+                to_email = Opaque.OpUtilities.ParseEmailList(GetAppSetting(
+                    Program.IsProd ? "SupportDevelopers" : "SupportDevelopers_NONPROD"
+                    ), ",");
+            }
+            catch (Exception ex)
+            {
+                LogPerf.Log(ex);
+            }
+
+            if (String.IsNullOrEmpty(to_email))
+            {
+                //Replace Mike Name with DCS Dev PDL
+                to_email = Opaque.OpUtilities.ParseEmailList("dcs.dev.team@intel.com", ",");
+            }
+
+            using (var client = new SmtpClient())
+            {
+                using (var myMail = new MailMessage())
+                {
+                    myMail.To.Add(to_email);
+                    myMail.Subject = subject;
+                    myMail.Body = sb.ToString();
+                    myMail.IsBodyHtml = false;
+
+                    client.Send(myMail);
+                }
+            }
+
+        }
+
+        public static void SendDebugMail(string runMode, string body)
+        {
+            string subject = String.Format("MyDeals-VTX [{0}] [Status: {1}] [ENV: {2}]", runMode, "Exception", VistexCommonLogging.GetAppSetting("ENV"));
 
             StringBuilder sb = new StringBuilder(body);
             sb.AppendLine("");
