@@ -596,6 +596,22 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="test populate values",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.DefaultCustomerLookbackValue,
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD }) && de.DcID < 0 && (de.IsHidden || de.IsReadOnly)
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Validate Group Type",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/3/2020 11:56:06 AM
+File Updated: 6/4/2020 12:29:19 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -606,7 +606,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CONSUMPTION_LOOKBACK_PERIOD",
 			ATRB_DESC = "Consumption Lookback Period",
-			ATRB_LBL = "Consumption Lookback Period",
+			ATRB_LBL = "Consumption Lookback Period (Months)",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3461,
 			DATA_TYPE_CD = "INT",
@@ -1336,6 +1336,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_LOOKBACK_PERD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_LOOKBACK_PERD",
+			ATRB_DESC = "Vistex Customer Default Lookback Period",
+			ATRB_LBL = "Vistex Customer Default Lookback Period",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2029,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute DFLT_PERD_PRFL = new MyDealsAttribute()

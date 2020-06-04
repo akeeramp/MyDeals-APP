@@ -410,12 +410,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     {
                         var numDim = 0;
                         foreach (string key in opFlatItem.Keys.Where(k => k.ToString().Contains("ECAP_PRICE") && !k.ToString().Contains(baseKitDimKey + "__"))) {
-                            numDim++;   //it's probably safe to assume kit will always have 10 positive dims at most, but to have less hard-coded maintenance we just caluclate it here using ECAP_PRICE
+                            numDim++;   // it's probably safe to assume kit will always have 10 positive dims at most, but to have less hard-coded maintenance we just calculate it here using ECAP_PRICE
                         }
 
                         for (int i = 0; i < numDim; i++)
                         {
-                            //blank out all cap and ycs2 details (we reset them later if needed, but this will prevent leftover data from lingering if we delete a product)
+                            // blank out all cap and ycs2 details (we reset them later if needed, but this will prevent leftover data from lingering if we delete a product)
                             opFlatItem[AttributeCodes.CAP + baseKitDimKey + i] = "";
                             opFlatItem[AttributeCodes.CAP_STRT_DT + baseKitDimKey + i] = "";
                             opFlatItem[AttributeCodes.CAP_END_DT + baseKitDimKey + i] = "";
@@ -428,12 +428,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     double kitCap = 0;
                     double kitYcs2 = 0;
                     bool validKitCap = false;
-                    bool validkitYcs2 = false;
+                    bool validKitYcs2 = false;
                     foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
                         {
-                            opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___" + dim] = pMap.PRD_MBR_SID;  //copying the original code where it only has 4 leading underscores - why is that the case? seems intentional...
+                            opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___" + dim] = pMap.PRD_MBR_SID;  // copying the original code where it only has 4 leading underscores - why is that the case? seems intentional...
                             opFlatItem[AttributeCodes.CAP + baseKitDimKey + dim] = pMap.CAP;
                             opFlatItem[AttributeCodes.CAP_STRT_DT + baseKitDimKey + dim] = pMap.CAP == "No CAP" ? "" : pMap.CAP_START;
                             opFlatItem[AttributeCodes.CAP_END_DT + baseKitDimKey + dim] = pMap.CAP == "No CAP" ? "" : pMap.CAP_END;
@@ -457,7 +457,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                             if (double.TryParse(opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + dim]?.ToString(), out tmpPrc))
                             {
-                                validkitYcs2 = true;
+                                validKitYcs2 = true;
                                 if (int.TryParse(opFlatItem[AttributeCodes.QTY + baseKitDimKey + dim]?.ToString(), out tmpQty))
                                 {
                                     kitYcs2 += (tmpPrc * tmpQty);
@@ -480,9 +480,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
-                        int l1, l2;
-                        l1 = pMap.HAS_L1;
-                        l2 = pMap.HAS_L2;
+                        int l1 = pMap.HAS_L1;
+                        int l2 = pMap.HAS_L2;
 
                         if (l1 >= 1)
                         {
@@ -494,17 +493,17 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         }
                     }
 
-                    //check if eligible to create subkits
+                    // Check if eligible to create sub-kits
                     if (opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD].ToString().ToUpper() == "KIT")
                     {
 
                         opFlatItem[AttributeCodes.CAP + baseKitDimKey + "__1"] = validKitCap ? kitCap.ToString() : "";
-                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + "__1"] = validkitYcs2 ? kitYcs2.ToString() : "";
+                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseKitDimKey + "__1"] = validKitYcs2 ? kitYcs2.ToString() : "";
 
-                        opFlatItem[AttributeCodes.HAS_SUBKIT] = 0;  //default to 0=false
+                        opFlatItem[AttributeCodes.HAS_SUBKIT] = 0;  // Default to 0=false
                         if (pMaps.Count() > 2)
                         {
-                            //"If a kit having more than two products, having two L1 or one L1 and one L2,then can create subkit"
+                            // If a kit having more than two products, having two L1 or one L1 and one L2,then can create sub-kit
                             if ((numL1 == 2 && numL2 == 0) || (numL1 == 1 && numL2 == 1))
                             {
                                 opFlatItem[AttributeCodes.HAS_SUBKIT] = 1;
@@ -557,6 +556,18 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             // Overwrite geo value
             newItem[AttributeCodes.GEO_COMBINED] = geo;
+
+            // START Set WIP-ONLY customer level auto-default values for CONSUMPTION_LOOKBACK_PERIOD (and any other fields needing to be set)
+            // Only new WIP items will get this value - problem is that we might not need this, validation to reset value if cell is read only
+            // TODO : REPLACE singleCustomer.CUST_SID WITH singleCustomer.DFLT_LOOKBACK_PERD
+            if (Int32.Parse(newItem[AttributeCodes.DC_ID].ToString()) < 0)
+            {
+                MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c =>
+                    c.CUST_SID == Int32.Parse(newItem[AttributeCodes.CUST_MBR_SID].ToString()));
+                newItem[AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD] =
+                    singleCustomer != null ? singleCustomer.DFLT_LOOKBACK_PERD.ToString() : "";
+            }
+            // END Set WIP-ONLY customer level auto-default values for CONSUMPTION_LOOKBACK_PERIOD (and any other fields needing to be set)
 
             // not sure what to assign this to yet... if new, no id, if existing need the id.  We don't have access to that in this scope
             //newItem[AttributeCodes.DC_ID] = 0;

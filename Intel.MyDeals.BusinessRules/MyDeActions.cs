@@ -94,6 +94,13 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void DefaultCustomerLookbackValue(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            de.AtrbValue = "";
+        }
+
         public static void CheckDealCombType(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
