@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/3/2020 11:49:39 AM
+File Updated: 6/4/2020 12:22:24 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -766,6 +766,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DFLT_CUST_RPT_GEO = "DFLT_CUST_RPT_GEO";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2029
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string DFLT_LOOKBACK_PERD = "DFLT_LOOKBACK_PERD";
 
 		///<summary>
 		/// DIM_SID: 2

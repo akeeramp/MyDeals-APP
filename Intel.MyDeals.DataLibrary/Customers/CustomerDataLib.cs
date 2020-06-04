@@ -98,6 +98,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
                     int IDX_DFLT_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_AR_SETL_LVL");
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
+                    int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
                     int IDX_DFLT_PERD_PRFL = DB.GetReaderOrdinal(rdr, "DFLT_PERD_PRFL");
                     int IDX_DFLT_TNDR_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_TNDR_AR_SETL_LVL");
                     int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
@@ -118,6 +119,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
                             DFLT_AR_SETL_LVL = (IDX_DFLT_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_AR_SETL_LVL),
                             DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
+                            DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL),
                             DFLT_TNDR_AR_SETL_LVL = (IDX_DFLT_TNDR_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_TNDR_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_TNDR_AR_SETL_LVL),
                             DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
