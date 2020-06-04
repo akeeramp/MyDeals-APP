@@ -576,6 +576,26 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Trigger field validation message if present value is left blank, WIP only",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "{0} must be populated with a positive value" },
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
+                            }) && (de.HasNoValue() || de.IsNegativeOrZero()) 
+                               && !(de.IsHidden || de.IsReadOnly) // Safety check to not enforce if read only or hidden
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Validate Group Type",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },

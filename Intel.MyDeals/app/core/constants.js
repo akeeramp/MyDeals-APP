@@ -324,6 +324,9 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -483,6 +486,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
@@ -671,6 +677,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
                     //"COST_TEST_RESULT": {
@@ -1027,6 +1036,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {

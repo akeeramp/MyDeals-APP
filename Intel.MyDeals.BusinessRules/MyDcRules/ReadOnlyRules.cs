@@ -24,7 +24,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Readonly if Tracker Exists",
                     ActionRule = MyDcActions.ExecuteActions,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -45,7 +45,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
-                                AttributeCodes.PAYOUT_BASED_ON
+                                AttributeCodes.PAYOUT_BASED_ON,
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
                             }
                         }
                     }
@@ -197,7 +198,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Readonly for Overarching Max Volume and Dollar for Non Hybrid Deals if they dont contain any value",
+                    Title="Readonly for Overarching Max Volume and Dollar for Non Hybrid Deals if they don't contain any value",
                     ActionRule = MyDcActions.ReadOnlyNonHybridOverarchingFields,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
@@ -298,6 +299,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.TERMS
                             }
                         }
@@ -625,7 +627,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                                AttributeCodes.CONSUMPTION_CUST_SEGMENT
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
                             }
                         }
                     }

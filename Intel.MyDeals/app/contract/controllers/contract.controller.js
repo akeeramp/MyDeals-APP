@@ -457,14 +457,14 @@
 
                 $scope.OverrideDeleteContract();
 
-                $scope.$broadcast('refreshContractDataComplete');
+                $scope.$broadcast("refreshContractDataComplete");
 
                 $timeout(function () {
                     $scope.$apply();
                 });
 
                 if ($scope.forceNavigation && $scope.isTenderContract) {
-                    if (($scope.actualClikedTabName == 'MC' || $scope.actualClikedTabName == 'PD') && $scope.curPricingStrategy.PASSED_VALIDATION == 'Complete') {
+                    if (($scope.actualClikedTabName == "MC" || $scope.actualClikedTabName == "PD") && $scope.curPricingStrategy.PASSED_VALIDATION == "Complete") {
                         if ($scope.isMCForceRunReq() && !$scope.inCompleteCapMissing) {
                             $scope.gotoMCPage();
                         }
@@ -472,9 +472,9 @@
                             $scope.gotoPDPage();
                         }
                     }
-                    else if ($scope.curPricingStrategy.PASSED_VALIDATION != 'Complete' && $scope.selectedTAB == 'PTR') {
-                        $scope.selectedTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
-                        $scope.currentTAB = 'DE'; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                    else if ($scope.curPricingStrategy.PASSED_VALIDATION != "Complete" && $scope.selectedTAB == "PTR") {
+                        $scope.selectedTAB = "DE"; //Purpose: If No Error/Warning go to Deal Editor Automatically
+                        $scope.currentTAB = "DE"; //Purpose: If No Error/Warning go to Deal Editor Automatically
                         $scope.resetDirty();
                         $scope.publishWipDealsFromTab();
                         $scope.setBusy("", "");
@@ -490,8 +490,8 @@
 
         $scope.gotoMCPage = function () {
             $scope.isPtr = false;
-            $scope.selectedTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
-            $scope.currentTAB = 'MC'; //Purpose: If No Error/Warning go to Meet Comp Automatically
+            $scope.selectedTAB = "MC"; //Purpose: If No Error/Warning go to Meet Comp Automatically
+            $scope.currentTAB = "MC"; //Purpose: If No Error/Warning go to Meet Comp Automatically
             $scope.setBusy("", "");
             $scope.resetDirty();
         }
@@ -510,7 +510,7 @@
         $scope.goToPublished = function () {
             $scope.isPtr = false;
             $scope.setBusy("", "");
-            if ($scope.actualClikedTabName == 'PD') {
+            if ($scope.actualClikedTabName == "PD") {
                 $scope.gotoPDPage();
             }
             $scope.resetDirty();
@@ -579,7 +579,7 @@
         $scope.contractData.CUST_ACCNT_DIV_UI = "";
         // Contract detail page initializations
         if ($scope.isContractDetailsPage || ($scope.isTenderContract && isTender)) {
-            var today = moment().format('l');
+            var today = moment().format("l");
 
             // Set dates Max and Min Values for numeric text box
             // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
@@ -587,8 +587,8 @@
             $scope.contractData.MaxYear = parseInt(moment("2099").format("YYYY"));
 
             // Set the initial Max and Min date, actual dates will be updated as per the selected customer
-            $scope.contractData.MinDate = moment().subtract(6, 'years').format('l');
-            $scope.contractData.MaxDate = moment("2099").format('l');
+            $scope.contractData.MinDate = moment().subtract(6, "years").format("l");
+            $scope.contractData.MaxDate = moment("2099").format("l");
 
             // If new contract... default customer to the last customer used on the dashboard
             if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
@@ -600,7 +600,7 @@
 
             // Contract custom initializations and functions
             // Dummy attribute on the UI which will hold the array of customer divisions
-            $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
+            $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split("/");
 
             $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
             $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
@@ -611,14 +611,14 @@
             $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = !$scope.contractData._behaviors.isRequired["BACK_DATE_RSN"];
 
             // By default set the CUST_ACCPT to pending(99) if new contract
-            $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
+            $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? "Pending" : $scope.contractData.CUST_ACCPT;
             $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: ($scope.contractData.CUST_ACCPT === 'Pending');
 
             // TODO: Ideally undefined check should be removed, once we run the DBConst.tt and DealPropertyWrapper.tt we can remove this
             // Not running now I see many new Attributes added for VOL_TIER
             $scope.contractData["NO_END_DT"] = ($scope.contractData.NO_END_DT_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined);
 
-            // Set customer acceptance rulesc
+            // Set customer acceptance rules
             var setCustAcceptanceRules = function (newValue) {
                 $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
                 $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles) && !$scope.isTenderContract;
@@ -1500,7 +1500,7 @@
 
             // if its hybrid PS and already contains a PS do not allow to create one mor pricing table.
             if (ps.IS_HYBRID_PRC_STRAT !== undefined && ps.IS_HYBRID_PRC_STRAT == "1" && ps.PRC_TBL != undefined && ps.PRC_TBL.length > 0) {
-                kendo.alert("You can add only one pricing table within a hybrid pricing stratergy");
+                kendo.alert("You can add only one pricing table within a hybrid pricing strategy");
                 return;
             }
             $scope.isAddPricingTableHidden = false;
@@ -1531,7 +1531,7 @@
 
                 // Check if row count is over the number of rows we allow
                 if ($scope.spreadDs._data.length >= ($scope.ptRowCount - 1)) {
-                    alert("Cannot insert a new row. You already have the maxium number of rows allowed in one " + $scope.ptTitle + ". Please make a new " + $scope.ptTitle + " or delete some existing rows the current " + $scope.ptTitle + ".");
+                    alert("Cannot insert a new row. You already have the maximum number of rows allowed in one " + $scope.ptTitle + ". Please make a new " + $scope.ptTitle + " or delete some existing rows the current " + $scope.ptTitle + ".");
                     return;
                 }
 
@@ -1773,7 +1773,7 @@
         }
         $scope.addCustomToTemplates();
 
-        // **** UNMARK CURRENT Methods ****
+        // **** UN-MARK CURRENT Methods ****
         //
         $scope.unmarkCurPricingStrategyIf = function (id) {
             if ($scope.curPricingStrategyId === id) {

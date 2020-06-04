@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/26/2020 9:51:33 AM
+File Updated: 6/3/2020 11:49:39 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -352,6 +352,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string CONSUMPTION_CUST_SEGMENT = "CONSUMPTION_CUST_SEGMENT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3461
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string CONSUMPTION_LOOKBACK_PERIOD = "CONSUMPTION_LOOKBACK_PERIOD";
 
 		///<summary>
 		/// DIM_SID: 3

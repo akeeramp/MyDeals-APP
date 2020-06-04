@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/26/2020 9:29:07 AM
+File Updated: 6/3/2020 11:56:06 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -601,6 +601,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_LOOKBACK_PERIOD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_LOOKBACK_PERIOD",
+			ATRB_DESC = "Consumption Lookback Period",
+			ATRB_LBL = "Consumption Lookback Period",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3461,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute CONSUMPTION_REASON = new MyDealsAttribute()
 		{
