@@ -53,6 +53,9 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
             List<string> lstSqlCriteria = new List<string>();
             List<string> lstDescription = new List<string>();
             Criteria criteria = priceRuleCriteria.Criterias;
+            dicExpressions.Add(ExpressionType.RuleXml, string.Join(string.Empty, priceRuleCriteria.Criterias.Rules.Where(x => x.type == "list" && x.subType == "xml").Select(x => string.Format("<{0}>{1}</{0}>", x.field, string.Join(",", x.values)))));
+            List<string> lstDescriptionXml = priceRuleCriteria.Criterias.Rules.Where(x => x.type == "list" && x.subType == "xml").Select(x => string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">'{2}'</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, string.Join(", ", x.values))).ToList();
+            criteria.Rules.RemoveAll(x => x.type == "list" && x.subType == "xml");
             criteria.Rules.Where(x => lstStringDataTypes.Contains(x.type) && x.@operator == "LIKE").ToList().ForEach(x =>
             {
                 x.values = x.value.Split(',').ToList();
@@ -131,7 +134,7 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                 string strBlanketValue = string.Concat(criteria.BlanketDiscount.First().valueType.value == "$" ? "$" : string.Empty, criteria.BlanketDiscount.First().value, criteria.BlanketDiscount.First().valueType.value == "%" ? "%" : string.Empty);
                 lstDescription.Add(string.Concat("(<span class=\"rule_attr_desc\">", strECapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> >= </span>(", "<span class=\"rule_attr_desc\">", strCapPriceTitle, "</span>", "<span class=\"rule_operator_desc\"> - </span>", "<span class=\"rule_value_desc\">", strBlanketValue, "</span>)"));
             }
-
+            lstDescription.AddRange(lstDescriptionXml);
             string strProductDescription = string.Empty;
             dicExpressions.Add(ExpressionType.RuleSql, string.Join(" AND ", lstSqlCriteria.Select(x => string.Concat("(", x, ")"))));
             dicExpressions.Add(ExpressionType.RuleDescription, string.Join("<br/>", lstDescription.Select(x => x)));
@@ -222,5 +225,6 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
         RuleDescription,
         ProductSql,
         ProductDescription,
+        RuleXml
     }
 }

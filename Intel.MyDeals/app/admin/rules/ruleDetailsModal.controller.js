@@ -211,6 +211,11 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                 "operator": ["=", "!="]
             },
             {
+                "type": "list",
+                "subType": "xml",
+                "operator": ["="]
+            },
+            {
                 "type": "bool",
                 "operator": ["=", "!="]
             },
@@ -274,6 +279,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             field: "GEO_COMBINED",
             title: "Deal Geo",
             type: "list",
+            subType: "xml",
             width: 150,
             lookupText: "Value",
             lookupValue: "Value",
@@ -351,6 +357,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             field: "MRKT_SEG",
             title: "Market Segment",
             type: "list",
+            subType: "xml",
             width: 150,
             lookupText: "DROP_DOWN",
             lookupValue: "DROP_DOWN",
@@ -439,6 +446,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
             field: "QLTR_BID_GEO",
             title: "Bid Geo",
             type: "list",
+            subType: "xml",
             width: 150,
             lookupText: "dropdownName",
             lookupValue: "dropdownName",
@@ -818,7 +826,20 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
                         OwnerId: vm.rule.OwnerId
                     }
 
-                    vm.UpdatePriceRule(priceRuleCriteria, strActionName);
+                    var duplicateListXml = [];
+                    $.each(priceRuleCriteria.Criterias.Rules.filter(x => x.type == "list" && x.subType == "xml"), function (index, value) {
+                        var strTitle = $scope.attributeSettings.filter(x => x.field == value.field)[0].title;
+                        if (duplicateListXml.indexOf(strTitle) < 0 && priceRuleCriteria.Criterias.Rules.filter(x => x.field == value.field).length > 1)
+                            duplicateListXml.push(strTitle);
+                    });
+                    if (duplicateListXml.length == 0) {
+                        vm.UpdatePriceRule(priceRuleCriteria, strActionName);
+                    }
+                    else {
+                        kendo.confirm("Below " + (duplicateListXml.length == 1 ? "attribute" : "attributes") + " cannot be duplicate, This will be merged into single attribute. Would you like to continue?</br></br><b>" + duplicateListXml.join("</br>") + "</b>").then(function () {
+                            vm.UpdatePriceRule(priceRuleCriteria, strActionName);
+                        });
+                    }
                 }
                 // If submit call, close the dialog afterwards.
                 //if (strActionName === "SUBMIT") {

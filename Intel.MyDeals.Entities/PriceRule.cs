@@ -72,11 +72,13 @@ namespace Intel.MyDeals.Entities
         public string ChangeDateTimeFormat { get; set; }
         public string RuleDescription { get; set; }
         public string ProductDescription { get; set; }
+        public string CriteriaXml { get; set; }
     }
 
     public class rule
     {
         public string type { get; set; }
+        public string subType { get; set; }
         public string field { get; set; }
         public string @operator { get; set; }
         public string value { get; set; }

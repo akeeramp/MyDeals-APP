@@ -21,6 +21,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
             $scope.data = $scope.criteria == undefined ? [] : $scope.criteria;
             $scope.myRules = [];
             $scope.fieldDict = {};
+            $scope.subTypeDict = {};
             $scope.currentRule = "";
             $scope.currentRuleColumns = "";
             $scope.lookupDs = {};
@@ -32,6 +33,7 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
 
             for (var i = 0; i < $scope.attributeSettings.length; i++) {
                 $scope.fieldDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].type;
+                $scope.subTypeDict[$scope.attributeSettings[i].field] = $scope.attributeSettings[i].subType;
             }
 
             $scope.attributeSettingsCopy = angular.copy($scope.attributeSettings).sort(function (a, b) {
@@ -120,7 +122,8 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                             field: x.field,
                             operator: x.operator,
                             value: x.value,
-                            valueType: x.valueType
+                            valueType: x.valueType,
+                            subType: $scope.subTypeDict[x.field]
                         };
                     }).ToArray();
             }
@@ -353,9 +356,14 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
                         return (x.field === field);
                     }).ToArray()[0].type;
 
+                var fieldSubType = $linq.Enumerable().From($scope.attributeSettings)
+                    .Where(function (x) {
+                        return (x.field === field);
+                    }).ToArray()[0].subType;
+
                 var opers = $linq.Enumerable().From($scope.operatorSettings.types2operator)
                     .Where(function (x) {
-                        return (x.type === fieldType);
+                        return (x.type === fieldType && x.subType === fieldSubType);
                     }).ToArray()[0].operator;
 
                 var operData = $linq.Enumerable().From($scope.operatorSettings.operators)
