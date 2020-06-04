@@ -559,7 +559,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             // START Set WIP-ONLY customer level auto-default values for CONSUMPTION_LOOKBACK_PERIOD (and any other fields needing to be set)
             // Only new WIP items will get this value - problem is that we might not need this, validation to reset value if cell is read only
-            // TODO : REPLACE singleCustomer.CUST_SID WITH singleCustomer.DFLT_LOOKBACK_PERD
             if (Int32.Parse(newItem[AttributeCodes.DC_ID].ToString()) < 0)
             {
                 MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c =>

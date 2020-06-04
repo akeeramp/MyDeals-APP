@@ -94,7 +94,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void DefaultCustomerLookbackValue(this IOpDataElement de, params object[] args)
+        public static void ClearNewDefaultValues(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
 

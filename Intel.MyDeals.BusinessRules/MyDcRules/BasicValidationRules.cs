@@ -596,7 +596,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="test populate values",
+                    Title="Clear un-needed values for new WIP attributes",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -604,7 +604,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = MyDeActions.DefaultCustomerLookbackValue,
+                            Action = MyDeActions.ClearNewDefaultValues,
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD }) && de.DcID < 0 && (de.IsHidden || de.IsReadOnly)
                         }
                     }
