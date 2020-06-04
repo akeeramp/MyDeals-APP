@@ -86,7 +86,8 @@
                         DFLT_PERD_PRFL: { from: "VistexCustomerInfo.DFLT_PERD_PRFL", editable: true, nullable: true },
                         DFLT_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_AR_SETL_LVL", editable: true, nullable: true },
                         DFLT_TNDR_AR_SETL_LVL: { from: "VistexCustomerInfo.DFLT_TNDR_AR_SETL_LVL", editable: true, nullable: true },
-                        CustomerReportedGeos: { editable: true, nullable: true }
+                        CustomerReportedGeos: { editable: true, nullable: true },
+                        DFLT_LOOKBACK_PERD: { from: "VistexCustomerInfo.DFLT_LOOKBACK_PERD", editable: true, nullable: true }
                     }
                 }
             }
@@ -274,6 +275,11 @@
                     template: "<span>{{dataItem.CustomerReportedGeos.join(', ')}}<span>",
                     filterable: { multi: true, search: true },
                     editor: vm.CustomerReportedGeoDropDownEditor
+                },
+                {
+                    field: "DFLT_LOOKBACK_PERD",
+                    title: "Consumption Lookback Period (Months)",
+                    filterable: { multi: true, search: true }
                 }
             ]
         }
