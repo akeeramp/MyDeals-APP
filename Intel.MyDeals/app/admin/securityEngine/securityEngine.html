@@ -19,7 +19,7 @@
                     <div class="lbl">
                         <div>ObjType: </div>
                         <div class="opUiContainer md">
-                            <select style="width: 160px;" kendo-drop-down-list="vm.id.ObjType" k-options="vm.dropDownOptions.objType" k-ng-model="vm.selected.objType" k-ng-delay="vm.isDropdownsLoaded"></select>
+                            <select style="width: 160px;" id="serviceAccounts" kendo-drop-down-list="vm.id.ObjType" k-options="vm.dropDownOptions.objType" k-ng-model="vm.selected.objType" k-ng-delay="vm.isDropdownsLoaded"></select>
                         </div>
                         <div class="clearboth"></div>
                     </div>
@@ -71,7 +71,7 @@
                                 </div> 
                                 <div class="clearboth"></div>
                             </uib-tab>
-                            <uib-tab index="1" heading="Deal Security" select="vm.selectTabMode(vm.tabModeEnum.DealSecurity)">
+                            <uib-tab index="1" heading="Deal Security" select="vm.selectTabMode(vm.tabModeEnum.DealSecurity)" ng-click="vm.changeTabs()">
                                 <div class="col-md-12 opUiContainer sm">
                                     <!-- Deal Security -->
                                     Deal Action:
