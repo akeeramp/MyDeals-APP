@@ -302,6 +302,21 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Consumption Cust Reported Geo</span>",
+                //Label = "Consumption Cust Reported Geo",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsHidden = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3719,
                 AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -702,6 +717,21 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Consumption Cust Reported Geo</span>",
+                //Label = "Consumption Cust Reported Geo",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsHidden = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -2568,7 +2598,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
-                IsSortable = true,                
+                IsSortable = true,
                 ExcelTemplate = "#=EXCLUDE_AUTOMATION#",
                 BypassExport = true
             });

@@ -504,13 +504,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // If no data was returned, we should redirect back to PTR
         if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
-                $state.go('contract.manager.strategy',
-                    {
-                        cid: $scope.contractData.DC_ID,
-                        sid: $scope.curPricingStrategyId,
-                        pid: $scope.curPricingTableId
-                    },
-                    { reload: true });
+            $state.go('contract.manager.strategy',
+                {
+                    cid: $scope.contractData.DC_ID,
+                    sid: $scope.curPricingStrategyId,
+                    pid: $scope.curPricingTableId
+                },
+                { reload: true });
         }
 
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true, true);
@@ -1111,21 +1111,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.child.setRowIdStyle(data);
 
                                 }
-                                    , function (response) { // Cancel Merge
-                                        // Find all occurances with deal-grp-nm
-                                        for (var i = data.length - 1; i >= 0; i--) {
-                                            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
-                                                // Don't clear the existing
-                                                if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
-                                                    continue;
-                                                }
-                                                // Clear
-                                                data[i]["DEAL_GRP_NM"] = "";
-                                                data[i]["dirty"] = true;
+                                , function (response) { // Cancel Merge
+                                    // Find all occurances with deal-grp-nm
+                                    for (var i = data.length - 1; i >= 0; i--) {
+                                        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+                                            // Don't clear the existing
+                                            if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
+                                                continue;
                                             }
+                                            // Clear
+                                            data[i]["DEAL_GRP_NM"] = "";
+                                            data[i]["dirty"] = true;
                                         }
-                                        spreadDsSync();
                                     }
+                                    spreadDsSync();
+                                }
                                 );
                         }
                     }
@@ -1311,10 +1311,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             },
                                 5);
                         },
-                            function () {
-                                $(".k-button[title=Undo]").click();
-                                syncUndoRedoCounters();
-                            });
+                        function () {
+                            $(".k-button[title=Undo]").click();
+                            syncUndoRedoCounters();
+                        });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
                     $timeout(function () {
@@ -1916,13 +1916,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         case "AR_SETTLEMENT_LVL": {
                                             // Default to customer tender value or system wide tender value, safety check for "User Select" value
                                             var newTenderArSettlementValue = (root.contractData.Customer == undefined
-                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
-                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === ""
-                                                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
+                                                || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
+                                                || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === ""
+                                                || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
                                                 "Issue Credit to Billing Sold To" : root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL;
-                                            root.curPricingTable[key] = newTenderArSettlementValue; 
+                                            root.curPricingTable[key] = newTenderArSettlementValue;
                                         } break;
                                     }
+                                }
+
+                                switch (key) {
+                                    case "CONSUMPTION_CUST_RPT_GEO": {
+                                        if (root.contractData.Customer != undefined && root.contractData.Customer != null)
+                                            root.curPricingTable[key] = root.contractData.Customer.DFLT_CUST_RPT_GEO;
+                                    } break;
                                 }
 
                                 // Auto fill default values from Pricing Strategy level
@@ -2304,8 +2311,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }, {
-            layout: true
-        });
+                layout: true
+            });
     }
     $scope.$on('saveWithWarnings',
         function (event, args) {
@@ -3673,7 +3680,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
-       
+
         var iscustdivnull = isCustDivisonNull(data);
         if (iscustdivnull) {
             kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
@@ -3689,7 +3696,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
-        
+
         var iscustdivnull = isCustDivisonNull(data)
         if (iscustdivnull) {
             kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
