@@ -230,6 +230,46 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Add history message for changed fields",
+                    ActionRule = MyDcActions.AddHistoryMessagesForChanges,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
+                                AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.START_DT,
+                                AttributeCodes.END_DT,
+                                AttributeCodes.REBATE_BILLING_START,
+                                AttributeCodes.REBATE_BILLING_END,
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.CUST_ACCNT_DIV,
+                                AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.PRD_EXCLDS,
+                                AttributeCodes.MRKT_SEG,
+                                AttributeCodes.PAYOUT_BASED_ON,
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.PROGRAM_PAYMENT,
+                                AttributeCodes.REBATE_TYPE,
+                                AttributeCodes.QTY,
+                                AttributeCodes.SOLD_TO_ID,
+                                AttributeCodes.VOLUME,
+                                AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+                                AttributeCodes.END_VOL,
+                                AttributeCodes.TITLE // Product Title at Deal Level
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Check for Product changes in WIP",
                     ActionRule = MyDcActions.ModifiedProductCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
