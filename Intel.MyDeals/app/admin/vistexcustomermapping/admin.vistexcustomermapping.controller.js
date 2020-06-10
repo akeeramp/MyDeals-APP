@@ -51,7 +51,11 @@
                     });
                 },
                 update: function (e) {
-                    e.success(e.model);
+                    var validationMessages = vm.ValidateCustomerMapping(e.data);
+                    if (validationMessages.length == 0)
+                        e.success(e.data);
+                    else
+                        kendo.alert(validationMessages.join("</br>"));
                 }
             },
             pageSize: 25,
@@ -72,7 +76,7 @@
             }
         });
 
-        vm.SaveCustomerMapping = function (model) {
+        vm.ValidateCustomerMapping = function (model) {
             var validationMessages = [];
 
             if (model.VISTEX_CUST_FLAG && (model.DFLT_PERD_PRFL == null || model.DFLT_PERD_PRFL == ''))
@@ -84,14 +88,7 @@
             if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0)
                 validationMessages.push("Please select a valid <b>Tenders AR Settlement Level</b>");
 
-            if (validationMessages.length == 0) {
-                vistexcustomermappingService.UpdateVistexCustomer(model).then(function (response) {
-                    logger.success("Vistex Customer Mapping updated.");
-                }, function (response) {
-                    logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
-                });
-            } else
-                kendo.alert(validationMessages.join("</br>"));
+            return validationMessages;
         }
 
         vm.PeriodProfileOptions = {
@@ -231,7 +228,14 @@
             toolbar: gridUtils.clearAllFiltersToolbar(),
             save: function (e) {
                 e.model.DFLT_CUST_RPT_GEO = vm.SelectedConsumptionReportedGeos;
-                vm.SaveCustomerMapping(e.model);
+                var validationMessages = vm.ValidateCustomerMapping(e.model);
+                if (validationMessages.length == 0) {
+                    vistexcustomermappingService.UpdateVistexCustomer(e.model).then(function (response) {
+                        logger.success("Vistex Customer Mapping updated.");
+                    }, function (response) {
+                        logger.error("Unable to update Vistex Customer Mapping.", response, response.statusText);
+                    });
+                }
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
