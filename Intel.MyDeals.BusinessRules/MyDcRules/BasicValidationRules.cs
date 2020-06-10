@@ -624,12 +624,11 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = MyDeActions.AddMessage,
-                            Args = new object[] { "{0} must be populated with a positive value" },
+                            Action = MyDeActions.ConsumptionLookbackPeriodCheck,
+                            //Args = new object[] { "{0} must be populated with a positive value" }, // Used if there was more then one atrb matching, backed out since this because a single purpose rule
                             Where = de => de.AtrbCdIn(new List<string> {
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
-                            }) && (de.HasNoValue() || de.IsNegativeOrZero()) 
-                               && !(de.IsHidden || de.IsReadOnly) // Safety check to not enforce if read only or hidden
+                            }) && !(de.IsHidden || de.IsReadOnly) // Safety check to not enforce if read only or hidden
                         }
                     }
                 },
