@@ -2003,7 +2003,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3459,
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 150,
+                Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
