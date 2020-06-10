@@ -36,6 +36,10 @@
 
 		<div class="row">
 			<div class="col-md-12">
+                <div class="col-md-7" ng-if="$ctrl.multiSelectPopUpModal.enableSelectAll || $ctrl.multiSelectPopUpModal.enableDeselectAll">
+                    <button style="width:35%" ng-if="$ctrl.multiSelectPopUpModal.enableSelectAll" ng-click="$ctrl.SelecAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;
+                    <button style="width:35%" ng-if="$ctrl.multiSelectPopUpModal.enableDeselectAll" ng-click="$ctrl.DeSelecAllCustomerReportedGeos()" class="btn btn-primary">Deselect All</button>
+                </div>
 				<div class="fr">
 					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
 					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>

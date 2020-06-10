@@ -24,7 +24,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <returns></returns>
         [Authorize]
         [Route("GetVistexCustomersMapList/{getCachedResult:bool?}")]
-        public IEnumerable<VistexCustomerMappingWrapper> GetVistexCustomersMapList(bool getCachedResult = true)
+        public IEnumerable<VistexCustomerMapping> GetVistexCustomersMapList(bool getCachedResult = true)
         {
             return SafeExecutor(() => _vistexCustomerMappingLib.GetVistexCustomerMapping(), "Unable to get Customers");
         }
@@ -38,10 +38,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("UpdateVistexCustomer")]
         [HttpPost]
         [AntiForgeryValidate]
-        public IEnumerable<VistexCustomerMappingWrapper> UpdateVistexCustomer(VistexCustomerMappingWrapper data)
-        {
-            data.VistexCustomerInfo.DFLT_CUST_RPT_GEO = string.Join(",", data.CustomerReportedGeos.OrderBy(x => x));
-            return SafeExecutor(() => _vistexCustomerMappingLib.SetVistexCustomerMapping(CrudModes.Update, data.VistexCustomerInfo), "Unable to update Customers");
+        public IEnumerable<VistexCustomerMapping> UpdateVistexCustomer(VistexCustomerMapping data)
+        {   
+            return SafeExecutor(() => _vistexCustomerMappingLib.SetVistexCustomerMapping(CrudModes.Update, data), "Unable to update Customers");
         }
     }
 }
