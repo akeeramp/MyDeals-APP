@@ -78,7 +78,7 @@
                     if (e.data.models[0]) {
                         if (e.data.models[0].ATRB_SID == 3456 || e.data.models[0].ATRB_SID == 3457 || e.data.models[0].ATRB_SID == 3458) {
                             if (e.data.models[0].DROP_DOWN.length > 40) {
-                                logger.warning("Value can not have more than 40 characters long.");
+                                logger.warning("Value can not be more than 40 characters long.");
                             } else if (e.data.models[0].DROP_DOWN.indexOf(',') > -1) {
                                 logger.warning("Value can not have comma (,).");
                             }
