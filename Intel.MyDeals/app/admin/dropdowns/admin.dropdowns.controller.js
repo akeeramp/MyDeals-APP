@@ -75,17 +75,29 @@
                     
                 },
                 create: function (e) {
-                    dropdownsService.insertBasicDropdowns(e.data.models[0])
-                        .then(function (response) {
-                            e.success(response.data);
-                            vm.selectedInheritanceGroup = "";
-                            if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
-                                vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
+                    if (e.data.models[0]) {
+                        if (e.data.models[0].ATRB_SID == 3456 || e.data.models[0].ATRB_SID == 3457 || e.data.models[0].ATRB_SID == 3458) {
+                            if (e.data.models[0].DROP_DOWN.length > 40) {
+                                logger.warning("Value can not have more than 40 characters long.");
+                            } else if (e.data.models[0].DROP_DOWN.indexOf(',') > -1) {
+                                logger.warning("Value can not have comma (,).");
                             }
-                            logger.success("New Dropdown Added.");
-                        }, function (response) {
-                            logger.error("Unable to insert Dropdown.", response, response.statusText);
-                        });
+                            else {
+                                dropdownsService.insertBasicDropdowns(e.data.models[0])
+                                    .then(function (response) {
+                                        e.success(response.data);
+                                        vm.selectedInheritanceGroup = "";
+                                        if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
+                                            vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
+                                        }
+                                        logger.success("New Dropdown Added.");
+                                    }, function (response) {
+                                        logger.error("Unable to insert Dropdown.", response, response.statusText);
+                                    });
+                            }
+                        }
+                    }
+                    
                 }
             },
             batch: true,
