@@ -11,7 +11,7 @@ securityEngineDrawDeals.$inject = ['$http', 'lookupsService', '$compile', '$temp
 
 function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache, logger, $q, $filter) {
 
-	var dummyAttrName = "NA"; // This is used for deal Security and others that do not tie to an attribute
+	var dummyAttrName = "ACTIVE"; // This is used for deal Security and others that do not tie to an attribute
 
 	var linker = function (scope, element, attr) {
 		var vm = scope.$parent.vm;
@@ -53,17 +53,21 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 					mappingKey = vm.filtered.attrAction.dropdownName;
 					newAtrbId = atrbId;
 					newAtrbCd = atrbCd;
+
+                    clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", " + stgId + ", \"" + stgName + "\")'>";
 				} else { // Deal Security
 					actionId = atrbId; // Note: for deal security only, it's atrb ID is actually action ID
 					var myActnCd = $filter('filter')(vm.dropDownDatasource.actions, { dropdownID: parseInt(atrbId) }, true)[0];
 					actnCd = (myActnCd ? myActnCd.dropdownName : -1);
 					mappingKey = atrbCd;
-					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes["CNTRCT"], { ATRB_COL_NM: dummyAttrName }, true)[0] //quickfix: changed to attributes["CNTRCT"], but not sure if that is ok - all the attributes at different levels have the same dummyAttrName ID (90001) so perhaps it is ok?
-				    newAtrbId = dummyAttr.ATRB_SID;
-					newAtrbCd = dummyAttrName;
+					//var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes["CNTRCT"], { ATRB_COL_NM: dummyAttrName }, true)[0] //quickfix: changed to attributes["CNTRCT"], but not sure if that is ok - all the attributes at different levels have the same dummyAttrName ID (90001) so perhaps it is ok?
+                    newAtrbId = 1;
+				    newAtrbCd = dummyAttrName;
+
+				    clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", 0, \"All WF Stages\")'>";
 				}
 
-				clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", " + stgId + ", \"" + stgName + "\")'>"
+				//clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", " + stgId + ", \"" + stgName + "\")'>"
 				buf += drawDealType(vm, mappingKey, newAtrbCd, dealType.Alias, role.dropdownName, stgName, clickableHtml);
 			}
 			buf += divEnd;
@@ -81,7 +85,11 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 
 		var actionCollection = vm.secAtrbUtil.securityMappings[mappingKey];
 		var title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
-		var atrbKey = atrbCd + "/" + vm.filtered.objType.Id + "/" + dealType + "/" + role + "/" + stgName;
+		var atrbKey = atrbCd + "/" + vm.filtered.objType.Id + "/" + dealType + "/" + role + "/" + stgName; // This is attribute level security pattern
+		if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+		    //ACTIVE/0/ALL_TYPES/FSE/All WF Stages:
+		    atrbKey = "ACTIVE/0/ALL_TYPES/" + role + "/All WF Stages";
+        }
 
 		// Deal Read Only
 		if (mappingKey === "ATRB_READ_ONLY" && (vm.secAtrbUtil.securityMappings["C_EDIT_CONTRACT"] === undefined || vm.secAtrbUtil.securityMappings["C_EDIT_CONTRACT"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined)) {

@@ -563,8 +563,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             {
                 MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c =>
                     c.CUST_SID == Int32.Parse(newItem[AttributeCodes.CUST_MBR_SID].ToString()));
-                newItem[AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD] =
-                    singleCustomer != null ? singleCustomer.DFLT_LOOKBACK_PERD.ToString() : "";
+                int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1; // Safe to do because loader sets null value = 0
+                newItem[AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD] = lookbackDefaultVal >= 0 ? lookbackDefaultVal.ToString() : "";
             }
             // END Set WIP-ONLY customer level auto-default values for CONSUMPTION_LOOKBACK_PERIOD (and any other fields needing to be set)
 

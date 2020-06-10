@@ -789,6 +789,37 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void AddHistoryMessagesForChanges(params object[] args)
+        {
+            // This rule posts value change messages into comment history at any time a value is updated.  not re-deal only events.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement sysComment = r.Dc.GetDataElement(AttributeCodes.SYS_COMMENTS);
+            if (sysComment == null) return;
+
+            // Get the list of all attributes so that we can pull meaningful names below
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+
+            List<string> updates = new List<string>();
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d =>
+                r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
+            {
+                MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                if (atrb == null) continue;
+                updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+            }
+
+            if (updates.Count > 0) // If there are items to add, add them
+            {
+                // "; " is a safe spacing for excel output, but it is also replaced by "<br>" on web popup for readability.
+                sysComment.AtrbValue += sysComment.AtrbValue.ToString().Length > 0
+                    ? "; " + String.Join("; ", updates.ToArray())
+                    : String.Join("; ", updates.ToArray());
+            }
+        }
+
         public static void ReadOnlyStartDateIfIsInPastAndHasTracker(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

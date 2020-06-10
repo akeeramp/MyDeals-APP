@@ -2072,7 +2072,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3461,
                 AtrbCd = AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                HeaderTemplate = "<span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates.'>Consumption Lookback Period (Months)</span>",
+                HeaderTemplate = "Consumption Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
                 //Label = "Consumption Cust Reported Geo",
                 Width = 170, // 110
                 Format = "{0:d}",

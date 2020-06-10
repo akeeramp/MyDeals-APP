@@ -101,6 +101,16 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = "";
         }
 
+        public static void ConsumptionLookbackPeriodCheck(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            int safeParse = 0;
+
+            if (de.HasNoValue() || de.IsNegative() || (Int32.TryParse(de.AtrbValue.ToString(), out safeParse) && safeParse > 24))
+                de.AddMessage("Consumption Lookback Period must be a value between 0 and 24.");
+        }
+
         public static void CheckDealCombType(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

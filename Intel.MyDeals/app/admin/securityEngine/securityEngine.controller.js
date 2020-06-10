@@ -21,6 +21,7 @@
     	vm.save = save;
     	vm.reset = reset;
     	vm.magicWandSelect = magicWandSelect;
+        vm.changeTabs = changeTabs;
     	vm.onObjTypeChange = onObjTypeChange;
 
     	// Variables     
@@ -61,7 +62,7 @@
     	vm.default.attrActionName = "ATRB_REQUIRED";
     	vm.default.objTypeName = "CNTRCT";
 
-    	vm.filtered = {}; // A copy of vm.selected's values to create the grid
+        vm.filtered = {}; // A copy of vm.selected's values to create the grid
     	vm.filtered.attributes = [];
 		
     	vm.isDropdownsLoaded = false; // Determines load for k-ng-delay on dropdowns
@@ -171,6 +172,7 @@
     	vm.dropDownOptions.objType = {
     		autoBind: false,
     		select: vm.onObjTypeChange,
+    		//change: vm.onObjTypeChange,
     		dataTextField: "Alias",
     		dataSource: {
     			type: "json",
@@ -212,9 +214,9 @@
 					.then(function (response) {
 						vm.dealTypeAtrbs = response.data;
 						var defaultObjType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
-						vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
+                        vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
 						vm.drilledDownStages = filterObjTypeForStages(defaultObjType.Alias);
-						deferred.resolve(response);
+                        deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get Deal Type Attributes.", error, error.statusText);
 						deferred.reject();
@@ -477,6 +479,11 @@
 				//isModified: true
     		};
 
+            if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+                objToSave.OBJ_TYPE = "All WF Stages";
+                objToSave.OBJ_TYPE_SID = 0;
+            }
+
     		// Is this the clickable colored-box element?
     		if (!child.hasClass("atrbContainer")) {
     			return;
@@ -499,7 +506,7 @@
 
     		if (vm.pendingSaveArray[index] != null) {
     			// store orignallyChecked in case of another click on the colored box
-    			objToSave.originallyChecked = vm.pendingSaveArray[index].originallyChecked
+                objToSave.originallyChecked = vm.pendingSaveArray[index].originallyChecked;
 				// Check if the object was modified
     			objToSave.isModified = (objToSave.originallyChecked != objToSave.isNowChecked);
     		} else {
@@ -582,6 +589,12 @@
         	vm.dropDown.dealSecurity;
         }
 
+        function changeTabs() {
+            //var dropDownList = $("#serviceAccounts").getKendoDropDownList();
+            //dropDownList.value(1);
+            //dropDownList.trigger("change");
+        }
+
         function onObjTypeChange(e) {
         	// Note: kendo select event being called twice: once on click and once on deselect 
         	vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
@@ -627,6 +640,12 @@
                     }
                 }
             }
+
+            //if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+            //    filteredDeals = [];
+            //    filteredDeals.push({ "Stage": "All WF Stages", "Id": 0 });
+            //}
+
             return filteredDeals;
         }
         function filterObjTypeForStages(objTypeName) {
@@ -639,7 +658,13 @@
         			}
         		}
         	}
-        	return filteredStages;
+
+            if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+                filteredStages = [];
+                filteredStages.push({ "Stage": "All WF Stages", "Id": 0 });
+            }
+
+            return filteredStages;
         }
 
         function getSelectedObjType() {
