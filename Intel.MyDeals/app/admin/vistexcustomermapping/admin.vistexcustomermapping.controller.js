@@ -51,11 +51,9 @@
                     });
                 },
                 update: function (e) {
-                    var validationMessages = vm.ValidateCustomerMapping(e.data);
-                    if (validationMessages.length == 0)
+                    //This funtion is used only to close the editors if the values are valid
+                    if (vm.IsValidCustomerMapping(e.data, false))
                         e.success(e.data);
-                    else
-                        kendo.alert(validationMessages.join("</br>"));
                 }
             },
             pageSize: 25,
@@ -76,7 +74,7 @@
             }
         });
 
-        vm.ValidateCustomerMapping = function (model) {
+        vm.IsValidCustomerMapping = function (model, isShowPopup) {
             var validationMessages = [];
 
             if (model.VISTEX_CUST_FLAG && (model.DFLT_PERD_PRFL == null || model.DFLT_PERD_PRFL == ''))
@@ -88,7 +86,10 @@
             if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0)
                 validationMessages.push("Please select a valid <b>Tenders AR Settlement Level</b>");
 
-            return validationMessages;
+            if (isShowPopup && validationMessages.length > 0)
+                kendo.alert(validationMessages.join("</br>"));
+
+            return validationMessages.length == 0;
         }
 
         vm.PeriodProfileOptions = {
@@ -228,8 +229,7 @@
             toolbar: gridUtils.clearAllFiltersToolbar(),
             save: function (e) {
                 e.model.DFLT_CUST_RPT_GEO = vm.SelectedConsumptionReportedGeos;
-                var validationMessages = vm.ValidateCustomerMapping(e.model);
-                if (validationMessages.length == 0) {
+                if (vm.IsValidCustomerMapping(e.model, true)) {
                     vistexcustomermappingService.UpdateVistexCustomer(e.model).then(function (response) {
                         logger.success("Vistex Customer Mapping updated.");
                     }, function (response) {
