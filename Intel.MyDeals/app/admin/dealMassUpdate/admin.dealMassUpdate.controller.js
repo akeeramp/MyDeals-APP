@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    DealMassUpdateController.$inject = ['dealMassUpdateService', '$scope', 'gridConstants', 'logger'];
+    DealMassUpdateController.$inject = ['dealMassUpdateService', '$scope', 'gridConstants', 'logger', '$timeout'];
 
-    function DealMassUpdateController(dealMassUpdateService, $scope, gridConstants, logger) {
+    function DealMassUpdateController(dealMassUpdateService, $scope, gridConstants, logger, $timeout) {
 
         $scope.accessAllowed = true;
         if (!(window.usrRole === 'SA' || window.isDeveloper)) {
@@ -23,7 +23,38 @@
         $scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
         $scope.ShowResults = false;
 
+
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
+                var newState = msg != undefined && msg !== "";
+                isShowFunFact = true; // Always show fun fact
+                // if no change in state, simple update the text
+                if ($scope.isBusy === newState) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                    return;
+                }
+
+                $scope.isBusy = newState;
+                if ($scope.isBusy) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                } else {
+                    $timeout(function () {
+                        $scope.isBusyMsgTitle = msg;
+                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
+                    }, 100);
+                }
+            
+        }
+
         $scope.ValidateAndUpdateValues = function () {
+            $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
             var data = {};
             var reg = new RegExp(/^[0-9,]+$/);
             var isvalidAtrb = true;
@@ -65,13 +96,17 @@
                         $scope.UpdCnt.success = vm.UpdatedResults.filter(x => x.ERR_FLAG === 0).length;
                         vm.dataSource.read();
                         $scope.ShowResults = true;
+                        $scope.setBusy("", "");
+                        logger.success("Please Check The Results.");
                     }, function (response) {
-                        logger.error("Unable to Update deal(s)");
+                            logger.error("Unable to Update deal(s)");
+                            $scope.setBusy("", "");
                     });
             }
             else {
                 $scope.ShowResults = false;
                 logger.warning("Please Correct the Errors");
+                $scope.setBusy("", "");
             }
         }
 
@@ -103,7 +138,7 @@
             columns: [
                 {
                     field: "DEAL_ID",
-                    title: "DEAL ID"
+                    title: "Deal Id"
                 },
                 {
                     field: "UPD_MSG",
