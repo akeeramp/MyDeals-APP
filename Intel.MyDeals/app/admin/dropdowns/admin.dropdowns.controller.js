@@ -20,7 +20,11 @@
         vm.nonCorpInheritableValues = [];
         vm.selectedInheritanceGroup = "";
         vm.selectedInheritanceCust = "";
-
+        vm.COMP_ATRB_SIDS = [];
+        //Added CONSUMPTION_CUST_RPT_GEO, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT
+        vm.COMP_ATRB_SIDS.push(3456)
+        vm.COMP_ATRB_SIDS.push(3457)
+        vm.COMP_ATRB_SIDS.push(3458)
         vm.selectedATRB_SID = 0;
         vm.selectedOBJ_SET_TYPE_SID = 0;
         vm.selectedCUST_MBR_SID = 1;
@@ -75,17 +79,35 @@
                     
                 },
                 create: function (e) {
-                    dropdownsService.insertBasicDropdowns(e.data.models[0])
-                        .then(function (response) {
-                            e.success(response.data);
-                            vm.selectedInheritanceGroup = "";
-                            if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
-                                vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
+                    var IS_MODEL_VALID = true;
+                    if (e.data.models[0]) {
+                        if (vm.COMP_ATRB_SIDS.indexOf(e.data.models[0].ATRB_SID) > -1) {
+                            if (e.data.models[0].DROP_DOWN.length > 40) {
+                                logger.warning("Value can not be more than 40 characters long.");
+                                IS_MODEL_VALID = false;
+                            } else if (e.data.models[0].DROP_DOWN.indexOf(',') > -1) {
+                                logger.warning("Value can not have comma (,).");
+                                IS_MODEL_VALID = false;
                             }
-                            logger.success("New Dropdown Added.");
-                        }, function (response) {
-                            logger.error("Unable to insert Dropdown.", response, response.statusText);
-                        });
+                            
+                        }
+                        
+                        if (IS_MODEL_VALID) {
+                            dropdownsService.insertBasicDropdowns(e.data.models[0])
+                                .then(function (response) {
+                                    e.success(response.data);
+                                    vm.selectedInheritanceGroup = "";
+                                    if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
+                                        vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
+                                    }
+                                    logger.success("New Dropdown Added.");
+                                }, function (response) {
+                                    logger.error("Unable to insert Dropdown.", response, response.statusText);
+                                });
+                        }
+                        
+                    }
+                    
                 }
             },
             batch: true,

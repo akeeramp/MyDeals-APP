@@ -302,6 +302,21 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Consumption Cust Reported Geo</span>",
+                //Label = "Consumption Cust Reported Geo",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsHidden = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3719,
                 AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -702,6 +717,21 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Consumption Cust Reported Geo</span>",
+                //Label = "Consumption Cust Reported Geo",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsHidden = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1973,7 +2003,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3459,
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 150,
+                Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
@@ -2042,7 +2072,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3461,
                 AtrbCd = AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                HeaderTemplate = "<span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates.'>Consumption Lookback Period (Months)</span>",
+                HeaderTemplate = "Consumption Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
                 //Label = "Consumption Cust Reported Geo",
                 Width = 170, // 110
                 Format = "{0:d}",
@@ -2568,7 +2598,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
-                IsSortable = true,                
+                IsSortable = true,
                 ExcelTemplate = "#=EXCLUDE_AUTOMATION#",
                 BypassExport = true
             });

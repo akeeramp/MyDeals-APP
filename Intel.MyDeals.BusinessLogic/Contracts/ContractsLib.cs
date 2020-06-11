@@ -507,7 +507,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("VOLUME", qty);
             testDealData.Add("END_CUSTOMER_RETAIL", endCust);
             //testDealData.Add("ON_ADD_DT", "09/19/2020"); // default to start
-            testDealData.Add("CONSUMPTION_REASON", "None");
+            testDealData.Add("CONSUMPTION_REASON", "Platform");
             testDealData.Add("MRKT_SEG", "Corp");
             testDealData.Add("PROGRAM_PAYMENT", "Backend");
             //testDealData.Add("REBATE_BILLING_START", "09/19/2020"); // default to start
