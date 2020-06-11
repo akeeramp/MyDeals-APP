@@ -197,7 +197,7 @@
                         };
                     },
                     cellCurrValues: function () {
-                        return dataItem.DFLT_CUST_RPT_GEO.split(",").map(function (item) {
+                        return vm.SelectedConsumptionReportedGeos.split(",").map(function (item) {
                             return item.trim();
                         });
                     },
