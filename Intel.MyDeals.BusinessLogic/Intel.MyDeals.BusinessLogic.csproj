@@ -105,6 +105,7 @@
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />
     <Compile Include="DataQuality\DataQualityLib.cs" />
+    <Compile Include="DealMassUpdate\DealMassUpdateLib.cs" />
     <Compile Include="DsaEngine\DsaEngineLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
     <Compile Include="Employees\EmployeeHelpers.cs" />

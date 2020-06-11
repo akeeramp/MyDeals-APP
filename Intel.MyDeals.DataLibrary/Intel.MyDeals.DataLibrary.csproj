@@ -109,6 +109,7 @@
     <Compile Include="CostTest\CostTestDataLib.cs" />
     <Compile Include="Dashboard\DashboardDataLib.cs" />
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
+    <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
