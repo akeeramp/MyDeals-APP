@@ -105,7 +105,7 @@
             }
             else {
                 $scope.ShowResults = false;
-                logger.warning("Please Correct the Errors");
+                logger.warning("Please fix validation errors");
                 $scope.setBusy("", "");
             }
         }
