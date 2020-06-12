@@ -13,7 +13,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     var geo = "GEO_COMBINED";
     var mrktSeg = "MRKT_SEG";
     var corp = "CUST_ACCNT_DIV";
-    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "DFLT_CUST_RPT_GEO"];
+    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT"];
     var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "DFLT_CUST_RPT_GEO"];
 
     $ctrl.multiSelectPopUpModal = items;
