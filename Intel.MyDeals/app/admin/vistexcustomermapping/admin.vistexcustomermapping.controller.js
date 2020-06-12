@@ -212,6 +212,17 @@
             }, function () { });
         }
 
+        vm.LookBackPeriodEditor = function (container, options) {
+            var LookBackEditor = $('<input id="Look_Back' + options.field + '" data-bind="value:' + options.field + '"/>')
+                .appendTo(container)
+                .kendoNumericTextBox({
+                    format: "#",
+                    decimals: 0,
+                    min: 0,
+                    max: 24
+                });
+        }
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: gridConstants.filterable,
@@ -229,6 +240,9 @@
             toolbar: gridUtils.clearAllFiltersToolbar(),
             save: function (e) {
                 e.model.DFLT_CUST_RPT_GEO = vm.SelectedConsumptionReportedGeos;
+                if (e.model.DFLT_LOOKBACK_PERD == null || e.model.DFLT_LOOKBACK_PERD == "") {
+                    e.model.DFLT_LOOKBACK_PERD = -1;
+                }
                 if (vm.IsValidCustomerMapping(e.model, true)) {
                     vistexcustomermappingService.UpdateVistexCustomer(e.model).then(function (response) {
                         logger.success("Vistex Customer Mapping updated.");
@@ -272,19 +286,21 @@
                 {
                     field: "DFLT_PERD_PRFL",
                     title: "Period Profile",
-                    width: "235px",
+                    width: "190px",
                     filterable: { multi: true, search: true },
                     editor: vm.PeriodProfileDropDownEditor
                 },
                 {
                     field: "DFLT_TNDR_AR_SETL_LVL",
                     title: "Tenders AR Settlement Level",
+                    width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.TenderARSettlementLevelDropDownEditor
                 },
                 {
                     field: "DFLT_AR_SETL_LVL",
                     title: "Non-Tenders AR Settlement Level",
+                    width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.ARSettlementLevelDropDownEditor
                 },
@@ -296,8 +312,12 @@
                 },
                 {
                     field: "DFLT_LOOKBACK_PERD",
-                    title: "Consumption Lookback Period (Months)",
-                    filterable: { multi: true, search: true }
+                    headerTemplate: 'Consumption Lookback Period (Months) <span title="Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
+                    //title: "Consumption Lookback Period (Months)",
+                    width: "220px",
+                    filterable: { multi: true, search: true },
+                    editor: vm.LookBackPeriodEditor,
+                    template: "<div>#if(DFLT_LOOKBACK_PERD == -1){## ##} else {##:DFLT_LOOKBACK_PERD##}#</div>"
                 }
             ]
         }

@@ -7,10 +7,15 @@
 </div>
 
 <div ng-show="accessAllowed" class="col-md-12" style="padding-top: 20px;">
-    <div kendo-grid="vistexcustomerGrid" class="table" expand-k-grid options="vm.gridOptions"></div>    
+    <div kendo-grid="vistexcustomerGrid" class="table vistex-grid" expand-k-grid options="vm.gridOptions"></div>    
 </div>
 <div ng-include="'app/contract/partials/ptModals/multiSelectModal.html'"></div>
 <style>
+
+    .vistex-grid.k-grid thead th {
+        white-space: normal;
+    }
+
     #cmbCustomerReportedGeo_taglist {
         font-size: 10px;
     }
