@@ -55,13 +55,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opValidMsg === undefined) scope.opValidMsg = "";
         if (scope.opHelpMsg === undefined) scope.opHelpMsg = "";
         if (scope.opFilterable === undefined) scope.opFilterable = false;
-        //if (scope.opFilterable === null || scope.opFilterable === undefined || scope.opFilterable.toString() != "true") {
-        //    kendo.alert(scope.opFilterable.toString());
-        //    scope.opFilterable = false;            
-        //} else {
-        //    kendo.alert('test');
-        //    //kendo.alert(scope.opFilterable.toString());
-        //}
 
         // TODO make changes to propagate from directive bindings, used for numeric text box formating
         scope.opOptions = {
