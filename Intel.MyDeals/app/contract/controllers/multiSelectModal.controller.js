@@ -14,6 +14,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     var mrktSeg = "MRKT_SEG";
     var corp = "CUST_ACCNT_DIV";
     var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "DFLT_CUST_RPT_GEO"];
+    var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "DFLT_CUST_RPT_GEO"];
 
     $ctrl.multiSelectPopUpModal = items;
     $ctrl.popupResult = [];
@@ -25,6 +26,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     $ctrl.isCorp = (colName === corp);
     $ctrl.isGeoBlend = isBlendedGeo;
     $ctrl.isEmptyList = false; // Set to false for non-consumption by default - proper set in $uibModalInstance.rendered.then for consumption
+    $ctrl.isFilterEnabled = filterableFields.indexOf(colName) > -1;
 
     $ctrl.EnterPressed = function (event) {
         // KeyCode 13 is 'Enter'

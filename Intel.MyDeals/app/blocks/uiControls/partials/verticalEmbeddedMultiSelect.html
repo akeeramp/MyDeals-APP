@@ -7,7 +7,7 @@
     <div class="k-content" style="position:relative; width:100%">
         <div ng-click="onEmbeddedMultiSelectClick()">
             <select id="{{opCd + '_MS'}}"
-                    kendo-multi-select 
+                    kendo-multi-select
                     class="fl opUiElement"
                     k-ng-model="value"
                     k-data-source="values"
@@ -20,13 +20,12 @@
                     k-open="onOpen"
                     k-deselect="onDeselect"
                     k-data-bound="onMSDataBound"
-					k-placeholder="opPlaceholder"
+                    k-placeholder="opPlaceholder"
                     k-ng-readonly="false"
                     style="width: 100%;"
-                    ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
-            </select>
+                    ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
         </div>
-
+        <input id="txtSearch" class="k-input k-textbox" ng-keyup="onFilterKeyUpFunction($event)" ng-if="opFilterable" placeholder="Type here to filter the values.." type="text" style="width:100%;margin-bottom: 14px;margin-left: 1px;">
         <div class="msPopup opUiElement opUiTreeView" ng-show="showTreeView" ng-blur="onClose">
             <div style="overflow: hidden;">
                 <div id="{{opCd}}"

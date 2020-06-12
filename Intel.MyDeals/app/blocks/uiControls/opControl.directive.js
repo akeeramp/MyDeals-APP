@@ -64,16 +64,16 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         var serviceData = []; // data from the service will be pushed into this.
         if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
             if ((scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
-            	scope.values = {
+                scope.values = {
                     transport: {
-                    	read: function(e) {
-                    		// Use dataService to take advantage of ng caching
-                    		dataService.get(scope.opLookupUrl, null, null, true)
-								.then(function (response) {
-									e.success(response.data);
-								}, function (response) {
-									logger.error("Unable to get data for dropdowns.", response, response.statusText);
-								});
+                        read: function (e) {
+                            // Use dataService to take advantage of ng caching
+                            dataService.get(scope.opLookupUrl, null, null, true)
+                                .then(function (response) {
+                                    e.success(response.data);
+                                }, function (response) {
+                                    logger.error("Unable to get data for dropdowns.", response, response.statusText);
+                                });
                         }
                     },
                     schema: {
@@ -212,7 +212,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'EMBEDDEDMULTISELECT') {
             if (!!scope.value && !Array.isArray(scope.value) && !(typeof scope.value === "object")) {
-            	scope.value = scope.value.toString().split(",");
+                scope.value = scope.value.toString().split(",");
             }
 
             if (scope.opExpanded !== undefined) {
@@ -301,13 +301,13 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 });
             }
 
-        	// Onclick event for embedded Multiselects
+            // Onclick event for embedded Multiselects
             scope.onEmbeddedMultiSelectClick = function () {
                 return;
                 //$(".k-animation-container").last().css("display", "none");
-        	    //scope.showTreeView = !scope.showTreeView;
-        	    //updateTreeView();
-        	}
+                //scope.showTreeView = !scope.showTreeView;
+                //updateTreeView();
+            }
             scope.onCheckFunction = function (e) {
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
                 var checkedNodes = [];
@@ -332,6 +332,19 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
             scope.onSelectFunction = function (e) {
                 //TODO: clicking the name of a treeview node, it should check its respective checkbox as well
+            }
+
+            scope.onFilterKeyUpFunction = function (e) {
+                var strFilterKey = e.target.value.trim().toLowerCase();
+                if (strFilterKey != "") {
+                    $("#MultiSelectSelections .k-in").each(function () {
+                        if ($(this).html().toLowerCase().indexOf(strFilterKey) > -1)
+                            $(this).closest('li').show();
+                        else
+                            $(this).closest('li').hide();
+                    });
+                } else
+                    $("#MultiSelectSelections li").show();
             }
 
             var flattenTreeData = function (sd) {
@@ -487,7 +500,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opExtra: '=',
             opClass: '=',
             opStyle: '=',
-            opPlaceholder: '='
+            opPlaceholder: '=',
+            opFilterable: '='
         },
         link: linker
     }

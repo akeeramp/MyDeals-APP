@@ -1,51 +1,52 @@
 ﻿<script type="text/ng-template" id="multiSelectModal">
-	<div class="modal-header">
-		<h3 class="modal-title" id="modal-title">Select {{$ctrl.multiSelectPopUpModal.label}}</h3>
-	</div>
-	<div class="modal-body" id="modal-body">
-		<p>
-			<!--Select which {{$ctrl.multiSelectPopUpModal.label}}(s) to apply below: <br />-->
-			<span ng-if="$ctrl.isGeo">
-				If blending, Worldwide will not be blended with any geos.
-			</span>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Select {{$ctrl.multiSelectPopUpModal.label}}</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <p>
+            <!--Select which {{$ctrl.multiSelectPopUpModal.label}}(s) to apply below: <br />-->
+            <span ng-if="$ctrl.isGeo">
+                If blending, Worldwide will not be blended with any geos.
+            </span>
             <span ng-if="$ctrl.isEmptyList" style="color:red;">
                 There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.
             </span>
-		</p>
+        </p>
 
         <div op-control-flat
-                ng-model="$ctrl.popupResult"
-                ng-keypress="$ctrl.EnterPressed($event)"
-                op-cd="'MultiSelectSelections'"
-                op-type="$ctrl.multiSelectPopUpModal.uiType"
-                op-label="''"
-                op-lookup-url="$ctrl.multiSelectPopUpModal.opLookupUrl"
-                op-lookup-text="$ctrl.multiSelectPopUpModal.opLookupText"
-                op-lookup-value="$ctrl.multiSelectPopUpModal.opLookupValue"
-                op-placeholder="$ctrl.placeholderText"
-                op-is-form="true"
-                op-expanded="true"
-                op-extra="true"
-                op-ui-mode="'VERTICAL'">
+             ng-model="$ctrl.popupResult"
+             ng-keypress="$ctrl.EnterPressed($event)"
+             op-cd="'MultiSelectSelections'"
+             op-type="$ctrl.multiSelectPopUpModal.uiType"
+             op-label="''"
+             op-lookup-url="$ctrl.multiSelectPopUpModal.opLookupUrl"
+             op-lookup-text="$ctrl.multiSelectPopUpModal.opLookupText"
+             op-lookup-value="$ctrl.multiSelectPopUpModal.opLookupValue"
+             op-placeholder="$ctrl.placeholderText"
+             op-is-form="true"
+             op-expanded="true"
+             op-extra="true"
+             op-ui-mode="'VERTICAL'"
+             op-filterable="$ctrl.isFilterEnabled">
         </div>
 
-		<br />
-		<p ng-if="$ctrl.isGeo">
-			<input type="checkbox" ng-model="$ctrl.isGeoBlend" /> <b>Blend</b>
-		</p>
+        <br />
+        <p ng-if="$ctrl.isGeo">
+            <input type="checkbox" ng-model="$ctrl.isGeoBlend" /> <b>Blend</b>
+        </p>
 
-		<div class="row">
-			<div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="col-md-7" ng-if="$ctrl.multiSelectPopUpModal.enableSelectAll || $ctrl.multiSelectPopUpModal.enableDeselectAll">
                     <button style="width:35%" ng-if="$ctrl.multiSelectPopUpModal.enableSelectAll" ng-click="$ctrl.SelecAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;
                     <button style="width:35%" ng-if="$ctrl.multiSelectPopUpModal.enableDeselectAll" ng-click="$ctrl.DeSelecAllCustomerReportedGeos()" class="btn btn-primary">Deselect All</button>
                 </div>
-				<div class="fr">
-					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--<div class="modal-footer">	</div>-->
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="modal-footer">	</div>-->
 </script>
