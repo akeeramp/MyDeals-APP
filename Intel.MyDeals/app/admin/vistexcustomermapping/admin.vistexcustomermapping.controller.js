@@ -158,10 +158,10 @@
             var TenderAREditor = $('<select kendo-combo-box k-options="vm.TenderARSettlementLevelOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
-        vm.SelectedConsumptionReportedGeos = [];
+        vm.SelectedConsumptionReportedGeos = "";
         vm.CustomerReportedGeoDropDownEditor = function (container, options) {
             vm.SelectedConsumptionReportedGeos = options.model.DFLT_CUST_RPT_GEO;
-            var editor = $('<input id="txtEditedCustomerReportedGeo" class="k-input k-textbox" ng-readonly="true" type="text" name="' + options.field + '" style= "width:100%" title="' + options.model.DFLT_CUST_RPT_GEO + '" ng-click="vm.lookupEditorCustPlatformModal(dataItem)">').appendTo(container);
+            var editor = $('<input id="txtEditedCustomerReportedGeo" class="k-input k-textbox" ng-readonly="true" type="text" name="' + options.field + '" style= "width:100%" title="' + vm.SelectedConsumptionReportedGeos + '" ng-click="vm.lookupEditorCustPlatformModal(dataItem)">').appendTo(container);
         }
 
         vm.CustPlatformModalReportedGeoOptions = {
@@ -209,6 +209,7 @@
             custPlatformModal.result.then(function (strSelectedItems) {
                 vm.SelectedConsumptionReportedGeos = strSelectedItems;
                 $('#txtEditedCustomerReportedGeo').val(strSelectedItems);
+                $('#txtEditedCustomerReportedGeo').attr('title', strSelectedItems);
             }, function () { });
         }
 
@@ -308,6 +309,7 @@
                     field: "DFLT_CUST_RPT_GEO",
                     title: "Consumption Customer Reported Geo",
                     filterable: { multi: true, search: true },
+                    template: "<div title='#= DFLT_CUST_RPT_GEO #'>#= DFLT_CUST_RPT_GEO #<div>",
                     editor: vm.CustomerReportedGeoDropDownEditor
                 },
                 {
