@@ -44,7 +44,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
         el += ' op-is-saved="opValue.' + scope.opCd + '.isSaved"';
         el += ' op-is-stealth="' + scope.opIsStealth + '"';
-        el += ' op-filterable="' + scope.opFilterable + '"';
+        //el += ' op-filterable="' + scope.opFilterable + '"';
         el += ' op-is-dirty="opValue.' + scope.opCd + '.isDirty"';
         el += ' op-is-required="opValue.' + scope.opCd + '.isRequired"';
         el += ' op-is-read-only="opValue.' + scope.opCd + '.isReadOnly"';
@@ -79,8 +79,8 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opStyle: "=",
             opPlaceholder: '=',
             opExpanded: '=',
-            opExtra: '=',
-            opIsStealth: '=?'
+            opExtra: '='//,
+            //opIsStealth: '=?'
         },
         link: linker
     }
