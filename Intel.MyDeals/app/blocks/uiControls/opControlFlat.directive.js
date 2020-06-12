@@ -80,7 +80,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
             opPlaceholder: '=',
             opExpanded: '=',
             opExtra: '=',
-            opFilterable: '='
+            opFilterable: '=?'
         },
         link: linker
     }

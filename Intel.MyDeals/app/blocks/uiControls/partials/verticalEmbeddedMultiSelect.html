@@ -25,7 +25,9 @@
                     style="width: 100%;"
                     ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
         </div>
-        <input id="txtSearch" class="k-input k-textbox" ng-keyup="onFilterKeyUpFunction($event)" ng-if="opFilterable" placeholder="Type here to filter the values.." type="text" style="width:100%;margin-bottom: 14px;margin-left: 1px;">
+        <div ng-show="{{opFilterable}}">
+            <input id="txtSearch" class="k-input k-textbox" ng-keyup="onFilterKeyUpFunction($event)" placeholder="Type here to filter the values.." type="text" style="width:100%;margin-bottom: 14px;margin-left: 1px;">
+        </div>
         <div class="msPopup opUiElement opUiTreeView" ng-show="showTreeView" ng-blur="onClose">
             <div style="overflow: hidden;">
                 <div id="{{opCd}}"
