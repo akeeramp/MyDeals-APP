@@ -219,7 +219,7 @@
                 .kendoNumericTextBox({
                     format: "#",
                     decimals: 0,
-                    min: 0,
+                    min: -1,
                     max: 24
                 });
         }
@@ -241,7 +241,7 @@
             toolbar: gridUtils.clearAllFiltersToolbar(),
             save: function (e) {
                 e.model.DFLT_CUST_RPT_GEO = vm.SelectedConsumptionReportedGeos;
-                if (e.model.DFLT_LOOKBACK_PERD == null || e.model.DFLT_LOOKBACK_PERD == "") {
+                if (e.model.DFLT_LOOKBACK_PERD === null || e.model.DFLT_LOOKBACK_PERD === "") {
                     e.model.DFLT_LOOKBACK_PERD = -1;
                 }
                 if (vm.IsValidCustomerMapping(e.model, true)) {
@@ -319,7 +319,7 @@
                     width: "220px",
                     filterable: { multi: true, search: true },
                     editor: vm.LookBackPeriodEditor,
-                    template: "<div>#if(DFLT_LOOKBACK_PERD == -1){## ##} else {##:DFLT_LOOKBACK_PERD##}#</div>"
+                    template: "<div>#if(DFLT_LOOKBACK_PERD === -1){## ##} else {##:DFLT_LOOKBACK_PERD##}#</div>"
                 }
             ]
         }
