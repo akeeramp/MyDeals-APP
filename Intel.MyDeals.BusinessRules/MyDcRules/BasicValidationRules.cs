@@ -445,26 +445,6 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule
-                {
-                    Title="Value must be a valid non-decimal number",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = MyDeActions.CheckForIntegerValues,
-                            Where = de => de.AtrbCdIn(new List<string>
-                            {
-                                //AttributeCodes.VOLUME, // Volume us covered by "MyDcActions.CheckVolume" below for decimal checks
-                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
-                            })
-                        }
-                    }
-                },
-
                 //CheckForIntegerValues
                 new MyOpRule
                 {
