@@ -808,7 +808,8 @@ namespace Intel.MyDeals.BusinessRules
             {
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                 if (atrb == null) continue;
-                updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                if (atrb.ATRB_LBL != "Title") updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                else updates.Add("Deal product value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]"); // instead of showing "Title changed from.."
             }
 
             if (updates.Count > 0) // If there are items to add, add them
