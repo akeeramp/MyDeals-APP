@@ -1451,7 +1451,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
 
                 // Tack on re-deal messages that are specific to "wrong way" major changes.
-                var reason = "Fast Track Redeal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
+                var reason = "Fast Track Re-deal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
                 var reasonDetails = new List<string>();
                 List<IOpDataElement> onChangeWrongWayElements = r.Dc.GetDataElementsWhere(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
 
@@ -1535,7 +1535,7 @@ namespace Intel.MyDeals.BusinessRules
 
             // TO DO: Fix this later
 
-            var reason = "Redeal due to major change: ";
+            var reason = "Re-deal due to major change: ";
             var reasonDetails = new List<string>();
             if (r.Dc.DcID > 0)
             {
@@ -2016,7 +2016,7 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
 
             if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
-                || DateTime.Compare(dealEndDate, userEnteredRedealDate) < 0) // OR User Entered is later then the End Date, toss an error
+                || DateTime.Compare(userEnteredRedealDate, dealEndDate) > 0) // OR User Entered is later then the End Date, toss an error
             {
                 //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
                 userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and "
