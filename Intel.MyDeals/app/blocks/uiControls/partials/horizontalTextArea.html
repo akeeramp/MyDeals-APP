@@ -2,7 +2,7 @@
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div style="overflow: hidden;">
         <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-        <textarea type="text" class="fl opUiElement k-textarea"
+        <textarea type="text" class="fl opUiElement k-textarea" placeholder="{{opPlaceholder}}" 
                ng-model="value"
                ng-readonly="opIsReadOnly"
                ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" ></textarea>
