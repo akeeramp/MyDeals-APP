@@ -16,7 +16,7 @@ namespace Intel.MyDeals.Entities
         public string Value { get; set; }
         public string Text { get; set; }
     }
-    
+
     public enum PriceRuleAction
     {
         NONE = 0,
@@ -72,21 +72,23 @@ namespace Intel.MyDeals.Entities
         public string ChangeDateTimeFormat { get; set; }
         public string RuleDescription { get; set; }
         public string ProductDescription { get; set; }
+        public string CriteriaXml { get; set; }
     }
 
     public class rule
     {
         public string type { get; set; }
+        public string subType { get; set; }
         public string field { get; set; }
         public string @operator { get; set; }
         public string value { get; set; }
         public List<string> values { get; set; }
-        public ValueType valueType { get; set; }        
+        public ValueType valueType { get; set; }
     }
 
     public class ValueType
     {
         public string text { get; set; }
         public string value { get; set; }
-    }    
+    }
 }
