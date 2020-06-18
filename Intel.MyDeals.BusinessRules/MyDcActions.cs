@@ -487,6 +487,33 @@ namespace Intel.MyDeals.BusinessRules
             r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }"); //r.Dc.AddTimelineComment($"Created { deTypeDesc } ({ r.Dc.DcID }): { title }"); // But deal # shows up as -1000 ID upon creation
         }
 
+        public static void SetCustDefaultValues(params object[] args)
+        {
+            
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+            if (!(dePayoutBasedOn.HasValueChanged && dePayoutBasedOn.HasValue("Consumption"))) return; 
+
+            int custId;
+            bool deEcapTypeValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
+            IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
+
+            if (deConsLookback.AtrbValue == "")
+            {
+                deConsLookback.AtrbValue = cust.DFLT_LOOKBACK_PERD;
+            }
+            if (deConsRptGeo.AtrbValue == "")
+            {
+                deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
+            }
+        }
+
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

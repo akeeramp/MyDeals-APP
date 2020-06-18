@@ -580,6 +580,37 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Clear when payout based on is billings",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Billings") && de.HasValueChanged).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.ClearNewDefaultValues,
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM, 
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT, 
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO, 
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD 
+                            })
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Reset customer level defaults on payout based on consumption",
+                    ActionRule = MyDcActions.SetCustDefaultValues,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any() // Check if this triggers rule
+                },
+
+                new MyOpRule
+                {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.CheckGeos,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
