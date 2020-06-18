@@ -31,7 +31,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             List<DictDropDown> lstRtn = new List<DictDropDown>();
-            Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS{ atrb_cd = atrbCd };
+            Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_DICT_DROPDOWNS { atrb_cd = atrbCd };
 
             try
             {
@@ -53,7 +53,7 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return lstRtn.OrderBy(x=>x.value).ToList();
+            return lstRtn.OrderBy(x => x.value).ToList();
         }
 
         /// <summary>
@@ -125,6 +125,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = type.ToString(),
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
+                    CUST_MBR_SID = 0,
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",
@@ -139,6 +140,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = type.ToString(),
                     ATRB_SID = dropdown.ATRB_SID,
                     OBJ_SET_TYPE_SID = dropdown.OBJ_SET_TYPE_SID,
+                    CUST_MBR_SID = dropdown.CUST_MBR_SID,
                     ATRB_VAL_TXT = dropdown.DROP_DOWN,
                     ATRB_LKUP_DESC = dropdown.ATRB_LKUP_DESC,
                     ATRB_LKUP_TTIP = dropdown.ATRB_LKUP_TTIP,
@@ -157,6 +159,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_ATRB_LKUP_SID = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_SID");
                     int IDX_ATRB_LKUP_TTIP = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_TTIP");
                     int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_DFLT_FLG = DB.GetReaderOrdinal(rdr, "DFLT_FLG");
                     int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
@@ -174,6 +177,7 @@ namespace Intel.MyDeals.DataLibrary
                             ATRB_LKUP_SID = (IDX_ATRB_LKUP_SID < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_LKUP_SID),
                             ATRB_LKUP_TTIP = (IDX_ATRB_LKUP_TTIP < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_TTIP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_TTIP),
                             ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             DFLT_FLG = (IDX_DFLT_FLG < 0 || rdr.IsDBNull(IDX_DFLT_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_FLG),
                             DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
@@ -213,6 +217,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = CrudModes.Delete.ToString(),
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
+                    CUST_MBR_SID = 0,
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",
@@ -231,16 +236,16 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return true;
-		}
+        }
 
-		/// <summary>
-		/// Gets a list of deal groups given a dealId
-		/// </summary>
-		/// <param name="ids">A dealId</param>
-		/// <returns>a list of deal groups</returns>
-		public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> ids)
-		{
-		    type_int_pair opPair = new type_int_pair();
+        /// <summary>
+        /// Gets a list of deal groups given a dealId
+        /// </summary>
+        /// <param name="ids">A dealId</param>
+        /// <returns>a list of deal groups</returns>
+        public List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> ids)
+        {
+            type_int_pair opPair = new type_int_pair();
             opPair.AddRows(ids.Select(id => new OpPair<int, int>
             {
                 First = opDataElementType.ToId(),
@@ -248,14 +253,15 @@ namespace Intel.MyDeals.DataLibrary
             }));
 
             var ret = new List<OverlappingDeal>();
-			Procs.dbo.PR_MYDL_GET_OVLP_DEALS cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS() {
+            Procs.dbo.PR_MYDL_GET_OVLP_DEALS cmd = new Procs.dbo.PR_MYDL_GET_OVLP_DEALS()
+            {
                 in_obj_keys = opPair
             };
 
-			try
-			{
-				using (var rdr = DataAccess.ExecuteReader(cmd))
-				{
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
                     int IDX_CST_MCP_DEAL_FLAG = DB.GetReaderOrdinal(rdr, "CST_MCP_DEAL_FLAG");
                     int IDX_EXCLD_DEAL_FLAG = DB.GetReaderOrdinal(rdr, "EXCLD_DEAL_FLAG");
                     int IDX_OVLP_ADDITIVE = DB.GetReaderOrdinal(rdr, "OVLP_ADDITIVE");
@@ -276,9 +282,9 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
 
                     while (rdr.Read())
-					{
-						ret.Add(new OverlappingDeal
-						{
+                    {
+                        ret.Add(new OverlappingDeal
+                        {
                             CST_MCP_DEAL_FLAG = (IDX_CST_MCP_DEAL_FLAG < 0 || rdr.IsDBNull(IDX_CST_MCP_DEAL_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CST_MCP_DEAL_FLAG),
                             EXCLD_DEAL_FLAG = (IDX_EXCLD_DEAL_FLAG < 0 || rdr.IsDBNull(IDX_EXCLD_DEAL_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EXCLD_DEAL_FLAG),
                             OVLP_ADDITIVE = (IDX_OVLP_ADDITIVE < 0 || rdr.IsDBNull(IDX_OVLP_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_ADDITIVE),
@@ -298,15 +304,15 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
                             WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
                         });
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw;
-			}
-			return ret;
-		}
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
     }
 }
