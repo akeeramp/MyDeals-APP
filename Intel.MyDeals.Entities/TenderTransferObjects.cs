@@ -237,6 +237,7 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedEndDate { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string DealRFQId { get; set; }
+                    public string ErrorMessages { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
                     public CompetetorProduct competetorProduct { get; set; }
