@@ -509,7 +509,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isChecked = document.getElementById('chkDealTools').checked;
                 var data = $scope.contractDs.view();
                 for (var i = 0; i < data.length; i++) {
-                    data[i].isLinked = isChecked;                    
+                    data[i].isLinked = isChecked;
                 }
             }
             $scope.excludeAllItems = function () {
@@ -524,7 +524,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
             //Call contract.controller.js => addExclusionList()
             $scope.addExclusionList = function (dataItem) {
-                $scope.root.addExclusionList(dataItem);                
+                $scope.root.addExclusionList(dataItem);
             }
             $scope.clickPin = function (e, grpName) {
                 var el = $(e.currentTarget);
@@ -1203,7 +1203,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.lookupEditor = function (container, options) {
                 var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
                 var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
-                var col = { field: options.field };
+                var col = { field: options.field, enableSelectAll: false, enableDeselectAll: false };
 
                 for (var c = 0; c < cols.length; c++) {
                     if (cols[c].field === options.field) {
@@ -1314,6 +1314,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         || options.field.toUpperCase() === "CONSUMPTION_CUST_SEGMENT"
                         || options.field.toUpperCase() === "CONSUMPTION_CUST_RPT_GEO") {
                         var cur_cust_mbr_sid = options.model["CUST_MBR_SID"];
+                        col.enableSelectAll = true;
+                        col.enableDeselectAll = true;
                         openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
                     }
 
@@ -2869,10 +2871,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }, 2000);
 
                         },
-                            function (response) {
-                                //empty after moving sync and validate to happen before the getOverlappingDeals call is made
-                                $scope.$parent.$parent.setBusy("", "");
-                            });
+                        function (response) {
+                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                            $scope.$parent.$parent.setBusy("", "");
+                        });
                 } else {
                     if ($scope.$root.pc !== null) $scope.$root.pc.stop();
                     $timeout(function () {
@@ -2888,7 +2890,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.$on('fireSaveAndValidateGrid', function (event, args) {
                 $scope.saveAndValidateGrid();
             });
-            
+
             $scope.saveAndValidateGrid = function () {
                 if (!$scope._dirty) return;
 
@@ -3158,7 +3160,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 'uiType': col.uiType,
                                 'opLookupUrl': col.lookupUrl + cur_cust_mbr_sid,
                                 'opLookupText': col.lookupText,
-                                'opLookupValue': col.lookupValue
+                                'opLookupValue': col.lookupValue,
+                                'enableSelectAll': col.enableSelectAll,
+                                'enableDeselectAll': col.enableDeselectAll
                             };
                         },
                         cellCurrValues: function () {
