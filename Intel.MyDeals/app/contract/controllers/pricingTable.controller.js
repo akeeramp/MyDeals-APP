@@ -29,7 +29,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
     $scope.pcCookUI = {};
-
+    
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
 
@@ -153,6 +153,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         //// Pricing Table data
         root.pricingTableData = pricingTableData.data;
+        root.unchangedPTData = angular.copy(pricingTableData.data);
 
         if (root.pricingTableData.PRC_TBL_ROW === undefined) {
             root.pricingTableData.PRC_TBL_ROW = [];

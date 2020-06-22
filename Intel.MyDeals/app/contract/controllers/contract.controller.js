@@ -2957,6 +2957,7 @@
             if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
+                var uData = $scope.unchangedPTData.WIP_DEAL;
                 var isTenderFlag = "0";
                 if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
                 var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
@@ -2986,6 +2987,15 @@
                         if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
                         if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                         if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
+
+                        if ($scope.curPricingStrategy.WF_STG_CD == "Approved" && gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[i].CONSUMPTION_LOOKBACK_PERIOD && isTenderFlag !== "1") {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                            gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Lookback Period can only be increased");
+                        }
 
                         // check dates against contract - Tender contracts don't observe start/end date within contract.
                         if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
@@ -3407,6 +3417,7 @@
                                 }
                             }
                             $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                            $scope.unchangedPTData = angular.copy($scope.pricingTableData);
                         }
                     }
                     if (!anyWarnings || !forceValidation) {
