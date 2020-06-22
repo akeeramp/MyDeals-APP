@@ -310,7 +310,8 @@
                     title: "Consumption Customer Reported Geo",
                     filterable: { multi: true, search: true },
                     template: "<div title='#= DFLT_CUST_RPT_GEO #'>#= DFLT_CUST_RPT_GEO #<div>",
-                    editor: vm.CustomerReportedGeoDropDownEditor
+                    editor: vm.CustomerReportedGeoDropDownEditor,
+                    hidden: true //Hiding the column temporarily as part of  the user story US695951. This might be enabled in future with full scope of features
                 },
                 {
                     field: "DFLT_LOOKBACK_PERD",
