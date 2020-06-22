@@ -2957,7 +2957,7 @@
             if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
-                var uData = $scope.unchangedPTData.WIP_DEAL;
+                var uData = $scope.LookBackPeriod;
                 var isTenderFlag = "0";
                 if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
                 var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
@@ -2988,7 +2988,7 @@
                         if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                         if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
-                        if ($scope.curPricingStrategy.WF_STG_CD == "Approved" && gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[i].CONSUMPTION_LOOKBACK_PERIOD && isTenderFlag !== "1") {
+                        if ($scope.curPricingStrategy.WF_STG_CD == "Approved" && gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[gData[i].DC_ID] && isTenderFlag !== "1") {
                             if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                             if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                             gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
@@ -3417,7 +3417,7 @@
                                 }
                             }
                             $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
-                            $scope.unchangedPTData = angular.copy($scope.pricingTableData);
+                            $scope.getLookBackPeriod();
                         }
                     }
                     if (!anyWarnings || !forceValidation) {
