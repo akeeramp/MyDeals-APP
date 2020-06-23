@@ -98,7 +98,7 @@ namespace Intel.MyDeals.VistexService
                     {
                         Console.WriteLine("Batch Id: " + records.BatchId + "  " + "Status: " + records.BatchStatus + " " + "Message: " + records.BatchMessage);
                         lstStatus.Add("Batch ID: " + records.BatchId);
-                        lstStatus.Add("Batch Status: " + records.BatchId + Environment.NewLine);
+                        lstStatus.Add("Batch Status: " + records.BatchStatus + Environment.NewLine);
                         VistexCommonLogging.WriteToLogObject(records.MessageLog);
                     }
                 }
