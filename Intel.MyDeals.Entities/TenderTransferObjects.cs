@@ -176,7 +176,10 @@ namespace Intel.MyDeals.Entities
     #region Tenders Deal Create/Update Objects
     public class TenderTransferRootObject
     {
+        [JsonProperty("Header")]
         public Header header { get; set; }
+
+        [JsonProperty("RecordDetails")]
         public RecordDetails recordDetails { get; set; }
 
         public class Header
@@ -189,6 +192,7 @@ namespace Intel.MyDeals.Entities
 
         public class RecordDetails
         {
+            [JsonProperty("Quote")]
             public Quote quote { get; set; }
 
             public class Quote
@@ -196,6 +200,7 @@ namespace Intel.MyDeals.Entities
                 public string Id { get; set; }
                 public string Name { get; set; }
                 public string FolioID { get; set; }
+                [JsonProperty("Account")]
                 public Account account { get; set; }
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
@@ -205,6 +210,8 @@ namespace Intel.MyDeals.Entities
                 public string ShipmentEndDate { get; set; }
                 public string ServerDealType { get; set; }
                 public string Region { get; set; }
+
+                [JsonProperty("QuoteLine")]
                 public List<QuoteLine> quoteLine { get; set; }
 
                 public class Account
@@ -230,6 +237,8 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedEndDate { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string DealRFQId { get; set; }
+                    public string ErrorMessages { get; set; }
+                    [JsonProperty("Product")]
                     public Product product { get; set; }
                     public CompetetorProduct competetorProduct { get; set; }
                     public List<PerformanceMetric> performanceMetric { get; set; }

@@ -378,6 +378,15 @@
                     , url: 'testtenders'
                     , controller: 'TestTendersController as vm'
                 }
+            },
+            {
+                state: 'admin.dealMassUpdate',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dealMassUpdate/dealMassUpdate.html'
+                    , url: 'dealmassupdate'
+                    , controller: 'DealMassUpdateController as vm'
+                }
             }
 
         ];

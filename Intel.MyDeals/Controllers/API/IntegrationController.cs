@@ -25,12 +25,13 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
-        public string SaveSalesForceTenderData(JObject jsonDataPacket)
+        public TenderTransferRootObject SaveSalesForceTenderData(JObject jsonDataPacket)
         {
             Guid saveSuccessful;
+            TenderTransferRootObject jsonData;
             try
             {
-                var jsonData = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket.ToString());
+                jsonData = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket.ToString());
                 OpLogPerf.Log(jsonDataPacket.ToString(), LogCategory.Information);
                //TenderTransferRootObject jsonDataPacket
                // User and Password validate here.......
@@ -43,7 +44,15 @@ namespace Intel.MyDeals.Controllers.API
                     $" | Stack Trace{ex.StackTrace}", LogCategory.Error);
                 throw ex;
             }
-            return saveSuccessful != Guid.Empty ? saveSuccessful.ToString() : "Tender Data Stage Failed"; 
+
+            if(saveSuccessful != Guid.Empty)
+            {
+                jsonData.header.source_system = "MyDeals";
+                jsonData.header.target_system = "Tenders";
+                jsonData.header.action = jsonData.header.action + "Response";
+            }
+            //return saveSuccessful != Guid.Empty ? JsonConvert.SerializeObject(jsonData) : "Tender Data Stage Failed";
+            return saveSuccessful != Guid.Empty ? jsonData : null;
         }
 
         //[Route("ExecuteSalesForceTenderData")]

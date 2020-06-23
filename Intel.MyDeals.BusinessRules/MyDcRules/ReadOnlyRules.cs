@@ -45,8 +45,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
-                                AttributeCodes.PAYOUT_BASED_ON,
-                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
+                                AttributeCodes.PAYOUT_BASED_ON
                             }
                         }
                     }

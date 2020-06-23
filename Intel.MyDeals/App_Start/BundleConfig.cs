@@ -115,6 +115,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/admintools/admintools.service.js"                
                 , "~/app/admin/admintools/admin.admintools.controller.js"
                 , "~/app/admin/admintools/admin.testtenders.controller.js"
+                , "~/app/admin/dealMassUpdate/admin.dealMassUpdate.controller.js"
+                , "~/app/admin/dealMassUpdate/dealMassUpdate.service.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/cache.manager.resize.directive.js"

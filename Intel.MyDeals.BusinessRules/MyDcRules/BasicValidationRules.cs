@@ -244,6 +244,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
                                 AttributeCodes.START_DT,
                                 AttributeCodes.END_DT,
                                 AttributeCodes.REBATE_BILLING_START,
@@ -259,6 +260,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.QTY,
                                 AttributeCodes.SOLD_TO_ID,
+                                AttributeCodes.DEAL_SOLD_TO_ID,
                                 AttributeCodes.VOLUME,
                                 AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                                 AttributeCodes.END_VOL,
@@ -443,6 +445,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                //CheckForIntegerValues
                 new MyOpRule
                 {
                     Title="Volume Validation",
@@ -573,6 +576,37 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.MRKT_SEG })
                         }
                     }
+                },
+
+                new MyOpRule
+                {
+                    Title="Clear when payout based on is billings",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Billings") && de.HasValueChanged).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.ClearNewDefaultValues,
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM, 
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT, 
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO, 
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD 
+                            })
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Reset customer level defaults on payout based on consumption",
+                    ActionRule = MyDcActions.SetCustDefaultValues,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any() // Check if this triggers rule
                 },
 
                 new MyOpRule

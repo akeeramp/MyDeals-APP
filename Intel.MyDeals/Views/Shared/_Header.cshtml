@@ -254,7 +254,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -297,13 +297,17 @@
                         </li>
                     }
 
-                    @if (isDeveloper)
+                    @if (isDeveloper || isRealSA)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Admin Tools</a>
                             <ul class="dropdown-menu">
-                                <li><a href="Admin#/AdminTools">Support Scripts</a></li>
-                                <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                @if (isDeveloper)
+                                {
+                                    <li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                                    <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                }
+                                <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
                             </ul>
                         </li>
                     }
@@ -331,86 +335,86 @@
                         //User Customer Assignments
                     }
                 </ul>
-                        </li>
+            </li>
 
 
-                        <li>
-                            <a href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
-                        </li>
-                        <li>
-                            <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
-                        </li>
-                        <li>
-                            <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
-                        </li>
-                        @if (isReportingUser)
-                        {
-                            <li class="dropdown">
-                                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
-                                    <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
-                                </a>
-                                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                                    <li><a href="/reporting#/dashboard">Report Dashboard</a></li>
-                                </ul>
-                            </li>
-                        }
-                        @Html.Partial("_Search")
+            <li>
+                <a href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
+            </li>
+            <li>
+                <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+            </li>
+            <li>
+                <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
+            </li>
+            @if (isReportingUser)
+            {
+                <li class="dropdown">
+                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                        <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
+                    </a>
+                    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="/reporting#/dashboard">Report Dashboard</a></li>
                     </ul>
-            </div>
-        </nav>
+                </li>
+            }
+            @Html.Partial("_Search")
+        </ul>
+    </div>
+</nav>
 
-        <style>
-            .menu-bar {
-                background-color: #0071C5;
-                padding: 0 6px 6px 6px;
+<style>
+    .menu-bar {
+        background-color: #0071C5;
+        padding: 0 6px 6px 6px;
+    }
+
+    nav .hdrIcon {
+        text-align: center;
+    }
+
+        nav .hdrIcon a {
+            padding: 6px;
+        }
+
+            nav .hdrIcon a i {
+                line-height: .9em;
+                font-size: 20px;
             }
 
-            nav .hdrIcon {
-                text-align: center;
+            nav .hdrIcon a div {
+                font-size: 9px;
+                line-height: .9em;
             }
 
-                nav .hdrIcon a {
-                    padding: 6px;
-                }
+    .menu-detailed a i {
+        font-size: 28px !important;
+        color: #00AEEF;
+        margin: 2px 10px 0 0;
+        width: 30px;
+    }
 
-                    nav .hdrIcon a i {
-                        line-height: .9em;
-                        font-size: 20px;
-                    }
+    .menu-detailed a div {
+        line-height: 1.2em;
+    }
 
-                    nav .hdrIcon a div {
-                        font-size: 9px;
-                        line-height: .9em;
-                    }
+        .menu-detailed a div > div {
+            font-size: 10px;
+            color: #aaaaaa;
+        }
 
-            .menu-detailed a i {
-                font-size: 28px !important;
-                color: #00AEEF;
-                margin: 2px 10px 0 0;
-                width: 30px;
-            }
+    .navbar-security {
+        float: left;
+        padding: 20px 15px 14px 0;
+        font-size: 10px;
+        margin-left: -11px;
+        color: #ffffff;
+        line-height: 12px;
+        height: 50px;
+    }
+</style>
 
-            .menu-detailed a div {
-                line-height: 1.2em;
-            }
-
-                .menu-detailed a div > div {
-                    font-size: 10px;
-                    color: #aaaaaa;
-                }
-
-            .navbar-security {
-                float: left;
-                padding: 20px 15px 14px 0;
-                font-size: 10px;
-                margin-left: -11px;
-                color: #ffffff;
-                line-height: 12px;
-                height: 50px;
-            }
-        </style>
-
-        <script>
+<script>
     function eggSmw() {
         window.open("/egg/mb/menu.html", "_blank", "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=642,height=482,top=200,left=200");
     }
@@ -452,13 +456,13 @@
     window.isTester = "@isTester" === "True";
 
     window.env = "@env";
-        </script>
+</script>
 
-        @if (env == "PROD")
-        {
-            <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
-        }
-        else
-        {
-            <script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
-        }
+@if (env == "PROD")
+{
+    <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
+}
+else
+{
+    <script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
+}

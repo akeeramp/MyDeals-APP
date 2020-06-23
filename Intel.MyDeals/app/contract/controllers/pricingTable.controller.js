@@ -29,7 +29,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
     $scope.pcCookUI = {};
-
+    
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
 
@@ -71,6 +71,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var productLevel = null;
     root.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
     root.letterToCol = {};
+    root.LookBackPeriod = {};
     vm.readOnlyColLetters = [];
     var lastHiddenBeginningColLetter; // The letter of the last hidden column before the user editable columns. Calculated using the firstEditableColBeforeProduct
     var finalColLetter = 'Z'; // Don't worry, this gets overrided to get the dynamic final col letter
@@ -153,6 +154,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         //// Pricing Table data
         root.pricingTableData = pricingTableData.data;
+        root.getLookBackPeriod();
 
         if (root.pricingTableData.PRC_TBL_ROW === undefined) {
             root.pricingTableData.PRC_TBL_ROW = [];
@@ -171,6 +173,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else {
             generateKendoGridOptions();
             root.pageTitle = "Deal Editor";
+        }
+    }
+
+    root.getLookBackPeriod = function () {
+        if ($scope.pricingTableData.WIP_DEAL) {
+            var info = $scope.pricingTableData.WIP_DEAL;
+            for (var i = 0; i < info.length; i++)
+            {
+                $scope.LookBackPeriod[info[i].DC_ID] = info[i].CONSUMPTION_LOOKBACK_PERIOD;
+            }
         }
     }
 

@@ -38,7 +38,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
 		el += ' op-extra="' + scope.opExtra + '"';
 		el += ' op-class="\'' + scope.opClass + '\'"';
 		el += ' op-style="\'' + scope.opStyle + '\'"';
-		el += ' op-placeholder="\'' + placeholder + '\'"';
+        el += ' op-placeholder="\'' + placeholder + '\'"';
+        el += ' op-filterable="\'' + scope.opFilterable + '\'"';
         el += ' op-valid-msg="value._behaviors.validMsg.' + scope.opCd + '"';
         el += ' op-help-msg="value._behaviors.helpMsg.' + scope.opCd + '"';
         el += ' op-is-error="value._behaviors.isError.' + scope.opCd + '"';
@@ -78,7 +79,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
             opStyle: '=',
             opPlaceholder: '=',
             opExpanded: '=',
-            opExtra: '='
+            opExtra: '=',
+            opFilterable: '=?'
         },
         link: linker
     }

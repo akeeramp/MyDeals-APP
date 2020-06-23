@@ -57,6 +57,7 @@
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="DataQuality\IDataQualityDataLib.cs" />
+    <Compile Include="DealMassUpdate\IDealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />

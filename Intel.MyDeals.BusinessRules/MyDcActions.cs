@@ -487,6 +487,42 @@ namespace Intel.MyDeals.BusinessRules
             r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }"); //r.Dc.AddTimelineComment($"Created { deTypeDesc } ({ r.Dc.DcID }): { title }"); // But deal # shows up as -1000 ID upon creation
         }
 
+        public static void SetCustDefaultValues(params object[] args)
+        {
+
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+            if (!(dePayoutBasedOn.HasValueChanged && dePayoutBasedOn.HasValue("Consumption"))) return;
+
+            int custId;
+            bool deEcapTypeValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
+            IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
+            IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
+            var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
+
+            if (deConsLookback.AtrbValue == "")
+            {
+                //Updated the condition as per the user story US695161
+                deConsLookback.AtrbValue = cust.DFLT_LOOKBACK_PERD < 0 ? (isTender ? "0" : "") : cust.DFLT_LOOKBACK_PERD.ToString();
+            }
+
+            if (deConsRptGeo.AtrbValue == "")
+            {
+                deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
+            }
+
+            if (isTender && deConsReason.AtrbValue == "")
+            {
+                deConsReason.AtrbValue = "End Customer";
+            }
+        }
+
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -808,7 +844,8 @@ namespace Intel.MyDeals.BusinessRules
             {
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                 if (atrb == null) continue;
-                updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                if (atrb.ATRB_LBL != "Title") updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                else updates.Add("Deal product value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]"); // instead of showing "Title changed from.."
             }
 
             if (updates.Count > 0) // If there are items to add, add them
@@ -1450,7 +1487,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
 
                 // Tack on re-deal messages that are specific to "wrong way" major changes.
-                var reason = "Fast Track Redeal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
+                var reason = "Fast Track Re-deal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
                 var reasonDetails = new List<string>();
                 List<IOpDataElement> onChangeWrongWayElements = r.Dc.GetDataElementsWhere(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
 
@@ -1534,7 +1571,7 @@ namespace Intel.MyDeals.BusinessRules
 
             // TO DO: Fix this later
 
-            var reason = "Redeal due to major change: ";
+            var reason = "Re-deal due to major change: ";
             var reasonDetails = new List<string>();
             if (r.Dc.DcID > 0)
             {
@@ -2015,7 +2052,7 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
 
             if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
-                || DateTime.Compare(dealEndDate, userEnteredRedealDate) < 0) // OR User Entered is later then the End Date, toss an error
+                || DateTime.Compare(userEnteredRedealDate, dealEndDate) > 0) // OR User Entered is later then the End Date, toss an error
             {
                 //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
                 userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and "
