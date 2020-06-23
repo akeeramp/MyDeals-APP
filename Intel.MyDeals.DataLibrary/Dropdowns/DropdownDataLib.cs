@@ -118,6 +118,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             var ret = new List<BasicDropdown>();
             Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
+
             if (type.Equals(CrudModes.Select))
             {
                 cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
