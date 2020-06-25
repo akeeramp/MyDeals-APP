@@ -309,6 +309,9 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -323,10 +326,7 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_LOOKBACK_PERIOD": {
-                        "Groups": ["Consumption"]
-                    },
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -473,6 +473,9 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -487,10 +490,7 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_LOOKBACK_PERIOD": {
-                        "Groups": ["Consumption"]
-                    },
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -664,6 +664,9 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -678,10 +681,7 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_LOOKBACK_PERIOD": {
-                        "Groups": ["Consumption"]
-                    },
+                    },                    
                     //"COST_TEST_RESULT": {
                     //    "Groups": ["Cost Test"]
                     //},
@@ -1023,6 +1023,9 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -1037,10 +1040,7 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_LOOKBACK_PERIOD": {
-                        "Groups": ["Consumption"]
-                    },
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
