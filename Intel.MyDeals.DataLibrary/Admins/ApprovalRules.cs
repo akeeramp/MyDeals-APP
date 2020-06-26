@@ -40,10 +40,11 @@ namespace Intel.MyDeals.DataLibrary
                     is_aprv = isApproved,
                     actv_ind = priceRuleCriteria.IsActive,
                     usr_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                    ownr_wwid= priceRuleCriteria.OwnerId,
+                    ownr_wwid = priceRuleCriteria.OwnerId,
                     actn_nm = priceRuleAction.ToString("g"),
                     rule_desc = priceRuleCriteria.RuleDescription,
                     prd_desc = priceRuleCriteria.ProductDescription,
+                    rule_ext_pro = priceRuleCriteria.CriteriaXml
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -159,7 +160,7 @@ namespace Intel.MyDeals.DataLibrary
                         APRV_PRCSS_FLG = (IDX_APRV_PRCSS_FLG < 0 || rdr.IsDBNull(IDX_APRV_PRCSS_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APRV_PRCSS_FLG),
                         APRV_RULES = (IDX_APRV_RULES < 0 || rdr.IsDBNull(IDX_APRV_RULES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APRV_RULES),
                         EXCLD_RULES = (IDX_EXCLD_RULES < 0 || rdr.IsDBNull(IDX_EXCLD_RULES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXCLD_RULES),
-                        OWNER_EMP_WWID = (IDX_OWNER_EMP_WWID < 0 || rdr.IsDBNull(IDX_OWNER_EMP_WWID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OWNER_EMP_WWID),
+                        OWNER_EMP_WWID = (IDX_OWNER_EMP_WWID < 0 || rdr.IsDBNull(IDX_OWNER_EMP_WWID)) ? default(System.Int32) : Convert.ToInt32(rdr.GetFieldValue<System.String>(IDX_OWNER_EMP_WWID)),
                         WIP_DEAL_SID = (IDX_WIP_DEAL_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_SID)
                     });
                 } // while

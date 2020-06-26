@@ -24,7 +24,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             //List<MyOpRule> AtrbRules
             return MyRulesConfiguration.AttrbRules;
-        }        
+        }
 
         public RuleConfig GetPriceRulesConfig()
         {
@@ -101,6 +101,20 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string[] lstAllowedRole = new string[] { "GA", "FSE" };
                 priceRuleCriteria.Criterias.BlanketDiscount.Where(y => y.valueType.value == "%" && y.value != string.Empty && !(Convert.ToInt32(y.value) <= 70)).ToList().ForEach(z => z.value = "70");
+                //Merging into single attribute
+                string[] strXmlRulesAttributes = priceRuleCriteria.Criterias.Rules.Where(x => x.type == "list" && x.subType == "xml").Select(x => x.field).Distinct().ToArray();
+                if (strXmlRulesAttributes.Length > 0)
+                {
+                    List<rule> lstRuleMerge = new List<rule>();
+                    foreach (string strXmlRulesAttribute in strXmlRulesAttributes)
+                    {
+                        List<rule> lstTemp = priceRuleCriteria.Criterias.Rules.Where(x => x.field == strXmlRulesAttribute).ToList();
+                        lstTemp.First().values = string.Join(",", lstTemp.Select(x => string.Join(",", x.values))).Split(',').Distinct().OrderBy(x => x).ToList();
+                        lstRuleMerge.Add(lstTemp.First());
+                    }
+                    priceRuleCriteria.Criterias.Rules.RemoveAll(x => strXmlRulesAttributes.Contains(x.field));
+                    priceRuleCriteria.Criterias.Rules.AddRange(lstRuleMerge);
+                }
                 Dictionary<int, string> dicEmployeeName = priceRuleCriteria.Criterias.Rules.Any(x => x.field == "CRE_EMP_NAME") ? new EmployeesLib().GetUsrProfileRoleByRoleCode(lstAllowedRole).ToDictionary(x => x.EMP_WWID, y => y.NAME) : new Dictionary<int, string>();
                 priceRuleCriteria.CriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.Criterias);
                 priceRuleCriteria.ProductCriteriaJson = JsonConvert.SerializeObject(priceRuleCriteria.ProductCriteria);
@@ -111,6 +125,7 @@ namespace Intel.MyDeals.BusinessLogic
                     priceRuleCriteria.ProductCriteriaSql = dicExpressions[ExpressionType.ProductSql];
                     priceRuleCriteria.RuleDescription = dicExpressions[ExpressionType.RuleDescription];
                     priceRuleCriteria.ProductDescription = dicExpressions[ExpressionType.ProductDescription];
+                    priceRuleCriteria.CriteriaXml = dicExpressions[ExpressionType.RuleXml];
                 }
             }
             return new ApprovalRules().UpdatePriceRule(priceRuleCriteria, priceRuleAction);

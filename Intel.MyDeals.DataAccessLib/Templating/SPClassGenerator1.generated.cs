@@ -18461,11 +18461,11 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
         }
 
         ///<summary>
-        /// ID: 1068957778
-        /// Modified: 2/5/2020 2:26:24 AM
-        /// Parameters: 17
-        ///</summary>
-        public partial class PR_MYDL_UPD_PRC_RULE : SP
+		/// ID: 1068957778
+		/// Modified: 6/3/2020 12:27:16 PM
+		/// Parameters: 18
+		///</summary>
+		public partial class PR_MYDL_UPD_PRC_RULE : SP
         {
             public PR_MYDL_UPD_PRC_RULE()
             {
@@ -18660,6 +18660,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
             {
                 set { SetParmeter("prd_desc", value); }
                 get { return (String)GetParameter("prd_desc"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(18, "ParameterDirection.Input", -1, false)]
+            public String rule_ext_pro
+            {
+                set { SetParmeter("rule_ext_pro", value); }
+                get { return (String)GetParameter("rule_ext_pro"); }
             }
         }
 
@@ -21078,4 +21089,3 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals
 
 
 }
-
