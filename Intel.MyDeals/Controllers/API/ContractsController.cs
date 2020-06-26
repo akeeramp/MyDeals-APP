@@ -377,23 +377,34 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("ExecuteSalesForceTenderData")]
         [HttpGet]
-        public string TestPath()
+        public string ExecuteSalesForceTenderData()
         {
             // Path to catch all unprocessed items
             Guid workId = Guid.Empty;
             return SafeExecutor(() => _contractsLib.ExecuteSalesForceTenderData(workId)
-                , "Unable to save the Contract"
+                , "Unable to process Salesforce Tender deals"
             );
         }
 
         [Authorize]
         [Route("ExecuteSalesForceTenderData/{workId}/")]
         [HttpGet]
-        public string TestPath(Guid workId)
+        public string ExecuteSalesForceTenderData(Guid workId)
         {
             // Path to kick off any ad-hoc needed runs via admin page
             return SafeExecutor(() => _contractsLib.ExecuteSalesForceTenderData(workId)
-                , "Unable to save the Contract"
+                , "Unable to process Salesforce Tender deals"
+            );
+        }
+
+        [Authorize]
+        [Route("ReturnSalesForceTenderResults")]
+        [HttpGet]
+        public string ReturnSalesForceTenderResults()
+        {
+            // Path to catch all unprocessed items
+            return SafeExecutor(() => _contractsLib.ReturnSalesForceTenderResults()
+                , "Unable to process Salesforce Tender Return results"
             );
         }
 

@@ -5,12 +5,15 @@ using Apache.NMS.ActiveMQ;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.Entities;
 using opaqueTools.Intel.Opaque.Tools;
 using Intel.MyDeals.DataAccessLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
+using System.Net;
+using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
@@ -306,6 +309,62 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public bool PublishBackToSfTenders(string data)
+        {
+            OpLog.Log("JMS - Publish to SF Tenders");
+
+            bool sendSuccess = false;
+
+            string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : "";
+            if (url == "") return false; // If no URL is defined, bail out of the send
+
+            WebRequest request = WebRequest.Create(url);
+            request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
+
+            request.Method = "POST"; // Set the Method property of the request to POST.  
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(data);
+
+            request.ContentType = "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+            request.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                    //Logging
+                    if (responseObjectDictionary["Data"] == "Request captured successfully") sendSuccess = true;
+                    OpLog.Log("JMS - Publish to SF Tenders Completed: " + responseObjectDictionary["Data"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("JMS - Publish to SF Tenders ERROR: " + ex);
+            }
+
+            return sendSuccess;
+        }
+
         public void Publish(string brokerURI,
                        string userName,
                        string queueName,
@@ -564,6 +623,25 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             return retData;
+        }
+
+        public void UpdateTendersStage(Guid btchId, string rqstStatus) // Update the processing status of in/out bound tender data
+        {
+            // Add type_int_dictionary here later
+            OpLog.Log("Tenders - SetTendersIOBoundStage");
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_rqst_sts = rqstStatus,
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
         }
 
         public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal)

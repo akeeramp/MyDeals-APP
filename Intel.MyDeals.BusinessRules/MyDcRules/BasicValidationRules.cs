@@ -683,6 +683,28 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                //new MyOpRule
+                //{
+                //    Title="Set Validation on Salesforce Tenders",
+                //    ActionRule = MyDcActions.ExecuteActions,
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.SALESFORCE_ID) && de.HasValue() && de.DcID <= 0).Any(),
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = MyDeActions.SetSFTendersValidationOnCreation,
+                //            Where = de => de.AtrbCdIn(new List<string>
+                //            {
+                //                AttributeCodes.PASSED_VALIDATION
+                //            })
+                //        }
+                //    }
+                //},
+
+                //SALESFORCE_ID
+
                 new MyOpRule
                 {
                     Title="Validate Group Type",

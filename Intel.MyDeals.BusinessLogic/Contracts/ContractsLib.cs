@@ -237,7 +237,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
 
-        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
+        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields, ref string errMsg)
         {
             // Save a new Tender Folio Contract Header here.  Update the JSON data with whatever is needed and pass back the new Folio ID
 
@@ -306,7 +306,7 @@ namespace Intel.MyDeals.BusinessLogic
             else
             {
                 workRecordDataFields.recordDetails.quote.FolioID = "-100";
-                // And any other error messages you want here - Problem is that errors are at quote line level and this is contract
+                errMsg = "Failed to create the Tender Folio for this request;  ";
             }
 
             return contractId; // Send back the new contract ID here
@@ -367,11 +367,12 @@ namespace Intel.MyDeals.BusinessLogic
             return retItem;
         }
 
-        private void EnterMeetCompData(int stratId, int dealId, int prdId, string usrInputProd, string myPrdCat, string compBench, string iaBench, string compPrice, string compProduct, int custId)
+        private string EnterMeetCompData(int stratId, int dealId, int prdId, string usrInputProd, string myPrdCat, string compBench, string iaBench, string compPrice, string compProduct, int custId)
         {
             //int myCompBench = int.TryParse(compBench, out myCompBench) ? myCompBench : 0;
             //int myIaBench = int.TryParse(iaBench, out myIaBench) ? myIaBench : 0;
             //int myCompPrice = int.TryParse(compPrice, out myCompPrice) ? myCompPrice : 0;
+            string meetCompErrorResponse = "";
             Decimal myCompBench = Convert.ToDecimal(compBench, CultureInfo.InvariantCulture) + 0.00M;
             Decimal myIaBench = Convert.ToDecimal(iaBench, CultureInfo.InvariantCulture) + 0.00M;
             Decimal myCompPrice = Convert.ToDecimal(compPrice, CultureInfo.InvariantCulture) + 0.00M;
@@ -420,10 +421,16 @@ namespace Intel.MyDeals.BusinessLogic
 
             MeetCompLib _meetCompLib = new MeetCompLib();
             List<MeetCompResult> meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(stratId, OpDataElementType.PRC_ST.ToId(), mcu);
-            int p = 0;
+
+            if (meetCompResult != null && meetCompResult.Where(m => m.MEET_COMP_STS == "Fail").Any())
+            {
+                meetCompErrorResponse = "Failed Meet Comp Testing;  ";
+            }
+
+            return meetCompErrorResponse;
         }
 
-        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int currRecord)
+        private int ProcessSalesForceDealInformation(int dealId, int contractId, string dealSfId, int custId, MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int currRecord, ref string errMsg)
         {
             if (dealId > 0) return dealId; // only process new deals for now
 
@@ -660,18 +667,52 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            if (WIP_DEAL_ID > 0)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currRecord].DealRFQId = WIP_DEAL_ID.ToString();
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currRecord].DealRFQId = "-100";
+                errMsg = "Failed to create the Tender Deal for this request;  ";
+            }
+
 
             // Update the Meet Comp data now.
-            // Meetcomp Start
-            EnterMeetCompData(CONT_PS_ID, WIP_DEAL_ID, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, compSku,
+            // Meet Comp Start
+            string meetCompErrorString = "";
+            meetCompErrorString = EnterMeetCompData(CONT_PS_ID, WIP_DEAL_ID, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, compSku,
                 intelSku, meetCompPrc, compPrd, custId);
-            // Meetcomp End
-
-            // END SAVE WIP DEAL SECTION
+            if (meetCompErrorString != "")
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currRecord].ErrorMessages += meetCompErrorString;
+            }
+            // Meet Comp End
 
             return WIP_DEAL_ID;
         }
 
+        public string ReturnSalesForceTenderResults()
+        {
+            string executionResponse = "";
+
+            JmsDataLib jmsDataLib = new JmsDataLib();
+            List<TenderTransferObject> returnStagedWorkRecords = jmsDataLib.FetchTendersStagedData("TENDER_DEALS_RESPONSE", Guid.Empty);
+
+            foreach (TenderTransferObject workRecord in returnStagedWorkRecords)
+            {
+                bool saveSuccessfulReturnToTenders = jmsDataLib.PublishBackToSfTenders(workRecord.RqstJsonData);
+
+                if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
+                {
+                    jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Processing_Complete");
+                    executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
+                }
+            }
+
+            return executionResponse;
+        }
+        
         public string ExecuteSalesForceTenderData(Guid workId)
         {
             // Processing steps
@@ -679,23 +720,20 @@ namespace Intel.MyDeals.BusinessLogic
             // 2. tear it apart and make our save objects - need to do cust/prod lookups
             // 3. Save the objects
 
-            // Take read packet and turn it into dictionary
-            // Test
-            //string blahData = "{\"SALESFORCEIDCNTRCT\":\"50130000000X14c\",\"SALESFORCEIDDEAL\":\"001i000001AWbWu\",\"DEAL_ID\":\"502592\",\"OBJ_SET_TYPE_CD\":\"ECAP\",\"CUST_NM\":\"Acer\",\"PRODUCT_FILTER\":\"FH8067703417714\",\"START_DT\":\"2018-08-06\",\"END_DT\":\"2018-09-29\",\"MRKT_SEG\":\"Consumer No Pull, Consumer Retail Pull, Education, Government\",\"GEO_COMBINED\":\"Worldwide\",\"VOLUME\":\"999999999.0000\",\"PAYOUT_BASED_ON\":\"Billings\"}";
-            //OpDataCollectorFlattenedItem myValues = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(blahData);//JsonConvert.DeserializeObject<Dictionary<string, string>>(blahData);
-            int custId;
-            // End Test
+            string executionResponse = "";
 
             // Fetch data (START WORK)
-            //OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
             JmsDataLib jmsDataLib = new JmsDataLib();
             OpUserStack.TendersAutomatedUserToken(); // Fetch a generic faceless GA account to use
 
-
             List<TenderTransferObject> tenderStagedWorkRecords = jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
+
+            if (tenderStagedWorkRecords.Count == 0) executionResponse += "There are no records to process<br>";
 
             foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
             {
+                int custId;
+
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
                 // expect that we might have more then one deal, so walk through those records
@@ -707,10 +745,15 @@ namespace Intel.MyDeals.BusinessLogic
                     string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
                     string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
 
-                    custId = jmsDataLib.FetchCustFromCimId(custCimId); // update the customer ID based on CIM ID
+                    executionResponse += "Processing [" + workRecord.BtchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+                    custId = jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
 
                     List<TendersSFIDCheck> sfToMydlIds = jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
-                    if (sfToMydlIds == null) continue; // we had error on lookup, skip to next to process
+                    if (sfToMydlIds == null)
+                    {
+                        executionResponse += "Failed, ID lookup Error<br>";
+                        continue; // we had error on lookup, skip to next to process
+                    }
 
                     int contractId = sfToMydlIds[0].Cntrct_SID;
                     int dealId = sfToMydlIds[0].Wip_SID;
@@ -718,32 +761,65 @@ namespace Intel.MyDeals.BusinessLogic
                     List<int> passedIds = new List<int>() { contractId };
 
                     var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
-                        ? WorkFlowStages.Requested
-                        : WorkFlowStages.Draft;
+                        ? WorkFlowStages.Submitted
+                        : WorkFlowStages.Requested;
                     MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
 
-                    if (custId == 0) // No customer found for this record - Respond and bail
+                    if (custId == 0) // Need to have a working customer for this request and failed, skip!
                     {
-                        workRecordDataFields.header.action += " Error - Customer not found";
-                        continue;
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].ErrorMessages += "Customer CIM ID did not match to a Customer; ";
+                        executionResponse += "Failed, Customer CIM ID did not match to a Customer<br>";
+                        continue; 
                     }
 
                     // Step 2 - Deal with a contract header
                     if (contractId == 0) // This is a new contract header
                     {
-                        contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId, workRecordDataFields);
+                        string contractErrMsg = "";
+                        contractId = ProcessSalesForceContractInformation(contractId, salesForceIdCntrct, custId, workRecordDataFields, ref contractErrMsg);
+                        if (contractId < 0)  // Needed to create a new Folio for this request and failed, skip!
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].ErrorMessages += contractErrMsg;
+                            executionResponse += "Failed, Contract Creation: " + contractErrMsg + "<br>";
+                            continue; 
+                        }
                     }
 
                     if (dealId == 0) // This is a new deal entry
                     {
-                        dealId = ProcessSalesForceDealInformation(dealId, contractId, salesForceIdDeal, custId, myDealsData, workRecordDataFields, i);
+                        string dealErrMsg = "";
+                        dealId = ProcessSalesForceDealInformation(dealId, contractId, salesForceIdDeal, custId, myDealsData, workRecordDataFields, i, ref dealErrMsg);
+                        if (dealId < 0)  // Needed to create a new PS to WIP Deal for this request and failed, error..
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].ErrorMessages += dealErrMsg;
+                            executionResponse += "Failed, Deal Creation: " + dealErrMsg + "<br>";
+                        }
                     }
+                    executionResponse += "Folio ID: " + contractId + ", Deal ID: " + dealId + "<br>";
                 } // End of quote lines loop
 
-                // TODO: Can either send back each completed JSON for response here or after break, send entire back back record by record below.
+
+                string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
+                List<int> deadIdList = new List<int>() { -99 };
+                Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
+
+                if (saveSuccessful != Guid.Empty) // Then we can close out the processing record and go for an immediate send back
+                {
+                    jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Processing_Complete");
+                    executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
+                }
+                // Attempt to close out response now
+
+                bool saveSuccessfulReturnToTenders = jmsDataLib.PublishBackToSfTenders(jsonData);
+
+                if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
+                {
+                    jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
+                    executionResponse += "Response object successfully returned<br>";
+                }
             }
 
-            return "blah";
+            return executionResponse;
         }
         #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
 

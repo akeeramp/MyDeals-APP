@@ -18,7 +18,9 @@ namespace Intel.MyDeals.DataLibrary
 
                 ["vistexBaseURL"] = envConfigs.ContainsKey("vistexBaseURL") ? envConfigs["vistexBaseURL"] : "",
                 ["vistexUID"] = envConfigs.ContainsKey("vistexUID") ? envConfigs["vistexUID"] : "",
-                ["vistexPWD"] = envConfigs.ContainsKey("vistexPWD") ? envConfigs["vistexPWD"] : ""
+                ["vistexPWD"] = envConfigs.ContainsKey("vistexPWD") ? envConfigs["vistexPWD"] : "",
+
+                ["tendersResponseURL"] = envConfigs.ContainsKey("tendersResponseURL") ? envConfigs["tendersResponseURL"] : ""
             };
         }
 
