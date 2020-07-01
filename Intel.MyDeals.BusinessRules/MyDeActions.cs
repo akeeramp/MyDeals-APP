@@ -101,13 +101,6 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = "";
         }
 
-        //public static void SetSFTendersValidationOnCreation(this IOpDataElement de, params object[] args)
-        //{
-        //    if (de == null) return;
-
-        //    de.AtrbValue = PassedValidation.Complete;
-        //}
-
         public static void ConsumptionLookbackPeriodCheck(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
