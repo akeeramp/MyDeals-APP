@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 6/4/2020 12:29:19 AM
+File Updated: 7/1/2020 8:43:05 AM
 On: MHTIPPIN-MOBL
-From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
+From: EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180, MYDEALS
 */
 
 namespace Intel.MyDeals.Entities {

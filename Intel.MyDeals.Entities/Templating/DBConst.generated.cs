@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 6/4/2020 12:22:24 AM
+File Updated: 7/1/2020 8:42:27 AM
 On: MHTIPPIN-MOBL
-From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
+From: EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180, MYDEALS
 */
 using System;
 using System.Collections.Generic;
@@ -771,8 +771,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2029
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string DFLT_LOOKBACK_PERD = "DFLT_LOOKBACK_PERD";
 
