@@ -764,12 +764,32 @@
                     if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                     if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
+                   
                     var fields = $scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
                     for (var key in fields) {
                         if (fields.hasOwnProperty(key)) {
                             if (fields[key].type === "date") {
                                 gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
                             }
+                        }
+                    }
+                    if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                        if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
+                                if (!errs.WIP_DEAL) errs.WIP_DEAL = [];
+                                errs.WIP_DEAL.push("End Customer text can not be longer than 60 Characters");
+                            }
+                        }
+                        else {
+                            if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                            }
+                            gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString().toUpperCase();
                         }
                     }
 
@@ -818,7 +838,7 @@
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.Errors && !angular.equals(data.Errors, {})) {
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
-                $scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////
+                //$scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////              
                 $scope.setBusy("", "");
                 return;
             }

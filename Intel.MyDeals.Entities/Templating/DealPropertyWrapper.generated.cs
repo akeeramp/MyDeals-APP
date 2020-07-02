@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 6/4/2020 12:29:19 AM
+File Updated: 7/1/2020 1:54:30 PM
 On: MHTIPPIN-MOBL
-From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
+From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
 
 namespace Intel.MyDeals.Entities {
@@ -4294,7 +4294,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};

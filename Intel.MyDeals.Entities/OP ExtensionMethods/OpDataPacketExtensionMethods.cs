@@ -365,5 +365,10 @@ namespace Intel.MyDeals.Entities
             return dcHasErrors;
         }
 
+        public static bool SalesForceObjectCheck(this MyDealsData myDealsData, OpDataCollector dc)
+        {
+            return dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "";
+        }
+
     }
 }

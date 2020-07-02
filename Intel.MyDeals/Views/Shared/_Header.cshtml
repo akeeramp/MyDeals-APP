@@ -297,7 +297,7 @@
                         </li>
                     }
 
-                    @if (isDeveloper || isRealSA)
+                    @if (isDeveloper) // Was isDeveloper || isRealSA
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Admin Tools</a>
@@ -306,8 +306,8 @@
                                 {
                                     <li><a href="Admin#/AdminTools">Support Scripts</a></li>
                                     <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                    <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
                                 }
-                                <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
                             </ul>
                         </li>
                     }

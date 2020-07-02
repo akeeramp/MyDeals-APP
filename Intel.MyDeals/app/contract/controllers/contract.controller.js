@@ -2795,14 +2795,14 @@
                         }
 
                         if (sData[s]["END_CUSTOMER_RETAIL"] != undefined && sData[s]["END_CUSTOMER_RETAIL"] != null) {
-                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 40) {
+                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 60) {
                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                 sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 60 Characters");
                             }
                             else {
 
@@ -2983,18 +2983,20 @@
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
 
                         // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
-                        // ^ very informative Phil... :)  Here we convert the data of Array format used by Kendo to a string format expected by our middle tier
+                        // ^ very informative Phil... :)  Here we convert the data of Array format used by Kendo to a string format expected by our middle tier 
                         if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
                         if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                         if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
-
-                        if ($scope.curPricingStrategy.WF_STG_CD == "Approved" && gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[gData[i].DC_ID] && isTenderFlag !== "1") {
-                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                            gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
-                            gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased";
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push("Lookback Period can only be increased");
+                        
+                        if (($scope.curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(gData[i].TRKR_NBR).length > 0) && isTenderFlag !== "1") {
+                            if (gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[gData[i].DC_ID]) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                                gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only increase after approval";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Lookback Period can only increase after approval");
+                            }
                         }
 
                         // check dates against contract - Tender contracts don't observe start/end date within contract.
@@ -3031,14 +3033,14 @@
                         }
 
                         if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
-                            if (gData[i]["END_CUSTOMER_RETAIL"].length > 40) {
+                            if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
                                 if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                                    gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 40 Characters";
+                                    gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("End Customer text can not be longer than 40 Characters");
+                                    errs.PRC_TBL_ROW.push("End Customer text can not be longer than 60 Characters");
                                 }
                             }
                             else {

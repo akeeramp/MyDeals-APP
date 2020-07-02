@@ -227,6 +227,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (root.isTenderContract && ptTemplate.model.fields["AR_SETTLEMENT_LVL"] !== undefined) {
             ptTemplate.model.fields.AR_SETTLEMENT_LVL.editable = false;
         }
+        if (root.isTenderContract && ptTemplate.model.fields["PAYOUT_BASED_ON"] !== undefined) {
+            ptTemplate.model.fields.PAYOUT_BASED_ON.editable = false;
+        }
 
         // Show oevrarcghing colums only for hybrid deals
         if (root.isTenderContract) {
@@ -1939,7 +1942,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 switch (key) {
                                     case "CONSUMPTION_CUST_RPT_GEO": {
-                                        if (root.contractData.Customer != undefined && root.contractData.Customer != null)
+                                        if (root.contractData.Customer != undefined && root.contractData.Customer != null && root.curPricingTable.PAYOUT_BASED_ON == "Consumption")
                                             root.curPricingTable[key] = root.contractData.Customer.DFLT_CUST_RPT_GEO;
                                     } break;
                                 }

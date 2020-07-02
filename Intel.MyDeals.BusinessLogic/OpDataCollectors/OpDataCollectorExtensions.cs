@@ -300,9 +300,18 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Now check for changes to see if the PASSED_VALIDATION flag needs to be reset
             IOpDataElement dePassValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+            IOpDataElement deSalesForceId = dc.GetDataElement(AttributeCodes.SALESFORCE_ID);
+            bool byPassValidation = deSalesForceId != null && deSalesForceId.AtrbValue.ToString() != "";
             if (dePassValid != null && dc.ModifiedDataElements.Any(d => d.AtrbCd != AttributeCodes.PASSED_VALIDATION))
             {
-                dePassValid.AtrbValue = PassedValidation.Dirty;
+                if (byPassValidation) // SalesForce entered Tenders are set to completed due to automated import nature
+                {
+                    dePassValid.AtrbValue = PassedValidation.Complete;
+                }
+                else // Normal route
+                {
+                    dePassValid.AtrbValue = PassedValidation.Dirty;
+                }
             }
 
             return opMsgQueue;

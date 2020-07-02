@@ -21,7 +21,7 @@ namespace Intel.MyDeals.Controllers.API
         /// <summary>
         /// Checks if the previous run is completed
         /// </summary>
-        /// <param name="jobType">The job type</param>
+        /// <param name="jsonDataPacket">JSON data to pass</param>
 
         [HttpPost]
         [Route("SaveSalesForceTenderData")]
@@ -33,14 +33,14 @@ namespace Intel.MyDeals.Controllers.API
             {
                 jsonData = JsonConvert.DeserializeObject<TenderTransferRootObject>(jsonDataPacket.ToString());
                 OpLogPerf.Log(jsonDataPacket.ToString(), LogCategory.Information);
-               //TenderTransferRootObject jsonDataPacket
+               // TenderTransferRootObject jsonDataPacket
                // User and Password validate here.......
-               // 1. With authorise attribute
+               // 1. With authorize attribute
                saveSuccessful = _integrationLib.SaveSalesForceTenderData(jsonData);
             }
             catch(Exception ex)
             {
-                OpLogPerf.Log($"Tenders JSON payload: {jsonDataPacket.ToString()} | Message: {ex.Message}| Innerexception: {ex.InnerException}" +
+                OpLogPerf.Log($"Tenders JSON payload: {jsonDataPacket} | Message: {ex.Message}| Inner Exception: {ex.InnerException}" +
                     $" | Stack Trace{ex.StackTrace}", LogCategory.Error);
                 throw ex;
             }

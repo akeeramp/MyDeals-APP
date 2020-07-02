@@ -46,7 +46,13 @@ namespace Intel.MyDeals.BusinessLogic
                 // Clear Passed Validation for PTR and WIP
                 if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
                 {
-                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId()));
+                    List<int> salesForceIds = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.SALESFORCE_ID 
+                        && d.AtrbValue.ToString() != "" 
+                        && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId()))
+                        .Select(d => d.DcID).ToList();
+                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION 
+                        && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId())
+                        && !salesForceIds.Contains(d.DcID) );
                     foreach (OpDataElement de in passedAtrbs)
                     {
                         de.AtrbValue = PassedValidation.Dirty;
@@ -607,6 +613,7 @@ namespace Intel.MyDeals.BusinessLogic
                     //}
 
                     if (myDealsData.RollupValidationMessages(dc, ignoreTypes, ref dataHasValidationErrors)) dcHasErrors = true;
+                    bool isSalesForceDc = myDealsData.SalesForceObjectCheck(dc);
 
                     if (savePacket.ValidateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
@@ -640,8 +647,15 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL)
                         {
-                            if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
-                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                            if (!isSalesForceDc) // Normal deals flow - dirty on errors or changes
+                            {
+                                if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
+                                dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                            }
+                            else // Salesforce flow should come pre-validated, only change if errors, not changes
+                            {
+                                dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, dcHasErrors ? PassedValidation.Dirty : PassedValidation.Complete);
+                            }
                         }
                     }
 
