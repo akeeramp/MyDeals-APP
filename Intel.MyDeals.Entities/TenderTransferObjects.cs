@@ -229,7 +229,7 @@ namespace Intel.MyDeals.Entities
                     public string Status { get; set; }
                     public string DealRFQStatus { get; set; }
                     public string QuoteLineNumber { get; set; }
-                    public string Pricing_ECAP_Price__c { get; set; }
+                    //public string Pricing_ECAP_Price__c { get; set; }
                     public string MeetCompPrice { get; set; }
                     public string IntegrationStatus { get; set; }
                     public string ApprovedStartDate { get; set; }
@@ -237,11 +237,19 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedEndDate { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string DealRFQId { get; set; }
-                    public string ErrorMessages { get; set; }
+                    [JsonProperty("ErrorMessages")]
+                    public List<ErrorMessages> errorMessages { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
                     public CompetetorProduct competetorProduct { get; set; }
                     public List<PerformanceMetric> performanceMetric { get; set; }
+
+                    public class ErrorMessages
+                    {
+                        public int Code { get; set; }
+                        public string Message { get; set; }
+                        public string MessageDetails { get; set; }
+                    }
 
                     public class Product
                     {
