@@ -43,8 +43,8 @@ namespace Intel.MyDeals.BusinessLogic
                     for (; indx < dataRecords.Count; indx++)
                     {
                         jsonData = jsonData + "," + dataRecords[indx].RqstJsonData;
-                        //Checking less the 4MB packet size
-                        if (jsonData.Length * sizeof(Char) > 400 || indx == dataRecords.Count - 1)
+                        //Checking less the 5MB packet size
+                        if (jsonData.Length * sizeof(Char) > 5000000 || indx == dataRecords.Count - 1)
                         {
                             jsonData = jsonData.Remove(0, 1);
                             responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
