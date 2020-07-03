@@ -597,6 +597,29 @@
                 type: "string",
                 template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
                 width: 140
+            },
+            {
+                field: "AR_SETTLEMENT_LVL",
+                title: "AR Settlement Level",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL"
+            },
+            {
+                field: "PERIOD_PROFILE",
+                title: "Period Profile",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PERIOD_PROFILE"
+            }, {
+                field: "CONSUMPTION_LOOKBACK_PERIOD",
+                title: "Consumption Lookback Period",
+                type: "number",
+                width: 160
             }
         ];
 
@@ -764,7 +787,7 @@
                     if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                     if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
-                   
+
                     var fields = $scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
                     for (var key in fields) {
                         if (fields.hasOwnProperty(key)) {
