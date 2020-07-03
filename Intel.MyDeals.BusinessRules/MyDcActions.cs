@@ -1567,7 +1567,7 @@ namespace Intel.MyDeals.BusinessRules
             // if not a major change... exit
             if (!changedDes.Any() && !changedIncreaseDes.Any() && !changedDecreaseDes.Any() && r.Dc.DcID > 0) return;
 
-            // Define redeal reason
+            // Define re deal reason
 
             // TO DO: Fix this later
 

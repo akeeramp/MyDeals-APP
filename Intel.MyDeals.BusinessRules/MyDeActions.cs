@@ -218,6 +218,13 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void UpdateConsumptionLookbackPeriodDate(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            de.AtrbValue = DateTime.Now.Date.ToString("MM/dd/yyyy");
+        }
+
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

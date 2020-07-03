@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/1/2020 8:42:27 AM
+File Updated: 7/2/2020 6:11:50 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180, MYDEALS
 */
@@ -262,6 +262,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string CAP_STRT_DT = "CAP_STRT_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3455
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string CNSMPTN_LKBACK_PERD_DT = "CNSMPTN_LKBACK_PERD_DT";
 
 		///<summary>
 		/// DIM_SID: 3
