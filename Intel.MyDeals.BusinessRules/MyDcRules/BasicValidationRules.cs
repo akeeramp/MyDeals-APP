@@ -564,11 +564,11 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Update Consumption Lookback Period Date on Change after Tracker",
+                    Title="Update Consumption Lookback Period Date on Change",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD) && de.HasValueChanged && dc.HasTracker()).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD) && de.HasValueChanged).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>

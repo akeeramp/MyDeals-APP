@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/2/2020 6:12:24 PM
+File Updated: 7/6/2020 10:52:46 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
@@ -449,11 +449,11 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Consumption Lookback Period Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3455,
-			DATA_TYPE_CD = "DATE",
+			DATA_TYPE_CD = "DATETIME",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
-			FRMT_MSK = "{0:MM/dd/yyyy}",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"

@@ -222,7 +222,7 @@ namespace Intel.MyDeals.BusinessRules
         {
             if (de == null) return;
 
-            de.AtrbValue = DateTime.Now.Date.ToString("MM/dd/yyyy");
+            de.AtrbValue = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
         }
 
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
