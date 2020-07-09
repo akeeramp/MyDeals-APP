@@ -111,6 +111,7 @@ namespace Intel.MyDeals.DataLibrary
                     }
 
                     DataCollections.RecycleCache("_getVistexCustomerMappings");
+                    DataCollections.RecycleCache("_getMyCustomers");
                 }
             }
             catch (Exception ex)
