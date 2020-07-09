@@ -59,6 +59,28 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = newStage;
         }
 
+        public static void CheckSalesForceInitialWorkFlow(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
+
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return;
+
+            string newStage = string.Empty;
+
+            if (opDeType == OpDataElementType.PRC_ST.ToString())
+            {
+                newStage = WorkFlowStages.Submitted;
+            }
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
+            {
+                newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
+            }
+
+            de.AtrbValue = newStage;
+        }
+
         public static void CheckConsumptionReason(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

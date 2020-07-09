@@ -445,6 +445,22 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule
+                {
+                    Title="Default Salesforce Workflow on Save",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.DC_ID) && dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.SALESFORCE_ID) && de.HasValue()).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckSalesForceInitialWorkFlow,
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.WF_STG_CD })
+                        }
+                    }
+                },
+
                 //CheckForIntegerValues
                 new MyOpRule
                 {
