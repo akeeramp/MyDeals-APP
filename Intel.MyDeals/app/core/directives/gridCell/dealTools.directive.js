@@ -411,7 +411,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 });
             }
 
-            $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
+            $scope.attachmentCount = 0; // Can't be 0 or initialization won't happen. Changed to 0 as part of DE83606
             $scope.initComplete = false;
 
             $scope.getAttachmentDatasourceURL = function () {
