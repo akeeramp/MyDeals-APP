@@ -662,11 +662,15 @@ namespace Intel.MyDeals.BusinessLogic
 
                 List<OpDataElement> trkrs = retMyDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Where(t => t.AtrbCd == AttributeCodes.TRKR_NBR).ToList();
 
-                Dictionary<int, List<string>> dictTrkrs = new Dictionary<int, List<string>>();
-                foreach (OpDataElement de in trkrs)
+                //Flattend the data and pass Trackers as object to UI
+                OpDataCollectorFlattenedDictList flatDictList = retMyDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
+                OpDataCollectorFlattenedList rtn = flatDictList.ToHierarchialList(OpDataElementType.WIP_DEAL);
+                Dictionary<int, object> dictTrkrs = new Dictionary<int, object>();
+                foreach (OpDataCollectorFlattenedItem item in rtn)
                 {
-                    if (!dictTrkrs.ContainsKey(de.DcID)) dictTrkrs[de.DcID] = new List<string>();
-                    dictTrkrs[de.DcID].Add(de.AtrbValue.ToString());
+                    int dcid = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                    var trackers = item[AttributeCodes.TRKR_NBR];
+                    if (!dictTrkrs.ContainsKey(dcid)) dictTrkrs.Add(dcid, trackers);
                 }
 
                 // Apply messaging
