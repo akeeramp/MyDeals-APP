@@ -104,6 +104,7 @@
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />
+    <Compile Include="DataFix\DataFixLib.cs" />
     <Compile Include="DataQuality\DataQualityLib.cs" />
     <Compile Include="DealMassUpdate\DealMassUpdateLib.cs" />
     <Compile Include="DsaEngine\DsaEngineLib.cs" />

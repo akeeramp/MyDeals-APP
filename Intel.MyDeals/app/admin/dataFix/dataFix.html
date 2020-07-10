@@ -1,0 +1,91 @@
+﻿<div class="form-group row" id="data_fix">
+    <div class="form-group row" style="padding: 0 0 0 15px;">
+        <div class="col-md-6" style="text-align: left;">
+            <p style="color: #FC4C02">This screen allows SA users to fix the data without EDCAP approval</p>
+        </div>
+    </div>
+    <div ng-if="vm.IsEditMode">
+        <div class="form-group row">
+            <label class="control-label isRequired col-md-1" autocomplete="off">Action:</label>
+            <div class="col-md-4">
+                <select kendo-combo-box k-options="vm.DataFixActionOptions" k-ng-model="vm.currentDataFix.ActionId" style="width:100%"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label isRequired col-md-1" autocomplete="off">Incident Number:</label>
+            <div class="col-md-4">
+                <input class="form-control md"
+                       type="text"
+                       ng-model="vm.currentDataFix.IncidentNumber"
+                       style="width:100%">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-1">Notes:</label>
+            <div class="col-md-4">
+                <textarea type="textarea" rows="5" ng-model="vm.currentDataFix.Notes" style="width:100%"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-1">Is Active?:</label>
+            <div class="col-md-1">
+                <toggle class="fl toggle-accept"
+                        ng-model="vm.currentDataFix.IsActive"
+                        on="Active"
+                        off="Inactive"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"
+                        title="{{vm.currentDataFix.IsActive === true ? 'Active' : 'Inactivate'}}" style="width:100%"></toggle>
+            </div>
+            <label class="control-label col-md-2" style="text-align:right;">Is Approved?:</label>
+            <div class="col-md-1">
+                <toggle class="fl toggle-accept" ng-disabled="true"
+                        ng-model="vm.currentDataFix.IsApproved"
+                        on="Approved"
+                        off="Pending Approval"
+                        onstyle="btn-success"
+                        offstyle="btn-danger"
+                        title="{{vm.currentDataFix.IsApproved === true ? 'Click to Un-Approve' : 'Click to Approve'}}" style="width:100%"></toggle>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-1">Data:</label>
+            <div class="col-md-9">
+                <div rule-attribute-builder
+                     grid-id="'attributeGrid'"
+                     operator-settings="operatorSettings"
+                     attribute-settings="attributeSettings"
+                     criteria="vm.currentDataFix.DataToFix"
+                     custom-settings="">
+                </div>
+            </div>
+        </div>
+        <div class="form-group modal-footer">
+            <div class="form-group row action_btns">
+                <div class="col-md-5">
+                    <button ng-click="vm.SaveFix()" class="btn btn-primary" style="margin-left: 15px">Save</button>
+                    <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row col-md-12" ng-if="!vm.IsEditMode">
+        <div kendo-grid="dataFixGrid" class="table vistex-grid" expand-k-grid options="vm.gridOptions">
+            <div class="k-header k-grid-toolbar ng-scope">
+                <a role="button" class="k-button k-button-icontext k-grid-add ng-scope" ng-click="vm.addNewFix()">
+                    <span class="k-icon k-i-plus" style="color: white !important"></span>Add New Fix
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    #data_fix {
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+        #data_fix .toggle.btn {
+            min-width: 100px;
+        }
+</style>

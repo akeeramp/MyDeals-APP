@@ -249,6 +249,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
@@ -339,6 +340,9 @@
     <Content Include="app\admin\customer\admin.customer.controller.js" />
     <Content Include="app\admin\customer\customer.html" />
     <Content Include="app\admin\customer\customer.service.js" />
+    <Content Include="app\admin\dataFix\admin.dataFix.controller.js" />
+    <Content Include="app\admin\dataFix\dataFix.html" />
+    <Content Include="app\admin\dataFix\dataFix.service.js" />
     <Content Include="app\admin\dataQuality\dataQuality.html" />
     <Content Include="app\admin\dataQuality\dataQuality.service.js" />
     <Content Include="app\admin\dealMassUpdate\admin.dealMassUpdate.controller.js" />
