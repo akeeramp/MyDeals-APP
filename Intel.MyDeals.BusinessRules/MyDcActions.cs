@@ -2011,6 +2011,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement endDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            List<OpDataElement> otherChangeElements = r.Dc.DataElements.Where(d => d.HasValueChanged == true).Select(d => d).ToList();
 
             if (endDate.OrigAtrbValue.ToString() == string.Empty) return; // In initial create, this rule can be bypassed because there isn't an Original Value in DE
 
@@ -2018,16 +2019,17 @@ namespace Intel.MyDeals.BusinessRules
             DateTime originalEndDate = DateTime.Parse(endDate.OrigAtrbValue.ToString());
             DateTime today = DateTime.Today;
             // DateTime.Compare, <0 If date1 is earlier than date2, 0 If date1 is the same as date2, > 0 If date1 is later than date2
-            if (DateTime.Compare(originalEndDate, today) < 0) // If original end is earlier then today, it was in past, not changed to past
+
+            if (DateTime.Compare(originalEndDate, today) >= 0) return; // If original end is EARLIER then today, it was in past, not changed to the past, continue
+            if (!endDate.HasValueChanged) return; // If the value hasn't been changed, continue
+            if (DateTime.Compare(newEndDate, originalEndDate) >= 0) return; // If New end is EARLIER then Original, wrong way move, continue and roll all changes back
+            foreach (OpDataElement changeElement in otherChangeElements)
             {
-                if (endDate.HasValueChanged)
+                changeElement.AtrbValue = changeElement.OrigAtrbValue;
+                changeElement.State = OpDataElementState.Unchanged;
+                if (changeElement.AtrbCd == AttributeCodes.END_DT)
                 {
-                    if (DateTime.Compare(newEndDate, originalEndDate) < 0) // If New end is earlier then Original, wrong way move
-                    {
-                        endDate.AtrbValue = endDate.OrigAtrbValue;
-                        endDate.State = OpDataElementState.Unchanged;
-                        endDate.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
-                    }
+                    changeElement.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
                 }
             }
         }
@@ -2043,13 +2045,21 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement dealStartDateDe = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement dealEndDateDe = r.Dc.GetDataElement(AttributeCodes.END_DT);
 
-            if (userEnteredRedealDateDe == null || userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
+            if (userEnteredRedealDateDe == null || (string) userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
 
             DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
             DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
+            DateTime dealStartDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
             DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != "" ?
                 DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()) :
                 DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
+
+            // If the deal end date is in the past or the start date is in the future, set the userEnteredRedealDate to the last or deal start instead of today
+            if (DateTime.Compare(dealEndDate, DateTime.Today) < 0 || DateTime.Compare(DateTime.Today, dealStartDate) < 0)
+            {
+                userEnteredRedealDateDe.AtrbValue = lastTrackerStartDate.ToString("MM/dd/yyyy");
+                userEnteredRedealDate = lastTrackerStartDate;
+            }
 
             if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
                 || DateTime.Compare(userEnteredRedealDate, dealEndDate) > 0) // OR User Entered is later then the End Date, toss an error
