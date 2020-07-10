@@ -116,6 +116,7 @@
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
     <Compile Include="Notifications\NotificationsDataLib.cs" />
     <Compile Include="ProductMicroPacket.cs" />
+    <Compile Include="PushDealstoVistex\PushDealstoVistexDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetter.cs">
       <SubType>Component</SubType>

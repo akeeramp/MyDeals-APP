@@ -396,6 +396,15 @@
                     , url: 'dealmassupdate'
                     , controller: 'DealMassUpdateController as vm'
                 }
+            },
+            {
+                state: 'admin.pushDealstoVistex',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/pushDealstoVistex/pushDealstoVistex.html'
+                    , url: 'pushDealstoVistex'
+                    , controller: 'PushDealstoVistexcontroller as vm'
+                }
             }
 
         ];
