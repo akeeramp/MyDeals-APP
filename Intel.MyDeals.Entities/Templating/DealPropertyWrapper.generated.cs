@@ -4038,7 +4038,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
