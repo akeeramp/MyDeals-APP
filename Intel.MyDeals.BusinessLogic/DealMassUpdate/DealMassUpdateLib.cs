@@ -28,5 +28,11 @@ namespace Intel.MyDeals.BusinessLogic
             List<DealMassUpdateResults> lstResults = _dealMassUpdateDataLib.UpdateMassDealAttributes(data);
             return lstResults;
         }
+
+        public List<AttributeFeildvalues> GetAttributeValues(int atrb_sid)
+        {
+            List<AttributeFeildvalues> results = _dealMassUpdateDataLib.GetAttributeValues(atrb_sid);
+            return results;
+        }
     }
 }

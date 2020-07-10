@@ -33,13 +33,16 @@ namespace Intel.MyDeals.Entities
 
     }
 
-    public class AttributeFeilds
+    public class AttributeFeildvalues
     {
         [DataMember]
         public int ATRB_SID { get; set; }
 
         [DataMember]
-        public string ATRB_DESC { get; set; }
+        public string ATRB_LBL { get; set; }
+
+        [DataMember]
+        public string ATRB_VAL_TXT { get; set; }
 
     }
 }

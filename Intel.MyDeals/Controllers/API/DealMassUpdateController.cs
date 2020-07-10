@@ -27,19 +27,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetUpdateAttributes")]
-        public List<AttributeFeilds> GetUpdateAttributes()
+        [Route("GetUpdateAttributes/{atrb_sid}")]
+        public List<AttributeFeildvalues> GetUpdateAttributes(int atrb_sid)
         {
-            AttributeFeilds atrbFields = new AttributeFeilds();
-            var result = new List<AttributeFeilds>();
-            var ret = DataCollections.GetAttributeData().All.FirstOrDefault(a => a.ATRB_SID == 3461);
-            result.Add(new AttributeFeilds
-            {
-                ATRB_SID = ret.ATRB_SID,
-                ATRB_DESC = ret.ATRB_DESC
-
-            });
-            return SafeExecutor(() => result);
+            
+                return SafeExecutor(() => _dealMassUpdateLib.GetAttributeValues(atrb_sid), "Unable to get Attribute List");
         }
     }
 }
