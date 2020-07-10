@@ -30,8 +30,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUpdateAttributes/{atrb_sid}")]
         public List<AttributeFeildvalues> GetUpdateAttributes(int atrb_sid)
         {
-            
-                return SafeExecutor(() => _dealMassUpdateLib.GetAttributeValues(atrb_sid), "Unable to get Attribute List");
+            return SafeExecutor(() => _dealMassUpdateLib.GetAttributeValues(atrb_sid), "Unable to get Attribute List");
         }
     }
 }

@@ -110,6 +110,7 @@
     <Compile Include="PriceRule.cs" />
     <Compile Include="ProductLookupPacket.cs" />
     <Compile Include="ProductTranslatePacket.cs" />
+    <Compile Include="PushDealstoVistex.cs" />
     <Compile Include="QuoteLetterSave.cs" />
     <Compile Include="QuoteLetterFile.cs" />
     <Compile Include="QuoteLetterData.cs" />
