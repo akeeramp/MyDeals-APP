@@ -108,6 +108,7 @@
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
     <Compile Include="CostTest\CostTestDataLib.cs" />
     <Compile Include="Dashboard\DashboardDataLib.cs" />
+    <Compile Include="DataFix\DataFixDataLib.cs" />
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
     <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />

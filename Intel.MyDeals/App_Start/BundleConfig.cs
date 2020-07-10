@@ -112,7 +112,7 @@ namespace Intel.MyDeals
                  "~/app/admin/admin.module.js"
                 , "~/app/admin/admin.route.js"
                 , "~/app/shared/_requestVerificationToken.js"
-                , "~/app/admin/admintools/admintools.service.js"                
+                , "~/app/admin/admintools/admintools.service.js"
                 , "~/app/admin/admintools/admin.admintools.controller.js"
                 , "~/app/admin/admintools/admin.testtenders.controller.js"
                 , "~/app/admin/dealMassUpdate/admin.dealMassUpdate.controller.js"
@@ -277,6 +277,8 @@ namespace Intel.MyDeals
                 , "~/app/reporting/reporting.route.js"
                 , "~/app/reporting/reporting.service.js"
                 , "~/app/reporting/dash/reporting.dashboard.controller.js"
+                , "~/app/admin/dataFix/admin.dataFix.controller.js"
+                , "~/app/admin/dataFix/dataFix.service.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
@@ -292,7 +294,7 @@ namespace Intel.MyDeals
                 "~/css/jquery-ui.min.css",
                 "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
-                "~/css/kendo.intel.css",                
+                "~/css/kendo.intel.css",
                 "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",
                 "~/css/select2.min.css",

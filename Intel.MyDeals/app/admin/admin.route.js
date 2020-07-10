@@ -345,6 +345,15 @@
                 }
             },
             {
+                state: 'admin.dataFix',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dataFix/dataFix.html'
+                    , url: 'dataFix'
+                    , controller: 'DataFixController as vm'
+                }
+            },
+            {
                 state: 'admin.admintools',
                 abstract: false,
                 config: {

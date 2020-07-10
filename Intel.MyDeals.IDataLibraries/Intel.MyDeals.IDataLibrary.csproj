@@ -56,6 +56,7 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
+    <Compile Include="DataFix\IDataFixDataLib.cs" />
     <Compile Include="DataQuality\IDataQualityDataLib.cs" />
     <Compile Include="DealMassUpdate\IDealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
