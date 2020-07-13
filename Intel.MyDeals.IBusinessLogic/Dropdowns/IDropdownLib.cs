@@ -7,6 +7,8 @@ namespace Intel.MyDeals.IBusinessLogic
 	{
         List<BasicDropdown> GetBasicDropdowns();
 
+        List<DropDowns> GetOpDataElements();
+
         IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
 
         IEnumerable<BasicDropdown> GetDropdownsWithInactives(string atrbCd);

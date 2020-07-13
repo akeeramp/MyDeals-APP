@@ -1,0 +1,186 @@
+﻿<div class="filterContainer">
+    <table>
+        <thead>
+            <tr>
+                <th style="width:75px;">&nbsp;</th>
+                <th>Data Element</th>
+                <th>Attribute</th>
+                <th>Mtx Value</th>
+                <th>Object Id</th>
+                <th>Data Value</th>
+                <th>Data Value Max</th>
+                <th>MDX</th>
+                <th>Customer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataItem in data" class="filterRow">
+                <td>
+                    <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
+                    <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select field'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-value-primitive="true"
+                                k-filter="'contains'"
+                                k-auto-bind="true"
+                                k-data-source="OpDataElementDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 200px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select field'"
+                                k-data-text-field="'title'"
+                                k-data-value-field="'field'"
+                                k-ng-model="dataItem.field"
+                                k-value-primitive="true"
+                                k-change="changeField"
+                                k-close="closeField"
+                                k-filter="'contains'"
+                                k-auto-bind="true"
+                                k-data-source="dataItem.source"
+                                class="opUiContainer sm abField"
+                                style="width: 200px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <input class="form-control md" type="text" style="width:100%" placeholder="Mtx Value">
+                </td>
+                <td>
+                    <input class="form-control md" type="text" style="width:100%" placeholder="Object Id">
+                </td>
+                <td>
+                    <span class="fl abValue">Select attribute!</span>
+                </td>
+                <td>
+                    <input class="form-control md" type="text" style="width:100%" placeholder="Data Value Max">
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select field'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-value-primitive="true"
+                                k-auto-bind="true"
+                                k-data-source="MdxDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 100px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <select kendo-drop-down-list
+                            k-placeholder="'Select field'"
+                            k-data-text-field="'dropdownName'"
+                            k-data-value-field="'dropdownID'"
+                            k-value-primitive="true"
+                            k-filter="'contains'"
+                            k-auto-bind="true"
+                            k-data-source="MyCustomersInfoDataSource"
+                            class="opUiContainer sm abField"
+                            style="width: 200px;"></select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .filterContainer table thead th {
+        text-align: center;
+    }
+
+    .k-animation-container UL {
+        min-width: 165px !important
+    }
+
+    .filterContainer {
+        max-height: 250px;
+        overflow: auto;
+    }
+
+    .filterRow {
+        margin-bottom: 7px;
+    }
+
+        .filterRow .k-dropdown {
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+        }
+
+    .icnBtn {
+        border-radius: 4px;
+        width: 24px;
+        padding: 2px 5px;
+        margin: 2px 12px 2px 0;
+        cursor: pointer;
+    }
+
+        .icnBtn i {
+            color: #ffffff;
+        }
+
+    .icnSkyBtn {
+        background-color: #00AEEF;
+    }
+
+        .icnSkyBtn:hover {
+            background-color: #0071C5;
+        }
+
+    .icnGryBtn {
+        background-color: #bbbbbb;
+    }
+
+        .icnGryBtn:hover {
+            background-color: #cccccc;
+        }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .btn-def {
+        margin: 0 0 0 15px;
+    }
+
+    .h5-small {
+        font-size: 12px;
+        color: #444444;
+        font-weight: 200;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .curRule {
+        color: #0071C5;
+        margin-left: 10px;
+    }
+
+    .icnSky {
+        cursor: pointer;
+        color: #00AEEF;
+        margin-left: 8px;
+    }
+
+    .menu-container li a {
+        cursor: pointer;
+    }
+
+    .sm-help {
+        font-size: 11px;
+        color: #666666;
+        line-height: 1.1em;
+    }
+
+        .sm-help I {
+            color: #FFA300;
+        }
+</style>

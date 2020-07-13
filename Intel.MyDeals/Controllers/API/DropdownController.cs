@@ -27,6 +27,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetOpDataElements")]
+        public IEnumerable<DropDowns> GetOpDataElements()
+        {
+            return SafeExecutor(() => _dropdownLib.GetOpDataElements()
+                , $"Unable to get op data elements"
+            );
+        }
+
+        [Authorize]
         [Route("GetDropdowns/{atrbCd}")]
         public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
         {

@@ -38,6 +38,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetBasicDropdowns();
         }
 
+        public List<DropDowns> GetOpDataElements()
+        {
+            return _dropdownDataLib.GetOpDataElements();
+        }
+
         /// <summary>
         /// Get All Simple Dropdowns
         /// </summary>

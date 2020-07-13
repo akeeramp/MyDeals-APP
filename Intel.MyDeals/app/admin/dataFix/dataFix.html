@@ -6,58 +6,38 @@
     </div>
     <div ng-if="vm.IsEditMode">
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Action:</label>
+            <label class="control-label isRequired col-md-1" autocomplete="off">Incident#:</label>
             <div class="col-md-4">
-                <select kendo-combo-box k-options="vm.DataFixActionOptions" k-ng-model="vm.currentDataFix.ActionId" style="width:100%"></select>
+                <input class="form-control md" type="text" ng-model="vm.currentDataFix.IncidentNumber" style="width:100%">
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Incident Number:</label>
-            <div class="col-md-4">
-                <input class="form-control md"
-                       type="text"
-                       ng-model="vm.currentDataFix.IncidentNumber"
-                       style="width:100%">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-1">Notes:</label>
-            <div class="col-md-4">
-                <textarea type="textarea" rows="5" ng-model="vm.currentDataFix.Notes" style="width:100%"></textarea>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-1">Is Active?:</label>
-            <div class="col-md-1">
-                <toggle class="fl toggle-accept"
-                        ng-model="vm.currentDataFix.IsActive"
-                        on="Active"
-                        off="Inactive"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"
-                        title="{{vm.currentDataFix.IsActive === true ? 'Active' : 'Inactivate'}}" style="width:100%"></toggle>
-            </div>
-            <label class="control-label col-md-2" style="text-align:right;">Is Approved?:</label>
-            <div class="col-md-1">
-                <toggle class="fl toggle-accept" ng-disabled="true"
-                        ng-model="vm.currentDataFix.IsApproved"
-                        on="Approved"
-                        off="Pending Approval"
-                        onstyle="btn-success"
-                        offstyle="btn-danger"
-                        title="{{vm.currentDataFix.IsApproved === true ? 'Click to Un-Approve' : 'Click to Approve'}}" style="width:100%"></toggle>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-1">Data:</label>
-            <div class="col-md-9">
-                <div rule-attribute-builder
-                     grid-id="'attributeGrid'"
-                     operator-settings="operatorSettings"
-                     attribute-settings="attributeSettings"
-                     criteria="vm.currentDataFix.DataToFix"
+            <label class="control-label isRequired col-md-1">Attribures:</label>
+            <div class="col-md-11">
+                <div datafix-attribute-builder grid-id="'attributeGrid'" operator-settings="operatorSettings" attribute-settings="attributeSettings" criteria="vm.currentDataFix.DataToFix"
                      custom-settings="">
                 </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label isRequired col-md-1">Actions:</label>
+            <div class="col-md-11">
+                <span>Under construction!</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label isRequired col-md-1" autocomplete="off">Message:</label>
+            <div class="col-md-6">
+                <input class="form-control md" type="text" ng-model="vm.currentDataFix.Notes" style="width:100%">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary" style="margin-left: 15px">Execute</button>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-1">Results:</label>
+            <div class="col-md-4">
+                <span>Under construction!</span>
             </div>
         </div>
         <div class="form-group modal-footer">

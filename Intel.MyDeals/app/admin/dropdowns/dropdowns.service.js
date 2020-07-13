@@ -19,7 +19,12 @@
             updateBasicDropdowns: updateBasicDropdowns,
             deleteBasicDropdowns: deleteBasicDropdowns,
             insertBasicDropdowns: insertBasicDropdowns,
-            getDropdown: getDropdown
+            getDropdown: getDropdown,
+            getOpDataElements: getOpDataElements
+        }
+
+        function getOpDataElements() {
+            return dataService.get(apiBaseUrl + 'GetOpDataElements');
         }
 
         function getDropdown(strDropDownType) {
