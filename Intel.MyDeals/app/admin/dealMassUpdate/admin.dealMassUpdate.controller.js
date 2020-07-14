@@ -12,7 +12,7 @@
     function DealMassUpdateController(dealMassUpdateService, $scope, gridConstants, logger, $timeout, dataService) {
 
         $scope.accessAllowed = true;
-        if (!(window.usrRole === 'SA' || window.isDeveloper)) {
+        if (!window.isDeveloper) {
             // Kick not valid users out of the page
             $scope.accessAllowed = false;
             document.location.href = "/Dashboard#/portal";
