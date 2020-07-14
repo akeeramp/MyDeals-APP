@@ -1,4 +1,4 @@
-﻿<div class="filterContainer">
+﻿<div id="dataFixAttributes" class="filterContainer">
     <table>
         <thead>
             <tr>
@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="dataItem in data" class="filterRow">
+            <tr ng-repeat="dataItem in DataRows" class="filterRow">
                 <td>
                     <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
                     <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
@@ -25,12 +25,13 @@
                                 k-placeholder="'Select field'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
+                                k-ng-model="dataItem.DataElement"
                                 k-value-primitive="true"
                                 k-filter="'contains'"
                                 k-auto-bind="true"
                                 k-data-source="OpDataElementDataSource"
                                 class="opUiContainer sm abField"
-                                style="width: 200px;"></select>
+                                style="width: 150px;"></select>
                     </span>
                 </td>
                 <td>
@@ -39,53 +40,55 @@
                                 k-placeholder="'Select field'"
                                 k-data-text-field="'title'"
                                 k-data-value-field="'field'"
-                                k-ng-model="dataItem.field"
+                                k-ng-model="dataItem.Attribute"
                                 k-value-primitive="true"
                                 k-change="changeField"
                                 k-close="closeField"
                                 k-filter="'contains'"
                                 k-auto-bind="true"
-                                k-data-source="dataItem.source"
+                                k-data-source="attributeDataSource"
                                 class="opUiContainer sm abField"
-                                style="width: 200px;"></select>
+                                style="width: 150px;"></select>
                     </span>
                 </td>
                 <td>
-                    <input class="form-control md" type="text" style="width:100%" placeholder="Mtx Value">
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.MtxValue" placeholder="Mtx Value" value="0">
                 </td>
                 <td>
-                    <input class="form-control md" type="text" style="width:100%" placeholder="Object Id">
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ObjectId" placeholder="Object Id">
                 </td>
                 <td>
-                    <span class="fl abValue">Select attribute!</span>
+                    <div class="fl abValue">Select attribute!</div>
                 </td>
                 <td>
-                    <input class="form-control md" type="text" style="width:100%" placeholder="Data Value Max">
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ValueMax" placeholder="Data Value Max">
                 </td>
                 <td>
                     <span class="fl ">
                         <select kendo-drop-down-list
-                                k-placeholder="'Select field'"
+                                k-placeholder="'Select MDX'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
+                                k-ng-model="dataItem.MDX"
                                 k-value-primitive="true"
                                 k-auto-bind="true"
                                 k-data-source="MdxDataSource"
                                 class="opUiContainer sm abField"
-                                style="width: 100px;"></select>
+                                style="width: 75px;"></select>
                     </span>
                 </td>
                 <td>
                     <select kendo-drop-down-list
-                            k-placeholder="'Select field'"
+                            k-placeholder="'Select customer'"
                             k-data-text-field="'dropdownName'"
                             k-data-value-field="'dropdownID'"
+                            k-ng-model="dataItem.CustId"
                             k-value-primitive="true"
                             k-filter="'contains'"
                             k-auto-bind="true"
                             k-data-source="MyCustomersInfoDataSource"
                             class="opUiContainer sm abField"
-                            style="width: 200px;"></select>
+                            style="width: 150px;"></select>
                 </td>
             </tr>
         </tbody>
@@ -93,17 +96,35 @@
 </div>
 
 <style>
-    .filterContainer table thead th {
+    #dataFixAttributes .dataValue {
+        height: 30px;
+        font-size: 12px;
+        width:100%;
+    }
+
+    #dataFixAttributes table thead th {
         text-align: center;
+        font-size: 13px;
     }
 
-    .k-animation-container UL {
-        min-width: 165px !important
+    #dataFixAttributes table tbody td {
+        padding-right: 2px;
     }
 
-    .filterContainer {
+    #dataFixAttributes {
         max-height: 250px;
         overflow: auto;
+    }
+
+        #dataFixAttributes .abValue {
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+            width: 100%;
+        }
+
+    .k-animation-container ul {
+        min-width: 50px !important
     }
 
     .filterRow {

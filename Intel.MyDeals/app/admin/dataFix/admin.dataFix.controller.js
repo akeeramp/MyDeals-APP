@@ -31,7 +31,7 @@
         }
 
         vm.SaveFix = function () {
-            $rootScope.$broadcast("save-criteria");
+            $rootScope.$broadcast("save-datafix-attribute");
             $timeout(function () {
                 dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
                     vm.DataFixes.push(result.data);
@@ -45,7 +45,7 @@
         }
 
         vm.addNewFix = function () {
-            vm.currentDataFix = {};
+            vm.currentDataFix = { DataFixAttributes: [] };
             vm.IsEditMode = true;
         }
 
@@ -98,182 +98,11 @@
                     title: "Incident Number"
                 },
                 {
-                    field: "ActionId",
-                    title: "Action Name",
-                    template: "<Span>Action #= ActionId #<Span>"
-                },
-                {
-                    field: "IsActive",
-                    title: "Is Active",
-                    template: gridUtils.boolViewer('IsActive')
-                },
-                {
-                    field: "IsApproved",
-                    title: "Is Approved",
-                    template: gridUtils.boolViewer('IsApproved')
-                },
-                {
-                    field: "Notes",
-                    title: "Notes"
+                    field: "Message",
+                    title: "Message"
                 }
             ]
         }
-
-        $scope.operatorSettings = {
-            "operators": [
-                {
-                    "operator": "LIKE",
-                    "operCode": "contains",
-                    "label": "contains"
-                },
-                {
-                    "operator": "=",
-                    "operCode": "eq",
-                    "label": "equal to"
-                },
-                {
-                    "operator": "IN",
-                    "operCode": "in",
-                    "label": "in"
-                },
-                {
-                    "operator": "!=",
-                    "operCode": "neq",
-                    "label": "not equal to"
-                },
-                {
-                    "operator": "<",
-                    "operCode": "lt",
-                    "label": "less than"
-                },
-                {
-                    "operator": "<=",
-                    "operCode": "lte",
-                    "label": "less than or equal to"
-                },
-                {
-                    "operator": ">",
-                    "operCode": "gt",
-                    "label": "greater than"
-                },
-                {
-                    "operator": ">=",
-                    "operCode": "gte",
-                    "label": "greater than or equal to"
-                }
-            ],
-            "types": [
-                {
-                    "type": "string",
-                    "uiType": "textbox"
-                }, {
-                    "type": "string_with_in",
-                    "uiType": "textbox"
-                }, {
-                    "type": "string_limited",
-                    "uiType": "textbox"
-                },
-                {
-                    "type": "autocomplete",
-                    "uiType": "textbox"
-                },
-                {
-                    "type": "number",
-                    "uiType": "numeric"
-                },
-                {
-                    "type": "numericOrPercentage",
-                    "uiType": "numeric"
-                },
-                {
-                    "type": "money",
-                    "uiType": "numeric"
-                },
-                {
-                    "type": "date",
-                    "uiType": "datepicker"
-                },
-                {
-                    "type": "list",
-                    "uiType": "combobox"
-                },
-                {
-                    "type": "bool",
-                    "uiType": "checkbox"
-                },
-                {
-                    "type": "singleselect",
-                    "uiType": "combobox"
-                },
-                {
-                    "type": "singleselect_ext",
-                    "uiType": "combobox"
-                },
-                {
-                    "type": "singleselect_read_only",
-                    "uiType": "combobox"
-                }
-            ],
-            "types2operator": [
-                {
-                    "type": "number",
-                    "operator": ["=", "!=", "<", "<=", ">", ">="]
-                },
-                {
-                    "type": "numericOrPercentage",
-                    "operator": ["=", "!=", "<", "<=", ">", ">="]
-                },
-                {
-                    "type": "money",
-                    "operator": ["=", "!=", "<", "<=", ">", ">="]
-                },
-                {
-                    "type": "date",
-                    "operator": ["=", "!=", "<", "<=", ">", ">="]
-                },
-                {
-                    "type": "string",
-                    "operator": ["LIKE", "=", "!="]
-                },
-                {
-                    "type": "string_with_in",
-                    "operator": ["=", "!=", "LIKE", "IN"]
-                },
-                {
-                    "type": "string_limited",
-                    "operator": ["=", "!=", "IN"]
-                },
-                {
-                    "type": "autocomplete",
-                    "operator": ["=", "!=", "IN"]
-                },
-                {
-                    "type": "list",
-                    "operator": ["=", "!="]
-                },
-                {
-                    "type": "list",
-                    "subType": "xml",
-                    "operator": ["="]
-                },
-                {
-                    "type": "bool",
-                    "operator": ["=", "!="]
-                },
-                {
-                    "type": "singleselect",
-                    "operator": ["="]
-                },
-                {
-                    "type": "singleselect_read_only",
-                    "operator": ["="]
-                },
-                {
-                    "type": "singleselect_ext",
-                    "operator": ["=", "!="]
-                }
-            ]
-        };
 
         var allowedRoleForCreatedBy = ["GA", "FSE"];
         $scope.attributeSettings = [

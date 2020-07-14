@@ -8,24 +8,34 @@ namespace Intel.MyDeals.Entities
     public class DataFix
     {
         [DataMember]
-        public int RequestId { get; set; }
-
-        [DataMember]
-        public int ActionId { get; set; }
-
-        [DataMember]
         public string IncidentNumber { get; set; }
 
         [DataMember]
-        public string Notes { get; set; }
+        public string Message { get; set; }
 
         [DataMember]
-        public bool IsActive { get; set; }
+        public List<DataFixAttribute> DataFixAttributes { get; set; }
 
         [DataMember]
-        public bool IsApproved { get; set; }
+        public List<DataFixAction> DataFixActions { get; set; }
+    }
 
-        [DataMember]
-        public List<rule> DataToFix { get; set; }
+    public class DataFixAttribute
+    {
+        public string DataElement { get; set; }
+        public string Attribute { get; set; }
+        public string MtxValue { get; set; }
+        public string ObjectId { get; set; }
+        public string ValueMax { get; set; }
+        public string MDX { get; set; }
+        public int CustId { get; set; }
+        public string value { get; set; }
+    }
+
+    public class DataFixAction
+    {
+        public int ObjectType { get; set; }
+        public string Action { get; set; }
+        public string TargetObjectIds { get; set; }
     }
 }

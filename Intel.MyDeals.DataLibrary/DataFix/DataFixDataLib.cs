@@ -24,20 +24,16 @@ namespace Intel.MyDeals.DataLibrary
             for (int i = 1; i <= 10; i++)
                 lstRtn.Add(new DataFix()
                 {
-                    ActionId = i,
-                    DataToFix = new List<rule>(),
+                    DataFixAttributes = new List<DataFixAttribute>(),
+                    DataFixActions = new List<DataFixAction>(),
                     IncidentNumber = string.Format("Incident {0}", i),
-                    IsActive = true,
-                    IsApproved = i % 2 == 0,
-                    Notes = string.Format("Test notes for INC {0}", i),
-                    RequestId = i
+                    Message = string.Format("Test notes for INC {0}", i),
                 });
             return lstRtn;
         }
 
         public DataFix UpdateDataFix(DataFix data)
-        {
-            data.RequestId = 11;
+        {;
             return data;
         }
     }
