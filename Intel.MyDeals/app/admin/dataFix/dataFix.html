@@ -6,45 +6,40 @@
     </div>
     <div ng-if="vm.IsEditMode">
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Incident#:</label>
+            <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
             <div class="col-md-4">
                 <input class="form-control md" type="text" ng-model="vm.currentDataFix.IncidentNumber" style="width:100%">
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1">Attributes:</label>
+            <label class="control-label isRequired col-md-1">Attributes : </label>
             <div class="col-md-11">
                 <div datafix-attribute-builder attribute-settings="attributeSettings" selected-datafix-attributes="vm.currentDataFix.DataFixAttributes">
                 </div>
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1">Actions:</label>
+            <label class="control-label isRequired col-md-1">Actions : </label>
             <div class="col-md-11">
-                <span>Under construction!</span>
+                <div datafix-action-builder selected-datafix-actions="vm.currentDataFix.DataFixActions">
+                </div>
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Message:</label>
+            <label class="control-label isRequired col-md-1" autocomplete="off">Message : </label>
             <div class="col-md-6">
-                <input class="form-control md" type="text" ng-model="vm.currentDataFix.Notes" style="width:100%">
+                <input class="form-control md" type="text" ng-model="vm.currentDataFix.Message" style="width:100%">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <button class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                <button ng-click="vm.SaveFix()" class="btn btn-primary" style="margin-left: 15px">Save</button>
+                <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
             </div>
         </div>
         <div class="form-group row">
-            <label class="control-label col-md-1">Results:</label>
+            <label class="control-label col-md-1">Results : </label>
             <div class="col-md-4">
                 <span>Under construction!</span>
-            </div>
-        </div>
-        <div class="form-group modal-footer">
-            <div class="form-group row action_btns">
-                <div class="col-md-5">
-                    <button ng-click="vm.SaveFix()" class="btn btn-primary" style="margin-left: 15px">Save</button>
-                    <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
-                </div>
             </div>
         </div>
     </div>
@@ -63,6 +58,10 @@
         margin-left: 20px;
         margin-top: 10px;
     }
+
+        #data_fix .control-label {
+            text-align: right;
+        }
 
         #data_fix .toggle.btn {
             min-width: 100px;

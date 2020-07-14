@@ -1,0 +1,163 @@
+﻿<div id="dataFixActions" class="filterContainer">
+    <table>
+        <thead>
+            <tr>
+                <th style="width:75px;">&nbsp;</th>
+                <th>Object Type</th>
+                <th>Action</th>
+                <th>Target Object Ids</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataItem in ActionDataRows" class="filterRow">
+                <td>
+                    <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
+                    <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select data element'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-ng-model="dataItem.DataElement"
+                                k-value-primitive="true"
+                                k-filter="'contains'"
+                                k-auto-bind="true"
+                                k-data-source="OpDataElementDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 150px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select action'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-ng-model="dataItem.Action"
+                                k-value-primitive="true"
+                                k-auto-bind="true"
+                                k-data-source="ActionsSource"
+                                class="opUiContainer sm abField"
+                                style="width: 150px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.TargetObjectIds" placeholder="Target Object Ids">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    #dataFixActions .dataValue {
+        height: 30px;
+        font-size: 12px;
+        width:700px;
+    }
+
+    #dataFixActions table thead th {
+        text-align: center;
+        font-size: 13px;
+    }
+
+    #dataFixActions table tbody td {
+        padding-right: 2px;
+    }
+
+    #dataFixActions {
+        max-height: 250px;
+        overflow: auto;
+    }
+
+        #dataFixActions .abValue {
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+            width: 100%;
+        }
+
+    .k-animation-container ul {
+        min-width: 50px !important
+    }
+
+    .filterRow {
+        margin-bottom: 7px;
+    }
+
+        .filterRow .k-dropdown {
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+        }
+
+    .icnBtn {
+        border-radius: 4px;
+        width: 24px;
+        padding: 2px 5px;
+        margin: 2px 12px 2px 0;
+        cursor: pointer;
+    }
+
+        .icnBtn i {
+            color: #ffffff;
+        }
+
+    .icnSkyBtn {
+        background-color: #00AEEF;
+    }
+
+        .icnSkyBtn:hover {
+            background-color: #0071C5;
+        }
+
+    .icnGryBtn {
+        background-color: #bbbbbb;
+    }
+
+        .icnGryBtn:hover {
+            background-color: #cccccc;
+        }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .btn-def {
+        margin: 0 0 0 15px;
+    }
+
+    .h5-small {
+        font-size: 12px;
+        color: #444444;
+        font-weight: 200;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .curRule {
+        color: #0071C5;
+        margin-left: 10px;
+    }
+
+    .icnSky {
+        cursor: pointer;
+        color: #00AEEF;
+        margin-left: 8px;
+    }
+
+    .menu-container li a {
+        cursor: pointer;
+    }
+
+    .sm-help {
+        font-size: 11px;
+        color: #666666;
+        line-height: 1.1em;
+    }
+
+        .sm-help I {
+            color: #FFA300;
+        }
+</style>

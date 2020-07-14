@@ -9,19 +9,11 @@
 
     function DataFixController($rootScope, $timeout, dataFixService, $scope, logger, gridConstants) {
         var vm = this;
-        vm.DataFixActions = [];
         vm.DataFixes = [];
         vm.currentDataFix = {};
         vm.IsEditMode = false;
 
         vm.Init = function () {
-            dataFixService.getDataFixActions().then(function (result) {
-                vm.DataFixActions = result.data;
-                vm.dataSourceActions.read();
-            }, function (response) {
-                logger.error("Unable to get actions for data fix");
-            });
-
             dataFixService.getDataFixes().then(function (result) {
                 vm.DataFixes = result.data;
                 vm.dataSourceDataFixes.read();
@@ -32,6 +24,7 @@
 
         vm.SaveFix = function () {
             $rootScope.$broadcast("save-datafix-attribute");
+            $rootScope.$broadcast("save-datafix-action");
             $timeout(function () {
                 dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
                     vm.DataFixes.push(result.data);
@@ -45,21 +38,13 @@
         }
 
         vm.addNewFix = function () {
-            vm.currentDataFix = { DataFixAttributes: [] };
+            vm.currentDataFix = { DataFixAttributes: [], DataFixActions: [] };
             vm.IsEditMode = true;
         }
 
         vm.ok = function () {
             vm.IsEditMode = false;
         }
-
-        vm.dataSourceActions = new kendo.data.DataSource({
-            transport: {
-                read: function (e) {
-                    e.success(vm.DataFixActions);
-                }
-            }
-        });
 
         vm.dataSourceDataFixes = new kendo.data.DataSource({
             transport: {
@@ -68,16 +53,6 @@
                 }
             }
         });
-
-        vm.DataFixActionOptions = {
-            placeholder: "Select action name for data fix..",
-            dataSource: vm.dataSourceActions,
-            maxSelectedItems: 1,
-            autoBind: true,
-            dataTextField: "Text",
-            dataValueField: "Value",
-            valuePrimitive: true
-        };
 
         vm.gridOptions = {
             dataSource: vm.dataSourceDataFixes,

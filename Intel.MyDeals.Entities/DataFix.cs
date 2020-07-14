@@ -34,7 +34,7 @@ namespace Intel.MyDeals.Entities
 
     public class DataFixAction
     {
-        public int ObjectType { get; set; }
+        public string DataElement { get; set; }
         public string Action { get; set; }
         public string TargetObjectIds { get; set; }
     }

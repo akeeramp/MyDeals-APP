@@ -96,6 +96,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/ping/ping.directive.js"
                 , "~/app/core/directives/ruleAttributeBuilder/ruleAttributeBuilder.directive.js"
                 , "~/app/core/directives/datafixAttributeBuilder/datafixAttributeBuilder.directive.js"
+                , "~/app/core/directives/datafixActionBuilder/datafixActionBuilder.directive.js"
                 , "~/app/core/directives/searchResults/searchResults.directive.js"
                 , "~/app/core/directives/securityLoader/securityLoader.directive.js"
                 , "~/app/core/directives/trashcan/trashcan.directive.js"

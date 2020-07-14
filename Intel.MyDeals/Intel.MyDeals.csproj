@@ -592,6 +592,8 @@
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
+    <Content Include="app\core\directives\datafixActionBuilder\datafixActionBuilder.directive.html" />
+    <Content Include="app\core\directives\datafixActionBuilder\datafixActionBuilder.directive.js" />
     <Content Include="app\core\directives\datafixAttributeBuilder\datafixAttributeBuilder.directive.html" />
     <Content Include="app\core\directives\datafixAttributeBuilder\datafixAttributeBuilder.directive.js" />
     <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.css" />
