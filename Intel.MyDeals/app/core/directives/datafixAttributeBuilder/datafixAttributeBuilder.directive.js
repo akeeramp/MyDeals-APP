@@ -134,7 +134,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                             html += 'k-auto-bind="true" ';
                             //html += 'k-tag-mode="\'single\'" ';
                             html += 'k-value-primitive="true" ';
-                            html += 'k-ng-model="dataItem.value" ';
+                            html += 'k-ng-model="dataItem.values" ';
                             html += 'k-auto-close="false" ';
                             html += 'k-data-source="lookupDs.' + key + '" ';
                             html += 'class="opUiContainer sm" ';
