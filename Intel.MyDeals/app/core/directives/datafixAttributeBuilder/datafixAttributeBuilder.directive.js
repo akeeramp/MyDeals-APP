@@ -43,6 +43,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                 $scope.DataRows = [{
                     DataElement: "",
                     Attribute: "",
+                    RvsNumber: 0,
                     MtxValue: 0,
                     ObjectId: "",
                     ValueMax: "",
@@ -229,6 +230,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                     $scope.DataRows.splice(index + 1, 0, {
                         DataElement: "",
                         Attribute: "",
+                        RvsNumber: 0,
                         MtxValue: 0,
                         ObjectId: "",
                         ValueMax: "",
@@ -247,6 +249,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                     $scope.DataRows = [{
                         DataElement: "",
                         Attribute: "",
+                        RvsNumber: 0,
                         MtxValue: 0,
                         ObjectId: "",
                         ValueMax: "",

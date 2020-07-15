@@ -5,6 +5,7 @@
                 <th style="width:75px;">&nbsp;</th>
                 <th>Data Element</th>
                 <th>Attribute</th>
+                <th>Revision Number</th>
                 <th>Mtx Value</th>
                 <th>Object Id</th>
                 <th>Data Value</th>
@@ -50,6 +51,9 @@
                                 class="opUiContainer sm abField"
                                 style="width: 150px;"></select>
                     </span>
+                </td>
+                <td>
+                    <input kendo-numeric-text-box class="form-control md dataValue" decimals="0" format="'#'" min="0" style="width: 200px;height:20px" ng-model="dataItem.RvsNumber" >
                 </td>
                 <td>
                     <input class="form-control md dataValue" type="text" ng-model="dataItem.MtxValue" placeholder="Mtx Value" value="0">
@@ -98,6 +102,12 @@
 <style>
     #dataFixAttributes .dataValue {
         height: 30px;
+        font-size: 12px;
+        width:100%;
+    }
+
+    #dataFixAttributes .dataValueNumeric {
+        height: 20px;
         font-size: 12px;
         width:100%;
     }

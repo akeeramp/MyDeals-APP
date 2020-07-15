@@ -24,6 +24,7 @@ namespace Intel.MyDeals.Entities
     {
         public string DataElement { get; set; }
         public string Attribute { get; set; }
+        public string RvsNumber { get; set; }
         public string MtxValue { get; set; }
         public string ObjectId { get; set; }
         public string ValueMax { get; set; }
