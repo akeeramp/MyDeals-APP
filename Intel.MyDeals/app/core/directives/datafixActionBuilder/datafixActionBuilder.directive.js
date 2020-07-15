@@ -2,29 +2,29 @@
     .module('app.core')
     .directive('datafixActionBuilder', datafixActionBuilder);
 
-datafixActionBuilder.$inject = ['$compile', '$timeout', '$filter', '$localStorage', '$window', 'logger', '$linq', 'dropdownsService'];
+datafixActionBuilder.$inject = ['$compile', '$timeout', '$filter', '$localStorage', '$window', 'logger', '$linq'];
 
-function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $window, logger, $linq, dropdownsService) {
-    var vm = this;
-    vm.OpDataElements = null;
-    vm.Actions = [{ Text: "Action 1", Value: "A1" }, { Text: "Action 2", Value: "A2" }, { Text: "Action 3", Value: "A3" }];
-
-    dropdownsService.getOpDataElements().then(function (response) {
-        vm.OpDataElements = response.data;
-    }, function (response) {
-        logger.error("Unable to get op data elements.", response, response.statusText);
-    });    
-
+function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $window, logger, $linq) {    
     return {
         scope: {
-            selectedDatafixActions: '='
+            selectedDatafixActions: '=',
+            opdataElements: '=',
+            actions: '='
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/datafixActionBuilder/datafixActionBuilder.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
             $scope.root = $scope.$parent;
             $scope.ActionDataRows = $scope.selectedDatafixActions === undefined ? [] : $scope.selectedDatafixActions;
-                        
+
+            $scope.OpDataElementDataSource = new kendo.data.DataSource({
+                data: $scope.opdataElements
+            });
+
+            $scope.ActionsSource = new kendo.data.DataSource({
+                data: $scope.actions
+            });
+
             if ($scope.ActionDataRows.length === 0) {
                 $scope.ActionDataRows = [{
                     DataElement: "",
@@ -65,15 +65,7 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
 
             $scope.$on('save-datafix-action', function (event) {
                 $scope.selectedDatafixActions = $scope.ActionDataRows;
-            });
-
-            $scope.OpDataElementDataSource = new kendo.data.DataSource({
-                data: vm.OpDataElements
             });            
-
-            $scope.ActionsSource = new kendo.data.DataSource({
-                data: vm.Actions
-            });
         }],
         link: function (scope, element, attr) {
         }

@@ -3,15 +3,15 @@
         <thead>
             <tr>
                 <th style="width:75px;">&nbsp;</th>
-                <th>Data Element</th>
-                <th>Attribute</th>
-                <th>Revision Number</th>
+                <th class="isRequired">Data Element</th>
+                <th class="isRequired">Attribute</th>
+                <th class="isRequired" title="Revision Number">Rvs #</th>
                 <th>Mtx Value</th>
-                <th>Object Id</th>
-                <th>Data Value</th>
+                <th class="isRequired">Object Id</th>
+                <th class="isRequired">Data Value</th>
                 <th>Data Value Max</th>
-                <th>MDX</th>
-                <th>Customer</th>
+                <th class="isRequired">MDX</th>
+                <th class="isRequired">Customer</th>
             </tr>
         </thead>
         <tbody>
@@ -53,7 +53,7 @@
                     </span>
                 </td>
                 <td>
-                    <input kendo-numeric-text-box class="form-control md dataValue" decimals="0" format="'#'" min="0" style="width: 200px;height:20px" ng-model="dataItem.RvsNumber" >
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.RvsNumber" >
                 </td>
                 <td>
                     <input class="form-control md dataValue" type="text" ng-model="dataItem.MtxValue" placeholder="Mtx Value" value="0">
@@ -107,9 +107,8 @@
     }
 
     #dataFixAttributes .dataValueNumeric {
-        height: 20px;
-        font-size: 12px;
-        width:100%;
+        font-size: 11px;
+        width: 75px;
     }
 
     #dataFixAttributes table thead th {

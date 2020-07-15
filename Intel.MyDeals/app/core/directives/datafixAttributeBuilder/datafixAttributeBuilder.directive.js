@@ -2,30 +2,18 @@
     .module('app.core')
     .directive('datafixAttributeBuilder', datafixAttributeBuilder);
 
-datafixAttributeBuilder.$inject = ['$compile', '$timeout', '$filter', '$localStorage', '$window', 'logger', '$linq', 'dropdownsService'];
+datafixAttributeBuilder.$inject = ['$compile', '$timeout', '$filter', '$localStorage', '$window', 'logger', '$linq'];
 
-function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $window, logger, $linq, dropdownsService) {
+function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $window, logger, $linq) {
     var vm = this;
     vm.MDX = [{ Text: "Modify", Value: "M" }, { Text: "Delete", Value: "D" }, { Text: "Create", Value: "X" }];
-    vm.OpDataElements = null;
-    vm.MyCustomersInfo = null;
-
-    dropdownsService.getOpDataElements().then(function (response) {
-        vm.OpDataElements = response.data;
-    }, function (response) {
-        logger.error("Unable to get op data elements.", response, response.statusText);
-    });
-
-    dropdownsService.getCustsDropdowns(true).then(function (response) {
-        vm.MyCustomersInfo = response.data;
-    }, function (response) {
-        logger.error("Unable to get customers.", response, response.statusText);
-    });
 
     return {
         scope: {
             attributeSettings: '=',
-            selectedDatafixAttributes: '='
+            selectedDatafixAttributes: '=',
+            opdataElements: '=',
+            myCustomersInfo: '='
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/datafixAttributeBuilder/datafixAttributeBuilder.directive.html',
@@ -37,6 +25,18 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
             $scope.attributeDataSource = new kendo.data.DataSource({
                 data: $scope.attributeSettings,
                 sort: { field: "title", dir: "asc" }
+            });
+
+            $scope.OpDataElementDataSource = new kendo.data.DataSource({
+                data: $scope.opdataElements
+            });
+
+            $scope.MdxDataSource = new kendo.data.DataSource({
+                data: vm.MDX
+            });
+
+            $scope.MyCustomersInfoDataSource = new kendo.data.DataSource({
+                data: $scope.myCustomersInfo
             });
             
             if ($scope.DataRows.length === 0) {
@@ -267,18 +267,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
             $scope.$on('save-datafix-attribute', function (event) {
                 $scope.selectedDatafixAttributes = $scope.DataRows;
             });
-
-            $scope.OpDataElementDataSource = new kendo.data.DataSource({
-                data: vm.OpDataElements
-            });
-
-            $scope.MdxDataSource = new kendo.data.DataSource({
-                data: vm.MDX
-            });
-
-            $scope.MyCustomersInfoDataSource = new kendo.data.DataSource({
-                data: vm.MyCustomersInfo
-            });
+           
         }],
         link: function (scope, element, attr) {
         }

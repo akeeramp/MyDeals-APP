@@ -5,20 +5,35 @@
         .controller('DataFixController', DataFixController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
-    DataFixController.$inject = ['$rootScope', '$timeout', 'dataFixService', '$scope', 'logger', 'gridConstants'];
+    DataFixController.$inject = ['$rootScope', '$timeout', 'dataFixService', 'logger', 'gridConstants','dropdownsService'];
 
-    function DataFixController($rootScope, $timeout, dataFixService, $scope, logger, gridConstants) {
+    function DataFixController($rootScope, $timeout, dataFixService, logger, gridConstants, dropdownsService) {
         var vm = this;
         vm.DataFixes = [];
         vm.currentDataFix = {};
-        vm.IsEditMode = false;
-
+        vm.IsEditMode = false;        
+        vm.OpDataElements = [];
+        vm.MyCustomersInfo = [];
+        vm.Actions = [{ Text: "Action 1", Value: "A1" }, { Text: "Action 2", Value: "A2" }, { Text: "Action 3", Value: "A3" }];
+       
         vm.Init = function () {
             dataFixService.getDataFixes().then(function (result) {
                 vm.DataFixes = result.data;
                 vm.dataSourceDataFixes.read();
             }, function (response) {
                 logger.error("Unable to get data fixes");
+                });
+
+            dropdownsService.getOpDataElements().then(function (response) {
+                vm.OpDataElements = response.data;
+            }, function (response) {
+                logger.error("Unable to get op data elements.", response, response.statusText);
+            });
+
+            dropdownsService.getCustsDropdowns(true).then(function (response) {
+                vm.MyCustomersInfo = response.data;
+            }, function (response) {
+                logger.error("Unable to get customers.", response, response.statusText);
             });
         }
 
@@ -26,14 +41,26 @@
             $rootScope.$broadcast("save-datafix-attribute");
             $rootScope.$broadcast("save-datafix-action");
             $timeout(function () {
-                dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
-                    vm.DataFixes.push(result.data);
-                    vm.dataSourceDataFixes.read();
-                    vm.IsEditMode = false;
-                    logger.success("Data fix has been updated successfully!");
-                }, function (response) {
-                    logger.error("Unable to update data fix");
-                });
+                var requiredFields = [];
+                if (vm.currentDataFix.IncidentNumber === null || jQuery.trim(vm.currentDataFix.IncidentNumber) === "")
+                    requiredFields.push("Incident Number");
+                if (vm.currentDataFix.DataFixAttributes.filter(x => x.value === null || x.value === undefined || jQuery.trim(x.value) === "" || x.DataElement === "" || x.Attribute === "" || jQuery.trim(x.RvsNumber) === "" || jQuery.trim(x.ObjectId) === "" || x.MDX === "" || x.CustId === "").length > 0)
+                    requiredFields.push("Mandatory data in attributes section cannot be empty");
+                if (vm.currentDataFix.DataFixActions.filter(x => x.DataElement === "" || x.Action === "" || jQuery.trim(x.TargetObjectIds) === "").length > 0)
+                    requiredFields.push("Mandatory data in actions section cannot be empty");
+
+                if (requiredFields.length > 0) {
+                    kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
+                } else {
+                    dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
+                        vm.DataFixes.push(result.data);
+                        vm.dataSourceDataFixes.read();
+                        vm.IsEditMode = false;
+                        logger.success("Data fix has been updated successfully!");
+                    }, function (response) {
+                        logger.error("Unable to update data fix");
+                    });
+                }
             });
         }
 
@@ -80,7 +107,7 @@
         }
 
         var allowedRoleForCreatedBy = ["GA", "FSE"];
-        $scope.attributeSettings = [
+        vm.AttributeSettings = [
             {
                 field: "CRE_EMP_NAME",
                 title: "Created by name",

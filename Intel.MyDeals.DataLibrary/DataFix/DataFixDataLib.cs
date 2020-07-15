@@ -33,7 +33,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         public DataFix UpdateDataFix(DataFix data)
-        {;
+        {
             return data;
         }
     }

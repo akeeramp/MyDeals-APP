@@ -31,6 +31,7 @@ namespace Intel.MyDeals.Entities
         public string MDX { get; set; }
         public int CustId { get; set; }
         public string value { get; set; }
+        public ValueType valueType { get; set; }
     }
 
     public class DataFixAction

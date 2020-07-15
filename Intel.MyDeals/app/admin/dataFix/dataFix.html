@@ -7,22 +7,26 @@
     <div ng-if="vm.IsEditMode">
         <div class="form-group row">
             <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input class="form-control md" type="text" ng-model="vm.currentDataFix.IncidentNumber" style="width:100%">
             </div>
         </div>
         <div class="form-group row">
             <label class="control-label isRequired col-md-1">Attributes : </label>
             <div class="col-md-11">
-                <div datafix-attribute-builder attribute-settings="attributeSettings" selected-datafix-attributes="vm.currentDataFix.DataFixAttributes">
+                <div ng-if="vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0" 
+                     datafix-attribute-builder attribute-settings="vm.AttributeSettings" opdata-elements="vm.OpDataElements" 
+                     my-customers-info="vm.MyCustomersInfo" selected-datafix-attributes="vm.currentDataFix.DataFixAttributes">
                 </div>
+                <span ng-if="!(vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0)">Loading attributes..</span>
             </div>
         </div>
         <div class="form-group row">
             <label class="control-label isRequired col-md-1">Actions : </label>
             <div class="col-md-11">
-                <div datafix-action-builder selected-datafix-actions="vm.currentDataFix.DataFixActions">
+                <div ng-if="vm.OpDataElements.length > 0 && vm.Actions.length > 0" datafix-action-builder opdata-elements="vm.OpDataElements" actions="vm.Actions" selected-datafix-actions="vm.currentDataFix.DataFixActions">
                 </div>
+                <span ng-if="!(vm.OpDataElements.length > 0 && vm.Actions.length > 0)">Loading actions..</span>
             </div>
         </div>
         <div class="form-group row">
