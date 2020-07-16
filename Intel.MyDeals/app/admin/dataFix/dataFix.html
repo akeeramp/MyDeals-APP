@@ -1,4 +1,11 @@
-﻿<div class="form-group row" id="data_fix">
+﻿<div class="col-md-12">
+    <h2>Data Fix</h2>
+</div>
+<br />
+<div ng-show="!accessAllowed" class="col-md-12">
+    <h3 style="font-weight: bold; color: red"><i class="intelicon-alert-solid icon-lg"></i> Note: Access to this page is not allowed </h3>
+</div>
+<div ng-show="accessAllowed" class="form-group row" id="data_fix">
     <div class="form-group row" style="padding: 0 0 0 15px;">
         <div class="col-md-6" style="text-align: left;">
             <p style="color: #FC4C02">This screen allows SA users to fix the data without EDCAP approval</p>

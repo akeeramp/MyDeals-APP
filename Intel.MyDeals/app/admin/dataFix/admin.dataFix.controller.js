@@ -5,9 +5,16 @@
         .controller('DataFixController', DataFixController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
-    DataFixController.$inject = ['$rootScope', '$timeout', 'dataFixService', 'logger', 'gridConstants', 'dropdownsService'];
+    DataFixController.$inject = ['$rootScope', '$scope', '$timeout', 'dataFixService', 'logger', 'gridConstants', 'dropdownsService'];
 
-    function DataFixController($rootScope, $timeout, dataFixService, logger, gridConstants, dropdownsService) {
+    function DataFixController($rootScope, $scope, $timeout, dataFixService, logger, gridConstants, dropdownsService) {
+        $scope.accessAllowed = true;
+        if (!(window.usrRole === 'SA' || window.isDeveloper)) {
+            // Kick not valid users out of the page
+            $scope.accessAllowed = false;
+            document.location.href = "/Dashboard#/portal";
+        }
+
         var vm = this;
         vm.DataFixes = [];
         vm.currentDataFix = {};
