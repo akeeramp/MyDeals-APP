@@ -119,6 +119,23 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                new MyOpRule
+                {
+                    Title="Readonly if Deal is Soft Expired",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.EXPIRE_FLG) && de.AtrbValue != null
+                        && String.Equals(de.AtrbValue.ToString(),"1", StringComparison.OrdinalIgnoreCase)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] { AttributeCodes.EXPIRE_YCS2 }
+                        }
+                    }
+                },
                 new MyOpRule // Set to read only if the deal has been cancelled (has a tracker + stage is cancelled)
                 {
                     Title="Readonly if Cancelled",
