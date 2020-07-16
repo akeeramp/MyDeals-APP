@@ -17,12 +17,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("UpdateDataFix")]
+        [Route("UpdateDataFix/{isExecute}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public DataFix UpdateDataFix(DataFix data)
+        public DataFix UpdateDataFix(DataFix data, bool isExecute)
         {
-            return SafeExecutor(() => _dataFixLib.UpdateDataFix(data), "Unable to save data fix");
+            return SafeExecutor(() => _dataFixLib.UpdateDataFix(data, isExecute), "Unable to save data fix");
         }
 
         [Route("GetDataFixes")]

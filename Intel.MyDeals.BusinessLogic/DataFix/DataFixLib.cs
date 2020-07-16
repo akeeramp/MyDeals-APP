@@ -24,9 +24,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataFixDataLib.GetDataFixes();
         }
 
-        public DataFix UpdateDataFix(DataFix data)
+        public DataFix UpdateDataFix(DataFix data, bool isExecute)
         {
-            return _dataFixDataLib.UpdateDataFix(data);
+            return _dataFixDataLib.UpdateDataFix(data, isExecute);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Intel.MyDeals.DataLibrary
             return new List<DataFix>();
         }
 
-        public DataFix UpdateDataFix(DataFix data)
+        public DataFix UpdateDataFix(DataFix data, bool isExecute)
         {
             data.CreatedBy = OpUserStack.MyOpUserToken.Usr.Email;
             data.CreatedOn = DateTime.Now;

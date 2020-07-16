@@ -50,6 +50,14 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                     MDX: "",
                     CustId: ""
                 }];
+            } else {
+                $timeout(function () {
+                    var els = $(".abValue");
+                    for (var e = 0; e < els.length; e++) {
+                        var scope = angular.element(els[e]).scope();
+                        $scope.drawValueControl($(els[e]), scope);
+                    }
+                }, 0);                
             }
 
             $scope.changeField = function (e) {

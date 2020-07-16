@@ -9,6 +9,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<DataFix> GetDataFixes();
 
-        DataFix UpdateDataFix(DataFix data);
+        DataFix UpdateDataFix(DataFix data, bool isExecute);
     }
 }

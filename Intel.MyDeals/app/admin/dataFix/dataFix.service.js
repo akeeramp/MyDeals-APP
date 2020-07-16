@@ -16,8 +16,8 @@
 
         return service;
 
-        function updateDataFix(data) {
-            return dataService.post(apiBaseUrl + 'UpdateDataFix', data);
+        function updateDataFix(data, isExecute) {
+            return dataService.post(apiBaseUrl + 'UpdateDataFix/' + isExecute, data);
         }
 
         function getDataFixActions() {

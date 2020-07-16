@@ -59,13 +59,16 @@
                 if (requiredFields.length > 0) {
                     kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
                 } else {
-                    dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
+                    dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
                         if (vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber).length > 0)
                             vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber)[0] = result.data;
-                        else                        
+                        else
                             vm.DataFixes.push(result.data);
                         vm.dataSourceDataFixes.read();
-                        vm.IsEditMode = false;
+                        if (isExecute) {
+                            kendo.alert("Executed and Data has been fixed!");
+                        } else
+                            vm.IsEditMode = false;
                         logger.success("Data fix has been updated successfully!");
                     }, function (response) {
                         logger.error("Unable to update data fix");
@@ -93,21 +96,23 @@
                 read: function (e) {
                     e.success(vm.DataFixes);
                 }
-            }
+            },
+            pageSize: 25
         });
 
         vm.gridOptions = {
             dataSource: vm.dataSourceDataFixes,
-            filterable: gridConstants.filterable,
+            filterable: true,
             sortable: true,
             selectable: true,
             resizable: true,
-            groupable: false,
+            reorderable: true,
+            scrollable: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes
+                pageSizes: [25, 100, 500] //gridConstants.pageSizes
             },
             columns: [
                 {
