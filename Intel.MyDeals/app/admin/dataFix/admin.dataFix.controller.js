@@ -14,7 +14,7 @@
         vm.IsEditMode = false;
         vm.OpDataElements = [];
         vm.MyCustomersInfo = [];
-        vm.Actions = [{ Text: "Action 1", Value: "A1" }, { Text: "Action 2", Value: "A2" }, { Text: "Action 3", Value: "A3" }];
+        vm.Actions = [];
 
         vm.Init = function () {
             dataFixService.getDataFixes().then(function (result) {
@@ -22,6 +22,12 @@
                 vm.dataSourceDataFixes.read();
             }, function (response) {
                 logger.error("Unable to get data fixes");
+            });
+
+            dataFixService.getDataFixActions().then(function (result) {
+                vm.Actions = result.data;
+            }, function (response) {
+                logger.error("Unable to get actions");
             });
 
             dropdownsService.getOpDataElements().then(function (response) {
@@ -37,24 +43,27 @@
             });
         }
 
-        vm.SaveFix = function () {
+        vm.SaveFix = function (isExecute) {
             $rootScope.$broadcast("save-datafix-attribute");
             $rootScope.$broadcast("save-datafix-action");
             $timeout(function () {
                 var requiredFields = [];
                 if (vm.currentDataFix.IncidentNumber === null || jQuery.trim(vm.currentDataFix.IncidentNumber) === "")
                     requiredFields.push("Incident Number");
-                if (vm.currentDataFix.DataFixAttributes.filter(x => ((x.value === undefined || x.value == null || jQuery.trim(x.value) === "") && (x.values === undefined || x.values === null || x.values.length === 0))
+                if (isExecute && vm.currentDataFix.DataFixAttributes.filter(x => ((x.value === undefined || x.value == null || jQuery.trim(x.value) === "") && (x.values === undefined || x.values === null || x.values.length === 0))
                     || x.DataElement === "" || x.Attribute === "" || jQuery.trim(x.RvsNumber) === "" || jQuery.trim(x.ObjectId) === "" || x.MDX === "" || x.CustId === "").length > 0)
                     requiredFields.push("Mandatory data in attributes section cannot be empty");
-                if (vm.currentDataFix.DataFixActions.filter(x => x.DataElement === "" || x.Action === "" || jQuery.trim(x.TargetObjectIds) === "").length > 0)
+                if (isExecute && vm.currentDataFix.DataFixActions.filter(x => x.DataElement === "" || x.Action === "" || jQuery.trim(x.TargetObjectIds) === "").length > 0)
                     requiredFields.push("Mandatory data in actions section cannot be empty");
 
                 if (requiredFields.length > 0) {
                     kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
                 } else {
                     dataFixService.updateDataFix(vm.currentDataFix).then(function (result) {
-                        vm.DataFixes.push(result.data);
+                        if (vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber).length > 0)
+                            vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber)[0] = result.data;
+                        else                        
+                            vm.DataFixes.push(result.data);
                         vm.dataSourceDataFixes.read();
                         vm.IsEditMode = false;
                         logger.success("Data fix has been updated successfully!");
@@ -63,6 +72,11 @@
                     });
                 }
             });
+        }
+
+        vm.EditDataFix = function (incidentNumber) {
+            vm.currentDataFix = vm.DataFixes.find(x => x.IncidentNumber == incidentNumber);
+            vm.IsEditMode = true;
         }
 
         vm.addNewFix = function () {
@@ -97,12 +111,24 @@
             },
             columns: [
                 {
+                    width: "250px",
                     field: "IncidentNumber",
-                    title: "Incident Number"
+                    title: "Incident Number",
+                    template: "<div class='incNbr' ng-click='vm.EditDataFix(#= IncidentNumber #)'>#=IncidentNumber#</div>",
                 },
                 {
                     field: "Message",
                     title: "Message"
+                },
+                {
+                    width: "250px",
+                    field: "CreatedBy",
+                    title: "Created By"
+                },
+                {
+                    width: "250px",
+                    field: "CreatedOn",
+                    title: "Created On"
                 }
             ]
         }

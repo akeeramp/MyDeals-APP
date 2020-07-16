@@ -5,6 +5,7 @@ using Intel.Opaque.DBAccess;
 using Intel.Opaque;
 using System.Collections.Generic;
 using Intel.MyDeals.Entities;
+using System;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -20,20 +21,13 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<DataFix> GetDataFixes()
         {
-            List<DataFix> lstRtn = new List<DataFix>();
-            for (int i = 1; i <= 10; i++)
-                lstRtn.Add(new DataFix()
-                {
-                    DataFixAttributes = new List<DataFixAttribute>(),
-                    DataFixActions = new List<DataFixAction>(),
-                    IncidentNumber = string.Format("Incident {0}", i),
-                    Message = string.Format("Test notes for INC {0}", i),
-                });
-            return lstRtn;
+            return new List<DataFix>();
         }
 
         public DataFix UpdateDataFix(DataFix data)
         {
+            data.CreatedBy = OpUserStack.MyOpUserToken.Usr.Email;
+            data.CreatedOn = DateTime.Now;
             return data;
         }
     }

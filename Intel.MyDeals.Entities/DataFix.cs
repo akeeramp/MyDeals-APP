@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -18,6 +19,12 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public List<DataFixAction> DataFixActions { get; set; }
+
+        [DataMember]
+        public string CreatedBy { get; set; }
+
+        [DataMember]
+        public DateTime CreatedOn { get; set; }
     }
 
     public class DataFixAttribute

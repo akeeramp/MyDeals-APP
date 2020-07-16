@@ -35,8 +35,8 @@
                 <input class="form-control md" type="text" ng-model="vm.currentDataFix.Message" style="width:100%">
             </div>
             <div class="col-md-5">
-                <button class="btn btn-primary" style="margin-left: 15px">Execute</button>
-                <button ng-click="vm.SaveFix()" class="btn btn-primary" style="margin-left: 15px">Save</button>
+                <button ng-click="vm.SaveFix(true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                <button ng-click="vm.SaveFix(false)" class="btn btn-primary" style="margin-left: 15px">Save</button>
                 <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
             </div>
         </div>
@@ -63,9 +63,14 @@
         margin-top: 10px;
     }
 
-        #data_fix .control-label {
-            text-align: right;
+        #data_fix .incNbr {
+            cursor: pointer;
+            color: cornflowerblue;
         }
+    
+    #data_fix .control-label {
+        text-align: right;
+    }
 
         #data_fix .toggle.btn {
             min-width: 100px;
