@@ -5,9 +5,9 @@
         .controller('DataFixController', DataFixController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
-    DataFixController.$inject = ['$rootScope', '$scope', '$timeout', 'dataFixService', 'logger', 'gridConstants', 'dropdownsService'];
+    DataFixController.$inject = ['$rootScope', '$scope', '$timeout', 'dataFixService', 'logger', 'gridConstants', 'dropdownsService', 'customerService'];
 
-    function DataFixController($rootScope, $scope, $timeout, dataFixService, logger, gridConstants, dropdownsService) {
+    function DataFixController($rootScope, $scope, $timeout, dataFixService, logger, gridConstants, dropdownsService, customerService) {
         $scope.accessAllowed = true;
         if (!(window.usrRole === 'SA' || window.isDeveloper)) {
             // Kick not valid users out of the page
@@ -43,7 +43,7 @@
                 logger.error("Unable to get op data elements.", response, response.statusText);
             });
 
-            dropdownsService.getCustsDropdowns(true).then(function (response) {
+            customerService.getMyCustomersNameInfo().then(function (response) {
                 vm.MyCustomersInfo = response.data;
             }, function (response) {
                 logger.error("Unable to get customers.", response, response.statusText);
@@ -58,25 +58,34 @@
                 if (vm.currentDataFix.IncidentNumber === null || jQuery.trim(vm.currentDataFix.IncidentNumber) === "")
                     requiredFields.push("Incident Number");
                 if (isExecute && vm.currentDataFix.DataFixAttributes.filter(x => ((x.value === undefined || x.value == null || jQuery.trim(x.value) === "") && (x.values === undefined || x.values === null || x.values.length === 0))
-                    || x.DataElement === "" || x.Attribute === "" || jQuery.trim(x.RvsNumber) === "" || jQuery.trim(x.ObjectId) === "" || x.MDX === "" || x.CustId === "").length > 0)
+                    || x.DataElement === "" || x.Attribute === "" || jQuery.trim(x.RvsNumber) === "" || jQuery.trim(x.ObjectId) === "" || jQuery.trim(x.ObjectId) === "0" || x.MDX === "" || x.CustId === "").length > 0)
                     requiredFields.push("Mandatory data in attributes section cannot be empty");
                 if (isExecute && vm.currentDataFix.DataFixActions.filter(x => x.DataElement === "" || x.Action === "" || jQuery.trim(x.TargetObjectIds) === "").length > 0)
                     requiredFields.push("Mandatory data in actions section cannot be empty");
+
+                var regExpForObjectIds = /[0-9,]+$/;
+                if (vm.currentDataFix.DataFixActions.filter(x => jQuery.trim(x.TargetObjectIds) !== "" && !regExpForObjectIds.exec(jQuery.trim(x.TargetObjectIds))).length > 0)
+                    requiredFields.push("Target object IDs in actions has illegal characters!");
 
                 if (requiredFields.length > 0) {
                     kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
                 } else {
                     dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
-                        if (vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber).length > 0)
-                            vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber)[0] = result.data;
-                        else
-                            vm.DataFixes.push(result.data);
-                        vm.dataSourceDataFixes.read();
-                        if (isExecute) {
-                            kendo.alert("Executed and Data has been fixed!");
-                        } else
-                            vm.IsEditMode = false;
-                        logger.success("Data fix has been updated successfully!");
+                        if (isExecute && result.data.DataFixActions.filter(x => x.TargetObjectIds === "").length > 0) {
+                            kendo.alert("Target Object Ids cannot be empty in actions!");
+                        } else {
+                            if (vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber).length > 0)
+                                vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber)[0] = result.data;
+                            else
+                                vm.DataFixes.push(result.data);
+
+                            vm.dataSourceDataFixes.read();
+                            if (isExecute) {
+                                kendo.alert("Executed and Data has been fixed!");
+                            } else
+                                vm.IsEditMode = false;
+                            logger.success("Data fix has been updated successfully!");
+                        }                        
                     }, function (response) {
                         logger.error("Unable to update data fix");
                     });

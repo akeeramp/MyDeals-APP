@@ -53,16 +53,16 @@
                     </span>
                 </td>
                 <td>
-                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.RvsNumber" >
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.RvsNumber">
                 </td>
                 <td>
-                    <input class="form-control md dataValue" type="text" ng-model="dataItem.MtxValue" placeholder="Mtx Value" value="0">
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.MtxValue">
                 </td>
                 <td>
-                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ObjectId" placeholder="Object Id">
+                    <input kendo-numeric-text-box class="dataValueNumericFull" decimals="0" format="'#'" min="0" ng-model="dataItem.ObjectId">
                 </td>
                 <td>
-                    <div class="fl abValue">Select attribute!</div>
+                    <div class="fl abValue">Select an attribute!</div>
                 </td>
                 <td>
                     <input class="form-control md dataValue" type="text" ng-model="dataItem.ValueMax" placeholder="Data Value Max">
@@ -84,8 +84,8 @@
                 <td>
                     <select kendo-drop-down-list
                             k-placeholder="'Select customer'"
-                            k-data-text-field="'dropdownName'"
-                            k-data-value-field="'dropdownID'"
+                            k-data-text-field="'CUST_NM'"
+                            k-data-value-field="'CUST_SID'"
                             k-ng-model="dataItem.CustId"
                             k-value-primitive="true"
                             k-filter="'contains'"
@@ -103,12 +103,17 @@
     #dataFixAttributes .dataValue {
         height: 30px;
         font-size: 12px;
-        width:100%;
+        width: 100%;
     }
 
     #dataFixAttributes .dataValueNumeric {
         font-size: 11px;
         width: 75px;
+    }
+
+    #dataFixAttributes .dataValueNumericFull {
+        font-size: 11px;
+        width: 150px;
     }
 
     #dataFixAttributes table thead th {

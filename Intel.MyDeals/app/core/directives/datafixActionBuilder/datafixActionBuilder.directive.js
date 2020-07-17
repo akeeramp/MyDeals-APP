@@ -22,7 +22,8 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
             });
 
             $scope.ActionsSource = new kendo.data.DataSource({
-                data: $scope.actions
+                data: $scope.actions,
+                sort: { field: "title", dir: "asc" }
             });
 
             if ($scope.ActionDataRows.length === 0) {

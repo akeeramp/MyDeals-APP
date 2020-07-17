@@ -33,8 +33,8 @@ namespace Intel.MyDeals.DataLibrary
             return (from result in OpDataElementTypeRepository.OpDetCollection.Items
                     select new DropDowns
                     {
-                        Text = result.Description,
-                        Value = result.Alias
+                        Text = result.Alias,
+                        Value = result.Id.ToString()
                     }).OrderBy(x => x.Text).ToList();
         }
 
