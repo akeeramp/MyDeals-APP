@@ -766,8 +766,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 140,
                 Label = "Overarching Maximum Dollar",
                 Format = "{0:c}",
-                UiType = "NumericTextBox",
-                DataType = "number",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem
@@ -1209,6 +1207,19 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 ExcelTemplate = "#=gridUtils.exportDimTrkrControlWrapper(data)#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types + Dimensioned by Prod Bucket
+            {
+                Id = 24,
+                AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Auto-approved By",
+                Width = 130,
+                Template = "#=gridUtils.uiControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -2432,9 +2443,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Total Dollar Amount",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-                DataType = "number",
                 Width = 100,
-                Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT', 'number')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -2445,9 +2456,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Adjustment Ecap Unit",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-                DataType = "number",
                 Width = 100,
-                Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT', 'number')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -2476,8 +2487,6 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                UiType = "NumericTextBox",
-                DataType = "number",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
@@ -2539,7 +2548,6 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_AMT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types
@@ -2552,7 +2560,6 @@ namespace Intel.MyDeals.DataLibrary
                 Format = "{0:d}",
                 IsFilterable = true,
                 IsSortable = true,
-                //UiType = "IntegerTextBox",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_AMT', 'currency')#"
             });
             items.Add(new UiTemplateContainerItem  // WIP All Types

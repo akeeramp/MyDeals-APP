@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/2/2020 6:11:50 PM
+File Updated: 7/22/2020 3:26:03 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180, MYDEALS
 */
@@ -100,6 +100,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string AR_SETTLEMENT_LVL = "AR_SETTLEMENT_LVL";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 72
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string AUTO_APPROVE_RULE_INFO = "AUTO_APPROVE_RULE_INFO";
 
 		///<summary>
 		/// DIM_SID: 30

@@ -1681,6 +1681,13 @@ namespace Intel.MyDeals.BusinessRules
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
+
+            // Finally, clear the Auto_approval information if this was a Tender Deal
+            if (r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER")
+            {
+                r.Dc.SetAtrb(AttributeCodes.AUTO_APPROVE_RULE_INFO, "");
+            }
+
             //throw new Exception("Fracking hell...");
         }
 

@@ -712,13 +712,200 @@ namespace Intel.MyDeals.BusinessLogic
             return response;
         }
 
+        private string ProcessCreationRequest(TenderTransferRootObject workRecordDataFields, JmsDataLib jmsDataLib, Guid batchId, ref int dealId)
+        {
+            int custId;
+            int folioId = -1;
+
+            string executionResponse = "";
+
+            // Walk through deal records now
+            for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+            {
+                string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+                string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
+                string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
+
+                // TODO: Do a record stability check first and if no error messages, continue, catch things like ECAP/GEO/ETC
+
+                executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+                custId = jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
+
+                List<TendersSFIDCheck> sfToMydlIds = jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                if (sfToMydlIds == null)
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(100, "DB Lookup Error", "Failed, SF ID lookup Error"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue; // we had error on lookup, skip to next to process
+                }
+
+                folioId = sfToMydlIds[0].Cntrct_SID;
+                dealId = sfToMydlIds[0].Wip_SID;
+
+                List<int> passedFolioIds = new List<int>() { folioId };
+                MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
+
+                //List<int> passedFolioIds2 = new List<int>() { 512632 };
+                //MyDealsData myDealsData2 = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds2, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+                if (custId == 0) // Need to have a working customer for this request and failed, skip!
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(101, "Invalid Customer", "Unable to find the customer with CIMId (" + custCimId + ")"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue;
+                }
+
+                // Step 2 - Deal with a contract header
+                if (folioId == 0) // This is a new contract header
+                {
+                    folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields, i);
+                    workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
+
+                    if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(201, "Folio Error", "Failed to create the Tender Folio for this request"));
+                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                        continue;
+                    }
+                }
+                else // Potential Folio update route
+                {
+                    workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
+                }
+
+                // Step 2a - Deal with a deal structure now
+                if (dealId == 0) // This is a new deal entry
+                {
+                    dealId = ProcessSalesForceDealInformation(dealId, folioId, salesForceIdDeal, custId, myDealsData, workRecordDataFields, i);
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
+                    if (dealId < 0)  // Needed to create a new PS to WIP Deal for this request and failed, error..
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(301, "Deal Error", "Failed to create the Tender Deal"));
+                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                        continue;
+                    }
+                }
+                else // Potential Deals update route 
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
+                }
+
+                // Should have no bail outs, so post final messages here
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+            } // End of quote lines loop
+
+            return executionResponse;
+        }
+
+        private void UpdateElementValue(MyDealsData myDealsData, OpDataElementType objType, string atrbCode, string atrbUpdateValue)
+        {
+            OpDataElement updateAtrbDe = myDealsData[objType].AllDataElements.FirstOrDefault(d => d.AtrbCd == atrbCode);
+            if (updateAtrbDe != null) updateAtrbDe.AtrbValue = atrbUpdateValue;
+        }
+
+        private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, JmsDataLib jmsDataLib, Guid batchId, ref int dealId)
+        {
+            int custId;
+            int folioId = -1;
+
+            string executionResponse = "";
+
+            for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+            {
+                string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+                string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
+
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
+
+                executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+                folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+                dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId);
+
+                List<int> passedFolioIds = new List<int>() { dealId };
+                MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+                if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
+                {
+                    //is error case - no deal found
+                    int p = 0;
+                }
+                // Relocate this code later
+                // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
+                // Update End Customer
+                string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+
+                string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.QLTR_PROJECT, projectName);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.QLTR_PROJECT, projectName);
+
+                string dealStartDate = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedStartDate;
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.START_DT, dealStartDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.START_DT, dealStartDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.ON_ADD_DT, dealStartDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.REBATE_BILLING_START, dealStartDate);
+
+                DateTime dealStartDateCheck = DateTime.ParseExact(dealStartDate, "yyyy-MM-dd", null);
+                if (dealStartDateCheck < DateTime.Now) UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.BACK_DATE_RSN, "Contract Negotiation Delay");
+
+                string dealEndDate = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate;
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.END_DT, dealEndDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.END_DT, dealEndDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.REBATE_BILLING_END, dealEndDate);
+
+                string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
+                // Will need to add dimensions down the road
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.ECAP_PRICE, dealEndDate);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.ECAP_PRICE, dealEndDate);
+
+                // Volume Updates
+                string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
+                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.VOLUME, quantity);
+                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.VOLUME, quantity);
+
+                // Do the mapping of Folio items, PS for stage if needed, and PTR/WIP for deal
+                OpDataElement wipCustId = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID);
+                custId = Int32.Parse(wipCustId.AtrbValue.ToString());
+
+                // Using this to allow us to dive right into rules engines
+                SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
+                {
+                    CustId = custId,
+                    ContractId = folioId,
+                    DeleteAllPTR = false
+                });
+
+                bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
+
+                if (!hasValidationErrors) // If no errors, save it all
+                {
+                    // Using the straight up MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+                    ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
+                    {
+                        CustId = custId,
+                        ContractId = folioId
+                    };
+
+                    myDealsData.EnsureBatchIDs();
+                    MyDealsData saveResponse = myDealsData.Save(saveContractToken);
+                    //OpDataCollectorFlattenedDictList blahme = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                    //MyDealsData saveResponse = _dataCollectorLib.SavePackets(blahme, new SavePacket(saveContractToken));
+
+                    //Approvals are done with this:
+                    //public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
+                    //actnPs is like Approve: Requested
+                }
+
+                int j = 0;
+            }
+
+            return executionResponse;
+        }
+
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            // Processing steps
-            // 1. Read the data from DB, update status to working
-            // 2. tear it apart and make our save objects - need to do cust/prod lookups
-            // 3. Save the objects
-
             string executionResponse = "";
 
             // Fetch data (START WORK)
@@ -729,91 +916,28 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (tenderStagedWorkRecords.Count == 0) executionResponse += "There are no records to process<br>";
 
-            foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)
+            foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)  // Grab all of the items that need to be processed
             {
-                int custId;
-                int folioId = -1;
-                int dealId = -1;
-
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
-                // Walk through deal records now
-                for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+                string requestType = workRecordDataFields.header.action;
+                Guid batchId = workRecord.BtchId;
+                int dealId = -1;
+
+                switch (requestType)
                 {
-                    // TODO: Ask Mahesh if he is going to use the same code body for Create/Update/StageChange, if so, place mode checks first with C/U following same path
-                    string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
-                    string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-                    string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
-
-                    // TODO: Do a record stability check first and if no error messages, continue, catch things like ECAP/GEO/ETC
-
-                    executionResponse += "Processing [" + workRecord.BtchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
-                    custId = jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
-
-                    List<TendersSFIDCheck> sfToMydlIds = jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
-                    if (sfToMydlIds == null)
-                    {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(100, "DB Lookup Error", "Failed, ID lookup Error"));
-                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                        continue; // we had error on lookup, skip to next to process
-                    }
-
-                    folioId = sfToMydlIds[0].Cntrct_SID;
-                    dealId = sfToMydlIds[0].Wip_SID;
-
-                    List<int> passedFolioIds = new List<int>() { folioId };
-                    MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
-//List<int> passedFolioIds2 = new List<int>() { 512632 };
-//MyDealsData myDealsData2 = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds2, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
-
-                    if (custId == 0) // Need to have a working customer for this request and failed, skip!
-                    {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(101, "Invalid Customer", "Unable to find the customer with CIMId"));
-                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                        continue; 
-                    }
-
-                    // Step 2 - Deal with a contract header
-                    if (folioId == 0) // This is a new contract header
-                    {
-                        folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields, i);
-                        workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
-
-                        if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
-                        {
-                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(201, "Folio Error", "Failed to create the Tender Folio for this request"));
-                            executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                            continue; 
-                        }
-                    }
-                    else // Potential Folio update route
-                    {
-                        workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
-                    }
-
-                    // Step 2a - Deal with a deal structure now
-                    if (dealId == 0) // This is a new deal entry
-                    {
-                        dealId = ProcessSalesForceDealInformation(dealId, folioId, salesForceIdDeal, custId, myDealsData, workRecordDataFields, i);
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
-                        if (dealId < 0)  // Needed to create a new PS to WIP Deal for this request and failed, error..
-                        {
-                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(301, "Deal Error", "Failed to create the Tender Deal"));
-                            executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                            continue;
-                        }
-                    }
-                    else // Potential Deals update route 
-                    {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
-                    }
-
-                    // Should have no bail outs, so post final messages here
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                } // End of quote lines loop
-
+                    case "Create": // Tenders Create New Deals request
+                        executionResponse += ProcessCreationRequest(workRecordDataFields, jmsDataLib, batchId, ref dealId);
+                        break;
+                    case "Update":
+                        executionResponse += ProcessUpdateRequest(workRecordDataFields, jmsDataLib, batchId, ref dealId);
+                        break;
+                    case "UpdateStatus":
+                        int y = 0;
+                        break;
+                    default:
+                        break;
+                }
 
                 // Process the response message now
                 workRecordDataFields.header.source_system = "MyDeal";

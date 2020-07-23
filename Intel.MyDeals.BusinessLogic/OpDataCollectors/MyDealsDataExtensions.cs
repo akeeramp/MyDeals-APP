@@ -738,7 +738,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataElementTypeMapping elMapping = null;
 
-            // look at each PTR seperately
+            // look at each PTR separately
             foreach (OpDataCollector dcPtr in allPtrs)
             {
                 ProdMappings items = null;
