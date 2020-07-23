@@ -203,6 +203,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
+        if (root.isTenderContract && ptTemplate.model.fields["PAYOUT_BASED_ON"] !== undefined) {
+            ptTemplate.model.fields.PAYOUT_BASED_ON.editable = false;
+        }
+
         // Remove tender only columns for non tender deals.
         if (!root.isTenderContract) {
             root.tenderOnlyColumns.forEach(function (x) {

@@ -212,7 +212,10 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.REBATE_TYPE }
+                            Target = new[] { AttributeCodes.REBATE_TYPE,
+                                             AttributeCodes.PAYOUT_BASED_ON  
+
+                            }
                         }
                     }
                 },
