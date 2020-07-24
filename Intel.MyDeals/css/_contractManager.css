@@ -544,27 +544,30 @@
     }
 
     .isHybridIdent, .isHybridIdent_Complete {
-        font-size: 8px;
+        font-size: 10px;
         font-weight: bold;
         color: blue; 
-        position: absolute; 
-        margin-left: -13px; 
+        position: relative; 
+        margin-left: 6.5px;
+        margin-top: -19px;
     }
 
     .isHybridIdent_Finalizing, .isHybridIdent_Valid, .isHybridIdent_Dirty, .isHybridIdent_0, .isHybridIdent_ {
-        font-size: 8px;
+        font-size: 10px;
         font-weight: bold;
         color: white; 
-        position: absolute; 
-        margin-left: -13px; 
+        position: relative; 
+        margin-left: 6.5px;
+        margin-top: -19px;
     }
  
     .isHybridIdentHeader, .isHybridIdentHeader_Complete, .isHybridIdentHeader_Finalizing, .isHybridIdentHeader_Valid, .isHybridIdentHeader_Dirty, .isHybridIdentHeader_0, .isHybridIdentHeader_ {
         font-size: 11px;
         font-weight: bold;
         color: blue; 
-        position: absolute; 
-        margin-left: -17px; 
+        position: relative; 
+        margin-left: 9px;
+        margin-top: -25px;
     }
 
     /*Navigation Styles*/

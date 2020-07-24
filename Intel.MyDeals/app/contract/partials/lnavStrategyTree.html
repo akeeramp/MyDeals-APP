@@ -15,7 +15,7 @@
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ (ps.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet' }}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete' && ps.PASSED_VALIDATION !== 'Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
-                    <span ng-show="ps.IS_HYBRID_PRC_STRAT === '1'" class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</span>
+                    <div ng-show="ps.IS_HYBRID_PRC_STRAT === '1'" class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
                 </div>
                 <div ng-click="isCollapsed = !isCollapsed" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>
