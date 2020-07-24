@@ -331,6 +331,20 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Readonly if Salesforce TENDER",
+                    ActionRule = MyDcActions.SalesForceSetReadOnly,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
+                    // Looking for SFID didn't restrict like I had hoped.  Look into this down the road.
+                    //AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.SALESFORCE_ID) && de.AtrbValue != null 
+                    //    && de.AtrbValue.ToString() != "").Any()
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null
+                        && String.Equals(de.AtrbValue.ToString(),"TENDER", StringComparison.OrdinalIgnoreCase)).Any(),
+                },
+
+                new MyOpRule
+                {
                     Title="Readonly if not TENDER",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },

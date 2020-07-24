@@ -2077,6 +2077,26 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void SalesForceSetReadOnly(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId == "") return;
+
+            List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
+
+            foreach (IOpDataElement de in r.Dc.DataElements)
+            {
+                if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
+                {
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
         public static void VolTierMdfVolumeRequired(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
