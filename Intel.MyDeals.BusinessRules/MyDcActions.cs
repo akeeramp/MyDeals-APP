@@ -2081,6 +2081,10 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
+            
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId == "") return;
 
             List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
 
