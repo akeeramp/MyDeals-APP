@@ -41,6 +41,7 @@
             resizable: true,
             columns: [
                   { field: "HIER_VAL_NM", title: "Product" },
+                  { field: "Level4", title: "Deal Product Name", width: '20%', template: " #= kendo.toString(Level4) #" },
                   { field: "CAP_START", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "CUST_MBR_SID1", title: "SOLD TO"},
