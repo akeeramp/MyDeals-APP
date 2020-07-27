@@ -931,6 +931,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         group.rules[r].show = false;
                                         hideIfAll.push(group.rules[r]);
                                     }
+                                }
                             }
                         }
                     }
