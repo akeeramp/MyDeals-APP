@@ -68,7 +68,8 @@
                         DFLT_AR_SETL_LVL: { editable: true, nullable: true },
                         DFLT_TNDR_AR_SETL_LVL: { editable: true, nullable: true },
                         DFLT_LOOKBACK_PERD: { editable: true, nullable: true },
-                        DFLT_CUST_RPT_GEO: { editable: true, nullable: true }
+                        DFLT_CUST_RPT_GEO: { editable: true, nullable: true },
+                        CUST_CIM_ID: { editable: true, nullable: true }
                     }
                 }
             }
@@ -317,10 +318,16 @@
                     field: "DFLT_LOOKBACK_PERD",
                     headerTemplate: 'Consumption Lookback Period (Months) <span title="Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
                     //title: "Consumption Lookback Period (Months)",
-                    width: "220px",
+                    width: "200px",
                     filterable: { multi: true, search: true },
                     editor: vm.LookBackPeriodEditor,
                     template: "<div>#if(DFLT_LOOKBACK_PERD === -1){## ##} else {##:DFLT_LOOKBACK_PERD##}#</div>"
+                },
+                {
+                    field: "CUST_CIM_ID",
+                    title: "CIM ID",
+                    width: "220px",
+                    filterable: { multi: true, search: true }
                 }
             ]
         }

@@ -35,6 +35,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DFLT_TNDR_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_TNDR_AR_SETL_LVL");
                     int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
+                    int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
 
                     while (rdr.Read())
                     {
@@ -47,7 +48,8 @@ namespace Intel.MyDeals.DataLibrary
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL),
                             DFLT_TNDR_AR_SETL_LVL = (IDX_DFLT_TNDR_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_TNDR_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_TNDR_AR_SETL_LVL),
                             DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
-                            DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO)
+                            DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
+                            CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
                         });
                     }
 
@@ -83,7 +85,8 @@ namespace Intel.MyDeals.DataLibrary
                     in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                     in_dflt_perd_prfl = data.DFLT_PERD_PRFL == null ? string.Empty : data.DFLT_PERD_PRFL,
                     in_dflt_cust_rpt_geo = data.DFLT_CUST_RPT_GEO,
-                    in_dflt_lookback_perd = data.DFLT_LOOKBACK_PERD
+                    in_dflt_lookback_perd = data.DFLT_LOOKBACK_PERD,
+                    in_cust_cim_id = data.CUST_CIM_ID
                 }))
                 {
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
@@ -94,6 +97,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DFLT_TNDR_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_TNDR_AR_SETL_LVL");
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
                     int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
+                    int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
 
                     while (rdr.Read())
                     {
@@ -106,7 +110,8 @@ namespace Intel.MyDeals.DataLibrary
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL),
                             DFLT_TNDR_AR_SETL_LVL = (IDX_DFLT_TNDR_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_TNDR_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_TNDR_AR_SETL_LVL),
                             DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
-                            DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD)
+                            DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
+                            CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
                         });
                     }
 
