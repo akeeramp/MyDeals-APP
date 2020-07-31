@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 
 namespace Intel.MyDeals.VistexService
@@ -126,6 +127,8 @@ namespace Intel.MyDeals.VistexService
 
             VistexCommonLogging.Log("Done.");
 
+            MergeDealLogs(_logFile);
+
             if (!myArgs.pauseOnEnd) return SuccessReturn;
 
             PressAnyKeyToContinue();
@@ -187,6 +190,56 @@ namespace Intel.MyDeals.VistexService
                     VistexCommonLogging.WriteToLog("Invalid Operation...");                    
                     break;
             }
+        }
+
+        public static void MergeDealLogs(string _logFile)
+        {
+            string LogDirectory = Path.Combine(VistexCommonLogging.StartupPath, "Logs");
+            string separator = "------------------------------------------------------------------------------";
+            string HourlyFileName = "VistexDebugLog_Deal" + "_" + DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.Hour + ".txt";
+            string HourlyFile = Path.Combine(LogDirectory, HourlyFileName);
+            if (File.Exists(HourlyFile))
+            {
+                string content = File.ReadAllText(_logFile);
+                File.AppendAllText(HourlyFile, separator + Environment.NewLine);
+                File.AppendAllText(HourlyFile, content);
+            }
+            else
+            {
+                using (var output = File.Create(HourlyFile))
+                {
+                    using (var input = File.OpenRead(_logFile))
+                    {
+                        input.CopyTo(output);
+                    }
+                }
+
+            }
+
+            if (File.Exists(_logFile))
+            {
+                File.Delete(_logFile);
+            }
+
+            var LogDirectoryinfo = Directory.GetFiles(LogDirectory).Select(f => new FileInfo(f)).Where(f => f.LastAccessTime < DateTime.Now.AddDays(-7) && f.Name.Contains("Deal")).ToList();
+
+            if (LogDirectoryinfo.Count > 0)
+            {
+                string LogArchive = Path.Combine(VistexCommonLogging.StartupPath, "Logs", "LOG_ARCHIEVE");
+                if (!Directory.Exists(LogArchive))
+                {
+                    Directory.CreateDirectory(LogArchive);
+                }
+                string archiveFilepath = LogArchive + @"\VistexDebugLog_Deal_File.txt";
+                foreach (var file in LogDirectoryinfo)
+                {
+                    string con = File.ReadAllText(file.FullName);
+                    File.AppendAllText(archiveFilepath, con);
+                    File.AppendAllText(archiveFilepath, separator + Environment.NewLine);
+                    File.Move(file.FullName, Path.Combine(LogArchive, file.Name));
+                }
+            }
+
         }
 
 
