@@ -9,6 +9,7 @@ using Intel.MyDeals.DataLibrary;
 using System.Threading;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -138,6 +139,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> psGoingActive = new List<int>();
             List<int> psGoingPending = new List<int>();
             List<int> psStageChanges = new List<int>();
+            List<int> salesForceTenderReturns = new List<int>();
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
             List<int> auditableDealIds = new List<int>();
             List<NotificationLog> notifications = new List<NotificationLog>();
@@ -156,8 +158,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PASSED_VALIDATION.ATRB_SID,
                 Attributes.IN_REDEAL.ATRB_SID,
                 Attributes.HAS_L1.ATRB_SID,
-                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
-                Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incomplete PCT/MCTs
+                Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incomplete PCT/MCTs
                 Attributes.SYS_COMMENTS.ATRB_SID
             };
 
@@ -201,7 +203,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 bool hasL1 = dc.GetDataElementValue(AttributeCodes.HAS_L1) != "0";
 
-                // concurency check
+                // concurrency check
                 if (stageIn != stageInDb)
                 {
                     opMsgQueue.Messages.Add(new OpMsg
@@ -214,7 +216,7 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-                // concurency check for meet comp and cost test values..
+                // concurrency check for meet comp and cost test values..
                 if (stageIn == WorkFlowStages.Submitted && (submittedFailTests.Contains(meetCompInDB) || submittedFailTests.Contains(costTestInDB)) && actnPs.ContainsKey("Approve") && actnPs["Approve"].Any(i => i.DC_ID == dc.DcID))
                 {
                     opMsgQueue.Messages.Add(new OpMsg
@@ -285,9 +287,9 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
 
-                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Passed all checks, set the PS WFSTG
+                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Passed all checks, set the PS_WF_STG
 
-                //// Put this in to test if we can remove the strat stage change message for tender deals.  Creates an update error post save because UI
+                //// Put this in to test if we can remove the strategy stage change message for tender deals.  Creates an update error post save because UI
                 //// relies upon the stage changed messages to capture the fact that is also needs to force UI update.  This is a non-starter for removing that message.
                 ////var cntrctIsTender = OpDataElementType.CNTRCT.GetByIDs(new List<int> { dc.DcParentID }, new List<OpDataElementType> { OpDataElementType.CNTRCT }, new List<int> { Attributes.IS_TENDER.ATRB_SID });
                 ////int stratIsTender = cntrctIsTender[OpDataElementType.CNTRCT].AllDataElements.FirstOrDefault().AtrbValue.ToString() == "1" ? 1 : 0;
@@ -372,6 +374,8 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.START_DT.ATRB_SID,
                     Attributes.LAST_REDEAL_DT.ATRB_SID,
                     Attributes.LAST_TRKR_START_DT_CHK.ATRB_SID,
+                    Attributes.SALESFORCE_ID.ATRB_SID,
+                    Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID,
                     Attributes.OBJ_PATH_HASH.ATRB_SID
                 };
 
@@ -474,7 +478,7 @@ namespace Intel.MyDeals.BusinessLogic
                                     }
                                     de.SetAtrbValue(WorkFlowStages.Offer);
 
-                                    // For tender deals Sumbitted to offer notification logged at deal level
+                                    // For tender deals Submitted to offer notification logged at deal level
                                     AddNotificationLog(notifications, contractToken.ContractId, de.DcID, OpDataElementType.WIP_DEAL, NotificationEvents.TenderSubmittedToOffer);
                                 }
                             }
@@ -494,6 +498,9 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            salesForceTenderReturns.AddRange(myDealsData[OpDataElementType.WIP_DEAL].AllDataElements
+                .Where(d => d.AtrbCd == AttributeCodes.SALESFORCE_ID && d.AtrbValue.ToString() != "").Select(d => d.DcID));
+
             myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
             myDealsData[OpDataElementType.PRC_ST].GroupID = -101; // Whatever the real ID of this object is
 
@@ -503,7 +510,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
-            //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
             myDealsData[OpDataElementType.PRC_ST].AddAuditActions(auditableDealIds);
 
             if (dealIds.Any() || pendingDealIds.Any() || tenderWonDealsIds.Any() || stageChangesDealIds.Any())
@@ -532,7 +538,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (contractToken.BulkTenderUpdate)
             {
-                //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permissable _actions
+                //if this is from the tender dashboard, we need to further customize the return message with the newly updated stage and new permisable _actions
                 List<int> ps_ids = new List<int>();
 
                 //we need to gather the pricing strategy ids here so that we can also retrieve the corresponding tender wip deals
@@ -555,7 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         if (om.KeyIdentifier.ToString() == prc_st_data[i][AttributeCodes.DC_ID].ToString())
                         {
-                            //IDs of datacollector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
+                            //IDs of data collector and opMsg align, so we want to add the item's _actions which will be used by the UI to set the updated dropdown options
                             //ASSUMPTION: Here we assume that as per design we will only ever have one WIP deal for each PS - and that we retrieve them all in the correct order
                             om.ExtraDetails = wip_data[i];
                         }
@@ -575,6 +581,66 @@ namespace Intel.MyDeals.BusinessLogic
                 notificationThread.Start();
             }
 
+            if (!salesForceTenderReturns.Any()) return opMsgQueue;
+            // Otherwise, these were SalesForce Tenders, process IQR updates and send
+            try
+            {
+                var sendStageToIqr = new TenderTransferRootObject
+                {
+                    header = new TenderTransferRootObject.Header(),
+                    recordDetails = new TenderTransferRootObject.RecordDetails
+                    {
+                        quote = new TenderTransferRootObject.RecordDetails.Quote
+                        {
+                            quoteLine =
+                                new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>()
+                        }
+                    }
+                };
+                sendStageToIqr.header.source_system = "MyDeal";
+                sendStageToIqr.header.target_system = "Tender";
+                sendStageToIqr.header.action = "UpdateStatus";
+                int lastWipId = -100;
+
+                foreach (int wipDealId in salesForceTenderReturns)
+                {
+                    string dealBreadcrumbPathJson = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+                    dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJson);
+                    int dealParentPsId = int.Parse(dealBreadcrumbPath.PS.ToString());
+
+                    string newStage = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft
+                        ? myDealsData[OpDataElementType.PRC_ST].Data[dealParentPsId].GetDataElementValue(AttributeCodes.WF_STG_CD)
+                        : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                    string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+                    var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
+                    {
+                        DealRFQId = wipDealId.ToString(),
+                        DealRFQStatus = newStage,
+                        Id = wipSfId
+                    };
+                    sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
+
+                    lastWipId = wipDealId;
+                }
+
+                string jsonData = JsonConvert.SerializeObject(sendStageToIqr);
+
+                JmsDataLib jmsDataLib = new JmsDataLib();
+
+                Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", new List<int>() { lastWipId }, jsonData);
+
+                if (saveSuccessful != Guid.Empty)
+                {
+                    if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
+                        jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
+                }
+            }
+            catch
+            {
+                // Something failed in IRQ response send, Do not throw UI exception and Do nothing in this case
+            }
+
             return opMsgQueue;
         }
 
@@ -582,20 +648,24 @@ namespace Intel.MyDeals.BusinessLogic
         public void SetDealDcMessages(MyDealsData myDealsData, OpDataElement dealDe, string specificStage)
         {
             List<string> tenderStages = new List<string> { WorkFlowStages.Offer, WorkFlowStages.Won, WorkFlowStages.Lost };
-            OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault(d => d.DcID == dealDe.DcID);
-            string dealBreadcrumbPathJSON = dealDc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
-            if (!string.IsNullOrEmpty(dealBreadcrumbPathJSON))
+            List<string> salesForceUpdateStages = new List<string> { WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Won };
+            OpDataCollector dealDc = myDealsData[OpDataElementType.WIP_DEAL].Data[dealDe.DcID];
+            string sfDealTag = dealDc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+            string dealBreadcrumbPathJson = dealDc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+            if (!string.IsNullOrEmpty(dealBreadcrumbPathJson))
             {
-                // Dynamic makes the JSON an mapable object, otherwise need to parse it via dealBreadcrumbPath["PS"].ToString()
-                dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJSON);
-                int dealParentPSId = Int32.Parse(dealBreadcrumbPath.PS.ToString());
-                if (dealParentPSId != 0) // We got back a PS ID, get stage data from there
+                // Dynamic makes the JSON an map-able object, otherwise need to parse it via dealBreadcrumbPath["PS"].ToString()
+                dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJson);
+                int dealParentPsId = int.Parse(dealBreadcrumbPath.PS.ToString());
+                if (dealParentPsId != 0) // We got back a PS ID, get stage data from there
                 {
-                    OpDataElement psWfStgDe = myDealsData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault(d => d.DcID == dealParentPSId && d.AtrbCd == AttributeCodes.WF_STG_CD);
+                    IOpDataElement psWfStgDe = myDealsData[OpDataElementType.PRC_ST].Data[dealParentPsId].GetDataElement(AttributeCodes.WF_STG_CD); 
                     // If this is a tender deal - take the tender WIP stage, else take the PS stage
                     string fromStage = tenderStages.Contains(dealDe.OrigAtrbValue.ToString()) ? dealDe.OrigAtrbValue.ToString() : psWfStgDe.OrigAtrbValue.ToString();
                     string destStage = string.IsNullOrEmpty(specificStage) ? psWfStgDe.AtrbValue.ToString() : specificStage;
                     if (psWfStgDe != null) dealDc.AddTimelineComment($"Deal moved from {fromStage} to {destStage}.");
+                    // Check if it is a DA making a change and update the salesforce auto approved by tag
+                    if (sfDealTag != "" && fromStage == WorkFlowStages.Submitted && salesForceUpdateStages.Contains(destStage)) dealDc.AddSalesForceApprover();
                 }
             }
         }

@@ -49,6 +49,11 @@
         <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
+        
+        <!-- SalesForce icon -->
+        <div class='fl md-icon' ng-if="isSalesForceDeal">
+            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal" ></i>
+        </div>
 
         <!-- Cancel/Rollback/Delete icon -->
         <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->

@@ -12,6 +12,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isCommentEnabled: '<?',
             isFileAttachmentEnabled: '<?',
             isHistoryEnabled: '<?',
+            isSalesForceDeal: '@isSalesForceDeal',
             isQuoteLetterEnabled: '<?',
             isDeleteEnabled: '<?',
             isSplitEnabled: '<?',
@@ -28,11 +29,19 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
                 $scope.dataItem = $scope.dataItem.items[0];
             }
+
             if (!$scope.isEditable || $scope.isEditable === "false" || $scope.isEditable === false || $scope.dataItem.PS_WF_STG_CD === "Cancelled") {
                 $scope.editable = (1 === 2);
             }
             else {
                 $scope.editable = (1 === 1);
+            }
+
+            if ($scope.dataItem.SALESFORCE_ID === undefined || $scope.dataItem.SALESFORCE_ID === "") {
+                $scope.isSalesForceDeal = false;
+            }
+            else {
+                $scope.isSalesForceDeal = true;
             }
 
             if (!!$scope.isEditable) $scope.isEditable = false;

@@ -714,9 +714,6 @@ namespace Intel.MyDeals.BusinessLogic
 
         private string ProcessCreationRequest(TenderTransferRootObject workRecordDataFields, JmsDataLib jmsDataLib, Guid batchId, ref int dealId)
         {
-            int custId;
-            int folioId = -1;
-
             string executionResponse = "";
 
             // Walk through deal records now
@@ -730,17 +727,17 @@ namespace Intel.MyDeals.BusinessLogic
                 // TODO: Do a record stability check first and if no error messages, continue, catch things like ECAP/GEO/ETC
 
                 executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
-                custId = jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
+                int custId = jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
 
                 List<TendersSFIDCheck> sfToMydlIds = jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
                 if (sfToMydlIds == null)
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(100, "DB Lookup Error", "Failed, SF ID lookup Error"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
                     continue; // we had error on lookup, skip to next to process
                 }
 
-                folioId = sfToMydlIds[0].Cntrct_SID;
+                int folioId = sfToMydlIds[0].Cntrct_SID;
                 dealId = sfToMydlIds[0].Wip_SID;
 
                 List<int> passedFolioIds = new List<int>() { folioId };
@@ -798,17 +795,20 @@ namespace Intel.MyDeals.BusinessLogic
             return executionResponse;
         }
 
-        private void UpdateElementValue(MyDealsData myDealsData, OpDataElementType objType, string atrbCode, string atrbUpdateValue)
+        private void TagSaveActionsAndBatches(MyDealsData myDealsData)
         {
-            OpDataElement updateAtrbDe = myDealsData[objType].AllDataElements.FirstOrDefault(d => d.AtrbCd == atrbCode);
-            if (updateAtrbDe != null) updateAtrbDe.AtrbValue = atrbUpdateValue;
+            foreach (OpDataElementType objKey in myDealsData.Keys)
+            {
+                if (myDealsData[objKey].GetChanges().AllDataElements.Any())
+                {
+                    myDealsData[objKey].AddSaveActions();
+                }
+            }
+            myDealsData.EnsureBatchIDs();
         }
 
         private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, JmsDataLib jmsDataLib, Guid batchId, ref int dealId)
         {
-            int custId;
-            int folioId = -1;
-
             string executionResponse = "";
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
@@ -818,8 +818,8 @@ namespace Intel.MyDeals.BusinessLogic
 
                 workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
 
-                executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
-                folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+                executionResponse += "Processing update for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+                int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
                 dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId);
 
                 List<int> passedFolioIds = new List<int>() { dealId };
@@ -827,47 +827,58 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
                 {
-                    //is error case - no deal found
-                    int p = 0;
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(302, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue; // we had error on lookup, skip to next to process
                 }
+
+                int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
                 // Relocate this code later
                 // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
+
+                myDealsData[OpDataElementType.PRC_ST].Data[ptrId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+                myDealsData[OpDataElementType.PRC_TBL].Data[ptrId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+
                 // Update End Customer
                 string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
 
                 string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.QLTR_PROJECT, projectName);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.QLTR_PROJECT, projectName);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
 
                 string dealStartDate = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedStartDate;
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.START_DT, dealStartDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.START_DT, dealStartDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.ON_ADD_DT, dealStartDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.REBATE_BILLING_START, dealStartDate);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ON_ADD_DT, dealStartDate);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_START, dealStartDate);
 
-                DateTime dealStartDateCheck = DateTime.ParseExact(dealStartDate, "yyyy-MM-dd", null);
-                if (dealStartDateCheck < DateTime.Now) UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.BACK_DATE_RSN, "Contract Negotiation Delay");
+                if (DateTime.ParseExact(dealStartDate, "yyyy-MM-dd", null) < DateTime.Now) // If start date is in past
+                {
+                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.BACK_DATE_RSN, "Contract Negotiation Delay");
+                }
 
                 string dealEndDate = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate;
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.END_DT, dealEndDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.END_DT, dealEndDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.REBATE_BILLING_END, dealEndDate);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_END, dealEndDate);
 
                 string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
                 // Will need to add dimensions down the road
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.ECAP_PRICE, dealEndDate);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.ECAP_PRICE, dealEndDate);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
 
                 // Volume Updates
                 string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
-                UpdateElementValue(myDealsData, OpDataElementType.PRC_TBL_ROW, AttributeCodes.VOLUME, quantity);
-                UpdateElementValue(myDealsData, OpDataElementType.WIP_DEAL, AttributeCodes.VOLUME, quantity);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
 
+                // End updating fields, start the save process
                 // Do the mapping of Folio items, PS for stage if needed, and PTR/WIP for deal
-                OpDataElement wipCustId = myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.CUST_MBR_SID);
-                custId = Int32.Parse(wipCustId.AtrbValue.ToString());
+                int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
                 // Using this to allow us to dive right into rules engines
                 SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
@@ -879,26 +890,153 @@ namespace Intel.MyDeals.BusinessLogic
 
                 bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
 
-                if (!hasValidationErrors) // If no errors, save it all
+                if (!hasValidationErrors) // If validation errors, log and skip to next
                 {
-                    // Using the straight up MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
-                    ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
-                    {
-                        CustId = custId,
-                        ContractId = folioId
-                    };
-
-                    myDealsData.EnsureBatchIDs();
-                    MyDealsData saveResponse = myDealsData.Save(saveContractToken);
-                    //OpDataCollectorFlattenedDictList blahme = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
-                    //MyDealsData saveResponse = _dataCollectorLib.SavePackets(blahme, new SavePacket(saveContractToken));
-
-                    //Approvals are done with this:
-                    //public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
-                    //actnPs is like Approve: Requested
+                    // TODO: walk through all responses and gather validation messages
+                    string validErrors = "";
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(303, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue;
                 }
 
-                int j = 0;
+                // No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+                ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
+                {
+                    CustId = custId,
+                    ContractId = folioId
+                };
+
+                TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
+                MyDealsData saveResponse = myDealsData.Save(saveContractToken);
+
+                if (!saveResponse.Keys.Any())
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(305, "Deal Stage Error", "Save call failed at DB"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue;
+                }
+
+                //gather return fields and post back to json record (things like stage and approved by fields)
+
+
+                executionResponse += "Deal " + dealId + " - Save completed<br>";
+            }
+
+            return executionResponse;
+        }
+
+        private string ProcessStageUpdateRequest(TenderTransferRootObject workRecordDataFields, JmsDataLib jmsDataLib, Guid batchId, ref int dealId)
+        {
+            string executionResponse = "";
+
+            for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+            {
+                string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+                string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
+
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
+
+                executionResponse += "Processing stage change for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+                int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+                dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId);
+
+                // Grab the PS and Wip deal objects, this is a stage change and we need both of those levels to execute it
+                List<int> passedDealIds = new List<int>() { dealId };
+                MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedDealIds, new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+                // Safety check for PS and WIP deal collectors, if none, then problem
+                if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any() || !myDealsData[OpDataElementType.WIP_DEAL].Data.ContainsKey(dealId))
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(302, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue; // we had error on lookup, skip to next to process
+                }
+
+                //GetContract the packet data and place it on the right collector
+                // Three stages to expect from TENDERS, Submitted, Won, and Lost, so check stage first and move accordingly. 
+                string destinationStage = workRecordDataFields.recordDetails.quote.quoteLine[i].Status;
+                int strategyId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
+                var currentPsWfStg = myDealsData[OpDataElementType.PRC_ST].Data[strategyId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+                switch (destinationStage)
+                {
+                    case "Submitted": // Tenders Create New Deals request
+                        if (currentPsWfStg == WorkFlowStages.Requested)
+                        {
+                            myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Submitted);
+                        }
+                        // Place any stage to cancel here if IRQ decides they want it
+                        else
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(304, "Deal Stage Error", "Stage change to " + destinationStage +  " failed, current deal stage is " + currentPsWfStg));
+                            executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                            continue;
+                        }
+                        //myDealsData[OpDataElementType.PRC_ST].AddSaveActions(); // Add the save action because it is PS level change and you didn't bail out
+                        break;
+                    case "Won":
+                    case "Lost":
+                        if (currentWipWfStg == WorkFlowStages.Offer)
+                        {
+                            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD,
+                                destinationStage == WorkFlowStages.Won ? WorkFlowStages.Won : WorkFlowStages.Lost);
+                        }
+                        // Place lost to offer here as else if IRQ decides they want it
+                        else
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(304, "Deal Stage Error", "Stage change to " + destinationStage + " failed, current deal stage is " + currentWipWfStg));
+                            executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                            continue;
+                        }
+                        //myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions(); // Add the save action because it is WIP level change and you didn't bail out
+                        break;
+                }
+
+                int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+
+                // Using this to allow us to dive right into rules engines
+                SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
+                {
+                    CustId = custId,
+                    ContractId = folioId,
+                    DeleteAllPTR = false
+                });
+
+                bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
+
+                if (hasValidationErrors) // If validation errors, log and skip to next
+                {
+                    // TODO: walk through all responses and gather validation messages
+                    string validErrors = "";
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(303, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue; 
+                }
+                
+                // No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+                ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Stage Change")
+                {
+                    CustId = custId,
+                    ContractId = folioId
+                };
+
+                TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
+                MyDealsData saveResponse = myDealsData.Save(saveContractToken);
+
+                if (!saveResponse.Keys.Any())
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(305, "Deal Stage Error", "Save call failed at DB"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                    continue;
+                }
+
+                // If we want to reflect data to object, walk through return sets and save to workRecordDataFields.recordDetails.quote.quoteLine[i] fields - if (saveResponse.ContainsKey(OpDataElementType.WIP_DEAL))
+                // In this case, I am just blindly setting the response stage since the save completed
+
+                workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQStatus = destinationStage;
+
+                executionResponse += "Deal " + dealId + " - Stage Update completed<br>";
             }
 
             return executionResponse;
@@ -933,7 +1071,7 @@ namespace Intel.MyDeals.BusinessLogic
                         executionResponse += ProcessUpdateRequest(workRecordDataFields, jmsDataLib, batchId, ref dealId);
                         break;
                     case "UpdateStatus":
-                        int y = 0;
+                        executionResponse += ProcessStageUpdateRequest(workRecordDataFields, jmsDataLib, batchId, ref dealId);
                         break;
                     default:
                         break;
@@ -942,12 +1080,11 @@ namespace Intel.MyDeals.BusinessLogic
                 // Process the response message now
                 workRecordDataFields.header.source_system = "MyDeal";
                 workRecordDataFields.header.target_system = "Tender";
-                workRecordDataFields.header.action = "Update";
+                workRecordDataFields.header.action = requestType;
 
                 string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
                 List<int> deadIdList = new List<int>() { dealId };
-                Guid saveSuccessful =
-                    jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
+                Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
 
                 if (saveSuccessful != Guid.Empty
                 ) // Then we can close out the processing record and go for an immediate send back
@@ -959,11 +1096,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                 bool saveSuccessfulReturnToTenders = jmsDataLib.PublishBackToSfTenders(jsonData);
 
-                if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
-                {
-                    jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
-                    executionResponse += "Response object successfully returned<br><br>";
-                }
+                if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
+                jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
+                executionResponse += "Response object successfully returned<br><br>";
                 //executionResponse += jsonData + "<br>";
             }
 

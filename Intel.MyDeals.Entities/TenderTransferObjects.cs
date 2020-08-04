@@ -237,6 +237,7 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedEndDate { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string DealRFQId { get; set; }
+                    public string ApprovedByInfo { get; set; }
                     [JsonProperty("ErrorMessages")]
                     public List<ErrorMessages> errorMessages { get; set; }
                     [JsonProperty("Product")]
