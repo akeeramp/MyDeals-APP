@@ -17,7 +17,10 @@ namespace Intel.MyDeals.Entities
         public int ATRB_SID { get; set; }
 
         [DataMember]
-        public string UPD_VAL { get; set; } 
+        public string UPD_VAL { get; set; }
+
+        [DataMember]
+        public Boolean SEND_VSTX_FLG { get; set; }
     }
 
     public class DealMassUpdateResults

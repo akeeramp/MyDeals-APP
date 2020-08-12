@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="col-md-11 row"> 
+            <div class="col-md-11 row">
                 <div op-control-flat
                      ng-model="MassUpdateData"
                      op-cd="'UPD_VAL_MULTISELECT'"
@@ -75,7 +75,26 @@
                      op-is-form="true"
                      op-ui-mode="'HORIZONTAL'"></div>
             </div>
+           
+            <div class="row">
+                <div class="col-md-3 row dateRangeLabel" style="left:11px;">
+                    <b>Update Vistex Staging Table.*</b>
+                </div>
+                <div class="col-md-2 row" style="left:7px;">
+                    <div class="row mt-5"></div>
+                    <toggle ng-model="vm.Send_Vstx_Flg.IsEnable"
+                            size="btn-sm"
+                            ng-click="vm.toggleType(vm.Send_Vstx_Flg.IsEnable)">
+                    </toggle>
+                </div>
+                <div class="col-md-9 row ">
+                    <p style=" position:absolute; left:20px;">* When set to “Off”, updates will not be added to the Vistex staging table. Use the "Push Deal to Vistex" screen once all updates are completed.</p>
+                </div>
 
+            </div>
+
+            <div class="row mt-5"></div>
+            <div class="row mt-md-2"></div>
             <div class="col-md-12">
                 <div class="col-md-2 font-weight-bold ">
                 </div>
@@ -85,7 +104,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
         <div class="col-md-6" ng-if="ShowResults == true">
             <div class="row">
                 <a style="text-decoration:underline"><b>Results:</b></a>
@@ -98,4 +119,6 @@
         </div>
     </div>
 </div>
+
+
 
