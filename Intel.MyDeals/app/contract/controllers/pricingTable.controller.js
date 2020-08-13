@@ -491,12 +491,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function anyPtrDirtyValidation() {
+        var validServerType = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
+            function (x) {
+                return x._behaviors.isError.SERVER_DEAL_TYPE === true;
+            }).ToArray();
+
         var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
                 function (x) {
                     return x.PASSED_VALIDATION === "Dirty";
                 }).ToArray();
 
-        return dirtyItems.length > 0;
+        return dirtyItems.length > validServerType.length;
     }
 
     function getFormatedGeos(geos) {

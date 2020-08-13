@@ -22,7 +22,7 @@
             <div class="row breadCrumbWrapper" ng-if="!vm.isMultipleProduct">
                 <ul class="productpath breadcrumb">
                     <li>Product(s) found for: <a role="button" class="prdAnchor" ng-click="vm.selectPath(0)"> {{ vm.productName }}</a></li>
-                    <li ng-repeat="p in vm.selectedPathParts | unique:'name'" >
+                    <li ng-repeat="p in vm.selectedPathParts | unique:'name'">
                         <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                     </li>
                 </ul>
@@ -37,7 +37,7 @@
                 </div>
                 <div ng-if="vm.showSearchResults">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px" ></div>
+                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px"></div>
                     </div>
                 </div>
             </div>
@@ -102,10 +102,12 @@
         background-color: rgba(190, 163, 163, 0.12);
         margin-bottom: 10px;
     }
-    .suggestionClose{
-        color:yellow !important;
-        padding:0px !important;
+
+    .suggestionClose {
+        color: yellow !important;
+        padding: 0px !important;
     }
+
     .k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
         background-color: transparent;
         background: #00aeef;
@@ -291,6 +293,11 @@
         height: calc(85vh - 400px) !important;
         overflow: auto;
     }
+
+    #prodGrid > .k-auto-scrollable {
+        min-height: 235px;
+    }
+
 
     .err-Search {
         color: #FF6E77;

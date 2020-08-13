@@ -361,7 +361,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 var fVal = $scope.getFileValue(dataItem);
 
                 //Forces datasource web API call
-                $scope.attachmentsDataSource.read();
+                //$scope.attachmentsDataSource.read();
                 if (fVal === "HasFile" || fVal === "AddFile") {
                     $scope.openAttachments();
                 }
@@ -421,7 +421,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     kendo.ui.progress($("#attachmentsGrid"), true);
                 },
                 requestEnd: function (e) {
-                    var view = e.response;
+                    var view = e.sender._data.length > 0 ? e.sender._data : e.response;
 
                     $scope.attachmentCount = (view === null || view === undefined) ? 0 : view.length;
                     console.log($scope.attachmentCount);

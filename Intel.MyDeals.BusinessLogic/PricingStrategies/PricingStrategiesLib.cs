@@ -669,6 +669,9 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (OpDataCollectorFlattenedItem item in rtn)
                 {
                     int dcid = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                    var hasTrackers = item[AttributeCodes.HAS_TRACKER];
+
+                    if (hasTrackers.ToString() != "1") continue; // DE84892 - Offer and Lost will not have a tracker and will fail without this check
                     var trackers = item[AttributeCodes.TRKR_NBR];
                     if (!dictTrkrs.ContainsKey(dcid)) dictTrkrs.Add(dcid, trackers);
                 }

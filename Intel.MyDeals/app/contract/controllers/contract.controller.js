@@ -2865,6 +2865,8 @@
                     $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
 
                     var anyWarnings = false;
+                    var totalWarnings = 0
+                    var totalserverWarnings = 0;
 
                     pc.mark("Constructing returnset");
                     if (!!data.PRC_TBL_ROW) {
@@ -2874,7 +2876,14 @@
                                 // check for pivots
                                 data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             }
-                            if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
+                            if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) {
+                                anyWarnings = true;
+                                totalWarnings++;
+                            }
+                            if (data.PRC_TBL_ROW[i]._behaviors !== undefined && data.PRC_TBL_ROW[i]._behaviors.isError.SERVER_DEAL_TYPE) {
+                                totalserverWarnings++;
+                            }
+
                         }
 
                         $scope.updateResults(data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW); ////////////
@@ -2969,9 +2978,14 @@
 
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', data);
-                        $timeout(function () {
-                            $scope.setBusy("", "");
-                        }, 2000);
+                        if (toState == "contract.manager.strategy.wip" && toParams != undefined && totalWarnings == totalserverWarnings) {
+                            $state.go(toState, toParams, { reload: true });
+                        }
+                        else {
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                        }
                     }
 
                     if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {

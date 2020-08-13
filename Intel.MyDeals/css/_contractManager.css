@@ -154,8 +154,8 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
-     #secHeader {
-        height: 68px;
+    #secHeader {
+        /*height: 68px;*/
         margin-top: -68px;
         font-size: 14px;
         padding: 0px 16px 3px 0;

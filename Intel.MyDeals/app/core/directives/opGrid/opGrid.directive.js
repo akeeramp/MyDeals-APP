@@ -921,14 +921,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 // init all rules
                 if (!!$scope.opOptions.default) {
-                    for (g = 0; g < $scope.opOptions.default.groups.length; g++) {
-                        group = $scope.opOptions.default.groups[g];
-                        if (!!group.rules) {
-                            for (r = 0; r < group.rules.length; r++) {
-                                if (group.rules[r].logical === "HideIfAll") {
-                                    group.rules[r].name = group.name;
-                                    group.rules[r].show = false;
-                                    hideIfAll.push(group.rules[r]);
+                    if (!!$scope.opOptions.default.groups) {
+                        for (g = 0; g < $scope.opOptions.default.groups.length; g++) {
+                            group = $scope.opOptions.default.groups[g];
+                            if (!!group.rules) {
+                                for (r = 0; r < group.rules.length; r++) {
+                                    if (group.rules[r].logical === "HideIfAll") {
+                                        group.rules[r].name = group.name;
+                                        group.rules[r].show = false;
+                                        hideIfAll.push(group.rules[r]);
+                                    }
                                 }
                             }
                         }
