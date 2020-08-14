@@ -9,7 +9,7 @@ using System.Web.Http;
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/Integration")]
-    public class IntegrationController : ApiController
+    public class IntegrationController : BaseApiController
     {
         private readonly IIntegrationLib _integrationLib;
 
@@ -55,18 +55,44 @@ namespace Intel.MyDeals.Controllers.API
             return saveSuccessful != Guid.Empty ? jsonData : null;
         }
 
-        //[Route("ExecuteSalesForceTenderData")]
-        //Can't be here since it relies on Contract Controller parts to execute the saves
 
-        //[HttpPost]
-        //[Route("SaveVistexResponseData")]
-        //public bool SaveVistexResponseData(VistexResponseMsg jsonDataPacket)
-        //{
-        //    Boolean saveSuccessful = _integrationLib.SaveVistexResponseData(jsonDataPacket);
+        #region TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
 
-        //    return saveSuccessful;
-        //}
+        [Authorize]
+        [Route("ExecuteSalesForceTenderData")]
+        [HttpGet]
+        public string ExecuteSalesForceTenderData()
+        {
+            // Path to catch all unprocessed items
+            Guid workId = Guid.Empty;
+            return SafeExecutor(() => _integrationLib.ExecuteSalesForceTenderData(workId)
+                , "Unable to process Salesforce Tender deals"
+            );
+        }
 
+        [Authorize]
+        [Route("ExecuteSalesForceTenderData/{workId}/")]
+        [HttpGet]
+        public string ExecuteSalesForceTenderData(Guid workId)
+        {
+            // Path to kick off any ad-hoc needed runs via admin page
+            return SafeExecutor(() => _integrationLib.ExecuteSalesForceTenderData(workId)
+                , "Unable to process Salesforce Tender deals"
+            );
+        }
+
+        [Authorize]
+        [Route("ReturnSalesForceTenderResults")]
+        [HttpGet]
+        public string ReturnSalesForceTenderResults()
+        {
+            // Path to catch all unprocessed items
+            return SafeExecutor(() => _integrationLib.ReturnSalesForceTenderResults()
+                , "Unable to process Salesforce Tender Return results"
+            );
+        }
+
+        #endregion
 
     }
 }
