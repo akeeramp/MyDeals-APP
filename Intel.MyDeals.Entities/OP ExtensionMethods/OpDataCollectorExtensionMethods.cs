@@ -223,6 +223,33 @@ namespace Intel.MyDeals.Entities
             }
         }
 
+        public static void AddSalesForceApprover(this OpDataCollector dc)
+        {
+            if (dc == null) return;
+
+            IOpDataElement deSalesforceApprovedBy = (IOpDataElement)dc.GetAtrb(AttributeCodes.AUTO_APPROVE_RULE_INFO);
+            if (deSalesforceApprovedBy == null)
+            {
+                dc.DataElements.Add(new OpDataElement
+                {
+                    DcID = dc.DcID,
+                    DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
+                    DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
+                    DcParentID = dc.DcParentID,
+                    AtrbID = Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID,
+                    AtrbValue = OpUserStack.MyOpUserToken.Usr.WWID,
+                    OrigAtrbValue = String.Empty,
+                    PrevAtrbValue = String.Empty,
+                    AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
+                    State = OpDataElementState.Modified
+                });
+            }
+            else if (String.IsNullOrEmpty(deSalesforceApprovedBy.AtrbValue.ToString()) || deSalesforceApprovedBy.AtrbValue.ToString() == deSalesforceApprovedBy.OrigAtrbValue.ToString())
+            {
+                deSalesforceApprovedBy.AtrbValue = OpUserStack.MyOpUserToken.Usr.WWID;
+            }
+        }
+
         /// <summary>
         /// Ensure each data collector has the DcAltId set when known, and has an OpDataElement for DEAL_SID.
         /// </summary>

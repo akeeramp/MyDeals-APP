@@ -27,7 +27,8 @@ namespace Intel.MyDeals.DataLibrary
                     in_deal_lst = new type_int_list(DealIds.ToArray()),
                     in_atrb_sid = data.ATRB_SID,
                     in_atrb_val = data.UPD_VAL,
-                    in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                    in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    in_send_vstx_flg = data.SEND_VSTX_FLG
 
                 }))
                 {

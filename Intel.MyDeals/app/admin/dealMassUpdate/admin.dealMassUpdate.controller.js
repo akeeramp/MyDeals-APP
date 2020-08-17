@@ -19,10 +19,12 @@
         }
         var vm = this;
         vm.UpdatedResults = [];
+        vm.Send_Vstx_Flg = {};
         $scope.MassUpdateData = {};
         $scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
         $scope.ShowResults = false;
         $scope.ShowNumeric = false;
+        $scope.MassUpdateData.SEND_VSTX_FLG = false;
 
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
@@ -52,6 +54,15 @@
                     }, 100);
                 }
             
+        }
+
+        //It is used for set the SEND_VSTX_FLG as true/false value as per toggle ON/OFF
+        //If Toggle is ON then changes will be added to the vistex staging table
+        //If Toggle is OFF then changes will not be added to the vistex staging table
+        vm.toggleType = function (currentState) {
+           
+            $scope.MassUpdateData.SEND_VSTX_FLG = currentState;
+          
         }
 
         $scope.$watch('MassUpdateData', function (newValue, oldValue, el) {
@@ -164,6 +175,7 @@
                 data.DEAL_IDS = $scope.MassUpdateData.DEAL_IDS;
                 data.ATRB_SID = $scope.MassUpdateData.ATRB_SID;
                 data.UPD_VAL = updatedValues;
+                data.SEND_VSTX_FLG = $scope.MassUpdateData.SEND_VSTX_FLG;             
                 dealMassUpdateService.UpdateDealsAttrbValue(data)
                     .then(function (response) {
                         vm.UpdatedResults = response.data;

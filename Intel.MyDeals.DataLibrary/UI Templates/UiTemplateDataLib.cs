@@ -1214,8 +1214,8 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Label = "Auto-approved By",
-                Width = 130,
-                Template = "#=gridUtils.uiControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
+                Width = 320,
+                Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
@@ -2671,6 +2671,32 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150,
                 IsReadOnly = true,
             });
+            //items.Add(new UiTemplateContainerItem  // WIP All types + Dimensioned by Prod Bucket
+            //{
+            //    Id = 9999,
+            //    AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Label = "Approving Price Rule Name",
+            //    Width = 190,
+            //    Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
+            //    DataType = "object",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    IsReadOnly = true
+            //});
+            //items.Add(new UiTemplateContainerItem  // WIP All types + Dimensioned by Prod Bucket
+            //{
+            //    Id = 24,
+            //    AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Label = "Approving Price Rule Id",
+            //    Width = 130,
+            //    Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
+            //    DataType = "object",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    IsReadOnly = true
+            //});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 3717,

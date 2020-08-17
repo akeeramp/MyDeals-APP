@@ -6,8 +6,13 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IIntegrationLib
     {
 
+        void TestAsyncProcess(Guid myGuid);
+
         Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket);
 
-        //Boolean SaveVistexResponseData(VistexResponseMsg jsonDataPacket);
+        string ExecuteSalesForceTenderData(Guid workId);
+
+        string ReturnSalesForceTenderResults();
+
     }
 }

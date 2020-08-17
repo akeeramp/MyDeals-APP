@@ -225,7 +225,7 @@ namespace Intel.MyDeals.Entities
                 {
                     public string Id { get; set; }
                     public string Name { get; set; }
-                    public string ReferenceQuoteLineNumebr { get; set; }
+                    public string ReferenceQuoteLineNumber { get; set; }
                     public string Status { get; set; }
                     public string DealRFQStatus { get; set; }
                     public string QuoteLineNumber { get; set; }
@@ -237,6 +237,7 @@ namespace Intel.MyDeals.Entities
                     public string ApprovedEndDate { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string DealRFQId { get; set; }
+                    public string ApprovedByInfo { get; set; }
                     [JsonProperty("ErrorMessages")]
                     public List<ErrorMessages> errorMessages { get; set; }
                     [JsonProperty("Product")]
