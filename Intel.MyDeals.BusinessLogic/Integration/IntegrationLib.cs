@@ -147,11 +147,11 @@ namespace Intel.MyDeals.BusinessLogic
                 END_DATE = endDt,
                 GEO_COMBINED = geoCombined,
                 PROGRAM_PAYMENT = "Backend",
-                MOD_USR_INPUT = "",
-                COLUMN_TYPE = true
+                MOD_USR_INPUT = null,
+                COLUMN_TYPE = false
             });
             ProductsLib productlib = new ProductsLib();
-            ProductLookup resultsList = productlib.TranslateProducts(contractToken, usrData, 2, OpDataElementSetType.ECAP.ToString(), true);
+            ProductLookup resultsList = productlib.TranslateProducts(contractToken, usrData, custId, OpDataElementSetType.ECAP.ToString(), true);
 
             // Need to get resultsList down to a single product json string - if it fails, return the null empty object
             if (resultsList.ValidProducts.Count <= 0) // No valid products returned, clear return list and post error
@@ -469,7 +469,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName);
             testDealData.Add("IN_REDEAL", "0");
-            testDealData.Add("EXCLUDE_AUTOMATION", "Yes");  // Do we want this set like so??
+            testDealData.Add("EXCLUDE_AUTOMATION", "No");  // Set all inbound tenders to allow automation - check with Tenders
             if (dealStartDate < DateTime.Now) testDealData.Add("BACK_DATE_RSN", "Contract Negotiation Delay");
             testData.WipDeals.Add(testDealData);
 

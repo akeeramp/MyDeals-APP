@@ -1643,9 +1643,9 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Locate and set Parent PS Attributes
-            if (futureStage != null || r.Dc.DcID < 0)
+            if ((r.Dc.DcID > 0 && futureStage == null) || futureStage != null || r.Dc.DcID < 0)
             {
-                if (r.Dc.DcID < 0)
+                if (futureStage == null) // This is path where you edited a re-deal item, yet PS is not in re-deal pathing stage, so force the path
                 {
                     futureStage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
                         ? WorkFlowStages.Requested
@@ -1655,14 +1655,14 @@ namespace Intel.MyDeals.BusinessRules
                 int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL)
                     ? myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID].DcParentID
                     : myDealsData[OpDataElementType.PRC_ST].Data.FirstOrDefault().Value.DcID;
-                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) // Dont have the PS, fetch it.
+                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) // Don't have the PS, fetch it.
                 {
                     myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
                         new List<int> { dcPs },
                         new List<OpDataElementType> { OpDataElementType.PRC_ST },
                         new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
                 }
-                else if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any(d => d.DcID == dcPs))
+                else if (myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.All(d => d.DcID != dcPs))
                 {
                     MyDealsData tempMyDealsData = new MyDealsData();
                     tempMyDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
@@ -1675,7 +1675,7 @@ namespace Intel.MyDeals.BusinessRules
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
             }
 
-            // If object is expired, unexpire it
+            // If object is expired, un-expire it
             string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
