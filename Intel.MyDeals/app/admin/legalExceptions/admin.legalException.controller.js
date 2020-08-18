@@ -4,13 +4,20 @@
         .module('app.admin')
         .controller('legalExceptionsController', legalExceptionsController)
 
-    legalExceptionsController.$inject = ['legalExceptionService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService'];
+    legalExceptionsController.$inject = ['legalExceptionService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService', '$uibModal'];
 
-    function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService) {
+    function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService, $uibModal) {
         var vm = this;
+        //vm.rule = {};
         vm.validationMessage = "";
+        $scope.gridDataList = []; 
+        $scope.gridDataArr = [];
+      
+       
+       
         vm.dataSource = new kendo.data.DataSource({
-            transport: {
+
+            transport: {               
                 read: function (e) {
                     legalExceptionService.getLegalExceptions()
                         .then(function (response) {
@@ -20,8 +27,10 @@
                         }, function (response) {
                             logger.error("Unable to get Legal exceptions.", response, response.statusText);
                         });
+                    $scope.gridDataArr.length = 0;
                 },
                 update: function (e) {
+                    $scope.gridDataArr.length = 0;
                     if (isInvalidateRow(e, 'update')) {
                         e.error();
                     } else {
@@ -29,6 +38,8 @@
                             .then(function (response) {
                                 e.success(response.data);
                                 logger.success("Legal exception were successfully updated.");
+                                
+                                
                             }, function (response) {
                                 logger.error("Unable to update Legal exception.", response, response.statusText);
                             });
@@ -36,6 +47,7 @@
 
                 },
                 create: function (e) {
+                    $scope.gridDataArr.length = 0;
                     if (isInvalidateRow(e, 'create')) {
                         e.error();
                     } else {
@@ -43,12 +55,14 @@
                             .then(function (response) {
                                 e.success(response.data);
                                 logger.success("Legal exceptions added.");
+                                
                             }, function (response) {
                                 logger.error("Unable to add new Legal exceptions", response, response.statusText);
                             });
                     }
                 },
                 destroy: function (e) {
+                    $scope.gridDataArr.length = 0;
                     var modalOptions = {
                         closeButtonText: 'Cancel',
                         actionButtonText: 'Delete Legal Exception',
@@ -60,6 +74,7 @@
                         legalExceptionService.deleteLegalException(e.data.models[0]).then(function (response) {
                             e.success(response.data);
                             logger.success("Legal Exception Deleted.");
+                           
                         }, function (response) {
                             logger.error("Unable to delete Legal Exception.", response, response.statusText);
                         });
@@ -72,10 +87,12 @@
             pageSize: 25,
             filter: [{
                 field: "ACTV_IND", operator: "eq", value: "true"
+
             }],
             sort: { field: "INTEL_PRD", dir: "asc" },
             schema: {
                 model: {
+
                     id: "MYDL_PCT_LGL_EXCPT_SID",
                     fields: {
                         ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
@@ -174,7 +191,40 @@
             },
         });
 
+        $scope.openCompareLegalException = function ()
+        {
+            if ($scope.gridDataArr.length > 1 && $scope.gridDataArr.length <=4) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'app/admin/legalExceptions/compareLegalException.html',
+                    controller: 'compareController',
+                    controllerAs: 'vm',
+                    size: 'sm',
+                    windowClass: 'prdSelector-modal-window',
+                    resolve: {
+                        RuleConfig: ['legalExceptionService', function () {
+                           
+                        }],
+                        dataItem: function () {
+                           
+                            return $scope.gridDataArr;
+
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (returnData) {
+                    vm.cancel();
+                }, function () { });
+            }
+            else {
+                logger.warning('Please select exception between 2 to 4');
+            }
+        }
+
         function textareaEditor(container, options) {
+          
             $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Please enter.." ' +
                 'required name="' + options.field + '" />').appendTo(container);
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
@@ -187,6 +237,7 @@
         }
 
         vm.gridOptions = {
+
             dataSource: vm.dataSource,
             filterable: true,
             scrollable: true,
@@ -200,28 +251,36 @@
             resizable: true,
             reorderable: true,
             columnMenu: false,
-            sort: function (e) { gridUtils.cancelChanges(e); },
-            filter: function (e) { gridUtils.cancelChanges(e); },
-            toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(editNotAllowed),
+            sort: function (e) { $scope.gridDataArr.length = 0; gridUtils.cancelChanges(e); },
+            filter: function (e) { $scope.gridDataArr.length = 0; gridUtils.cancelChanges(e); },         
+            toolbar: GridMenuButton(editNotAllowed),
+            
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
-                var commandCell = e.container.find("td:first");
+               
+                var commandCell = e.container.find("td:first");               
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             destroy: function (e) {
+               
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             cancel: function (e) {
                 vm.validationMessage = '';
             },
+           
             columns: [
+           
             {
+                
                 command: [
+
+                    { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\$event, dataItem)' /> </div>" },
                        { name: "edit", template: "<a ng-if='" + !editNotAllowed + "' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                 ],
-                width: 100,
+                width: 120,
             },
             {
                 field: "ACTV_IND",
@@ -476,6 +535,53 @@
             e.data.models[0].DT_APRV = moment(e.data.models[0].DT_APRV).format("l");
 
             return false;
+        }
+
+        //To get the selected checkbox dataItem and store it to an array
+        $scope.selectItem = function (event, dataItem)
+        {
+            if (event.target.checked)
+            {                              
+                $scope.gridDataList = {
+                    'MYDL_PCT_LGL_EXCPT_SID': this.dataItem.MYDL_PCT_LGL_EXCPT_SID,
+                    'PCT_EXCP_NO': 'Exception 1234',
+                    'ACTV_IND': this.dataItem.ACTV_IND,
+                    'IS_DSBL': this.dataItem.IS_DSBL,
+                    'Scope': this.dataItem.SCPE,
+                    'PRC_RQST': this.dataItem.PRC_RQST,
+                    'Cost': this.dataItem.COST,
+                    'ExceptionStartDate': moment(this.dataItem.PCT_LGL_EXCPT_END_DT).format("l"),
+                    'ExceptionEndDate':moment(this.dataItem.PCT_LGL_EXCPT_STRT_DT).format("l")
+                 
+                };
+                $scope.gridDataArr.push($scope.gridDataList);
+            }
+            else
+            {
+                for (var i = 0; i < $scope.gridDataArr.length; i++)
+                {
+                    var unCheckedList = $scope.gridDataArr[i];
+                    var legalExcptSid = unCheckedList['MYDL_PCT_LGL_EXCPT_SID'];
+                    if (legalExcptSid == dataItem.MYDL_PCT_LGL_EXCPT_SID)
+                    {
+                        $scope.gridDataArr.splice(i, 1);
+                    }
+
+                   
+                }                           
+            }           
+        }
+      
+      function GridMenuButton(addRecordsNotAllowed) {
+            var rtn = '';
+            if (!addRecordsNotAllowed) {
+                rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
+            }
+          rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
+
+          rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span  style="color: white !important"></span>Compare</a>';
+        
+          return rtn;
         }
 
         function productEditor(container, options) {
