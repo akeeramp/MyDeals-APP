@@ -193,7 +193,7 @@
 
         $scope.openCompareLegalException = function ()
         {
-            if ($scope.gridDataArr.length > 1 && $scope.gridDataArr.length <=4) {
+            if ($scope.gridDataArr.length == 2) {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
@@ -219,7 +219,7 @@
                 }, function () { });
             }
             else {
-                logger.warning('Please select exception between 2 to 4');
+                logger.warning('Please Select 2 Exception to Compare');
             }
         }
 

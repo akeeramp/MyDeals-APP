@@ -8,8 +8,7 @@
         </div>
 
         <div id="RulesDetailsBodyDiv" class="modal-body">
-            <div class="container">
-                <div class="row">                   
+            <div class="row">                   
                     <div ng-repeat="item in vm.legalExceptionData"  class="col-xs-{{vm.noOfCol}} col-sm-{{vm.noOfCol}}">
                         <div id="navigation">
                             <div class="panel panel-default">
@@ -66,12 +65,8 @@
                     </div>                   
 
                 </div>
-            </div>
-
+            </div>       
         </div>
-
-        
-    </div>
 </form>
 
 <style>
@@ -94,7 +89,7 @@
         margin-left: -2px;
     }
     .panel-body{
-        margin-top:0px;
+        padding-top:0px;
     }
 
     .k-selectbox {
@@ -151,7 +146,7 @@
     #ruleModal .modal-body {
         overflow: auto;
         width: 100%;
-        height: 450px;
+        height: calc(85vh - 150px) !important; /*580px;*/
         border-bottom: none;
         margin-bottom: 30px;
     }
