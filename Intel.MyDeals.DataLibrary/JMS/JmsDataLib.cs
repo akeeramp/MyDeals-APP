@@ -28,13 +28,15 @@ namespace Intel.MyDeals.DataLibrary
         private string jmsUID;
         private Dictionary<string, string> jmsEnvs;
 
-        private IConnection connection;
-        private ISession session;
-        private IQueue destination;
+        private IConnection _connection;
+        private ISession _session;
+        private IQueue _destination;
 
         // This is all communications to our DB as well as SAP
         public JmsDataLib()
         {
+            // In case we need it on errors and no token
+            //_mIdsid = OpUserStack.MyOpUserToken == null? "dmyGA" : OpUserStack.MyOpUserToken.Usr.Idsid;
             _mIdsid = OpUserStack.MyOpUserToken.Usr.Idsid;
 
             jmsEnvs = DataLibrary.GetEnvConfigs();
@@ -384,19 +386,19 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
+                _connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
-                connection.ExceptionListener += new ExceptionListener(OnException);
+                _connection.ExceptionListener += new ExceptionListener(OnException);
 
                 // create the session
-                session = connection.CreateSession(ackMode);
+                _session = _connection.CreateSession(ackMode);
 
                 // create the destination
-                destination = session.GetQueue(queueName);
+                _destination = _session.GetQueue(queueName);
 
                 // create the producer
-                IMessageProducer msgProducer = session.CreateProducer(destination);
+                IMessageProducer msgProducer = _session.CreateProducer(_destination);
 
                 ITextMessage msg;
 
@@ -404,7 +406,7 @@ namespace Intel.MyDeals.DataLibrary
                 for (int i = 0; i < data.Count; i++)
                 {
                     // create text message
-                    msg = session.CreateTextMessage();
+                    msg = _session.CreateTextMessage();
 
                     // set message text
                     msg.Text = (String)data[i];
@@ -419,7 +421,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
 
                 // close the connection
-                connection.Close();
+                _connection.Close();
             }
             catch (Exception e)
             {
@@ -465,13 +467,13 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
+                _connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
-                connection.ExceptionListener += new ExceptionListener(OnException);
+                _connection.ExceptionListener += new ExceptionListener(OnException);
 
                 // create the session
-                ISession session = connection.CreateSession(ackMode);
+                ISession session = _connection.CreateSession(ackMode);
 
                 IQueue destination = session.GetQueue(queueName);
 
@@ -481,13 +483,13 @@ namespace Intel.MyDeals.DataLibrary
 
                 session.Close();
 
-                connection.Close();
+                _connection.Close();
 
                 return jmsEnvs;
             }
             catch (Exception ex)
             {
-                connection.Close();
+                _connection.Close();
                 throw ex;
             }
         }
@@ -539,7 +541,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        #region TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
+        #region Tenders Integration Items for IQR
         public Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
         {
             Guid myGuid = Guid.Empty;
@@ -764,41 +766,8 @@ namespace Intel.MyDeals.DataLibrary
 
             return retObj;
         }
-        
-        //public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages)
-        //{
-        //    type_int_dictionary opDealMessages = new type_int_dictionary();
-        //    opDealMessages.AddRows(dealsMessages.Select(itm => new Opaque.Tools.OpPair<int, string>
-        //    {
-        //        First = itm.Key,
-        //        Second = itm.Value
-        //    }));
 
-        //    var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
-        //    {
-        //        in_btch_id = batchId,
-        //        in_rqst_sts = "PO_Processing_Complete", // Default close the 
-        //        in_deal_rspn_err = opDealMessages
-        //    };
-
-        //    try
-        //    {
-        //        using (var rdr = DataAccess.ExecuteReader(cmd))
-        //        {
-        //            //Just save the data and move on - only error will report back below
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OpLogPerf.Log(ex);
-        //        return false;
-        //        //throw;
-        //    }
-
-        //    return true;
-        //}
-
-        #endregion TENDERS INTEGRATION ITEMS IN CONTRACTS CONTROLLER
+        #endregion Tenders Integration Items for IQR
 
     }
 }

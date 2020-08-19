@@ -2565,6 +2565,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         Range.prototype.fillFrom = function (srcRange, direction) {
             // Original kendo code
             var x = this._previewFillFrom(srcRange, direction);
+            
+            if (x.direction == 2) {
+                alert("Dragging values upwards is not supported")
+                return;
+            }
 
             // Custom code
             var firstDraggedVal = this.value();

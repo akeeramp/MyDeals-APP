@@ -362,6 +362,9 @@
                     },
                     "DIV_APPROVED_BY": {
                         "Groups": ["Deal Info"]
+                    },
+                    "AUTO_APPROVE_RULE_INFO": {
+                        "Groups": ["All"]
                     }
                 },
                 "VOL_TIER": {
@@ -1076,6 +1079,9 @@
                     },
                     "DIV_APPROVED_BY": {
                         "Groups": ["Deal Info"]
+                    },
+                    "AUTO_APPROVE_RULE_INFO": {
+                        "Groups": ["All"]
                     }
                 }
             },

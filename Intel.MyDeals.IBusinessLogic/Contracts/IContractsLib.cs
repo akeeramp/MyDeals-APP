@@ -44,9 +44,5 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList);
 
-        // Salesforce Process Data Call - can't move out of here due to reliance upon built in processing items for opDataCollectors
-        string ExecuteSalesForceTenderData(Guid workId);
-
-        string ReturnSalesForceTenderResults();
     }
 }
