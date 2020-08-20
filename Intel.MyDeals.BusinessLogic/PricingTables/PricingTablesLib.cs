@@ -509,6 +509,19 @@ namespace Intel.MyDeals.BusinessLogic
 
                     dc.AddTimelineComment($"Deal moved from {psStageIn} to {psTargetStage}.");
                 }
+                else
+                {
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Deal taken off of Hold.",
+                        ShortMessage = targetStage,
+                        MsgType = OpMsg.MessageType.Info,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+
+                    dc.AddTimelineComment($"Deal taken off of Hold.");
+                }
 
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
