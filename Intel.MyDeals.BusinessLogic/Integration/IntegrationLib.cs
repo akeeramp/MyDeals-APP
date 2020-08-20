@@ -12,6 +12,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
+using Intel.MyDeals.BusinessRules;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -561,9 +562,6 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> passedFolioIds = new List<int>() { folioId };
                 MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
 
-                //List<int> passedFolioIds2 = new List<int>() { 512632 };
-                //MyDealsData myDealsData2 = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds2, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
-
                 if (custId == 0) // Need to have a working customer for this request and failed, skip!
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(101, "Invalid Customer", "Unable to find the customer with CIMId (" + custCimId + ")"));
@@ -584,7 +582,7 @@ namespace Intel.MyDeals.BusinessLogic
                         continue;
                     }
                 }
-                else // Potential Folio update route
+                else // Post back known Folio ID to SF
                 {
                     workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
                 }
@@ -601,9 +599,10 @@ namespace Intel.MyDeals.BusinessLogic
                         continue;
                     }
                 }
-                else // Potential Deals update route 
+                else // Post back known Deal ID to SF, append error that it exists already
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(306, "Deal Error", "Tender Deal already created, Deal ID is " + dealId));
                 }
 
                 // Should have no bail outs, so post final messages here
@@ -681,7 +680,11 @@ namespace Intel.MyDeals.BusinessLogic
                 DeleteAllPTR = false
             });
 
-            bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
+            bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
+            }
 
             if (hasValidationErrors) // If validation errors, log and skip to next
             {

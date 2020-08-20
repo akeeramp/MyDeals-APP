@@ -445,8 +445,7 @@ namespace Intel.MyDeals.BusinessRules
         public static void CheckGeos(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            if (!r.HasExtraArgs) return;
+            if (!r.IsValid || !r.HasExtraArgs) return;
 
             var deGeo = r.Dc.GetDataElement(AttributeCodes.GEO_COMBINED);
             deGeo?.CheckGeos(r.ExtraArgs);
@@ -526,15 +525,12 @@ namespace Intel.MyDeals.BusinessRules
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            if (!r.HasExtraArgs) return;
-            char delim = '/';
-
-            //return
-
-            IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
+            if (!r.IsValid || !r.HasExtraArgs) return;
 
             int custId = (int)r.ExtraArgs[0];
+            char delim = '/';
+
+            IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
             if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "" || custId == 0) return; // we also return on custId = 0 (All Customers) because that's what we ustilize for the tender dashboard
 
@@ -583,7 +579,6 @@ namespace Intel.MyDeals.BusinessRules
                 deUserCustDivs.AddMessage("Please enter a valid value.");
         }
 
-        //Mikes New Rule
         public static void MeetCompMandatoryCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -629,12 +624,11 @@ namespace Intel.MyDeals.BusinessRules
         {
             ////US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
             //MyOpRuleCore r = new MyOpRuleCore(args);
-            //if (!r.IsValid) return;
+            //if (!r.IsValid || !r.HasExtraArgs) return;
 
+            //int custId = (int)r.ExtraArgs[0];
             //string mrktSegValue = r.Dc.GetDataElement(AttributeCodes.MRKT_SEG).AtrbValue.ToString();
             //IOpDataElement deOnAdDate = r.Dc.GetDataElement(AttributeCodes.ON_ADD_DT);
-            //if (!r.HasExtraArgs) return;
-            //int custId = (int)r.ExtraArgs[0];
 
             //if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All Direct Market Segments") && deOnAdDate.AtrbValue.ToString() == "")
             //{
@@ -1390,8 +1384,8 @@ namespace Intel.MyDeals.BusinessRules
         public static void TimelineAtrbChangeCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            var myDealsData = (MyDealsData)r.ExtraArgs[1];
+            if (!r.IsValid || !r.ExtraArgs.Any()) return;
+            var myDealsData = (MyDealsData)r.ExtraArgs[r.ExtraArgs.Count() - 1]; // Seems that sometimes we have 1, other times we have 2
 
             List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD, AttributeCodes.EXPIRE_YCS2 };
 
@@ -1510,7 +1504,9 @@ namespace Intel.MyDeals.BusinessRules
         {
             // Check for changes in attributes that would trigger a major change and re-deal.
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+            if (!r.IsValid || !r.ExtraArgs.Any()) return;
+
+            var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
             string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string ptrStage = r.Dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
@@ -1530,10 +1526,6 @@ namespace Intel.MyDeals.BusinessRules
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
             List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
             List<MyDealsAttribute> onChangeDecreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList();
-
-            if (!r.ExtraArgs.Any()) return;
-
-            var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
             // Find DE item changes that trigger a true re-deal/stage change here
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();

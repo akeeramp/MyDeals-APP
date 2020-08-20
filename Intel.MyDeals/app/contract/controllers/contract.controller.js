@@ -1926,8 +1926,14 @@
         }
         $scope.syncHoldWip = function (dataItem) {
             if (dataItem.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                // taken off hold
                 if (!dataItem._actions) dataItem._actions = {};
                 dataItem._actions["Hold"] = true;
+
+                if (!dataItem._behaviors) dataItem._behaviors = {};
+                if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
+                //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
             }
             if (dataItem.WF_STG_CD !== "Hold" && $scope.messages[0].ShortMessage === "Hold") {
                 // put on hold
@@ -1935,13 +1941,6 @@
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
-            }
-            if (dataItem.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
-                // taken off hold
-                if (!dataItem._behaviors) dataItem._behaviors = {};
-                if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
-                //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
-                //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
             }
 
             if ($scope.messages[0].ShortMessage.indexOf("You do not have permission") < 0 && $scope.messages[0].ShortMessage.indexOf("The stage was changed by another") < 0) {
