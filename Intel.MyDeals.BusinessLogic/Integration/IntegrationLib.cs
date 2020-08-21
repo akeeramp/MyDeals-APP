@@ -201,7 +201,7 @@ namespace Intel.MyDeals.BusinessLogic
         private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, int custId, TenderTransferRootObject workRecordDataFields, int currentRec)
         {
             // We only take the first instance of values as per Mahesh ([0] below)
-            string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competetorProduct.Name;
+            string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competitorProduct.Name;
             string perfMetric = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].performanceMetric[0].performanceMetric; // SpecInt - NOT USED YET
             string meetCompPrcStr = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MeetCompPrice;
             string iaBenchStr = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].performanceMetric[0].IntelSKUPerformance;
@@ -465,7 +465,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("HAS_L2", singleProduct?.HAS_L2 ?? 0); // From PTR_SYS_PRD singleProduct
             testDealData.Add("PRODUCT_CATEGORIES", singleProduct?.PRD_CAT_NM ?? ""); // From PTR_SYS_PRD singleProduct
             testDealData.Add("SALESFORCE_ID", dealSfId);
-            testDealData.Add("QUOTE_LN_ID", quoteLineId + " - " + quoteLineNumber);
+            testDealData.Add("QUOTE_LN_ID", quoteLineNumber);
             testDealData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
             testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName);
@@ -646,6 +646,9 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
 
+            string quiteLineId = workRecordDataFields.recordDetails.quote.quoteLine[i].QuoteLineNumber;
+            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QUOTE_LN_ID, quiteLineId);
+
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
@@ -759,6 +762,10 @@ namespace Intel.MyDeals.BusinessLogic
                 EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, i);
                 //gather return fields and post back to json record (things like stage and approved by fields)
 
+                string stage = saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft? 
+                    saveResponse[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD):
+                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQStatus = stage;
 
                 executionResponse += "Deal " + dealId + " - Save completed<br>";
             }

@@ -17,6 +17,7 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -311,6 +312,11 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public class Bearer
+        {
+            public string access_token { get; set; }
+        }
+
         public bool PublishBackToSfTenders(string data)
         {
             OpLog.Log("JMS - Publish to SF Tenders");
@@ -320,8 +326,53 @@ namespace Intel.MyDeals.DataLibrary
             string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : "";
             if (url == "") return false; // If no URL is defined, bail out of the send
 
+            // APOGEE
+            //string consumerKey = "client_id_value"; //"client_id_value";
+            //string consumerSecret = "client_secret_value"; //“client_secret_value";
+            //string accessToken;
+
+            //byte[] byte1 = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" + consumerKey + "&client_secret=" + consumerSecret);
+            ////Console.WriteLine(byte1);
+            //HttpWebRequest bearerReq = WebRequest.Create(url) as HttpWebRequest;
+            //bearerReq.Accept = "application/json";
+            //bearerReq.Method = "POST";
+            //bearerReq.ContentType = "application/x-www-form-urlencoded";
+            //bearerReq.ContentLength = byte1.Length;
+            //bearerReq.KeepAlive = false;
+            //Stream newStream = bearerReq.GetRequestStream();
+
+
+            //newStream.Write(byte1, 0, byte1.Length);
+
+            //WebResponse bearerResp = bearerReq.GetResponse();
+
+            ////Code dies in next block *FIX*
+            //using (var reader = new StreamReader(bearerResp.GetResponseStream(), Encoding.UTF8))
+            //{
+            //    var response = reader.ReadToEnd();
+            //    //Console.WriteLine(response);
+            //    Bearer bearer = JsonConvert.DeserializeObject<Bearer>(response);
+            //    accessToken = bearer.access_token;
+            //}
+
+            ////Console.WriteLine(accessToken);
+
+            //HttpWebRequest APIReq = WebRequest.Create("apigee_proxy_url") as HttpWebRequest;
+
+
+            //APIReq.Method = "GET";
+            //APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
+            ////Console.WriteLine();
+            //using (StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream()))
+            //{
+            //    string result = responseReader.ReadToEnd();
+            //    int j = 0;
+            //}
+            // END APOGEE
+
             WebRequest request = WebRequest.Create(url);
-            request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
+            //request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
+            request.Credentials = new System.Net.NetworkCredential("myDls2SF", "f@s_dlsYmz");
 
             request.Method = "POST"; // Set the Method property of the request to POST.  
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;

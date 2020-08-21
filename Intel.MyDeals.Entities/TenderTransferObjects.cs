@@ -198,14 +198,14 @@ namespace Intel.MyDeals.Entities
             public class Quote
             {
                 public string Id { get; set; }
-                public string Name { get; set; }
                 public string FolioID { get; set; }
-                [JsonProperty("Account")]
-                public Account account { get; set; }
+                public string Name { get; set; }
+                public string ProjectName { get; set; }
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
                 public string EndCustomerCountry { get; set; }
-                public string ProjectName { get; set; }
+                [JsonProperty("Account")]
+                public Account account { get; set; }
                 public string ShipmentStartDate { get; set; }
                 public string ShipmentEndDate { get; set; }
                 public string ServerDealType { get; set; }
@@ -227,23 +227,26 @@ namespace Intel.MyDeals.Entities
                     public string Name { get; set; }
                     public string ReferenceQuoteLineNumber { get; set; }
                     public string Status { get; set; }
-                    public string DealRFQStatus { get; set; }
-                    public string QuoteLineNumber { get; set; }
-                    //public string Pricing_ECAP_Price__c { get; set; }
-                    public string MeetCompPrice { get; set; }
                     public string IntegrationStatus { get; set; }
+                    public string Wwid { get; set; }
+                    public string QuoteLineNumber { get; set; }
+                    [JsonProperty("Product")]
+                    public Product product { get; set; }
+                    [JsonProperty("CompetetorProduct")]
+                    public CompetitorProduct competitorProduct { get; set; }
+                    public string OtherProduct { get; set; }
+                    public string MeetCompPrice { get; set; }
                     public string ApprovedStartDate { get; set; }
-                    public string ApprovedQuantity { get; set; }
                     public string ApprovedEndDate { get; set; }
+                    public string ApprovedQuantity { get; set; }
                     public string ApprovedECAPPrice { get; set; }
+                    public string DealRFQStatus { get; set; }
                     public string DealRFQId { get; set; }
+                    [JsonProperty("PerformanceMetric")]
+                    public List<PerformanceMetric> performanceMetric { get; set; }
                     public string ApprovedByInfo { get; set; }
                     [JsonProperty("ErrorMessages")]
                     public List<ErrorMessages> errorMessages { get; set; }
-                    [JsonProperty("Product")]
-                    public Product product { get; set; }
-                    public CompetetorProduct competetorProduct { get; set; }
-                    public List<PerformanceMetric> performanceMetric { get; set; }
 
                     public class ErrorMessages
                     {
@@ -259,7 +262,7 @@ namespace Intel.MyDeals.Entities
                         public string ProductNameEPMID { get; set; }
                     }
 
-                    public class CompetetorProduct
+                    public class CompetitorProduct
                     {
                         public string Id { get; set; }
                         public string Name { get; set; }

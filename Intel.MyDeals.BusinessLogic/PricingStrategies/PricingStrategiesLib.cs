@@ -622,7 +622,7 @@ namespace Intel.MyDeals.BusinessLogic
                         DealRFQId = wipDealId.ToString(),
                         DealRFQStatus = newStage,
                         Id = wipSfId,
-                        ApprovedByInfo = approverId
+                        ApprovedByInfo = "Manually approval by " + approverId
                     };
                     sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
 
