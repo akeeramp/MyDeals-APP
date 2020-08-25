@@ -590,7 +590,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
 			ATRB_DESC = "Consumption Customer Platform",
-			ATRB_LBL = "Consumption Customer Platform",
+			ATRB_LBL = "Customer Platform",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3456,
 			DATA_TYPE_CD = "VARCHAR",
@@ -606,7 +606,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
 			ATRB_DESC = "Consumption Customer Reported Geo",
-			ATRB_LBL = "Consumption Customer Reported Geo",
+			ATRB_LBL = "Customer Reported Region",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3458,
 			DATA_TYPE_CD = "VARCHAR",
@@ -622,7 +622,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "CONSUMPTION_CUST_SEGMENT",
 			ATRB_DESC = "Consumption Customer Segment",
-			ATRB_LBL = "Consumption Customer Segment",
+			ATRB_LBL = "Customer Segment",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3457,
 			DATA_TYPE_CD = "VARCHAR",
