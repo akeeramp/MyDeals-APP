@@ -75,6 +75,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -112,7 +113,7 @@
     </None>
     <None Include="App.itt.config">
       <DependentUpon>App.config</DependentUpon>
-    </None>    
+    </None>
     <None Include="App.Release.config">
       <DependentUpon>App.config</DependentUpon>
     </None>
@@ -135,7 +136,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="App_config_AfterCompile" AfterTargets="AfterBuild">
     <!--Generate transformed app config in the intermediate directory-->
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\Dev\" />
@@ -145,7 +146,7 @@
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\utt\" />
     <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\utt\$(TargetFileName).config" Transform="App.utt.config" />
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cons\" />
-    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cons\$(TargetFileName).config" Transform="App.cons.config" />    
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cons\$(TargetFileName).config" Transform="App.cons.config" />
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\ciar\" />
     <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\ciar\$(TargetFileName).config" Transform="App.ciar.config" />
     <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cinr\" />

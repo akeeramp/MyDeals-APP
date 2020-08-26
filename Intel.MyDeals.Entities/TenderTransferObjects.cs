@@ -232,7 +232,7 @@ namespace Intel.MyDeals.Entities
                     public string QuoteLineNumber { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
-                    [JsonProperty("CompetetorProduct")]
+                    [JsonProperty("CompetitorProduct")]
                     public CompetitorProduct competitorProduct { get; set; }
                     public string OtherProduct { get; set; }
                     public string MeetCompPrice { get; set; }
