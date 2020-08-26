@@ -363,8 +363,7 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Product Check
 
             #region Deal Stability Check
-            if (geoCombined == "" || ecapPrice == "" || dealStartDate != DateTime.MinValue || 
-                dealEndDate != DateTime.MinValue || dealType != "")
+            if (geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || dealType == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error", "Failed to create the Tender Deal due to missing expected fields"));
                 return -100;
