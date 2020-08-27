@@ -597,7 +597,7 @@
             }
             rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
 
-            rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span  style="color: white !important"></span>Compare</a>';
+            rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="k-icon intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
 
             return rtn;
         }
