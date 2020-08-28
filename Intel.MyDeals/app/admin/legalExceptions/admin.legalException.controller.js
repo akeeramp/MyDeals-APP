@@ -227,6 +227,7 @@
         }
 
         function textareaEditor(container, options) {
+            ClearSelectedItem();
 
             $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Please enter.." ' +
                 'required name="' + options.field + '" />').appendTo(container);
