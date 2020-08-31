@@ -94,7 +94,17 @@
                     fields: {
                         IS_SELECTED: { editable: true, defaultValue: false, type: "boolean" }
                         , ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
-                        , INTEL_PRD: {
+                        , PCT_EXCPT_NBR: {
+                            validation: {
+                                required: { message: "* field is required" },
+                            }
+                        },
+                        VER_NBR: {
+                            validation: {
+                                required: { message: "* field is required" },
+                            }
+                        },
+                        INTEL_PRD: {
                             validation: {
                                 required: { message: "* field is required" },
                             }
@@ -327,6 +337,30 @@
                     filterable: { multi: true, search: true }
                 },
                 {
+                    field: "PCT_EXCPT_NBR",
+                    title: "PCT Exception No.",
+                    headerTemplate: "<div class='isRequired'> PCT Exception No. </div>",
+                    width: 150,
+                    edit: onGridEditing,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "VER_NBR",
+                    title: "Version No.",
+                    headerTemplate: "<div class='isRequired'> Version No. </div>",
+                    width: 150,
+                    edit: onGridEditing,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "VER_CRE_DTM",
+                    hidden: true,
+                    width: 120,
+                    filterable: { multi: true, search: true }
+                },
+                {
                     field: "INTEL_PRD",
                     headerTemplate: "<div class='isRequired'> Intel Product </div>",
                     editor: textareaEditor,
@@ -459,6 +493,15 @@
                     editable: $scope.isEditable
                 },
                 {
+                    field: "EXCPT_RSTRIC_DURN",
+                    title: "Exceptions, Restrictions & Durations",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Exceptions, Restrictions & Durations </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
                     field: "RQST_CLNT",
                     title: "Requesting Client",
                     headerTemplate: "<div class='isRequired'> Requesting Client </div>",
@@ -533,6 +576,12 @@
             return true;
         }
 
+        //Checking Max Length of Editable Field
+        function onGridEditing(arg) {
+            arg.container.find("input[name='PCT_EXCPT_NBR']").attr('maxlength', '10');
+            arg.container.find("input[name='VER_NBR']").attr('maxlength', '4');
+        }
+
         //To clear selected checkbox 
         function ClearSelectedItem() {
             for (var i = 0; i < filterData.length; i++) {
@@ -558,6 +607,7 @@
             e.data.models[0].PCT_LGL_EXCPT_STRT_DT = moment(e.data.models[0].PCT_LGL_EXCPT_STRT_DT).format("l");
             e.data.models[0].PCT_LGL_EXCPT_END_DT = moment(e.data.models[0].PCT_LGL_EXCPT_END_DT).format("l");
             e.data.models[0].DT_APRV = moment(e.data.models[0].DT_APRV).format("l");
+            e.data.models[0].VER_CRE_DTM = moment(e.data.models[0].VER_CRE_DTM).format("l");
 
             return false;
         }
