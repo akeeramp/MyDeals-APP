@@ -399,7 +399,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPtData.Add("MRKT_SEG", "Corp");
             testPtData.Add("PROGRAM_PAYMENT", "Backend");
             testPtData.Add("GEO_COMBINED", "Worldwide"); // We need to inject the GEO here
-            testPtData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testPtData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testPtData.Add("TITLE", "PT - " + dealSfId);
             testPtData.Add("SALESFORCE_ID", dealSfId);
             testPtData.Add("PASSED_VALIDATION", PassedValidation.Complete);
@@ -425,7 +425,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPtrData.Add("GEO_COMBINED", geoCombined);
             testPtrData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
             testPtrData.Add("PTR_SYS_PRD", translatedValidProductJson); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
-            testPtrData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testPtrData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testPtrData.Add("SERVER_DEAL_TYPE", serverDealType);
             testPtrData.Add("QLTR_PROJECT", projectName);
             testPtrData.Add("SALESFORCE_ID", dealSfId);
@@ -446,8 +446,8 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
             testDealData.Add("TITLE", productLookupObj.MydlPcsrNbr); // Echo out user product name
             testDealData.Add("PAYOUT_BASED_ON", "Consumption");
-            testDealData.Add("CAP_____20___0", singleProduct?.CAP ?? ""); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("YCS2_PRC_IRBT_____20___0", singleProduct?.YCS2 ?? "No YCS2"); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("CAP_____20___0", singleProduct?.CAP ?? ""); // From PTR_SYS_PRD single Product
+            testDealData.Add("YCS2_PRC_IRBT_____20___0", singleProduct?.YCS2 ?? "No YCS2"); // From PTR_SYS_PRD single Product
             testDealData.Add("OBJ_SET_TYPE_CD", dealType);
             testDealData.Add("CUST_MBR_SID", custId);
             testDealData.Add("START_DT", dealStartDate.ToString("MM/dd/yyyy"));
@@ -463,20 +463,20 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
             testDealData.Add("GEO_COMBINED", geoCombined);
             testDealData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
-            testDealData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testDealData.Add("SERVER_DEAL_TYPE", serverDealType);
             testDealData.Add("QLTR_PROJECT", projectName);
-            testDealData.Add("CAP_STRT_DT_____20___0", singleProduct?.CAP_START ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("CAP_END_DT_____20___0", singleProduct?.CAP_END ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("CAP_STRT_DT_____20___0", singleProduct?.CAP_START ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD single Product
+            testDealData.Add("CAP_END_DT_____20___0", singleProduct?.CAP_END ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD single Product
             testDealData.Add("PASSED_VALIDATION", PassedValidation.Complete); // From PTR_SYS_PRD
-            testDealData.Add("HAS_L1", singleProduct?.HAS_L1 ?? 0); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("HAS_L2", singleProduct?.HAS_L2 ?? 0); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("PRODUCT_CATEGORIES", singleProduct?.PRD_CAT_NM ?? ""); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("HAS_L1", singleProduct?.HAS_L1 ?? 0); // From PTR_SYS_PRD single Product
+            testDealData.Add("HAS_L2", singleProduct?.HAS_L2 ?? 0); // From PTR_SYS_PRD single Product
+            testDealData.Add("PRODUCT_CATEGORIES", singleProduct?.PRD_CAT_NM ?? ""); // From PTR_SYS_PRD single Product
             testDealData.Add("SALESFORCE_ID", dealSfId);
             testDealData.Add("QUOTE_LN_ID", quoteLineNumber);
             testDealData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
             testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
-            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName);
+            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName + "; Deal moved from Requested to Submitted after creation.");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "No");  // Set all inbound tenders to allow automation - check with Tenders
             if (dealStartDate < DateTime.Now) testDealData.Add("BACK_DATE_RSN", "Contract Negotiation Delay");
@@ -609,8 +609,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else // Post back known Deal ID to SF, append error that it exists already
                 {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
                     executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
-                    //workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
                     //workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error", "Tender Deal already created, Deal ID is " + dealId));
                 }
 
@@ -633,6 +633,14 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.EnsureBatchIDs();
         }
 
+        private void UpdateDeValue(IOpDataElement myDe, string myValue)
+        {
+            if (myDe.AtrbValue.ToString() != myValue.ToString())
+            {
+                myDe.AtrbValue = myValue;
+            }
+        }
+
         private bool UpdateRecordsFromSfPackets(MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int i, int custId, int folioId, int psId, int dealId, ref string validErrors)
         {
             int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
@@ -641,48 +649,55 @@ namespace Intel.MyDeals.BusinessLogic
             // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
             // Update SalesForce IDs for new deal instance objects
             string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-            myDealsData[OpDataElementType.PRC_ST].Data[psId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.PRC_TBL].Data[ptId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
 
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
 
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
 
             string quiteLineId = workRecordDataFields.recordDetails.quote.quoteLine[i].QuoteLineNumber;
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QUOTE_LN_ID, quiteLineId);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QUOTE_LN_ID), quiteLineId);
 
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ON_ADD_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_START, dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ON_ADD_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), dealStartDate.ToString("MM/dd/yyyy"));
 
             if (dealStartDate < DateTime.Now) // If start date is in past
             {
-                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.BACK_DATE_RSN, "Contract Negotiation Delay");
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.BACK_DATE_RSN), "Contract Negotiation Delay");
             }
 
             DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_END, dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), dealEndDate.ToString("MM/dd/yyyy"));
 
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
             // Will need to add dimensions down the road
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
 
             // Volume Updates
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.VOLUME), quantity);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.VOLUME), quantity);
+
+            // Clear out system comments to all objects so that updates don't stack comments incorrectly
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
 
             // Using this to allow us to dive right into rules engines
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")

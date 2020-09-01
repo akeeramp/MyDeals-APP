@@ -638,7 +638,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (saveSuccessful != Guid.Empty)
                 {
                     if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
-                        jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
+                        jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
                 }
             }
             catch

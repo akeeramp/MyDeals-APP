@@ -1683,6 +1683,19 @@ namespace Intel.MyDeals.BusinessRules
             //throw new Exception("Fracking hell...");
         }
 
+        public static void SetSalesForceCreationMessages(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || r.Dc.DcID > 0) return;
+
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId != "")
+            {
+                r.Dc.AddTimelineComment("Deal moved from Requested to Submitted after creation.");
+            }
+        }
+
         public static void ValidateEcapPrice(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
