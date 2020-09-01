@@ -1094,8 +1094,6 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            // US705342 get dates for previous quarter
-            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, DateTime.Now.AddMonths(-3), null, null);
             
 
             // For front end YCS2 do not check for billing dates
@@ -1106,6 +1104,9 @@ namespace Intel.MyDeals.BusinessRules
 
             DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
+
+            // US705342 get dates for previous quarter
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null);
 
             // changed billing start date to equat deal start date as part of US705342
             // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
@@ -1132,7 +1133,7 @@ namespace Intel.MyDeals.BusinessRules
             // Billing start date can only be backdated up until start of previous quarter US705342
             if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT)
             {
-                deBllgStart.AddMessage("Billing Start date cannot be backdated beyond the previous quarter.");
+                deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
             }
         }
 
