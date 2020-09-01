@@ -699,6 +699,15 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
 
+            // Conduct staging push if needed - support only requested to submitted at this point - re-deal cycles will be rougher.
+            // Offer and Lost/Won deals would need to verify a right way major change prior to re-setting the WF Stage.  Best to let re-deal take care.
+            string psStage = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string dealStage = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            if (dealStage == WorkFlowStages.Draft && psStage == WorkFlowStages.Requested)
+            {
+                UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD), WorkFlowStages.Submitted);
+                myDealsData[OpDataElementType.PRC_ST].Data[psId].AddTimelineComment("Deal moved from Requested to Submitted after IQR Updating.");
+            }
             // Using this to allow us to dive right into rules engines
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
             {

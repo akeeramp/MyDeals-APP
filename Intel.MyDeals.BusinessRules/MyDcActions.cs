@@ -1702,7 +1702,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (salesForceId != "")
             {
-                r.Dc.AddTimelineComment("Deal moved from Requested to Submitted after creation.");
+                r.Dc.AddTimelineComment("Deal moved from Requested to Submitted after IQR creation.");
             }
         }
 
