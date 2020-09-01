@@ -8,76 +8,195 @@
         </div>
 
         <div id="RulesDetailsBodyDiv" class="modal-body">
-            <div class="row">                   
-                    <div ng-repeat="item in vm.legalExceptionData"  class="col-xs-{{vm.noOfCol}} col-sm-{{vm.noOfCol}}">
-                        <div id="navigation">
-                            <div class="panel panel-default">
-                                <div class="panel-heading" style="background-color: #003C71;color:white">{{item.PCT_EXCP_NO}}</div>
+            <div class="row">
+                <div ng-repeat="item in vm.legalExceptionData" class="col-xs-{{vm.noOfCol}} col-sm-{{vm.noOfCol}}">
+                    <div id="navigation">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="background-color: #003C71;color:white">PCT Exception No :{{item.PCT_EXCPT_NBR}}</div>
+                            <div class="panel-body">
                                 <div class="row">
-                                    <!--<div>-->
-                                        <div class="col-md-7">
-                                            <p class="divHeader" style="margin-top: 10px;">Active &nbsp<input type="checkbox" ng-checked={{item.ACTV_IND}}></p>
-                                        </div>
-                                        <div div class="col-md-5">
-                                            <p class="divHeader" style="margin-top: 10px;">Hidden &nbsp <input type="checkbox" ng-checked={{item.IS_DSBL}}></p>
-                                        </div>
-
-                                    <!--</div>-->
+                                    <div class="col-md-4">
+                                        <p class="divHeader" style="margin-top: 10px;margin-left:0px">Active &nbsp<input type="checkbox" onclick="return false" ng-checked={{item.ACTV_IND}}></p>
+                                    </div>
+                                    <div div class="col-md-4">
+                                  
+                                    </div>
+                                    <div div class="col-md-4">
+                                        <p class="divHeader" style="margin-top: 10px; float:right">Hidden &nbsp <input type="checkbox" onclick="return false" ng-checked={{item.IS_DSBL}}></p>
+                                    </div>                                    
                                 </div>
-                                    <br />
+                            </div>
+                           
+                            <div><p class="divHeader">Intel Product</p></div>
+                            <div class="panel-body">
 
-                                    <div><p class="divHeader">Scope</p></div>
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.INTEL_PRD}}</textarea>
 
-                                    <div class="panel-body">
+                            </div>
 
-                                        <textarea type="textarea" rows="5" readonly style="width:100%">{{item.Scope}}</textarea>
+                            <div><p class="divHeader">Scope</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.SCPE}}</textarea>
+
+                            </div>
+                            <div><p class="divHeader">Price Request</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.PRC_RQST}}</textarea>
+
+                            </div>
+                            <div><p class="divHeader">Cost</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{ item.COST}}</textarea>
+
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Exception Start Date</p>
+                                        <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{item.PCT_LGL_EXCPT_STRT_DT}}</textarea></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                       
+                                    </div>
+                                    <div div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Exception End Date</p>
+                                        <div> <textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.PCT_LGL_EXCPT_END_DT}}</textarea></div>
+                                    </div>
+                                </div>                                
+
+                            </div>
+
+                            <div><p class="divHeader">Forecasted Volume By Quarter</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.FRCST_VOL_BYQTR}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Customer Product</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.CUST_PRD}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Comp Product</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.MEET_COMP_PRD}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Comp Price</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.MEET_COMP_PRC}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Business Object</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.BUSNS_OBJ}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Potential Market Impact</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.PTNTL_MKT_IMPCT}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">OTHER</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.OTHER}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Justification for PCT Expiry</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.JSTFN_PCT_EXCPT}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Requesting Client</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.RQST_CLNT}}</textarea>
+
+                            </div>
+
+                            <div><p class="divHeader">Requesting Attorney</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.RQST_ATRNY}}</textarea>
+
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Approving Attorney</p>
+                                        <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.APRV_ATRNY}}</textarea></div>
+                                    </div>
+                                    <div class="col-md-4">
 
                                     </div>
-                                    <div><p class="divHeader">Price Request</p></div>
-
-                                    <div class="panel-body">
-
-                                        <textarea type="textarea" rows="5" readonly style="width:100%">{{item.PRC_RQST}}</textarea>
-
-                                    </div>
-                                    <div><p class="divHeader">Cost</p></div>
-
-                                    <div class="panel-body">
-
-                                        <textarea type="textarea" rows="5" readonly style="width:100%">{{ item.Cost}}</textarea>
-
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <p class="divHeader" style=" margin-left: 0px;">Exception Start Date</p>
-                                                <div><textarea type="textarea" rows="3" readonly style="width:60%;margin-bottom: 0px; margin-left: 0px;">{{ item.ExceptionStartDate}}</textarea></div>
-                                            </div>
-                                            <div div class="col-md-5">
-                                                <p class="divHeader" style="margin-left: 30px;">Exception End Date</p>
-                                                <div> <textarea type="textarea" rows="3" readonly style="width:90%;margin-bottom: 0px; margin-left: 0px;float:right">{{ item.ExceptionEndDate}}</textarea></div>
-                                            </div>
-                                        </div>
-
+                                    <div div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Date Approved</p>
+                                        <div> <textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.DT_APRV}}</textarea></div>
                                     </div>
                                 </div>
 
-                    </div>                   
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered By</p>
+                                        <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.CHG_EMP_NAME}}</textarea></div>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered Date</p>
+                                        <div> <textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.CHG_DTM}}</textarea></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
-            </div>       
+            </div>
         </div>
 </form>
 
 <style>
-    body{
-        font-size:13px !important;
+    body {
+        font-size: 13px !important;
     }
+
+    .panel-heading {
+        /*height:60px;*/
+    }
+
     .divHeader {
         margin-bottom: 0px;
         margin-left: 15px;
-        font-weight:800;
+        font-weight: 800;
     }
+
     #ruleModal .modal-footer {
         position: fixed;
         bottom: -59px;
@@ -88,8 +207,9 @@
         border: 1px solid #003c71;
         margin-left: -2px;
     }
-    .panel-body{
-        padding-top:0px;
+
+    .panel-body {
+        padding-top: 0px;
     }
 
     .k-selectbox {
@@ -103,11 +223,11 @@
         border-color: #adbd00 !important;
     }
 
-    .btn-success[disabled] {
-        color: #b1babf;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important;
-    }
+        .btn-success[disabled] {
+            color: #b1babf;
+            background-color: #edeff0 !important;
+            border-color: #b1babf !important;
+        }
 
     .notes {
         font-size: 14px;
@@ -127,7 +247,7 @@
 
     .modal-dialog {
         width: 90%;
-        margin-top: 100px; 
+        margin-top: 100px;
     }
 
     .fontSmall {
@@ -175,7 +295,7 @@
         margin-top: 15%;
     }
 
- 
+
 
     #btnClose {
         float: right;

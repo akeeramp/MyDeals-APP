@@ -8,61 +8,56 @@
 
     function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService, $uibModal) {
         var vm = this;
-        //vm.rule = {};
+        var filterData = "";
         vm.validationMessage = "";
-        $scope.gridDataList = []; 
-        $scope.gridDataArr = [];
-      
-       
-       
+
         vm.dataSource = new kendo.data.DataSource({
 
-            transport: {               
+            transport: {
                 read: function (e) {
                     legalExceptionService.getLegalExceptions()
                         .then(function (response) {
                             if (response.data.length > 0) {
                                 e.success(response.data);
+                                for (var i = 0; i < response.data.length; i++) {
+                                    reponse.data[i]['IS_SELECTED'] = false;                                 
+                                }
                             }
                         }, function (response) {
                             logger.error("Unable to get Legal exceptions.", response, response.statusText);
                         });
-                    $scope.gridDataArr.length = 0;
                 },
                 update: function (e) {
-                    $scope.gridDataArr.length = 0;
                     if (isInvalidateRow(e, 'update')) {
                         e.error();
                     } else {
                         legalExceptionService.updateLegalException(e.data.models[0])
                             .then(function (response) {
                                 e.success(response.data);
+                                ClearSelectedItem();
                                 logger.success("Legal exception were successfully updated.");
-                                
-                                
+
                             }, function (response) {
                                 logger.error("Unable to update Legal exception.", response, response.statusText);
                             });
                     }
-
                 },
                 create: function (e) {
-                    $scope.gridDataArr.length = 0;
                     if (isInvalidateRow(e, 'create')) {
                         e.error();
                     } else {
                         legalExceptionService.createLegalException(e.data.models[0])
                             .then(function (response) {
                                 e.success(response.data);
+                                ClearSelectedItem();
                                 logger.success("Legal exceptions added.");
-                                
+
                             }, function (response) {
                                 logger.error("Unable to add new Legal exceptions", response, response.statusText);
                             });
                     }
                 },
                 destroy: function (e) {
-                    $scope.gridDataArr.length = 0;
                     var modalOptions = {
                         closeButtonText: 'Cancel',
                         actionButtonText: 'Delete Legal Exception',
@@ -73,13 +68,15 @@
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
                         legalExceptionService.deleteLegalException(e.data.models[0]).then(function (response) {
                             e.success(response.data);
+                            ClearSelectedItem();
                             logger.success("Legal Exception Deleted.");
-                           
+
                         }, function (response) {
                             logger.error("Unable to delete Legal Exception.", response, response.statusText);
                         });
                     }, function (response) {
                         cancelChanges();
+                        ClearSelectedItem();
                     });
                 },
             },
@@ -95,75 +92,86 @@
 
                     id: "MYDL_PCT_LGL_EXCPT_SID",
                     fields: {
-                        ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
-                        , INTEL_PRD: {
+                        IS_SELECTED: { editable: true, defaultValue: false, type: "boolean" }
+                        , ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
+                        , PCT_EXCPT_NBR: {
+                            validation: {
+                                required: { message: "* field is required" },
+                            }
+                        },
+                        VER_NBR: {
+                            validation: {
+                                required: { message: "* field is required" },
+                            }
+                        },
+                        INTEL_PRD: {
                             validation: {
                                 required: { message: "* field is required" },
                             }
                         },
                         IS_DSBL: { editable: true, defaultValue: false, type: "boolean" }
-						, SCPE: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
-						, PRC_RQST: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
+                        , SCPE: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
+                        , PRC_RQST: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
                         , COST: {
                             type: "string", validation: {
                                 required: { message: "* field is required" }
                             }
                         }
-            			, PCT_LGL_EXCPT_STRT_DT: {
-            			    type: "date", validation: {
-            			        required: { message: "* field is required" }
-            			    }
-            			}
+                        , PCT_LGL_EXCPT_STRT_DT: {
+                            type: "date", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
                         , PCT_LGL_EXCPT_END_DT: {
                             type: "date", validation: {
                                 required: { message: "* field is required" },
                                 exceptionEndDateValidation: exceptionEndDateValidation
                             }
                         }
-						, FRCST_VOL_BYQTR: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
-						, CUST_PRD: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
-						, MEET_COMP_PRD: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
+                        , FRCST_VOL_BYQTR: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
+                        , CUST_PRD: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
+                        , MEET_COMP_PRD: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
                         , MEET_COMP_PRC: {
                             type: "string", validation: {
                                 required: { message: "* field is required" }
                             }
                         }
-						, BUSNS_OBJ: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
-						, PTNTL_MKT_IMPCT: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
-						, OTHER: { type: "string" }
-						, JSTFN_PCT_EXCPT: {
-						    type: "string", validation: {
-						        required: { message: "* field is required" }
-						    }
-						}
+                        , BUSNS_OBJ: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
+                        , PTNTL_MKT_IMPCT: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
+                        , OTHER: { type: "string" }
+                        , JSTFN_PCT_EXCPT: {
+                            type: "string", validation: {
+                                required: { message: "* field is required" }
+                            }
+                        }
                         , RQST_CLNT: {
                             type: "string", validation: {
                                 required: { message: "* field is required" }
@@ -186,14 +194,20 @@
                         }
                         , CHG_EMP_NAME: { type: "string", editable: false, defaultValue: usrName }
                         , CHG_DTM: { type: "date", editable: false, defaultValue: moment().format('l') }
+
                     }
                 },
             },
         });
 
-        $scope.openCompareLegalException = function ()
-        {
-            if ($scope.gridDataArr.length == 2) {
+        $scope.openCompareLegalException = function () {
+            var selectedData = $linq.Enumerable().From(filterData)
+                .Where(function (x) {
+                    return (x.IS_SELECTED == true);
+                })
+                .ToArray();
+
+            if (selectedData.length == 2) {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
@@ -204,12 +218,11 @@
                     windowClass: 'prdSelector-modal-window',
                     resolve: {
                         RuleConfig: ['legalExceptionService', function () {
-                           
+
                         }],
                         dataItem: function () {
-                           
-                            return $scope.gridDataArr;
 
+                            return selectedData;
                         }
                     }
                 });
@@ -224,7 +237,8 @@
         }
 
         function textareaEditor(container, options) {
-          
+            ClearSelectedItem();
+
             $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Please enter.." ' +
                 'required name="' + options.field + '" />').appendTo(container);
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
@@ -251,251 +265,298 @@
             resizable: true,
             reorderable: true,
             columnMenu: false,
-            sort: function (e) { $scope.gridDataArr.length = 0; gridUtils.cancelChanges(e); },
-            filter: function (e) { $scope.gridDataArr.length = 0; gridUtils.cancelChanges(e); },         
+            sort: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
+            filter: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
             toolbar: GridMenuButton(editNotAllowed),
-            
+
             editable: { mode: "inline", confirmation: false },
+
+            select: function (e) {
+
+                var commandCell = e.container.find("td:eq(0)");
+                commandCell.html('<div class="dealTools" ><input type="checkbox"  class="grid - link - checkbox with-font" id="lnkChk"  style="height: 17px; width: 17px; border: 2px solid;" /> </div>');
+            },
+
             edit: function (e) {
-               
-                var commandCell = e.container.find("td:first");               
+
+                var commandCell = e.container.find("td:eq(1)");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             destroy: function (e) {
-               
+
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             cancel: function (e) {
                 vm.validationMessage = '';
+                ClearSelectedItem();
             },
-           
-            columns: [
-           
-            {
-                
-                command: [
 
-                    { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\$event, dataItem)' /> </div>" },
-                       { name: "edit", template: "<a ng-if='" + !editNotAllowed + "' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-                       { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
-                ],
-                width: 120,
-            },
-            {
-                field: "ACTV_IND",
-                width: 115,
-                headerTemplate: "<div class='isRequired'> Active </div>",
-                template: gridUtils.boolViewer('ACTV_IND'),
-                editor: gridUtils.boolEditor,
-                attributes: { style: "text-align: center;" },
-                editable: $scope.isEditable
-            },
-            {
-                field: "IS_DSBL",
-                width: 115,
-                headerTemplate: "<div class='isRequired'> Hidden </div>",
-                template: gridUtils.boolViewer('IS_DSBL'),
-                editor: gridUtils.boolEditor,
-                attributes: { style: "text-align: center;" },
-                editable: function (dataItem) {
-                    return editNotAllowed === 1 ? false : true;
-                }
-            },
-            {
-                field: "MYDL_PCT_LGL_EXCPT_SID",
-                hidden: true,
-                width: 120,
-                filterable: { multi: true, search: true }
-            },
-            {
-                field: "INTEL_PRD",
-                headerTemplate: "<div class='isRequired'> Intel Product </div>",
-                editor: textareaEditor,
-                title: "Intel Product",
-                width: 240,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "SCPE",
-                headerTemplate: "<div class='isRequired'> Scope </div>",
-                editor: textareaEditor,
-                title: "Scope",
-                width: 200,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "PRC_RQST",
-                editor: textareaEditor,
-                title: "Price Request",
-                headerTemplate: "<div class='isRequired'> Price Request </div>",
-                width: 160,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "COST",
-                title: "Cost",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Cost </div>",
-                width: 120,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "PCT_LGL_EXCPT_STRT_DT",
-                width: 150,
-                headerTemplate: "<div class='isRequired'> Exception Start Date </div>",
-                template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_STRT_DT), 'M/d/yyyy') #",
-                title: "Exception Start Date",
-                filterable: {
-                    extra: false,
-                    ui: "datepicker"
+            columns: [
+                {
+                    command: [
+
+                        { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\$event, dataItem)' /> </div>" }
+                    ],
+                    width: 40,
+                    attributes: { style: "text-align: center;" },
                 },
-                editable: $scope.isEditable
-            },
-            {
-                field: "PCT_LGL_EXCPT_END_DT",
-                title: "Exception End Date",
-                headerTemplate: "<div class='isRequired'> Exception End Date </div>",
-                template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_END_DT), 'M/d/yyyy') #",
-                width: 150,
-                filterable: {
-                    extra: false,
-                    ui: "datepicker"
+
+                {
+                    command: [
+
+                        { name: "edit", template: "<a ng-if='" + !editNotAllowed + "' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                    ],
+                    width: 120,
                 },
-                editable: $scope.isEditable
-            },
-            {
-                field: "FRCST_VOL_BYQTR",
-                title: "Forecasted Volume By Quarter",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
-                width: 190,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "CUST_PRD",
-                title: "Customer Product",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Customer Product </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "MEET_COMP_PRD",
-                title: "Comp Product",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Comp Product </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "MEET_COMP_PRC",
-                title: "Comp Price",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Comp Price </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "BUSNS_OBJ",
-                title: "Business Object",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Business Object </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "PTNTL_MKT_IMPCT",
-                title: "Potential Market Impact",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
-                width: 180,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "OTHER",
-                title: "Other",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Other </div>",
-                width: 120,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "JSTFN_PCT_EXCPT",
-                title: "Justification for PCT Expiry",
-                editor: textareaEditor,
-                headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
-                width: 220,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "RQST_CLNT",
-                title: "Requesting Client",
-                headerTemplate: "<div class='isRequired'> Requesting Client </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "RQST_ATRNY",
-                title: "Requesting Attorney",
-                headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "APRV_ATRNY",
-                title: "Approving Attorney",
-                headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: $scope.isEditable
-            },
-            {
-                field: "DT_APRV",
-                title: "Date Approved",
-                template: "#= kendo.toString(new Date(DT_APRV), 'M/d/yyyy') #",
-                headerTemplate: "<div class='isRequired'> Date Approved </div>",
-                width: 150,
-                filterable: {
-                    extra: false,
-                    ui: "datepicker"
+                {
+                    field: "ACTV_IND",
+                    width: 115,
+                    headerTemplate: "<div class='isRequired'> Active </div>",
+                    template: gridUtils.boolViewer('ACTV_IND'),
+                    editor: gridUtils.boolEditor,
+                    attributes: { style: "text-align: center;" },
+                    editable: $scope.isEditable
                 },
-                editable: $scope.isEditable
-            },
-            {
-                field: "CHG_EMP_NAME",
-                title: "Entered By",
-                headerTemplate: "<div class='isRequired'> Entered By </div>",
-                width: 150,
-                filterable: { multi: true, search: true },
-                editable: false
-            },
-            {
-                field: "CHG_DTM",
-                title: "Entered Date",
-                headerTemplate: "<div class='isRequired'> Entered Date </div>",
-                template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
-                width: 150,
-                filterable: {
-                    extra: false,
-                    ui: "datepicker"
+                {
+                    field: "IS_DSBL",
+                    width: 115,
+                    headerTemplate: "<div class='isRequired'> Hidden </div>",
+                    template: gridUtils.boolViewer('IS_DSBL'),
+                    editor: gridUtils.boolEditor,
+                    attributes: { style: "text-align: center;" },
+                    editable: function (dataItem) {
+                        return editNotAllowed === 1 ? false : true;
+                    }
                 },
-                editable: false
-            }]
+                {
+                    field: "MYDL_PCT_LGL_EXCPT_SID",
+                    hidden: true,
+                    width: 120,
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "PCT_EXCPT_NBR",
+                    title: "PCT Exception No.",
+                    headerTemplate: "<div class='isRequired'> PCT Exception No. </div>",
+                    width: 150,
+                    edit: onGridEditing,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "VER_NBR",
+                    title: "Version No.",
+                    headerTemplate: "<div class='isRequired'> Version No. </div>",
+                    width: 150,
+                    edit: onGridEditing,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "VER_CRE_DTM",
+                    hidden: true,
+                    width: 120,
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "INTEL_PRD",
+                    headerTemplate: "<div class='isRequired'> Intel Product </div>",
+                    editor: textareaEditor,
+                    title: "Intel Product",
+                    width: 240,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "SCPE",
+                    headerTemplate: "<div class='isRequired'> Scope </div>",
+                    editor: textareaEditor,
+                    title: "Scope",
+                    width: 200,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "PRC_RQST",
+                    editor: textareaEditor,
+                    title: "Price Request",
+                    headerTemplate: "<div class='isRequired'> Price Request </div>",
+                    width: 160,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "COST",
+                    title: "Cost",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Cost </div>",
+                    width: 120,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "PCT_LGL_EXCPT_STRT_DT",
+                    width: 150,
+                    headerTemplate: "<div class='isRequired'> Exception Start Date </div>",
+                    template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_STRT_DT), 'M/d/yyyy') #",
+                    title: "Exception Start Date",
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "PCT_LGL_EXCPT_END_DT",
+                    title: "Exception End Date",
+                    headerTemplate: "<div class='isRequired'> Exception End Date </div>",
+                    template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_END_DT), 'M/d/yyyy') #",
+                    width: 150,
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "FRCST_VOL_BYQTR",
+                    title: "Forecasted Volume By Quarter",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
+                    width: 190,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "CUST_PRD",
+                    title: "Customer Product",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Customer Product </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "MEET_COMP_PRD",
+                    title: "Comp Product",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Comp Product </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "MEET_COMP_PRC",
+                    title: "Comp Price",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Comp Price </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "BUSNS_OBJ",
+                    title: "Business Object",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Business Object </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "PTNTL_MKT_IMPCT",
+                    title: "Potential Market Impact",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
+                    width: 180,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "OTHER",
+                    title: "Other",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Other </div>",
+                    width: 120,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "JSTFN_PCT_EXCPT",
+                    title: "Justification for PCT Expiry",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
+                    width: 220,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "EXCPT_RSTRIC_DURN",
+                    title: "Exceptions, Restrictions & Durations",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Exceptions, Restrictions & Durations </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "RQST_CLNT",
+                    title: "Requesting Client",
+                    headerTemplate: "<div class='isRequired'> Requesting Client </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "RQST_ATRNY",
+                    title: "Requesting Attorney",
+                    headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "APRV_ATRNY",
+                    title: "Approving Attorney",
+                    headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "DT_APRV",
+                    title: "Date Approved",
+                    template: "#= kendo.toString(new Date(DT_APRV), 'M/d/yyyy') #",
+                    headerTemplate: "<div class='isRequired'> Date Approved </div>",
+                    width: 150,
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "CHG_EMP_NAME",
+                    title: "Entered By",
+                    headerTemplate: "<div class='isRequired'> Entered By </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: false
+                },
+                {
+                    field: "CHG_DTM",
+                    title: "Entered Date",
+                    headerTemplate: "<div class='isRequired'> Entered Date </div>",
+                    template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
+                    width: 150,
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: false
+                }]
         }
 
         function cancelChanges() {
@@ -513,6 +574,19 @@
                 return false;
             }
             return true;
+        }
+
+        //Checking Max Length of Editable Field
+        function onGridEditing(arg) {
+            arg.container.find("input[name='PCT_EXCPT_NBR']").attr('maxlength', '10');
+            arg.container.find("input[name='VER_NBR']").attr('maxlength', '4');
+        }
+
+        //To clear selected checkbox 
+        function ClearSelectedItem() {
+            for (var i = 0; i < filterData.length; i++) {
+                filterData[i].IS_SELECTED = false;
+            }
         }
 
         function isInvalidateRow(e, mode) {
@@ -533,55 +607,50 @@
             e.data.models[0].PCT_LGL_EXCPT_STRT_DT = moment(e.data.models[0].PCT_LGL_EXCPT_STRT_DT).format("l");
             e.data.models[0].PCT_LGL_EXCPT_END_DT = moment(e.data.models[0].PCT_LGL_EXCPT_END_DT).format("l");
             e.data.models[0].DT_APRV = moment(e.data.models[0].DT_APRV).format("l");
+            e.data.models[0].VER_CRE_DTM = moment(e.data.models[0].VER_CRE_DTM).format("l");
 
             return false;
         }
 
-        //To get the selected checkbox dataItem and store it to an array
-        $scope.selectItem = function (event, dataItem)
-        {
-            if (event.target.checked)
-            {                              
-                $scope.gridDataList = {
-                    'MYDL_PCT_LGL_EXCPT_SID': this.dataItem.MYDL_PCT_LGL_EXCPT_SID,
-                    'PCT_EXCP_NO': 'Exception 1234',
-                    'ACTV_IND': this.dataItem.ACTV_IND,
-                    'IS_DSBL': this.dataItem.IS_DSBL,
-                    'Scope': this.dataItem.SCPE,
-                    'PRC_RQST': this.dataItem.PRC_RQST,
-                    'Cost': this.dataItem.COST,
-                    'ExceptionStartDate': moment(this.dataItem.PCT_LGL_EXCPT_END_DT).format("l"),
-                    'ExceptionEndDate':moment(this.dataItem.PCT_LGL_EXCPT_STRT_DT).format("l")
-                 
-                };
-                $scope.gridDataArr.push($scope.gridDataList);
-            }
-            else
-            {
-                for (var i = 0; i < $scope.gridDataArr.length; i++)
-                {
-                    var unCheckedList = $scope.gridDataArr[i];
-                    var legalExcptSid = unCheckedList['MYDL_PCT_LGL_EXCPT_SID'];
-                    if (legalExcptSid == dataItem.MYDL_PCT_LGL_EXCPT_SID)
-                    {
-                        $scope.gridDataArr.splice(i, 1);
-                    }
+        //To get the selected checkbox data and make the IS_Selected as 'true'
+        $scope.selectItem = function (event, dataItem) {
+            var dataSource = $("#grid").data("kendoGrid").dataSource;
+            var filters = dataSource.filter();
+            var allData = dataSource.data();
+            var query = new kendo.data.Query(allData);
+            filterData = query.filter(filters).data;
 
-                   
-                }                           
-            }           
+            if (event.target.checked) {
+                for (var i = 0; i < filterData.length; i++) {
+                    if (filterData[i].id == dataItem.id) {
+                        filterData[i].IS_SELECTED = true;
+                        filterData[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
+                        filterData[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
+                        filterData[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
+                        filterData[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < filterData.length; i++) {
+                    if (filterData[i].id == dataItem.id) {
+                        filterData[i].IS_SELECTED = false;
+
+                    }
+                }
+            }
         }
-      
-      function GridMenuButton(addRecordsNotAllowed) {
+
+        function GridMenuButton(addRecordsNotAllowed) {
             var rtn = '';
             if (!addRecordsNotAllowed) {
                 rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
             }
-          rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
+            rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
 
-          rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span  style="color: white !important"></span>Compare</a>';
-        
-          return rtn;
+            rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="k-icon intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
+
+            return rtn;
         }
 
         function productEditor(container, options) {

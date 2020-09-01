@@ -461,6 +461,15 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule
+                {
+                    Title="Set Creation Messages for SalesForce Deals",
+                    ActionRule = MyDcActions.SetSalesForceCreationMessages,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.DC_ID),
+                },
+
                 //CheckForIntegerValues
                 new MyOpRule
                 {

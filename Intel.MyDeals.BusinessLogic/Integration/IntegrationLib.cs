@@ -12,6 +12,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
+using Intel.MyDeals.BusinessRules;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -156,11 +157,11 @@ namespace Intel.MyDeals.BusinessLogic
             // Need to get resultsList down to a single product json string - if it fails, return the null empty object
             if (resultsList.ValidProducts.Count <= 0) // No valid products returned, clear return list and post error
             {
-                productErrorResponse.Add(AppendError(402, "Product Error", "Product not found"));
+                productErrorResponse.Add(AppendError(703, "Product Error", "Product not found"));
             }
             else if (resultsList.ValidProducts.Count > 1) // Multiple matches returned -- Might be able to consolidate this and next and deal with it externally
             {
-                productErrorResponse.Add(AppendError(403, "Product Error", "Product search returned multiple products"));
+                productErrorResponse.Add(AppendError(704, "Product Error", "Product search returned multiple products"));
             }
             else
             {
@@ -190,7 +191,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 if (returnedProducts.Count == 0)
                 {
-                    productErrorResponse.Add(AppendError(404, "Product Error", "No valid products matched"));
+                    productErrorResponse.Add(AppendError(705, "Product Error", "No valid products matched"));
                 }
             }
 
@@ -200,7 +201,7 @@ namespace Intel.MyDeals.BusinessLogic
         private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, int custId, TenderTransferRootObject workRecordDataFields, int currentRec)
         {
             // We only take the first instance of values as per Mahesh ([0] below)
-            string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competetorProduct.Name;
+            string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competitorProduct.Name;
             string perfMetric = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].performanceMetric[0].performanceMetric; // SpecInt - NOT USED YET
             string meetCompPrcStr = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MeetCompPrice;
             string iaBenchStr = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].performanceMetric[0].IntelSKUPerformance;
@@ -258,7 +259,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (meetCompResult == null)
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(501, "PCT/MCT Error", "Saving Meet Comp data failed"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "PCT/MCT Error", "Saving Meet Comp data failed"));
                 }
             }
             catch (Exception e)
@@ -266,7 +267,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string errMsg = "PR_MYDL_UI_SAVE_MEET_COMP threw an error on save.  Call data: <br>";
                 errMsg += strategyId + ", " + OpDataElementType.PRC_ST.ToId() + ", " + JsonConvert.SerializeObject(mcu) + "<br>";
                 errMsg += e.Message + "<br>";
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(505, "PCT/MCT Error", errMsg));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(731, "PCT/MCT Error", errMsg));
             }
 
             // Get formal results
@@ -275,18 +276,18 @@ namespace Intel.MyDeals.BusinessLogic
             List<PctMctResult> pctResults = _costTestDataLib.RunPct(OpDataElementType.PRC_ST.ToId(), deadIdList);
             if (pctResults == null)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(504, "PCT/MCT Error", "PR_MYDL_GET_MEET_COMP failed to return data, Assume PCT/MCT failed"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(732, "PCT/MCT Error", "PR_MYDL_GET_MEET_COMP failed to return data, Assume PCT/MCT failed"));
             }
             else
             {
                 if (pctResults.Any(m => m.MEETCOMP_TEST_RESULT == "Fail"))
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(503, "PCT/MCT Error", "Meet Comp Test FAILED"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(733, "PCT/MCT Error", "Meet Comp Test FAILED"));
                 }
 
                 if (pctResults.Any(m => m.COST_TEST_RESULT == "Fail"))
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(502, "PCT/MCT Error", "Price Cost Test FAILED"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(734, "PCT/MCT Error", "Price Cost Test FAILED"));
                 }
             }
         }
@@ -342,7 +343,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (productLookupObj?.MydlPcsrNbr == null)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(401, "Product Error", "Product EMP ID not found"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product Error", "Product EMP ID not found"));
                 return -100; // Bail out - no products matched
             }
 
@@ -360,6 +361,14 @@ namespace Intel.MyDeals.BusinessLogic
             int myPrdMbrSid = singleProduct != null ? ToInt32(singleProduct.PRD_MBR_SID) : 0;
             string myPrdCat = singleProduct != null ? singleProduct.PRD_CAT_NM : "";
             #endregion Product Check
+
+            #region Deal Stability Check
+            if (geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || dealType == "")
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error", "Failed to create the Tender Deal due to missing expected fields"));
+                return -100;
+            }
+            #endregion Deal Stability Check
 
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
             string defArSettlementLvl =
@@ -390,7 +399,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPtData.Add("MRKT_SEG", "Corp");
             testPtData.Add("PROGRAM_PAYMENT", "Backend");
             testPtData.Add("GEO_COMBINED", "Worldwide"); // We need to inject the GEO here
-            testPtData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testPtData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testPtData.Add("TITLE", "PT - " + dealSfId);
             testPtData.Add("SALESFORCE_ID", dealSfId);
             testPtData.Add("PASSED_VALIDATION", PassedValidation.Complete);
@@ -416,7 +425,7 @@ namespace Intel.MyDeals.BusinessLogic
             testPtrData.Add("GEO_COMBINED", geoCombined);
             testPtrData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
             testPtrData.Add("PTR_SYS_PRD", translatedValidProductJson); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
-            testPtrData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testPtrData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testPtrData.Add("SERVER_DEAL_TYPE", serverDealType);
             testPtrData.Add("QLTR_PROJECT", projectName);
             testPtrData.Add("SALESFORCE_ID", dealSfId);
@@ -437,8 +446,8 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("WF_STG_CD", "Draft"); // Because this is a new deal
             testDealData.Add("TITLE", productLookupObj.MydlPcsrNbr); // Echo out user product name
             testDealData.Add("PAYOUT_BASED_ON", "Consumption");
-            testDealData.Add("CAP_____20___0", singleProduct?.CAP ?? ""); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("YCS2_PRC_IRBT_____20___0", singleProduct?.YCS2 ?? "No YCS2"); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("CAP_____20___0", singleProduct?.CAP ?? ""); // From PTR_SYS_PRD single Product
+            testDealData.Add("YCS2_PRC_IRBT_____20___0", singleProduct?.YCS2 ?? "No YCS2"); // From PTR_SYS_PRD single Product
             testDealData.Add("OBJ_SET_TYPE_CD", dealType);
             testDealData.Add("CUST_MBR_SID", custId);
             testDealData.Add("START_DT", dealStartDate.ToString("MM/dd/yyyy"));
@@ -446,7 +455,7 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("VOLUME", quantity);
             testDealData.Add("END_CUSTOMER_RETAIL", endCustomer);
             testDealData.Add("ON_ADD_DT", dealStartDate.ToString("MM/dd/yyyy")); // defaulting to start date
-            testDealData.Add("CONSUMPTION_REASON", "Platform");
+            testDealData.Add("CONSUMPTION_REASON", "End Customer");
             testDealData.Add("MRKT_SEG", "Corp");
             testDealData.Add("PROGRAM_PAYMENT", "Backend");
             testDealData.Add("REBATE_BILLING_START", dealStartDate.ToString("MM/dd/yyyy")); // defaulting to start date
@@ -454,20 +463,20 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
             testDealData.Add("GEO_COMBINED", geoCombined);
             testDealData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
-            testDealData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testDealData.Add("SERVER_DEAL_TYPE", serverDealType);
             testDealData.Add("QLTR_PROJECT", projectName);
-            testDealData.Add("CAP_STRT_DT_____20___0", singleProduct?.CAP_START ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("CAP_END_DT_____20___0", singleProduct?.CAP_END ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("CAP_STRT_DT_____20___0", singleProduct?.CAP_START ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD single Product
+            testDealData.Add("CAP_END_DT_____20___0", singleProduct?.CAP_END ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD single Product
             testDealData.Add("PASSED_VALIDATION", PassedValidation.Complete); // From PTR_SYS_PRD
-            testDealData.Add("HAS_L1", singleProduct?.HAS_L1 ?? 0); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("HAS_L2", singleProduct?.HAS_L2 ?? 0); // From PTR_SYS_PRD singleProduct
-            testDealData.Add("PRODUCT_CATEGORIES", singleProduct?.PRD_CAT_NM ?? ""); // From PTR_SYS_PRD singleProduct
+            testDealData.Add("HAS_L1", singleProduct?.HAS_L1 ?? 0); // From PTR_SYS_PRD single Product
+            testDealData.Add("HAS_L2", singleProduct?.HAS_L2 ?? 0); // From PTR_SYS_PRD single Product
+            testDealData.Add("PRODUCT_CATEGORIES", singleProduct?.PRD_CAT_NM ?? ""); // From PTR_SYS_PRD single Product
             testDealData.Add("SALESFORCE_ID", dealSfId);
-            testDealData.Add("QUOTE_LN_ID", quoteLineId + " - " + quoteLineNumber);
+            testDealData.Add("QUOTE_LN_ID", quoteLineNumber);
             testDealData.Add("PERIOD_PROFILE", "Bi-Weekly (2 weeks)");
             testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
-            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName);
+            testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName + "; Deal moved from Requested to Submitted after creation.");
             testDealData.Add("IN_REDEAL", "0");
             testDealData.Add("EXCLUDE_AUTOMATION", "No");  // Set all inbound tenders to allow automation - check with Tenders
             if (dealStartDate < DateTime.Now) testDealData.Add("BACK_DATE_RSN", "Contract Negotiation Delay");
@@ -550,7 +559,7 @@ namespace Intel.MyDeals.BusinessLogic
                 List<TendersSFIDCheck> sfToMydlIds = _jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
                 if (sfToMydlIds == null)
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(100, "DB Lookup Error", "Failed, SF ID lookup Error"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "DB Lookup Error", "Failed, SF ID lookup Error"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
                     continue; // we had error on lookup, skip to next to process
                 }
@@ -561,12 +570,9 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> passedFolioIds = new List<int>() { folioId };
                 MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
 
-                //List<int> passedFolioIds2 = new List<int>() { 512632 };
-                //MyDealsData myDealsData2 = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds2, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
-
                 if (custId == 0) // Need to have a working customer for this request and failed, skip!
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(101, "Invalid Customer", "Unable to find the customer with CIMId (" + custCimId + ")"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Invalid Customer", "Unable to find the customer with CIMId (" + custCimId + ")"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
                 }
@@ -579,12 +585,12 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(201, "Folio Error", "Failed to create the Tender Folio for this request"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(710, "Folio Error", "Failed to create the Tender Folio for this request"));
                         executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                         continue;
                     }
                 }
-                else // Potential Folio update route
+                else // Post back known Folio ID to SF
                 {
                     workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
                 }
@@ -596,14 +602,16 @@ namespace Intel.MyDeals.BusinessLogic
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
                     if (dealId < 0)  // Needed to create a new PS to WIP Deal for this request and failed, error..
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(301, "Deal Error", "Failed to create the Tender Deal"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(711, "Deal Error", "Failed to create the Tender Deal"));
                         executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                         continue;
                     }
                 }
-                else // Potential Deals update route 
+                else // Post back known Deal ID to SF, append error that it exists already
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
+                    executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
+                    //workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error", "Tender Deal already created, Deal ID is " + dealId));
                 }
 
                 // Should have no bail outs, so post final messages here
@@ -625,6 +633,14 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.EnsureBatchIDs();
         }
 
+        private void UpdateDeValue(IOpDataElement myDe, string myValue)
+        {
+            if (myDe.AtrbValue.ToString() != myValue.ToString())
+            {
+                myDe.AtrbValue = myValue;
+            }
+        }
+
         private bool UpdateRecordsFromSfPackets(MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int i, int custId, int folioId, int psId, int dealId, ref string validErrors)
         {
             int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
@@ -633,45 +649,55 @@ namespace Intel.MyDeals.BusinessLogic
             // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
             // Update SalesForce IDs for new deal instance objects
             string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-            myDealsData[OpDataElementType.PRC_ST].Data[psId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.PRC_TBL].Data[ptId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.SALESFORCE_ID, salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SALESFORCE_ID), salesForceIdDeal);
 
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL, endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
 
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.QLTR_PROJECT, projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
+
+            string quiteLineId = workRecordDataFields.recordDetails.quote.quoteLine[i].QuoteLineNumber;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QUOTE_LN_ID), quiteLineId);
 
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.START_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ON_ADD_DT, dealStartDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_START, dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ON_ADD_DT), dealStartDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), dealStartDate.ToString("MM/dd/yyyy"));
 
             if (dealStartDate < DateTime.Now) // If start date is in past
             {
-                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.BACK_DATE_RSN, "Contract Negotiation Delay");
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.BACK_DATE_RSN), "Contract Negotiation Delay");
             }
 
             DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_DT, dealEndDate.ToString("MM/dd/yyyy"));
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.REBATE_BILLING_END, dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), dealEndDate.ToString("MM/dd/yyyy"));
 
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
             // Will need to add dimensions down the road
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.ECAP_PRICE, ecapPrice);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
 
             // Volume Updates
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
-            myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
-            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.VOLUME, quantity);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.VOLUME), quantity);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.VOLUME), quantity);
+
+            // Clear out system comments to all objects so that updates don't stack comments incorrectly
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
 
             // Using this to allow us to dive right into rules engines
             SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
@@ -681,7 +707,11 @@ namespace Intel.MyDeals.BusinessLogic
                 DeleteAllPTR = false
             });
 
-            bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
+            bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
+            }
 
             if (hasValidationErrors) // If validation errors, log and skip to next
             {
@@ -692,72 +722,86 @@ namespace Intel.MyDeals.BusinessLogic
             return hasValidationErrors;
         }
 
-        private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
+        private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, ref int dealId)
         {
+            string executionResponse = "";
+
+            string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+            string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[recordId].Id;
+
+            workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
+
+            executionResponse += "Processing update for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+            int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+            dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQId);
+
+            List<int> passedFolioIds = new List<int>() { dealId };
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+            if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(712, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
+            }
+
+            // Break out update records block so that it can be updated easier apart from the save and PCT/MCT calls
+
+            int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
+            int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+
+            // Break out update and validate checks, then come back and do the needed saves if everything is good.
+            string validErrors = "";
+            if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, ref validErrors)) // If validation errors, log and skip to next
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(713, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            // Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+            ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
+            {
+                CustId = custId,
+                ContractId = folioId
+            };
+
+            TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
+            MyDealsData saveResponse = myDealsData.Save(saveContractToken);
+
+            if (!saveResponse.Keys.Any())
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(721, "Deal Stage Error", "Save call failed at DB"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            // Update the Meet Comp data now.
+            int prdMbrSid = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
+            string prdCat = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES);
+            string mydlPcsrNbr = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
+
+            EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, recordId);
+            //gather return fields and post back to json record (things like stage and approved by fields)
+
+            string stage = saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft ?
+                saveResponse[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
+                saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
+
+            executionResponse += "Deal " + dealId + " - Save completed<br>";
+
+            return executionResponse;
+        }
+
+        private string ProcessUpdateRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
+        {
+            // This was shelled out to support updating single lines from a create path as per Mahesh request.
             string executionResponse = "";
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
-                string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
-                string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-
-                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
-
-                executionResponse += "Processing update for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
-                int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
-                dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId);
-
-                List<int> passedFolioIds = new List<int>() { dealId };
-                MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
-
-                if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(302, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                    continue; // we had error on lookup, skip to next to process
-                }
-
-                // Break out update records block so that it can be updated easier apart from the save and PCT/MCT calls
-
-                int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
-                int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-
-                // Break out update and validate checks, then come back and do the needed saves if everything is good.
-                string validErrors = "";
-                if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, i, custId, folioId, psId, dealId, ref validErrors)) // If validation errors, log and skip to next
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(303, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                    continue;
-                }
-
-                // Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
-                ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
-                {
-                    CustId = custId,
-                    ContractId = folioId
-                };
-
-                TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
-                MyDealsData saveResponse = myDealsData.Save(saveContractToken);
-
-                if (!saveResponse.Keys.Any())
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(305, "Deal Stage Error", "Save call failed at DB"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                    continue;
-                }
-
-                // Update the Meet Comp data now.
-                int prdMbrSid = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
-                string prdCat = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES);
-                string mydlPcsrNbr = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
-
-                EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, i);
-                //gather return fields and post back to json record (things like stage and approved by fields)
-
-
-                executionResponse += "Deal " + dealId + " - Save completed<br>";
+                executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
             }
 
             return executionResponse;
@@ -785,7 +829,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // Safety check for PS and WIP deal collectors, if none, then problem
                 if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any() || !myDealsData[OpDataElementType.WIP_DEAL].Data.ContainsKey(dealId))
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(302, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(712, "Deal Error", "Couldn't find deal for this request (" + dealId + ")"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue; // we had error on lookup, skip to next to process
                 }
@@ -807,7 +851,7 @@ namespace Intel.MyDeals.BusinessLogic
                         // Place any stage to cancel here if IRQ decides they want it
                         else
                         {
-                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(304, "Deal Stage Error", "Stage change to " + destinationStage + " failed, current deal stage is " + currentPsWfStg));
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(720, "Deal Stage Error", "Stage change to " + destinationStage + " failed, current deal stage is " + currentPsWfStg));
                             executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                             continue;
                         }
@@ -823,7 +867,7 @@ namespace Intel.MyDeals.BusinessLogic
                         // Place lost to offer here as else if IRQ decides they want it
                         else
                         {
-                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(304, "Deal Stage Error", "Stage change to " + destinationStage + " failed, current deal stage is " + currentWipWfStg));
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(720, "Deal Stage Error", "Stage change to " + destinationStage + " failed, current deal stage is " + currentWipWfStg));
                             executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                             continue;
                         }
@@ -847,7 +891,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     // TODO: walk through all responses and gather validation messages
                     string validErrors = "";
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(303, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(713, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
                 }
@@ -864,7 +908,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (!saveResponse.Keys.Any())
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(305, "Deal Stage Error", "Save call failed at DB"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(721, "Deal Stage Error", "Save call failed at DB"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
                 }
@@ -882,6 +926,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus" };
             string executionResponse = "";
 
             OpUserStack.TendersAutomatedUserToken(); // Fetch a generic faceless GA account to use
@@ -904,7 +949,7 @@ namespace Intel.MyDeals.BusinessLogic
                         executionResponse += ProcessCreationRequest(workRecordDataFields, batchId, ref dealId);
                         break;
                     case "Update":
-                        executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, ref dealId);
+                        executionResponse += ProcessUpdateRequestShell(workRecordDataFields, batchId, ref dealId);
                         break;
                     case "UpdateStatus":
                         executionResponse += ProcessStageUpdateRequest(workRecordDataFields, batchId, ref dealId);
@@ -913,29 +958,37 @@ namespace Intel.MyDeals.BusinessLogic
                         break;
                 }
 
-                // Process the response message now
-                workRecordDataFields.header.source_system = "MyDeal";
-                workRecordDataFields.header.target_system = "Tender";
-                workRecordDataFields.header.action = requestType;
-
-                string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
-                List<int> deadIdList = new List<int>() { dealId };
-                Guid saveSuccessful = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
-
-                if (saveSuccessful != Guid.Empty
-                ) // Then we can close out the processing record and go for an immediate send back
+                if (goodRequestTypes.Contains(requestType))
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Processing_Complete");
-                    executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
+                    // Process the response message now
+                    workRecordDataFields.header.source_system = "MyDeals";
+                    workRecordDataFields.header.target_system = "Tender";
+                    workRecordDataFields.header.action = requestType;
+
+                    string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
+                    List<int> deadIdList = new List<int>() { dealId };
+                    Guid saveSuccessful = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
+
+                    if (saveSuccessful != Guid.Empty
+                    ) // Then we can close out the processing record and go for an immediate send back
+                    {
+                        _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                        executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
+                    }
+                    // Attempt to close out response now
+
+                    bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
+
+                    if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
+                    _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+                    executionResponse += "Response object successfully returned<br><br>";
+                    //executionResponse += jsonData + "<br>";
                 }
-                // Attempt to close out response now
-
-                bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
-
-                if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
-                _jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
-                executionResponse += "Response object successfully returned<br><br>";
-                //executionResponse += jsonData + "<br>";
+                else // request type was not an expected pattern, don't report back and just close the request down as per Mahesh
+                {
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Line_Skipped");
+                    executionResponse += "Unexpected request type of '" + requestType + "' sent.  Ignoring record request.";
+                }
             }
 
             return executionResponse;

@@ -613,11 +613,16 @@ namespace Intel.MyDeals.BusinessLogic
                         : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                     string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
 
+                    string approverId = "";
+                    if (newStage == WorkFlowStages.Offer || newStage == WorkFlowStages.Won ||
+                        newStage == WorkFlowStages.Pending) approverId = wwid.ToString();
+
                     var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
                     {
                         DealRFQId = wipDealId.ToString(),
                         DealRFQStatus = newStage,
-                        Id = wipSfId
+                        Id = wipSfId,
+                        ApprovedByInfo = "Manually approval by " + approverId
                     };
                     sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
 
@@ -633,7 +638,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (saveSuccessful != Guid.Empty)
                 {
                     if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
-                        jmsDataLib.UpdateTendersStage(saveSuccessful, "Processing_Complete");
+                        jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
                 }
             }
             catch

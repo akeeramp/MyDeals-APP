@@ -39,6 +39,10 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("DT_APRV", typeof(string));
             this.Columns.Add("ACTV_IND", typeof(bool));
             this.Columns.Add("IS_DSBL", typeof(bool));
+            this.Columns.Add("PCT_EXCPT_NBR", typeof(string));
+            this.Columns.Add("VER_NBR", typeof(string));
+            this.Columns.Add("VER_CRE_DTM", typeof(string));
+            this.Columns.Add("EXCPT_RSTRIC_DURN", typeof(string));
         }
 
         /// <summary>
@@ -69,6 +73,10 @@ namespace Intel.MyDeals.Entities
             r["DT_APRV"] = itm.DT_APRV;
             r["ACTV_IND"] = itm.ACTV_IND;
             r["IS_DSBL"] = itm.IS_DSBL;
+            r["PCT_EXCPT_NBR"] = itm.PCT_EXCPT_NBR;
+            r["VER_NBR"] = itm.VER_NBR;
+            r["VER_CRE_DTM"] = itm.VER_CRE_DTM;
+            r["EXCPT_RSTRIC_DURN"] = itm.EXCPT_RSTRIC_DURN;
             this.Rows.Add(r);
         }
 
@@ -103,6 +111,10 @@ namespace Intel.MyDeals.Entities
                 r["DT_APRV"] = itm.DT_APRV;
                 r["ACTV_IND"] = itm.ACTV_IND;
                 r["IS_DSBL"] = itm.IS_DSBL;
+                r["PCT_EXCPT_NBR"] = itm.PCT_EXCPT_NBR;
+                r["VER_NBR"] = itm.VER_NBR;
+                r["VER_CRE_DTM"] = itm.VER_CRE_DTM;
+                r["EXCPT_RSTRIC_DURN"] = itm.EXCPT_RSTRIC_DURN;
                 this.Rows.Add(r);
             }
         }

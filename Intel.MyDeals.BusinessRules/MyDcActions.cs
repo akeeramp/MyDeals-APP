@@ -73,11 +73,12 @@ namespace Intel.MyDeals.BusinessRules
 
             if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
             {
+                // changed billing start date to equat deal start date as part of US705342
                 // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
                 // End date =  Billing End date
                 if (string.IsNullOrEmpty(billStartDate?.AtrbValue.ToString()))
                 {
-                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).AddYears(-1).ToString("MM/dd/yyyy");
+                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).ToString("MM/dd/yyyy");
                     item[AttributeCodes.REBATE_BILLING_END] = DateTime.Parse(dcEn).ToString("MM/dd/yyyy");
                 }
             }
@@ -445,8 +446,7 @@ namespace Intel.MyDeals.BusinessRules
         public static void CheckGeos(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            if (!r.HasExtraArgs) return;
+            if (!r.IsValid || !r.HasExtraArgs) return;
 
             var deGeo = r.Dc.GetDataElement(AttributeCodes.GEO_COMBINED);
             deGeo?.CheckGeos(r.ExtraArgs);
@@ -526,15 +526,12 @@ namespace Intel.MyDeals.BusinessRules
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            if (!r.HasExtraArgs) return;
-            char delim = '/';
-
-            //return
-
-            IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
+            if (!r.IsValid || !r.HasExtraArgs) return;
 
             int custId = (int)r.ExtraArgs[0];
+            char delim = '/';
+
+            IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
             if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "" || custId == 0) return; // we also return on custId = 0 (All Customers) because that's what we ustilize for the tender dashboard
 
@@ -583,7 +580,6 @@ namespace Intel.MyDeals.BusinessRules
                 deUserCustDivs.AddMessage("Please enter a valid value.");
         }
 
-        //Mikes New Rule
         public static void MeetCompMandatoryCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -629,12 +625,11 @@ namespace Intel.MyDeals.BusinessRules
         {
             ////US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
             //MyOpRuleCore r = new MyOpRuleCore(args);
-            //if (!r.IsValid) return;
+            //if (!r.IsValid || !r.HasExtraArgs) return;
 
+            //int custId = (int)r.ExtraArgs[0];
             //string mrktSegValue = r.Dc.GetDataElement(AttributeCodes.MRKT_SEG).AtrbValue.ToString();
             //IOpDataElement deOnAdDate = r.Dc.GetDataElement(AttributeCodes.ON_ADD_DT);
-            //if (!r.HasExtraArgs) return;
-            //int custId = (int)r.ExtraArgs[0];
 
             //if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All Direct Market Segments") && deOnAdDate.AtrbValue.ToString() == "")
             //{
@@ -1099,6 +1094,9 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            // US705342 get dates for previous quarter
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, DateTime.Now.AddMonths(-3), null, null);
+            
 
             // For front end YCS2 do not check for billing dates
 
@@ -1109,11 +1107,12 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
+            // changed billing start date to equat deal start date as part of US705342
             // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-                var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
+                var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 deBllgStart.SetAtrbValue(dt);
             }
 
@@ -1129,6 +1128,11 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()).Date > dcEn)
             {
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
+            }
+            // Billing start date can only be backdated up until start of previous quarter US705342
+            if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT)
+            {
+                deBllgStart.AddMessage("Billing Start date cannot be backdated beyond the previous quarter.");
             }
         }
 
@@ -1390,8 +1394,8 @@ namespace Intel.MyDeals.BusinessRules
         public static void TimelineAtrbChangeCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            var myDealsData = (MyDealsData)r.ExtraArgs[1];
+            if (!r.IsValid || !r.ExtraArgs.Any()) return;
+            var myDealsData = (MyDealsData)r.ExtraArgs[r.ExtraArgs.Count() - 1]; // Seems that sometimes we have 1, other times we have 2
 
             List<string> atrbs = new List<string> { AttributeCodes.DEAL_COMB_TYPE, AttributeCodes.C2A_DATA_C2A_ID, AttributeCodes.WF_STG_CD, AttributeCodes.EXPIRE_YCS2 };
 
@@ -1510,7 +1514,9 @@ namespace Intel.MyDeals.BusinessRules
         {
             // Check for changes in attributes that would trigger a major change and re-deal.
             MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+            if (!r.IsValid || !r.ExtraArgs.Any()) return;
+
+            var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
             string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string ptrStage = r.Dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
@@ -1530,10 +1536,6 @@ namespace Intel.MyDeals.BusinessRules
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
             List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
             List<MyDealsAttribute> onChangeDecreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_DECREASE").ToList();
-
-            if (!r.ExtraArgs.Any()) return;
-
-            var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
             // Find DE item changes that trigger a true re-deal/stage change here
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();
@@ -1689,6 +1691,19 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             //throw new Exception("Fracking hell...");
+        }
+
+        public static void SetSalesForceCreationMessages(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || r.Dc.DcID > 0) return;
+
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId != "")
+            {
+                r.Dc.AddTimelineComment("Deal moved from Requested to Submitted after creation.");
+            }
         }
 
         public static void ValidateEcapPrice(params object[] args)
