@@ -1,0 +1,88 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "MyDeals CI/CD Pipeline" },
+    { "categoryAction", "Flows" },
+    { "sectionTitle", "" },
+    { "sectionAction", "" },
+    { "pageTitle", "MyDeals CI/CD Pipeline" }
+})
+
+<div id="mainBody" style="margin: 0; padding-bottom: 100px;">
+
+    <div style="margin: 10px;">
+        <h1>My Deals CD/CD Pipeline</h1>
+        <p>
+            This is basic information about My Deals CI/CD Pipeline Process.
+        </p>
+
+        <h4>Branches</h4>
+        <div style="padding-left: 30px;">
+            <h6>master</h6>
+            <ul>
+                <li>Strictly for Production Deployment</li>
+                <li>No Manual Check-ins recommended.</li>
+            </ul>
+
+            <h6>feature</h6>
+            <ul>
+                <li><b><i>feature</i></b> Branch is dedicated to Next Planned Release.</li>
+                <li><b><i>GitLab</i></b> check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
+                <li>Developers work in a single <b><i>GitLab</i></b> working location. Upon selected release stages, the working version will be branched, however all new development will be done in the <b><i>GitLab</i></b> folder path: <b><a target="_blank" href="https://gitlab.devtools.intel.com/mydeals">MyDeals - GitLab</a></b></li>
+            </ul>
+
+            <h6>development</h6>
+            <ul>
+                <li><b><i>development</i></b> Branch is intended for initial Check-ins.</li>
+                <li>After Final Check-ins initiate <b>Merge</b> to <b><i>feature</i></b> Branch with Code Review Request.</li>
+                <li>If code does not compile or code is NOT ready to be promoted through the environments, <b><i>"git stash"</i></b> the changes in <b><i>GitLab</i></b> until ready to formally check-in.</li>
+            </ul>
+        </div>
+
+        <h4>Code Review with Merging</h4>
+        <div style="padding-left: 30px;">
+            <h6>development -> feature</h6>
+            <ul>
+                <li>
+                    After Successful completion of your Unit Testing, please initiate Code Review using Merge to feature
+                    <ul>
+                        <li>source branch</li>
+                        <li>target branch</li>
+                        <li>title</li>
+                        <li>description</li>
+                        <li>assignee</li>
+                    </ul>
+                </li>
+                <li>
+                    <img alt="Creating merge request" class=""
+                         src="~/Images/docs/creating-merge-request.png" style="width: auto; height: auto;">
+                </li>
+            </ul>
+        </div>
+
+        <h4>Team City</h4>
+        <div style="padding-left: 30px;">
+            <h6>Pre-PROD</h6>
+            <ul>
+                <li>Deployment to <b>DEV/ITT</b> server is automated.</li>
+                <li>Deployment to <b><i>CONS</i>, <i>UTT</i>, <i>CIAR</i></b> are Manual.</li>
+                <li>AGS Role- [ <b>DevTools - - BOS Platform Operation - Project Developer</b> ]</li>
+            </ul>
+
+            <h6>Production</h6>
+            <ul>
+                <li>Code should be taken from <b> CONS Release </b></li>
+            </ul>
+
+            <h6>Pipeline</h6>
+            <ul>
+                <li>
+                    <img alt="Creating merge request" class=""
+                         src="~/Images/docs/TeamCity_Pipeline.jpg" style="width: auto; height: auto;">
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

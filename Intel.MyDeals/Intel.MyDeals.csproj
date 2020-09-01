@@ -1878,6 +1878,7 @@
     <Content Include="Views\Error\LostAccountToken.cshtml" />
     <Content Include="Views\ToolManual\Index.cshtml" />
     <Content Include="Views\Reporting\Index.cshtml" />
+    <Content Include="Views\CodingPractices\CiCdPipeline.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

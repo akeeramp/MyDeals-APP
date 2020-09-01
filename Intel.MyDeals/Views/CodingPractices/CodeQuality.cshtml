@@ -15,7 +15,7 @@
         <p>
             This is the basic standards for My Deals Code Quality in the User Interface and Middle Tier.
         </p>
-        
+
         <h4>Check In Process</h4>
         <div style="padding-left: 30px;">
             <h6>Expectations</h6>
@@ -27,15 +27,14 @@
             <h6>Scope</h6>
             <ul>
                 <li>Check-ins should be scoped to a single defect or user story.</li>
-                <li>TFS check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
-                <li>Developers work in a single TFS working location. Upon selected release stages, the working version will be branched, however all new development will be done in the TFS folder path: $/RDMS/MyDeals/MyDeals_Release/UI/main</li>
-            </ul>
+                <li><b><i>GitLab</i></b> check-in should have <b>comments</b> on the check-in with the <i>User Story</i> or <i>Defect</i> number in the comment</li>
+                <li>Developers work in a single <b><i>GitLab</i></b> working location. Upon selected release stages, the working version will be branched, however all new development will be done in the <b><i>GitLab</i></b> folder path: <b><a target="_blank" href="https://gitlab.devtools.intel.com/mydeals">MyDeals - GitLab</a></b></li>   </ul>
 
             <h6>Lightweight</h6>
             <ul>
                 <li>Keep LOC (Lines of Code) minimal. More code reviews are better than large code reviews</li>
                 <li>If possible (code must work on check-in), check in large User Stories at convenient milestones to prevent large code reviews and more code redesign post the reviews.</li>
-                <li>If code does not compile or code is NOT ready to be promoted through the environments, shelf the changes in TFS until ready to formally check-in.</li>
+                <li>If code does not compile or code is NOT ready to be promoted through the environments, <b><i>"git stash"</i></b> the changes in <b><i>GitLab</i></b> until ready to formally check-in.</li>
             </ul>
         </div>
 
@@ -43,25 +42,36 @@
         <div style="padding-left: 30px;">
             <h6>Type of Code Review</h6>
             <ul>
-                <li>Small LOC check-ins (typically < 200 LOC) can rely on <b>TFS Code Review</b></li>
-                <li>Large LOC check-ins (User Stories typically > 200 LOC) need a <b>Code Review Meeting</b> prior to checking in code</li>
+                <li>Small <b><i>LOC check-ins (typically < 200 LOC)</i></b> can rely on <b><i>GitLab</i> Code Review</b></li>
+                <li>Large check-ins <b><i>(User Stories typically > 200 LOC)</i></b>  need a <b>Code Review Meeting</b> prior to checking in code</li>
             </ul>
 
             <h6>Type of Code Review</h6>
             <ul>
                 <li>Code must be checked in prior to making a code review request.</li>
-                <li>Every code check-in <b>MUST be reviewed by the UI/MT Tech Lead</b> (Philip Eckenroth for Rebel Scrum… Philip Eckenroth and Mahesh Biradar for Scrum Troopers)</li>
-                <li>UI/MT Tech Lead will monitor check-ins for missing code reviews to catch check-ins without a requested code review.  This will be done through automated emails from TFS upon developer code check-in.  Lead will manually match email against code review request to locate checked code without a code review.</li>
+                <li>Every code check-in <b>MUST be reviewed by the UI/MT Tech Lead (Michael Tipping and Saurav Kundu)</b></li>
+                <li>UI/MT Tech Lead will monitor check-ins for missing code reviews to catch check-ins without a requested code review.  This will be done through automated emails from <b><i>GitLab</i></b> upon developer code check-in.  Lead will manually match email against code review request to locate checked code without a code review.</li>
+            </ul>
+
+            <h6>Code Review Process</h6>
+            <ul>
+                <li>
+                    After Successful completion of your Unit Testing, please initiate Code Review using Merge to feature
+                    <ul>
+                        <li>source branch</li>
+                        <li>target branch</li>
+                        <li>title</li>
+                        <li>description</li>
+                        <li>assignee</li>
+                    </ul>
+                </li>
+                <li>
+                    <img alt="Creating merge request" class=""
+                         src="~/Images/docs/creating-merge-request.png" style="width: auto; height: auto;">
+                </li>
             </ul>
         </div>
-
-
-
-
     </div>
-
-
-
 </div>
 
 
