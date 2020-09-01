@@ -574,6 +574,72 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            if (salesForceTenderReturns.Any())
+            {
+                try
+                {
+                    var sendStageToIqr = new TenderTransferRootObject
+                    {
+                        header = new TenderTransferRootObject.Header(),
+                        recordDetails = new TenderTransferRootObject.RecordDetails
+                        {
+                            quote = new TenderTransferRootObject.RecordDetails.Quote
+                            {
+                                quoteLine =
+                                    new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>()
+                            }
+                        }
+                    };
+                    sendStageToIqr.header.source_system = "MyDeals";
+                    sendStageToIqr.header.target_system = "Tender";
+                    sendStageToIqr.header.action = "UpdateStatus";
+                    int lastWipId = -100;
+
+                    foreach (int wipDealId in salesForceTenderReturns)
+                    {
+                        string dealBreadcrumbPathJson = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+                        dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJson);
+                        int dealParentPsId = int.Parse(dealBreadcrumbPath.PS.ToString());
+
+                        string newStage = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft
+                            ? myDealsData[OpDataElementType.PRC_ST].Data[dealParentPsId].GetDataElementValue(AttributeCodes.WF_STG_CD)
+                            : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                        string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+                        string approverId = "";
+                        if (newStage == WorkFlowStages.Offer || newStage == WorkFlowStages.Won ||
+                            newStage == WorkFlowStages.Pending) approverId = wwid.ToString();
+
+                        var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
+                        {
+                            DealRFQId = wipDealId.ToString(),
+                            DealRFQStatus = newStage,
+                            Id = wipSfId,
+                            ApprovedByInfo = "Manually approval by " + approverId
+                        };
+                        sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
+
+                        lastWipId = wipDealId;
+                    }
+
+                    string jsonData = JsonConvert.SerializeObject(sendStageToIqr);
+
+                    JmsDataLib jmsDataLib = new JmsDataLib();
+
+                    Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", new List<int>() { lastWipId }, jsonData);
+
+                    if (saveSuccessful != Guid.Empty)
+                    {
+                        if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
+                            jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+                    }
+                }
+                catch
+                {
+                    // Something failed in IRQ response send, Do not throw UI exception and Do nothing in this case
+                }
+            }
+
             // After save insert into notification log
             if (notifications.Any())
             {
@@ -581,70 +647,70 @@ namespace Intel.MyDeals.BusinessLogic
                 notificationThread.Start();
             }
 
-            if (!salesForceTenderReturns.Any()) return opMsgQueue;
-            // Otherwise, these were SalesForce Tenders, process IQR updates and send
-            try
-            {
-                var sendStageToIqr = new TenderTransferRootObject
-                {
-                    header = new TenderTransferRootObject.Header(),
-                    recordDetails = new TenderTransferRootObject.RecordDetails
-                    {
-                        quote = new TenderTransferRootObject.RecordDetails.Quote
-                        {
-                            quoteLine =
-                                new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>()
-                        }
-                    }
-                };
-                sendStageToIqr.header.source_system = "MyDeal";
-                sendStageToIqr.header.target_system = "Tender";
-                sendStageToIqr.header.action = "UpdateStatus";
-                int lastWipId = -100;
+            //if (!salesForceTenderReturns.Any()) return opMsgQueue;
+            //// Otherwise, these were SalesForce Tenders, process IQR updates and send
+            //try
+            //{
+            //    var sendStageToIqr = new TenderTransferRootObject
+            //    {
+            //        header = new TenderTransferRootObject.Header(),
+            //        recordDetails = new TenderTransferRootObject.RecordDetails
+            //        {
+            //            quote = new TenderTransferRootObject.RecordDetails.Quote
+            //            {
+            //                quoteLine =
+            //                    new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>()
+            //            }
+            //        }
+            //    };
+            //    sendStageToIqr.header.source_system = "MyDeals";
+            //    sendStageToIqr.header.target_system = "Tender";
+            //    sendStageToIqr.header.action = "UpdateStatus";
+            //    int lastWipId = -100;
 
-                foreach (int wipDealId in salesForceTenderReturns)
-                {
-                    string dealBreadcrumbPathJson = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
-                    dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJson);
-                    int dealParentPsId = int.Parse(dealBreadcrumbPath.PS.ToString());
+            //    foreach (int wipDealId in salesForceTenderReturns)
+            //    {
+            //        string dealBreadcrumbPathJson = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+            //        dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJson);
+            //        int dealParentPsId = int.Parse(dealBreadcrumbPath.PS.ToString());
 
-                    string newStage = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft
-                        ? myDealsData[OpDataElementType.PRC_ST].Data[dealParentPsId].GetDataElementValue(AttributeCodes.WF_STG_CD)
-                        : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
-                    string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+            //        string newStage = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft
+            //            ? myDealsData[OpDataElementType.PRC_ST].Data[dealParentPsId].GetDataElementValue(AttributeCodes.WF_STG_CD)
+            //            : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            //        string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
 
-                    string approverId = "";
-                    if (newStage == WorkFlowStages.Offer || newStage == WorkFlowStages.Won ||
-                        newStage == WorkFlowStages.Pending) approverId = wwid.ToString();
+            //        string approverId = "";
+            //        if (newStage == WorkFlowStages.Offer || newStage == WorkFlowStages.Won ||
+            //            newStage == WorkFlowStages.Pending) approverId = wwid.ToString();
 
-                    var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
-                    {
-                        DealRFQId = wipDealId.ToString(),
-                        DealRFQStatus = newStage,
-                        Id = wipSfId,
-                        ApprovedByInfo = "Manually approval by " + approverId
-                    };
-                    sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
+            //        var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
+            //        {
+            //            DealRFQId = wipDealId.ToString(),
+            //            DealRFQStatus = newStage,
+            //            Id = wipSfId,
+            //            ApprovedByInfo = "Manually approval by " + approverId
+            //        };
+            //        sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
 
-                    lastWipId = wipDealId;
-                }
+            //        lastWipId = wipDealId;
+            //    }
 
-                string jsonData = JsonConvert.SerializeObject(sendStageToIqr);
+            //    string jsonData = JsonConvert.SerializeObject(sendStageToIqr);
 
-                JmsDataLib jmsDataLib = new JmsDataLib();
+            //    JmsDataLib jmsDataLib = new JmsDataLib();
 
-                Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", new List<int>() { lastWipId }, jsonData);
+            //    Guid saveSuccessful = jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", new List<int>() { lastWipId }, jsonData);
 
-                if (saveSuccessful != Guid.Empty)
-                {
-                    if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
-                        jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
-                }
-            }
-            catch
-            {
-                // Something failed in IRQ response send, Do not throw UI exception and Do nothing in this case
-            }
+            //    if (saveSuccessful != Guid.Empty)
+            //    {
+            //        if (jmsDataLib.PublishBackToSfTenders(jsonData) == true) // The return data has been sent back to tenders, close out our safety record
+            //            jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+            //    }
+            //}
+            //catch
+            //{
+            //    // Something failed in IRQ response send, Do not throw UI exception and Do nothing in this case
+            //}
 
             return opMsgQueue;
         }
