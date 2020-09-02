@@ -115,6 +115,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Tender Projects Required",
+                    ActionRule = MyDcActions.TendersProjectRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() }
+                },
+
+                new MyOpRule
+                {
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
                     ActionRule = MyDcActions.VistexRequiredFields,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},

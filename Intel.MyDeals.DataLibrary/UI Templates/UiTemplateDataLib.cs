@@ -850,9 +850,11 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 DataType = "string",
                 Width = 180,
+                Label = "Project *",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
                 IsFilterable = true,
-                IsSortable = true
+                IsSortable = true,
+                IsRequired = true
             });
             items.Add(new UiTemplateContainerItem
             {
