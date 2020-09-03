@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime contractStartDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime contractEndDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string quoteLineId = workRecordDataFields.recordDetails.quote.Name;
-            string contractTitle = "SalesForce Contract - " + quoteLineId + " - " + contractSfId;
+            string contractTitle = "SF: " + workRecordDataFields.recordDetails.quote.FolioName; 
 
             // Create a new standard tender header packet
             ContractTransferPacket testData = new ContractTransferPacket();
@@ -323,17 +323,28 @@ namespace Intel.MyDeals.BusinessLogic
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
-            string geoCombined = workRecordDataFields.recordDetails.quote.Region;
+            string geoCombined = workRecordDataFields.recordDetails.quote.Region != "APJ"? workRecordDataFields.recordDetails.quote.Region: "ASMO,IJKK";
             string dealType = workRecordDataFields.recordDetails.quote.DealType;
             // Embedded Array Items
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            string terms = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].AdditionalTandC;
+            string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ExcludeAutomation? "Yes": "No";
             string quoteLineId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Name;
             string quoteLineNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].QuoteLineNumber;
+            string groupType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].GroupType;
+            string marketSegment = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MarketSegment;
+            marketSegment.Replace(";", ", ");
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
             string productEpmId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductNameEPMID; // For lookup
+            // Safety setting back date reason in case we need it and they don't send it...
+            string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason != "" ?
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason :
+                "Contract Negotiation Delay";
 
             #region Product Check and translation
             // Use the MyTranslatedProduct function and expect null if no product is matched
@@ -363,7 +374,8 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Product Check
 
             #region Deal Stability Check
-            if (geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || dealType == "")
+            if (geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null || 
+                dealType == "" || groupType == "" || marketSegment == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error", "Failed to create the Tender Deal due to missing expected fields"));
                 return -100;
@@ -396,9 +408,9 @@ namespace Intel.MyDeals.BusinessLogic
             testPtData.Add("OBJ_SET_TYPE_CD", dealType);
             testPtData.Add("REBATE_TYPE", "TENDER");
             testPtData.Add("PAYOUT_BASED_ON", "Consumption");
-            testPtData.Add("MRKT_SEG", "Corp");
+            testPtData.Add("MRKT_SEG", marketSegment);
             testPtData.Add("PROGRAM_PAYMENT", "Backend");
-            testPtData.Add("GEO_COMBINED", "Worldwide"); // We need to inject the GEO here
+            testPtData.Add("GEO_COMBINED", "Worldwide"); // This doesn't matter since it is autofill value and not used
             testPtData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
             testPtData.Add("TITLE", "PT - " + dealSfId);
             testPtData.Add("SALESFORCE_ID", dealSfId);
@@ -420,9 +432,9 @@ namespace Intel.MyDeals.BusinessLogic
             testPtrData.Add("END_DT", dealEndDate.ToString("MM/dd/yyyy"));
             testPtrData.Add("VOLUME", quantity);
             testPtrData.Add("END_CUSTOMER_RETAIL", endCustomer);
-            testPtrData.Add("MRKT_SEG", "Corp");
+            testPtrData.Add("MRKT_SEG", marketSegment);
             testPtrData.Add("PROGRAM_PAYMENT", "Backend");
-            testPtrData.Add("GEO_COMBINED", geoCombined);
+            testPtrData.Add("GEO_COMBINED", geoCombined.Contains(",")? "[" + geoCombined + "]": geoCombined);
             testPtrData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
             testPtrData.Add("PTR_SYS_PRD", translatedValidProductJson); // "{\"i3-8300\":[{\"BRND_NM\":\"Ci3\",\"CAP\":\"129.00\",\"CAP_END\":\"12/31/9999\",\"CAP_START\":\"12/7/2017\",\"DEAL_PRD_NM\":\"\",\"DEAL_PRD_TYPE\":\"CPU\",\"DERIVED_USR_INPUT\":\"i3-8300\",\"FMLY_NM\":\"Coffee Lake\",\"HAS_L1\":1,\"HAS_L2\":0,\"HIER_NM_HASH\":\"CPU DT Ci3 Coffee Lake i3-8300 \",\"HIER_VAL_NM\":\"i3-8300\",\"MM_MEDIA_CD\":\"Box, Tray\",\"MTRL_ID\":\"\",\"PCSR_NBR\":\"i3-8300\",\"PRD_ATRB_SID\":7006,\"PRD_CAT_NM\":\"DT\",\"PRD_END_DTM\":\"12/31/9999\",\"PRD_MBR_SID\":92189,\"PRD_STRT_DTM\":\"11/29/2017\",\"USR_INPUT\":\"i3-8300\",\"YCS2\":\"No YCS2\",\"YCS2_END\":\"1/1/1900\",\"YCS2_START\":\"1/1/1900\",\"EXCLUDE\":false}]}");
             testPtrData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
@@ -456,11 +468,11 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("END_CUSTOMER_RETAIL", endCustomer);
             testDealData.Add("ON_ADD_DT", dealStartDate.ToString("MM/dd/yyyy")); // defaulting to start date
             testDealData.Add("CONSUMPTION_REASON", "End Customer");
-            testDealData.Add("MRKT_SEG", "Corp");
+            testDealData.Add("MRKT_SEG", marketSegment);
             testDealData.Add("PROGRAM_PAYMENT", "Backend");
-            testDealData.Add("REBATE_BILLING_START", dealStartDate.ToString("MM/dd/yyyy")); // defaulting to start date
-            testDealData.Add("REBATE_BILLING_END", dealEndDate.ToString("MM/dd/yyyy")); // defaulting to end date
-            testDealData.Add("DEAL_COMB_TYPE", "Mutually Exclusive");
+            testDealData.Add("REBATE_BILLING_START", billingStartDate.ToString("MM/dd/yyyy")); // defaulting to start date
+            testDealData.Add("REBATE_BILLING_END", billingEndDate.ToString("MM/dd/yyyy")); // defaulting to end date
+            testDealData.Add("DEAL_COMB_TYPE", groupType);
             testDealData.Add("GEO_COMBINED", geoCombined);
             testDealData.Add("PTR_USER_PRD", productLookupObj.MydlPcsrNbr);
             testDealData.Add("PROD_INCLDS", singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
@@ -478,8 +490,9 @@ namespace Intel.MyDeals.BusinessLogic
             testDealData.Add("AR_SETTLEMENT_LVL", defArSettlementLvl);
             testDealData.Add("SYS_COMMENT", "SalesForce Created Deals: " + userEnteredProductName + "; Deal moved from Requested to Submitted after creation.");
             testDealData.Add("IN_REDEAL", "0");
-            testDealData.Add("EXCLUDE_AUTOMATION", "No");  // Set all inbound tenders to allow automation - check with Tenders
-            if (dealStartDate < DateTime.Now) testDealData.Add("BACK_DATE_RSN", "Contract Negotiation Delay");
+            testDealData.Add("TERMS", terms);
+            testDealData.Add("EXCLUDE_AUTOMATION", excludeAutomationFlag);  // Set all inbound tenders to allow automation - check with Tenders
+            if (dealStartDate < DateTime.Now) testDealData.Add("BACK_DATE_RSN", backdateReason);
             testData.WipDeals.Add(testDealData);
 
             ContractToken saveContractToken = new ContractToken("ContractToken Created - Save WIP Deal")
@@ -670,17 +683,23 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ON_ADD_DT), dealStartDate.ToString("MM/dd/yyyy"));
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), dealStartDate.ToString("MM/dd/yyyy"));
+
+            DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
 
             if (dealStartDate < DateTime.Now) // If start date is in past
             {
-                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.BACK_DATE_RSN), "Contract Negotiation Delay");
+                string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[i].BackdateReason != "" ?
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].BackdateReason : "Contract Negotiation Delay";
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
             }
 
             DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), dealEndDate.ToString("MM/dd/yyyy"));
+
+            DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
 
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
             // Will need to add dimensions down the road
@@ -691,6 +710,13 @@ namespace Intel.MyDeals.BusinessLogic
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedQuantity;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.VOLUME), quantity);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.VOLUME), quantity);
+
+            string terms = workRecordDataFields.recordDetails.quote.quoteLine[i].AdditionalTandC;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.TERMS), terms);
+
+            string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[i].ExcludeAutomation ? "Yes" : "No";
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.EXCLUDE_AUTOMATION), excludeAutomationFlag);
+
 
             // Clear out system comments to all objects so that updates don't stack comments incorrectly
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");

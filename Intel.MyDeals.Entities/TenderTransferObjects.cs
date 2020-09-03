@@ -200,6 +200,7 @@ namespace Intel.MyDeals.Entities
                 public string Id { get; set; }
                 public string FolioID { get; set; }
                 public string Name { get; set; }
+                public string FolioName { get; set; }
                 public string ProjectName { get; set; }
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
@@ -230,6 +231,8 @@ namespace Intel.MyDeals.Entities
                     public string IntegrationStatus { get; set; }
                     public string Wwid { get; set; }
                     public string QuoteLineNumber { get; set; }
+                    public string GroupType { get; set; }
+                    public string MarketSegment { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
                     [JsonProperty("CompetitorProduct")]
@@ -238,8 +241,13 @@ namespace Intel.MyDeals.Entities
                     public string MeetCompPrice { get; set; }
                     public string ApprovedStartDate { get; set; }
                     public string ApprovedEndDate { get; set; }
+                    public string BackdateReason { get; set; }
+                    public string BillingStartDate { get; set; }
+                    public string BillingEndDate { get; set; }
                     public string ApprovedQuantity { get; set; }
                     public string ApprovedECAPPrice { get; set; }
+                    public string AdditionalTandC { get; set; }
+                    public bool ExcludeAutomation { get; set; }
                     public string DealRFQStatus { get; set; }
                     public string DealRFQId { get; set; }
                     [JsonProperty("PerformanceMetric")]
