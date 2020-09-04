@@ -2606,7 +2606,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP }, // not sure that KIT should be here...
                 DataType = "object",
-                Label = "Exclude Automation",
+                Label = "<div title='Exclude from Price Approval Rules'>Exclude from Price Rules</div>",
                 Width = 120,
                 Template = "#=gridUtils.uiControlWrapper(data, 'EXCLUDE_AUTOMATION')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/EXCLUDE_AUTOMATION/",

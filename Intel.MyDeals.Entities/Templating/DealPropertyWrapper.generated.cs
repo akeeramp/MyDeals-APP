@@ -1726,7 +1726,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "EXCLUDE_AUTOMATION",
 			ATRB_DESC = "Exclude Automation from Price Rule",
-			ATRB_LBL = "Exclude Automation",
+			ATRB_LBL = "Exclude from Price Rules",
 			ATRB_MAX_LEN = 3,
 			ATRB_SID = 90012,
 			DATA_TYPE_CD = "VARCHAR",
