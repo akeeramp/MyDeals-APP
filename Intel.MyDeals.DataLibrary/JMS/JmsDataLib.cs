@@ -380,7 +380,7 @@ namespace Intel.MyDeals.DataLibrary
             // Create POST data and convert it to a byte array.  
             byte[] byteArray = Encoding.UTF8.GetBytes(data);
 
-            request.ContentType = "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+            request.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
             request.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
 
             // Get the request stream, write data, then close the stream
