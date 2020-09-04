@@ -493,13 +493,46 @@
             return displayTemplateType;
         }
 
+        //For NAND (SSD)
+        function addWithCapForFamily(item) {
+            var data = {
+                "searchHash": item.path,
+                "startDate": moment(pricingTableRow.START_DT).format("l"),
+                "endDate": moment(pricingTableRow.END_DT).format("l"),
+                "selectionLevel": 7005,
+                "drillDownFilter4": null,
+                "drillDownFilter5": null,
+                "custSid": pricingTableRow.CUST_MBR_SID,
+                "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "mediaCd": pricingTableRow.PROD_INCLDS,
+                "dealType": vm.dealType
+            }
+            productSelectorService.GetProductSelectionResults(data).then(function (response) {
+                var rst = response.data.map(function (x) {
+                        x['selected'] = productExists(item, x.PRD_MBR_SID);
+                        x['parentSelected'] = item.selected;
+                        return x;
+                    });
+                    
+                item["CAP"] = rst[0].CAP;
+                item["CAP_START"] = rst[0].CAP_START;
+                item["CAP_END"] = rst[0].CAP_END;
+                item["YCS2"] = rst[0].YCS2;
+                item["YCS2_START"] = rst[0].YCS2_START;
+                item["YCS2_END"] = rst[0].YCS2_END; 
+                
+                manageSelectedProducts('include', item);
+                 
+            });
+            
+        }
         function selectProduct(product) {
-            var item = angular.copy(product);
+            var item = angular.copy(product);            
             if (item.id !== undefined && item.id != "") {
                 var products = vm.productSelectionLevels.filter(function (x) {
                     return x.PRD_MBR_SID == item.id;
                 })[0];
-                item = $.extend({}, item, products);
+                item = $.extend({}, item, products);                
             }
             if (vm.excludeMode) {
                 manageSelectedProducts('exclude', item, true);
@@ -523,7 +556,15 @@
                         return false;
                     }
                 }
-                manageSelectedProducts('include', item);
+                //Bring CAP and YCS2 for Family..
+                if (item.DEAL_PRD_TYPE === 'NAND (SSD)' && (vm.dealType == "ECAP" || vm.dealType == "KIT" )) {
+                    addWithCapForFamily(item);
+                    return;
+                }
+                else {
+                    manageSelectedProducts('include', item);
+                }
+                
             }
         }
 
