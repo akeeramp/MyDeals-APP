@@ -1863,7 +1863,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending };
+            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost };
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";

@@ -143,7 +143,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ROW_NUMBER = 1,
                 USR_INPUT = usrInputProd,
                 EXCLUDE = false,
-                FILTER = "Tray", // Do we assume this?
+                FILTER = "All", // Do we assume this?
                 START_DATE = strtDt,
                 END_DATE = endDt,
                 GEO_COMBINED = geoCombined,
