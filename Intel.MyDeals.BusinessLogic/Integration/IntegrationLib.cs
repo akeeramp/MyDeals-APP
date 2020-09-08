@@ -1029,7 +1029,7 @@ namespace Intel.MyDeals.BusinessLogic
             return executionResponse;
         }
 
-        public string ReturnSalesForceTenderResults() // Bulk processing of Renders Responses - Send back to MuleSoft
+        public string ReturnSalesForceTenderResults() // Bulk processing of Tenders Responses - Send back to MuleSoft
         {
             string executionResponse = "";
 
@@ -1041,7 +1041,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Processing_Complete");
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
                 }
             }
