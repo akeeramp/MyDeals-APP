@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Web.Mvc;
 using Intel.MyDeals.Entities;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -68,9 +70,18 @@ namespace Intel.MyDeals.Controllers
                     Directory.CreateDirectory(tempFolder);
                 }
 
-                client.UseDefaultCredentials = true;
+                //client.UseDefaultCredentials = true;
                 client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
                 client.PickupDirectoryLocation = tempFolder;
+                //client.Send(message);
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["smtpClinetUid"], StringEncrypter.StringDecrypt(
+                        ConfigurationManager.AppSettings["smtpClinetPass"] != string.Empty ? ConfigurationManager.AppSettings["smtpClinetPass"] : "", "Smtp_Password"));
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.EnableSsl = true;
+                //SMTP Change for Port Number and Host Name
+                client.Host = ConfigurationManager.AppSettings["smtpClinet"];
+                client.Port = Convert.ToInt32(ConfigurationManager.AppSettings["smtpClinetPort"]);
                 client.Send(message);
 
                 // tempFolder should contain 1 eml file
@@ -115,9 +126,14 @@ namespace Intel.MyDeals.Controllers
 
             using (var client = new SmtpClient())
             {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["smtpClinetUid"], StringEncrypter.StringDecrypt(
+                        ConfigurationManager.AppSettings["smtpClinetPass"] != string.Empty ? ConfigurationManager.AppSettings["smtpClinetPass"] : "", "Smtp_Password"));
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = true;
-                client.Host = "mail.intel.com";
+                client.EnableSsl = true;
+                //SMTP Change for Port Number and Host Name
+                client.Host = ConfigurationManager.AppSettings["smtpClinet"];
+                client.Port = Convert.ToInt32(ConfigurationManager.AppSettings["smtpClinetPort"]);
                 client.Send(message);
 
             }
