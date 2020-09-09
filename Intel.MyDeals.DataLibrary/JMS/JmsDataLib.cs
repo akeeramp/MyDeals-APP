@@ -409,6 +409,8 @@ namespace Intel.MyDeals.DataLibrary
                     if (responseObjectDictionary["Data"] == "Request captured successfully") sendSuccess = true;
                     OpLog.Log("JMS - Publish to SF Tenders Completed: " + responseObjectDictionary["Data"]);
                 }
+
+                response.Close();
             }
             catch (Exception ex)
             {
