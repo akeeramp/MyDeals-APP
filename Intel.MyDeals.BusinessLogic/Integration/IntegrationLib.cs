@@ -562,7 +562,6 @@ namespace Intel.MyDeals.BusinessLogic
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
                 string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
-                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
 
                 // TODO: Do a record stability check first and if no error messages, continue, catch things like ECAP/GEO/ETC
 
@@ -648,7 +647,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         private void UpdateDeValue(IOpDataElement myDe, string myValue)
         {
-            if (myDe.AtrbValue.ToString() != myValue.ToString())
+            if (myDe != null && myValue != null && myDe.AtrbValue.ToString() != myValue.ToString())
             {
                 myDe.AtrbValue = myValue;
             }
@@ -684,9 +683,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ON_ADD_DT), dealStartDate.ToString("MM/dd/yyyy"));
 
-            DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
-
             if (dealStartDate < DateTime.Now) // If start date is in past
             {
                 string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[i].BackdateReason != "" ?
@@ -698,7 +694,10 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
 
-            DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
+
+            DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
 
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
@@ -746,12 +745,10 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
             {
                 dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
-            }
-
-            if (hasValidationErrors) // If validation errors, log and skip to next
-            {
-                // TODO: walk through all responses and gather validation messages
-                validErrors = "ABC";
+                foreach (OpMsg opMsg in dc.Message.Messages) // If validation errors, log and skip to next
+                {
+                    if (opMsg.Message != "Validation Errors detected in deal") validErrors += validErrors.Length == 0? opMsg.Message: "; " + opMsg.Message;
+                }
             }
 
             return hasValidationErrors;
@@ -763,8 +760,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
             string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[recordId].Id;
-
-            workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
 
             executionResponse += "Processing update for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
             int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
@@ -789,7 +784,7 @@ namespace Intel.MyDeals.BusinessLogic
             string validErrors = "";
             if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, ref validErrors)) // If validation errors, log and skip to next
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(713, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(713, "Deal Validation Error", "Deal " + dealId + " had validation errors: " + validErrors));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
@@ -804,7 +799,7 @@ namespace Intel.MyDeals.BusinessLogic
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
-            if (!saveResponse.Keys.Any())
+            if (myDealsData[OpDataElementType.WIP_DEAL].Actions.Any() && !saveResponse.Keys.Any())
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(721, "Deal Stage Error", "Save call failed at DB"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
@@ -819,9 +814,15 @@ namespace Intel.MyDeals.BusinessLogic
             EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, recordId);
             //gather return fields and post back to json record (things like stage and approved by fields)
 
-            string stage = saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Draft ?
+            string psWfStage = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ? 
                 saveResponse[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
-                saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string wipWfStage = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
+                saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
+
             workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
 
             executionResponse += "Deal " + dealId + " - Save completed<br>";
@@ -850,8 +851,6 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
-
-                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
 
                 executionResponse += "Processing stage change for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
                 int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
@@ -920,12 +919,18 @@ namespace Intel.MyDeals.BusinessLogic
                     DeleteAllPTR = false
                 });
 
-                bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
-
-                if (hasValidationErrors) // If validation errors, log and skip to next
+                bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
+                string validErrors = "";
+                foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
                 {
-                    // TODO: walk through all responses and gather validation messages
-                    string validErrors = "";
+                    dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
+                    foreach (OpMsg opMsg in dc.Message.Messages) // append validation messages
+                    {
+                        if (opMsg.Message != "Validation Errors detected in deal") validErrors += validErrors.Length == 0 ? opMsg.Message : "; " + opMsg.Message;
+                    }
+                }
+                if (hasValidationErrors || validErrors.Length > 0) // If validation errors, log and skip to next
+                {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(713, "Deal Validation Error", "Deal " + dealId + "  had validation errors: " + validErrors));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
@@ -961,10 +966,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus" };
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus", "ErrorState"};
             string executionResponse = "";
-
-            OpUserStack.TendersAutomatedUserToken(); // Fetch a generic faceless GA account to use
 
             List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
 
@@ -974,7 +977,31 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
+                // Read Headers and tag in error blocks where needed
                 string requestType = workRecordDataFields.header.action;
+                for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
+                }
+
+                // Generate Security Token for this set of records
+                // TO DO: This will shift to the quotes block since only one user is sending the records...
+                string idsid = workRecordDataFields.recordDetails.quote.quoteLine[0].Wwid; //11911244
+                OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
+                UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+
+                if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(706, "User not in My Deals", "User ID " + idsid + " is not presently in My Deals"));
+                    requestType = "ErrorState";
+                }
+                else if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(707, "User not a GA in My Deals", "User ID " + idsid + " is not a GA role in My Deals"));
+                    requestType = "ErrorState";
+                }
+                OpUserStack.TendersAutomatedUserToken(opUserToken);
+
                 Guid batchId = workRecord.BtchId;
                 int dealId = -1;
 

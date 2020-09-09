@@ -189,6 +189,11 @@ namespace Intel.MyDeals.Entities
             EmulateUnitTester(unitOpUserToken);
         }
 
+        public static void TendersAutomatedUserToken(OpUserToken unitOpUserToken)
+        {
+            EmulateUnitTester(unitOpUserToken);
+        }
+
         /// <summary>
         /// Ensures the OpUserToken contains values.
         /// </summary>
