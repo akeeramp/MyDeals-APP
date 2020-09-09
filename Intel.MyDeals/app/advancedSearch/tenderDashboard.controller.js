@@ -1616,8 +1616,12 @@
                         $scope.$root.pc = null;
                     }
 
-                    $("#dealEditor").data("kendoGrid").dataSource.read();
-                    $("#dealEditor").data("kendoGrid").refresh();
+                    var wip_ids = [];
+                    for (var i = 0; i < tenders.length; i++) {
+                        wip_ids.push(tenders[i].DC_ID);
+                    }
+
+                    $scope.refreshGridRows(wip_ids, null);
 
                     $scope.setBusy("", "");
                     $scope.actionType = "";
