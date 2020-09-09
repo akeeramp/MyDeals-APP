@@ -370,11 +370,14 @@ namespace Intel.MyDeals.DataLibrary
             //}
             // END APOGEE
 
-            WebRequest request = WebRequest.Create(url);
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             //request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
             request.Credentials = new System.Net.NetworkCredential("myDls2SF", "f@s_dlsYmz");
 
             request.Method = "POST"; // Set the Method property of the request to POST.  
+
+            request.KeepAlive = false;
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             // Create POST data and convert it to a byte array.  
