@@ -6940,7 +6940,44 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		/// Modified: 2/5/2020 2:24:09 AM
 		/// Parameters: 2
 		///</summary>
-		public partial class PR_MYDL_GET_PRC_RULE : SP {
+		public partial class PR_MYDL_GET_PCT_LGL_EXCPT_HIST : SP
+        {
+            public PR_MYDL_GET_PCT_LGL_EXCPT_HIST()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_PCT_LGL_EXCPT_HIST]";
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Int32 in_pct_lgl_excpt_sid
+            {
+                set { SetParmeter("in_pct_lgl_excpt_sid", value); }
+                get { return (Int32)GetParameter("in_pct_lgl_excpt_sid"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 in_excld_curr_ver
+            {
+                set { SetParmeter("in_excld_curr_ver", value); }
+                get { return (Int32)GetParameter("in_excld_curr_ver"); }
+            }
+        }
+
+
+        ///<summary>
+        /// ID: 1620953907
+        /// Modified: 2/5/2020 2:24:09 AM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_GET_PRC_RULE : SP {
 			public PR_MYDL_GET_PRC_RULE() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_GET_PRC_RULE]";

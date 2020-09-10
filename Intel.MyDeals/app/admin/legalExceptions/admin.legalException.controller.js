@@ -9,7 +9,11 @@
     function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService, $uibModal) {
         var vm = this;
         var filterData = "";
+        var rowID = 0;
+        var filterDataChildGrid = "";
         vm.validationMessage = "";
+        $scope.ChildGridSelect = false;
+       
 
         vm.dataSource = new kendo.data.DataSource({
 
@@ -93,17 +97,14 @@
                     id: "MYDL_PCT_LGL_EXCPT_SID",
                     fields: {
                         IS_SELECTED: { editable: true, defaultValue: false, type: "boolean" }
+                        ,IS_ChildGrid: { editable: true,  type: "boolean" }
                         , ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
                         , PCT_EXCPT_NBR: {
                             validation: {
                                 required: { message: "* field is required" },
                             }
                         },
-                        VER_NBR: {
-                            validation: {
-                                required: { message: "* field is required" },
-                            }
-                        },
+                        VER_NBR: { type: "int", editable: false, defaultValue: 1 },
                         INTEL_PRD: {
                             validation: {
                                 required: { message: "* field is required" },
@@ -201,38 +202,71 @@
         });
 
         $scope.openCompareLegalException = function () {
+           
             var selectedData = $linq.Enumerable().From(filterData)
                 .Where(function (x) {
                     return (x.IS_SELECTED == true);
                 })
                 .ToArray();
 
-            if (selectedData.length == 2) {
-                var modalInstance = $uibModal.open({
-                    animation: true,
-                    backdrop: 'static',
-                    templateUrl: 'app/admin/legalExceptions/compareLegalException.html',
-                    controller: 'compareController',
-                    controllerAs: 'vm',
-                    size: 'sm',
-                    windowClass: 'prdSelector-modal-window',
-                    resolve: {
-                        RuleConfig: ['legalExceptionService', function () {
+            var selectedChildItem = $linq.Enumerable().From(filterDataChildGrid)
+                .Where(function (x) {
+                    return (x.IS_ChildGrid == true);
+                })
+                .ToArray();
+            var flag = "";
+            if (selectedChildItem.length == 1 && selectedData.length==1)
+            {
+                if (selectedData[0]['MYDL_PCT_LGL_EXCPT_SID'] == selectedChildItem[0]['MYDL_PCT_LGL_EXCPT_SID']) {
+                    flag = "false";
+                    selectedData = selectedData.concat(selectedChildItem);
+                }
+                else
+                {
+                    flag = "true";
+                }
+            }          
+           
+            if (flag != "true")
+            {
+                if ((selectedData.length == 2 && selectedChildItem.length == 0) || (selectedData.length == 0 && selectedChildItem.length == 2) || flag == "false" ) {
 
-                        }],
-                        dataItem: function () {
 
-                            return selectedData;
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        backdrop: 'static',
+                        templateUrl: 'app/admin/legalExceptions/compareLegalException.html',
+                        controller: 'compareController',
+                        controllerAs: 'vm',
+                        size: 'sm',
+                        windowClass: 'prdSelector-modal-window',
+                        resolve: {
+                            RuleConfig: ['legalExceptionService', function () {
+
+                            }],
+                            dataItem: function () {
+                                if (selectedData.length == 2) {
+                                    return selectedData;
+                                }
+
+                                if (selectedChildItem.length == 2) {
+                                    return selectedChildItem;
+                                }
+                            }
                         }
-                    }
-                });
+                    });
 
-                modalInstance.result.then(function (returnData) {
-                    vm.cancel();
-                }, function () { });
+                    modalInstance.result.then(function (returnData) {
+                        vm.cancel();
+                    }, function () { });
+                }
+                else {
+                    logger.warning('Please Select 2 Exception to Compare');
+                }
             }
-            else {
-                logger.warning('Please Select 2 Exception to Compare');
+            else
+            {
+                logger.warning('Pervious Version cannot not be Compared against Other Exceptions');
             }
         }
 
@@ -245,10 +279,13 @@
         }
 
         var editNotAllowed = usrRole == "SA" ? 1 : 0;
+        var amendmentAllowed = usrRole == "Legal" ? 1 : 0;
 
         $scope.isEditable = function (dataItem) {
             return editNotAllowed === 1 ? false : dataItem.ACTV_IND && dataItem.USED_IN_DL !== 'Y';
         }
+
+       
 
         vm.gridOptions = {
 
@@ -267,19 +304,19 @@
             columnMenu: false,
             sort: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
             filter: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
-            toolbar: GridMenuButton(editNotAllowed),
+            toolbar: GridMenuButton(editNotAllowed,amendmentAllowed),
 
             editable: { mode: "inline", confirmation: false },
 
             select: function (e) {
 
-                var commandCell = e.container.find("td:eq(0)");
+                var commandCell = e.container.find("td:eq(1)");
                 commandCell.html('<div class="dealTools" ><input type="checkbox"  class="grid - link - checkbox with-font" id="lnkChk"  style="height: 17px; width: 17px; border: 2px solid;" /> </div>');
             },
 
             edit: function (e) {
 
-                var commandCell = e.container.find("td:eq(1)");
+                var commandCell = e.container.find("td:eq(2)");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             destroy: function (e) {
@@ -291,12 +328,22 @@
                 vm.validationMessage = '';
                 ClearSelectedItem();
             },
-
+            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget'  kendo-grid k-options='detailInit(dataItem)' style='width:1260px;' id='childGrid'></div>",
+            
+            detailExpand: function (e) {                               
+                var dataItem = e.sender.dataItem(e.masterRow);                
+                ChildGrid(dataItem);               
+                e.sender.tbody.find('.k-detail-row').each(function (idx,item) {
+                    if (item !== e.detailRow[0]) {
+                        e.sender.collapseRow($(item).prev());
+                    }
+                })
+            },           
             columns: [
                 {
                     command: [
 
-                        { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\$event, dataItem)' /> </div>" }
+                        { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
                     ],
                     width: 40,
                     attributes: { style: "text-align: center;" },
@@ -350,9 +397,9 @@
                     title: "Version No.",
                     headerTemplate: "<div class='isRequired'> Version No. </div>",
                     width: 150,
-                    edit: onGridEditing,
+                    //edit: onGridEditing,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: false
                 },
                 {
                     field: "VER_CRE_DTM",
@@ -587,6 +634,10 @@
             for (var i = 0; i < filterData.length; i++) {
                 filterData[i].IS_SELECTED = false;
             }
+            for (var i = 0; i < filterDataChildGrid.length; i++) {
+                filterDataChildGrid[i].IS_SELECTED = false;
+                filterDataChildGrid[i].IS_ChildGrid = false;
+            }
         }
 
         function isInvalidateRow(e, mode) {
@@ -612,8 +663,137 @@
             return false;
         }
 
+        $scope.detailInit = function (parentDataItem) {       
+           
+            var id = parentDataItem.MYDL_PCT_LGL_EXCPT_SID;
+            ClearSelectedItem();
+            return {
+                dataSource: {
+                    transport: {
+                        read: function (e) {                                                    
+                            legalExceptionService.getVersionDetailsPCTExceptions(id, 1)
+                                .then(function (response) {
+                                    if (response.data.length > 0) {
+                                        e.success(response.data);                                        
+                                    }
+                                }, function (response) {
+                                    logger.error("Unable to get Legal exceptions.", response, response.statusText);
+                                });
+                        },
+                        create: function (e) {
+                        }
+                    },
+                    pageSize: 10,                  
+                    schema: {
+                        model: {
+                            id: "MYDL_PCT_LGL_EXCPT_SID",
+                            fields:
+                            {                              
+                                IS_SELECTED: { editable: true, defaultValue: false, type: "boolean" },                                
+                                IS_ChildGrid: { editable: true, defaultValue: false, type: "boolean" },
+                                VER_NBR: { type: "int", editable: false, defaultValue: 1 },
+                                CHG_EMP_NAME: { type: "string", editable: false, defaultValue: usrName }
+                                , CHG_DTM: { type: "date", editable: false, defaultValue: moment().format('l') }
+                            }
+                        }
+                    },
+                },
+                filterable: true,
+                scrollable: false,
+                sortable: true,
+                enableHorizontalScrollbar: true,
+
+                pageable: {
+                    refresh: true,
+
+                },
+                navigatable: true,
+                resizable: true,
+                reorderable: true,
+                columns:
+                    [
+                        {
+                            command: [
+
+                                { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItemChildGrid($event, dataItem)' /> </div>" }
+                            ],
+                            width: 1,
+                            attributes: { style: "text-align: center;" }
+
+                        },
+                        {
+                            field: "VER_NBR",
+                            title: "Version No",
+                            headerTemplate: "<div class='isRequired'> Version No. </div>",
+                            width: 3,                            
+                            filterable: { multi: true, search: true },
+                            editable: false
+                        },
+
+                        {
+                            field: "CHG_EMP_NAME",
+                            title: "Version Created By",
+                            headerTemplate: "<div class='isRequired'> Version Created By </div>",                            
+                            width: 3,
+                            filterable: { multi: true, search: true },
+                            editable: false
+                        },
+                        {
+                            field: "MYDL_PCT_LGL_EXCPT_SID",
+                            hidden: true,
+                            width: 1,                            
+                            filterable: { multi: true, search: true }
+                        },
+
+                        {
+                            field: "VER_CRE_DTM",
+                            title: "Version Created Date",
+                            headerTemplate: "<div class='isRequired'>Version Created Date </div>",
+                            template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",                            
+                            width: 3,
+                            filterable:
+                            {
+                                extra: false,
+                                ui: "datepicker"
+                            }
+                        }
+
+                    ]
+            };
+        };
+
+
+        //To get the selected childgrid checkbox
+        $scope.selectItemChildGrid = function (event, dataItem) {
+           
+            if (event.target.checked) {
+                for (var i = 0; i < filterDataChildGrid.length; i++) {
+                    if (filterDataChildGrid[i].VER_NBR == dataItem.VER_NBR) {
+                        filterDataChildGrid[i].IS_SELECTED = true;
+                        filterDataChildGrid[i].IS_ChildGrid = true;
+                        filterDataChildGrid[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
+                        filterDataChildGrid[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
+                        filterDataChildGrid[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
+                        filterDataChildGrid[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
+                    }
+                }
+               
+            }
+            else {
+                for (var i = 0; i < filterDataChildGrid.length; i++) {
+                    if (filterDataChildGrid[i].VER_NBR == dataItem.VER_NBR) {
+                        filterDataChildGrid[i].IS_SELECTED = false;
+                        filterDataChildGrid[i].IS_ChildGrid = false;
+
+                    }
+                }
+               
+            }
+        }
+
         //To get the selected checkbox data and make the IS_Selected as 'true'
-        $scope.selectItem = function (event, dataItem) {
+        $scope.selectItem = function (ChildGrid, event, dataItem)
+        {
             var dataSource = $("#grid").data("kendoGrid").dataSource;
             var filters = dataSource.filter();
             var allData = dataSource.data();
@@ -621,15 +801,17 @@
             filterData = query.filter(filters).data;
 
             if (event.target.checked) {
-                for (var i = 0; i < filterData.length; i++) {
-                    if (filterData[i].id == dataItem.id) {
+                for (var i = 0; i < filterData.length; i++)
+                {
+                    if (filterData[i].id == dataItem.id)
+                    {
                         filterData[i].IS_SELECTED = true;
                         filterData[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
                         filterData[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
                         filterData[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
                         filterData[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
                     }
-                }
+                }              
             }
             else {
                 for (var i = 0; i < filterData.length; i++) {
@@ -637,11 +819,73 @@
                         filterData[i].IS_SELECTED = false;
 
                     }
-                }
+                }              
             }
         }
 
-        function GridMenuButton(addRecordsNotAllowed) {
+        $scope.openAmendment = function ()
+        {
+            
+            var selectedData = $linq.Enumerable().From(filterData)
+                .Where(function (x) {
+                    return (x.IS_SELECTED == true);
+                })
+                .ToArray();         
+
+            var selectedChildGrid = $linq.Enumerable().From(filterDataChildGrid)
+                .Where(function (x) {
+                    return (x.IS_ChildGrid == true);
+                })
+                .ToArray();
+
+            if (selectedChildGrid.length == 0)
+            {
+                if (selectedData.length == 1)
+                {
+                    var usedInDeal = selectedData[0]['USED_IN_DL'];
+                    if (usedInDeal == 'Y')
+                    {
+                        var modalInstance = $uibModal.open({
+                            animation: true,
+                            backdrop: 'static',
+                            templateUrl: 'app/admin/legalExceptions/addAmendment.html',
+                            controller: 'addAmendmentController',
+                            controllerAs: 'vm',
+                            size: 'sm',
+                            windowClass: 'prdSelector-modal-window',
+                            resolve: {
+                                RuleConfig: ['legalExceptionService', function () {
+
+                                }],
+                                dataItem: function () {
+
+                                    return selectedData;
+                                }
+                            }
+                        });
+
+                        modalInstance.result.then(function (returnData) {
+                            vm.cancel();
+                        }, function () { });
+                    }
+                    else
+                    {
+                        logger.warning('Exceptions without Deals can not be Edited');
+                    }
+                }
+
+                else
+                {
+                    logger.warning('Please Select up Only One Exception to Add an Amendment');
+                }
+            }
+            else
+            {
+                logger.warning('Please Select the Current Version of the Exception to Add an Amendment');
+            }           
+        }
+
+        function GridMenuButton(addRecordsNotAllowed, amendmentAllowed) {
             var rtn = '';
             if (!addRecordsNotAllowed) {
                 rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
@@ -650,7 +894,27 @@
 
             rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="k-icon intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
 
+            if (amendmentAllowed)
+            {
+                rtn += '<a role="button" class="k-button k-button-icontext"  ng-click="openAmendment()"><span class="k-icon k-i-plus"></span>Add Amendment</a> ';
+            }
+                                
             return rtn;
+        }
+
+        function ChildGrid(dataitem)
+        {
+            legalExceptionService.getVersionDetailsPCTExceptions(dataitem.id, 1)
+                .then(function (response) {
+                    if (response.data.length > 0) {
+                        filterDataChildGrid = response.data;                                         
+                    }
+                }, function (response) {
+                   
+                });
+            var grid = $("#childGrid").data("kendoGrid");
+            grid.refresh();
+          
         }
 
         function productEditor(container, options) {

@@ -12,7 +12,7 @@
                 <div ng-repeat="item in vm.legalExceptionData" class="col-xs-{{vm.noOfCol}} col-sm-{{vm.noOfCol}}">
                     <div id="navigation">
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="background-color: #003C71;color:white">PCT Exception No :{{item.PCT_EXCPT_NBR}}</div>
+                            <div class="panel-heading" style="background-color: #003C71;color:white">PCT Exception No :&nbsp{{item.PCT_EXCPT_NBR}}</div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -125,6 +125,13 @@
 
                             </div>
 
+                            <div><p class="divHeader">Exceptions, Restrictions & Durations</p></div>
+                            <div class="panel-body">
+
+                                <textarea type="textarea" rows="5" readonly style="width:100%">{{item.EXCPT_RSTRIC_DURN}}</textarea>
+
+                            </div>
+
                             <div><p class="divHeader">Requesting Client</p></div>
                             <div class="panel-body">
 
@@ -151,6 +158,23 @@
                                     <div div class="col-md-4">
                                         <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Date Approved</p>
                                         <div> <textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.DT_APRV}}</textarea></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Version No</p>
+                                        <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.VER_NBR}}</textarea></div>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div div class="col-md-4">
+                                        <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Version Created Date</p>
+                                        <div> <textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;">{{ item.VER_CRE_DTM}}</textarea></div>
                                     </div>
                                 </div>
 
