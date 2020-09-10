@@ -3097,7 +3097,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var translationInput = pricingTableRowData.map(function (row, index) {
             return {
                 ROW_NUMBER: row.ROW_NUMBER,
-                USR_INPUT: row.PTR_USER_PRD,
+                USR_INPUT: row.PTR_USER_PRD.startsWith("NAND") ? row.PTR_USER_PRD.substring(row.PTR_USER_PRD.trim().lastIndexOf(" ")) : row.PTR_USER_PRD,
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
                 START_DATE: moment(row.START_DT).format("l"),
@@ -3523,7 +3523,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     function () { });
             }, 10);
     }
-
+    
     //Trimming unwanted Property to make JSON light
     function massagingObjectsForJSON(key, transformResult) {
         for (var validKey in transformResult.ValidProducts[key]) {
