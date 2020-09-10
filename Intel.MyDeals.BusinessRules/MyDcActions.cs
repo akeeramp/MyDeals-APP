@@ -1524,7 +1524,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (chkTrkrDate > chkStartDate) return chkTrkrDate; // Someone set a future tracker start date, use it
                 return chkStartDate; // Otherwise, Start Date is your target
             }
-            
+             
             // Deal is currently running, check if the tracker date should be the marker or the current day is
             if (dtNow < chkTrkrDate) return chkTrkrDate;
             return dtNow;
