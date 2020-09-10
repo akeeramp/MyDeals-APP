@@ -779,7 +779,19 @@ namespace Intel.MyDeals.BusinessRules
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfValueIsPopulatedAndWon(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() != "") de.IsReadOnly = true;
             }
         }
 
@@ -1885,12 +1897,12 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost };
+            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost, WorkFlowStages.Won };
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && deProject != null && allowedStages.Contains(wfStage) &&  string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            if (rebateType == "TENDER" && allowedStages.Contains(wfStage) && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
             {
                 deProject.IsRequired = true;
             }
