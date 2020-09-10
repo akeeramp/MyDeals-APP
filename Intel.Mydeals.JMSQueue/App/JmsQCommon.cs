@@ -324,7 +324,15 @@ namespace Intel.MyDeals.JMSQueueApp
                     //SMTP Change for Port Number and Host Name
                     client.Host = "smtpauth.intel.com";
                     client.Port = 587;
-                    client.Send(myMail);
+                    try
+                    {
+                        client.Send(myMail);
+                    }
+                    catch(Exception EX)
+                    {
+
+                    }
+                    
                 }
             }
         }
