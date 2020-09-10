@@ -18,5 +18,7 @@ namespace Intel.MyDeals.IDataLibrary
         
 
         PCTLegalException SetPCTlegalException(CrudModes update, PCTLegalException input);
+
+        List<VersionHistPCTExceptions> GetVersionDetailsPCTExceptions(int PCT_LGL_EXCPT_SID,int excludeCurrVer);
     }
 }
