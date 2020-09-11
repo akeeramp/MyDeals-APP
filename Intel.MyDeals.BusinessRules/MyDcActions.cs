@@ -789,8 +789,6 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            // Figure out why the ConditionIf statement doesn't block entry into the rule...  Then clean up this rule some.
-            //var testme = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && String.Equals(de.AtrbValue.ToString(), "Won", StringComparison.OrdinalIgnoreCase)).Any();
 
             if (dealStage != WorkFlowStages.Won) return;
 
@@ -1534,20 +1532,22 @@ namespace Intel.MyDeals.BusinessRules
             DateTime chkStartDate;
             DateTime chkTrkrDate;
             DateTime chkEndDate;
+            DateTime chkLastTrkr;
             DateTime dtNow = DateTime.Now;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out chkStartDate)) chkStartDate = dtNow;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.TRKR_START_DT), out chkTrkrDate)) chkTrkrDate = dtNow;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out chkEndDate)) chkEndDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out chkLastTrkr)) chkLastTrkr = chkStartDate;
 
             if (chkEndDate < dtNow) return chkEndDate; // The deals is fully in the past, End Date is your target
             if (dtNow < chkStartDate) // The deals is fully in the future, Start Date or previous tracker start is your target
             {
-                if (chkTrkrDate > chkStartDate) return chkTrkrDate; // Someone set a future tracker start date, use it
+                if (chkLastTrkr > chkStartDate) return chkLastTrkr; // Someone set a future tracker start date, use it (Last Tracker Date, Not Tracker Start)
                 return chkStartDate; // Otherwise, Start Date is your target
             }
              
             // Deal is currently running, check if the tracker date should be the marker or the current day is
-            if (dtNow < chkTrkrDate) return chkTrkrDate;
+            if (dtNow < chkLastTrkr) return chkLastTrkr;
             return dtNow;
         }
 
@@ -1650,6 +1650,7 @@ namespace Intel.MyDeals.BusinessRules
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, GetBackDateValue(r.Dc).ToString("MM/dd/yyyy"));
+                //string test = r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT);
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {
                     string tracker = de.AtrbValue.ToString();
@@ -2120,15 +2121,16 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+            string inRedeal = r.Dc.GetDataElementValue(AttributeCodes.IN_REDEAL);
 
-            if (userEnteredRedealDateDe == null || (string) userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
+            if (userEnteredRedealDateDe == null || ((string) userEnteredRedealDateDe.AtrbValue == "" && inRedeal != "1")) return; // Bail out if there isn't a user entered Re-deal date
 
             DateTime userEnteredRedealDate;
             DateTime dealStartDate;
             DateTime dealEndDate;
             DateTime lastTrackerStartDate;
             DateTime dtNow = DateTime.Now;
-            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out userEnteredRedealDate)) userEnteredRedealDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out userEnteredRedealDate)) userEnteredRedealDate = DateTime.MinValue;
             if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStartDate)) dealStartDate = dtNow;
             if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEndDate)) dealEndDate = dtNow;
             if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out lastTrackerStartDate)) lastTrackerStartDate = dealStartDate;

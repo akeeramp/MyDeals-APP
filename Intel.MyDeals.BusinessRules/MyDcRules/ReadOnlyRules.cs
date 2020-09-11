@@ -99,12 +99,10 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ReadOnlyIfValueIsPopulatedAndWon,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && String.Equals(de.AtrbValue.ToString(), "Won", StringComparison.OrdinalIgnoreCase)).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
                                 AttributeCodes.QLTR_PROJECT
                             }
