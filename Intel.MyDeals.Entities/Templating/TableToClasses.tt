@@ -431,6 +431,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "VistexLogsInfo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//To get the version details of PCT Exceptions  
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PCT_LGL_EXCPT_HIST] @in_pct_lgl_excpt_sid = 32");
+	ds.Tables[0].TableName = "VersionHistPCTExceptions";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

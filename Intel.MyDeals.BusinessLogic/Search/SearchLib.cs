@@ -182,7 +182,7 @@ namespace Intel.MyDeals.BusinessLogic
                     autoApproveRuleFlag = true;
                     autoApproveRuleval = i.Value.ToString();
                     Operator = i.Operator;
-                    if (Operator == "=")
+                    if (Operator == "=" || Operator == "!=")
                     {
                         autoApproveRuleval = quote + autoApproveRuleval + quote;
                     }
@@ -266,6 +266,10 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID LIKE {autoApproveRuleval} OR {opDataElementType}_RULE_NM LIKE {autoApproveRuleval} OR {opDataElementType}_OWNER_NM LIKE {autoApproveRuleval} OR {opDataElementType}_OWNER_WWID LIKE {autoApproveRuleval})";
 
+                        }
+                        if(Operator== "!=")
+                        {
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID != {autoApproveRuleval} AND {opDataElementType}_RULE_NM != {autoApproveRuleval} AND {opDataElementType}_OWNER_NM != {autoApproveRuleval} AND {opDataElementType}_OWNER_WWID != {autoApproveRuleval})";
                         }
                     }
 
