@@ -54,7 +54,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             return myGuid;
         }
-        
+
 
         #region CREATE TENDERS DEAL (IQR) 
 
@@ -68,7 +68,81 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime contractStartDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime contractEndDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string quoteLineId = workRecordDataFields.recordDetails.quote.Name;
-            string contractTitle = "SF: " + workRecordDataFields.recordDetails.quote.FolioName; 
+            string contractTitle = "SF: " + workRecordDataFields.recordDetails.quote.FolioName;
+
+            // TESTING
+            //MyDealsData newData = new MyDealsData();
+            //newData[OpDataElementType.CNTRCT] = new OpDataPacket<OpDataElementType>() { PacketType = OpDataElementType.CNTRCT };
+            //newData[OpDataElementType.CNTRCT].Data = new OpDataCollectorDict();
+            //newData[OpDataElementType.CNTRCT].Data[-101] = new OpDataCollector
+            //{
+            //    DcID = -101,
+            //    DcParentID = 0,
+            //    DcParentType = "ALL_OBJ_TYPE",
+            //    DcType = OpDataElementType.CNTRCT.ToString(),
+            //    DataElements = new List<OpDataElement>()
+            //};
+            //newData.FillInHolesFromAtrbTemplate(OpDataElementType.CNTRCT, OpDataElementSetType.ALL_TYPES);
+
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.dc_type), OpDataElementType.CNTRCT.ToString());
+
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD), OpDataElementSetType.ALL_TYPES.ToString());
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.SALESFORCE_ID), contractSfId);
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.QUOTE_LN_ID), quoteLineId);
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.START_DT), contractStartDt.ToString("MM/dd/yyyy"));
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.END_DT), contractEndDt.ToString("MM/dd/yyyy"));
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.TENDER_PUBLISHED), "1");
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.IS_TENDER), "1");
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.TITLE), contractTitle+"1");
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.DC_ID), "-101");
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.DC_PARENT_ID), "0");
+            //UpdateDeValue(newData[OpDataElementType.CNTRCT].Data[-101].GetDataElement(AttributeCodes.WF_STG_CD), WorkFlowStages.InComplete.ToString());
+
+            //SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
+            //{
+            //    CustId = custId,
+            //    ContractId = -101,
+            //    DeleteAllPTR = false
+            //});
+
+            //bool hasValidationErrors = newData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
+
+
+            //string validErrors = "";
+            //foreach (OpDataCollector dc in newData[OpDataElementType.CNTRCT].AllDataCollectors)
+            //{
+            //    dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, newData);
+            //    foreach (OpMsg opMsg in dc.Message.Messages) // If validation errors, log and skip to next
+            //    {
+            //        if (opMsg.Message != "Validation Errors detected in deal") validErrors += validErrors.Length == 0 ? opMsg.Message : "; " + opMsg.Message;
+            //    }
+            //}
+
+            //if (validErrors != "") // If validation errors, log and skip to next
+            //{
+            //    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(999, "Deal Validation Error", "Folio -101 had validation errors: " + validErrors));
+            //    return -101; //Pre-emptive continue, but since this is relocated outside of loop..
+            //}
+
+            //// Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+            //ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
+            //{
+            //    CustId = custId,
+            //    ContractId = -101
+            //};
+
+            //TagSaveActionsAndBatches(newData); // Add needed save actions and batch IDs for the save
+            //MyDealsData saveResponse = newData.Save(saveContractToken);
+
+            //if (newData[OpDataElementType.CNTRCT].Actions.Any() && !saveResponse.Keys.Any())
+            //{
+            //    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(998, "My Deals DB", "Folio Save call failed at DB"));
+            //}
+
+            //END TESTING
 
             // Create a new standard tender header packet
             ContractTransferPacket testData = new ContractTransferPacket();

@@ -51,9 +51,6 @@
     <OutputPath>bin\App.prod.config\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Intel.MyDeals.Entities">
-      <HintPath>..\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Intel.Opaque">
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
@@ -134,7 +131,12 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
+      <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
+      <Name>Intel.MyDeals.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
   <Target Name="App_config_AfterCompile" AfterTargets="AfterBuild">

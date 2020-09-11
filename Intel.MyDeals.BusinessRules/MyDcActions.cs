@@ -779,7 +779,25 @@ namespace Intel.MyDeals.BusinessRules
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfValueIsPopulatedAndWon(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            // Figure out why the ConditionIf statement doesn't block entry into the rule...  Then clean up this rule some.
+            //var testme = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && String.Equals(de.AtrbValue.ToString(), "Won", StringComparison.OrdinalIgnoreCase)).Any();
+
+            if (dealStage != WorkFlowStages.Won) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && !string.IsNullOrEmpty(de.AtrbValue.ToString())) de.IsReadOnly = true;
             }
         }
 
@@ -1513,10 +1531,13 @@ namespace Intel.MyDeals.BusinessRules
 
         private static DateTime GetBackDateValue(OpDataCollector opDataCollector)
         {
+            DateTime chkStartDate;
+            DateTime chkTrkrDate;
+            DateTime chkEndDate;
             DateTime dtNow = DateTime.Now;
-            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out DateTime chkStartDate)) chkStartDate = dtNow;
-            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.TRKR_START_DT), out DateTime chkTrkrDate)) chkTrkrDate = dtNow;
-            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out DateTime chkEndDate)) chkEndDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out chkStartDate)) chkStartDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.TRKR_START_DT), out chkTrkrDate)) chkTrkrDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out chkEndDate)) chkEndDate = dtNow;
 
             if (chkEndDate < dtNow) return chkEndDate; // The deals is fully in the past, End Date is your target
             if (dtNow < chkStartDate) // The deals is fully in the future, Start Date or previous tracker start is your target
@@ -1524,7 +1545,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (chkTrkrDate > chkStartDate) return chkTrkrDate; // Someone set a future tracker start date, use it
                 return chkStartDate; // Otherwise, Start Date is your target
             }
-            
+             
             // Deal is currently running, check if the tracker date should be the marker or the current day is
             if (dtNow < chkTrkrDate) return chkTrkrDate;
             return dtNow;
@@ -1882,12 +1903,11 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost };
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && deProject != null && allowedStages.Contains(wfStage) &&  string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            if (rebateType == "TENDER" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
             {
                 deProject.IsRequired = true;
             }
@@ -2103,11 +2123,15 @@ namespace Intel.MyDeals.BusinessRules
 
             if (userEnteredRedealDateDe == null || (string) userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
 
+            DateTime userEnteredRedealDate;
+            DateTime dealStartDate;
+            DateTime dealEndDate;
+            DateTime lastTrackerStartDate;
             DateTime dtNow = DateTime.Now;
-            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out DateTime userEnteredRedealDate)) userEnteredRedealDate = dtNow;
-            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out DateTime dealStartDate)) dealStartDate = dtNow;
-            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out DateTime dealEndDate)) dealEndDate = dtNow;
-            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out DateTime lastTrackerStartDate)) lastTrackerStartDate = dealStartDate;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out userEnteredRedealDate)) userEnteredRedealDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStartDate)) dealStartDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEndDate)) dealEndDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out lastTrackerStartDate)) lastTrackerStartDate = dealStartDate;
 
             // If User Entered is earlier then the Last Re-deal marker or User Entered is later then the End Date, toss an error
             if (userEnteredRedealDate < lastTrackerStartDate || userEnteredRedealDate > dealEndDate) 
