@@ -788,10 +788,16 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            // Figure out why the ConditionIf statement doesn't block entry into the rule...  Then clean up this rule some.
+            //var testme = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && String.Equals(de.AtrbValue.ToString(), "Won", StringComparison.OrdinalIgnoreCase)).Any();
+
+            if (dealStage != WorkFlowStages.Won) return;
+
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue.ToString() != "") de.IsReadOnly = true;
+                if (de != null && !string.IsNullOrEmpty(de.AtrbValue.ToString())) de.IsReadOnly = true;
             }
         }
 
@@ -1897,12 +1903,11 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost, WorkFlowStages.Won };
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && allowedStages.Contains(wfStage) && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            if (rebateType == "TENDER" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
             {
                 deProject.IsRequired = true;
             }
