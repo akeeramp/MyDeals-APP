@@ -3097,8 +3097,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var translationInput = pricingTableRowData.map(function (row, index) {
             return {
                 ROW_NUMBER: row.ROW_NUMBER,
-                //Only for ECAP as mentioned in DE90791
-                USR_INPUT: (dealType == "ECAP") ? getCorrectedPtrUsrPrd(row.PTR_USER_PRD) : row.PTR_USER_PRD, 
+                USR_INPUT: getCorrectedPtrUsrPrd(row.PTR_USER_PRD), 
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
                 START_DATE: moment(row.START_DT).format("l"),
