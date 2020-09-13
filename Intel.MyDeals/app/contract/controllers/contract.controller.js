@@ -5497,10 +5497,9 @@
                             if (window.usrRole === "GA") {
                                 wipTemplate.columns.unshift({
                                     field: "EXCLUDE_AUTOMATION",
-                                    title: "Exclude Automation",
-                                    width: 110,
-                                    template: "<div class='dealTools'><div class='fl' ><input type='checkbox' ng-model='dataItem.EXCLUDE_AUTOMATION' class= 'grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}' id = 'lnkChk_{{dataItem.DC_PARENT_ID}}' /> <label for='lnkChk_{{dataItem.DC_PARENT_ID}}' style='margin: 10px 0 0 10px;' title='Check to Exclude From Automated Rule' ng-click='addExclusionList(dataItem)'></label></div ></div>",
-                                    //< div > <input type='checkbox' ng-model='dataItem.EXCLUDE_AUTOMATION'></input></div> ",
+                                    title: "Exclude from Price Rules",
+                                    width: 150,
+                                    template: "<div class='dealTools'><div class='fl' ><input type='checkbox' ng-model='dataItem.EXCLUDE_AUTOMATION' class= 'grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}' id = 'lnkChk_{{dataItem.DC_PARENT_ID}}' /> <label for='lnkChk_{{dataItem.DC_PARENT_ID}}' style='margin: 10px 0 0 10px;' title='Check to Exclude from Price Rules' ng-click='addExclusionList(dataItem)'></label></div ></div>",
                                     bypassExport: true,
                                     hidden: false,
                                     uiType: "CheckBox",
@@ -5508,7 +5507,7 @@
                                     isRequired: false,
                                     sortable: false,
                                     filterable: false,
-                                    headerTemplate: "<input type='checkbox' ng-click='excludeAllItems()' class='with-font' id='chkDealTools' /><label id='lblExclAutoHeader' for='chkDealTools' style='margin-left: 20px;margin-top: -70px; '>Exclude Automation</label>",
+                                    headerTemplate: "<input type='checkbox' ng-click='excludeAllItems()' class='with-font' id='chkDealTools' /><label id='lblExclAutoHeader' for='chkDealTools' style='margin-left: 20px;margin-top: -70px; '>Exclude from Price Rules</label>",
                                     mjrMnrChg: "MINOR",
                                     lookupUrl: "",
                                     lookupText: "",
