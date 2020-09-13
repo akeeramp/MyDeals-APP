@@ -3726,20 +3726,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
-
-        var iscustdivnull = isCustDivisonNull(data);
-        if (iscustdivnull) {
-            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
-                ValidateProducts(data, false, true);
-            }, function () {
-                return;
-            });
+        //Defect -- System Testing :Price strategy for hybrid deals having multiple deals under it containing the same product
+        var multiGeoWithoutBlend = validateMultiGeoForHybrid(data);
+        if (multiGeoWithoutBlend) {
+            logger.warning('Multiple GEO Selection not allowed without BLEND');
         }
         else {
-            ValidateProducts(data, false, true);
+            var iscustdivnull = isCustDivisonNull(data);
+            if (iscustdivnull) {
+                kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                    ValidateProducts(data, false, true);
+                }, function () {
+                    return;
+                });
+            }
+            else {
+                ValidateProducts(data, false, true);
+            }
         }
     }
-
+    function validateMultiGeoForHybrid(data) {        
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
+                var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
+                var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                if (lastComma > lastBracesPos) {
+                    return true;
+                }
+            }
+                
+        }
+        return false;
+    }
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
 
