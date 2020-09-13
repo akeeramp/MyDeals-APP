@@ -620,6 +620,11 @@
                 title: "Consumption Lookback Period",
                 type: "number",
                 width: 160
+            }, {
+                field: "AUTO_APPROVE_RULE_INFO",
+                title: "Auto Approve By",
+                type: "string",
+                width: 100
             }
         ];
 
@@ -1616,8 +1621,12 @@
                         $scope.$root.pc = null;
                     }
 
-                    $("#dealEditor").data("kendoGrid").dataSource.read();
-                    $("#dealEditor").data("kendoGrid").refresh();
+                    var wip_ids = [];
+                    for (var i = 0; i < tenders.length; i++) {
+                        wip_ids.push(tenders[i].DC_ID);
+                    }
+
+                    $scope.refreshGridRows(wip_ids, null);
 
                     $scope.setBusy("", "");
                     $scope.actionType = "";

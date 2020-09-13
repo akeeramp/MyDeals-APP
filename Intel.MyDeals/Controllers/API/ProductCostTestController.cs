@@ -112,6 +112,19 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         /// <summary>
+        /// To get the version details of PCT Exceptions  
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetVersionDetailsPCTExceptions/{id}/{excludeCurrVer}")]       
+        public List<VersionHistPCTExceptions> GetVersionDetailsPCTExceptions(int id,int excludeCurrVer)
+        {
+            
+            return SafeExecutor(() => _productCostTestLib.GetVersionDetailsPCTExceptions(id,excludeCurrVer)
+               , $"Unable to get Version Details of PCT Exceptions  "
+           );
+        }
+
+        /// <summary>
         /// Create LegalException
         /// </summary>
         /// <returns></returns>

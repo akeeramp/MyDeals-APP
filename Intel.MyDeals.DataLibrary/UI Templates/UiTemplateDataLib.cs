@@ -2741,7 +2741,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.LAST_REDEAL_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_REDEAL_DT', \"date:'MM/dd/yyyy'\")#",
-                Label = "Effective Tracker Start Date",
+                Label = "<div title='Date the current deal values took effect. This date can be changed on a re-deal.'>Effective Tracker Start Date</div>",
                 IsFilterable = false,
                 IsSortable = true,
                 Width = 120,

@@ -3097,7 +3097,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var translationInput = pricingTableRowData.map(function (row, index) {
             return {
                 ROW_NUMBER: row.ROW_NUMBER,
-                USR_INPUT: row.PTR_USER_PRD,
+                USR_INPUT: getCorrectedPtrUsrPrd(row.PTR_USER_PRD), 
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
                 START_DATE: moment(row.START_DT).format("l"),
@@ -3188,6 +3188,32 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.setBusy("", "");
         }
     }
+
+    function getCorrectedPtrUsrPrd(userInpProdName) {
+        userInpProdName = userInpProdName.trim();
+        var retVal = "";
+        if (userInpProdName.indexOf("NAND") != -1) {
+            if (userInpProdName.indexOf(",") != -1) {
+
+                var splitStr = userInpProdName.split(",");
+                for (var i = 0; i < splitStr.length; i++) {
+                    var individProdName = splitStr[i].trim();
+                    if (individProdName.indexOf("NAND") != -1) {
+                        retVal = retVal + ((retVal.length == 0) ? individProdName.substring(individProdName.lastIndexOf(" ")) : "," + individProdName.substring(individProdName.lastIndexOf(" ")));
+                    } else {
+                        retVal = retVal + ((retVal.length == 0) ? individProdName : "," + individProdName);
+                    }
+                }
+            } else {
+                retVal = userInpProdName.substring(userInpProdName.lastIndexOf(" "));
+            }
+        } else {
+            retVal = userInpProdName;
+        }
+       
+        return retVal;
+    }
+    
 
     // Combine the valid and invalid JSON into single object, corrector understands following object type
     function buildTranslatorOutputObject(invalidProductJSONRows, data) {
@@ -3523,7 +3549,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     function () { });
             }, 10);
     }
-
+    
     //Trimming unwanted Property to make JSON light
     function massagingObjectsForJSON(key, transformResult) {
         for (var validKey in transformResult.ValidProducts[key]) {

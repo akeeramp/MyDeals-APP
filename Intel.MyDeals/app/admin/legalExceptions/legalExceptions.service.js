@@ -16,6 +16,7 @@
             createLegalException: createLegalException,
             updateLegalException: updateLegalException,
             deleteLegalException: deleteLegalException,
+            getVersionDetailsPCTExceptions: getVersionDetailsPCTExceptions,
         }
 
         function getLegalExceptions(verticalId) {
@@ -32,6 +33,10 @@
 
         function deleteLegalException(dto) {
             return dataService.post(apiBaseUrl + 'DeleteLegalException', dto);
+        }
+
+        function getVersionDetailsPCTExceptions(id,excludeCurrVer) {
+            return dataService.get(apiBaseUrl + 'GetVersionDetailsPCTExceptions' + "/" + id + "/" + excludeCurrVer);
         }
 
         function userHasAccess() {

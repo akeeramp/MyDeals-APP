@@ -779,7 +779,23 @@ namespace Intel.MyDeals.BusinessRules
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfValueIsPopulatedAndWon(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            if (dealStage != WorkFlowStages.Won) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && !string.IsNullOrEmpty(de.AtrbValue.ToString())) de.IsReadOnly = true;
             }
         }
 
@@ -1511,6 +1527,30 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        private static DateTime GetBackDateValue(OpDataCollector opDataCollector)
+        {
+            DateTime chkStartDate;
+            DateTime chkTrkrDate;
+            DateTime chkEndDate;
+            DateTime chkLastTrkr;
+            DateTime dtNow = DateTime.Now;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out chkStartDate)) chkStartDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.TRKR_START_DT), out chkTrkrDate)) chkTrkrDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out chkEndDate)) chkEndDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out chkLastTrkr)) chkLastTrkr = chkStartDate;
+
+            if (chkEndDate < dtNow) return chkEndDate; // The deals is fully in the past, End Date is your target
+            if (dtNow < chkStartDate) // The deals is fully in the future, Start Date or previous tracker start is your target
+            {
+                if (chkLastTrkr > chkStartDate) return chkLastTrkr; // Someone set a future tracker start date, use it (Last Tracker Date, Not Tracker Start)
+                return chkStartDate; // Otherwise, Start Date is your target
+            }
+             
+            // Deal is currently running, check if the tracker date should be the marker or the current day is
+            if (dtNow < chkLastTrkr) return chkLastTrkr;
+            return dtNow;
+        }
+
         public static void MajorChangeCheck(params object[] args)
         {
             // Check for changes in attributes that would trigger a major change and re-deal.
@@ -1609,7 +1649,8 @@ namespace Intel.MyDeals.BusinessRules
             {
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
-                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date.ToString("MM/dd/yyyy"));
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, GetBackDateValue(r.Dc).ToString("MM/dd/yyyy"));
+                //string test = r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT);
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {
                     string tracker = de.AtrbValue.ToString();
@@ -1863,12 +1904,11 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> allowedStages = new List<string> { WorkFlowStages.Draft, WorkFlowStages.Pending, WorkFlowStages.Offer, WorkFlowStages.Lost };
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && deProject != null && allowedStages.Contains(wfStage) &&  string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            if (rebateType == "TENDER" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
             {
                 deProject.IsRequired = true;
             }
@@ -2077,37 +2117,29 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void RedealNoEarlierThenPrevious(params object[] args)
         {
-            // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
             IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
-            IOpDataElement lastTrackerStartDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
-            IOpDataElement dealStartDateDe = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            IOpDataElement dealEndDateDe = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            string inRedeal = r.Dc.GetDataElementValue(AttributeCodes.IN_REDEAL);
 
-            if (userEnteredRedealDateDe == null || (string) userEnteredRedealDateDe.AtrbValue == "") return; // Bail out if there isn't a user entered Re-deal date
+            if (userEnteredRedealDateDe == null || ((string) userEnteredRedealDateDe.AtrbValue == "" && inRedeal != "1")) return; // Bail out if there isn't a user entered Re-deal date
 
-            DateTime userEnteredRedealDate = DateTime.Parse(userEnteredRedealDateDe.AtrbValue.ToString());
-            DateTime dealEndDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
-            DateTime dealStartDate = DateTime.Parse(dealEndDateDe.AtrbValue.ToString());
-            DateTime lastTrackerStartDate = lastTrackerStartDateDe != null && lastTrackerStartDateDe.AtrbValue.ToString() != "" ?
-                DateTime.Parse(lastTrackerStartDateDe.AtrbValue.ToString()) :
-                DateTime.Parse(dealStartDateDe.AtrbValue.ToString());
+            DateTime userEnteredRedealDate;
+            DateTime dealStartDate;
+            DateTime dealEndDate;
+            DateTime lastTrackerStartDate;
+            DateTime dtNow = DateTime.Now;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out userEnteredRedealDate)) userEnteredRedealDate = DateTime.MinValue;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStartDate)) dealStartDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEndDate)) dealEndDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out lastTrackerStartDate)) lastTrackerStartDate = dealStartDate;
 
-            // If the deal end date is in the past or the start date is in the future, set the userEnteredRedealDate to the last or deal start instead of today
-            if (DateTime.Compare(dealEndDate, DateTime.Today) < 0 || DateTime.Compare(DateTime.Today, dealStartDate) < 0)
-            {
-                userEnteredRedealDateDe.AtrbValue = lastTrackerStartDate.ToString("MM/dd/yyyy");
-                userEnteredRedealDate = lastTrackerStartDate;
-            }
-
-            if (DateTime.Compare(userEnteredRedealDate, lastTrackerStartDate) < 0 // If User Entered is earlier then the Last Re-deal marker
-                || DateTime.Compare(userEnteredRedealDate, dealEndDate) > 0) // OR User Entered is later then the End Date, toss an error
+            // If User Entered is earlier then the Last Re-deal marker or User Entered is later then the End Date, toss an error
+            if (userEnteredRedealDate < lastTrackerStartDate || userEnteredRedealDate > dealEndDate) 
             {
                 //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
-                userEnteredRedealDateDe.AddMessage("Re-Deal Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and "
-                                                   + dealEndDate.ToString("MM/dd/yyyy") + ".  Date reset to original value.");
+                userEnteredRedealDateDe.AddMessage("Tracker Effective Start Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and " + dealEndDate.ToString("MM/dd/yyyy"));
             }
         }
 

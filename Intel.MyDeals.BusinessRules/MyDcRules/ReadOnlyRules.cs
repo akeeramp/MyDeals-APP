@@ -93,6 +93,23 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule
+                {
+                    Title="Readonly if Stage is Won and value is populated",
+                    ActionRule = MyDcActions.ReadOnlyIfValueIsPopulatedAndWon,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.QLTR_PROJECT
+                            }
+                        }
+                    }
+                },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and AR_SETTLEMENT_LVL is Cash
                 {
                     Title="Readonly if Tracker Exists and Value is Cash",
