@@ -657,6 +657,8 @@ namespace Intel.MyDeals.BusinessLogic
             EnterMeetCompData(CONT_PS_ID, WIP_DEAL_ID, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, custId,
                 workRecordDataFields, currentRec);
 
+            // TODO: POTENTIALLY PLACE APRV_AUDIT CALL HERE
+
             return WIP_DEAL_ID;
 
             // END REWRITE
@@ -921,6 +923,11 @@ namespace Intel.MyDeals.BusinessLogic
                 if (myDealsData[objKey].GetChanges().AllDataElements.Any())
                 {
                     myDealsData[objKey].AddSaveActions();
+                    if (objKey == OpDataElementType.PRC_ST)
+                    {
+                        List<int> auditIds = myDealsData[objKey].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
+                        if (auditIds.Any()) myDealsData[objKey].AddAuditActions(auditIds);
+                    }
                 }
             }
             myDealsData.EnsureBatchIDs();
@@ -1208,7 +1215,10 @@ namespace Intel.MyDeals.BusinessLogic
                         break;
                     // Place lost to offer here as else if IRQ decides they want it
                     case "Cancelled":
+                        // Send back both Strategy and Wip level cancels - the WIP one is the one that counts, but let's ensure it goes through.
+                        // TODO: Put in data limits here if business decides to truncate the deals
                         myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
                         break;
                 }
 
