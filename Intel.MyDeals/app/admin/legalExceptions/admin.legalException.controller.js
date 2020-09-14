@@ -306,14 +306,14 @@
             filter: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
             toolbar: GridMenuButton(editNotAllowed,amendmentAllowed),
 
-            editable: { mode: "inline", confirmation: false },
+            editable: { mode: "popup", confirmation: false, template: kendo.template($("#popup_editor").html()) },
 
             select: function (e) {
 
                 var commandCell = e.container.find("td:eq(1)");
                 commandCell.html('<div class="dealTools" ><input type="checkbox"  class="grid - link - checkbox with-font" id="lnkChk"  style="height: 17px; width: 17px; border: 2px solid;" /> </div>');
             },
-
+            
             edit: function (e) {
 
                 var commandCell = e.container.find("td:eq(2)");
