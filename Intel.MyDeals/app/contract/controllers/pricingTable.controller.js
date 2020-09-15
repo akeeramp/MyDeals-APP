@@ -227,10 +227,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (root.isTenderContract && ptTemplate.model.fields["AR_SETTLEMENT_LVL"] !== undefined) {
             ptTemplate.model.fields.AR_SETTLEMENT_LVL.editable = false;
         }
-        if (root.isTenderContract && ptTemplate.model.fields["PAYOUT_BASED_ON"] !== undefined) {
-            ptTemplate.model.fields.PAYOUT_BASED_ON.editable = false;
-        }
-
+        
         // Show oevrarcghing colums only for hybrid deals
         if (root.isTenderContract) {
             root.vistextHybridOnlyColumns.forEach(function (x) {
