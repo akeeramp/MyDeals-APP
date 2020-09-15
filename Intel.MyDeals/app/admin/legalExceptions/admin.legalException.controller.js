@@ -266,7 +266,7 @@
             }
             else
             {
-                logger.warning('Pervious Version cannot not be Compared against Other Exceptions');
+                logger.warning('Previous version cannot be compared against other Exceptions');
             }
         }
 
@@ -824,8 +824,7 @@
         }
 
         $scope.openAmendment = function ()
-        {
-            
+        {    
             var selectedData = $linq.Enumerable().From(filterData)
                 .Where(function (x) {
                     return (x.IS_SELECTED == true);
@@ -837,51 +836,54 @@
                     return (x.IS_ChildGrid == true);
                 })
                 .ToArray();
-
+            
             if (selectedChildGrid.length == 0)
             {
-                if (selectedData.length == 1)
-                {
-                    var usedInDeal = selectedData[0]['USED_IN_DL'];
-                    if (usedInDeal == 'Y')
-                    {
-                        var modalInstance = $uibModal.open({
-                            animation: true,
-                            backdrop: 'static',
-                            templateUrl: 'app/admin/legalExceptions/addAmendment.html',
-                            controller: 'addAmendmentController',
-                            controllerAs: 'vm',
-                            size: 'sm',
-                            windowClass: 'prdSelector-modal-window',
-                            resolve: {
-                                RuleConfig: ['legalExceptionService', function () {
+                if (selectedData.length != 0) {
+                    if (selectedData.length == 1) {
+                        var usedInDeal = selectedData[0]['USED_IN_DL'];
+                        if (usedInDeal == 'Y') {
+                            var modalInstance = $uibModal.open({
+                                animation: true,
+                                backdrop: 'static',
+                                templateUrl: 'app/admin/legalExceptions/addAmendment.html',
+                                controller: 'addAmendmentController',
+                                controllerAs: 'vm',
+                                size: 'sm',
+                                windowClass: 'prdSelector-modal-window',
+                                resolve: {
+                                    RuleConfig: ['legalExceptionService', function () {
 
-                                }],
-                                dataItem: function () {
+                                    }],
+                                    dataItem: function () {
 
-                                    return selectedData;
+                                        return selectedData;
+                                    }
                                 }
-                            }
-                        });
-
-                        modalInstance.result.then(function (returnData) {
-                            vm.cancel();
-                        }, function () { });
+                            });
+                            modalInstance.result.then(function (returnData) {
+                                $("#grid").data("kendoGrid").refresh();
+                                var grid = $("#childGrid").data("kendoGrid");
+                                grid.refresh();                                
+                                vm.cancel();
+                            }, function () { });
+                        }
+                        else {
+                            logger.warning('Exceptions without deals must be edited not amended');
+                        }
                     }
-                    else
-                    {
-                        logger.warning('Exceptions without Deals can not be Edited');
+                    else {
+                        logger.warning('Please select only one Exception to add an amendment');
                     }
                 }
-
                 else
                 {
-                    logger.warning('Please Select up Only One Exception to Add an Amendment');
+                    logger.warning('Please select an Exception to add an amendment');
                 }
             }
             else
             {
-                logger.warning('Please Select the Current Version of the Exception to Add an Amendment');
+                logger.warning('Please select the current version of the exception to add an amendment');
             }           
         }
 
