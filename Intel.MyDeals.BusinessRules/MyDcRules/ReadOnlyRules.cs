@@ -339,8 +339,7 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.AR_SETTLEMENT_LVL,
-                                AttributeCodes.PAYOUT_BASED_ON
+                                AttributeCodes.AR_SETTLEMENT_LVL
                             }
                         }
                     }
