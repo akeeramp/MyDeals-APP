@@ -71,7 +71,7 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
-            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
+            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase) && !dcRebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
             {
                 // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
                 // End date =  Billing End date
