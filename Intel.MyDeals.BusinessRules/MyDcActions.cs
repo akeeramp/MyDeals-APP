@@ -71,14 +71,13 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
-            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
+            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase) && !dcRebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
             {
-                // changed billing start date to equat deal start date as part of US705342
                 // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
                 // End date =  Billing End date
                 if (string.IsNullOrEmpty(billStartDate?.AtrbValue.ToString()))
                 {
-                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).ToString("MM/dd/yyyy");
+                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).AddYears(-1).ToString("MM/dd/yyyy");
                     item[AttributeCodes.REBATE_BILLING_END] = DateTime.Parse(dcEn).ToString("MM/dd/yyyy");
                 }
             }
@@ -1109,6 +1108,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+            IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             
 
@@ -1129,8 +1129,17 @@ namespace Intel.MyDeals.BusinessRules
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-                var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
-                deBllgStart.SetAtrbValue(dt);
+
+                if (deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                    deBllgStart.SetAtrbValue(dt);
+                } else {
+                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
+                    deBllgStart.SetAtrbValue(dt);
+
+                }
+                
             }
 
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
@@ -1147,7 +1156,7 @@ namespace Intel.MyDeals.BusinessRules
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
             // Billing start date can only be backdated up until start of previous quarter US705342
-            if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT)
+            if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
             {
                 deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
             }
