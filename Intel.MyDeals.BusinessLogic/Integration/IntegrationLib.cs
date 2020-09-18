@@ -1140,7 +1140,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus", "ErrorState"};
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus"};
             string executionResponse = "";
 
             List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
@@ -1149,6 +1149,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)  // Grab all of the items that need to be processed
             {
+                bool goodOperationFlag = true;
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
                 // Read Headers and tag in error blocks where needed
@@ -1167,64 +1168,64 @@ namespace Intel.MyDeals.BusinessLogic
                 if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(706, "User not in My Deals", "User ID " + idsid + " is not presently in My Deals"));
-                    requestType = "ErrorState";
+                    goodOperationFlag = false;
                 }
-                else if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(707, "User not a GA in My Deals", "User ID " + idsid + " is not a GA role in My Deals"));
-                    requestType = "ErrorState";
+                    goodOperationFlag = false;
+                }
+                if (!goodRequestTypes.Contains(requestType))
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(708, "Bad Action", "Action " + requestType + " is not a valid action code"));
+                    goodOperationFlag = false;
                 }
                 OpUserStack.TendersAutomatedUserToken(opUserToken);
 
                 Guid batchId = workRecord.BtchId;
                 int dealId = -1;
 
-                switch (requestType)
+                if (goodOperationFlag)
                 {
-                    case "Create": // Tenders Create New Deals request
-                        executionResponse += ProcessCreationRequest(workRecordDataFields, batchId, ref dealId);
-                        break;
-                    case "Update":
-                        executionResponse += ProcessUpdateRequestShell(workRecordDataFields, batchId, ref dealId);
-                        break;
-                    case "UpdateStatus":
-                        executionResponse += ProcessStageUpdateRequest(workRecordDataFields, batchId, ref dealId);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (goodRequestTypes.Contains(requestType))
-                {
-                    // Process the response message now
-                    workRecordDataFields.header.source_system = "MyDeals";
-                    workRecordDataFields.header.target_system = "Tender";
-                    workRecordDataFields.header.action = requestType;
-
-                    string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
-                    List<int> deadIdList = new List<int>() { dealId };
-                    Guid saveSuccessful = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
-
-                    if (saveSuccessful != Guid.Empty
-                    ) // Then we can close out the processing record and go for an immediate send back
+                    switch (requestType)
                     {
-                        _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
-                        executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
+                        case "Create": // Tenders Create New Deals request
+                            executionResponse += ProcessCreationRequest(workRecordDataFields, batchId, ref dealId);
+                            break;
+                        case "Update":
+                            executionResponse += ProcessUpdateRequestShell(workRecordDataFields, batchId, ref dealId);
+                            break;
+                        case "UpdateStatus":
+                            executionResponse += ProcessStageUpdateRequest(workRecordDataFields, batchId, ref dealId);
+                            break;
+                        default:
+                            break;
                     }
-                    // Attempt to close out response now
-
-                    bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
-
-                    if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
-                    _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
-                    executionResponse += "Response object successfully returned<br><br>";
-                    //executionResponse += jsonData + "<br>";
                 }
-                else // request type was not an expected pattern, don't report back and just close the request down as per Mahesh
+
+                // Process the response message now
+                workRecordDataFields.header.source_system = "MyDeals";
+                workRecordDataFields.header.target_system = "Tender";
+                workRecordDataFields.header.action = requestType;
+
+                string jsonData = JsonConvert.SerializeObject(workRecordDataFields);
+                List<int> deadIdList = new List<int>() { dealId };
+                Guid saveSuccessful = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, jsonData);
+
+                if (saveSuccessful != Guid.Empty
+                ) // Then we can close out the processing record and go for an immediate send back
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "Line_Skipped");
-                    executionResponse += "Unexpected request type of '" + requestType + "' sent.  Ignoring record request.";
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                    executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
                 }
+                // Attempt to close out response now
+
+                bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
+
+                if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
+                _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+                executionResponse += "Response object successfully returned<br><br>";
+                //executionResponse += jsonData + "<br>";
             }
 
             return executionResponse;
