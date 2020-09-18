@@ -370,7 +370,7 @@ namespace Intel.MyDeals.BusinessLogic
             string quoteLineNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].QuoteLineNumber;
             string groupType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].GroupType;
             string marketSegment = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MarketSegment;
-            marketSegment.Replace(";", ", ");
+            marketSegment = marketSegment.Replace(";", ", ");
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
