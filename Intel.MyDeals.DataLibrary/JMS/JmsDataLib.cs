@@ -1,5 +1,4 @@
 ﻿extern alias opaqueTools;
-
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using System;
@@ -17,7 +16,6 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
-using Newtonsoft.Json;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -323,7 +321,9 @@ namespace Intel.MyDeals.DataLibrary
 
             bool sendSuccess = false;
 
-            string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : "";
+            // Default to Dev Response Environment, update connection if it falls to another environment.
+            string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : ""; 
+
             if (url == "") return false; // If no URL is defined, bail out of the send
 
             // APOGEE

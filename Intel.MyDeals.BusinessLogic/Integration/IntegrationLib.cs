@@ -95,7 +95,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.END_DT), contractEndDt.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TENDER_PUBLISHED), "1");
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.IS_TENDER), "1");
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TITLE), contractTitle+ "1");
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TITLE), contractTitle);
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
             // Object Validation Checks
@@ -1066,6 +1066,18 @@ namespace Intel.MyDeals.BusinessLogic
                         else
                         {
                             workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(720, "Deal Stage Error: Stage change to " + destinationStage + " failed, current deal stage is " + currentWipWfStg, "Deal Stage Error"));
+                            executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                            continue;
+                        }
+                        break;
+                    case "Approved":
+                        if (currentWipWfStg == WorkFlowStages.Lost)
+                        {
+                            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Offer);
+                        }
+                        else
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(720, "Deal Stage Error: Stage change to Offer failed, current deal stage is " + currentWipWfStg, "Deal Stage Error"));
                             executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                             continue;
                         }
