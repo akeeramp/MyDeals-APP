@@ -191,11 +191,11 @@ namespace Intel.MyDeals.BusinessLogic
             // Need to get resultsList down to a single product json string - if it fails, return the null empty object
             if (resultsList.ValidProducts.Count <= 0) // No valid products returned, clear return list and post error
             {
-                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {EPMID}. Please contact L2 Support", "Product not found"));
+                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product not found"));
             }
             else if (resultsList.ValidProducts.Count > 1) // Multiple matches returned -- Might be able to consolidate this and next and deal with it externally
             {
-                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {EPMID}. Please contact L2 Support", "Product search returned multiple products"));
+                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product search returned multiple products"));
             }
             else
             {
@@ -225,7 +225,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 if (returnedProducts.Count == 0)
                 {
-                    productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {EPMID}. Please contact L2 Support", "No valid products matched"));
+                    productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "No valid products matched"));
                 }
             }
 
@@ -388,7 +388,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (productLookupObj?.MydlPcsrNbr == null)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {EPMID}. Please contact L2 Support", "Product EMP ID not found"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product EMP ID not found"));
                 return initWipId; // Bail out - no products matched
             }
 
@@ -735,7 +735,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(710, "Folio Error: Failed to create the Tender Folio, user {" + idsid + "} doesn’t have GA access in Mydeals", "Failed to create the Tender Folio"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed to create the Tender Folio"));
                         executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                         continue;
                     }
@@ -752,8 +752,9 @@ namespace Intel.MyDeals.BusinessLogic
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
                     if (dealId < 0)  // Needed to create a new PS to WIP Deal for this request and failed, error..
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(711, "Deal Error: Failed to create the Tender Deal, user {" + idsid + "} doesn’t have GA access in Mydeals", "Failed to create the Tender Deal"));
-                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                        //// Real error passed back in ProcessSalesForceDealInformation, so catch-all condition below removed
+                        //workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(711, "Deal Error: Failed to create the Tender Deal, user {" + idsid + "} doesn’t have GA access in Mydeals", "Failed to create the Tender Deal"));
+                        //executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                         continue;
                     }
                 }
@@ -761,7 +762,6 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
                     executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
-                    //workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error", "Tender Deal already created, Deal ID is " + dealId));
                 }
 
                 // Should have no bail outs, so post final messages here

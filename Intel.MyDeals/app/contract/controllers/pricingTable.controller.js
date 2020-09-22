@@ -3776,14 +3776,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     return {
                         count: 1,
                         name: name
-                    }
+                    };
                 })
                 .reduce((a, b) => {
-                    a[b.name] = (a[b.name] || 0) + b.count
-                    return a
-                }, {})
+                    a[b.name] = (a[b.name] || 0) + b.count;
+                    return a;
+                }, {});
             //Duplicate Product Check
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
             if (duplicates.length > 0) {
                 return "2";
             }
