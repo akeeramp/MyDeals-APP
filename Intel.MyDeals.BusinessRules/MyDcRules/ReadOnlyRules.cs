@@ -37,6 +37,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.TRGT_RGN,
                                 AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.DEAL_COMB_TYPE,
                                 AttributeCodes.QTY,
                                 AttributeCodes.ON_ADD_DT,
                                 AttributeCodes.QLTR_BID_GEO,

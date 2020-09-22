@@ -6699,7 +6699,7 @@ button.list-group-item-danger {
 .navbar-logo {
   float: left;
   height: 50px;
-  padding: 10px 15px; }
+  padding: 5px 20px; }
   @media (min-width: 768px) {
     .navbar > .container .navbar-logo,
     .navbar > .container-fluid .navbar-logo {

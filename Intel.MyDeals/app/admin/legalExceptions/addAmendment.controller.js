@@ -27,7 +27,9 @@
                 legalExceptionService.updateLegalException(data)
                     .then(function (response) {
                         
-                        logger.success("Legal exception were successfully updated.");                       
+                        logger.success("Legal exception were successfully updated.");  
+                        //window.opener.location.reload(true);
+                        $scope.ok();
                         e.success(response.data);
 
                     }, function (response) {
