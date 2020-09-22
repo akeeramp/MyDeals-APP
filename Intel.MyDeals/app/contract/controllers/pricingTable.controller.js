@@ -3725,8 +3725,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var data = cleanupData(root.spreadDs.data());
         //Defect -- System Testing :Price strategy for hybrid deals having multiple deals under it containing the same product
         var multiGeoWithoutBlend = validateMultiGeoForHybrid(data);
-        if (multiGeoWithoutBlend) {
-            logger.warning('Multiple GEO Selection not allowed without BLEND');
+        if (multiGeoWithoutBlend != "0") {
+            if (multiGeoWithoutBlend == "1") {
+                logger.stickyError('Multiple GEO Selection not allowed without BLEND');
+            }
+            else if (multiGeoWithoutBlend == "2") {
+                logger.stickyError('Duplicate Product(s) are not allowed in same PS.');
+            }            
         }
         else {
             var iscustdivnull = isCustDivisonNull(data);
@@ -3742,19 +3747,48 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
     }
-    function validateMultiGeoForHybrid(data) {        
+    function validateMultiGeoForHybrid(data) {    
+        //This is Comma Separated GEOS
+        var prod_used = [];
         for (var i = 0; i < data.length; i++) {
+            //Add Products
+            if (data[i].IS_HYBRID_PRC_STRAT == "1") {
+                var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+                for (var j = 0; j < temp_split.length; j++) {
+                    prod_used.push(temp_split[j]);
+                }
+            }            
+            //Checking GEO
             if (data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
                 var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
                 var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
                 var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
                 if (lastComma > lastBracesPos) {
-                    return true;
+                    return "1";
                 }
             }
                 
         }
-        return false;
+        //This is to Check Product Line
+        if (prod_used.length > 0) {
+            var uniq = prod_used
+                .map((name) => {
+                    return {
+                        count: 1,
+                        name: name
+                    }
+                })
+                .reduce((a, b) => {
+                    a[b.name] = (a[b.name] || 0) + b.count
+                    return a
+                }, {})
+            //Duplicate Product Check
+            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            if (duplicates.length > 0) {
+                return "2";
+            }
+        }        
+        return "0";
     }
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
