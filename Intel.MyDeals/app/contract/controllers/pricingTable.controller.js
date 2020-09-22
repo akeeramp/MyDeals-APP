@@ -3770,24 +3770,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 
         }
         //This is to Check Product Line
-        if (prod_used.length > 0) {
-            var uniq = prod_used
-                .map((name) => {
-                    return {
-                        count: 1,
-                        name: name
-                    };
-                })
-                .reduce((a, b) => {
-                    a[b.name] = (a[b.name] || 0) + b.count;
-                    return a;
-                }, []);
-            //Duplicate Product Check
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
-            if (duplicates.length > 0) {
-                return "2";
-            }
-        }        
+        //if (prod_used.length > 0) {
+        //    var uniq = prod_used
+        //        .map((name) => {
+        //            return {
+        //                count: 1,
+        //                name: name
+        //            };
+        //        })
+        //        .reduce((a, b) => {
+        //            a[b.name] = (a[b.name] || 0) + b.count;
+        //            return a;
+        //        }, {});
+        //    //Duplicate Product Check
+        //    var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1);
+        //    if (duplicates.length > 0) {
+        //        return "2";
+        //    }
+        //}        
         return "0";
     }
     function validateSavepublishWipDeals() {
