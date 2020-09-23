@@ -189,11 +189,22 @@ namespace Intel.MyDeals.BusinessLogic
             ProductLookup resultsList = productlib.TranslateProducts(contractToken, usrData, custId, OpDataElementSetType.ECAP.ToString(), true);
 
             // Need to get resultsList down to a single product json string - if it fails, return the null empty object
-            if (resultsList.ValidProducts.Count <= 0) // No valid products returned, clear return list and post error
+            if (resultsList.ValidProducts.Count <= 0 && resultsList.DuplicateProducts.Count <= 0) // No valid products returned, clear return list and post error
             {
                 productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product not found"));
             }
-            else if (resultsList.ValidProducts.Count > 1) // Multiple matches returned -- Might be able to consolidate this and next and deal with it externally
+            else if (resultsList.DuplicateProducts.Count > 0) // Might need to also check valids
+            {
+                var blah = resultsList.DuplicateProducts["1"][usrInputProd].Where(i => i.PRD_ATRB_SID == 7006).ToList();
+                if (resultsList.ValidProducts.Count == 0)
+                {
+                    resultsList.ValidProducts["1"] = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
+                    resultsList.ValidProducts["1"].Add(usrInputProd, blah);
+                }
+                int c = 0;
+                // Push 7006 items over to matches
+            }
+            if (resultsList.ValidProducts.Count > 1) // Multiple matches returned -- Might be able to consolidate this and next and deal with it externally
             {
                 productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product search returned multiple products"));
             }
@@ -405,6 +416,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             int myPrdMbrSid = singleProduct != null ? ToInt32(singleProduct.PRD_MBR_SID) : 0;
             string myPrdCat = singleProduct != null ? singleProduct.PRD_CAT_NM : "";
+            string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD: ""; //singleProduct?.MM_MEDIA_CD
             #endregion Product Check
 
             #region Deal Stability Check
@@ -485,7 +497,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.MRKT_SEG), marketSegment);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PROGRAM_PAYMENT), "Backend");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.GEO_COMBINED), "Worldwide"); // This doesn't matter since it is autofill value and not used
-            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PROD_INCLDS), singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[initPtId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
 
@@ -519,7 +531,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.MRKT_SEG), marketSegment);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PROGRAM_PAYMENT), "Backend");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.GEO_COMBINED), geoCombined.Contains(",") ? "[" + geoCombined + "]" : geoCombined);
-            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PROD_INCLDS), singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
@@ -566,7 +578,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.MRKT_SEG), marketSegment);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PROGRAM_PAYMENT), "Backend");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.GEO_COMBINED), geoCombined);
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PROD_INCLDS), singleProduct?.MM_MEDIA_CD ?? ""); // From PTR_SYS_PRD single Product
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
