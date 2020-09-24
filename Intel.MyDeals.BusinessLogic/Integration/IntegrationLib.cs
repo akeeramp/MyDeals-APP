@@ -159,7 +159,72 @@ namespace Intel.MyDeals.BusinessLogic
             MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
             return singleCustomer;
         }
+        //Product JSON by PRD_MBR_SID
+        private ProdMappings TranslateIQRProducts(int PRD_MBR_SID , int CUST_MBR_SID, string geoCombined, string DEAL_STRT_DT, string DEAL_END_DT)          
+        {
+            ProdMappings returnedProducts = new ProdMappings();
+            PRD_LOOKUP_RESULTS prd = new PRD_LOOKUP_RESULTS();
+            prd.PRD_MBR_SID = PRD_MBR_SID;
+            List<PRD_LOOKUP_RESULTS> temp_products = new List<PRD_LOOKUP_RESULTS>();
+            temp_products.Add(prd);
+            
+            ProductsLib pl = new ProductsLib();
 
+            var result = pl.GetProductAttributes(temp_products);
+            if (result != null && result.Count == 1)
+            {
+                var opt = pl.GetCAPForProduct(PRD_MBR_SID, CUST_MBR_SID, geoCombined, Convert.ToDateTime(DEAL_STRT_DT), Convert.ToDateTime(DEAL_END_DT));
+                
+                if(opt.Count == 1)
+                {
+                    result[0].USR_INPUT = result[0].HIER_NM_HASH;
+                    result[0].DERIVED_USR_INPUT = result[0].HIER_NM_HASH;
+                    result[0].CAP = opt[0].CAP;
+                    result[0].CAP_START = opt[0].CAP_START;
+                    result[0].CAP_END = opt[0].CAP_END;
+                    result[0].YCS2 = opt[0].YCS2;
+                    result[0].YCS2_START = opt[0].YCS2_START;
+                    result[0].YCS2_END = opt[0].YCS2_END;
+                    
+                    foreach (var newItem in result.Select(row => new ProdMapping()
+                    {
+                        CAP = row.CAP,
+                        CAP_END = row.CAP_END.ToString("MM/dd/yyyy"),
+                        CAP_START = row.CAP_START.ToString("MM/dd/yyyy"),
+                        DEAL_PRD_TYPE = row.DEAL_PRD_TYPE,
+                        DERIVED_USR_INPUT = row.DERIVED_USR_INPUT,
+                        HAS_L1 = row.HAS_L1,
+                        HAS_L2 = row.HAS_L2,
+                        HIER_NM_HASH = row.HIER_NM_HASH,
+                        HIER_VAL_NM = row.HIER_VAL_NM,
+                        MM_MEDIA_CD = row.MM_MEDIA_CD,
+                        PRD_CAT_NM = row.PRD_CAT_NM,
+                        PRD_END_DTM = row.PRD_END_DTM.ToString("MM/dd/yyyy"),
+                        PRD_MBR_SID = row.PRD_MBR_SID.ToString(),
+                        PRD_STRT_DTM = row.PRD_STRT_DTM.ToString("MM/dd/yyyy"),
+                        YCS2 = row.YCS2,
+                        YCS2_END = row.YCS2_END.ToString("MM/dd/yyyy"),
+                        YCS2_START = row.YCS2_START.ToString("MM/dd/yyyy"),
+                        EXCLUDE = false
+                    }))
+                    {
+                        returnedProducts.Add(result[0].HIER_NM_HASH, new[] { newItem });
+                    }
+                }
+                else
+                {
+                    //Error Handling CODE for CAP Missing
+                    //productErrorResponse.Add(AppendError(702, "CAP not Available error. Please contact L2 Support", "CAP not found"));
+                }
+            }
+            else
+            {
+                //Error Handling CODE Product Not FOUND
+                //productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for {PCSR_NBR}. Please contact L2 Support", "Product not found"));
+            }
+
+            return returnedProducts;
+        }
         private ProdMappings LookupProducts(string usrInputProd, int epmId, string strtDt, string endDt, string geoCombined, int custId,
             int contractId, ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)
         {
@@ -393,7 +458,9 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrors = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
-            ProdMappings myTranslatedProduct = LookupProducts(productLookupObj.MydlPcsrNbr, epmId, dealStartDate.ToString("MM/dd/yyyy"), dealEndDate.ToString("MM/dd/yyyy"), geoCombined, custId, contractId, ref productErrors);
+            //GET Product JSON by PRD_MBR_SID
+            ProdMappings myTranslatedProduct = TranslateIQRProducts(productLookupObj.PcsrNbrSid, custId, geoCombined, dealStartDate.ToString("MM/dd/yyyy"), dealEndDate.ToString("MM/dd/yyyy"));
+            //ProdMappings myTranslatedProduct = LookupProducts(productLookupObj.MydlPcsrNbr, epmId, dealStartDate.ToString("MM/dd/yyyy"), dealEndDate.ToString("MM/dd/yyyy"), geoCombined, custId, contractId, ref productErrors);
             if (productErrors.Any())
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.AddRange(productErrors);
