@@ -406,7 +406,7 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product EMP ID not found"));
                 return initWipId; // Bail out - no products matched
             }
-
+            
             List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrors = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
             ProdMappings myTranslatedProduct = LookupProducts(productLookupObj.MydlPcsrNbr, epmId, dealStartDate.ToString("MM/dd/yyyy"), dealEndDate.ToString("MM/dd/yyyy"), geoCombined, custId, contractId, ref productErrors);
             if (productErrors.Any())
