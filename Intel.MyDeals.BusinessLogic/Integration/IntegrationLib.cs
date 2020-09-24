@@ -186,7 +186,11 @@ namespace Intel.MyDeals.BusinessLogic
                 COLUMN_TYPE = false
             });
             ProductsLib productlib = new ProductsLib();
+
+            // Saurav - Switch out to test new one below
             ProductLookup resultsList = productlib.TranslateProducts(contractToken, usrData, custId, OpDataElementSetType.ECAP.ToString(), true);
+            //int prdMbrSid = 78227;
+            //ProductLookup resultsList = productlib.TranslateProductsTenders(contractToken, usrData, prdMbrSid, custId, OpDataElementSetType.ECAP.ToString(), true);
 
             // Need to get resultsList down to a single product json string - if it fails, return the null empty object
             if (resultsList.ValidProducts.Count <= 0 && resultsList.DuplicateProducts.Count <= 0) // No valid products returned, clear return list and post error

@@ -802,7 +802,7 @@ namespace Intel.MyDeals.DataLibrary
                         retObj.PrdGrpEpmId = (IDX_PRD_GRP_EPM_ID < 0 || rdr.IsDBNull(IDX_PRD_GRP_EPM_ID))
                             ? default(System.Int32)
                             : rdr.GetFieldValue<System.Int32>(IDX_PRD_GRP_EPM_ID);
-                        retObj.PrdGrpEpmId = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
+                        retObj.PcsrNbrSid = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
                             ? default(System.Int32)
                             : rdr.GetFieldValue<System.Int32>(IDX_PCSR_NBR_SID);
                         retObj.EdwPcsrNbr = (IDX_EDW_PCSR_NBR < 0 || rdr.IsDBNull(IDX_EDW_PCSR_NBR))
