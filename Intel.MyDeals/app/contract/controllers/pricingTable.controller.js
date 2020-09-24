@@ -3772,14 +3772,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //This is to Check Product Line
         if (prod_used.length > 0) {
             var uniq = prod_used
-                .map((name) => {
-                    return {
-                        count: 1,
-                        name: name
-                    }
-                })
-                .reduce((a, b) => {
-                    a[b.name] = (a[b.name] || 0) + b.count
+                .map(function (e) {
+                    return e;
+                }).reduce((a, b) =>
+                {
+                a[b] = (a[b] || 0) + 1;
                     return a
                 }, {})
             //Duplicate Product Check

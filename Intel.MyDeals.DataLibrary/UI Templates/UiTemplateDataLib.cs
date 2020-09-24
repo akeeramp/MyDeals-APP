@@ -2093,14 +2093,6 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_LOOKBACK_PERIOD', 'number')#",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 3455,
-                AtrbCd = AttributeCodes.CNSMPTN_LKBACK_PERD_DT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'CNSMPTN_LKBACK_PERD_DT')#",
-                IsHidden = true
-            });
 
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
