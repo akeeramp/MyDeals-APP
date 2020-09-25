@@ -1178,28 +1178,37 @@ namespace Intel.MyDeals.BusinessLogic
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
 
-                if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                if (opUserToken.Usr.Idsid != null) // Bad user lookup
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
+                    if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
+                        goodOperationFlag = false;
+                    }
+                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
+                        goodOperationFlag = false;
+                    }
+                    if (!goodRequestTypes.Contains(requestType))
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
+                        goodOperationFlag = false;
+                    }
+                }
+                else
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "No User ID passed from IQR for this request", "IQR passed WWID was left empty"));
                     goodOperationFlag = false;
                 }
-                if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
-                    goodOperationFlag = false;
-                }
-                if (!goodRequestTypes.Contains(requestType))
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
-                    goodOperationFlag = false;
-                }
-                OpUserStack.TendersAutomatedUserToken(opUserToken);
 
                 Guid batchId = workRecord.BtchId;
                 int dealId = -1;
 
                 if (goodOperationFlag)
                 {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken);
+
                     switch (requestType)
                     {
                         case "Create": // Tenders Create New Deals request
