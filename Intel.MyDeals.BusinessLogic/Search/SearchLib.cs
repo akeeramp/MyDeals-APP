@@ -164,11 +164,7 @@ namespace Intel.MyDeals.BusinessLogic
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
-            var autoApproveRuleval = "";
-            var Operator = "";
-            string quote = "'";
-            string likeOperator1 = "'%";
-            string likeOperator2 = "%'";
+            var autoApproveRuleval = "";         
             bool autoApproveRuleFlag = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
 
@@ -179,17 +175,7 @@ namespace Intel.MyDeals.BusinessLogic
                 
                 if (field == "AUTO_APPROVE_RULE_INFO")
                 {
-                    autoApproveRuleFlag = true;
-                    autoApproveRuleval = i.Value.ToString();
-                    Operator = i.Operator;
-                    if (Operator == "=" || Operator == "!=")
-                    {
-                        autoApproveRuleval = quote + autoApproveRuleval + quote;
-                    }
-                    if (Operator == "LIKE")
-                    {
-                        autoApproveRuleval = likeOperator1 + autoApproveRuleval + likeOperator2;           
-                    }                  
+                    autoApproveRuleFlag = true;                   
                     break;
                 }              
             }
@@ -251,28 +237,33 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            //Special case for AUTO_APPROVE_RULE_INFO
+            //Special case for AUTO_APPROVE_RULE_INFO. Modify the concatenation string for 'AUTO_APPROVE_RULE_INFO' field as it is needed from database side
             if (autoApproveRuleFlag == true)
             {                
                 for (int i = 0; i < modifiedSearchList.Count; i++)
                 {                    
                     if(modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
                     {
-                        if (Operator == "=")
+                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!")) 
                         {
-                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID = {autoApproveRuleval} OR {opDataElementType}_RULE_NM = {autoApproveRuleval} OR {opDataElementType}_OWNER_NM = {autoApproveRuleval} OR {opDataElementType}_OWNER_WWID = {autoApproveRuleval})";
-                        }                           
-                        if (Operator == "LIKE")
+                            string[] val =  modifiedSearchList[i].Split("=".ToCharArray());
+                            autoApproveRuleval = val[val.Length -1];
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID ={autoApproveRuleval} OR {opDataElementType}_RULE_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_WWID ={autoApproveRuleval})";
+                        }
+                        if (modifiedSearchList[i].Contains("LIKE"))
                         {
-                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID LIKE {autoApproveRuleval} OR {opDataElementType}_RULE_NM LIKE {autoApproveRuleval} OR {opDataElementType}_OWNER_NM LIKE {autoApproveRuleval} OR {opDataElementType}_OWNER_WWID LIKE {autoApproveRuleval})";
+                            string[] val = modifiedSearchList[i].Split("LIKE".ToCharArray());
+                            autoApproveRuleval = val[val.Length - 1];
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID LIKE{autoApproveRuleval} OR {opDataElementType}_RULE_NM LIKE{autoApproveRuleval} OR {opDataElementType}_OWNER_NM LIKE{autoApproveRuleval} OR {opDataElementType}_OWNER_WWID LIKE{autoApproveRuleval})";
+                        }
+                        if (modifiedSearchList[i].Contains("!="))
+                        {
+                            string[] val = modifiedSearchList[i].Split("!=".ToCharArray());
+                            autoApproveRuleval = val[val.Length - 1];                           
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID !={autoApproveRuleval} AND {opDataElementType}_RULE_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_WWID !={autoApproveRuleval})";
 
-                        }
-                        if(Operator== "!=")
-                        {
-                            modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID != {autoApproveRuleval} AND {opDataElementType}_RULE_NM != {autoApproveRuleval} AND {opDataElementType}_OWNER_NM != {autoApproveRuleval} AND {opDataElementType}_OWNER_WWID != {autoApproveRuleval})";
-                        }
+                        }                      
                     }
-
                 }
             }
            
