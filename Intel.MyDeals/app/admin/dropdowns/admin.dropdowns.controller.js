@@ -36,7 +36,7 @@
                     dropdownsService.getBasicDropdowns(true)
                         .then(function (response) {
                             setNonCorpInheritableValues(response.data);
-                            e.success(response.data);
+                            e.success(response.data.filter(checkRestrictions));
                         }, function (response) {
                             logger.error("Unable to get Dropdowns.", response, response.statusText);
                         });
@@ -153,6 +153,20 @@
             }
         });
 
+        function checkRestrictions(dataItem) {
+            var Id = (dataItem.dropdownID === undefined) ? dataItem.ATRB_SID : dataItem.dropdownID;
+            //var Id = dataItem.dropdownID ?
+            var restrictToConsumptionOnly = (usrRole === 'SA' && !isDeveloper);
+            var restrictedGroupList = [3456, 3457, 3458];
+            if (restrictToConsumptionOnly === false) {
+                return true;
+            }
+            else {
+                return restrictedGroupList.includes(Id);
+            }
+
+        }
+
         function getDealtypeDataSource() {
             dropdownsService.getDealTypesDropdowns(true)
                         .then(function (response) {
@@ -167,8 +181,8 @@
 
         function getGroupsDataSource() {
             dropdownsService.getDropdownGroups(true)
-                        .then(function (response) {
-                            vm.groupsDataSource = response.data;
+                .then(function (response) {
+                    vm.groupsDataSource = response.data.filter(checkRestrictions);
                         }, function (response) {
                             logger.error("Unable to get Dropdown Groups.", response, response.statusText);
                         });
