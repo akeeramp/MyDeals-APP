@@ -351,6 +351,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.QUOTE_LN_ID.ATRB_SID,
                     Attributes.QLTR_BID_GEO.ATRB_SID,
                     Attributes.GEO_COMBINED.ATRB_SID
+                    
                 });
 
             // Get all the products in a collection base on the PRODUCT_FILTER
@@ -645,7 +646,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.TOTAL_DOLLAR_AMOUNT.ATRB_SID,
                 Attributes.TRKR_NBR.ATRB_SID,
                 Attributes.VOLUME.ATRB_SID,
-                Attributes.WF_STG_CD.ATRB_SID
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID
+
             },
             new List<string> { SearchTools.BuildCustSecurityWhere() },
             new UserPreferencesLib().GetUserPreference("DealSearch", "SearchRules", "CustomSearch"),

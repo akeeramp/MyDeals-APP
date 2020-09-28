@@ -628,7 +628,7 @@
                 width: 160
             }, {
                 field: "AUTO_APPROVE_RULE_INFO",
-                title: "Auto Approve By",
+                title: "Auto Approved By",
                 type: "string",
                 width: 160
             }
