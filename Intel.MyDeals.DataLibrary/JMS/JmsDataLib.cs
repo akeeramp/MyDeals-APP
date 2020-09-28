@@ -790,12 +790,10 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
                     int IDX_PRD_GRP_EPM_ID = DB.GetReaderOrdinal(rdr, "PRD_GRP_EPM_ID");
                     int IDX_PCSR_NBR_SID = DB.GetReaderOrdinal(rdr, "PCSR_NBR_SID");
                     int IDX_EDW_PCSR_NBR = DB.GetReaderOrdinal(rdr, "EDW_PCSR_NBR");
                     int IDX_MYDL_PCSR_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PCSR_NBR");
-                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
 
                     while (rdr.Read())
                     {

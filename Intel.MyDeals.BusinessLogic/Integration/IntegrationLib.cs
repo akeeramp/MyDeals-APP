@@ -160,88 +160,73 @@ namespace Intel.MyDeals.BusinessLogic
             return singleCustomer;
         }
 
-        private ProdMappings LookupProducts(string usrInputProd, int epmId, string strtDt, string endDt, string geoCombined, int custId,
-            int contractId, ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)
+        private ProdMappings TranslateIQRProducts(ProductEpmObject epmProduct, int epmId, int custId, string geoCombined, DateTime strtDt, DateTime endDt, 
+            ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)          
         {
             ProdMappings returnedProducts = new ProdMappings();
+            PRD_LOOKUP_RESULTS prd = new PRD_LOOKUP_RESULTS();
+            prd.PRD_MBR_SID = epmProduct.PcsrNbrSid; 
+            List<PRD_LOOKUP_RESULTS> temp_products = new List<PRD_LOOKUP_RESULTS>();
+            temp_products.Add(prd);
+            
+            ProductsLib pl = new ProductsLib();
 
-            ContractToken contractToken = new ContractToken("ContractToken Created - TranslateProducts")
+            var result = pl.GetProductAttributes(temp_products);
+            if (result != null && result.Count == 1)
             {
-                CustId = custId,
-                ContractId = contractId
-            };
-
-            List<ProductEntryAttribute> usrData = new List<ProductEntryAttribute>();
-            usrData.Add(new ProductEntryAttribute()
-            {
-                ROW_NUMBER = 1,
-                USR_INPUT = usrInputProd,
-                EXCLUDE = false,
-                FILTER = "All", // Do we assume this?
-                START_DATE = strtDt,
-                END_DATE = endDt,
-                GEO_COMBINED = geoCombined,
-                PROGRAM_PAYMENT = "Backend",
-                MOD_USR_INPUT = null,
-                COLUMN_TYPE = false
-            });
-            ProductsLib productlib = new ProductsLib();
-
-            // Saurav - Switch out to test new one below
-            ProductLookup resultsList = productlib.TranslateProducts(contractToken, usrData, custId, OpDataElementSetType.ECAP.ToString(), true);
-            //int prdMbrSid = 78227;
-            //ProductLookup resultsList = productlib.TranslateProductsTenders(contractToken, usrData, prdMbrSid, custId, OpDataElementSetType.ECAP.ToString(), true);
-
-            // Need to get resultsList down to a single product json string - if it fails, return the null empty object
-            if (resultsList.ValidProducts.Count <= 0 && resultsList.DuplicateProducts.Count <= 0) // No valid products returned, clear return list and post error
-            {
-                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product not found"));
-            }
-            else if (resultsList.DuplicateProducts.Count > 0) // Might need to also check valids
-            {
-                var blah = resultsList.DuplicateProducts["1"][usrInputProd].Where(i => i.PRD_ATRB_SID == 7006).ToList();
-                if (resultsList.ValidProducts.Count == 0)
+                var opt = pl.GetCAPForProduct(epmProduct.PcsrNbrSid, custId, geoCombined, strtDt, endDt);
+                
+                if(opt.Count == 1)
                 {
-                    resultsList.ValidProducts["1"] = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
-                    resultsList.ValidProducts["1"].Add(usrInputProd, blah);
+                    if (opt[0].CAP == "No CAP")
+                    {
+                        // Decide if we toss this back as error or allow create
+                    }
+
+                    result[0].USR_INPUT = result[0].HIER_NM_HASH;
+                    result[0].DERIVED_USR_INPUT = result[0].HIER_NM_HASH;
+                    result[0].CAP = opt[0].CAP;
+                    result[0].CAP_START = opt[0].CAP_START;
+                    result[0].CAP_END = opt[0].CAP_END;
+                    result[0].YCS2 = opt[0].YCS2;
+                    result[0].YCS2_START = opt[0].YCS2_START;
+                    result[0].YCS2_END = opt[0].YCS2_END;
+                    
+                    foreach (var newItem in result.Select(row => new ProdMapping()
+                    {
+                        CAP = row.CAP,
+                        CAP_END = row.CAP_END.ToString("MM/dd/yyyy"),
+                        CAP_START = row.CAP_START.ToString("MM/dd/yyyy"),
+                        DEAL_PRD_TYPE = row.DEAL_PRD_TYPE,
+                        DERIVED_USR_INPUT = row.DERIVED_USR_INPUT,
+                        HAS_L1 = row.HAS_L1,
+                        HAS_L2 = row.HAS_L2,
+                        HIER_NM_HASH = row.HIER_NM_HASH,
+                        HIER_VAL_NM = row.HIER_VAL_NM,
+                        MM_MEDIA_CD = row.MM_MEDIA_CD == null? "All": row.MM_MEDIA_CD,
+                        PRD_CAT_NM = row.PRD_CAT_NM,
+                        PRD_END_DTM = row.PRD_END_DTM.ToString("MM/dd/yyyy"),
+                        PRD_MBR_SID = row.PRD_MBR_SID.ToString(),
+                        PRD_STRT_DTM = row.PRD_STRT_DTM.ToString("MM/dd/yyyy"),
+                        YCS2 = row.YCS2,
+                        YCS2_END = row.YCS2_END.ToString("MM/dd/yyyy"),
+                        YCS2_START = row.YCS2_START.ToString("MM/dd/yyyy"),
+                        EXCLUDE = false
+                    }))
+                    {
+                        returnedProducts.Add(result[0].HIER_VAL_NM, new[] { newItem }); //result[0].HIER_NM_HASH
+                    }
                 }
-                int c = 0;
-                // Push 7006 items over to matches
-            }
-            if (resultsList.ValidProducts.Count > 1) // Multiple matches returned -- Might be able to consolidate this and next and deal with it externally
-            {
-                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product search returned multiple products"));
+                else
+                {
+                    //Error Handling CODE for CAP Missing
+                    productErrorResponse.Add(AppendError(703, "Product error: CAP not Available error for EPM Id [" + epmId + "]. Please contact L2 Support", "CAP not found"));
+                }
             }
             else
             {
-                foreach (var newItem in resultsList.ValidProducts["1"][usrInputProd].Select(row => new ProdMapping()
-                {
-                    CAP = row.CAP,
-                    CAP_END = row.CAP_END.ToString("MM/dd/yyyy"),
-                    CAP_START = row.CAP_START.ToString("MM/dd/yyyy"),
-                    DEAL_PRD_TYPE = row.DEAL_PRD_TYPE,
-                    DERIVED_USR_INPUT = row.DERIVED_USR_INPUT,
-                    HAS_L1 = row.HAS_L1,
-                    HAS_L2 = row.HAS_L2,
-                    HIER_NM_HASH = row.HIER_NM_HASH,
-                    HIER_VAL_NM = row.HIER_VAL_NM,
-                    MM_MEDIA_CD = row.MM_MEDIA_CD,
-                    PRD_CAT_NM = row.PRD_CAT_NM,
-                    PRD_END_DTM = row.PRD_END_DTM.ToString("MM/dd/yyyy"),
-                    PRD_MBR_SID = row.PRD_MBR_SID.ToString(),
-                    PRD_STRT_DTM = row.PRD_STRT_DTM.ToString("MM/dd/yyyy"),
-                    YCS2 = row.YCS2,
-                    YCS2_END = row.YCS2_END.ToString("MM/dd/yyyy"),
-                    YCS2_START = row.YCS2_START.ToString("MM/dd/yyyy"),
-                    EXCLUDE = row.EXCLUDE
-                }))
-                {
-                    returnedProducts.Add(usrInputProd, new[] { newItem });
-                }
-                if (returnedProducts.Count == 0)
-                {
-                    productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "No valid products matched"));
-                }
+                //Error Handling CODE Product Not FOUND
+                productErrorResponse.Add(AppendError(702, "Product error: No valid products matched, for EPM Id [" + epmId + "]. Please contact L2 Support", "No valid products found"));
             }
 
             return returnedProducts;
@@ -401,14 +386,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
 
-            if (productLookupObj?.MydlPcsrNbr == null)
+            if (productLookupObj?.MydlPcsrNbr == String.Empty || productLookupObj?.PcsrNbrSid == 0)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id {" + epmId + "}. Please contact L2 Support", "Product EMP ID not found"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id [" + epmId + "]. Please contact L2 Support", "Product EMP ID not found"));
                 return initWipId; // Bail out - no products matched
             }
-
+            
             List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrors = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
-            ProdMappings myTranslatedProduct = LookupProducts(productLookupObj.MydlPcsrNbr, epmId, dealStartDate.ToString("MM/dd/yyyy"), dealEndDate.ToString("MM/dd/yyyy"), geoCombined, custId, contractId, ref productErrors);
+            //GET Product JSON by PRD_MBR_SID
+            ProdMappings myTranslatedProduct = TranslateIQRProducts(productLookupObj, epmId, custId, geoCombined, dealStartDate, dealEndDate, ref productErrors);
             if (productErrors.Any())
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.AddRange(productErrors);
@@ -896,7 +882,6 @@ namespace Intel.MyDeals.BusinessLogic
             string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[i].ExcludeAutomation ? "Yes" : "No";
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.EXCLUDE_AUTOMATION), excludeAutomationFlag);
 
-
             // Clear out system comments to all objects so that updates don't stack comments incorrectly
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
@@ -1193,28 +1178,37 @@ namespace Intel.MyDeals.BusinessLogic
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
 
-                if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                if (opUserToken.Usr.Idsid != null) // Bad user lookup
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(703, "User ID " + idsid + " is not presently a user in My Deals", "User account doesn't exist"));
+                    if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
+                        goodOperationFlag = false;
+                    }
+                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
+                        goodOperationFlag = false;
+                    }
+                    if (!goodRequestTypes.Contains(requestType))
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
+                        goodOperationFlag = false;
+                    }
+                }
+                else
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "No User ID passed from IQR for this request", "IQR passed WWID was left empty"));
                     goodOperationFlag = false;
                 }
-                if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID " + idsid + " is not a GA user role in My Deals", "User has wrong role"));
-                    goodOperationFlag = false;
-                }
-                if (!goodRequestTypes.Contains(requestType))
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code " + requestType + " is not valid"));
-                    goodOperationFlag = false;
-                }
-                OpUserStack.TendersAutomatedUserToken(opUserToken);
 
                 Guid batchId = workRecord.BtchId;
                 int dealId = -1;
 
                 if (goodOperationFlag)
                 {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken);
+
                     switch (requestType)
                     {
                         case "Create": // Tenders Create New Deals request
