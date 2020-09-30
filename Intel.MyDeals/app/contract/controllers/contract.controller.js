@@ -390,7 +390,7 @@
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
 
-        //PS object is holding the Pricing Strategy ID with Pricing Stratagy Status
+        //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
         $scope.PS = {};
         if ($scope.contractData.PRC_ST) {
             for (var n = 0; n < $scope.contractData.PRC_ST.length; n++) {
@@ -4329,6 +4329,14 @@
                 $scope.isValid = false;
             } else if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
                 $scope.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 2099/12/31";
+                $scope.contractData._behaviors.isError["END_DT"] = true;
+                $scope.isValid = false;
+            }
+            else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter($scope.contractData.MaxDate)) {
+                $scope.contractData._behaviors
+                    .validMsg['END_DT'] = moment(ct.END_DT).isAfter($scope.contractData.MaxDate)
+                        ? "End date cannot be greater than - " + $scope.contractData.MaxDate
+                        : "End date cannot be less than Start Date";
                 $scope.contractData._behaviors.isError["END_DT"] = true;
                 $scope.isValid = false;
             }
