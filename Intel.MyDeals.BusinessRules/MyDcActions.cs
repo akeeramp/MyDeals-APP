@@ -272,6 +272,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            string hasTrkr = (r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER)) ?? "";
             string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
             string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
             if (!string.IsNullOrEmpty(prdJsonIvalid))
@@ -378,7 +379,7 @@ namespace Intel.MyDeals.BusinessRules
             //}
             if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString() || r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.PROGRAM.ToString())
             {
-                CheckForCrossVerticalProducts(dePrdUsr, items);
+                CheckForCrossVerticalProducts(dePrdUsr, hasTrkr, items);
             }
         }
 
@@ -389,7 +390,7 @@ namespace Intel.MyDeals.BusinessRules
         /// </summary>
         /// <param name="dePrdUsr"></param>
         /// <param name="items"></param>
-        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, ProdMappings items)
+        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, string hasTrkr, ProdMappings items)
         {
             // TODO Move these to constants
             var productCombination1 = new string[] { "DT", "Mb", "SvrWS", "EIA CPU" }.ToDictionary(x => x);
@@ -414,11 +415,15 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     if (i == validContractProducts.Count() - 1) break;
                     var newprodCategory = validContractProducts[i + 1];
+                    // (DE88221) - Append special message to trigger save calls to drop active invalid row saves
+                    string activeDealProdError = "  Changes to this active deal/row have been restored to their previous saved values."; //Products reset to orignal values.  Please re-validate this line to clear errors.
                     if (productCombination1.ContainsKey(validContractProducts[i]))
                     {
                         if (!productCombination1.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -426,7 +431,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (!productCombination2.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -434,7 +441,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (validContractProducts[i] != newprodCategory)
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
                     }

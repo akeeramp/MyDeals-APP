@@ -913,7 +913,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpLog.Log("SavePacketsBase - Start.");
 
-            // Save Data Cycle: Point 9
+            // Save Data Cycle: Point 9 - Full reconstituted Mid Tier objects here, Apply rules and kick off the save cycle data culling/actions building
 
             // How this should work:
             // Step 1 - get all of the related DEs for each object given a set of object levels (OpDataElementType) and IDs
@@ -943,6 +943,12 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         hasCriticalErrors = true;
                     }
+                    // Approved Price Table Row product errors safety check - If product errors AND PTR is approved, roll back all row saves (DE88221)
+                    if (opDataElementType == OpDataElementType.PRC_TBL_ROW && myDealsData.ContainsKey(opDataElementType) 
+                        && myDealsData[opDataElementType].Messages.Messages.Where(m => m.Message.Contains("Changes to this active deal/row have been restored to their previous saved values.")).Any())
+                    {
+                        RollbackActiveInvalidProductRows(myDealsData);
+                    }
                 }
             }
 
@@ -971,6 +977,38 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpLog.Log("SavePacketsBase - Complete.");
             return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
+        }
+
+        private static void RollbackActiveInvalidProductRows(MyDealsData myDealsData)
+        {
+            // This rolls back any Approved/Active PTR/Wip objects that suffered from an invalid product check (DE88221)
+            // Triggered in CheckForCrossVerticalProducts DC rule by appended warning message
+            List<int> badTableRowProductsIds = myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.Messages.Where(m => m.Message.Contains("Changes to this active deal/row have been restored to their previous saved values.")).Select(m => m.KeyIdentifier).ToList();
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                if (badTableRowProductsIds.Contains(dc.DcParentID))
+                {
+                    // At WIP level, remove new product entries, then roll back all changes
+                    List<OpDataElement> dePrds = dc.DataElements.Where(e => e.State == OpDataElementState.Modified && e.AtrbCd == AttributeCodes.PRODUCT_FILTER).ToList();
+                    dc.DataElements.RemoveAll(e => e.State == OpDataElementState.Modified && e.AtrbCd == AttributeCodes.PRODUCT_FILTER);
+                    foreach (OpDataElement de in dc.DataElements)
+                    {
+                        de.AtrbValue = de.OrigAtrbValue; // rolls back all WIP items
+                    }
+                }
+            }
+
+            // At PTR level, roll back all changes
+            foreach (OpDataCollector ptrDc in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
+            {
+                if (badTableRowProductsIds.Contains(ptrDc.DcID))
+                {
+                    foreach (OpDataElement de in ptrDc.DataElements)
+                    {
+                        de.AtrbValue = de.OrigAtrbValue; // rolls back all WIP items
+                    }
+                }
+            }
         }
 
         private static void TransferActions(this MyDealsData myDealsDataResults, MyDealsData myDealsDataWithErrors)

@@ -149,7 +149,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="custId">Customer ID to tag to operation.</param>
         private void ImportOpDataPackets(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid, int custId)
         {
-            // Save Data Cycle: Point 16
+            // Save Data Cycle: Point 16 - Final save objects to DB and start the return path back to the UI
 
             if (packets == null) { return; }
 
