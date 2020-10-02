@@ -2737,7 +2737,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateKITSpreadsheetProducts(params object[] args)
+        public static void ValidateKITSpreadsheetProducts(params object[] args) // PTR only rule
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -2753,8 +2753,6 @@ namespace Intel.MyDeals.BusinessRules
             ProdMappings items = null;
             int numOfL1s = 0;
             int numOfL2s = 0;
-
-            int prdMapIndex = 0;
 
             try
             {
@@ -2775,7 +2773,11 @@ namespace Intel.MyDeals.BusinessRules
 
                 foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
                 {
-                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == prdMapIndex).FirstOrDefault();
+                    // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
+                    // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
+                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString() == prdMapping.Key).FirstOrDefault();
+                    int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
+                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
 
                     foreach (ProdMapping prod in prdMapping.Value)
@@ -2792,7 +2794,7 @@ namespace Intel.MyDeals.BusinessRules
                             // Rule: Each L1 can only have a Qty of 1
                             if (parsedQty > 1)
                             {
-                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", prdMapIndex);
+                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", deDimKey);
                             }
                             numOfL1s += parsedQty;
                         }
@@ -2815,7 +2817,6 @@ namespace Intel.MyDeals.BusinessRules
                             dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
                         }
 
-                        prdMapIndex++;
                     }
                 }
             }
