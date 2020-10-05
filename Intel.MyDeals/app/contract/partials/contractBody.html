@@ -24,7 +24,7 @@
 		<div style="height: 37px; padding-left: 10px; " ng-if="isPtr || isWip" ng-class="{'notReqForTender': isTenderContract == true}">
 			<div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">{{ptTitle}} Editor</div>
 			<div class="fl editorTab" ng-class="{'inactive': !isWip, disabled: enableDealEditorTab() === false}"title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required" ng-click="publishWipDealsFromTab()">
-				<i ng-if="dealEditorTabValidationIssue() === true" class="intelicon-information-outlined font-med ng-scope" style="margin-left: -6px; color: black;" title="Deal Editor needs to be reviewed"></i> Deal Editor
+				<i ng-if="dealEditorTabValidationIssue() === true" class="intelicon-information-outlined font-med ng-scope" style="margin-left: -6px; color: yellow;" title="Deal Editor needs to be reviewed"></i> Deal Editor
 			</div>
 			<div class="clearboth"></div>
 		</div>

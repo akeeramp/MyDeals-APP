@@ -38,7 +38,9 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.NUM_OF_TIERS }) && de.IsNegativeOrZero()
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.NUM_OF_TIERS 
+                            }) && de.IsNegativeOrZero()
                         }
                     }
                 },
@@ -71,7 +73,9 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.VOLUME }) && de.HasValue() && de.IsNegativeOrZero()
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.VOLUME 
+                            }) && de.HasValue() && de.IsNegativeOrZero()
                         }
                     }
                 },
@@ -88,7 +92,9 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegativeOrZero()
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.FRCST_VOL 
+                            }) && de.HasValue() && de.IsNegativeOrZero()
                         }
                     }
                 },
@@ -105,7 +111,10 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be positive or zero" },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_AVG_RPU, AttributeCodes.USER_MAX_RPU }) && de.HasValue() && de.IsNegative()
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.USER_AVG_RPU, 
+                                AttributeCodes.USER_MAX_RPU 
+                            }) && de.HasValue() && de.IsNegative()
                         }
                     }
                 },
@@ -315,7 +324,9 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be no more than 80 characters." },
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.TITLE }) && de.ExceedsMaxLength(80)
+                            Where = de => de.AtrbCdIn(new List<string> { 
+                                AttributeCodes.TITLE 
+                            }) && de.ExceedsMaxLength(80)
                         }
                     }
                 },

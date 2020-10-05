@@ -613,16 +613,15 @@ namespace Intel.MyDeals.BusinessLogic
                         : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                     string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
 
-                    string approverId = "";
-                    if (newStage == WorkFlowStages.Offer || newStage == WorkFlowStages.Won ||
-                        newStage == WorkFlowStages.Pending) approverId = wwid.ToString();
+                    string ApprovedByString = "";
+                    if (newStage == WorkFlowStages.Offer) ApprovedByString = "Manually approval by " + wwid.ToString();
 
                     var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
                     {
                         DealRFQId = wipDealId.ToString(),
                         DealRFQStatus = newStage,
                         Id = wipSfId,
-                        ApprovedByInfo = "Manually approval by " + approverId
+                        ApprovedByInfo = ApprovedByString
                     };
                     sendStageToIqr.recordDetails.quote.quoteLine.Add(newQuoteLine);
 

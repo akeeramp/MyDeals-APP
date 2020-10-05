@@ -272,6 +272,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            string hasTrkr = (r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER)) ?? "";
             string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
             string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
             if (!string.IsNullOrEmpty(prdJsonIvalid))
@@ -378,7 +379,7 @@ namespace Intel.MyDeals.BusinessRules
             //}
             if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString() || r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.PROGRAM.ToString())
             {
-                CheckForCrossVerticalProducts(dePrdUsr, items);
+                CheckForCrossVerticalProducts(dePrdUsr, hasTrkr, items);
             }
         }
 
@@ -389,7 +390,7 @@ namespace Intel.MyDeals.BusinessRules
         /// </summary>
         /// <param name="dePrdUsr"></param>
         /// <param name="items"></param>
-        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, ProdMappings items)
+        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, string hasTrkr, ProdMappings items)
         {
             // TODO Move these to constants
             var productCombination1 = new string[] { "DT", "Mb", "SvrWS", "EIA CPU" }.ToDictionary(x => x);
@@ -414,11 +415,15 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     if (i == validContractProducts.Count() - 1) break;
                     var newprodCategory = validContractProducts[i + 1];
+                    // (DE88221) - Append special message to trigger save calls to drop active invalid row saves
+                    string activeDealProdError = "  Changes to this active deal/row have been restored to their previous saved values."; //Products reset to orignal values.  Please re-validate this line to clear errors.
                     if (productCombination1.ContainsKey(validContractProducts[i]))
                     {
                         if (!productCombination1.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -426,7 +431,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (!productCombination2.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -434,7 +441,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (validContractProducts[i] != newprodCategory)
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
                     }
@@ -2728,7 +2737,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateKITSpreadsheetProducts(params object[] args)
+        public static void ValidateKITSpreadsheetProducts(params object[] args) // PTR only rule
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -2744,8 +2753,6 @@ namespace Intel.MyDeals.BusinessRules
             ProdMappings items = null;
             int numOfL1s = 0;
             int numOfL2s = 0;
-
-            int prdMapIndex = 0;
 
             try
             {
@@ -2766,7 +2773,11 @@ namespace Intel.MyDeals.BusinessRules
 
                 foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
                 {
-                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == prdMapIndex).FirstOrDefault();
+                    // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
+                    // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
+                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString() == prdMapping.Key).FirstOrDefault();
+                    int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
+                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
 
                     foreach (ProdMapping prod in prdMapping.Value)
@@ -2783,7 +2794,7 @@ namespace Intel.MyDeals.BusinessRules
                             // Rule: Each L1 can only have a Qty of 1
                             if (parsedQty > 1)
                             {
-                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", prdMapIndex);
+                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", deDimKey);
                             }
                             numOfL1s += parsedQty;
                         }
@@ -2806,7 +2817,6 @@ namespace Intel.MyDeals.BusinessRules
                             dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
                         }
 
-                        prdMapIndex++;
                     }
                 }
             }

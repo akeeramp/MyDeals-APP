@@ -98,7 +98,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TITLE), contractTitle);
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
-            // Object Validation Checks
+            // Object Validation Checks - this is a contract level, and can skip OnFinalize
             SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
             {
                 CustId = custId,
@@ -606,7 +606,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
 
-            // Object Validation Checks
+            // Object Validation Checks - This is a new item creation, so just save validation needed
             SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
             {
                 CustId = custId,
@@ -899,12 +899,13 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData[OpDataElementType.PRC_ST].Data[psId].AddTimelineComment("Deal moved from Requested to Submitted after IQR Updating.");
             }
             // Using this to allow us to dive right into rules engines
-            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
-            {
-                CustId = custId,
-                ContractId = folioId,
-                DeleteAllPTR = false
-            });
+            SavePacket savePacket = new SavePacket() { 
+                MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
+                {
+                    CustId = custId,
+                    ContractId = folioId
+                }, 
+                ValidateIds = new List<int> { dealId } };
 
             bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
             foreach (OpDataElementType dpKey in myDealsData.Keys) // dpKey is like OpDataElementType.WIP_DEAL
@@ -1095,12 +1096,17 @@ namespace Intel.MyDeals.BusinessLogic
                 int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
                 // Using this to allow us to dive right into rules engines
-                SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveFullContract")
+                SavePacket savePacket = new SavePacket()
                 {
-                    CustId = custId,
-                    ContractId = folioId,
-                    DeleteAllPTR = false
-                });
+                    MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
+                    {
+                        CustId = custId,
+                        ContractId = folioId,
+                        DeleteAllPTR = false
+                    },
+                    ValidateIds = new List<int> { dealId }
+                };
+
 
                 // Check for any validation errors, and if found, log and skip to next record
                 if (myDealsData.ValidationApplyRules(savePacket))

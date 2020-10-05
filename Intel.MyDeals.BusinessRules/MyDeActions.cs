@@ -128,9 +128,9 @@ namespace Intel.MyDeals.BusinessRules
             if (de == null) return;
 
             int lookbackPeriodValue = -1;
-            bool blah = int.TryParse(de.AtrbValue.ToString(), out lookbackPeriodValue);
+            bool intChk = int.TryParse(de.AtrbValue.ToString(), out lookbackPeriodValue);
 
-            if (de.HasNoValue() || lookbackPeriodValue < 0 || lookbackPeriodValue > 24)
+            if (de.HasNoValue() || lookbackPeriodValue < 0 || lookbackPeriodValue > 24 || !intChk)
                 de.AddMessage("Consumption Lookback Period must be a whole number between 0 and 24.");
         }
 
