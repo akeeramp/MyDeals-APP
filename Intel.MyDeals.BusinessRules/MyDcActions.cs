@@ -2141,7 +2141,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
             string inRedeal = r.Dc.GetDataElementValue(AttributeCodes.IN_REDEAL);
 
-            if (userEnteredRedealDateDe == null || ((string) userEnteredRedealDateDe.AtrbValue == "" && inRedeal != "1")) return; // Bail out if there isn't a user entered Re-deal date
+            if (userEnteredRedealDateDe == null || inRedeal != "1") return; // Bail out if there isn't a user entered Re-deal date or not in re-deal - DE95332
 
             DateTime userEnteredRedealDate;
             DateTime dealStartDate;
