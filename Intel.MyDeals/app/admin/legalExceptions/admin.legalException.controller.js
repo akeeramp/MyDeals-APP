@@ -6,6 +6,10 @@
 
     legalExceptionsController.$inject = ['legalExceptionService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService', '$uibModal'];
 
+    //--------------------------------------------------------------------
+    // LegalExceptionsController
+    //--------------------------------------------------------------------
+
     function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService, $uibModal) {
         var vm = this;
         var filterData = "";
@@ -14,7 +18,6 @@
         vm.validationMessage = "";
         $scope.ChildGridSelect = false;
        
-
         vm.dataSource = new kendo.data.DataSource({
 
             transport: {
@@ -201,6 +204,101 @@
             },
         });
 
+        //--------------------------------------------------------------------
+        // Add Legal Exception
+        //--------------------------------------------------------------------
+
+        $scope.addLegalException = function () {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/legalExceptions/addLegalException.html',
+                controller: 'addLegalExceptionController',
+                controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'prdSelector-modal-window',
+                resolve: {
+                    
+                }
+            });
+            modalInstance.result.then(function (returnData) {
+                $("#grid").data("kendoGrid").refresh();
+                var grid = $("#childGrid").data("kendoGrid");
+                grid.refresh();
+                vm.cancel();
+            }, function () { });
+
+            modalInstance.result.then(function (returnData) {
+                vm.cancel();
+            }, function () { });
+        }
+
+        //--------------------------------------------------------------------
+        // Update Legal Exception
+        //--------------------------------------------------------------------
+
+        $scope.updateLegalException = function (dataItem) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/legalExceptions/updateLegalException.html',
+                controller: 'updateLegalExceptionController',
+                controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'prdSelector-modal-window',
+                backdrop: false,
+                resolve: {                    
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+            modalInstance.result.then(function (returnData) {
+                $("#grid").data("kendoGrid").refresh();
+                var grid = $("#childGrid").data("kendoGrid");
+                grid.refresh();
+                vm.cancel();
+            }, function () { });
+
+            modalInstance.result.then(function (returnData) {
+                vm.cancel();
+            }, function () { });
+
+        }
+
+        //--------------------------------------------------------------------
+        // View Legal Exception
+        //--------------------------------------------------------------------
+
+        $scope.viewLegalException = function (dataItem) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/legalExceptions/viewLegalException.html',
+                controller: 'viewLegalExceptionController',
+                controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'prdSelector-modal-window',
+                backdrop: false,
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+            
+            modalInstance.result.then(function (returnData) {
+                vm.cancel();
+            }, function () { });
+        }
+
+        //--------------------------------------------------------------------
+        // Compare Legal Exceptions
+        //--------------------------------------------------------------------
+
         $scope.openCompareLegalException = function () {
            
             var selectedData = $linq.Enumerable().From(filterData)
@@ -270,6 +368,10 @@
             }
         }
 
+        //--------------------------------------------------------------------
+        // Text Area Editor
+        //--------------------------------------------------------------------
+
         function textareaEditor(container, options) {
             ClearSelectedItem();
 
@@ -284,8 +386,10 @@
         $scope.isEditable = function (dataItem) {
             return editNotAllowed === 1 ? false : dataItem.ACTV_IND && dataItem.USED_IN_DL !== 'Y';
         }
-
-       
+        
+        //--------------------------------------------------------------------
+        // Grid Options
+        //--------------------------------------------------------------------
 
         vm.gridOptions = {
 
@@ -293,6 +397,7 @@
             filterable: true,
             scrollable: true,
             sortable: true,
+            selectable: true,
             enableHorizontalScrollbar: true,
             pageable: {
                 refresh: true,
@@ -306,28 +411,8 @@
             filter: function (e) { ClearSelectedItem(); gridUtils.cancelChanges(e); },
             toolbar: GridMenuButton(editNotAllowed,amendmentAllowed),
 
-            editable: { mode: "popup", confirmation: false, template: kendo.template($("#popup_editor").html()) },
+            editable: { mode: "inline", confirmation: false },
 
-            select: function (e) {
-
-                var commandCell = e.container.find("td:eq(1)");
-                commandCell.html('<div class="dealTools" ><input type="checkbox"  class="grid - link - checkbox with-font" id="lnkChk"  style="height: 17px; width: 17px; border: 2px solid;" /> </div>');
-            },
-            
-            edit: function (e) {
-
-                var commandCell = e.container.find("td:eq(2)");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-            },
-            destroy: function (e) {
-
-                var commandCell = e.container.find("td:first");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-            },
-            cancel: function (e) {
-                vm.validationMessage = '';
-                ClearSelectedItem();
-            },
             detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget'  kendo-grid k-options='detailInit(dataItem)' style='width:1260px;' id='childGrid'></div>",
             
             detailExpand: function (e) {                               
@@ -340,22 +425,24 @@
                 })
             },           
             columns: [
+
                 {
                     command: [
 
-                        { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
+                        { name: "select", template: "<div class='dealTools' ><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px; width: 17px; border: 2px solid; cursor: pointer;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
                     ],
                     width: 40,
                     attributes: { style: "text-align: center;" },
                 },
-
                 {
                     command: [
 
-                        { name: "edit", template: "<a ng-if='" + !editNotAllowed + "' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                        { name: "view", template: "<div class='dealTools' ><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
+                        { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + !editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' title='Delete' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><span class='k-icon k-i-close'></span></a>" }
                     ],
-                    width: 120,
+                    width: 100,
+                    attributes: { style: "text-align: center;" },
                 },
                 {
                     field: "ACTV_IND",
@@ -400,12 +487,6 @@
                     //edit: onGridEditing,
                     filterable: { multi: true, search: true },
                     editable: false
-                },
-                {
-                    field: "VER_CRE_DTM",
-                    hidden: true,
-                    width: 120,
-                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "INTEL_PRD",
@@ -468,15 +549,6 @@
                     editable: $scope.isEditable
                 },
                 {
-                    field: "FRCST_VOL_BYQTR",
-                    title: "Forecasted Volume By Quarter",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
-                    width: 190,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
                     field: "CUST_PRD",
                     title: "Customer Product",
                     editor: textareaEditor,
@@ -503,113 +575,21 @@
                     filterable: { multi: true, search: true },
                     editable: $scope.isEditable
                 },
-                {
-                    field: "BUSNS_OBJ",
-                    title: "Business Object",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Business Object </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "PTNTL_MKT_IMPCT",
-                    title: "Potential Market Impact",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
-                    width: 180,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "OTHER",
-                    title: "Other",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Other </div>",
-                    width: 120,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "JSTFN_PCT_EXCPT",
-                    title: "Justification for PCT Expiry",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
-                    width: 220,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "EXCPT_RSTRIC_DURN",
-                    title: "Exceptions, Restrictions & Durations",
-                    editor: textareaEditor,
-                    headerTemplate: "<div class='isRequired'> Exceptions, Restrictions & Durations </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "RQST_CLNT",
-                    title: "Requesting Client",
-                    headerTemplate: "<div class='isRequired'> Requesting Client </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "RQST_ATRNY",
-                    title: "Requesting Attorney",
-                    headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "APRV_ATRNY",
-                    title: "Approving Attorney",
-                    headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "DT_APRV",
-                    title: "Date Approved",
-                    template: "#= kendo.toString(new Date(DT_APRV), 'M/d/yyyy') #",
-                    headerTemplate: "<div class='isRequired'> Date Approved </div>",
-                    width: 150,
-                    filterable: {
-                        extra: false,
-                        ui: "datepicker"
-                    },
-                    editable: $scope.isEditable
-                },
-                {
-                    field: "CHG_EMP_NAME",
-                    title: "Entered By",
-                    headerTemplate: "<div class='isRequired'> Entered By </div>",
-                    width: 150,
-                    filterable: { multi: true, search: true },
-                    editable: false
-                },
-                {
-                    field: "CHG_DTM",
-                    title: "Entered Date",
-                    headerTemplate: "<div class='isRequired'> Entered Date </div>",
-                    template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
-                    width: 150,
-                    filterable: {
-                        extra: false,
-                        ui: "datepicker"
-                    },
-                    editable: false
-                }]
+            ]
         }
+
+        //--------------------------------------------------------------------
+        // CancelChanges
+        //--------------------------------------------------------------------
 
         function cancelChanges() {
             var grid = $("#grid").data("kendoGrid");
             grid.cancelChanges();
         }
+
+        //--------------------------------------------------------------------
+        // Exception End Date Validtion
+        //--------------------------------------------------------------------
 
         function exceptionEndDateValidation(input) {
             var row = input.closest("tr");
@@ -623,13 +603,19 @@
             return true;
         }
 
-        //Checking Max Length of Editable Field
+        //--------------------------------------------------------------------
+        // Checking Max Length of Editable Field
+        //--------------------------------------------------------------------
+
         function onGridEditing(arg) {
             arg.container.find("input[name='PCT_EXCPT_NBR']").attr('maxlength', '10');
             arg.container.find("input[name='VER_NBR']").attr('maxlength', '4');
         }
 
-        //To clear selected checkbox 
+        //--------------------------------------------------------------------
+        // To clear selected checkbox 
+        //--------------------------------------------------------------------
+
         function ClearSelectedItem() {
             for (var i = 0; i < filterData.length; i++) {
                 filterData[i].IS_SELECTED = false;
@@ -639,6 +625,10 @@
                 filterDataChildGrid[i].IS_ChildGrid = false;
             }
         }
+
+        //--------------------------------------------------------------------
+        // IsInvalidateRow
+        //--------------------------------------------------------------------
 
         function isInvalidateRow(e, mode) {
             vm.validationMessage = "";
@@ -662,6 +652,10 @@
 
             return false;
         }
+
+        //--------------------------------------------------------------------
+        // DetailInit
+        //--------------------------------------------------------------------
 
         $scope.detailInit = function (parentDataItem) {       
            
@@ -762,8 +756,10 @@
             };
         };
 
+        //----------------------------------------------------------------------
+        // To get the selected childgrid checkbox
+        //----------------------------------------------------------------------
 
-        //To get the selected childgrid checkbox
         $scope.selectItemChildGrid = function (event, dataItem) {
            
             if (event.target.checked) {
@@ -791,7 +787,10 @@
             }
         }
 
-        //To get the selected checkbox data and make the IS_Selected as 'true'
+        //----------------------------------------------------------------------
+        // To get the selected checkbox data and make the IS_Selected as 'true'
+        //----------------------------------------------------------------------
+                
         $scope.selectItem = function (ChildGrid, event, dataItem)
         {
             var dataSource = $("#grid").data("kendoGrid").dataSource;
@@ -822,6 +821,10 @@
                 }              
             }
         }
+
+        //--------------------------------------------------------------------
+        // Open Amendment
+        //--------------------------------------------------------------------
 
         $scope.openAmendment = function ()
         {    
@@ -887,13 +890,19 @@
             }           
         }
 
+        //--------------------------------------------------------------------
+        // Grid Menu Buttons
+        //--------------------------------------------------------------------
+
         function GridMenuButton(addRecordsNotAllowed, amendmentAllowed) {
             var rtn = '';
-            if (!addRecordsNotAllowed) {
-                rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
-            }
-            rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
 
+            if (!addRecordsNotAllowed)
+            {
+                rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="addLegalException()"><span class="k-icon k-i-plus"></span>Add new record</a>';
+            }
+
+            rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
             rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="k-icon intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
 
             if (amendmentAllowed)
@@ -903,6 +912,10 @@
                                 
             return rtn;
         }
+
+        //--------------------------------------------------------------------
+        // Child Grid
+        //--------------------------------------------------------------------
 
         function ChildGrid(dataitem)
         {
@@ -918,6 +931,10 @@
             grid.refresh();
           
         }
+
+        //--------------------------------------------------------------------
+        // Product Editor
+        //--------------------------------------------------------------------
 
         function productEditor(container, options) {
             $('<input id="productEditor" validationMessage="* field is required" placeholder="Enter Products.."' +
