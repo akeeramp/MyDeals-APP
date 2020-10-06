@@ -310,7 +310,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Dropdown Groups</returns>
         public List<Dropdown> GetDropdownGroups()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Security Attributes" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
         /// <summary>
