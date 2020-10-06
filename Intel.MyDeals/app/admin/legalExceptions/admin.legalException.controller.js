@@ -26,11 +26,9 @@
                     legalExceptionService.getLegalExceptions()
                         .then(function (response) {
                             if (response.data.length > 0) {
-                                e.success(response.data);
-                                //vm.exceptionData = response.data;
+                                e.success(response.data);                                
                                 for (var i = 0; i < response.data.length; i++) {
-                                    reponse.data[i]['IS_SELECTED'] = false; 
-                                    //vm.exceptionData[i]['IS_SELECTED'] = false; 
+                                    reponse.data[i]['IS_SELECTED'] = false;                                     
                                 }
                             }
                         }, function (response) {
@@ -469,7 +467,7 @@
 
                         { name: "view", template: "<div class='dealTools'><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
                         { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + !editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        { name: "deallist", template: "<div class='dealTools'><i class='intelicon-copy-solid' title='Deal List' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "deallist", template: "<div class='dealTools' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='Deal List' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
                         { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' title='Delete' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     width: 140,
