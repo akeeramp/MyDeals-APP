@@ -51,18 +51,17 @@
         vm.save = function () {
             legalExceptionService.createLegalException(vm.legalExceptionData)
                 .then(function (response) {
-                    logger.success("Legal Exception added.");
-                    $scope.ok();
+                    logger.success("Legal Exception added.");                    
+                    $scope.ok(true);
                     e.success(response.data);
-
                 }, function (response) {
                     logger.error("Unable to add new Legal Exception.", response, response.statusText);
                 });
         }
 
         //To close the Add Legal Exception popup 
-        $scope.ok = function () {
-            $uibModalInstance.close();
+        $scope.ok = function (isSaved) {
+            $uibModalInstance.close(isSaved);
         };
     }
 })();

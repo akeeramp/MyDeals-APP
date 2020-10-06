@@ -17,6 +17,7 @@
         var filterDataChildGrid = "";
         vm.validationMessage = "";
         $scope.ChildGridSelect = false;
+        vm.exceptionData;
        
         vm.dataSource = new kendo.data.DataSource({
 
@@ -26,8 +27,10 @@
                         .then(function (response) {
                             if (response.data.length > 0) {
                                 e.success(response.data);
+                                //vm.exceptionData = response.data;
                                 for (var i = 0; i < response.data.length; i++) {
-                                    reponse.data[i]['IS_SELECTED'] = false;                                 
+                                    reponse.data[i]['IS_SELECTED'] = false; 
+                                    //vm.exceptionData[i]['IS_SELECTED'] = false; 
                                 }
                             }
                         }, function (response) {
@@ -222,10 +225,10 @@
                     
                 }
             });
-            modalInstance.result.then(function (returnData) {
-                $("#grid").data("kendoGrid").refresh();
-                var grid = $("#childGrid").data("kendoGrid");
-                grid.refresh();
+            modalInstance.result.then(function (isSaved) {
+                if (isSaved == true || isSaved.toLowerCase() == "true") {
+                    vm.dataSource.read();
+                }
                 vm.cancel();
             }, function () { });
 
@@ -439,6 +442,7 @@
 
                         { name: "view", template: "<div class='dealTools' ><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
                         { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + !editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "details", template: "<div class='dealTools'><i class='intelicon-reports-outlined' title='List of deals applied to this exception' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
                         { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' title='Delete' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     width: 100,
