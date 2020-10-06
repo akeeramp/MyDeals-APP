@@ -2237,48 +2237,39 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IEnumerable<IOpDataElement> endVolAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-            IOpDataElement atrbWithValidation = endVolAtrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
             // Make dictionary of <tier, start vol>
-            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(x => new
+            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
             {
-                Key = x.DimKey.FirstOrDefault().AtrbItemId,
-                Value = x.AtrbValue.ToString()
+                Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                Value = de.AtrbValue.ToString()
             });
-            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            // Validate and set validation message if applicable on each tier
-            foreach (IOpDataElement atrb in endVolAtrbs)
+            var endVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
             {
-                if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()) || atrb.DimKey.Count() == 0)
-                {
-                    continue;
-                }
-                decimal startVol = 0;
-                decimal endVol = 0;
-                int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-                string relatedStartVol = "";
+                Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                Value = de.AtrbValue.ToString()
+            });
 
-                // Find the related start vol (in the same tier)
-                if (startVolDict.ContainsKey(tier))
-                {
-                    relatedStartVol = startVolDict[tier];
-                }
+            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
+            Dictionary<int, string> endVolDict = endVols.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-                // Parse the decimal values
-                bool isEndVolANumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out endVol);
-
-                // End Vol is unlimited
-                if (!isEndVolANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+            foreach (int key in startVolDict.Keys)
+            {
+                int currStartVol = 0;
+                int currEndVol = 0;
+                bool isStartVolANumber = int.TryParse(startVolDict[key], out currStartVol);
+                bool isEndVolANumber = int.TryParse(endVolDict[key], out currEndVol);
+                if (!isEndVolANumber && endVolDict[key].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    continue;
+                    currEndVol = int.MaxValue;
                 }
 
-                // Compare
-                if (startVol >= endVol)
+                if (currStartVol == 0 && currEndVol == 0) return; // Hit the end of populated values
+
+                if (currStartVol >= currEndVol)
                 {
-                    AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
+                    AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", key);
                 }
             }
         }
