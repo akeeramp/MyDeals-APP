@@ -377,6 +377,8 @@
     <Content Include="app\admin\legalExceptions\addAmendment.html" />
     <Content Include="app\admin\legalExceptions\compareLegalException.html" />
     <Content Include="app\admin\legalExceptions\compareLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\viewLegalExceptionDealList.controller.js" />
+    <Content Include="app\admin\legalExceptions\viewLegalExceptionDealList.html" />
     <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.controller.js" />
     <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />

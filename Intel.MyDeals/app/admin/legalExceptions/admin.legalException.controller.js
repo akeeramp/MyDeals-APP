@@ -201,7 +201,7 @@
                         }
                         , CHG_EMP_NAME: { type: "string", editable: false, defaultValue: usrName }
                         , CHG_DTM: { type: "date", editable: false, defaultValue: moment().format('l') }
-
+                        , DEALS_USED_IN_EXCPT: { type: "string", editable: false }
                     }
                 },
             },
@@ -293,6 +293,33 @@
                 }
             });
             
+            modalInstance.result.then(function (returnData) {
+                vm.cancel();
+            }, function () { });
+        }
+
+        //--------------------------------------------------------------------
+        // View Legal Exception Deal List
+        //--------------------------------------------------------------------
+
+        $scope.viewLegalExceptionDealList = function (dataItem) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/legalExceptions/viewLegalExceptionDealList.html',
+                controller: 'viewLegalExceptionDealListController',
+                controllerAs: 'vm',
+                size: 'sm',
+                windowClass: 'prdSelector-modal-window',
+                backdrop: false,
+                resolve: {
+                    dataItem: function () {
+                        return dataItem;
+                    }
+                }
+            });
+
             modalInstance.result.then(function (returnData) {
                 vm.cancel();
             }, function () { });
@@ -440,12 +467,12 @@
                 {
                     command: [
 
-                        { name: "view", template: "<div class='dealTools' ><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
+                        { name: "view", template: "<div class='dealTools'><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
                         { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + !editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        { name: "details", template: "<div class='dealTools'><i class='intelicon-reports-outlined' title='List of deals applied to this exception' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "deallist", template: "<div class='dealTools'><i class='intelicon-copy-solid' title='Deal List' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
                         { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' title='Delete' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><span class='k-icon k-i-close'></span></a>" }
                     ],
-                    width: 100,
+                    width: 140,
                     attributes: { style: "text-align: center;" },
                 },
                 {
@@ -579,6 +606,12 @@
                     filterable: { multi: true, search: true },
                     editable: $scope.isEditable
                 },
+                {
+                    field: "DEALS_USED_IN_EXCPT",
+                    hidden: true,
+                    width: 120,
+                    filterable: { multi: true, search: true }
+                }
             ]
         }
 
@@ -755,7 +788,7 @@
                                 ui: "datepicker"
                             }
                         }
-
+                        
                     ]
             };
         };
