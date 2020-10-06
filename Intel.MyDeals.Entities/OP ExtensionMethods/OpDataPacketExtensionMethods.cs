@@ -116,6 +116,14 @@ namespace Intel.MyDeals.Entities
                 //packet.AddAuditActions(majorFieldNoRedealIds); // Pulled out since Doug doesn't think that we need to re-trigger cost testing.
             }
 
+            if (wonTenderIds.Any() && !majorFieldNoRedealIds.Any()) // Added this path for Salesforce Tenders not matching above path due to Stage being set to WON and IsChanged.
+            {
+                packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, wonTenderIds); // Set actions - save them.
+                packet.AddGoingActiveActions(wonTenderIds);
+                packet.AddAuditActions(wonTenderIds);
+                packet.AddQuoteLetterActions(wonTenderIds);
+            }
+
             if (majorFieldQuoteOnlyIds.Any())
             {
                 //packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, majorFieldQuoteOnlyIds); // Set actions - save them.

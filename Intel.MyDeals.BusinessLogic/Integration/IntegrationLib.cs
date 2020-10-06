@@ -1269,7 +1269,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(workRecord.RqstJsonData);
 
-                if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
+                 if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
                 {
                     _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
