@@ -240,6 +240,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_VER_NBR = DB.GetReaderOrdinal(rdr, "VER_NBR");
                     int IDX_VER_CRE_DTM = DB.GetReaderOrdinal(rdr, "VER_CRE_DTM");
                     int IDX_EXCPT_RSTRIC_DURN = DB.GetReaderOrdinal(rdr, "EXCPT_RSTRIC_DURN");
+                    int IDX_DEALS_USED_IN_EXCPT = DB.GetReaderOrdinal(rdr, "DEALS_USED_IN_EXCPT");
 
                     while (rdr.Read())
                     {
@@ -275,7 +276,9 @@ namespace Intel.MyDeals.DataLibrary
                             PCT_EXCPT_NBR = (IDX_PCT_EXCPT_NBR < 0 || rdr.IsDBNull(IDX_PCT_EXCPT_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_EXCPT_NBR),
                             VER_NBR = (IDX_VER_NBR < 0 || rdr.IsDBNull(IDX_VER_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_VER_NBR),
                             VER_CRE_DTM = (IDX_VER_CRE_DTM < 0 || rdr.IsDBNull(IDX_VER_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_VER_CRE_DTM),
-                            EXCPT_RSTRIC_DURN = (IDX_EXCPT_RSTRIC_DURN < 0 || rdr.IsDBNull(IDX_EXCPT_RSTRIC_DURN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXCPT_RSTRIC_DURN)
+                            EXCPT_RSTRIC_DURN = (IDX_EXCPT_RSTRIC_DURN < 0 || rdr.IsDBNull(IDX_EXCPT_RSTRIC_DURN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXCPT_RSTRIC_DURN),
+                            DEALS_USED_IN_EXCPT = (IDX_DEALS_USED_IN_EXCPT < 0 || rdr.IsDBNull(IDX_DEALS_USED_IN_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEALS_USED_IN_EXCPT),
+
                         });
                     } // while
                 }

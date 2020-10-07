@@ -42,7 +42,8 @@
             "SCPE": "",
             "USED_IN_DL": "",
             "VER_CRE_DTM": moment($scope.today).format("l"),
-            "VER_NBR": 1
+            "VER_NBR": 1,
+            "DEALS_USED_IN_EXCPT": ""
         }
 
         vm.noOfCol = 1;

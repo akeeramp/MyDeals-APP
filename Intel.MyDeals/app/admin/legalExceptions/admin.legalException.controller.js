@@ -18,19 +18,27 @@
         vm.validationMessage = "";
         $scope.ChildGridSelect = false;
         vm.exceptionData;
-       
+        vm.legalExceptionData;
+        vm.colSize = 12;
+        //Legal and SA can see the Screen..
+        if (window.usrRole != 'Legal' && window.usrRole != 'SA') {
+            document.location.href = "/Dashboard#/portal";
+        }
+
         vm.dataSource = new kendo.data.DataSource({
 
             transport: {
                 read: function (e) {
                     legalExceptionService.getLegalExceptions()
                         .then(function (response) {
-                            if (response.data.length > 0) {
-                                e.success(response.data);                                
+                            if (response.data.length > 0) {                                                             
                                 for (var i = 0; i < response.data.length; i++) {
-                                    reponse.data[i]['IS_SELECTED'] = false;                                     
+                                    response.data[i]["IS_SELECTED"] = false;                                     
                                 }
+                                //$scope.viewLegalException(response.data[0]);
+                                e.success(response.data);     
                             }
+                            
                         }, function (response) {
                             logger.error("Unable to get Legal exceptions.", response, response.statusText);
                         });
@@ -274,26 +282,8 @@
         //--------------------------------------------------------------------
 
         $scope.viewLegalException = function (dataItem) {
-
-            var modalInstance = $uibModal.open({
-                animation: true,
-                backdrop: 'static',
-                templateUrl: 'app/admin/legalExceptions/viewLegalException.html',
-                controller: 'viewLegalExceptionController',
-                controllerAs: 'vm',
-                size: 'sm',
-                windowClass: 'prdSelector-modal-window',
-                backdrop: false,
-                resolve: {
-                    dataItem: function () {
-                        return dataItem;
-                    }
-                }
-            });
-            
-            modalInstance.result.then(function (returnData) {
-                vm.cancel();
-            }, function () { });
+            vm.colSize = 6;
+            vm.legalExceptionData = dataItem;            
         }
 
         //--------------------------------------------------------------------
@@ -400,6 +390,10 @@
         // Text Area Editor
         //--------------------------------------------------------------------
 
+        $scope.ok = function () {
+            vm.colSize = 12;
+        }
+
         function textareaEditor(container, options) {
             ClearSelectedItem();
 
@@ -408,7 +402,7 @@
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
 
-        var editNotAllowed = usrRole == "SA" ? 1 : 0;
+        var editNotAllowed = usrRole == "Legal" ? true : false;
         var amendmentAllowed = usrRole == "Legal" ? 1 : 0;
 
         $scope.isEditable = function (dataItem) {
@@ -457,21 +451,24 @@
                 {
                     command: [
 
-                        { name: "select", template: "<div class='dealTools' ><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px; width: 17px; border: 2px solid; cursor: pointer;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
+                        { name: "select", template: "<div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px; width: 17px; border: 2px solid; cursor: pointer;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
                     ],
                     width: 40,
                     attributes: { style: "text-align: center;" },
+                    hidden: !editNotAllowed
                 },
                 {
                     command: [
 
-                        { name: "view", template: "<div class='dealTools'><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
-                        { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + !editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        { name: "deallist", template: "<div class='dealTools' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='Deal List' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        { name: "destroy", template: "<a ng-if='" + !editNotAllowed + " && dataItem.ACTV_IND && dataItem.USED_IN_DL !== \"Y\"' title='Delete' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><span class='k-icon k-i-close'></span></a>" }
+                        { name: "view", template: "<div class='dealTools' ng-if='" + editNotAllowed + "'><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
+                        { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + "' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        //{ name: "cantDelete", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT != \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;color:grey'><span class='k-icon k-i-close'></span></a>" },
+                        { name: "destroy", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT == \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;color: blue'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     width: 140,
                     attributes: { style: "text-align: center;" },
+                    hidden: !editNotAllowed
                 },
                 {
                     field: "ACTV_IND",
@@ -609,8 +606,109 @@
                     hidden: true,
                     width: 120,
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "BUSNS_OBJ",
+                    title: "Business Object",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Business Object </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "PTNTL_MKT_IMPCT",
+                    title: "Potential Market Impact",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
+                    width: 180,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "OTHER",
+                    title: "Other",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Other </div>",
+                    width: 120,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "JSTFN_PCT_EXCPT",
+                    title: "Justification for PCT Expiry",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
+                    width: 220,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "EXCPT_RSTRIC_DURN",
+                    title: "Exceptions, Restrictions & Durations",
+                    editor: textareaEditor,
+                    headerTemplate: "<div class='isRequired'> Exceptions, Restrictions & Durations </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "RQST_CLNT",
+                    title: "Requesting Client",
+                    headerTemplate: "<div class='isRequired'> Requesting Client </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "RQST_ATRNY",
+                    title: "Requesting Attorney",
+                    headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "APRV_ATRNY",
+                    title: "Approving Attorney",
+                    headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "DT_APRV",
+                    title: "Date Approved",
+                    template: "#= kendo.toString(new Date(DT_APRV), 'M/d/yyyy') #",
+                    headerTemplate: "<div class='isRequired'> Date Approved </div>",
+                    width: 150,
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: $scope.isEditable
+                },
+                {
+                    field: "CHG_EMP_NAME",
+                    title: "Entered By",
+                    headerTemplate: "<div class='isRequired'> Entered By </div>",
+                    width: 150,
+                    filterable: { multi: true, search: true },
+                    editable: false
+                },
+                {
+                    field: "CHG_DTM",
+                    title: "Entered Date",
+                    headerTemplate: "<div class='isRequired'> Entered Date </div>",
+                    template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",
+                    width: 150,
+                    filterable: {
+                        extra: false,
+                        ui: "datepicker"
+                    },
+                    editable: false
                 }
-            ]
+            ]            
         }
 
         //--------------------------------------------------------------------
