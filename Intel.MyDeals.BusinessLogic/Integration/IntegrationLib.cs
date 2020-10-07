@@ -763,7 +763,7 @@ namespace Intel.MyDeals.BusinessLogic
                 else // Post back known Deal ID to SF, append error that it exists already
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQId = dealId.ToString();
-                    executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
+                    executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId);
                 }
 
                 // Should have no bail outs, so post final messages here
@@ -819,7 +819,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        private bool UpdateRecordsFromSfPackets(MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int i, int custId, int folioId, int psId, int dealId, ref string validErrors)
+        private bool UpdateRecordsFromSfPackets(MyDealsData myDealsData, TenderTransferRootObject workRecordDataFields, int i, int custId, int folioId, int psId, int dealId, bool reRunMode, ref string validErrors)
         {
             int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
             int ptId = myDealsData[OpDataElementType.PRC_TBL].Data.Keys.FirstOrDefault();
@@ -891,13 +891,40 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Conduct staging push if needed - support only requested to submitted at this point - re-deal cycles will be rougher.
             // Offer and Lost/Won deals would need to verify a right way major change prior to re-setting the WF Stage.  Best to let re-deal take care.
+            List<string> changeMessages = new List<string>();
             string psStage = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD);
             string dealStage = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
             if (dealStage == WorkFlowStages.Draft && psStage == WorkFlowStages.Requested)
             {
                 UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD), WorkFlowStages.Submitted);
                 myDealsData[OpDataElementType.PRC_ST].Data[psId].AddTimelineComment("Deal moved from Requested to Submitted after IQR Updating.");
+                changeMessages.Add("Deal moved from Requested to Submitted after IQR Updating.");
             }
+
+            // Tack on change messages - this loosely mimics rule AddHistoryMessagesForChanges for IQR
+            //AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            //List<string> checkList = new List<string> { AttributeCodes.ECAP_PRICE, AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.REBATE_BILLING_START, AttributeCodes.REBATE_BILLING_END, AttributeCodes.GEO_COMBINED, AttributeCodes.MRKT_SEG, AttributeCodes.QTY, AttributeCodes.VOLUME };
+            //foreach (IOpDataElement de in myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementsWhere(d => d.HasOrigValueChanged && checkList.Contains(d.AtrbCd)).ToList())
+            //{
+            //    MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+            //    if (atrb == null) continue;
+            //    string addItem = atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]";
+            //    if (!changeMessages.Contains(addItem, StringComparer.OrdinalIgnoreCase)) changeMessages.Add(addItem);
+            //}
+            if (changeMessages.Count > 0) // If there are items to add, add them
+            {
+                // "; " is a safe spacing for excel output, but it is also replaced by "<br>" on web popup for readability.
+                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].AddTimelineComment(String.Join("; ", changeMessages.ToArray()));
+            }
+
+            // NEW FIELD TO BE ADDED AFTER REDEAL
+            string OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IN_REDEAL);
+            if (reRunMode && OrigRedealBit == "1")
+            {
+                DateTime ReDealEffectiveDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].EffectivePricingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), ReDealEffectiveDate.ToString("MM/dd/yyyy"));
+            }
+
             // Using this to allow us to dive right into rules engines
             SavePacket savePacket = new SavePacket() { 
                 MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
@@ -922,7 +949,7 @@ namespace Intel.MyDeals.BusinessLogic
             return hasValidationErrors;
         }
 
-        private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, ref int dealId)
+        private string ProcessUpdateRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, bool reRunMode, ref int dealId)
         {
             string executionResponse = "";
 
@@ -950,7 +977,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Break out update and validate checks, then come back and do the needed saves if everything is good.
             string validErrors = "";
-            if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, ref validErrors)) // If validation errors, log and skip to next
+            if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, reRunMode, ref validErrors)) // If validation errors, log and skip to next
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(713, "Deal Validation Error : Deal " + dealId + "  had validation errors: " + validErrors, "Deal had validation errors"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
@@ -974,28 +1001,42 @@ namespace Intel.MyDeals.BusinessLogic
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
 
-            // Update the Meet Comp data now.
-            int prdMbrSid = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
-            string prdCat = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES);
-            string mydlPcsrNbr = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
+            // Check post validation data to see if we triggered a hard or soft re-deal to set up for second save run.
+            IOpDataElement OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IN_REDEAL);
+            IOpDataElement OrigWfStg = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD);
+            if ((OrigRedealBit.AtrbValue.ToString() == "1" && OrigRedealBit.State == OpDataElementState.Modified) 
+                || (OrigWfStg.AtrbValue.ToString() == WorkFlowStages.Requested && OrigWfStg.State == OpDataElementState.Modified))
+            {
+                // Just did a re-deal of some form, DO A SECOND SAVE to set Submitted and update Tracker Start Date.
+                // Pass mode = ReRun and dump these results into the DustBin since next run will complete them.
+                string dustBin = ProcessUpdateRequest(workRecordDataFields, batchId, recordId, true, ref dealId);
+            }
+            else
+            {
+                // Update the Meet Comp data now.
+                int prdMbrSid = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
+                string prdCat = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES);
+                string mydlPcsrNbr = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
 
-            EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, recordId);
-            //gather return fields and post back to json record (things like stage and approved by fields)
+                EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, recordId);
+                //gather return fields and post back to json record (things like stage and approved by fields)
 
-            string psWfStage = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ? 
-                saveResponse[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
-                myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD);
-            string wipWfStage = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
-                saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
-                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                string psWfStage = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ?
+                    saveResponse[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
+                    myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                string wipWfStage = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
+                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
+                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
 
-            string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
+                string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
 
-            workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
 
-            executionResponse += "Deal " + dealId + " - Save completed<br>";
+                executionResponse += "Deal " + dealId + " - Save completed<br>";
 
-            return executionResponse;
+                return executionResponse;
+            }
+            return null; // dustBin route, return no responses.
         }
 
         private string ProcessUpdateRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
@@ -1005,7 +1046,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
-                executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, ref dealId);
+                executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId);
             }
 
             return executionResponse;
@@ -1269,7 +1310,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(workRecord.RqstJsonData);
 
-                 if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
+                if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
                 {
                     _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
