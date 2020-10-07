@@ -229,6 +229,7 @@ namespace Intel.MyDeals.Entities
                     public string ReferenceQuoteLineNumber { get; set; }
                     public string Status { get; set; }
                     public string IntegrationStatus { get; set; }
+                    public string EffectivePricingStartDate { get; set; }
                     public string Wwid { get; set; }
                     public string QuoteLineNumber { get; set; }
                     public string GroupType { get; set; }

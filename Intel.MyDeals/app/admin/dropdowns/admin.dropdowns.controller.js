@@ -219,7 +219,7 @@
                 if (e.model.isNew() == false) { //edit case: prevent edit of these fields except during creation
                     $('input[name=DROP_DOWN]').parent().html(e.model.DROP_DOWN);
                     $('input[name=OBJ_SET_TYPE_SID]').parent().html(e.model.OBJ_SET_TYPE_CD);
-                    $('input[name=CUST_MBR_SID]').parent().html(e.model.CUST_MBR_SID);
+                    $('input[name=CUST_MBR_SID]').parent().html(e.model.CUST_NM);
                     $('input[name=ATRB_SID]').parent().html(e.model.ATRB_CD);
                 } else {    //new entry case: all fields are editable
                     $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").select(0);
@@ -292,6 +292,11 @@
                                 isempty: "Is empty"
                             }
                         }
+                    },
+                    sortable: {
+                        compare: function (a, b) {
+                            return a.OBJ_SET_TYPE_CD.toLowerCase() === b.OBJ_SET_TYPE_CD.toLowerCase() ? 0 : (a.OBJ_SET_TYPE_CD.toLowerCase() > b.OBJ_SET_TYPE_CD.toLowerCase()) ? 1 : -1;
+                        }
                     }
                 },
                 {
@@ -329,6 +334,11 @@
                                 isempty: "Is empty"
                             }
                         }
+                    },
+                    sortable: {
+                        compare: function (a, b) {
+                            return a.ATRB_CD.toLowerCase() === b.ATRB_CD.toLowerCase() ? 0 : (a.ATRB_CD.toLowerCase() > b.ATRB_CD.toLowerCase()) ? 1 : -1;
+                        }
                     }
                 },
                 {
@@ -358,6 +368,11 @@
                                 neq: "Not equal to",
                                 isempty: "Is empty"
                             }
+                        }
+                    },
+                    sortable: {
+                        compare: function (a, b) {
+                            return a.CUST_NM.toLowerCase() === b.CUST_NM.toLowerCase() ? 0 : (a.CUST_NM.toLowerCase() > b.CUST_NM.toLowerCase()) ? 1 : -1;
                         }
                     }
                 },

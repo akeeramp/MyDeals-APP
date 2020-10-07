@@ -613,8 +613,9 @@ namespace Intel.MyDeals.BusinessLogic
                         : myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                     string wipSfId = myDealsData[OpDataElementType.WIP_DEAL].Data[wipDealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
 
-                    string ApprovedByString = "";
-                    if (newStage == WorkFlowStages.Offer) ApprovedByString = "Manually approval by " + wwid.ToString();
+                    //string ApprovedByString = "";
+                    //if (newStage == WorkFlowStages.Offer) ApprovedByString = "Manually approval by " + wwid.ToString();
+                    string ApprovedByString = wwid.ToString() != "" ? "Manually approval by " + wwid.ToString(): "";
 
                     var newQuoteLine = new TenderTransferRootObject.RecordDetails.Quote.QuoteLine
                     {
