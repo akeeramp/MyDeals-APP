@@ -2083,10 +2083,22 @@ gridUtils.getBidActionsList = function (data) {
                 || data.BID_ACTNS[i]['BidActnName'] === 'Lost') {
                 //do nothing... perhaps we should structure this if block better.
             } else {
-                bidActns.push({
-                    "BidActnName": data.BID_ACTNS[i],
-                    "BidActnValue": data.BID_ACTNS[i]
-                });
+                if (data.SALESFORCE_ID === "") {
+                    bidActns.push({
+                        "BidActnName": data.BID_ACTNS[i],
+                        "BidActnValue": data.BID_ACTNS[i]
+                    });
+                }
+                else // Salesforce Tenders Deal - change flow for WON/LOST, only push on current stage
+                {
+                    if (data.BID_ACTNS[i] === data.WF_STG_CD)
+                    {
+                        bidActns.push({
+                            "BidActnName": data.BID_ACTNS[i],
+                            "BidActnValue": data.BID_ACTNS[i]
+                        });
+                    }
+                }
             }
         }
     }
