@@ -4318,7 +4318,7 @@
         $scope.customContractValidate = function () {
             $scope.isValid = true;
             var ct = $scope.contractData;
-
+            var maximumDate = moment(ct.START_DT).add(20, 'years').format('l');
             // If user has clicked on save, that means he has accepted the default contract name set, make it dirty to avoid any changes to dates making a change to contract name.
             if (!$scope.contractData._behaviors) $scope.contractData._behaviors = {};
             $scope.contractData._behaviors.isDirty['TITLE'] = true;
@@ -4332,10 +4332,10 @@
                 $scope.contractData._behaviors.isError["END_DT"] = true;
                 $scope.isValid = false;
             }
-            else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter($scope.contractData.MaxDate)) {
+            else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter(maximumDate)) {
                 $scope.contractData._behaviors
-                    .validMsg['END_DT'] = moment(ct.END_DT).isAfter($scope.contractData.MaxDate)
-                        ? "End date cannot be greater than - " + $scope.contractData.MaxDate
+                    .validMsg['END_DT'] = moment(ct.END_DT).isAfter(maximumDate)
+                    ? "End date cannot be greater than - " + maximumDate
                         : "End date cannot be less than Start Date";
                 $scope.contractData._behaviors.isError["END_DT"] = true;
                 $scope.isValid = false;
