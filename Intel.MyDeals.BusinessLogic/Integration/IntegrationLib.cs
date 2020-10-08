@@ -975,6 +975,15 @@ namespace Intel.MyDeals.BusinessLogic
             int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
             int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
+            string currentStage = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElementValue(AttributeCodes.WF_STG_CD); // US799242
+            if (currentStage == WorkFlowStages.Submitted)
+            {
+                // If you make it in here, they are attempting to do an update on a deal still at the Submitted stage, block them...
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(740, "Update Error: Deal is at Submitted stage where editing is not allowed", "Submitted stage edits not allowed"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
             // Break out update and validate checks, then come back and do the needed saves if everything is good.
             string validErrors = "";
             if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, reRunMode, ref validErrors)) // If validation errors, log and skip to next
