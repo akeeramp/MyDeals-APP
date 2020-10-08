@@ -134,6 +134,11 @@
                             <textarea type="textarea" rows="5" style="width:100%" name="JSTFN_PCT_EXCPT" ng-model="vm.legalExceptionData.JSTFN_PCT_EXCPT" readonly></textarea>
                         </div>
 
+                        <div><p class="divHeader"><b>Exceptions, Restrictions & Durations</b></p></div>
+                        <div class="panel-body">
+                            <textarea type="textarea" rows="5" style="width:100%" name="RQST_ATRNY" ng-model="vm.legalExceptionData.EXCPT_RSTRIC_DURN" readonly>`</textarea>
+                        </div>
+
                         <div><p class="divHeader"><b>Requesting Client</b></p></div>
                         <div class="panel-body">
                             <textarea type="textarea" rows="5" style="width:100%" name="RQST_CLNT" ng-model="vm.legalExceptionData.RQST_CLNT" readonly></textarea>
@@ -195,11 +200,14 @@
 </div>
 
 <style>
+    #grid .k-grid-content tr td {
+        white-space: nowrap !important;
+    }
     .gridUtil{
         max-height:650px;
     }
     #RulesDetailsBodyDiv {
-        max-height: 600px;
+        max-height: 616px;
         overflow: scroll;
     }
     .divHeader {

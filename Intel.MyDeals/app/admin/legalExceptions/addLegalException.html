@@ -11,174 +11,179 @@
             <div class="row">
                 <div id="navigation">
 
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*PCT Exception No</p>
-                                    <div><input type="text" maxlength="10" style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="PCT_EXCPT_NBR" ng-model="vm.legalExceptionData.PCT_EXCPT_NBR" required></div>
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Version</p>
-                                    <div><input type="text" required readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="VER_NBR" ng-model="vm.legalExceptionData.VER_NBR"></div>
-                                </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*PCT Exception No</p>
+                                <div><input type="text" maxlength="10" style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="PCT_EXCPT_NBR" ng-model="vm.legalExceptionData.PCT_EXCPT_NBR" required></div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Version</p>
+                                <div><input type="text" required readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="VER_NBR" ng-model="vm.legalExceptionData.VER_NBR"></div>
                             </div>
                         </div>
-
-                        <div><p class="divHeader">*Intel Product</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="INTEL_PRD" ng-model="vm.legalExceptionData.INTEL_PRD" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="divHeader" style="margin-top: 10px;margin-left:0px">Active &nbsp<input type="checkbox" checked="checked" name="ACTV_IND" ng-model="vm.legalExceptionData.ACTV_IND"></p>
-                                </div>
-                                <div div class="col-md-4">
-                                </div>
-                                <div div class="col-md-4">
-                                    <p class="divHeader" style="margin-top: 10px; float:right">Hidden &nbsp <input type="checkbox" name="IS_DSBL" ng-model="vm.legalExceptionData.IS_DSBL"></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div><p class="divHeader">*Scope</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="SCPE" ng-model="vm.legalExceptionData.SCPE" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Price Request</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="PRC_RQST" ng-model="vm.legalExceptionData.PRC_RQST" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Cost</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="COST" ng-model="vm.legalExceptionData.COST" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>*Exception Start Date</b></p>
-                                    <input kendo-date-picker
-                                           placeholder="To date"
-                                           name="PCT_LGL_EXCPT_STRT_DT"
-                                           k-ng-model="vm.legalExceptionData.PCT_LGL_EXCPT_STRT_DT"
-                                           required
-                                           style="width: 100%;" />
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>*Exception End Date</b></p>
-                                    <input kendo-date-picker
-                                           placeholder="To date"
-                                           name="PCT_LGL_EXCPT_END_DT"
-                                           k-ng-model="vm.legalExceptionData.PCT_LGL_EXCPT_END_DT"
-                                           required
-                                           style="width: 100%;" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div><p class="divHeader">*Forecasted Volume By Quarter</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="FRCST_VOL_BYQTR" ng-model="vm.legalExceptionData.FRCST_VOL_BYQTR" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Customer Product</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="CUST_PRD" ng-model="vm.legalExceptionData.CUST_PRD" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Comp Product</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="MEET_COMP_PRD" ng-model="vm.legalExceptionData.MEET_COMP_PRD" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Comp Price</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="MEET_COMP_PRC" ng-model="vm.legalExceptionData.MEET_COMP_PRC" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Business Object</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="BUSNS_OBJ" ng-model="vm.legalExceptionData.BUSNS_OBJ" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Potential Market Impact</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="PTNTL_MKT_IMPCT" ng-model="vm.legalExceptionData.PTNTL_MKT_IMPCT" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*OTHER</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="OTHER" ng-model="vm.legalExceptionData.OTHER" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Justification for PCT Expiry</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="JSTFN_PCT_EXCPT" ng-model="vm.legalExceptionData.JSTFN_PCT_EXCPT" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Requesting Client</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="RQST_CLNT" ng-model="vm.legalExceptionData.RQST_CLNT" maxlength="8000" required></textarea>
-                        </div>
-
-                        <div><p class="divHeader">*Requesting Attorney</p></div>
-                        <div class="panel-body">
-                            <textarea type="textarea" rows="5" style="width:100%" name="RQST_ATRNY" ng-model="vm.legalExceptionData.RQST_ATRNY" maxlength="8000" required>`</textarea>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Approving Attorney</p>
-                                    <div><textarea type="textarea" rows="3" style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="APRV_ATRNY" ng-model="vm.legalExceptionData.APRV_ATRNY" maxlength="8000" required></textarea></div>
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Date Approved</p>
-                                    <input kendo-date-picker
-                                           placeholder="To date"
-                                           name="DT_APRV"
-                                           required
-                                           k-ng-model="vm.legalExceptionData.DT_APRV" 
-                                           style="width: 100%;" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered By</p>
-                                    <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="CHG_EMP_NAME" ng-model="vm.legalExceptionData.CHG_EMP_NAME" required></textarea></div>
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div div class="col-md-4">
-                                    <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered Date</p>
-                                    <input kendo-date-picker
-                                           placeholder="To date"
-                                           required
-                                           name="CHG_DTM"
-                                           readonly
-                                           k-ng-model="vm.legalExceptionData.CHG_DTM" 
-                                           style="width: 100%;" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="MYDL_PCT_LGL_EXCPT_SID" ng-model="vm.legalExceptionData.MYDL_PCT_LGL_EXCPT_SID" >
-                        <input type="hidden" name="VER_CRE_DTM" ng-model="vm.legalExceptionData.VER_CRE_DTM">
-
                     </div>
+
+                    <div><p class="divHeader">*Intel Product</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="INTEL_PRD" ng-model="vm.legalExceptionData.INTEL_PRD" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-top: 10px;margin-left:0px">Active &nbsp<input type="checkbox" checked="checked" name="ACTV_IND" ng-model="vm.legalExceptionData.ACTV_IND"></p>
+                            </div>
+                            <div div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-top: 10px; float:right">Hidden &nbsp <input type="checkbox" name="IS_DSBL" ng-model="vm.legalExceptionData.IS_DSBL"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><p class="divHeader">*Scope</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="SCPE" ng-model="vm.legalExceptionData.SCPE" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Price Request</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="PRC_RQST" ng-model="vm.legalExceptionData.PRC_RQST" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Cost</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="COST" ng-model="vm.legalExceptionData.COST" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>*Exception Start Date</b></p>
+                                <input kendo-date-picker
+                                       placeholder="To date"
+                                       name="PCT_LGL_EXCPT_STRT_DT"
+                                       k-ng-model="vm.legalExceptionData.PCT_LGL_EXCPT_STRT_DT"
+                                       required
+                                       style="width: 100%;" />
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>*Exception End Date</b></p>
+                                <input kendo-date-picker
+                                       placeholder="To date"
+                                       name="PCT_LGL_EXCPT_END_DT"
+                                       k-ng-model="vm.legalExceptionData.PCT_LGL_EXCPT_END_DT"
+                                       required
+                                       style="width: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><p class="divHeader">*Forecasted Volume By Quarter</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="FRCST_VOL_BYQTR" ng-model="vm.legalExceptionData.FRCST_VOL_BYQTR" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Customer Product</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="CUST_PRD" ng-model="vm.legalExceptionData.CUST_PRD" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Comp Product</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="MEET_COMP_PRD" ng-model="vm.legalExceptionData.MEET_COMP_PRD" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Comp Price</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="MEET_COMP_PRC" ng-model="vm.legalExceptionData.MEET_COMP_PRC" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Business Object</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="BUSNS_OBJ" ng-model="vm.legalExceptionData.BUSNS_OBJ" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Potential Market Impact</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="PTNTL_MKT_IMPCT" ng-model="vm.legalExceptionData.PTNTL_MKT_IMPCT" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*OTHER</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="OTHER" ng-model="vm.legalExceptionData.OTHER" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Justification for PCT Expiry</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="JSTFN_PCT_EXCPT" ng-model="vm.legalExceptionData.JSTFN_PCT_EXCPT" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Exceptions, Restrictions & Durations</b></p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="RQST_ATRNY" ng-model="vm.legalExceptionData.EXCPT_RSTRIC_DURN" maxlength="8000" readonly>`</textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Requesting Client</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="RQST_CLNT" ng-model="vm.legalExceptionData.RQST_CLNT" maxlength="8000" required></textarea>
+                    </div>
+
+                    <div><p class="divHeader">*Requesting Attorney</p></div>
+                    <div class="panel-body">
+                        <textarea type="textarea" rows="5" style="width:100%" name="RQST_ATRNY" ng-model="vm.legalExceptionData.RQST_ATRNY" maxlength="8000" required>`</textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Approving Attorney</p>
+                                <div><textarea type="textarea" rows="3" style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="APRV_ATRNY" ng-model="vm.legalExceptionData.APRV_ATRNY" maxlength="8000" required></textarea></div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">*Date Approved</p>
+                                <input kendo-date-picker
+                                       placeholder="To date"
+                                       name="DT_APRV"
+                                       required
+                                       k-ng-model="vm.legalExceptionData.DT_APRV"
+                                       style="width: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered By</p>
+                                <div><textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" name="CHG_EMP_NAME" ng-model="vm.legalExceptionData.CHG_EMP_NAME" required></textarea></div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;">Entered Date</p>
+                                <input kendo-date-picker
+                                       placeholder="To date"
+                                       required
+                                       name="CHG_DTM"
+                                       readonly
+                                       k-ng-model="vm.legalExceptionData.CHG_DTM"
+                                       style="width: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="MYDL_PCT_LGL_EXCPT_SID" ng-model="vm.legalExceptionData.MYDL_PCT_LGL_EXCPT_SID">
+                    <input type="hidden" name="VER_CRE_DTM" ng-model="vm.legalExceptionData.VER_CRE_DTM">
+
+                </div>
                 </div>
             </div>
             </div>

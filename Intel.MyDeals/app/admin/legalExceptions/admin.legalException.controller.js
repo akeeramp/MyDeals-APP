@@ -20,8 +20,9 @@
         vm.exceptionData;
         vm.legalExceptionData;
         vm.colSize = 12;
+        vm.hideColInGrid = true;
         //Legal and SA can see the Screen..
-        if (window.usrRole != 'Legal' && window.usrRole != 'SA') {
+        if (window.usrRole != 'Legal' && window.usrRole != 'SA' && !window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
 
@@ -35,8 +36,7 @@
                                 for (var i = 0; i < response.data.length; i++) {
                                     response.data[i]["IS_SELECTED"] = false;                                     
                                 }
-                                //$scope.viewLegalException(response.data[0]);
-                                e.success(response.data);     
+                                e.success(response.data);                                                                     
                             }
                             
                         }, function (response) {
@@ -247,33 +247,38 @@
         // Update Legal Exception
         //--------------------------------------------------------------------
 
-        $scope.updateLegalException = function (dataItem) {
-
-            var modalInstance = $uibModal.open({
-                animation: true,
-                backdrop: 'static',
-                templateUrl: 'app/admin/legalExceptions/updateLegalException.html',
-                controller: 'updateLegalExceptionController',
-                controllerAs: 'vm',
-                size: 'sm',
-                windowClass: 'prdSelector-modal-window',
-                backdrop: false,
-                resolve: {                    
-                    dataItem: function () {
-                        return dataItem;
+        $scope.updateLegalException = function (dataItem, mode) {
+            if (mode == true) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'app/admin/legalExceptions/updateLegalException.html',
+                    controller: 'updateLegalExceptionController',
+                    controllerAs: 'vm',
+                    size: 'sm',
+                    windowClass: 'prdSelector-modal-window',
+                    backdrop: false,
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        }
                     }
-                }
-            });
-            modalInstance.result.then(function (returnData) {
-                $("#grid").data("kendoGrid").refresh();
-                var grid = $("#childGrid").data("kendoGrid");
-                grid.refresh();
-                vm.cancel();
-            }, function () { });
+                });
+                modalInstance.result.then(function (returnData) {
+                    $("#grid").data("kendoGrid").refresh();
+                    var grid = $("#childGrid").data("kendoGrid");
+                    grid.refresh();
+                    vm.cancel();
+                }, function () { });
 
-            modalInstance.result.then(function (returnData) {
-                vm.cancel();
-            }, function () { });
+                modalInstance.result.then(function (returnData) {
+                    vm.cancel();
+                }, function () { });
+            }
+            else {
+                logger.warning("Exception that has been applied to a Deal can not be Edited.");
+            }
+            
 
         }
 
@@ -290,27 +295,32 @@
         // View Legal Exception Deal List
         //--------------------------------------------------------------------
 
-        $scope.viewLegalExceptionDealList = function (dataItem) {
-
-            var modalInstance = $uibModal.open({
-                animation: true,
-                backdrop: 'static',
-                templateUrl: 'app/admin/legalExceptions/viewLegalExceptionDealList.html',
-                controller: 'viewLegalExceptionDealListController',
-                controllerAs: 'vm',
-                size: 'sm',
-                windowClass: 'prdSelector-modal-window',
-                backdrop: false,
-                resolve: {
-                    dataItem: function () {
-                        return dataItem;
+        $scope.viewLegalExceptionDealList = function (dataItem, mode) {
+            if (mode == true) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'app/admin/legalExceptions/viewLegalExceptionDealList.html',
+                    controller: 'viewLegalExceptionDealListController',
+                    controllerAs: 'vm',
+                    size: 'sm',
+                    windowClass: 'prdSelector-modal-window',
+                    backdrop: false,
+                    resolve: {
+                        dataItem: function () {
+                            return dataItem;
+                        }
                     }
-                }
-            });
+                });
 
-            modalInstance.result.then(function (returnData) {
-                vm.cancel();
-            }, function () { });
+                modalInstance.result.then(function (returnData) {
+                    vm.cancel();
+                }, function () { });
+            }
+            else{
+                logger.warning("Exception has not been applied to a Deal.");
+            }
+            
         }
 
         //--------------------------------------------------------------------
@@ -394,6 +404,10 @@
             vm.colSize = 12;
         }
 
+        $scope.showLogger = function () {
+            logger.warning("Exception that has been applied to a Deal can not be Deleted.");
+        }
+
         function textareaEditor(container, options) {
             ClearSelectedItem();
 
@@ -402,8 +416,8 @@
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
 
-        var editNotAllowed = usrRole == "Legal" ? true : false;
-        var amendmentAllowed = usrRole == "Legal" ? 1 : 0;
+        var editNotAllowed = ( usrRole == "Legal" || window.isDeveloper ) ? true : false;
+        var amendmentAllowed = ( usrRole == "Legal" || window.isDeveloper ) ? 1 : 0;
 
         $scope.isEditable = function (dataItem) {
             return editNotAllowed === 1 ? false : dataItem.ACTV_IND && dataItem.USED_IN_DL !== 'Y';
@@ -445,7 +459,12 @@
                         e.sender.collapseRow($(item).prev());
                     }
                 })
-            },           
+            }, 
+            dataBound: function (e) {
+                $scope.viewLegalException(vm.dataSource.view()[0]);
+                this.element.find('tbody tr:first').addClass('k-state-selected')
+                //this.tbody.find("tr.k-master-row").addClass('k-state-selected');
+            },
             columns: [
 
                 {
@@ -461,10 +480,12 @@
                     command: [
 
                         { name: "view", template: "<div class='dealTools' ng-if='" + editNotAllowed + "'><i class='rulesGidIcon intelicon-search clrGreen dealTools' title='View' ng-click='viewLegalException(dataItem)' style='font-size: 20px; cursor: pointer;'></i></div>" },
-                        { name: "edit", template: "<div class='dealTools'><i class='intelicon-edit' ng-if='" + editNotAllowed + "' title='Edit' ng-click='updateLegalException(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + "' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
-                        //{ name: "cantDelete", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT != \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;color:grey'><span class='k-icon k-i-close'></span></a>" },
-                        { name: "destroy", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT == \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;color: blue'><span class='k-icon k-i-close'></span></a>" }
+                        { name: "edit", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT == \"\"'><i class='intelicon-edit' title='Edit' ng-click='updateLegalException(dataItem,true)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
+                        { name: "cantEdit", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT != \"\"'><i class='intelicon-no-access' title='Edit' ng-click='updateLegalException(dataItem, false)' style='font-size: 20px; margin-left: 10px; cursor: pointer;color: \\#00AEEF'></i></div>" },
+                        { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT != \"\"' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem, true)' style='font-size: 20px; margin-left: 10px; cursor: pointer; color:\\#1a3e6f'></i></div>" },
+                        { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT == \"\"' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem, false)' style='font-size: 20px; margin-left: 10px; cursor: pointer; color:\\#b1babf'></i></div>" },
+                        { name: "cantDelete", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT != \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><i class='k-icon k-i-close' title='Only exception not applied to a deal can be Deleted' style='color:\\#b1babf;opacity: 1;' ng-click='showLogger()'></i></a>" },
+                        { name: "destroy", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT == \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><i class='k-icon k-i-close' title='Only exception not applied to a deal can be Deleted' style='color:\\#1a3e6f;opacity: 1;'></i></a>" }
                     ],
                     width: 140,
                     attributes: { style: "text-align: center;" },
@@ -519,7 +540,7 @@
                     headerTemplate: "<div class='isRequired'> Intel Product </div>",
                     editor: textareaEditor,
                     title: "Intel Product",
-                    width: 240,
+                    width: 540,
                     filterable: { multi: true, search: true },
                     editable: $scope.isEditable
                 },
@@ -530,7 +551,8 @@
                     title: "Scope",
                     width: 200,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden:vm.hideColInGrid
                 },
                 {
                     field: "PRC_RQST",
@@ -539,7 +561,8 @@
                     headerTemplate: "<div class='isRequired'> Price Request </div>",
                     width: 160,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "COST",
@@ -548,7 +571,8 @@
                     headerTemplate: "<div class='isRequired'> Cost </div>",
                     width: 120,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "PCT_LGL_EXCPT_STRT_DT",
@@ -560,7 +584,8 @@
                         extra: false,
                         ui: "datepicker"
                     },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "PCT_LGL_EXCPT_END_DT",
@@ -572,7 +597,8 @@
                         extra: false,
                         ui: "datepicker"
                     },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "CUST_PRD",
@@ -581,7 +607,8 @@
                     headerTemplate: "<div class='isRequired'> Customer Product </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "MEET_COMP_PRD",
@@ -590,7 +617,8 @@
                     headerTemplate: "<div class='isRequired'> Comp Product </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "MEET_COMP_PRC",
@@ -599,13 +627,15 @@
                     headerTemplate: "<div class='isRequired'> Comp Price </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "DEALS_USED_IN_EXCPT",
                     hidden: true,
                     width: 120,
-                    filterable: { multi: true, search: true }
+                    filterable: { multi: true, search: true },
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "BUSNS_OBJ",
@@ -614,7 +644,8 @@
                     headerTemplate: "<div class='isRequired'> Business Object </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "PTNTL_MKT_IMPCT",
@@ -623,7 +654,8 @@
                     headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
                     width: 180,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "OTHER",
@@ -632,7 +664,8 @@
                     headerTemplate: "<div class='isRequired'> Other </div>",
                     width: 120,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "JSTFN_PCT_EXCPT",
@@ -641,7 +674,8 @@
                     headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
                     width: 220,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "EXCPT_RSTRIC_DURN",
@@ -650,7 +684,8 @@
                     headerTemplate: "<div class='isRequired'> Exceptions, Restrictions & Durations </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "RQST_CLNT",
@@ -658,7 +693,8 @@
                     headerTemplate: "<div class='isRequired'> Requesting Client </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "RQST_ATRNY",
@@ -666,7 +702,8 @@
                     headerTemplate: "<div class='isRequired'> Requesting Attorney </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "APRV_ATRNY",
@@ -674,7 +711,8 @@
                     headerTemplate: "<div class='isRequired'> Approving Attorney </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "DT_APRV",
@@ -686,7 +724,8 @@
                         extra: false,
                         ui: "datepicker"
                     },
-                    editable: $scope.isEditable
+                    editable: $scope.isEditable,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "CHG_EMP_NAME",
@@ -694,7 +733,8 @@
                     headerTemplate: "<div class='isRequired'> Entered By </div>",
                     width: 150,
                     filterable: { multi: true, search: true },
-                    editable: false
+                    editable: false,
+                    hidden: vm.hideColInGrid
                 },
                 {
                     field: "CHG_DTM",
@@ -706,7 +746,8 @@
                         extra: false,
                         ui: "datepicker"
                     },
-                    editable: false
+                    editable: false,
+                    hidden: vm.hideColInGrid
                 }
             ]            
         }
@@ -1030,7 +1071,7 @@
         function GridMenuButton(addRecordsNotAllowed, amendmentAllowed) {
             var rtn = '';
 
-            if (!addRecordsNotAllowed)
+            if (addRecordsNotAllowed)
             {
                 rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="addLegalException()"><span class="k-icon k-i-plus"></span>Add new record</a>';
             }
@@ -1109,5 +1150,7 @@
 
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
+
     }
+    
 })();
