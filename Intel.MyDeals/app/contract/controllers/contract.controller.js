@@ -3347,7 +3347,7 @@
             var stagePending = false;
             $scope.pendingList.length = 0; 
 
-            //checking for pending deal and set the flag
+            //checking for pending deal and set the flag true
             for (var i = 0; i < data.WipDeals.length; i++) {                
                 if (data.WipDeals[i].WF_STG_CD == "Pending")
                 {
