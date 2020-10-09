@@ -276,7 +276,7 @@
                 }, function () { });
             }
             else {
-                logger.warning("Exception that has been applied to a Deal can not be Edited.");
+                logger.warning("Exception that has been applied to a Deal cannot be Edited.");
             }
             
 
@@ -285,7 +285,6 @@
         //--------------------------------------------------------------------
         // View Legal Exception
         //--------------------------------------------------------------------
-
         $scope.viewLegalException = function (dataItem) {
             vm.colSize = 6;
             vm.legalExceptionData = dataItem;            
@@ -294,7 +293,6 @@
         //--------------------------------------------------------------------
         // View Legal Exception Deal List
         //--------------------------------------------------------------------
-
         $scope.viewLegalExceptionDealList = function (dataItem, mode) {
             if (mode == true) {
                 var modalInstance = $uibModal.open({
@@ -399,13 +397,12 @@
         //--------------------------------------------------------------------
         // Text Area Editor
         //--------------------------------------------------------------------
-
         $scope.ok = function () {
             vm.colSize = 12;
         }
 
         $scope.showLogger = function () {
-            logger.warning("Exception that has been applied to a Deal can not be Deleted.");
+            logger.warning("Exception that has been applied to a Deal cannot be Deleted.");
         }
 
         function textareaEditor(container, options) {
@@ -449,7 +446,7 @@
 
             editable: { mode: "inline", confirmation: false },
 
-            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget'  kendo-grid k-options='detailInit(dataItem)' style='width:1260px;' id='childGrid'></div>",
+            detailTemplate: "<div class='childGrid opUiContainer md k-grid k-widget'  kendo-grid k-options='detailInit(dataItem)' style='width:100%;' id='childGrid'></div>",
             
             detailExpand: function (e) {                               
                 var dataItem = e.sender.dataItem(e.masterRow);                
@@ -462,8 +459,7 @@
             }, 
             dataBound: function (e) {
                 $scope.viewLegalException(vm.dataSource.view()[0]);
-                this.element.find('tbody tr:first').addClass('k-state-selected')
-                //this.tbody.find("tr.k-master-row").addClass('k-state-selected');
+                this.element.find('tbody tr:first').addClass('k-state-selected');
             },
             columns: [
 
@@ -483,8 +479,8 @@
                         { name: "edit", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT == \"\"'><i class='intelicon-edit' title='Edit' ng-click='updateLegalException(dataItem,true)' style='font-size: 20px; margin-left: 10px; cursor: pointer;'></i></div>" },
                         { name: "cantEdit", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT != \"\"'><i class='intelicon-no-access' title='Edit' ng-click='updateLegalException(dataItem, false)' style='font-size: 20px; margin-left: 10px; cursor: pointer;color: \\#00AEEF'></i></div>" },
                         { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT != \"\"' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem, true)' style='font-size: 20px; margin-left: 10px; cursor: pointer; color:\\#1a3e6f'></i></div>" },
-                        { name: "deallist", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT == \"\"' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem, false)' style='font-size: 20px; margin-left: 10px; cursor: pointer; color:\\#b1babf'></i></div>" },
-                        { name: "cantDelete", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT != \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><i class='k-icon k-i-close' title='Only exception not applied to a deal can be Deleted' style='color:\\#b1babf;opacity: 1;' ng-click='showLogger()'></i></a>" },
+                        { name: "deallistBlur", template: "<div class='dealTools' ng-if='" + editNotAllowed + " && dataItem.DEALS_USED_IN_EXCPT == \"\"' style='margin-left: 10px;'><i class='intelicon-reports-outlined' title='List of deals applied to this Exception' ng-click='viewLegalExceptionDealList(dataItem, false)' style='font-size: 20px; margin-left: 10px; cursor: pointer; color:\\#b1babf'></i></div>" },
+                        { name: "cantDelete", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT != \"\"' title='Only exception not applied to a deal can be Deleted' style='margin-left: 10px; cursor: pointer;'><i class='intelicon-trash-solid dealTools' title='Only exception not applied to a deal can be Deleted' style='color: \\#b1babf;opacity: 1;font-size: 20px;margin-left: 20px;' ng-click='showLogger()'></i></a>" },
                         { name: "destroy", template: "<a ng-if='" + editNotAllowed + " && dataItem.ACTV_IND && dataItem.DEALS_USED_IN_EXCPT == \"\"' title='Only exception not applied to a deal can be Deleted' class='k-grid-delete' href='\\#' style='margin-left: 10px; cursor: pointer;'><i class='k-icon k-i-close' title='Only exception not applied to a deal can be Deleted' style='color:\\#1a3e6f;opacity: 1;'></i></a>" }
                     ],
                     width: 140,
@@ -860,8 +856,8 @@
                                 IS_SELECTED: { editable: true, defaultValue: false, type: "boolean" },                                
                                 IS_ChildGrid: { editable: true, defaultValue: false, type: "boolean" },
                                 VER_NBR: { type: "int", editable: false, defaultValue: 1 },
-                                CHG_EMP_NAME: { type: "string", editable: false, defaultValue: usrName }
-                                , CHG_DTM: { type: "date", editable: false, defaultValue: moment().format('l') }
+                                CHG_EMP_NAME: { type: "string", editable: false, defaultValue: usrName },
+                                CHG_DTM: { type: "date", editable: false, defaultValue: moment().format('l') }
                             }
                         }
                     },
@@ -885,7 +881,7 @@
 
                                 { name: "select", template: "<div class='dealTools' ><input type='checkbox'  class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' ng-click='selectItemChildGrid($event, dataItem)' /> </div>" }
                             ],
-                            width: 1,
+                            width: 50,
                             attributes: { style: "text-align: center;" }
 
                         },
@@ -893,7 +889,7 @@
                             field: "VER_NBR",
                             title: "Version No",
                             headerTemplate: "<div class='isRequired'> Version No. </div>",
-                            width: 3,                            
+                            width: 100,                            
                             filterable: { multi: true, search: true },
                             editable: false
                         },
@@ -902,14 +898,14 @@
                             field: "CHG_EMP_NAME",
                             title: "Version Created By",
                             headerTemplate: "<div class='isRequired'> Version Created By </div>",                            
-                            width: 3,
+                            width: 100,
                             filterable: { multi: true, search: true },
                             editable: false
                         },
                         {
                             field: "MYDL_PCT_LGL_EXCPT_SID",
                             hidden: true,
-                            width: 1,                            
+                            width: 100,                            
                             filterable: { multi: true, search: true }
                         },
 
@@ -918,7 +914,7 @@
                             title: "Version Created Date",
                             headerTemplate: "<div class='isRequired'>Version Created Date </div>",
                             template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",                            
-                            width: 3,
+                            width: 100,
                             filterable:
                             {
                                 extra: false,
