@@ -57,6 +57,25 @@ namespace Intel.MyDeals.BusinessLogic
 
 
         #region IQR CREATE TENDERS DEAL
+        private void PullUnusedAttributes(MyDealsData myDealsData)
+        {
+            List<string> removeElemets = new List<string> { AttributeCodes.ACTIVE, AttributeCodes.DC_ID, AttributeCodes.DC_PARENT_ID };
+            foreach (var key in myDealsData.Keys)
+            {
+                foreach (OpDataCollector dc in myDealsData[key].AllDataCollectors)
+                { 
+                    foreach (OpDataElement de in dc.DataElements)
+                    {
+                        if (removeElemets.Contains(de.AtrbCd))
+                        {
+                            de.OrigAtrbValue = de.AtrbValue;
+                            de.PrevAtrbValue = de.AtrbValue;
+                            de.State = OpDataElementState.Unchanged;
+                        }
+                    }
+                }
+            }
+        }
 
         private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
         {
@@ -99,12 +118,15 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
             // Object Validation Checks - this is a contract level, and can skip OnFinalize
-            SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
+            SavePacket savePacket = new SavePacket()
             {
-                CustId = custId,
-                ContractId = initId,
-                DeleteAllPTR = false
-            });
+                MyContractToken = new ContractToken("IRQ ContractToken Created - SaveFullContract")
+                {
+                    CustId = custId,
+                    ContractId = initId,
+                    DeleteAllPTR = false
+                }
+            };
 
             bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
 
@@ -130,6 +152,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = initId
             };
 
+            PullUnusedAttributes(myDealsData);
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
@@ -641,6 +664,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = initWipId
             };
 
+            PullUnusedAttributes(myDealsData);
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
