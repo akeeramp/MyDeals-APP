@@ -248,6 +248,17 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
         }
 
+        public static void PullValuesFromSaveStack(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            if (de.State != OpDataElementState.Unchanged)
+            {
+                de.AtrbValue = de.OrigAtrbValue;
+                de.State = OpDataElementState.Unchanged;
+            }
+        }
+
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

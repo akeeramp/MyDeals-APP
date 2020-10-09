@@ -1548,12 +1548,10 @@ namespace Intel.MyDeals.BusinessRules
         private static DateTime GetBackDateValue(OpDataCollector opDataCollector)
         {
             DateTime chkStartDate;
-            DateTime chkTrkrDate;
             DateTime chkEndDate;
             DateTime chkLastTrkr;
             DateTime dtNow = DateTime.Now;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out chkStartDate)) chkStartDate = dtNow;
-            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.TRKR_START_DT), out chkTrkrDate)) chkTrkrDate = dtNow;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out chkEndDate)) chkEndDate = dtNow;
             if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out chkLastTrkr)) chkLastTrkr = chkStartDate;
 

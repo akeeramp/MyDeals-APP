@@ -32,6 +32,7 @@
         $scope.isBusyShowFunFact = false;
         $scope.stealthMode = false;
         $scope.messages = [];
+        $scope.pendingList = [];
         $scope.colToLetter = {};
         $scope.letterToCol = {};
         var intA = "A".charCodeAt(0);
@@ -3315,6 +3316,8 @@
             return;
         }
 
+       
+
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract, callback) {
             if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
             var pc = new perfCacheBlock("Save Contract Root", "UX");
@@ -3341,6 +3344,19 @@
             }
 
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
+            var stagePending = false;
+            $scope.pendingList.length = 0; 
+
+            //checking for pending deal and set the flag true
+            for (var i = 0; i < data.WipDeals.length; i++) {                
+                if (data.WipDeals[i].WF_STG_CD == "Pending")
+                {
+                    stagePending = true;
+                    $scope.pendingList.push(data.WipDeals[i].DC_ID);
+                }
+            }
+
+
             pc.mark("Built data structure");
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
@@ -3370,6 +3386,34 @@
                 function (results) {
 
                     var data = results.data.Data;
+                  
+                    // If pending deal is present then refresh  the deal editor 
+                    if (stagePending == true)
+                    {
+                        if (data.WIP_DEAL)
+                        {
+                            var flag = (0 === 1);
+                            for (var i = 0; i < data.WIP_DEAL.length; i++)
+                            {
+                                if ($scope.pendingList.indexOf(data.WIP_DEAL[i].DC_ID) > -1)
+                                {
+                                    if (data.WIP_DEAL[i]["_actions"] !== undefined)
+                                    {
+                                        data.WIP_DEAL[i]["_actionsPS"] = data.WIP_DEAL[i]._actions;
+                                        flag = (0 === 0);
+
+                                    }
+                                }
+
+                            }
+                        }
+                        if (flag == true) {
+                            $("#dealEditor").data("kendoGrid").dataSource.read();
+                            $("#dealEditor").data("kendoGrid").refresh();
+                        }
+                       
+                    }
+                  
 
                     pcService.addPerfTimes(results.data.PerformanceTimes);
                     pc.add(pcService.stop());
@@ -3509,6 +3553,9 @@
                     $scope.isAutoSaving = false;
 
                     util.console("updateContractAndCurPricingTable Complete");
+
+                    $("#dealEditor").data("kendoGrid").dataSource.read();
+                    $("#dealEditor").data("kendoGrid").refresh(); 
 
                     //if a callback function is provided, invoke it now once everything else is completed
                     if (!!callback && typeof callback === "function") {

@@ -57,6 +57,25 @@ namespace Intel.MyDeals.BusinessLogic
 
 
         #region IQR CREATE TENDERS DEAL
+        private void PullUnusedAttributes(MyDealsData myDealsData)
+        {
+            List<string> removeElemets = new List<string> { AttributeCodes.ACTIVE, AttributeCodes.DC_ID, AttributeCodes.DC_PARENT_ID };
+            foreach (var key in myDealsData.Keys)
+            {
+                foreach (OpDataCollector dc in myDealsData[key].AllDataCollectors)
+                { 
+                    foreach (OpDataElement de in dc.DataElements)
+                    {
+                        if (removeElemets.Contains(de.AtrbCd))
+                        {
+                            de.OrigAtrbValue = de.AtrbValue;
+                            de.PrevAtrbValue = de.AtrbValue;
+                            de.State = OpDataElementState.Unchanged;
+                        }
+                    }
+                }
+            }
+        }
 
         private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
         {
@@ -99,12 +118,15 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
             // Object Validation Checks - this is a contract level, and can skip OnFinalize
-            SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
+            SavePacket savePacket = new SavePacket()
             {
-                CustId = custId,
-                ContractId = initId,
-                DeleteAllPTR = false
-            });
+                MyContractToken = new ContractToken("IRQ ContractToken Created - SaveFullContract")
+                {
+                    CustId = custId,
+                    ContractId = initId,
+                    DeleteAllPTR = false
+                }
+            };
 
             bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket);
 
@@ -130,6 +152,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = initId
             };
 
+            PullUnusedAttributes(myDealsData);
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
@@ -641,6 +664,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ContractId = initWipId
             };
 
+            PullUnusedAttributes(myDealsData);
             TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
             MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
@@ -1067,6 +1091,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
+                bool runSaveStage = false;
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
 
@@ -1115,6 +1140,12 @@ namespace Intel.MyDeals.BusinessLogic
                             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD,
                                 destinationStage == WorkFlowStages.Won ? WorkFlowStages.Won : WorkFlowStages.Lost);
                         }
+                        else if (currentWipWfStg == WorkFlowStages.Won && destinationStage == WorkFlowStages.Won)
+                        {
+                            // Case of re-deal from one stage autoapproving back to one, IQR doesn't do this and instead sends us a stage change to WON, 
+                            // we are already there, so ignore, but don't toss an error.
+                            runSaveStage = false;
+                        }
                         else
                         {
                             workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(720, "Deal Stage Error: Stage change to " + destinationStage + " failed, current deal stage is " + currentWipWfStg, "Deal Stage Error"));
@@ -1143,57 +1174,60 @@ namespace Intel.MyDeals.BusinessLogic
                         break;
                 }
 
-                int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-
-                // Using this to allow us to dive right into rules engines
-                SavePacket savePacket = new SavePacket()
+                if (runSaveStage)
                 {
-                    MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
-                    {
-                        CustId = custId,
-                        ContractId = folioId,
-                        DeleteAllPTR = false
-                    },
-                    ValidateIds = new List<int> { dealId }
-                };
+                    int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
-
-                // Check for any validation errors, and if found, log and skip to next record
-                if (myDealsData.ValidationApplyRules(savePacket))
-                {
-                    string validErrors = "";
-                    foreach (OpDataElementType dpKey in myDealsData.Keys) // dpKey is like OpDataElementType.WIP_DEAL
+                    // Using this to allow us to dive right into rules engines
+                    SavePacket savePacket = new SavePacket()
                     {
-                        foreach (OpDataCollector dc in myDealsData[dpKey].AllDataCollectors)
+                        MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
                         {
-                            dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
-                            foreach (OpMsg opMsg in dc.Message.Messages) 
+                            CustId = custId,
+                            ContractId = folioId,
+                            DeleteAllPTR = false
+                        },
+                        ValidateIds = new List<int> { dealId }
+                    };
+
+
+                    // Check for any validation errors, and if found, log and skip to next record
+                    if (myDealsData.ValidationApplyRules(savePacket))
+                    {
+                        string validErrors = "";
+                        foreach (OpDataElementType dpKey in myDealsData.Keys) // dpKey is like OpDataElementType.WIP_DEAL
+                        {
+                            foreach (OpDataCollector dc in myDealsData[dpKey].AllDataCollectors)
                             {
-                                if (opMsg.Message != "Validation Errors detected in deal") validErrors += validErrors.Length == 0 ? "[" + dpKey + "] " + opMsg.Message : "; " + "[" + dpKey + "] " + opMsg.Message;
+                                dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
+                                foreach (OpMsg opMsg in dc.Message.Messages)
+                                {
+                                    if (opMsg.Message != "Validation Errors detected in deal") validErrors += validErrors.Length == 0 ? "[" + dpKey + "] " + opMsg.Message : "; " + "[" + dpKey + "] " + opMsg.Message;
+                                }
                             }
                         }
+
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(713, "Deal Validation Error : Deal " + dealId + "  had validation errors: " + validErrors, "Deal had validation errors"));
+                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                        continue;
                     }
 
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(713, "Deal Validation Error : Deal " + dealId + "  had validation errors: " + validErrors, "Deal had validation errors"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                    continue; 
-                }
+                    // No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+                    ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Stage Change")
+                    {
+                        CustId = custId,
+                        ContractId = folioId
+                    };
 
-                // No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
-                ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Stage Change")
-                {
-                    CustId = custId,
-                    ContractId = folioId
-                };
+                    TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
+                    MyDealsData saveResponse = myDealsData.Save(saveContractToken);
 
-                TagSaveActionsAndBatches(myDealsData); // Add needed save actions and batch IDs for the save
-                MyDealsData saveResponse = myDealsData.Save(saveContractToken);
-
-                if (!saveResponse.Keys.Any())
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessStageUpdateRequest"));
-                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                    continue;
+                    if (!saveResponse.Keys.Any())
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessStageUpdateRequest"));
+                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                        continue;
+                    }
                 }
 
                 // If we want to reflect data to object, walk through return sets and save to workRecordDataFields.recordDetails.quote.quoteLine[i] fields - if (saveResponse.ContainsKey(OpDataElementType.WIP_DEAL))

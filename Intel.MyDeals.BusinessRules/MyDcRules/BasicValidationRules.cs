@@ -912,6 +912,25 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Pull Values From Save Stack",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.PullValuesFromSaveStack,
+                            Target = new[] {
+                                AttributeCodes.TRKR_START_DT,
+                                AttributeCodes.TRKR_END_DT
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Add Timeline Comments for New Items",
                     ActionRule = MyDcActions.NewObjTimeLineComment,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
