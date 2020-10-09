@@ -864,7 +864,17 @@ namespace Intel.MyDeals.BusinessRules
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                 if (atrb == null) continue;
                 if (atrb.ATRB_LBL != "Title") updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
-                else updates.Add("Deal product value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]"); // instead of showing "Title changed from.."
+                else
+                {
+                    var origProds = de.OrigAtrbValue.ToString().Split(',');
+                    var currProds = de.AtrbValue.ToString().Split(',');
+                    IEnumerable<string> addedProducts = currProds.Except(origProds);
+                    IEnumerable<string> removedProducts = origProds.Except(currProds);
+                    string msg = "Deal products have changed:";
+                    if (addedProducts.Count() > 0) msg += " Added [" + string.Join(",", addedProducts) + "]";
+                    if (removedProducts.Count() > 0) msg += " Removed [" + string.Join(", ", removedProducts) + "]";
+                    updates.Add(msg); // instead of showing "Title changed from.."
+                }
             }
 
             if (updates.Count > 0) // If there are items to add, add them

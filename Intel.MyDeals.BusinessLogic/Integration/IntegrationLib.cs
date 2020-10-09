@@ -1091,7 +1091,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
-                bool runSaveStage = false;
+                bool runSaveStage = true;
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
 
