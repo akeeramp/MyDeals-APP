@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.BusinessLogic.Employees
 {
@@ -65,9 +67,13 @@ namespace Intel.MyDeals.BusinessLogic.Employees
 
             using (var client = new SmtpClient())
             {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = true;
-                client.Host = "mail.intel.com";
+                client.EnableSsl = true;
+                //SMTP Change for Port Number and Host Name
+                client.Host = "smtpauth.intel.com";
+                client.Port = 587;
                 client.Send(message);
 
             }
