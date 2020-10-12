@@ -126,7 +126,7 @@
 
                     <div><p class="divHeader"><b>Exceptions, Restrictions & Durations</b></p></div>
                     <div class="panel-body">
-                        <textarea type="textarea" rows="5" style="width:100%" name="RQST_ATRNY" ng-model="vm.legalExceptionData.EXCPT_RSTRIC_DURN" maxlength="8000" readonly>`</textarea>
+                        <textarea type="textarea" rows="5" style="width:100%" name="EXCPT_RSTRIC_DURN" ng-model="vm.legalExceptionData.EXCPT_RSTRIC_DURN" maxlength="8000" required></textarea>
                     </div>
 
                     <div><p class="divHeader">*Requesting Client</p></div>
@@ -207,7 +207,9 @@
     .panel-heading {
         /*height:60px;*/
     }
-
+    a{
+        cursor: pointer !important;
+    }
     #ruleModal .modal-footer {
         position: fixed;
         bottom: -59px;

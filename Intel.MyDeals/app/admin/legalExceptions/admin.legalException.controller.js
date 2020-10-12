@@ -21,9 +21,32 @@
         vm.legalExceptionData;
         vm.colSize = 12;
         vm.hideColInGrid = true;
+        vm.btnName = 'intelicon-show-results-outlined';
+        vm.btnColor = 'rgba(255,255,255,0)';
+        vm.toolTip = 'Show Additional Column';
         //Legal and SA can see the Screen..
         if (window.usrRole != 'Legal' && window.usrRole != 'SA' && !window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
+        }
+
+        //Show Hide Additional Column
+        $scope.showHideAllCol = function () {
+            vm.hideColInGrid = vm.hideColInGrid == true ? false : true;
+            var grid = $("#grid").data("kendoGrid");
+            if (vm.hideColInGrid == true) {
+                for (var i = 8; i < 28; i++) {
+                    grid.hideColumn(i);                    
+                }
+                vm.btnColor = 'rgba(255,255,255,0)';
+                vm.toolTip = 'Show Additional Column';
+            } else {
+                for (var i = 8; i < 28; i++) {
+                    grid.showColumn(i);                    
+                }
+                vm.btnColor = '#008bd1';                
+                vm.toolTip = 'Hide Additional Column';
+                vm.colSize = 12;
+            }            
         }
 
         vm.dataSource = new kendo.data.DataSource({
@@ -218,7 +241,6 @@
         //--------------------------------------------------------------------
 
         $scope.addLegalException = function () {
-
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: 'static',
@@ -248,7 +270,7 @@
         //--------------------------------------------------------------------
 
         $scope.updateLegalException = function (dataItem, mode) {
-            if (mode == true) {
+            if (mode == true) {                 
                 var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: 'static',
@@ -260,14 +282,17 @@
                     backdrop: false,
                     resolve: {
                         dataItem: function () {
-                            return dataItem;
+                            return util.deepClone(dataItem);                            
                         }
                     }
                 });
                 modalInstance.result.then(function (returnData) {
-                    $("#grid").data("kendoGrid").refresh();
-                    var grid = $("#childGrid").data("kendoGrid");
-                    grid.refresh();
+                    if (returnData) {
+                        $scope.findAndReplace(returnData);
+                        $("#grid").data("kendoGrid").refresh();
+                        var grid = $("#childGrid").data("kendoGrid");
+                        grid.refresh();
+                    }                    
                     vm.cancel();
                 }, function () { });
 
@@ -280,6 +305,49 @@
             }
             
 
+        }
+
+        $scope.findAndReplace = function (dataItem) {
+            for (var i = 0; i < $("#grid").data("kendoGrid")._data.length; i++) {
+                if ($("#grid").data("kendoGrid")._data[i]["PCT_EXCPT_NBR"] == dataItem.PCT_EXCPT_NBR) {
+                    
+                    $("#grid").data("kendoGrid")._data[i]["ACTV_IND"] = dataItem.ACTV_IND;
+                    $("#grid").data("kendoGrid")._data[i]["APRV_ATRNY"] = dataItem.APRV_ATRNY;
+                    $("#grid").data("kendoGrid")._data[i]["BUSNS_OBJ"] = dataItem.BUSNS_OBJ;
+                    $("#grid").data("kendoGrid")._data[i]["CHG_DTM"] = moment(dataItem.CHG_DTM).format("l");
+                    $("#grid").data("kendoGrid")._data[i]["CHG_EMP_NAME"] = dataItem.CHG_EMP_NAME;
+                    $("#grid").data("kendoGrid")._data[i]["CHG_EMP_WWID"] = dataItem.CHG_EMP_WWID;
+                    $("#grid").data("kendoGrid")._data[i]["COST"] = dataItem.COST;
+                    $("#grid").data("kendoGrid")._data[i]["CRE_DTM"] = moment(dataItem.CRE_DTM).format("l");
+
+                    $("#grid").data("kendoGrid")._data[i]["CRE_EMP_WWID"] = dataItem.CRE_EMP_WWID;
+                    $("#grid").data("kendoGrid")._data[i]["CUST_PRD"] = dataItem.CUST_PRD;
+                    $("#grid").data("kendoGrid")._data[i]["DT_APRV"] = dataItem.DT_APRV;
+                    $("#grid").data("kendoGrid")._data[i]["EXCPT_RSTRIC_DURN"] = dataItem.EXCPT_RSTRIC_DURN;
+                    $("#grid").data("kendoGrid")._data[i]["FRCST_VOL_BYQTR"] = dataItem.FRCST_VOL_BYQTR;
+                    $("#grid").data("kendoGrid")._data[i]["INTEL_PRD"] = dataItem.INTEL_PRD;
+                    $("#grid").data("kendoGrid")._data[i]["IS_DSBL"] = dataItem.IS_DSBL;
+                    $("#grid").data("kendoGrid")._data[i]["JSTFN_PCT_EXCPT"] = dataItem.JSTFN_PCT_EXCPT;
+
+                    $("#grid").data("kendoGrid")._data[i]["MEET_COMP_PRC"] = dataItem.MEET_COMP_PRC;
+                    $("#grid").data("kendoGrid")._data[i]["MEET_COMP_PRD"] = dataItem.MEET_COMP_PRD;
+                    $("#grid").data("kendoGrid")._data[i]["MYDL_PCT_LGL_EXCPT_SID"] = dataItem.MYDL_PCT_LGL_EXCPT_SID;
+                    $("#grid").data("kendoGrid")._data[i]["OTHER"] = dataItem.OTHER;
+                    $("#grid").data("kendoGrid")._data[i]["PCT_EXCPT_NBR"] = dataItem.PCT_EXCPT_NBR;
+                    $("#grid").data("kendoGrid")._data[i]["PCT_LGL_EXCPT_END_DT"] = dataItem.PCT_LGL_EXCPT_END_DT;
+                    $("#grid").data("kendoGrid")._data[i]["PCT_LGL_EXCPT_STRT_DT"] = dataItem.PCT_LGL_EXCPT_STRT_DT;
+                    $("#grid").data("kendoGrid")._data[i]["PRC_RQST"] = dataItem.PRC_RQST;
+
+                    $("#grid").data("kendoGrid")._data[i]["PTNTL_MKT_IMPCT"] = dataItem.PTNTL_MKT_IMPCT;
+                    $("#grid").data("kendoGrid")._data[i]["RQST_ATRNY"] = dataItem.RQST_ATRNY;
+                    $("#grid").data("kendoGrid")._data[i]["RQST_CLNT"] = dataItem.RQST_CLNT;
+                    $("#grid").data("kendoGrid")._data[i]["SCPE"] = dataItem.SCPE;
+                    $("#grid").data("kendoGrid")._data[i]["USED_IN_DL"] = dataItem.USED_IN_DL;
+                    $("#grid").data("kendoGrid")._data[i]["VER_CRE_DTM"] = dataItem.VER_CRE_DTM;
+                    $("#grid").data("kendoGrid")._data[i]["VER_NBR"] = dataItem.VER_NBR;
+                    $("#grid").data("kendoGrid")._data[i]["DEALS_USED_IN_EXCPT"] = dataItem.DEALS_USED_IN_EXCPT;
+                }
+            }
         }
 
         //--------------------------------------------------------------------
@@ -898,23 +966,22 @@
                             field: "CHG_EMP_NAME",
                             title: "Version Created By",
                             headerTemplate: "<div class='isRequired'> Version Created By </div>",                            
-                            width: 100,
+                            width: 200,
                             filterable: { multi: true, search: true },
                             editable: false
                         },
                         {
                             field: "MYDL_PCT_LGL_EXCPT_SID",
                             hidden: true,
-                            width: 100,                            
+                            width: 200,                            
                             filterable: { multi: true, search: true }
                         },
-
                         {
                             field: "VER_CRE_DTM",
                             title: "Version Created Date",
                             headerTemplate: "<div class='isRequired'>Version Created Date </div>",
                             template: "#= kendo.toString(new Date(gridUtils.stripMilliseconds(CHG_DTM)), 'M/d/yyyy') #",                            
-                            width: 100,
+                            width: 300,
                             filterable:
                             {
                                 extra: false,
@@ -1079,7 +1146,9 @@
             {
                 rtn += '<a role="button" class="k-button k-button-icontext"  ng-click="openAmendment()"><span class="k-icon k-i-plus"></span>Add Amendment</a> ';
             }
-                                
+
+
+            rtn += '<a role="button" class="k-button k-button-icontext" style="float: right; background-color: {{vm.btnColor}}" ng-click="showHideAllCol()"><i id="btnWordWrapControl" class="{{vm.btnName}}" title="{{vm.toolTip}}' +'" style="font-size:25px;"></i></a>';
             return rtn;
         }
 

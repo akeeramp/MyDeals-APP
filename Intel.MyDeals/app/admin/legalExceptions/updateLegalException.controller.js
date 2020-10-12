@@ -31,7 +31,7 @@
                     .then(function (response) {
 
                         logger.success("Legal Exception was successfully updated.");
-                        $scope.ok();
+                        $scope.ok(response.data);
                         e.success(response.data);
 
                     }, function (response) {
@@ -42,8 +42,8 @@
         }
 
         //To close the Edit Legal Exception popup 
-        $scope.ok = function () {
-            $uibModalInstance.close();
+        $scope.ok = function (data) {
+            $uibModalInstance.close(data);
         };
         
     }
