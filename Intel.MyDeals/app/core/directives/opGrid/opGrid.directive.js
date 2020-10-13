@@ -975,6 +975,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.opData[i]["TRKR_NBR"] = args.WIP_DEAL[i].TRKR_NBR;
                         //$scope.opData[i]["IN_REDEAL"] = args.WIP_DEAL[i].IN_REDEAL;
                         $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly;
+                        $scope.opData[i]["REBATE_BILLING_END"] = args.WIP_DEAL[i].REBATE_BILLING_END;
                     }
 
                 }
