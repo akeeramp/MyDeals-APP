@@ -960,6 +960,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             }
+            $scope.$on('updateDealAtrb', function (event, args) {
+                
+                for (var i = 0; i < args.WIP_DEAL.length; i++)
+                {
+                    if (args.WIP_DEAL[i].DC_ID == $scope.opData[i]["DC_ID"] )
+                    {
+                        $scope.opData[i]["_actionsPS"] = args.WIP_DEAL[i]._actions;
+                        $scope.opData[i]["PS_WF_STG_CD"] = args.WIP_DEAL[i].PS_WF_STG_CD;
+                        $scope.opData[i]["WF_STG_CD"] = args.WIP_DEAL[i].WF_STG_CD;
+                        $scope.opData[i]["HAS_TRACKER"] = args.WIP_DEAL[i].HAS_TRACKER;
+                        $scope.opData[i]["IN_REDEAL"] = args.WIP_DEAL[i].IN_REDEAL;
+                        $scope.opData[i]["LAST_REDEAL_DT"] = args.WIP_DEAL[i].LAST_REDEAL_DT;
+                        $scope.opData[i]["TRKR_NBR"] = args.WIP_DEAL[i].TRKR_NBR;
+                        //$scope.opData[i]["IN_REDEAL"] = args.WIP_DEAL[i].IN_REDEAL;
+                        $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly;
+                    }
+
+                }
+                $scope.contractDs.read();
+
+            });
 
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {

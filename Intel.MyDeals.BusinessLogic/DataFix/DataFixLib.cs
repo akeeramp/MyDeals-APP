@@ -19,12 +19,12 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataFixDataLib.GetDataFixActions();
         }
 
-        public List<DataFix> GetDataFixes()
+        public List<IncdnDataFix> GetDataFixes()
         {
             return _dataFixDataLib.GetDataFixes();
         }
 
-        public DataFix UpdateDataFix(DataFix data, bool isExecute)
+        public IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute)
         {
             return _dataFixDataLib.UpdateDataFix(data, isExecute);
         }

@@ -15,7 +15,7 @@
         <div class="form-group row">
             <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
             <div class="col-md-3">
-                <input class="form-control md" type="text" ng-model="vm.currentDataFix.IncidentNumber" style="width:100%">
+                <input class="form-control md" type="text" ng-model="vm.currentDataFix.INCDN_NBR" style="width:100%">
             </div>
         </div>
         <div class="form-group row">
@@ -42,17 +42,16 @@
                 <input class="form-control md" type="text" ng-model="vm.currentDataFix.Message" style="width:100%">
             </div>
             <div class="col-md-5">
-                <button ng-click="vm.SaveFix(true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
-                <button ng-click="vm.SaveFix(false)" class="btn btn-primary" style="margin-left: 15px">Save</button>
+                <button ng-click="vm.SaveFix(true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>                
                 <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
             </div>
         </div>
-        <div class="form-group row">
+        <!--<div class="form-group row" ng-if="{{vm.isSuccess == true}}">
             <label class="control-label col-md-1">Results : </label>
             <div class="col-md-4">
-                <span>Under construction!</span>
+                <span ng-if="{{vm.isSuccess == true}}">Data fix has been updated successfully!</span>
             </div>
-        </div>
+        </div>-->
     </div>
     <div class="row col-md-12" ng-if="!vm.IsEditMode">
         <div kendo-grid="dataFixGrid" class="table vistex-grid" expand-k-grid options="vm.gridOptions">

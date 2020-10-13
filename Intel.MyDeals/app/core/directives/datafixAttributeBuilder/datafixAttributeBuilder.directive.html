@@ -12,6 +12,7 @@
                 <th>Data Value Max</th>
                 <th class="isRequired">MDX</th>
                 <th class="isRequired">Customer</th>
+                <th class="isRequired">Batch Id</th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +27,7 @@
                                 k-placeholder="'Select field'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
-                                k-ng-model="dataItem.DataElement"
+                                k-ng-model="dataItem.OBJ_TYPE_SID"
                                 k-value-primitive="true"
                                 k-filter="'contains'"
                                 k-auto-bind="true"
@@ -41,7 +42,7 @@
                                 k-placeholder="'Select field'"
                                 k-data-text-field="'title'"
                                 k-data-value-field="'field'"
-                                k-ng-model="dataItem.Attribute"
+                                k-ng-model="dataItem.ATRB_SID"
                                 k-value-primitive="true"
                                 k-change="changeField"
                                 k-close="closeField"
@@ -53,19 +54,19 @@
                     </span>
                 </td>
                 <td>
-                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.RvsNumber">
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.ATRB_RVS_NBR">
                 </td>
                 <td>
-                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.MtxValue">
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.ATRB_MTX_SID">
                 </td>
                 <td>
-                    <input kendo-numeric-text-box class="dataValueNumericFull" decimals="0" format="'#'" min="0" ng-model="dataItem.ObjectId">
+                    <input kendo-numeric-text-box class="dataValueNumericFull" decimals="0" format="'#'" min="0" ng-model="dataItem.OBJ_SID">
                 </td>
                 <td>
                     <div class="fl abValue">Select an attribute!</div>
                 </td>
                 <td>
-                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ValueMax" placeholder="Data Value Max">
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ATRB_VAL_MAX" placeholder="Data Value Max">
                 </td>
                 <td>
                     <span class="fl ">
@@ -73,7 +74,7 @@
                                 k-placeholder="'Select MDX'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
-                                k-ng-model="dataItem.MDX"
+                                k-ng-model="dataItem.MDX_CD"
                                 k-value-primitive="true"
                                 k-auto-bind="true"
                                 k-data-source="MdxDataSource"
@@ -86,13 +87,16 @@
                             k-placeholder="'Select customer'"
                             k-data-text-field="'CUST_NM'"
                             k-data-value-field="'CUST_SID'"
-                            k-ng-model="dataItem.CustId"
+                            k-ng-model="dataItem.CUST_MBR_SID"
                             k-value-primitive="true"
                             k-filter="'contains'"
                             k-auto-bind="true"
                             k-data-source="MyCustomersInfoDataSource"
                             class="opUiContainer sm abField"
                             style="width: 150px;"></select>
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.BTCH_ID" placeholder="Data Value Max">
                 </td>
             </tr>
         </tbody>

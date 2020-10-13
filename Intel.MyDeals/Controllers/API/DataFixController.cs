@@ -20,13 +20,13 @@ namespace Intel.MyDeals.Controllers.API
         [Route("UpdateDataFix/{isExecute}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public DataFix UpdateDataFix(DataFix data, bool isExecute)
+        public IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute)
         {
             return SafeExecutor(() => _dataFixLib.UpdateDataFix(data, isExecute), "Unable to save data fix");
         }
 
         [Route("GetDataFixes")]
-        public List<DataFix> GetDataFixes()
+        public List<IncdnDataFix> GetDataFixes()
         {
             return SafeExecutor(() => _dataFixLib.GetDataFixes(), "Unable to get data fixes");
         }

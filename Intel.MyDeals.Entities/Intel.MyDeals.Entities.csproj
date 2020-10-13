@@ -180,6 +180,12 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\in_t_obj_atrb.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_obj_actn.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\T_NOTIF_INFO.cs">
       <SubType>Component</SubType>
     </Compile>
