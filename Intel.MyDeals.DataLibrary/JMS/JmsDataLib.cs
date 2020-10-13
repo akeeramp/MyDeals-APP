@@ -702,15 +702,13 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal)
+        public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId)
         {
-            bool success = false;
-            // TO DO: Fill in with correct passed data after verification
-
             var cmd = new Procs.dbo.PR_MYDL_CHECK_SF_ID()
             {
                 CntrctSFID = salesForceIdCntrct,
-                WipSFID = salesForceIdDeal
+                WipSFID = salesForceIdDeal,
+                CustId = custId
             };
             var ret = new List<TendersSFIDCheck>();
 

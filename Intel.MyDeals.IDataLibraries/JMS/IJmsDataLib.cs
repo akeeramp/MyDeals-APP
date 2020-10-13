@@ -42,7 +42,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         void UpdateTendersStage(Guid btchId, string rqstStatus);
 
-        List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal);
+        List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId);
 
         int FetchCustFromCimId(string custCimId);
 

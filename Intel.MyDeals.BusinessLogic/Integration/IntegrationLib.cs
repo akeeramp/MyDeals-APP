@@ -79,43 +79,37 @@ namespace Intel.MyDeals.BusinessLogic
 
         private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
         {
-            if (contractId > 0) return contractId; // only process new contract headers
+            int initId = -101;
+
+            if (contractId <= 0)
+            {
+                return initId;
+            }
+
+            // Assume now that the contract folio exists, at least 1 element of it as supplied by PR_MYDL_CHECK_SF_ID
+            List<int> passedFolioIds = new List<int>() { contractId };
+            MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }).FillInHolesFromAtrbTemplate(OpDataElementType.CNTRCT, OpDataElementSetType.ALL_TYPES); // Make the save object .FillInHolesFromAtrbTemplate()
 
             // Pull needed data out of JSON
-            int initId = -101;
             DateTime contractStartDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime contractEndDt = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.ShipmentEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string quoteLineId = workRecordDataFields.recordDetails.quote.Name;
             string contractTitle = "SF: " + workRecordDataFields.recordDetails.quote.FolioName;
 
-            // Build a save record (Contract level only needed here)
-            MyDealsData myDealsData = new MyDealsData();
-            myDealsData[OpDataElementType.CNTRCT] = new OpDataPacket<OpDataElementType>() { PacketType = OpDataElementType.CNTRCT };
-            myDealsData[OpDataElementType.CNTRCT].Data = new OpDataCollectorDict();
-            myDealsData[OpDataElementType.CNTRCT].Data[initId] = new OpDataCollector
-            {
-                DcID = initId,
-                DcParentID = 0,
-                DcParentType = "ALL_OBJ_TYPE",
-                DcType = OpDataElementType.CNTRCT.ToString(),
-                DataElements = new List<OpDataElement>()
-            };
-            myDealsData.FillInHolesFromAtrbTemplate(OpDataElementType.CNTRCT, OpDataElementSetType.ALL_TYPES); // Fill in all of the holes from the templates
-
             // Update attributes that need to be updated
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.dc_type), OpDataElementType.CNTRCT.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.DC_ID), initId.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.DC_PARENT_ID), "0");
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD), OpDataElementSetType.ALL_TYPES.ToString()); // 3002
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.SALESFORCE_ID), contractSfId);
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.QUOTE_LN_ID), quoteLineId);
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.START_DT), contractStartDt.ToString("MM/dd/yyyy"));
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.END_DT), contractEndDt.ToString("MM/dd/yyyy"));
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TENDER_PUBLISHED), "1");
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.IS_TENDER), "1");
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.TITLE), contractTitle);
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[initId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.dc_type), OpDataElementType.CNTRCT.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.DC_ID), contractId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.DC_PARENT_ID), "0");
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD), OpDataElementSetType.ALL_TYPES.ToString()); // 3002
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.SALESFORCE_ID), contractSfId);
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.QUOTE_LN_ID), quoteLineId);
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.START_DT), contractStartDt.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.END_DT), contractEndDt.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.TENDER_PUBLISHED), "1");
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.IS_TENDER), "1");
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.TITLE), contractTitle);
+            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[contractId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
 
             // Object Validation Checks - this is a contract level, and can skip OnFinalize
             SavePacket savePacket = new SavePacket()
@@ -123,7 +117,7 @@ namespace Intel.MyDeals.BusinessLogic
                 MyContractToken = new ContractToken("IRQ ContractToken Created - SaveFullContract")
                 {
                     CustId = custId,
-                    ContractId = initId,
+                    ContractId = contractId,
                     DeleteAllPTR = false
                 }
             };
@@ -149,7 +143,7 @@ namespace Intel.MyDeals.BusinessLogic
             ContractToken saveContractToken = new ContractToken("IRQ ContractToken Created - Save Folio Header")
             {
                 CustId = custId,
-                ContractId = initId
+                ContractId = contractId
             };
 
             PullUnusedAttributes(myDealsData);
@@ -733,42 +727,45 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
                 int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
 
-                List<TendersSFIDCheck> sfToMydlIds = _jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal);
+                if (custId == 0) // Need to have a working customer for this request and failed, skip!
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}. Contact Mydeals Support Invalid Customer", "Invalid Customer"));
+                    executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, 0, dealId);
+                    continue;
+                }
+
+                List<TendersSFIDCheck> sfToMydlIds = _jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal, custId);
                 if (sfToMydlIds == null)
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, SF ID lookup Error"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
                     continue; // we had error on lookup, skip to next to process
                 }
+                while (sfToMydlIds[0].Cntrct_SID <= 0) // Add in SF_ID blocked loop to fire this event until we get a proper item back, only bail on DB errors
+                {
+                    System.Threading.Thread.Sleep(5000);
+                    sfToMydlIds = _jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal, custId);
+
+                    if (sfToMydlIds == null)
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, SF ID lookup Error"));
+                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
+                        continue; // we had error on lookup, skip to next to process
+                    }
+                }
 
                 int folioId = sfToMydlIds[0].Cntrct_SID;
                 dealId = sfToMydlIds[0].Wip_SID;
 
-                List<int> passedFolioIds = new List<int>() { folioId };
+                // Step 2 - Update the contract header if needed
+                folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields);
+                workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
 
-                if (custId == 0) // Need to have a working customer for this request and failed, skip!
+                if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}. Contact Mydeals Support Invalid Customer", "Invalid Customer"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed to create the Tender Folio"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
-                }
-
-                // Step 2 - Deal with a contract header
-                if (folioId == 0) // This is a new contract header
-                {
-                    folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields);
-                    workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
-
-                    if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
-                    {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed to create the Tender Folio"));
-                        executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
-                        continue;
-                    }
-                }
-                else // Post back known Folio ID to SF
-                {
-                    workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
                 }
 
                 // Step 2a - Deal with a deal structure now

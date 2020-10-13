@@ -165,11 +165,9 @@ namespace Intel.MyDeals.DataLibrary
         public List<VistexLogsInfo> AddVistexData(List<int> lstDealIds)
         {
             List<VistexLogsInfo> lstVistex = new List<VistexLogsInfo>();
-            List<Guid> listGuid = new List<Guid>();
             var cmd = new Procs.dbo.PR_MYDL_VISTEX_DEALS_PRCSS
             {
-                in_btch_ids = new type_guid_list(listGuid),
-                in_deal_lst = new type_int_list(lstDealIds.ToArray()),
+                in_deal_lst = new type_int_list(lstDealIds.ToArray())
             };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))

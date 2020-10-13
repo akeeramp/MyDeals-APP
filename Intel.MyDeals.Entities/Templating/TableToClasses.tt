@@ -422,7 +422,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// TENDERS SFID Check
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CHECK_SF_ID] '50130000000X14c', '001i000001AWbWu'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CHECK_SF_ID] '50130000000X14c', '001i000001AWbWu', 2");
 	ds.Tables[0].TableName = "TendersSFIDCheck";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
