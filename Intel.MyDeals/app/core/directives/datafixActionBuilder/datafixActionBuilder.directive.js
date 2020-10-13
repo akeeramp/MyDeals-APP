@@ -28,9 +28,9 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
 
             if ($scope.ActionDataRows.length === 0) {
                 $scope.ActionDataRows = [{
-                    DataElement: "",
-                    Action: "",
-                    TargetObjectIds: ""
+                    OBJ_TYPE_SID: "",
+                    ACTN_NM: "",
+                    ACTN_VAL_LIST: ""
                 }];
             }            
 
@@ -38,9 +38,9 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
                 var index = $scope.ActionDataRows.indexOf(dataItem);
                 if (index > -1) {
                     $scope.ActionDataRows.splice(index + 1, 0, {
-                        DataElement: "",
-                        Action: "",
-                        TargetObjectIds: ""
+                        OBJ_TYPE_SID: "",
+                        ACTN_NM: "",
+                        ACTN_VAL_LIST: ""
                     });
                     setTimeout(function () {
                         if ($(".filterRow")[index + 1] !== undefined)
@@ -52,9 +52,9 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
             $scope.removeRow = function (dataItem) {
                 if ($scope.ActionDataRows.length === 1) {
                     $scope.ActionDataRows = [{
-                        DataElement: "",
-                        Action: "",
-                        TargetObjectIds: ""
+                        OBJ_TYPE_SID: "",
+                        ACTN_NM: "",
+                        ACTN_VAL_LIST: ""
                     }];
                     return;
                 }

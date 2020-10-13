@@ -6,6 +6,7 @@
                 <th class="isRequired">Object Type</th>
                 <th class="isRequired">Action</th>
                 <th class="isRequired">Target Object Ids</th>
+                <th class="isRequired">Batch Id</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +21,7 @@
                                 k-placeholder="'Select data element'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
-                                k-ng-model="dataItem.DataElement"
+                                k-ng-model="dataItem.OBJ_TYPE_SID"
                                 k-value-primitive="true"
                                 k-filter="'contains'"
                                 k-auto-bind="true"
@@ -35,7 +36,7 @@
                                 k-placeholder="'Select action'"
                                 k-data-text-field="'Text'"
                                 k-data-value-field="'Value'"
-                                k-ng-model="dataItem.Action"
+                                k-ng-model="dataItem.ACTN_NM"
                                 k-value-primitive="true"
                                 k-auto-bind="true"
                                 k-data-source="ActionsSource"
@@ -44,7 +45,10 @@
                     </span>
                 </td>
                 <td>
-                    <input class="form-control md dataValue" type="text" ng-model="dataItem.TargetObjectIds" placeholder="Target Object Ids">
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ACTN_VAL_LIST" placeholder="Target Object Ids">
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.BTCH_ID" style="width:270px !important" placeholder="Data Value Max">
                 </td>
             </tr>
         </tbody>

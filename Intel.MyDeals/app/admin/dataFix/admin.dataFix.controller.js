@@ -22,6 +22,7 @@
         vm.OpDataElements = [];
         vm.MyCustomersInfo = [];
         vm.Actions = [];
+        vm.isSuccess = false;
 
         vm.Init = function () {
             dataFixService.getDataFixes().then(function (result) {
@@ -55,37 +56,29 @@
             $rootScope.$broadcast("save-datafix-action");
             $timeout(function () {
                 var requiredFields = [];
-                if (vm.currentDataFix.IncidentNumber === null || jQuery.trim(vm.currentDataFix.IncidentNumber) === "")
+                if (vm.currentDataFix.INCDN_NBR === null || jQuery.trim(vm.currentDataFix.INCDN_NBR) === "")
                     requiredFields.push("Incident Number");
                 if (isExecute && vm.currentDataFix.DataFixAttributes.filter(x => ((x.value === undefined || x.value == null || jQuery.trim(x.value) === "") && (x.values === undefined || x.values === null || x.values.length === 0))
-                    || x.DataElement === "" || x.Attribute === "" || jQuery.trim(x.RvsNumber) === "" || jQuery.trim(x.ObjectId) === "" || jQuery.trim(x.ObjectId) === "0" || x.MDX === "" || x.CustId === "").length > 0)
+                    || x.OBJ_TYPE_SID === "" || x.ATRB_SID === "" || jQuery.trim(x.ATRB_RVS_NBR) === "" || jQuery.trim(x.OBJ_SID) === "" || jQuery.trim(x.OBJ_SID) === "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "").length > 0)
                     requiredFields.push("Mandatory data in attributes section cannot be empty");
-                if (isExecute && vm.currentDataFix.DataFixActions.filter(x => x.DataElement === "" || x.Action === "" || jQuery.trim(x.TargetObjectIds) === "").length > 0)
+                if (isExecute && vm.currentDataFix.DataFixActions.filter(x => x.OBJ_TYPE_SID === "" || x.ACTN_NM === "" || jQuery.trim(x.ACTN_VAL_LIST) === "").length > 0)
                     requiredFields.push("Mandatory data in actions section cannot be empty");
 
                 var regExpForObjectIds = /[0-9,]+$/;
-                if (vm.currentDataFix.DataFixActions.filter(x => jQuery.trim(x.TargetObjectIds) !== "" && !regExpForObjectIds.exec(jQuery.trim(x.TargetObjectIds))).length > 0)
+                if (vm.currentDataFix.DataFixActions.filter(x => jQuery.trim(x.ACTN_VAL_LIST) !== "" && !regExpForObjectIds.exec(jQuery.trim(x.ACTN_VAL_LIST))).length > 0)
                     requiredFields.push("Target object IDs in actions has illegal characters!");
 
                 if (requiredFields.length > 0) {
                     kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
                 } else {
                     dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
-                        if (isExecute && result.data.DataFixActions.filter(x => x.TargetObjectIds === "").length > 0) {
-                            kendo.alert("Target Object Ids cannot be empty in actions!");
-                        } else {
-                            if (vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber).length > 0)
-                                vm.DataFixes.filter(x => x.IncidentNumber == result.data.IncidentNumber)[0] = result.data;
-                            else
-                                vm.DataFixes.push(result.data);
-
-                            vm.dataSourceDataFixes.read();
-                            if (isExecute) {
-                                kendo.alert("Executed and Data has been fixed!");
-                            } else
-                                vm.IsEditMode = false;
+                        if (result.data.RESULT == "1") {                            
+                            vm.isSuccess = true;
                             logger.success("Data fix has been updated successfully!");
+                        } else {
+                            logger.error("Unable to update data fix");
                         }                        
+
                     }, function (response) {
                         logger.error("Unable to update data fix");
                     });
@@ -93,8 +86,8 @@
             });
         }
 
-        vm.EditDataFix = function (incidentNumber) {
-            vm.currentDataFix = vm.DataFixes.find(x => x.IncidentNumber == incidentNumber);
+        vm.EditDataFix = function (INCDN_NBR) {
+            vm.currentDataFix = vm.DataFixes.find(x => x.INCDN_NBR == INCDN_NBR);
             vm.IsEditMode = true;
         }
 
@@ -133,22 +126,26 @@
             columns: [
                 {
                     width: "250px",
-                    field: "IncidentNumber",
+                    field: "INCDN_NBR",
                     title: "Incident Number",
-                    template: "<div class='incNbr' ng-click='vm.EditDataFix(#= IncidentNumber #)'>#=IncidentNumber#</div>",
+                    template: "<div class='incNbr'>#=INCDN_NBR#</div>",
                 },
                 {
-                    field: "Message",
+                    field: "INCDN_MSG",
                     title: "Message"
                 },
                 {
+                    field: "INCDN_STS",
+                    title: "Incident Status"
+                },
+                {
                     width: "250px",
-                    field: "CreatedBy",
+                    field: "CRE_EMP_NM",
                     title: "Created By"
                 },
                 {
                     width: "250px",
-                    field: "CreatedOn",
+                    field: "CRE_DTM",
                     title: "Created On"
                 }
             ]

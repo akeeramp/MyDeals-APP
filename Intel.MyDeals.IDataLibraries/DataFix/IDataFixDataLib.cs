@@ -7,8 +7,8 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<DropDowns> GetDataFixActions();
 
-        List<DataFix> GetDataFixes();
+        List<IncdnDataFix> GetDataFixes();
 
-        DataFix UpdateDataFix(DataFix data, bool isExecute);
+        IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute);
     }
 }

@@ -9,7 +9,7 @@ namespace Intel.MyDeals.Entities
     public class DataFix
     {
         [DataMember]
-        public string IncidentNumber { get; set; }
+        public string INCDN_NBR { get; set; }
 
         [DataMember]
         public string Message { get; set; }
@@ -29,14 +29,16 @@ namespace Intel.MyDeals.Entities
 
     public class DataFixAttribute
     {
-        public string DataElement { get; set; }
-        public string Attribute { get; set; }
-        public string RvsNumber { get; set; }
-        public string MtxValue { get; set; }
-        public string ObjectId { get; set; }
-        public string ValueMax { get; set; }
-        public string MDX { get; set; }
-        public int CustId { get; set; }
+        public int OBJ_TYPE_SID { get; set; }
+        public int ATRB_SID { get; set; }
+        public int ATRB_RVS_NBR { get; set; }
+        public int ATRB_MTX_SID { get; set; }
+        public int OBJ_SID { get; set; }
+        public string ATRB_VAL { get; set; }
+        public string ATRB_VAL_MAX { get; set; }
+        public string MDX_CD { get; set; }
+        public int CUST_MBR_SID { get; set; }
+        public int BTCH_ID { get; set; }
         public string value { get; set; }
         public List<string> values { get; set; }
         public ValueType valueType { get; set; }
@@ -44,8 +46,9 @@ namespace Intel.MyDeals.Entities
 
     public class DataFixAction
     {
-        public string DataElement { get; set; }
-        public string Action { get; set; }
-        public string TargetObjectIds { get; set; }
+        public int OBJ_TYPE_SID { get; set; }
+        public string ACTN_NM { get; set; }
+        public string ACTN_VAL_LIST { get; set; }
+        public int BTCH_ID { get; set; }
     }
 }

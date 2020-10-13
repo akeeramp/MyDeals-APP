@@ -41,14 +41,16 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
             
             if ($scope.DataRows.length === 0) {
                 $scope.DataRows = [{
-                    DataElement: "",
-                    Attribute: "",
-                    RvsNumber: 0,
-                    MtxValue: 0,
-                    ObjectId: "",
-                    ValueMax: "",
-                    MDX: "",
-                    CustId: ""
+                    OBJ_TYPE_SID: "",
+                    ATRB_SID: "",
+                    ATRB_RVS_NBR: 0,
+                    ATRB_MTX_SID: 0,
+                    OBJ_SID: "",
+                    ATRB_VAL: "",
+                    ATRB_VAL_MAX: "",
+                    MDX_CD: "",
+                    CUST_MBR_SID: "",
+                    BTCH_ID: ""
                 }];
             } else {
                 $timeout(function () {
@@ -68,11 +70,11 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
             }
 
             $scope.drawValueControl = function (el, scope) {
-                if (scope.dataItem.Attribute === "") return;
+                if (scope.dataItem.ATRB_SID === "") return;
 
                 var field = $linq.Enumerable().From(scope.attributeSettings)
                     .Where(function (x) {
-                        return (x.field === scope.dataItem.Attribute);
+                        return (x.field === scope.dataItem.ATRB_SID);
                     }).ToArray()[0];
 
                 var fieldType = field.type;
@@ -236,14 +238,16 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                 var index = $scope.DataRows.indexOf(dataItem);
                 if (index > -1) {
                     $scope.DataRows.splice(index + 1, 0, {
-                        DataElement: "",
-                        Attribute: "",
-                        RvsNumber: 0,
-                        MtxValue: 0,
-                        ObjectId: "",
-                        ValueMax: "",
-                        MDX: "",
-                        CustId: ""
+                        OBJ_TYPE_SID: "",
+                        ATRB_SID: "",
+                        ATRB_RVS_NBR: 0,
+                        ATRB_MTX_SID: 0,
+                        OBJ_SID: "",
+                        ATRB_VAL: "",
+                        ATRB_VAL_MAX: "",
+                        MDX_CD: "",
+                        CUST_MBR_SID: "",
+                        BTCH_ID: ""
                     });
                     setTimeout(function () {
                         if ($(".filterRow")[index + 1] !== undefined)
@@ -255,14 +259,16 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
             $scope.removeRow = function (dataItem) {
                 if ($scope.DataRows.length === 1) {
                     $scope.DataRows = [{
-                        DataElement: "",
-                        Attribute: "",
-                        RvsNumber: 0,
-                        MtxValue: 0,
-                        ObjectId: "",
-                        ValueMax: "",
-                        MDX: "",
-                        CustId: ""
+                        OBJ_TYPE_SID: "",
+                        ATRB_SID: "",
+                        ATRB_RVS_NBR: 0,
+                        ATRB_MTX_SID: 0,
+                        OBJ_SID: "",
+                        ATRB_VAL: "",
+                        ATRB_VAL_MAX: "",
+                        MDX_CD: "",
+                        CUST_MBR_SID: "",
+                        BTCH_ID: ""
                     }];
                     return;
                 }

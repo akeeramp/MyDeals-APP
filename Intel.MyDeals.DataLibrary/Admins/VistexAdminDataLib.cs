@@ -168,7 +168,7 @@ namespace Intel.MyDeals.DataLibrary
             List<Guid> listGuid = new List<Guid>();
             var cmd = new Procs.dbo.PR_MYDL_VISTEX_DEALS_PRCSS
             {
-                in_btch_ids = new type_guid_list(listGuid),
+                //in_btch_ids = new type_guid_list(listGuid),
                 in_deal_lst = new type_int_list(lstDealIds.ToArray()),
             };
 
