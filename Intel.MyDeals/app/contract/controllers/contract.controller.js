@@ -3386,34 +3386,9 @@
                 function (results) {
 
                     var data = results.data.Data;
-                  
-                    // If pending deal is present then refresh  the deal editor 
-                    if (stagePending == true)
-                    {
-                        if (data.WIP_DEAL)
-                        {
-                            var flag = (0 === 1);
-                            for (var i = 0; i < data.WIP_DEAL.length; i++)
-                            {
-                                if ($scope.pendingList.indexOf(data.WIP_DEAL[i].DC_ID) > -1)
-                                {
-                                    if (data.WIP_DEAL[i]["_actions"] !== undefined)
-                                    {
-                                        data.WIP_DEAL[i]["_actionsPS"] = data.WIP_DEAL[i]._actions;
-                                        flag = (0 === 0);
+                                     
 
-                                    }
-                                }
-
-                            }
-                        }
-                        if (flag == true) {
-                            $("#dealEditor").data("kendoGrid").dataSource.read();
-                            $("#dealEditor").data("kendoGrid").refresh();
-                        }
-                       
-                    }
-                  
+                    $scope.$broadcast('updateDealAtrb', data);
 
                     pcService.addPerfTimes(results.data.PerformanceTimes);
                     pc.add(pcService.stop());
@@ -3570,7 +3545,8 @@
                             $scope.$root.pc = null;
                         }
                     }
-
+                    //$("#dealEditor").data("kendoGrid").dataSource.read();
+                    //$("#dealEditor").data("kendoGrid").refresh(); 
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not save the contract.", "Error");
