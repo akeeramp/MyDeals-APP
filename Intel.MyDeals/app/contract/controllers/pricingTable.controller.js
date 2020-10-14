@@ -2059,6 +2059,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         );
                     }
+                    // added else if block to keep specified fields from becoming editable upon adding products to active program deal DE95752
+                    else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM") {
+
+                        // TODO: Break out into seperate function
+                        var trackerLockedFields = [root.colToLetter["GEO_COMBINED"], root.colToLetter["PAYOUT_BASED_ON"], root.colToLetter["REBATE_TYPE"], root.colToLetter["MRKT_SEG"]];
+                        for (var key in ptTemplate.model.fields) {
+                            var myColLetter = root.colToLetter[key];
+                            if (trackerLockedFields.contains(root.colToLetter[key])) {
+
+                                if ($scope.$parent.$parent.spreadDs._data[topLeftRowIndex - 2].HAS_TRACKER === "1") {
+                                    // DO NOTHING HERE
+                                }
+                                else if (ptTemplate.model.fields.hasOwnProperty(key) && ptTemplate.model.fields[key].editable) {
+                                    range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
+                                    range.enable(range);
+                                    range.background(null);
+                                }
+
+                            }
+                           // if (!trackerLockedFields.contains(root.colToLetter[key]) && (ptTemplate.model.fields.hasOwnProperty(key) && ptTemplate.model.fields[key].editable) && $scope.$parent.$parent.spreadDs._data[topLeftRowIndex - 2].HAS_TRACKER === "1") {
+                           //     range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
+                           //     range.enable(range);
+                           //     range.background(null);
+                            //}
+                            else {
+                                    range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
+                                    range.enable(true);
+                                    range.background(null);
+                            }
+                        }
+                    }
                     else {
                         // if additional rows are inserted due to change in number of products for KIT deal bottomrowIndexis lower than nuber of rows...Thus aasigning bottomrowIndex same as data.length
                         range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
