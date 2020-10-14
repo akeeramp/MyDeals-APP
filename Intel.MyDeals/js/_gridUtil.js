@@ -2083,7 +2083,7 @@ gridUtils.getBidActionsList = function (data) {
                 || data.BID_ACTNS[i]['BidActnName'] === 'Lost') {
                 //do nothing... perhaps we should structure this if block better.
             } else {
-                if (data.SALESFORCE_ID === "") {
+                if (data.SALESFORCE_ID === undefined || data.SALESFORCE_ID === "") {
                     bidActns.push({
                         "BidActnName": data.BID_ACTNS[i],
                         "BidActnValue": data.BID_ACTNS[i]

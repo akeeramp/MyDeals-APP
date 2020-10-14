@@ -66,7 +66,7 @@ namespace Intel.MyDeals.Controllers.API
             // Path to catch all unprocessed items
             Guid workId = Guid.Empty;
             return SafeExecutor(() => _integrationLib.ExecuteSalesForceTenderData(workId)
-                , "Unable to process Salesforce Tender deals"
+                , "Unable to process Salesforce Tender deals Bulk Mode"
             );
         }
 
@@ -77,7 +77,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             // Path to kick off any ad-hoc needed runs via admin page
             return SafeExecutor(() => _integrationLib.ExecuteSalesForceTenderData(workId)
-                , "Unable to process Salesforce Tender deals"
+                , "Unable to process Salesforce Tender deals Single Mode"
             );
         }
 

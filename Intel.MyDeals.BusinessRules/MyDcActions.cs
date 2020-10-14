@@ -1143,8 +1143,8 @@ namespace Intel.MyDeals.BusinessRules
             // US705342 get dates for previous quarter
             var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null);
 
-            // changed billing start date to equat deal start date as part of US705342
-            // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+            // changed billing start date to equal deal start date as part of US705342
+            // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
@@ -2245,7 +2245,9 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            IOpDataElement startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
+            IOpDataElement endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
 
             // Make dictionary of <tier, start vol>
             var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
@@ -2262,23 +2264,35 @@ namespace Intel.MyDeals.BusinessRules
             Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
             Dictionary<int, string> endVolDict = endVols.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-            foreach (int key in startVolDict.Keys)
+            int prevStartVal = 0;
+            int prevEndVal = 0;
+            for (int tierKey = 1; tierKey <= 10; tierKey++)
             {
                 int currStartVol = 0;
                 int currEndVol = 0;
-                bool isStartVolANumber = int.TryParse(startVolDict[key], out currStartVol);
-                bool isEndVolANumber = int.TryParse(endVolDict[key], out currEndVol);
-                if (!isEndVolANumber && endVolDict[key].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                bool isStartVolANumber = int.TryParse(startVolDict[tierKey], out currStartVol);
+                bool isEndVolANumber = int.TryParse(endVolDict[tierKey], out currEndVol);
+                if (!isEndVolANumber && endVolDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {
                     currEndVol = int.MaxValue;
                 }
 
-                if (currStartVol == 0 && currEndVol == 0) return; // Hit the end of populated values
+                if (currStartVol == 0 && currEndVol == 0) continue; // Hit the end of populated values, skip these rows
 
+                if (prevStartVal > currStartVol)
+                {
+                    AddTierValidationMessage(startAtrbWithValidation, "Start volume must be greater than previous tier start volume.", tierKey);
+                }
+                if (prevEndVal > currEndVol)
+                {
+                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than previous tier end volume.", tierKey);
+                }
                 if (currStartVol >= currEndVol)
                 {
-                    AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", key);
+                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than start volume.", tierKey);
                 }
+                prevStartVal = currStartVol;
+                prevEndVal = currEndVol;
             }
         }
 
