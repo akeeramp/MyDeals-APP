@@ -31,6 +31,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var depth = 5;
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_END'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
             if ($scope.opName === undefined) $scope.opName = "DealEditor";
@@ -960,24 +961,24 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             }
+            
+            //To refresh the modified row data after redeal without refresh the screen manually
             $scope.$on('updateDealAtrb', function (event, args) {
                 
                 for (var i = 0; i < args.WIP_DEAL.length; i++)
                 {
                     if (args.WIP_DEAL[i].DC_ID == $scope.opData[i]["DC_ID"] )
                     {
+                        for (var j = 0; j < atrbList.length; j++)
+                        {                          
+                            $scope.opData[i][atrbList[j]] = args.WIP_DEAL[i][atrbList[j]];
+                        }                      
+                                               
                         $scope.opData[i]["_actionsPS"] = args.WIP_DEAL[i]._actions;
-                        $scope.opData[i]["PS_WF_STG_CD"] = args.WIP_DEAL[i].PS_WF_STG_CD;
-                        $scope.opData[i]["WF_STG_CD"] = args.WIP_DEAL[i].WF_STG_CD;
-                        $scope.opData[i]["HAS_TRACKER"] = args.WIP_DEAL[i].HAS_TRACKER;
-                        $scope.opData[i]["IN_REDEAL"] = args.WIP_DEAL[i].IN_REDEAL;
-                        $scope.opData[i]["LAST_REDEAL_DT"] = args.WIP_DEAL[i].LAST_REDEAL_DT;
-                        $scope.opData[i]["TRKR_NBR"] = args.WIP_DEAL[i].TRKR_NBR;
-                        //$scope.opData[i]["IN_REDEAL"] = args.WIP_DEAL[i].IN_REDEAL;
-                        $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly;
-                        $scope.opData[i]["REBATE_BILLING_END"] = args.WIP_DEAL[i].REBATE_BILLING_END;
+                        $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly; 
+                        $scope.opData[i]["_behaviors"]["isError"] = args.WIP_DEAL[i]._behaviors.isError; 
+                        $scope.opData[i]["_behaviors"]["isRequired"] = args.WIP_DEAL[i]._behaviors.isRequired;  
                     }
-
                 }
                 $scope.contractDs.read();
 
