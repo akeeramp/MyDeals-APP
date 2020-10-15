@@ -31,7 +31,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var depth = 5;
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
-            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_END'];
+            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_END','PASSED_VALIDATION'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
             if ($scope.opName === undefined) $scope.opName = "DealEditor";
@@ -977,7 +977,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.opData[i]["_actionsPS"] = args.WIP_DEAL[i]._actions;
                         $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly; 
                         $scope.opData[i]["_behaviors"]["isError"] = args.WIP_DEAL[i]._behaviors.isError; 
-                        $scope.opData[i]["_behaviors"]["isRequired"] = args.WIP_DEAL[i]._behaviors.isRequired;  
+                        $scope.opData[i]["_behaviors"]["isRequired"] = args.WIP_DEAL[i]._behaviors.isRequired;                                                
+                        
                     }
                 }
                 $scope.contractDs.read();
