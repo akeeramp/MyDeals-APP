@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th style="width:75px;">&nbsp;</th>
-                <th class="isRequired">Data Element</th>
+                <th class="isRequired">Object Type</th>
                 <th class="isRequired">Attribute</th>
                 <th class="isRequired" title="Revision Number">Rvs #</th>
                 <th>Mtx Value</th>
@@ -40,12 +40,10 @@
                     <span class="fl ">
                         <select kendo-drop-down-list
                                 k-placeholder="'Select field'"
-                                k-data-text-field="'title'"
-                                k-data-value-field="'field'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
                                 k-ng-model="dataItem.ATRB_SID"
-                                k-value-primitive="true"
-                                k-change="changeField"
-                                k-close="closeField"
+                                k-value-primitive="true"                                
                                 k-filter="'contains'"
                                 k-auto-bind="true"
                                 k-data-source="attributeDataSource"
@@ -63,7 +61,7 @@
                     <input kendo-numeric-text-box class="dataValueNumericFull" decimals="0" format="'#'" min="0" ng-model="dataItem.OBJ_SID">
                 </td>
                 <td>
-                    <div class="fl abValue">Select an attribute!</div>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ATRB_VAL" placeholder="Data Value">
                 </td>
                 <td>
                     <input class="form-control md dataValue" type="text" ng-model="dataItem.ATRB_VAL_MAX" placeholder="Data Value Max">

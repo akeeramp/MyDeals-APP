@@ -12,22 +12,24 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class DataFixDataLib : IDataFixDataLib
     {
-        public List<DropDowns> GetDataFixActions()
+        public List<DropDownsList> GetDataFixActions()
         {
-            List<DropDowns> ddlActionList = new List<DropDowns>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_DATA_FIX_ACTNS { };
+            List<DropDownsList> ddlActionList = new List<DropDownsList>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_DATA_FIX_DROPDOWNS { };
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_Text = DB.GetReaderOrdinal(rdr, "ACTN_NM");
-                int IDX_Value = DB.GetReaderOrdinal(rdr, "ACTN_NM");
+                int IDX_COL_NM = DB.GetReaderOrdinal(rdr, "COL_NM");
+                int IDX_COL_SID = DB.GetReaderOrdinal(rdr, "COL_SID");
+                int IDX_DRPDWN_TYPE = DB.GetReaderOrdinal(rdr, "DRPDWN_TYPE");
 
                 while (rdr.Read())
                 {
-                    ddlActionList.Add(new DropDowns
+                    ddlActionList.Add(new DropDownsList
                     {
-                        Text = (IDX_Text < 0 || rdr.IsDBNull(IDX_Text)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Text),
-                        Value = (IDX_Value < 0 || rdr.IsDBNull(IDX_Value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Value)
+                        Text = (IDX_COL_NM < 0 || rdr.IsDBNull(IDX_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COL_NM),
+                        Value = (IDX_COL_SID < 0 || rdr.IsDBNull(IDX_COL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_COL_SID),
+                        DdlType = (IDX_DRPDWN_TYPE < 0 || rdr.IsDBNull(IDX_DRPDWN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DRPDWN_TYPE)
                     });
                 }
             }
@@ -64,22 +66,21 @@ namespace Intel.MyDeals.DataLibrary
 
         public IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute)
         {
-            //Converting Multiple values to String List => String Conversion
-            data.DataFixAttributes[0].ATRB_VAL = String.IsNullOrEmpty(data.DataFixAttributes[0].value) == true ? string.Join(",", data.DataFixAttributes[0].values.ToArray()) : data.DataFixAttributes[0].value;
-            //data.DataFixActions.ForEach(x =>
-            //{
-            //    x.OBJ_TYPE_SID = string.Join(",", x.OBJ_TYPE_SID.Split(',').Where(y => y.Trim() != string.Empty));
-            //});
-
+            
             data.CreatedBy = OpUserStack.MyOpUserToken.Usr.Email;
             data.CreatedOn = DateTime.Now;
 
             in_t_obj_atrb dt1 = new in_t_obj_atrb();
-            dt1.AddRow(data.DataFixAttributes[0]);
+            foreach(var r in data.DataFixAttributes)
+            {
+                dt1.AddRow(r);
+            }            
 
             in_t_obj_actn dt2 = new in_t_obj_actn();
-            dt2.AddRow(data.DataFixActions[0]);
-
+            foreach (var r in data.DataFixActions)
+            {
+                dt2.AddRow(r);
+            }
 
             IncdnActnUpd IncdnUpd = new IncdnActnUpd();
 

@@ -16,7 +16,14 @@ namespace Intel.MyDeals.Entities
         public string Value { get; set; }
         public string Text { get; set; }
     }
-    
+
+    public class DropDownsList
+    {
+        public int Value { get; set; }
+        public string Text { get; set; }
+        public string DdlType { get; set; }
+    }
+
     public enum PriceRuleAction
     {
         NONE = 0,

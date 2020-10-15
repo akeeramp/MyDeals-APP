@@ -440,15 +440,15 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_INCDN_DATA_FIX]");
 	ds.Tables[0].TableName = "IncdnDataFix";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	//To get the version details of PCT Exceptions  
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DATA_FIX_ACTNS]");
-	ds.Tables[0].TableName = "IncdnActn";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	//To get the version details of PCT Exceptions  
+	
+	//To UPD DataFix 
 	ds = dbobjects.ExecuteDataSet("DECLARE @in_incdn_nbr VARCHAR(50) = 'ABCD12' + CAST(GETDATE() as varchar) ;DECLARE @in_incdn_msg VARCHAR(500) = 'Exception';DECLARE @in_obj_atrb [dbo].[t_obj_atrb]; INSERT INTO @in_obj_atrb VALUES (99999999,1,1,1,1,1,1,'1','1','1');DECLARE @in_obj_actn AS [dbo].[t_obj_actn]; INSERT INTO @in_obj_actn VALUES (99999999,1,'1','1'); DECLARE @in_emp_wwid INT = 11637989;EXEC [dbo].[PR_MYDL_EXEC_INCDN_DATA_FIX] @in_incdn_nbr, @in_incdn_msg, @in_obj_atrb, @in_obj_actn, @in_emp_wwid");
 	ds.Tables[0].TableName = "IncdnActnUpd";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get the DataFix ATRB and ACTN
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DATA_FIX_DROPDOWNS]");
+	ds.Tables[0].TableName = "DataFixDdl";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
 	PopIndent();

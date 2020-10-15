@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Route("GetDataFixActions")]
-        public List<DropDowns> GetDataFixActions()
+        public List<DropDownsList> GetDataFixActions()
         {
             return SafeExecutor(() => _dataFixLib.GetDataFixActions(), "Unable to get actions for data fix");
         }

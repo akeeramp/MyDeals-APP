@@ -5,7 +5,7 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface IDataFixDataLib
     {
-        List<DropDowns> GetDataFixActions();
+        List<DropDownsList> GetDataFixActions();
 
         List<IncdnDataFix> GetDataFixes();
 

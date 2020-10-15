@@ -14,7 +14,7 @@ namespace Intel.MyDeals.BusinessLogic
             _dataFixDataLib = dataFixDataLib;
         }
 
-        public List<DropDowns> GetDataFixActions()
+        public List<DropDownsList> GetDataFixActions()
         {
             return _dataFixDataLib.GetDataFixActions();
         }
