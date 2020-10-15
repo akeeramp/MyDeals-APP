@@ -1174,10 +1174,24 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
-            // Billing start date can only be backdated up until start of previous quarter US705342
-            if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+
+            // Billing start date can only be backdated up until start of previous quarter US705342 - Set by constant value set at release time US815029
+            string bllgTenderCutoverDealCnst = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "BLLG_TENDER_CUTOVER_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            int bllgTenderCutoverDeal;
+            if (!int.TryParse(bllgTenderCutoverDealCnst, out bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
+            if (deBllgStart.DcID > bllgTenderCutoverDeal) // Apply new rules for tenders billing start dates
             {
-                deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
+                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
+                }
+            }
+            else // Apply old rules to old tenders before break off point
+            {
+                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < dcSt.AddYears(-1) && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1)
+                {
+                    deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date.");
+                }
             }
         }
 
