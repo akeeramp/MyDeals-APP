@@ -1154,6 +1154,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (currentWipWfStg == WorkFlowStages.Lost)
                         {
                             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Offer);
+                            destinationStage = "Offer";
                         }
                         else
                         {
