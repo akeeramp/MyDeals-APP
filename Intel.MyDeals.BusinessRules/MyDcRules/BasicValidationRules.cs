@@ -316,7 +316,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Does not exceed max character limit",
                     ActionRule = MyDcActions.ExecuteActions,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -327,6 +327,25 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> { 
                                 AttributeCodes.TITLE 
                             }) && de.ExceedsMaxLength(80)
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Contract Title Does not exceed max character limit",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] { "{0} must be no more than 250 characters." },
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.TITLE
+                            }) && de.ExceedsMaxLength(255)
                         }
                     }
                 },
