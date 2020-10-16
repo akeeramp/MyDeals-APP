@@ -23,6 +23,7 @@
         vm.OpDataElements = [];
         vm.MyCustomersInfo = [];
         vm.Actions = [];
+        vm.AttributeSettings = [];
         vm.isSuccess = false;
         vm.isAtrbSelected = true;
         vm.isActnSelected = true;
@@ -36,16 +37,22 @@
             });
 
             dataFixService.getDataFixActions().then(function (result) {
-                vm.Actions = $linq.Enumerable().From(result.data)
-                    .Where(function (x) {
-                        return (x.DdlType === 'ACTN_LIST');
-                    }).ToArray();
-                
-                vm.AttributeSettings = $linq.Enumerable().From(result.data)
-                    .Where(function (x) {
-                        return (x.DdlType === 'ATRB_LIST');
-                    }).ToArray();
-                
+                for (var r = 0; r < result.data.length; r++) {
+                    if (result.data[r].DdlType === 'ACTN_LIST') {
+                        vm.Actions.push({
+                            "Text": result.data[r].Text,
+                            "Value": result.data[r].Text,
+                            "DdlType": 'ACTN_LIST'
+                        });
+                    }
+                    else if (result.data[r].DdlType === 'ATRB_LIST') {
+                        vm.AttributeSettings.push({
+                            "Text": result.data[r].Text,
+                            "Value": result.data[r].Value,
+                            "DdlType": 'ATRB_LIST'
+                        });
+                    }
+                }                
             }, function (response) {
                 logger.error("Unable to get actions");
             });
@@ -108,6 +115,7 @@
 
         vm.ok = function () {
             vm.IsEditMode = false;
+            vm.disabled = false; 
         }
 
         vm.dataSourceDataFixes = new kendo.data.DataSource({

@@ -24,7 +24,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
 
             $scope.attributeDataSource = new kendo.data.DataSource({
                 data: $scope.attributeSettings,
-                sort: { field: "title", dir: "asc" }
+                sort: { field: "Text", dir: "asc" }
             });
 
             $scope.OpDataElementDataSource = new kendo.data.DataSource({
@@ -61,7 +61,36 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                     }
                 }, 0);                
             }
-            
+
+            $scope.changeField = function (e) {
+                e.sender.$angular_scope.$apply(function () {
+                    var el = $(e.sender.element).parents(".filterRow").find(".abValue");
+                    $scope.drawValueControl(el, e.sender.$angular_scope);
+                });
+            }
+
+            $scope.drawValueControl = function (el, scope) {
+                if (scope.dataItem.ATRB_SID === "") return;
+
+                var field = $linq.Enumerable().From(scope.attributeSettings)
+                    .Where(function (x) {
+                        return (x.field === scope.dataItem.ATRB_SID);
+                    }).ToArray()[0];
+
+                var fieldType = field.type;
+                var fieldValue = field.field;
+                var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
+
+                
+
+                if (field.post_label != undefined && field.post_label != '')
+                    html += '<span style="margin-left: 5px;padding: 6px;font-size: 13px;background-color: #fafafa;border-radius: 3px;color: #444444;border: 1px solid #e5e5e5;">' + field.post_label + '<span>';
+
+                var x = angular.element(html);
+                el.html(x);
+                $compile(x)(scope);
+            }
+
             $scope.enterPressed = function (event) {
                 //KeyCode 13 is 'Enter'
                 if (event.keyCode === 13) {
@@ -96,7 +125,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                 if (index > -1) {
                     $scope.DataRows.splice(index + 1, 0, {
                         OBJ_TYPE_SID: "",
-                        ATRB_SID: "",
+                        ATRB_SID: 0,
                         ATRB_RVS_NBR: 0,
                         ATRB_MTX_SID: 0,
                         OBJ_SID: "",

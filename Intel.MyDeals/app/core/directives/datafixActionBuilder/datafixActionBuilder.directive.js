@@ -30,7 +30,8 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
                 $scope.ActionDataRows = [{
                     OBJ_TYPE_SID: "",
                     ACTN_NM: "",
-                    ACTN_VAL_LIST: ""
+                    ACTN_VAL_LIST: "",
+                    BTCH_ID: 0
                 }];
             }            
 
@@ -40,7 +41,8 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
                     $scope.ActionDataRows.splice(index + 1, 0, {
                         OBJ_TYPE_SID: "",
                         ACTN_NM: "",
-                        ACTN_VAL_LIST: ""
+                        ACTN_VAL_LIST: "",
+                        BTCH_ID: 0
                     });
                     setTimeout(function () {
                         if ($(".filterRow")[index + 1] !== undefined)
@@ -54,7 +56,8 @@ function datafixActionBuilder($compile, $timeout, $filter, $localStorage, $windo
                     $scope.ActionDataRows = [{
                         OBJ_TYPE_SID: "",
                         ACTN_NM: "",
-                        ACTN_VAL_LIST: ""
+                        ACTN_VAL_LIST: "",
+                        BTCH_ID: 0
                     }];
                     return;
                 }

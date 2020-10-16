@@ -44,6 +44,7 @@ namespace Intel.MyDeals.Entities
             r["OBJ_SID"] = itm.OBJ_SID;
             r["ATRB_SID"] = itm.ATRB_SID;
             r["ATRB_RVS_NBR"] = itm.ATRB_RVS_NBR;
+            r["ATRB_MTX_SID"] = itm.ATRB_MTX_SID;
             r["ATRB_VAL"] = itm.ATRB_VAL;
             r["ATRB_VAL_MAX"] = itm.ATRB_VAL_MAX;
             r["MDX_CD"] = itm.MDX_CD;
@@ -66,6 +67,7 @@ namespace Intel.MyDeals.Entities
                 r["OBJ_SID"] = itm.OBJ_SID;
                 r["ATRB_SID"] = itm.ATRB_SID;
                 r["ATRB_RVS_NBR"] = itm.ATRB_RVS_NBR;
+                r["ATRB_MTX_SID"] = itm.ATRB_MTX_SID;
                 r["ATRB_VAL"] = itm.ATRB_VAL;
                 r["ATRB_VAL_MAX"] = itm.ATRB_VAL_MAX;
                 r["MDX_CD"] = itm.MDX_CD;
