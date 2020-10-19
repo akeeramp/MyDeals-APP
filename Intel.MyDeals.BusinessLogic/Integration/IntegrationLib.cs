@@ -904,7 +904,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.EXCLUDE_AUTOMATION), excludeAutomationFlag);
 
             // Clear out system comments to all objects so that updates don't stack comments incorrectly
-            UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            //UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), ""); // Removed since we actually don't need to do this at CNTRCT
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
@@ -1248,7 +1248,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (tenderStagedWorkRecords.Count == 0) executionResponse += "There are no records to process<br>";
 
-            foreach (TenderTransferObject workRecord in tenderStagedWorkRecords)  // Grab all of the items that need to be processed
+            foreach (TenderTransferObject workRecord in tenderStagedWorkRecords.OrderBy(a => a.RqstSid))  // Grab all of the items that need to be processed
             {
                 bool goodOperationFlag = true;
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
@@ -1347,7 +1347,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<TenderTransferObject> returnStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS_RESPONSE", Guid.Empty);
 
-            foreach (TenderTransferObject workRecord in returnStagedWorkRecords)
+            foreach (TenderTransferObject workRecord in returnStagedWorkRecords.OrderBy(a => a.RqstSid))
             {
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(workRecord.RqstJsonData);
 
