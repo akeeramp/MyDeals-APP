@@ -80,9 +80,7 @@ function datafixAttributeBuilder($compile, $timeout, $filter, $localStorage, $wi
                 var fieldType = field.type;
                 var fieldValue = field.field;
                 var html = '<input class="k-textbox" style="width: 200px;" ng-model="dataItem.value"/>';
-
                 
-
                 if (field.post_label != undefined && field.post_label != '')
                     html += '<span style="margin-left: 5px;padding: 6px;font-size: 13px;background-color: #fafafa;border-radius: 3px;color: #444444;border: 1px solid #e5e5e5;">' + field.post_label + '<span>';
 

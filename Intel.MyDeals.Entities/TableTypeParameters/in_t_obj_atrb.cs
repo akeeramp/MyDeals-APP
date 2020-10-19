@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Entities
 
         protected override void Init()
         {
-            //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)   
+            //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!) //   
             this.Columns.Add("BTCH_ID", typeof(int));       
             this.Columns.Add("CUST_MBR_SID", typeof(int));  
             this.Columns.Add("OBJ_TYPE_SID", typeof(int));

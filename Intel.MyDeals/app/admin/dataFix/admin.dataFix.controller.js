@@ -10,7 +10,7 @@
     function DataFixController($rootScope, $scope, $timeout, $linq, dataFixService, logger, gridConstants, dropdownsService, customerService) {
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
-            // Kick not valid users out of the page
+            // Kick not valid users out of the page 
             $scope.accessAllowed = false;
             document.location.href = "/Dashboard#/portal";
         }
