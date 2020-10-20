@@ -37,7 +37,11 @@ namespace Intel.MyDeals.VistexService
             {
                 fileName = "Deal";
             }
-            _logFile = Path.Combine(VistexCommonLogging.StartupPath, "Logs", String.Format("VistexDebugLog_"+fileName+"_{0:0}_{1}.txt",
+            else if (mode == "/mode:tr")
+            {
+                fileName = "TenderReturn";
+            }
+            _logFile = Path.Combine(VistexCommonLogging.StartupPath, "Logs", String.Format(mode == "/mode:tr" ? "TenderDebugLog_" : "VistexDebugLog_" +fileName+"_{0:0}_{1}.txt",
                                 Math.Abs((DateTime.Now - (new DateTime(DateTime.Now.Year, 1, 1))).TotalMinutes),
                                 DateTime.Now.Second
                             ));
@@ -127,7 +131,7 @@ namespace Intel.MyDeals.VistexService
 
             VistexCommonLogging.Log("Done.");
 
-            MergeDealLogs(_logFile);
+            MergeDealLogs(_logFile, args[0].ToString());
 
             if (!myArgs.pauseOnEnd) return SuccessReturn;
 
@@ -171,7 +175,12 @@ namespace Intel.MyDeals.VistexService
                     break;
                 case JobMode.ProcessDealsTenders:
                     Console.WriteLine("Processing Tenders deals in My Deals...");
-                    VistexCommonLogging.WriteToLog("Processing Tenders deals in My Deals...");
+                    VistexCommonLogging.WriteToLog("Processing Tenders deals in My Deals...");                    
+                    break;
+                case JobMode.TenderReturn:
+                    Console.WriteLine("Processing Tenders Return in My Deals...");
+                    VistexCommonLogging.WriteToLog("Processing Tenders Return in My Deals...");
+                    await SendTenderReturn("R");
                     // Not implemented yet
                     break;
                 case JobMode.TestPipelines:
@@ -192,11 +201,11 @@ namespace Intel.MyDeals.VistexService
             }
         }
 
-        public static void MergeDealLogs(string _logFile)
+        public static void MergeDealLogs(string _logFile, string mode)
         {
             string LogDirectory = Path.Combine(VistexCommonLogging.StartupPath, "Logs");
             string separator = "------------------------------------------------------------------------------";
-            string HourlyFileName = "VistexDebugLog_Deal" + "_" + DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.Hour + ".txt";
+            string HourlyFileName = (mode == "/mode:tr" ? "TenderReturnDebugLog" : "VistexDebugLog_Deal") + "_" + DateTime.Now.ToString("MMddyyyy") + "_" + DateTime.Now.Hour + ".txt";
             string HourlyFile = Path.Combine(LogDirectory, HourlyFileName);
             if (File.Exists(HourlyFile))
             {

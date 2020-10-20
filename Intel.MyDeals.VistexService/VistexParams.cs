@@ -14,7 +14,8 @@ namespace Intel.MyDeals.VistexService
         SendProductsVistex,
         SendVerticalsVistex,
         ProcessDealsTenders,
-        TestPipelines
+        TestPipelines,
+        TenderReturn
     }
 
     public class JobModeCode
@@ -25,13 +26,14 @@ namespace Intel.MyDeals.VistexService
         public const char SendVerticalsVistex = 'V';
         public const char ProcessDealsTenders = 'T';
         public const char TestPipelines = 'X';
+        public const char TenderReturn = 'R';
     }
 
     public class VistexParams
     {
         public int sleepSeconds = 0;
-        public JobMode jobMode = JobMode.UNKNOWN;
-        public char jobType = JobModeCode.SendDealsVistex; // Default to run as SendDealsVistex is nothing is passed
+        public JobMode jobMode = JobMode.TenderReturn;
+        public char jobType = JobModeCode.TenderReturn; // Default to run as SendDealsVistex is nothing is passed
         public bool pauseOnEnd = false;
         public bool displayHelpOnly = false;
         public bool outputLogging = true;
@@ -248,6 +250,13 @@ namespace Intel.MyDeals.VistexService
                             displayHelpOnly = false;
                             jobMode = JobMode.TestPipelines;
                             jobType = JobModeCode.TestPipelines;
+                            break;
+
+                        case "tenderReturn":
+                        case "tr":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.TenderReturn;
+                            jobType = JobModeCode.TenderReturn;
                             break;
 
                         default:

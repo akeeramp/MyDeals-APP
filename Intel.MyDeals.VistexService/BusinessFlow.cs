@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 
@@ -115,6 +116,35 @@ namespace Intel.MyDeals.VistexService
             return true;
         }
 
-
+        /// Tender Return ///
+        private static async Task SendTenderReturn(string runMode) //VTX_OBJ: DEALS
+        {
+            try
+            {
+                VistexCommonLogging.WriteToLog("Business Flow - SendTenderReturn - Initiated");
+                string dataRecord = "";
+                dataRecord = await DataAccessLayer.TenderResponseObject();                
+                if (dataRecord == null || dataRecord.Length == 0 )
+                {
+                    Console.WriteLine("There is no data to push..");
+                    VistexCommonLogging.WriteToLog("Business Flow - SendTenderReturn - Success");
+                }
+                else if (dataRecord.Length > 0)
+                {
+                    Console.WriteLine("Tender Return was successfully..");
+                    VistexCommonLogging.WriteToLog("Business Flow - SendTenderReturn - Success");
+                }
+                File.AppendAllText(Intel.MyDeals.VistexService.Program._logFile, dataRecord);                
+                VistexCommonLogging.SendMailTender("Tender Return", dataRecord, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                //Additionmal Logging
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendTenderReturn - Tender Return Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Business Flow - SendTenderReturn - Exception");
+                VistexCommonLogging.HandleException(ex, true, "Deals");
+            }
+        }
     }
 }

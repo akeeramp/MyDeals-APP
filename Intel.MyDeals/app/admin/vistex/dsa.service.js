@@ -12,6 +12,7 @@
 
         var apiBaseUrl = "api/DSA/";
         var vistexApiBase = "api/VistexService/";
+        var tenderApiBase = "api/Integration/";
 
         var service = {
             getVistexLogs: getVistexLogs,
@@ -49,10 +50,14 @@
             return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + dealId + "/" + strErrorMessage);
         }
 
-        function callAPI(apiName, runMode) {           
+        function callAPI(apiName, runMode) {
+            if (apiName.indexOf())
             if (runMode == "D") {
                 return dataService.get(vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode);
-            } else {
+            } else if (runMode == "R") {
+                return dataService.get(tenderApiBase + apiName);
+            }
+            else {
                 return dataService.get(vistexApiBase + apiName + '/' + runMode);
             }
             

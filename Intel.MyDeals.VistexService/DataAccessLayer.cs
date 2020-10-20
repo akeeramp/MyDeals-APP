@@ -15,6 +15,7 @@ namespace Intel.MyDeals.VistexService
     {
         private static string vistexAPIbaseUrl = GetAppSetting("MyDealsService");
         private static string vistexController = "/api/VistexService/";
+        private static string tenderController = "/api/Integration/";
 
         #region Common Settings
         public static Dictionary<string, string> conDict = new Dictionary<string, string>()
@@ -139,6 +140,34 @@ namespace Intel.MyDeals.VistexService
         }
         #endregion MyDeals Data Fetch Calls
 
+        /// Tender Return
+        public static async Task<string> TenderResponseObject() //VTX_OBJ: Tender Return
+        {
+            VistexCommonLogging.WriteToLog("Data Access Layer - VistexTenderResponseObject - Initiated");
+            string retRecord = "";
+            var xmlRecords = string.Empty;
+            try
+            {
+                var fetchVistexDFData = tenderController + "ReturnSalesForceTenderResults/";
+                HttpResponseMessage response = await MyDealsClient.GetAsync(fetchVistexDFData);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                    VistexCommonLogging.WriteToLog("Data Access Layer - ReturnSalesForceTenderResults - Success");
+                    retRecord = String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Tender Request was Successful." + "\n");
+                }
+                else
+                {
+                    retRecord = String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Something went wrong in Tender Request" + "\n"); 
+                }                
+            }
+            catch (Exception ex)
+            {
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: ReturnSalesForceTenderResults - Tender Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Data Access Layer - VistexTenderResponseObject - Completed");
+            }
 
+            return retRecord;
+        }
     }
 }

@@ -22,13 +22,15 @@
             "C": 'GetVistexDFStageData',
             "D": 'GetVistexDealOutBoundData',
             "P": 'GetVistexDFStageData',
-            "V": 'GetVistexDFStageData'
+            "V": 'GetVistexDFStageData',
+            "R": 'ReturnSalesForceTenderResults'
         };
         //Creating API
         vm.apiList.push({ API_ID: 1, API_NM: "Customer ", API_CD: "C" });
         vm.apiList.push({ API_ID: 2, API_NM: "Deal ", API_CD: "D" });
         vm.apiList.push({ API_ID: 3, API_NM: "Product ", API_CD: "P" });
         vm.apiList.push({ API_ID: 4, API_NM: "Product Vertical", API_CD: "V" });
+        vm.apiList.push({ API_ID: 5, API_NM: "Tender Return", API_CD: "R" });
 
         vm.apiDs = new kendo.data.DataSource({
             transport: {
@@ -84,13 +86,21 @@
             vm.isBusyShowFunFact = true;
             var startTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
             dsaService.callAPI(vm.apiPair[vm.apiSelectedCD], vm.apiSelectedCD).then(function (response) {
-                if (response.data) {
-                    var endTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
-                    response.data["START_TIME"] = startTime;
-                    response.data["END_TIME"] = endTime;
-                    vm.responseData.unshift(response.data);
-                    
-                    logger.success('Transaction was successful...');
+                if (vm.apiSelectedCD == "R") {
+                    if (response.status == 200) {
+                        logger.success('Transaction was successful...');
+                    } else {
+                        logger.error('DANG!! Something went wrong...');
+                    }
+                } else {
+                    if (response.data) {
+                        var endTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
+                        response.data["START_TIME"] = startTime;
+                        response.data["END_TIME"] = endTime;
+                        vm.responseData.unshift(response.data);
+
+                        logger.success('Transaction was successful...');
+                    }
                 }
             });
         }

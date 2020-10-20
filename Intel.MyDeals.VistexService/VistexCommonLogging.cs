@@ -10,6 +10,8 @@ using Intel.Opaque.Tools;
 using System.Configuration;
 using Intel.Opaque;
 using Intel.MyDeals.Entities;
+using System.Net;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.VistexService
 {
@@ -224,7 +226,7 @@ namespace Intel.MyDeals.VistexService
                 DateTime delete_date = DateTime.Now;
                 delete_date = delete_date.Subtract(delete_date.TimeOfDay).AddDays(-1 * DaysToKeep);
 
-                foreach (var fi in (new DirectoryInfo(log_path)).GetFiles("VistexDebugLog*").OrderBy(f => f.LastWriteTime))
+                foreach (var fi in (new DirectoryInfo(log_path)).GetFiles("*DebugLog*").OrderBy(f => f.LastWriteTime))
                 {
                     if (fi.LastWriteTime < delete_date)
                     {
@@ -350,7 +352,7 @@ namespace Intel.MyDeals.VistexService
             if (String.IsNullOrEmpty(to_email))
             {
                 //Replace Mike Name with DCS Dev PDL
-                to_email = Opaque.OpUtilities.ParseEmailList("dcs.dev.team@intel.com", ",");
+                to_email = Opaque.OpUtilities.ParseEmailList("mydeals.dev.team@intel.com", ",");
             }
 
             using (var client = new SmtpClient())
@@ -362,10 +364,74 @@ namespace Intel.MyDeals.VistexService
                     myMail.Body = sb.ToString();
                     myMail.IsBodyHtml = false;
 
-                    client.Send(myMail);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    //SMTP Change for Port Number and Host Name
+                    client.Host = "smtpauth.intel.com";
+                    client.Port = 587;
+                    try
+                    {
+                        client.Send(myMail);
+                    }
+                    catch (Exception ex)
+                    {
+                        VistexCommonLogging.WriteToLog("Exception Received: " + "Vistex Send Mail failure -- " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                    }
                 }
             }
 
+        }
+
+        public static void SendMailTender(string runMode, string responseObj, List<string> lstStatus)
+        {
+            string to_email = "";
+            string subject = String.Format("MyDeals-Tender [{0}] [ENV: {1}]", runMode, VistexCommonLogging.GetAppSetting("ENV"));
+
+            try
+            {
+                to_email = Opaque.OpUtilities.ParseEmailList(GetAppSetting(
+                    Program.IsProd ? "SupportDevelopers" : "SupportDevelopers_NONPROD"
+                    ), ",");
+            }
+            catch (Exception ex)
+            {
+                LogPerf.Log(ex);
+            }
+
+            if (String.IsNullOrEmpty(to_email))
+            {
+                //Replace Mike Name with DCS Dev PDL
+                to_email = Opaque.OpUtilities.ParseEmailList("mydeals.dev.team@intel.com", ",");
+            }
+
+            using (var client = new SmtpClient())
+            {
+                using (var myMail = new MailMessage())
+                {
+                    myMail.To.Add(to_email);
+                    myMail.Subject = subject;
+                    myMail.Body = responseObj.ToString();
+                    myMail.IsBodyHtml = false;
+
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    //SMTP Change for Port Number and Host Name
+                    client.Host = "smtpauth.intel.com";
+                    client.Port = 587;
+                    try
+                    {
+                        client.Send(myMail);
+                    }
+                    catch (Exception ex)
+                    {
+                        VistexCommonLogging.WriteToLog("Exception Received: " + "Tender Send Mail failure -- " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                    }
+                }
+            }
         }
 
         public static void SendDebugMail(string runMode, string body)
@@ -463,7 +529,21 @@ namespace Intel.MyDeals.VistexService
                     myMail.Body = sb.ToString();
                     myMail.IsBodyHtml = false;
 
-                    client.Send(myMail);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    //SMTP Change for Port Number and Host Name
+                    client.Host = "smtpauth.intel.com";
+                    client.Port = 587;
+                    try
+                    {
+                        client.Send(myMail);
+                    }
+                    catch (Exception ex)
+                    {
+                        VistexCommonLogging.WriteToLog("Exception Received: " + "Send Debug Mail failure -- " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                    }
                 }
             }
         }
