@@ -16,6 +16,7 @@
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
+        var verticalsWithFamilyLevelSelectionECAP = ["Nand (SSD)"] 
         var isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
@@ -241,7 +242,7 @@
                     return {
                         name: i.FMLY_NM,
                         path: i.HIER_NM_HASH,
-                        allowMultiple: vm.enableMultipleSelection,
+                        allowMultiple: (arrayContainsString(verticalsWithFamilyLevelSelectionECAP, familyName[0].PRD_CAT_NM) && (dealType == 'ECAP' || dealType == 'KIT')) ? true : vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -492,13 +493,46 @@
             return displayTemplateType;
         }
 
+        //For NAND (SSD)
+        function addWithCapForFamily(item) {
+            var data = {
+                "searchHash": item.path,
+                "startDate": moment(pricingTableRow.START_DT).format("l"),
+                "endDate": moment(pricingTableRow.END_DT).format("l"),
+                "selectionLevel": 7005,
+                "drillDownFilter4": null,
+                "drillDownFilter5": null,
+                "custSid": pricingTableRow.CUST_MBR_SID,
+                "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "mediaCd": pricingTableRow.PROD_INCLDS,
+                "dealType": vm.dealType
+            }
+            productSelectorService.GetProductSelectionResults(data).then(function (response) {
+                var rst = response.data.map(function (x) {
+                        x['selected'] = productExists(item, x.PRD_MBR_SID);
+                        x['parentSelected'] = item.selected;
+                        return x;
+                    });
+                    
+                item["CAP"] = rst[0].CAP;
+                item["CAP_START"] = rst[0].CAP_START;
+                item["CAP_END"] = rst[0].CAP_END;
+                item["YCS2"] = rst[0].YCS2;
+                item["YCS2_START"] = rst[0].YCS2_START;
+                item["YCS2_END"] = rst[0].YCS2_END; 
+                
+                manageSelectedProducts('include', item);
+                 
+            });
+            
+        }
         function selectProduct(product) {
-            var item = angular.copy(product);
+            var item = angular.copy(product);            
             if (item.id !== undefined && item.id != "") {
                 var products = vm.productSelectionLevels.filter(function (x) {
                     return x.PRD_MBR_SID == item.id;
                 })[0];
-                item = $.extend({}, item, products);
+                item = $.extend({}, item, products);                
             }
             if (vm.excludeMode) {
                 manageSelectedProducts('exclude', item, true);
@@ -522,7 +556,15 @@
                         return false;
                     }
                 }
-                manageSelectedProducts('include', item);
+                //Bring CAP and YCS2 for Family..
+                if (item.DEAL_PRD_TYPE === 'NAND (SSD)' && (vm.dealType == "ECAP" || vm.dealType == "KIT" )) {
+                    addWithCapForFamily(item);
+                    return;
+                }
+                else {
+                    manageSelectedProducts('include', item);
+                }
+                
             }
         }
 
@@ -1073,7 +1115,7 @@
             productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, vm.dealType).then(function (response) {
                 vm.selectPath(0, true);
                 vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
-                if (vm.enableMultipleSelection) {
+                if (vm.enableMultipleSelection || ((response.data[0].PRD_CAT_NM == 'NAND (SSD)' && response.data[0].FMLY_NM != 'NA' && response.data[0].PRD_ATRB_SID == 7005) && (vm.dealType == 'ECAP' || vm.dealType == 'KIT'))) {
                     vm.suggestionText = response.data.length === 0 ? "No products found." : "Product(s) found for \"" + vm.userInput + "\"";
                     vm.suggestedProducts = response.data;
                     vm.showSuggestions = true;
@@ -1430,7 +1472,7 @@
                 return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
             }
             var errorMessage = "";
-            var cap = productJson.CAP.toString();
+            var cap = (productJson.CAP != null) ? productJson.CAP.toString() : 'NO CAP';
             if (cap.toUpperCase() == "NO CAP") {
                 errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
             }

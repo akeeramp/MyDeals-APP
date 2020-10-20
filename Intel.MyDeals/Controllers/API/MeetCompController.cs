@@ -29,7 +29,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("GetMeetCompData")]
         [HttpPost]
-        public IEnumerable<MeetComp> GetMeetCompData(MeetCompSearch meetCompSearch)
+        public IEnumerable<MeetComp> GetMeetCompData(MeetCompSearch meetCompSearch) 
         {
             return SafeExecutor(() => _meetCompLib.GetMeetCompData(meetCompSearch.cid, meetCompSearch.PRD_CAT_NM, meetCompSearch.BRND_NM, meetCompSearch.HIER_VAL_NM)
                 , $"Unable to get {"Meet Comp data"}"
@@ -79,7 +79,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID, MODE, (int)OBJ_TYPE_ID)
                 , $"Unable to {"get Meet Comp"}"
             );
-        }
+        }        
 
         /// <summary>
         /// Manage Meet Comp TAB
@@ -90,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("UpdateMeetCompProductDetails/{CNTRCT_OBJ_SID}/{OBJ_TYPE_ID}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, int OBJ_TYPE_ID, List<MeetCompUpdate> mcu)
+        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID,int OBJ_TYPE_ID, List<MeetCompUpdate> mcu)
         {
             return SafeExecutor(() => _meetCompLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu)
                 , $"Unable to {"update Meet Comp"}"
@@ -123,10 +123,10 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public bool UploadMeetComp(List<MeetComp> lstMeetComp)
         {
-            return SafeExecutor(() => _meetCompLib.UploadMeetComp(lstMeetComp), $"Unable to upload meet comps");
+           return SafeExecutor(() => _meetCompLib.UploadMeetComp(lstMeetComp), $"Unable to upload meet comps");
         }
 
     }
 
-
+    
 }

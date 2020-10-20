@@ -83,6 +83,22 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
         {
+            // TO DO: Mike - Bring this back in later
+            //List < CustomerDivision > retList = new List<CustomerDivision>();
+            //CustomerDivision tempDiv = new CustomerDivision
+            //{
+            //    CUST_NM_SID = custNmSid,
+            //    CUST_DIV_NM = "All",
+            //    CUST_DIV_NM_SID = 0
+            //};
+
+            //retList.Add(tempDiv);
+
+            //List < CustomerDivision > blah = GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid && c.ACTV_IND).ToList();
+            //retList.AddRange(blah);
+
+            //int j = 0;
+            //return retList;
             return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid && c.ACTV_IND).ToList();
         }
 

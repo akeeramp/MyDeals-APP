@@ -8,7 +8,7 @@
                 <div class="flowBtn" ng-attr-title="{{showMeetCompTitle()}}"
                      ng-class="{inactive: flowMode != 'Compliance', disabled: enableFlowBtn() === false}" 
                      ng-click="gotoCompliance()">
-                    <i ng-if="needMct()" class="intelicon-information-outlined red font-med" title="Meet Comp needs to be reviewed"></i>
+                    <i ng-if="needMct()" class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed" style="color: yellow;"></i>
                     Meet Comp
                 </div>
             </td>

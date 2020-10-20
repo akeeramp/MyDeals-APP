@@ -85,6 +85,10 @@
                 {
                     "type": "bool",
                     "uiType": "checkbox"
+                },
+                {
+                    "type": "singleselect",
+                    "uiType": "combobox"
                 }
             ],
             "types2operator": [
@@ -111,6 +115,10 @@
                 {
                     type: "bool",
                     operator: ["=", "!="]
+                },
+                {
+                    type: "singleselect",
+                    operator: ["="]
                 }
             ]
         }
@@ -560,6 +568,11 @@
                 type: "string",
                 width: 140
             }, {
+                field: "QUOTE_LN_ID",
+                title: "Quote Line Id",
+                type: "string",
+                width: 140
+            }, {
                 field: "DEAL_GRP_NM ",
                 title: "Kit Name",
                 type: "string",
@@ -590,6 +603,34 @@
                 type: "string",
                 template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
                 width: 140
+            },
+            {
+                field: "AR_SETTLEMENT_LVL",
+                title: "AR Settlement Level",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL"
+            },
+            {
+                field: "PERIOD_PROFILE",
+                title: "Period Profile",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PERIOD_PROFILE"
+            }, {
+                field: "CONSUMPTION_LOOKBACK_PERIOD",
+                title: "Consumption Lookback Period",
+                type: "number",
+                width: 160
+            }, {
+                field: "AUTO_APPROVE_RULE_INFO",
+                title: "Auto-Approved By",
+                type: "string",
+                width: 160
             }
         ];
 

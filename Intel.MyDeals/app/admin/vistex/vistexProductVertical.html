@@ -1,0 +1,28 @@
+﻿<div class="col-md-12">
+    <h2>Product Vertical Logs</h2>
+    <p style="color: #FC4C02">This screen shows the Product Verticals to be sent to the down stream application Vistex</p>
+</div>
+
+<div class="col-md-12">
+    <div class="col-md-7" style="float:right;">
+        <div class="col-md-10">
+            <div class="fr">
+                <input kendo-date-picker ng-model="vm.startDate" style="width: 110px;" class="opUiContainer md" /> - <input kendo-date-picker ng-model="vm.endDate" style="width: 110px;" class="opUiContainer md" />
+            </div>
+            <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>
+        </div>
+        <div class="col-md-2"><button ng-click="vm.init()" class="btn btn-primary" style="float: left;width:97px;">Get Data</button></div>
+    </div>
+</div>
+
+<loading-panel id="vistexLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+<div class="col-md-12">
+    <div id="gridVistex" kendo-grid="constantsGrid" class="table" expand-k-grid options="vm.vistexOptions">
+    </div>
+</div>
+<style>
+    .ss-loading-panel {
+        margin-top: 6%;
+        margin-left: 37%;
+    }
+</style>

@@ -15,6 +15,7 @@
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ (ps.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet' }}"></i>
                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete' && ps.PASSED_VALIDATION !== 'Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                    <div ng-show="ps.IS_HYBRID_PRC_STRAT === '1'" class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
                 </div>
                 <div ng-click="isCollapsed = !isCollapsed" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>
@@ -26,8 +27,7 @@
                     <!-- If you can add PS, give the button to do so -->
                     <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{psTitle}}</a></li>
                     <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="copyPricingStrategy(contractData, ps)"><i class="intelicon-copy-outlined"></i> Copy {{psTitle}}</a></li>
-
-                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{ptTitle}}</a></li>
+                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && (!(ps.PRC_TBL[0].DC_ID > 0) || ps.IS_HYBRID_PRC_STRAT !== '1')"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{ptTitle}}</a></li>
 
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingStrategyName(ps)"><i class="intelicon-edit"></i> Edit {{psTitle}} Name</a></li>
 
@@ -72,8 +72,8 @@
                             <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{psTitle}}</a></li>
 
                             <!-- If you can add PT, give the button to do so -->
-                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{ptTitle}}</a></li>
-                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="copyPricingTable(ps,pt);"><i class="intelicon-copy-outlined"></i> Copy {{ptTitle}}</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1'"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add {{ptTitle}}</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1'"><a tabindex="-1" role="menuitem" ng-click="copyPricingTable(ps,pt);"><i class="intelicon-copy-outlined"></i> Copy {{ptTitle}}</a></li>
 
 
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="editPricingTableName(pt)"><i class="intelicon-edit"></i> Edit {{ptTitle}} Name</a></li>

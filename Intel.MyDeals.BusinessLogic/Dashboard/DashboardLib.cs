@@ -59,6 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.YCS2_PRC_IRBT.ATRB_SID,
                 Attributes.COMP_SKU.ATRB_SID,
                 Attributes.COMPETITIVE_PRICE.ATRB_SID,
+                Attributes.OBJ_PATH_HASH.ATRB_SID,
             };
 
             var step1 = OpDataElementType.PRC_TBL.GetByIDs(new List<int> {ptId}, opDataElementTypes, atrbs);

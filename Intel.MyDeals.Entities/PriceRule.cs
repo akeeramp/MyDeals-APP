@@ -17,6 +17,13 @@ namespace Intel.MyDeals.Entities
         public string Text { get; set; }
     }
 
+    public class DropDownsList
+    {
+        public int Value { get; set; }
+        public string Text { get; set; }
+        public string DdlType { get; set; }
+    }
+
     public enum PriceRuleAction
     {
         NONE = 0,
@@ -83,12 +90,12 @@ namespace Intel.MyDeals.Entities
         public string @operator { get; set; }
         public string value { get; set; }
         public List<string> values { get; set; }
-        public ValueType valueType { get; set; }
+        public ValueType valueType { get; set; }        
     }
 
     public class ValueType
     {
         public string text { get; set; }
         public string value { get; set; }
-    }
+    }    
 }

@@ -34,26 +34,48 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return; 
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return;
 
             string newStage = string.Empty;
 
-            if (opDeType == OpDataElementType.CNTRCT.ToString()) 
+            if (opDeType == OpDataElementType.CNTRCT.ToString())
             {
                 newStage = WorkFlowStages.InComplete;
             }
-            else if (opDeType == OpDataElementType.PRC_ST.ToString()) 
+            else if (opDeType == OpDataElementType.PRC_ST.ToString())
             {
                 newStage = WorkFlowStages.Draft;
                 if (role == RoleTypes.GA) newStage = WorkFlowStages.Requested;
             }
-            else if (opDeType == OpDataElementType.WIP_DEAL.ToString()) 
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
             {
                 newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
             else if (opDeType == OpDataElementType.DEAL.ToString()) // Might have to set conditions here
             {
                 newStage = WorkFlowStages.Offer;
+            }
+
+            de.AtrbValue = newStage;
+        }
+
+        public static void CheckSalesForceInitialWorkFlow(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
+
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return;
+
+            string newStage = string.Empty;
+
+            if (opDeType == OpDataElementType.PRC_ST.ToString())
+            {
+                newStage = WorkFlowStages.Submitted;
+            }
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
+            {
+                newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
 
             de.AtrbValue = newStage;
@@ -82,6 +104,34 @@ namespace Intel.MyDeals.BusinessRules
                     de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
                 }
             }
+        }
+
+        public static void CheckConsumptionReasonCmnt(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            if (de.AtrbValue.ToString() == "")
+            {
+                if (!de.IsReadOnly) de.AddMessage("Cannot leave Consumption Reason Comment blank if Consumption Reason is 'Other'.");
+            }
+        }
+
+        public static void ClearNewDefaultValues(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            de.AtrbValue = "";
+        }
+
+        public static void ConsumptionLookbackPeriodCheck(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            int lookbackPeriodValue = -1;
+            bool intChk = int.TryParse(de.AtrbValue.ToString(), out lookbackPeriodValue);
+
+            if (de.HasNoValue() || lookbackPeriodValue < 0 || lookbackPeriodValue > 24 || !intChk)
+                de.AddMessage("Consumption Lookback Period must be a whole number between 0 and 24.");
         }
 
         public static void CheckDealCombType(this IOpDataElement de, params object[] args)
@@ -125,14 +175,14 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> geosList = newGeoString.Split(',').ToList();
 
-			// Check that thse geos are valid
-			Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
+            // Check that thse geos are valid
+            Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
             foreach (string geo in geosList)
             {
                 if (validGeoValues.ContainsKey(geo.ToUpper()))
                 {
-					// set to db's stored value capitalization syntax
-					string posMatch = validGeoValues[geo.ToUpper()];
+                    // set to db's stored value capitalization syntax
+                    string posMatch = validGeoValues[geo.ToUpper()];
                     geoString = geoString.Replace(geo, posMatch);
                 }
                 else
@@ -151,8 +201,8 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-			// Blended GEO, can not mix WW and other Geo
-			if (isBlendedGeo)
+            // Blended GEO, can not mix WW and other Geo
+            if (isBlendedGeo)
             {
                 // Is "WorldWide" inside brackets?
                 string wwRegex = @"\[((.*)" + ww + @"(.*))\]";
@@ -191,6 +241,24 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void UpdateConsumptionLookbackPeriodDate(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            de.AtrbValue = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+        }
+
+        public static void PullValuesFromSaveStack(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            if (de.State != OpDataElementState.Unchanged)
+            {
+                de.AtrbValue = de.OrigAtrbValue;
+                de.State = OpDataElementState.Unchanged;
+            }
+        }
+
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
@@ -206,7 +274,7 @@ namespace Intel.MyDeals.BusinessRules
             allSegs.AddRange(validMrktSeg);
 
             //check to ensure user entries are valid market segments and set to db's stored value capitalization syntax
-            for (var s=0; s<userMrktSegs.Count; s++)
+            for (var s = 0; s < userMrktSegs.Count; s++)
             {
                 BasicDropdown dbSeg = allSegs.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userMrktSegs[s].ToUpper());
                 if (dbSeg == null)  //no match

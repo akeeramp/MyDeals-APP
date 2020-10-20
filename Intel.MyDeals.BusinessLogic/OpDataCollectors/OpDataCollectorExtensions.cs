@@ -132,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items, bool needToCheckForDelete)
         {
-            // Save Data Cycle: Point 4
+            // Save Data Cycle: Point 4 - Merge UI flattened to Mid tier objects from template
             // Save Data Cycle: Point 12
 
             OpMsgQueue opMsgQueue = new OpMsgQueue();
@@ -169,15 +169,15 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
 
-                if (needToCheckForDelete) // If true - came from PTR, false is from deals tab
+                if (needToCheckForDelete) // If true - this came from PTR, false is from deals tab
                 {
-                    // Delete existing products in DB that are not there in the incoming product list - VN
+                    // Delete existing products in DB that are not there in the incoming product list
                     foreach (OpDataElement dePrd in deProds)
                     {
                         bool exists = incomingPrds.Exists(prd => prd.Key == dePrd.AtrbCd + dePrd.DimKeyString.AtrbCdDimKeySafe());
                         if (!exists && dePrd.AtrbValue.ToString() != string.Empty)
                         {
-                            if (dc.HasTracker())
+                            if (dc.HasTracker()) // Rule - you cannot delete an active deal's products
                             {
                                 opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS));
                                 dc.Message.Messages.Add(new OpMsg(OpMsg.MessageType.Error, EN.MESSAGES.CANNOT_MODIFY_PRODUCTS));
@@ -300,9 +300,18 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Now check for changes to see if the PASSED_VALIDATION flag needs to be reset
             IOpDataElement dePassValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+            IOpDataElement deSalesForceId = dc.GetDataElement(AttributeCodes.SALESFORCE_ID);
+            bool byPassValidation = deSalesForceId != null && deSalesForceId.AtrbValue.ToString() != "";
             if (dePassValid != null && dc.ModifiedDataElements.Any(d => d.AtrbCd != AttributeCodes.PASSED_VALIDATION))
             {
-                dePassValid.AtrbValue = PassedValidation.Dirty;
+                if (byPassValidation) // SalesForce entered Tenders are set to completed due to automated import nature
+                {
+                    dePassValid.AtrbValue = PassedValidation.Complete;
+                }
+                else // Normal route
+                {
+                    dePassValid.AtrbValue = PassedValidation.Dirty;
+                }
             }
 
             return opMsgQueue;

@@ -62,7 +62,7 @@
     </Reference>
     <Reference Include="Intel.Opaque.Utilities.Server, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
+      <HintPath>..\Intel.MyDeals.VistexService\bin\Debug\Intel.Opaque.Utilities.Server.dll</HintPath>
     </Reference>
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
@@ -104,10 +104,14 @@
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />
+    <Compile Include="DataFix\DataFixLib.cs" />
     <Compile Include="DataQuality\DataQualityLib.cs" />
+    <Compile Include="DealMassUpdate\DealMassUpdateLib.cs" />
+    <Compile Include="DsaEngine\DsaEngineLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
     <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
+    <Compile Include="Integration\IntegrationLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
     <Compile Include="ManualEngine\ManualEngineLib.cs" />
     <Compile Include="NotificationsLib\NotificationsLib.cs" />
@@ -129,6 +133,7 @@
     <Compile Include="JMS\JmsLib.cs" />
     <Compile Include="Logging\LoggingLib.cs" />
     <Compile Include="DevTest\DevTestsLib.cs" />
+    <Compile Include="PushDealstoVistex\PushDealstoVistexLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetterLib.cs" />
     <Compile Include="ProductCostTest\ProductCostTestLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
@@ -150,6 +155,8 @@
     <Compile Include="OpLog\OpLogLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesLib.cs" />
     <Compile Include="Funfact\FunfactLib.cs" />
+    <Compile Include="VistexCustomerMapping\VistexCustomerMappingLib.cs" />
+    <Compile Include="VistexService\VistexServiceLib.cs" />
     <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +191,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Deals\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

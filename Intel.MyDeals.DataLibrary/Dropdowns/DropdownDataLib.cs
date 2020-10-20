@@ -28,6 +28,16 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public List<DropDowns> GetOpDataElements()
+        {
+            return (from result in OpDataElementTypeRepository.OpDetCollection.Items
+                    select new DropDowns
+                    {
+                        Text = result.Alias,
+                        Value = result.Id.ToString()
+                    }).OrderBy(x => x.Text).ToList();
+        }
+
         public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             List<DictDropDown> lstRtn = new List<DictDropDown>();
@@ -126,6 +136,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = type.ToString(),
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
+                    CUST_MBR_SID = 0,
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",
@@ -140,6 +151,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = type.ToString(),
                     ATRB_SID = dropdown.ATRB_SID,
                     OBJ_SET_TYPE_SID = dropdown.OBJ_SET_TYPE_SID,
+                    CUST_MBR_SID = dropdown.CUST_MBR_SID,
                     ATRB_VAL_TXT = dropdown.DROP_DOWN,
                     ATRB_LKUP_DESC = dropdown.ATRB_LKUP_DESC,
                     ATRB_LKUP_TTIP = dropdown.ATRB_LKUP_TTIP,
@@ -158,6 +170,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_ATRB_LKUP_SID = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_SID");
                     int IDX_ATRB_LKUP_TTIP = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_TTIP");
                     int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_DFLT_FLG = DB.GetReaderOrdinal(rdr, "DFLT_FLG");
                     int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
@@ -175,6 +188,7 @@ namespace Intel.MyDeals.DataLibrary
                             ATRB_LKUP_SID = (IDX_ATRB_LKUP_SID < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_LKUP_SID),
                             ATRB_LKUP_TTIP = (IDX_ATRB_LKUP_TTIP < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_TTIP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_TTIP),
                             ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             DFLT_FLG = (IDX_DFLT_FLG < 0 || rdr.IsDBNull(IDX_DFLT_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_FLG),
                             DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
@@ -214,6 +228,7 @@ namespace Intel.MyDeals.DataLibrary
                     MODE = CrudModes.Delete.ToString(),
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
+                    CUST_MBR_SID = 0,
                     ATRB_VAL_TXT = "",
                     ATRB_LKUP_DESC = "",
                     ATRB_LKUP_TTIP = "",

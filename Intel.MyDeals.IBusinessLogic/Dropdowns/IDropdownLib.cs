@@ -7,12 +7,25 @@ namespace Intel.MyDeals.IBusinessLogic
 	{
         List<BasicDropdown> GetBasicDropdowns();
 
+        List<DropDowns> GetOpDataElements();
+
         IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
+
+        IEnumerable<BasicDropdown> GetDropdownsWithInactives(string atrbCd);
+
         List<DictDropDown> GetDictDropDown(string atrbCd);
 
         IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd);
 
         IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd);
+
+        IEnumerable<BasicDropdown> GetDropdownsWithCustomer(string atrbCd, string custNm);
+
+        IEnumerable<BasicDropdown> GetDropdownsWithCustomerId(string atrbCd, int custId);
+
+        IEnumerable<BasicDropdown> GetDropdownsByCustomerOnly(string atrbCd, string custNm);
+
+        IEnumerable<BasicDropdown> GetDropdownsByCustomerOnlyId(string atrbCd, int custId);
 
         DropdownHierarchy[] GetDropdownHierarchy(string prnt);
 
@@ -41,7 +54,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
 		List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs);
 
-		List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
+        List<Dropdown> GetCustomersDropdown();
+
+        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
 
 	}
 }

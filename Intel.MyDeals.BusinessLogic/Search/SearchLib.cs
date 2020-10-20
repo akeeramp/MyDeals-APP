@@ -164,12 +164,27 @@ namespace Intel.MyDeals.BusinessLogic
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
+            var autoApproveRuleval = "";         
+            bool autoApproveRuleFlag = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
+
+            //Special case for AUTO_APPROVE_RULE_INFO
+            foreach (var i in customSearchOption)
+            {
+                var field = i.Field;
+                
+                if (field == "AUTO_APPROVE_RULE_INFO")
+                {
+                    autoApproveRuleFlag = true;                   
+                    break;
+                }              
+            }
 
             List<string> searchAtrbs = new List<string>
             {
                 AttributeCodes.END_CUSTOMER_RETAIL,
                 AttributeCodes.QLTR_PROJECT,
+                //AttributeCodes.QUOTE_LN_ID,
                 AttributeCodes.TRKR_NBR,
                 AttributeCodes.TITLE,
                 AttributeCodes.WF_STG_CD
@@ -222,6 +237,36 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            //Special case for AUTO_APPROVE_RULE_INFO. Modify the concatenation string for 'AUTO_APPROVE_RULE_INFO' field as it is needed from database side
+            if (autoApproveRuleFlag == true)
+            {                
+                for (int i = 0; i < modifiedSearchList.Count; i++)
+                {                    
+                    if(modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
+                    {
+                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!")) 
+                        {
+                            string[] val =  modifiedSearchList[i].Split("=".ToCharArray());
+                            autoApproveRuleval = val[val.Length -1];
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID ={autoApproveRuleval} OR {opDataElementType}_RULE_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_WWID ={autoApproveRuleval})";
+                        }
+                        if (modifiedSearchList[i].Contains("LIKE"))
+                        {
+                            string[] val = modifiedSearchList[i].Split("LIKE".ToCharArray());
+                            autoApproveRuleval = val[val.Length - 1];
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID LIKE{autoApproveRuleval} OR {opDataElementType}_RULE_NM LIKE{autoApproveRuleval} OR {opDataElementType}_OWNER_NM LIKE{autoApproveRuleval} OR {opDataElementType}_OWNER_WWID LIKE{autoApproveRuleval})";
+                        }
+                        if (modifiedSearchList[i].Contains("!="))
+                        {
+                            string[] val = modifiedSearchList[i].Split("!=".ToCharArray());
+                            autoApproveRuleval = val[val.Length - 1];                           
+                            modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID !={autoApproveRuleval} AND {opDataElementType}_RULE_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_WWID !={autoApproveRuleval})";
+
+                        }                      
+                    }
+                }
+            }
+           
             // create the full string
             rtn += string.Join(" AND ", modifiedSearchList);
 
@@ -294,6 +339,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.CAP.ATRB_SID,
                     Attributes.YCS2_PRC_IRBT.ATRB_SID,
                     Attributes.QLTR_PROJECT.ATRB_SID,
+                    Attributes.QUOTE_LN_ID.ATRB_SID,
                     Attributes.QLTR_BID_GEO.ATRB_SID,
                     Attributes.GEO_COMBINED.ATRB_SID
                 });
@@ -590,7 +636,8 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.TOTAL_DOLLAR_AMOUNT.ATRB_SID,
                 Attributes.TRKR_NBR.ATRB_SID,
                 Attributes.VOLUME.ATRB_SID,
-                Attributes.WF_STG_CD.ATRB_SID
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.AUTO_APPROVE_RULE_INFO.ATRB_SID
             },
             new List<string> { SearchTools.BuildCustSecurityWhere() },
             new UserPreferencesLib().GetUserPreference("DealSearch", "SearchRules", "CustomSearch"),
@@ -628,6 +675,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PS_WF_STG_CD.ATRB_SID,
                 Attributes.QLTR_BID_GEO.ATRB_SID,
                 Attributes.QLTR_PROJECT.ATRB_SID,
+                Attributes.QUOTE_LN_ID.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.SERVER_DEAL_TYPE.ATRB_SID,
                 Attributes.START_DT.ATRB_SID,

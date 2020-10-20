@@ -1,0 +1,32 @@
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
+using System.Collections.Generic;
+
+namespace Intel.MyDeals.BusinessLogic
+{
+    public class DataFixLib : IDataFixLib
+    {
+        private readonly IDataFixDataLib _dataFixDataLib;
+
+        public DataFixLib(IDataFixDataLib dataFixDataLib)
+        {
+            _dataFixDataLib = dataFixDataLib;
+        }
+
+        public List<DropDownsList> GetDataFixActions()
+        {
+            return _dataFixDataLib.GetDataFixActions();
+        }
+
+        public List<IncdnDataFix> GetDataFixes()
+        {
+            return _dataFixDataLib.GetDataFixes();
+        }
+
+        public IncdnActnUpd UpdateDataFix(DataFix data, bool isExecute)
+        {
+            return _dataFixDataLib.UpdateDataFix(data, isExecute);
+        }
+    }
+}

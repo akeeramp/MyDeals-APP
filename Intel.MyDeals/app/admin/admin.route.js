@@ -239,6 +239,51 @@
                 }
             },
             {
+                state: 'admin.vistexProductVertical',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexProductVertical.html',
+                    url: 'vistex/vistexProductVertical',
+                    controller: 'VistexProductVerticalController as vm',
+                }
+            },
+            {
+                state: 'admin.vistexProductVerticalOutbound',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexProductVerticalOutbound.html',
+                    url: 'vistex/vistexProductVerticalOutbound',
+                    controller: 'VistexProductVerticalOutboundController as vm',
+                }
+            },
+            {
+                state: 'admin.vistexOutbound',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexOutbound.html',
+                    url: 'vistex/vistexOutbound',
+                    controller: 'VistexOutboundController as vm',
+                }
+            },
+            {
+                state: 'admin.vistex',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistex.html',
+                    url: 'vistex',
+                    controller: 'VistexController as vm',
+                }
+            },
+            {
+                state: 'admin.vistextestapi',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistextestapi.html'
+                    , url: 'vistex/vistextestapi'
+                    , controller: 'VistexTestAPIController as vm'
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false
@@ -300,6 +345,15 @@
                 }
             },
             {
+                state: 'admin.dataFix',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dataFix/dataFix.html'
+                    , url: 'dataFix'
+                    , controller: 'DataFixController as vm'
+                }
+            },
+            {
                 state: 'admin.admintools',
                 abstract: false,
                 config: {
@@ -315,7 +369,44 @@
                     templateUrl: 'app/admin/mydealssupport/mydealssupport.html'
                     , url: 'MyDealsSupport'
                 }
+            },
+            {
+                state: 'admin.vistexcustomermapping',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistexcustomermapping/vistexcustomermapping.html'
+                    , url: 'vistexcustomermapping'
+                    , controller: 'VistexcustomermappingController as vm'
+                }
+            },            
+            {
+                state: 'admin.testtenders',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/admintools/testtenders.html'
+                    , url: 'testtenders'
+                    , controller: 'TestTendersController as vm'
+                }
+            },
+            {
+                state: 'admin.dealMassUpdate',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dealMassUpdate/dealMassUpdate.html'
+                    , url: 'dealmassupdate'
+                    , controller: 'DealMassUpdateController as vm'
+                }
+            },
+            {
+                state: 'admin.pushDealstoVistex',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/pushDealstoVistex/pushDealstoVistex.html'
+                    , url: 'pushDealstoVistex'
+                    , controller: 'PushDealstoVistexcontroller as vm'
+                }
             }
+
         ];
     }
 })();

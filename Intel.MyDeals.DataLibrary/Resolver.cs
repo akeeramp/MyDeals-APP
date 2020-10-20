@@ -13,6 +13,10 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICostTestDataLib, CostTestDataLib>();
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
+            registerService.RegisterType<IVistexCustomerMappingDataLib, VistexCustomerMappingDataLib>();
+            registerService.RegisterType<IDealMassUpdateDataLib, DealMassUpdateDataLib>();
+            registerService.RegisterType<IPushDealstoVistexDataLib, PushDealstoVistexDataLib>();
+            registerService.RegisterType<IVistexServiceDataLib, VistexServiceDataLib>();
             registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
             registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();
@@ -41,6 +45,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IDataQualityDataLib, DataQualityDataLib>();
             registerService.RegisterType<IMyDealsManualDataLib, MyDealsManualDataLib>();
             registerService.RegisterType<IReportingDataLib, ReportingDataLib>();
+            registerService.RegisterType<IDataFixDataLib, DataFixDataLib>();
         }
     }
 }

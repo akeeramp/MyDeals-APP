@@ -38,6 +38,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetBasicDropdowns();
         }
 
+        public List<DropDowns> GetOpDataElements()
+        {
+            return _dropdownDataLib.GetOpDataElements();
+        }
+
         /// <summary>
         /// Get All Simple Dropdowns
         /// </summary>
@@ -63,6 +68,17 @@ namespace Intel.MyDeals.BusinessLogic
                 Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
         }
 
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd INCLUDING INACTIVE ENTRIES
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsWithInactives(string atrbCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd).OrderBy(d => d.ORD);
+        }
+
         public IEnumerable<BasicDropdown> GetDistinctDropdownCodes(string atrbCd)
         {
             atrbCd = atrbCd.ToUpper();
@@ -79,10 +95,57 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of dropdowns</returns>
         public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
         {
+            int custId = 1;  // All customers by default
             atrbCd = atrbCd.ToUpper();
             dealtypeCd = dealtypeCd.ToUpper();
             return _dataCollectionsDataLib.GetBasicDropdowns().
                 Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd.ToUpper() || (d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS" || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_TYPES")) && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and customer (some customer as well as all customers)
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsWithCustomer(string atrbCd, string custNm)
+        {
+            atrbCd = atrbCd.ToUpper();
+            custNm = custNm.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.CUST_NM.ToUpper() == custNm.ToUpper() || (d.CUST_NM.ToUpper() == "ALL CUSTOMERS")) && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and customer ID (some customer as well as all customers)
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsWithCustomerId(string atrbCd, int custId)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.CUST_MBR_SID == custId || (d.CUST_MBR_SID == 1)) && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and customer (ONLY records matching customer)
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsByCustomerOnly(string atrbCd, string custNm)
+        {
+            atrbCd = atrbCd.ToUpper();
+            custNm = custNm.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && d.CUST_NM.ToUpper() == custNm.ToUpper() && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and customer ID (ONLY records matching customer)
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownsByCustomerOnlyId(string atrbCd, int custId)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && d.CUST_MBR_SID == custId && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
         }
 
         /// <summary>
@@ -247,7 +310,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Dropdown Groups</returns>
         public List<Dropdown> GetDropdownGroups()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Security Attributes" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
         /// <summary>
@@ -295,18 +358,41 @@ namespace Intel.MyDeals.BusinessLogic
             var custDivsList = custDivs == null ? new List<string>(): custDivs.Select(s => s.ToUpper()).ToList();
 
             List<Dropdown> myList = soldToIdList
-                .Where(r =>
-                    r.CUST_NM_SID == custId
-                    && (geos == null || geos.Contains("Worldwide") || geos.Contains(r.GEO_NM))
-                    && (custDivs == null || custDivsList.Contains(r.CUST_DIV_NM.ToUpper()))
-                    && r.ACTV_IND
-                )
-                .OrderBy(dd => dd.SOLD_TO_ID)
-                .Select(x => new Dropdown
-                {
-                    dropdownName = x.SOLD_TO_ID,
-                    subAtrbCd = x.GEO_CD == "" ? x.SOLD_TO_ID : x.SOLD_TO_ID + " - " + x.GEO_CD
-                }).ToList();
+                    .Where(r =>
+                        r.CUST_NM_SID == custId
+                        && (geos == null || geos.Contains("Worldwide") || geos.Contains(r.GEO_NM))
+                        && (custDivs == null || custDivsList.Contains(r.CUST_DIV_NM.ToUpper()))
+                        && r.ACTV_IND
+                    )
+                    .OrderBy(dd => dd.SOLD_TO_ID)
+                    .Select(x => new Dropdown
+                    {
+                        dropdownName = x.SOLD_TO_ID,
+                        subAtrbCd = x.GEO_CD == "" ? x.SOLD_TO_ID : x.SOLD_TO_ID + " - " + x.GEO_CD
+                    }).ToList();
+
+            return myList;
+        }
+
+        public List<Dropdown> GetCustomersDropdown()
+        {
+            List<SoldToIds> soldToIdList = _dataCollectionsDataLib.GetSoldToIdList();
+
+            List<Dropdown> myList = new List<Dropdown>();
+            myList.Add(new Dropdown()
+            {
+                dropdownName = "ALL CUSTOMERS",
+                dropdownID = 1
+            });
+
+            myList.AddRange(
+                soldToIdList.Where(r => r.ACTV_IND).GroupBy(r => r.CUST_NM).Select(r => r.FirstOrDefault())
+                    .OrderBy(dd => dd.CUST_NM)
+                    .Select(x => new Dropdown
+                    {
+                        dropdownName = x.CUST_NM,
+                        dropdownID = x.CUST_NM_SID
+                    }).Distinct().ToList());
 
             return myList;
         }

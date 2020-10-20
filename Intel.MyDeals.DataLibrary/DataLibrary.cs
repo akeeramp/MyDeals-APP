@@ -14,7 +14,13 @@ namespace Intel.MyDeals.DataLibrary
                 ["jmsQueue"] = envConfigs.ContainsKey("jmsQueue") ? envConfigs["jmsQueue"] : "",
                 ["jmsUID"] = envConfigs.ContainsKey("jmsUID") ? envConfigs["jmsUID"] : "",
                 ["jmsPWD"] = envConfigs.ContainsKey("jmsPWD") ? envConfigs["jmsPWD"] : "",
-                ["jmsResponseDir"] = envConfigs.ContainsKey("jmsResponseDir") ? envConfigs["jmsResponseDir"] : ""
+                ["jmsResponseDir"] = envConfigs.ContainsKey("jmsResponseDir") ? envConfigs["jmsResponseDir"] : "",
+
+                ["vistexBaseURL"] = envConfigs.ContainsKey("vistexBaseURL") ? envConfigs["vistexBaseURL"] : "",
+                ["vistexUID"] = envConfigs.ContainsKey("vistexUID") ? envConfigs["vistexUID"] : "",
+                ["vistexPWD"] = envConfigs.ContainsKey("vistexPWD") ? envConfigs["vistexPWD"] : "",
+
+                ["tendersResponseURL"] = envConfigs.ContainsKey("tendersResponseURL") ? envConfigs["tendersResponseURL"] : ""
             };
         }
 

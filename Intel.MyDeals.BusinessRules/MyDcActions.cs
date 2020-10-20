@@ -6,6 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
@@ -70,7 +71,7 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
             string dcRebateType = item[AttributeCodes.REBATE_TYPE]?.ToString().ToUpper() ?? "";
 
-            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase))
+            if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase) && !dcRebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
             {
                 // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
                 // End date =  Billing End date
@@ -106,11 +107,12 @@ namespace Intel.MyDeals.BusinessRules
                 //}
             }
 
+            // Consumption Reason no longer defaults to None as per US681744 - Vistex: Edits to Consumption Reason Dropdown
             // Consumption Reason
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
-            {
-                item[AttributeCodes.CONSUMPTION_REASON] = "None";
-            }
+            //if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
+            //{
+            //    item[AttributeCodes.CONSUMPTION_REASON] = "None";
+            //}
 
             // Expire YCS2
             if ((r.Dc.DcType == "ECAP" || r.Dc.DcType == "KIT") && string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_YCS2)))
@@ -159,7 +161,7 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
+                // && dcPrevSt != dcItemSt  -- removed because it was causing validation issues.
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
@@ -191,7 +193,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (item[AttributeCodes.HAS_SUBKIT].ToString() == "0")
                 {
-                    // Clear out subkit attributes if user changes products to make it ineligible for subkits
+                    // Clear out subkit attributes if user changes products to make it ineligible for sub-kits
                     item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = null;
                 }
                 else
@@ -270,6 +272,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            string hasTrkr = (r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER)) ?? "";
             string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
             string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
             if (!string.IsNullOrEmpty(prdJsonIvalid))
@@ -376,7 +379,7 @@ namespace Intel.MyDeals.BusinessRules
             //}
             if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString() || r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.PROGRAM.ToString())
             {
-                CheckForCrossVerticalProducts(dePrdUsr, items);
+                CheckForCrossVerticalProducts(dePrdUsr, hasTrkr, items);
             }
         }
 
@@ -387,7 +390,7 @@ namespace Intel.MyDeals.BusinessRules
         /// </summary>
         /// <param name="dePrdUsr"></param>
         /// <param name="items"></param>
-        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, ProdMappings items)
+        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, string hasTrkr, ProdMappings items)
         {
             // TODO Move these to constants
             var productCombination1 = new string[] { "DT", "Mb", "SvrWS", "EIA CPU" }.ToDictionary(x => x);
@@ -412,11 +415,15 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     if (i == validContractProducts.Count() - 1) break;
                     var newprodCategory = validContractProducts[i + 1];
+                    // (DE88221) - Append special message to trigger save calls to drop active invalid row saves
+                    string activeDealProdError = "  Changes to this active deal/row have been restored to their previous saved values."; //Products reset to orignal values.  Please re-validate this line to clear errors.
                     if (productCombination1.ContainsKey(validContractProducts[i]))
                     {
                         if (!productCombination1.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -424,7 +431,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (!productCombination2.ContainsKey(newprodCategory))
                         {
-                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
                     }
@@ -432,7 +441,9 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (validContractProducts[i] != newprodCategory)
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
+                                $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
                     }
@@ -484,6 +495,42 @@ namespace Intel.MyDeals.BusinessRules
             r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }"); //r.Dc.AddTimelineComment($"Created { deTypeDesc } ({ r.Dc.DcID }): { title }"); // But deal # shows up as -1000 ID upon creation
         }
 
+        public static void SetCustDefaultValues(params object[] args)
+        {
+
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+            if (!(dePayoutBasedOn.HasValueChanged && dePayoutBasedOn.HasValue("Consumption"))) return;
+
+            int custId;
+            bool deEcapTypeValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
+            IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
+            IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
+            var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
+
+            if (deConsLookback.AtrbValue == "")
+            {
+                //Updated the condition as per the user story US695161
+                deConsLookback.AtrbValue = cust.DFLT_LOOKBACK_PERD < 0 ? (isTender ? "0" : "") : cust.DFLT_LOOKBACK_PERD.ToString();
+            }
+
+            if (deConsRptGeo.AtrbValue == "")
+            {
+                deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
+            }
+
+            if (isTender && deConsReason.AtrbValue == "")
+            {
+                deConsReason.AtrbValue = "End Customer";
+            }
+        }
+
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -508,7 +555,12 @@ namespace Intel.MyDeals.BusinessRules
             List<string> custList = deUserCustDivs.AtrbValue.ToString().Split(delim).ToList();
             foreach (string divNm in custList)
             {
-                string matchedValue = custs.ToList().Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM).FirstOrDefault();
+                // TO DO: Mike - Bring this back in later
+                //if (divNm != "All")
+                //{
+                string matchedValue = custs.ToList()
+                        .Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM)
+                        .FirstOrDefault();
                 if (string.IsNullOrEmpty(matchedValue))
                 {
                     foundMisMatch = true;
@@ -518,6 +570,11 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     matchedDivs.Add(matchedValue);
                 }
+                //}
+                //else
+                //{
+                //    matchedDivs.Add("All");
+                //}
             }
 
             string newList = string.Join(delim.ToString(), matchedDivs.OrderBy(m => m));
@@ -531,7 +588,6 @@ namespace Intel.MyDeals.BusinessRules
                 deUserCustDivs.AddMessage("Please enter a valid value.");
         }
 
-        //Mikes New Rule
         public static void MeetCompMandatoryCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -723,6 +779,163 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfValueIsPopulatedAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfValueIsPopulatedAndWon(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            if (dealStage != WorkFlowStages.Won) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && !string.IsNullOrEmpty(de.AtrbValue.ToString())) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfHasTrackerAndSettlementIsCash(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
+                {
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
+        public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
+        {
+            // This rule should only allow changes for AR_SETTLEMENT_LVL after has tracker for one issue type to another, but not to cash
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] strTestingValues = new string[] { "Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region" };
+
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+            if (deArSettlementLvl != null && deArSettlementLvl.HasValueChanged && r.Dc.HasTracker())
+            {
+                // If the original value was Cash, then you can't change it anyhow due to read only rule, we only want cases where the original
+                // value was a testing target string (something with Issue flavor) and has been changed
+                if (strTestingValues.Contains(deArSettlementLvl.OrigAtrbValue.ToString()) && deArSettlementLvl.AtrbValue.ToString() == "Cash")
+                {
+                    deArSettlementLvl.AddMessage(string.Concat("AR Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
+                    deArSettlementLvl.AtrbValue = deArSettlementLvl.OrigAtrbValue;
+                    deArSettlementLvl.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
+                }
+            }
+        }
+
+        public static void AddHistoryMessagesForChanges(params object[] args)
+        {
+            // This rule posts value change messages into comment history at any time a value is updated.  not re-deal only events.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement sysComment = r.Dc.GetDataElement(AttributeCodes.SYS_COMMENTS);
+            if (sysComment == null) return;
+
+            // Get the list of all attributes so that we can pull meaningful names below
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+
+            List<string> updates = new List<string>();
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d =>
+                r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
+            {
+                MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                if (atrb == null) continue;
+                if (atrb.ATRB_LBL != "Title") updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                else
+                {
+                    var origProds = de.OrigAtrbValue.ToString().Split(',');
+                    var currProds = de.AtrbValue.ToString().Split(',');
+                    IEnumerable<string> addedProducts = currProds.Except(origProds);
+                    IEnumerable<string> removedProducts = origProds.Except(currProds);
+                    string msg = "Deal products have changed:";
+                    if (addedProducts.Count() > 0) msg += " Added [" + string.Join(",", addedProducts) + "]";
+                    if (removedProducts.Count() > 0) msg += " Removed [" + string.Join(", ", removedProducts) + "]";
+                    updates.Add(msg); // instead of showing "Title changed from.."
+                }
+            }
+
+            if (updates.Count > 0) // If there are items to add, add them
+            {
+                // "; " is a safe spacing for excel output, but it is also replaced by "<br>" on web popup for readability.
+                sysComment.AtrbValue += sysComment.AtrbValue.ToString().Length > 0
+                    ? "; " + String.Join("; ", updates.ToArray())
+                    : String.Join("; ", updates.ToArray());
+            }
+        }
+
+        public static void ReadOnlyStartDateIfIsInPastAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null && de.AtrbValue != "" && de.IsDateInPast() && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyEndDateIfIsTooOldAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            //var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check
+            int numDaysInPastLimit = 90; // Set to 90 days, by constant if we can
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+
+                DateTime chkDate = OpConvertSafe.ToDateTime(de.AtrbValue.ToString());
+                // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
+                bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
+
+                if (de != null && de.AtrbValue != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfNotInRedeal(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealHasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                if (dealHasTracker == "0" || dealStage != WorkFlowStages.Draft)
+                {
+                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                    if (de != null) de.IsReadOnly = true;
+                }
+            }
+        }
+
         public static void ReadOnlyFrontendWithNoTracker(params object[] args) // Set to read only if there is not a tracker and deal is frontend (DE38457)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -736,6 +949,47 @@ namespace Intel.MyDeals.BusinessRules
             foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
             {
                 de.SetReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Set read only 
+        /// </summary>
+        /// <param name="args"></param>
+        public static void ReadOnlyNonHybridOverarchingFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
+
+            if (deIsHybridPrcStratValue != "1")
+            {
+                List<string> readonlyAtrbs = new List<string> { AttributeCodes.REBATE_OA_MAX_AMT, AttributeCodes.REBATE_OA_MAX_VOL };
+
+                IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
+                IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+
+                if (deOAMaxAmt == null || deOAMaxVol == null)
+                {
+                    foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+                    {
+                        de.SetReadOnly();
+                    }
+                    return;
+                }
+
+                string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
+                string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
+
+                //do not run validation if no user input
+                if (overarchingMaxVol == "" && overarchingMaxVol == "")
+                {
+                    foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+                    {
+                        de.SetReadOnly();
+                    }
+                }
             }
         }
 
@@ -759,37 +1013,98 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckDropDownValues(params object[] args)
-        {
-            List<string> eligibleDropDowns = new List<string>
-            {
-                AttributeCodes.PAYOUT_BASED_ON,
-                AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.REBATE_TYPE,
-                AttributeCodes.PROD_INCLDS
-            };
-            CheckDropDownValues(eligibleDropDowns, args);
-        }
-
-        public static void CheckDropDownValues(List<string> eligibleDropDowns, params object[] args)
+        public static void DisableForActivityOrAccrual(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns))
+            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
+        public static void DisableForVistexHybrid(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            List<string> readonlyAtrbs = new List<string> {
+                AttributeCodes.REBATE_TYPE,
+                AttributeCodes.PAYOUT_BASED_ON,
+                AttributeCodes.CUST_ACCNT_DIV,
+                AttributeCodes.GEO_COMBINED,
+                AttributeCodes.PROGRAM_PAYMENT,
+                AttributeCodes.PERIOD_PROFILE
+                //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
+            };
+
+            string deIsHybridPrcStratValue = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
+
+            if (deIsHybridPrcStratValue == "1")
             {
-                List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
-                string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-                if (string.IsNullOrEmpty(matchedValue))
+                foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
                 {
-                    de.AddMessage("Please enter a valid value.");
+                    de.SetReadOnly();
                 }
-                else
+            }
+            //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
+        public static void CheckDropDownValues(params object[] args)
+        {
+            Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
+            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, "Payout Based On");
+            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, "Program Payment");
+            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, "Rebate Type");
+            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, "Media");
+            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, "Server Deal Type");
+            eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, "Period Profile");
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "AR Settlement Level");
+            CheckDropDownValues(eligibleDropDowns, args);
+
+            eligibleDropDowns.Clear();
+            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, "Bid Geo");
+            CheckDropDownMultiValues(eligibleDropDowns, args);
+        }
+
+        static void CheckDropDownValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns.Keys))
+            {
+                if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
-                    if (matchedValue != de.AtrbValue.ToString())
+                    List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                    string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    if (string.IsNullOrEmpty(matchedValue))
                     {
-                        // strings match but case is different
-                        de.AtrbValue = matchedValue;
+                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
+                    }
+                    else
+                    {
+                        if (matchedValue != de.AtrbValue.ToString())
+                        {
+                            // strings match but case is different
+                            de.AtrbValue = matchedValue;
+                        }
+                    }
+                }
+            }
+        }
+
+        static void CheckDropDownMultiValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns.Keys))
+            {
+                if (de.AtrbValue.ToString().Trim() != string.Empty)
+                {
+                    List<string> dropDowns = DataCollections.GetDropdowns().Where(d => d.dropdownCategory == (de.AtrbCd == AttributeCodes.QLTR_BID_GEO ? "Geo" : de.AtrbCd) && d.active == 1).Select(d => d.dropdownName).ToList();
+                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.ToUpper()).Except(dropDowns.Select(d => d.ToUpper())).ToList();
+                    if (unMatchedValues.Count > 0)
+                    {
+                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
                     }
                 }
             }
@@ -804,7 +1119,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToString();
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase)) return;
 
             // Billing dates should be only for deals which have Payout Based on = Consumption ?? Yes.
@@ -812,7 +1127,9 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
-            var programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT).ToString();
+            IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            
 
             // For front end YCS2 do not check for billing dates
 
@@ -823,12 +1140,25 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
-            // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+            // US705342 get dates for previous quarter
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null);
+
+            // changed billing start date to equal deal start date as part of US705342
+            // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-                var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
-                deBllgStart.SetAtrbValue(dt);
+
+                if (deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                    deBllgStart.SetAtrbValue(dt);
+                } else {
+                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
+                    deBllgStart.SetAtrbValue(dt);
+
+                }
+                
             }
 
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
@@ -844,6 +1174,45 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
+
+            // Billing start date can only be backdated up until start of previous quarter US705342 - Set by constant value set at release time US815029
+            string bllgTenderCutoverDealCnst = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "BLLG_TENDER_CUTOVER_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            int bllgTenderCutoverDeal;
+            if (!int.TryParse(bllgTenderCutoverDealCnst, out bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
+            if (deBllgStart.DcID > bllgTenderCutoverDeal) // Apply new rules for tenders billing start dates
+            {
+                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
+                }
+            }
+            else // Apply old rules to old tenders before break off point
+            {
+                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < dcSt.AddYears(-1) && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1)
+                {
+                    deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date.");
+                }
+            }
+        }
+
+        public static void CheckMaxDealEndDate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+            DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+
+            DateTime maxEndDt = startDate.AddYears(20);
+            if (endDate > maxEndDt && progPayment == "Backend")
+            {
+                deEndDate.AddMessage("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+            }
+
         }
 
         public static void CheckFrontendConsumption(params object[] args)
@@ -1181,7 +1550,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
 
                 // Tack on re-deal messages that are specific to "wrong way" major changes.
-                var reason = "Fast Track Redeal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
+                var reason = "Fast Track Re-deal due to major change by " + OpUserStack.MyOpUserToken.Usr.FullName + " (" + OpUserStack.MyOpUserToken.Usr.WWID + "): ";
                 var reasonDetails = new List<string>();
                 List<IOpDataElement> onChangeWrongWayElements = r.Dc.GetDataElementsWhere(d => onChangeWrongWayItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
 
@@ -1198,6 +1567,28 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
+        }
+
+        private static DateTime GetBackDateValue(OpDataCollector opDataCollector)
+        {
+            DateTime chkStartDate;
+            DateTime chkEndDate;
+            DateTime chkLastTrkr;
+            DateTime dtNow = DateTime.Now;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.START_DT), out chkStartDate)) chkStartDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.END_DT), out chkEndDate)) chkEndDate = dtNow;
+            if (!DateTime.TryParse(opDataCollector.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out chkLastTrkr)) chkLastTrkr = chkStartDate;
+
+            if (chkEndDate < dtNow) return chkEndDate; // The deals is fully in the past, End Date is your target
+            if (dtNow < chkStartDate) // The deals is fully in the future, Start Date or previous tracker start is your target
+            {
+                if (chkLastTrkr > chkStartDate) return chkLastTrkr; // Someone set a future tracker start date, use it (Last Tracker Date, Not Tracker Start)
+                return chkStartDate; // Otherwise, Start Date is your target
+            }
+             
+            // Deal is currently running, check if the tracker date should be the marker or the current day is
+            if (dtNow < chkLastTrkr) return chkLastTrkr;
+            return dtNow;
         }
 
         public static void MajorChangeCheck(params object[] args)
@@ -1259,11 +1650,11 @@ namespace Intel.MyDeals.BusinessRules
             // if not a major change... exit
             if (!changedDes.Any() && !changedIncreaseDes.Any() && !changedDecreaseDes.Any() && r.Dc.DcID > 0) return;
 
-            // Define redeal reason
+            // Define re deal reason
 
             // TO DO: Fix this later
 
-            var reason = "Redeal due to major change: ";
+            var reason = "Re-deal due to major change: ";
             var reasonDetails = new List<string>();
             if (r.Dc.DcID > 0)
             {
@@ -1285,7 +1676,7 @@ namespace Intel.MyDeals.BusinessRules
             // WIP always is "Draft" and PS depends on the users workflow
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
-            // set WIP Stages to Draft for a redeal if they already aren't there
+            // set WIP Stages to Draft for a re-deal if they already aren't there
             if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
             {
                 r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
@@ -1294,23 +1685,24 @@ namespace Intel.MyDeals.BusinessRules
                     : WorkFlowStages.Draft);
             }
 
-            if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
+            if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set re-deal date only if this came from active since it will drive the tracker effective from/to date calc.
             {
                 bool setRedealFlag = false;
                 r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
-                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date.ToString("MM/dd/yyyy"));
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, GetBackDateValue(r.Dc).ToString("MM/dd/yyyy"));
+                //string test = r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT);
                 foreach (IOpDataElement de in r.Dc.GetDataElements(AttributeCodes.TRKR_NBR)) // Get all trackers for this object and update as needed
                 {
                     string tracker = de.AtrbValue.ToString();
-                    if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
+                    if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in re-deal visual state
                     {
                         de.AtrbValue = tracker + "*";
-                        setRedealFlag = true; // If there is a tracker change, this is hard redeal and subject to rollback
+                        setRedealFlag = true; // If there is a tracker change, this is hard re-deal and subject to rollback
                     }
                 }
 
                 // If this is a hard rollback, set it so that Cancel/delete/rollback flags can be set in UI.  Rollup will set parents as needed.  Tenders in Offer will not have
-                // tracker and will be cancel in redeal states since the no longer have a level 6 object tied to them until they actually win.
+                // tracker and will be cancel in re-deal states since the no longer have a level 6 object tied to them until they actually win.
                 IOpDataElement rde = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
                 if (rde != null)
                 {
@@ -1335,9 +1727,9 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Locate and set Parent PS Attributes
-            if (futureStage != null || r.Dc.DcID < 0)
+            if ((r.Dc.DcID > 0 && futureStage == null) || futureStage != null || r.Dc.DcID < 0)
             {
-                if (r.Dc.DcID < 0)
+                if (futureStage == null) // This is path where you edited a re-deal item, yet PS is not in re-deal pathing stage, so force the path
                 {
                     futureStage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
                         ? WorkFlowStages.Requested
@@ -1347,14 +1739,14 @@ namespace Intel.MyDeals.BusinessRules
                 int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL)
                     ? myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID].DcParentID
                     : myDealsData[OpDataElementType.PRC_ST].Data.FirstOrDefault().Value.DcID;
-                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) // Dont have the PS, fetch it.
+                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) // Don't have the PS, fetch it.
                 {
                     myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
                         new List<int> { dcPs },
                         new List<OpDataElementType> { OpDataElementType.PRC_ST },
                         new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
                 }
-                else if (!myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.Any(d => d.DcID == dcPs))
+                else if (myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.All(d => d.DcID != dcPs))
                 {
                     MyDealsData tempMyDealsData = new MyDealsData();
                     tempMyDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
@@ -1367,13 +1759,33 @@ namespace Intel.MyDeals.BusinessRules
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
             }
 
-            // If object is expired, unexpire it
+            // If object is expired, un-expire it
             string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
+
+            // Finally, clear the Auto_approval information if this was a Tender Deal
+            if (r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER")
+            {
+                r.Dc.SetAtrb(AttributeCodes.AUTO_APPROVE_RULE_INFO, "");
+            }
+
             //throw new Exception("Fracking hell...");
+        }
+
+        public static void SetSalesForceCreationMessages(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || r.Dc.DcID > 0) return;
+
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId != "")
+            {
+                r.Dc.AddTimelineComment("Deal moved from Requested to Submitted after IQR creation.");
+            }
         }
 
         public static void ValidateEcapPrice(params object[] args)
@@ -1415,18 +1827,16 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement deOADealId = r.Dc.GetDataElement(AttributeCodes.REBATE_DEAL_ID);
             IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
             IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
 
-            if (deOADealId == null || deOAMaxAmt == null || deOAMaxVol == null) return;
+            if (deOAMaxAmt == null || deOAMaxVol == null) return;
 
-            string overarchingDealIds = deOADealId.AtrbValue.ToString();
             string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
             string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
 
             //do not run validation if no user input
-            if (overarchingDealIds == "" && overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
+            if (overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
 
             int numMaxVol;
             decimal numMaxAmt;
@@ -1449,30 +1859,59 @@ namespace Intel.MyDeals.BusinessRules
                 deOAMaxAmt.AddMessage("Overarching Max Dollar Amount cannot be a negative value.");
             }
 
-            if (overarchingDealIds == "")
-            {   //if user does not add an overarching deal id, then they should also not have an overarching max volume or dollar amt
-                if (deOAMaxAmt.AtrbValue.ToString() != "")
-                {
-                    deOADealId.AddMessage("Overarching Deal ID required if Overarching Max Dollar Amount not empty.");
-                }
-                else if (deOAMaxVol.AtrbValue.ToString() != "")
-                {
-                    deOADealId.AddMessage("Overarching Deal ID required if Overarching Max Volume not empty.");
-                }
+            //if user adds an overarching deal id, then one but not both overarching max values are required
+            if (overarchingMaxAmt != "" && overarchingMaxVol != "")
+            {
+                deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
+                deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
             }
-            else
-            {   //if user adds an overarching deal id, then one but not both overarching max values are required
-                if (overarchingMaxAmt != "" && overarchingMaxVol != "")
-                {
-                    deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
-                    deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
-                }
-                else if (overarchingMaxAmt == "" && overarchingMaxVol == "")
-                {
-                    deOAMaxAmt.AddMessage("Overarching Max Volume OR Max Dollar required if Overarching Deal IDs entered.");
-                    deOAMaxVol.AddMessage("Overarching Max Volume OR Max Dollar required if Overarching Deal IDs entered.");
-                }
+
+        }
+
+        public static void ValidateOverarchingInPTR(params object[] args)
+        {
+            //Validation Rules for overarching deals
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deOAMaxVol = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL);
+            IOpDataElement deOAMaxAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+
+            if (deOAMaxAmt == null || deOAMaxVol == null) return;
+
+            string overarchingMaxVol = deOAMaxVol.AtrbValue.ToString();
+            string overarchingMaxAmt = deOAMaxAmt.AtrbValue.ToString();
+
+            //do not run validation if no user input
+            if (overarchingMaxVol == "" && deOAMaxAmt.AtrbValue.ToString() == "") return;
+
+            int numMaxVol;
+            decimal numMaxAmt;
+
+            if (!decimal.TryParse(overarchingMaxAmt, out numMaxAmt) && overarchingMaxAmt != "")
+            {   //Non decimal type input error
+                deOAMaxAmt.AddMessage("Overarching Max Dollar Amount is not a valid dollar amount.");
             }
+            if (!int.TryParse(overarchingMaxVol, out numMaxVol) && overarchingMaxVol != "")
+            {   //Non integer type input error
+                deOAMaxVol.AddMessage("Overarching Max Volume is not a valid integer value.");
+            }
+            if (numMaxVol < 0)
+            {
+                deOAMaxVol.AddMessage("Overarching Max Volume cannot be a negative value.");
+            }
+            if (numMaxAmt < 0)
+            {
+                deOAMaxAmt.AddMessage("Overarching Max Dollar Amount cannot be a negative value.");
+            }
+
+            //if user adds an overarching deal id, then one but not both overarching max values are required
+            if (overarchingMaxAmt != "" && overarchingMaxVol != "")
+            {
+                deOAMaxAmt.AddMessage("Cannot have both Overarching Max Dollar Amount and Overarching Max Volume.");
+                deOAMaxVol.AddMessage("Cannot have both Overarching Max Volume and Overarching Max Dollar Amount.");
+            }
+
         }
 
         public static void BackdateRequired(params object[] args)
@@ -1487,14 +1926,31 @@ namespace Intel.MyDeals.BusinessRules
             if (deBackDate == null) return;
 
             string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            List<string> blackListStages = new List<string> { WorkFlowStages.Submitted, WorkFlowStages.Lost, WorkFlowStages.Offer, WorkFlowStages.Won, WorkFlowStages.Pending };
-            if (blackListStages.Contains(wipStage)) return;
+            List<string> blockedStages = new List<string> { WorkFlowStages.Submitted, WorkFlowStages.Lost, WorkFlowStages.Offer, WorkFlowStages.Won, WorkFlowStages.Pending };
+            if (blockedStages.Contains(wipStage)) return;
 
             string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
 
             if (backDateTxt != "" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
             {
                 deBackDate.IsRequired = true;
+            }
+        }
+
+        public static void TendersProjectRequired(params object[] args)
+        {
+            // Note that this will trigger on already published deals as well, but since they show up in Search screen, UI doesn't intercept the required messages.
+            // This is also a PTR only level rule, so it doesn't enforce 
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
+            string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
+
+            if (rebateType == "TENDER" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            {
+                deProject.IsRequired = true;
             }
         }
 
@@ -1578,7 +2034,7 @@ namespace Intel.MyDeals.BusinessRules
                 case OpDataElementType.PRC_TBL_ROW:
                     IOpDataElement deHasTrkr = r.Dc.GetDataElement(AttributeCodes.HAS_TRACKER);
                     IOpDataElement deInRedeal = r.Dc.GetDataElement(AttributeCodes.IN_REDEAL);
-                    if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meeto comp uses this as well and doesn't bring these fields down
+                    if (deParentStage == null || deHasTrkr == null || deInRedeal == null) return; // Because apparently meet comp uses this as well and doesn't bring these fields down
                     testObject = ((deHasTrkr.AtrbValue.ToString() == "0") || (deHasTrkr.AtrbValue.ToString() == "1" && deInRedeal.AtrbValue.ToString() == "1")) &&
                         (!parentStagesCheckToBypass.Contains(deParentStage.AtrbValue.ToString()));
                     break;
@@ -1592,6 +2048,158 @@ namespace Intel.MyDeals.BusinessRules
             if (testObject) // If the testObject meets above requirements, run this test...
             {
                 r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VistexRequiredFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+
+            if (programPayment == null || rebateType == null) return; // Safety check, if they are missing, skip!
+
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            string rebateTypeValue = rebateType.AtrbValue.ToString();
+            if (programPaymentValue == "Backend" && !(rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL"))
+            {
+                // Apply the action from the rule (SetRequired) to the targets (Anything in Target[])
+                r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VistexRequiredFieldsProgramPaymentOnly(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (programPayment == null) return; // Safety check, if they are missing, skip!
+
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            if (programPaymentValue == "Backend")
+            {
+                // Apply the action from the rule (SetRequired) to the targets (Anything in Target[])
+                r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            }
+        }
+
+        public static void VistexBlankFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dealType = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+            IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement periodProfile = r.Dc.GetDataElement(AttributeCodes.PERIOD_PROFILE);
+            IOpDataElement arSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (dealType == null || programPayment == null || rebateType == null || periodProfile == null || arSettlementLvl == null) return; // Safety check, if they are missing, skip!
+
+            string dealTypeValue = dealType.AtrbValue.ToString();
+            string programPaymentValue = programPayment.AtrbValue.ToString();
+            string rebateTypeValue = rebateType.AtrbValue.ToString();
+            // Period Profile has different blanking rules then Settlement Level
+            if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
+            {
+                if (periodProfile.AtrbValue != "")
+                {
+                    periodProfile.AtrbValue = "";
+                    periodProfile.State = OpDataElementState.Modified;
+                    periodProfile.AddMessage("Period Profile value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
+                }
+            }
+
+            if (programPaymentValue != "Backend")
+            {
+                if (arSettlementLvl.AtrbValue != "")
+                {
+                    arSettlementLvl.AtrbValue = "";
+                    arSettlementLvl.State = OpDataElementState.Modified;
+                    arSettlementLvl.AddMessage("AR Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
+                }
+            }
+        }
+
+        public static void PastEndDateExtendOnly(params object[] args)
+        {
+            // End dates in past are all handled this way regardless of tracker or not.  Read only rules depend on tracker.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement endDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            List<OpDataElement> otherChangeElements = r.Dc.DataElements.Where(d => d.HasValueChanged == true).Select(d => d).ToList();
+
+            if (endDate.OrigAtrbValue.ToString() == string.Empty) return; // In initial create, this rule can be bypassed because there isn't an Original Value in DE
+
+            DateTime newEndDate = DateTime.Parse(endDate.AtrbValue.ToString());
+            DateTime originalEndDate = DateTime.Parse(endDate.OrigAtrbValue.ToString());
+            DateTime today = DateTime.Today;
+            // DateTime.Compare, <0 If date1 is earlier than date2, 0 If date1 is the same as date2, > 0 If date1 is later than date2
+
+            if (DateTime.Compare(originalEndDate, today) >= 0) return; // If original end is EARLIER then today, it was in past, not changed to the past, continue
+            if (!endDate.HasValueChanged) return; // If the value hasn't been changed, continue
+            if (DateTime.Compare(newEndDate, originalEndDate) >= 0) return; // If New end is EARLIER then Original, wrong way move, continue and roll all changes back
+            foreach (OpDataElement changeElement in otherChangeElements)
+            {
+                changeElement.AtrbValue = changeElement.OrigAtrbValue;
+                changeElement.State = OpDataElementState.Unchanged;
+                if (changeElement.AtrbCd == AttributeCodes.END_DT)
+                {
+                    changeElement.AddMessage("A Past End Date can only be extended forward in time from " + originalEndDate.ToString("MM/dd/yyyy") + ".  Please adjust the End Date to after that date or the System will reset this value back to the Original End Date.");
+                }
+            }
+        }
+
+        public static void RedealNoEarlierThenPrevious(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement userEnteredRedealDateDe = r.Dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+            string inRedeal = r.Dc.GetDataElementValue(AttributeCodes.IN_REDEAL);
+
+            if (userEnteredRedealDateDe == null || inRedeal != "1") return; // Bail out if there isn't a user entered Re-deal date or not in re-deal - DE95332
+
+            DateTime userEnteredRedealDate;
+            DateTime dealStartDate;
+            DateTime dealEndDate;
+            DateTime lastTrackerStartDate;
+            DateTime dtNow = DateTime.Now;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_REDEAL_DT), out userEnteredRedealDate)) userEnteredRedealDate = DateTime.MinValue;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStartDate)) dealStartDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEndDate)) dealEndDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.LAST_TRKR_START_DT_CHK), out lastTrackerStartDate)) lastTrackerStartDate = dealStartDate;
+
+            // If User Entered is earlier then the Last Re-deal marker or User Entered is later then the End Date, toss an error
+            if (userEnteredRedealDate < lastTrackerStartDate || userEnteredRedealDate > dealEndDate) 
+            {
+                //Validation error was enough to prevent deal from moving, so no need to alter the date back to original
+                userEnteredRedealDateDe.AddMessage("Tracker Effective Start Date must be between " + lastTrackerStartDate.ToString("MM/dd/yyyy") + " and " + dealEndDate.ToString("MM/dd/yyyy"));
+            }
+        }
+
+        public static void SalesForceSetReadOnly(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            
+            string salesForceId = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+
+            if (salesForceId == "") return;
+
+            List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
+
+            foreach (IOpDataElement de in r.Dc.DataElements)
+            {
+                if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
+                {
+                    de.IsReadOnly = true;
+                }
             }
         }
 
@@ -1651,49 +2259,54 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IEnumerable<IOpDataElement> endVolAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-            IOpDataElement atrbWithValidation = endVolAtrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            IOpDataElement startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
+            IOpDataElement endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
 
             // Make dictionary of <tier, start vol>
-            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(x => new
+            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
             {
-                Key = x.DimKey.FirstOrDefault().AtrbItemId,
-                Value = x.AtrbValue.ToString()
+                Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                Value = de.AtrbValue.ToString()
             });
-            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            // Validate and set validation message if applicable on each tier
-            foreach (IOpDataElement atrb in endVolAtrbs)
+            var endVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
             {
-                if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()) || atrb.DimKey.Count() == 0)
-                {
-                    continue;
-                }
-                decimal startVol = 0;
-                decimal endVol = 0;
-                int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-                string relatedStartVol = "";
+                Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                Value = de.AtrbValue.ToString()
+            });
 
-                // Find the related start vol (in the same tier)
-                if (startVolDict.ContainsKey(tier))
-                {
-                    relatedStartVol = startVolDict[tier];
-                }
+            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
+            Dictionary<int, string> endVolDict = endVols.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-                // Parse the decimal values
-                bool isEndVolANumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out endVol);
-
-                // End Vol is unlimited
-                if (!isEndVolANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+            int prevStartVal = 0;
+            int prevEndVal = 0;
+            for (int tierKey = 1; tierKey <= 10; tierKey++)
+            {
+                int currStartVol = 0;
+                int currEndVol = 0;
+                bool isStartVolANumber = int.TryParse(startVolDict[tierKey], out currStartVol);
+                bool isEndVolANumber = int.TryParse(endVolDict[tierKey], out currEndVol);
+                if (!isEndVolANumber && endVolDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    continue;
+                    currEndVol = int.MaxValue;
                 }
 
-                // Compare
-                if (startVol >= endVol)
+                if (currStartVol == 0 && currEndVol == 0) continue; // Hit the end of populated values, skip these rows
+
+                if (prevStartVal > currStartVol)
                 {
-                    AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
+                    AddTierValidationMessage(startAtrbWithValidation, "Start volume must be greater than previous tier start volume.", tierKey);
                 }
+                if (prevEndVal > currEndVol)
+                {
+                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than previous tier end volume.", tierKey);
+                }
+                if (currStartVol >= currEndVol)
+                {
+                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than start volume.", tierKey);
+                }
+                prevStartVal = currStartVol;
+                prevEndVal = currEndVol;
             }
         }
 
@@ -1827,6 +2440,14 @@ namespace Intel.MyDeals.BusinessRules
                         bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
                         totalOfAtrb += safeParse;
 
+                        // added this to prevent user from saving 0 as QTY breaking DSAs, only triggers for QTY and 0/improper values.
+                        if (atrb.AtrbCd == AttributeCodes.QTY && safeParse == 0)
+                        {
+                            atrb.AtrbValue = 1;  // Just default it to 1 since QTY must be populated and at least 1 unit.
+                            atrb.State = OpDataElementState.Modified; // Force it modified to save
+                            continue; // Dispense with the QTY validation message filled in below.
+                        }
+
                         if (!isNumber)
                         {
                             AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
@@ -1835,6 +2456,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
                         }
+
                     }
                 }
             }
@@ -2142,7 +2764,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateKITSpreadsheetProducts(params object[] args)
+        public static void ValidateKITSpreadsheetProducts(params object[] args) // PTR only rule
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -2158,8 +2780,6 @@ namespace Intel.MyDeals.BusinessRules
             ProdMappings items = null;
             int numOfL1s = 0;
             int numOfL2s = 0;
-
-            int prdMapIndex = 0;
 
             try
             {
@@ -2180,7 +2800,11 @@ namespace Intel.MyDeals.BusinessRules
 
                 foreach (KeyValuePair<string, IEnumerable<ProdMapping>> prdMapping in items)
                 {
-                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == prdMapIndex).FirstOrDefault();
+                    // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
+                    // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
+                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString() == prdMapping.Key).FirstOrDefault();
+                    int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
+                    deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
 
                     foreach (ProdMapping prod in prdMapping.Value)
@@ -2197,7 +2821,7 @@ namespace Intel.MyDeals.BusinessRules
                             // Rule: Each L1 can only have a Qty of 1
                             if (parsedQty > 1)
                             {
-                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", prdMapIndex);
+                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", deDimKey);
                             }
                             numOfL1s += parsedQty;
                         }
@@ -2220,7 +2844,6 @@ namespace Intel.MyDeals.BusinessRules
                             dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
                         }
 
-                        prdMapIndex++;
                     }
                 }
             }

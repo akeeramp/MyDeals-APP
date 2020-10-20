@@ -1,0 +1,124 @@
+﻿<div class="contract-detail-form">
+    <div>
+        <h2>Deal Mass Update</h2>
+        <p style="color: #FC4C02">Use the tool below to update a value on existing deals</p>
+    </div>
+    <div class="row" style="color:#db704d;padding-left:10px" ng-class="{'mb-warning': true}">
+        <b><i class="intelicon-alert-solid icon-lg"></i> Warning:</b>
+        Use caution running this screen. Deals listed below will be updated regardless of deal status. Cancelled deals are not updated.
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-11 row">
+                <div op-control-flat
+                     ng-model="MassUpdateData"
+                     ng-pattern="vm.RegxDealIds"
+                     op-cd="'DEAL_IDS'"
+                     op-type="'TEXTAREA'"
+                     op-label="'Deal Id(s) :'"
+                     op-is-form="true"
+                     op-placeholder="'Multiple deal IDs can be separated with comma.'"
+                     op-ui-mode="'HORIZONTAL'"></div>
+            </div>
+
+            <div class="col-md-11 row">
+                <div op-control-flat
+                     ng-model="MassUpdateData"
+                     op-cd="'ATRB_SID'"
+                     op-type="'DROPDOWN'"
+                     op-label="'Field To Update :'"
+                     op-lookup-url="'/api/DealMassUpdate/GetUpdateAttributes/0'"
+                     op-lookup-text="'ATRB_LBL'"
+                     op-lookup-value="'ATRB_SID'"
+                     op-selected-object="'AtrbSid'"
+                     op-is-stealth="true"
+                     op-is-form="true"
+                     op-ui-mode="'HORIZONTAL'"></div>
+            </div>
+            <div class="row" ng-if="ShowNumeric == true">
+                <div class="col-md-3" style="font-weight:bold;width:21%">
+                    New Value :
+                </div>
+                <div class="col-md-8 row" style="width:69%">
+                    <div op-control-flat
+                         ng-model="MassUpdateData"
+                         op-cd="'UPD_VAL'"
+                         op-label="''"
+                         op-type="'NUMERIC'"
+                         op-min-value="0"
+                         op-max-value="24"
+                         op-is-stealth="true"
+                         op-is-form="true"
+                         op-ui-mode="'VERTICAL'"></div>
+                </div>
+            </div>
+
+            <div class="col-md-11 row">
+                <div op-control-flat
+                     ng-model="MassUpdateData"
+                     op-cd="'UPD_VAL_MULTISELECT'"
+                     op-type="'MULTISELECT'"
+                     op-label="'New Value'"
+                     op-lookup-values="[]"
+                     op-lookup-text="'ATRB_VAL_TXT'"
+                     op-lookup-value="'ATRB_VAL_TXT'"
+                     op-is-stealth="true"
+                     op-is-form="true"
+                     op-ui-mode="'HORIZONTAL'"></div>
+                <div op-control-flat
+                     ng-model="MassUpdateData"
+                     op-cd="'UPD_VAL_DROPDOWN'"
+                     op-type="'DROPDOWN'"
+                     op-label="'New Value'"
+                     op-lookup-text="'ATRB_VAL_TXT'"
+                     op-lookup-value="'ATRB_VAL_TXT'"
+                     op-is-form="true"
+                     op-ui-mode="'HORIZONTAL'"></div>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-3 row dateRangeLabel" style="left:11px;">
+                    <b>Update Vistex Staging Table.*</b>
+                </div>
+                <div class="col-md-2 row" style="left:7px;">
+                    <div class="row mt-5"></div>
+                    <toggle ng-model="vm.Send_Vstx_Flg.IsEnable"
+                            size="btn-sm"
+                            ng-click="vm.toggleType(vm.Send_Vstx_Flg.IsEnable)">
+                    </toggle>
+                </div>
+                <div class="col-md-9 row ">
+                    <p style=" position:absolute; left:20px;">* When set to “Off”, updates will not be added to the Vistex staging table. Use the "Push Deal to Vistex" screen once all updates are completed.</p>
+                </div>
+
+            </div>
+
+            <div class="row mt-5"></div>
+            <div class="row mt-md-2"></div>
+            <div class="col-md-12">
+                <div class="col-md-2 font-weight-bold ">
+                </div>
+                <div class="col-md-2">
+                    <div>
+                        <button ng-click="ValidateAndUpdateValues()" class="btn btn-primary">Update Values</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6" ng-if="ShowResults == true">
+            <div class="row">
+                <a style="text-decoration:underline"><b>Results:</b></a>
+                Deals Processed: {{UpdCnt.all}}, <i style="color:red;font-weight:bold">Errors: {{UpdCnt.error}}</i>, Successful Updated: {{UpdCnt.success}}
+            </div>
+            <div class="row">
+                <div id="grid" kendo-grid="DealMassupdateGrid" expand-k-grid options="vm.gridOptions">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

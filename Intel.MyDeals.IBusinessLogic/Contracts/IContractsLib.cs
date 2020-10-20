@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
@@ -11,8 +12,6 @@ namespace Intel.MyDeals.IBusinessLogic
         MyDealsData GetContract(int id, bool inclusive = false);
 
         OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, SavePacket savePacket);
-
-        OpDataCollectorFlattenedDictList SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData);
 
         OpDataCollectorFlattenedDictList SaveTenderContract(int custId, int contractId, ContractTransferPacket data);
 
@@ -44,5 +43,6 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsDuplicateContractTitle(int dcId, string title);       
 
         bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList);
+
     }
 }

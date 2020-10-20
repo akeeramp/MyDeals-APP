@@ -1,0 +1,223 @@
+﻿<div id="dataFixAttributes" class="filterContainer">
+    <table>
+        <thead>
+            <tr>
+                <th style="width:75px;">&nbsp;</th>
+                <th class="isRequired">Object Type</th>
+                <th class="isRequired">Attribute</th>
+                <th class="isRequired" title="Revision Number">Rvs #</th>
+                <th>Mtx Value</th>
+                <th class="isRequired">Object Id</th>
+                <th class="isRequired">Data Value</th>
+                <th>Data Value Max</th>
+                <th class="isRequired">MDX</th>
+                <th class="isRequired">Customer</th>
+                <th class="isRequired">Batch Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataItem in DataRows" class="filterRow">
+                <td>
+                    <span class="fl icnBtn icnSkyBtn" ng-click="addRow(dataItem)"><i class="intelicon-plus-max"></i></span>
+                    <span class="fl icnBtn icnGryBtn" ng-click="removeRow(dataItem)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select field'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-ng-model="dataItem.OBJ_TYPE_SID"
+                                k-value-primitive="true"
+                                k-filter="'contains'"
+                                k-auto-bind="true"
+                                k-data-source="OpDataElementDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 150px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select field'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-ng-model="dataItem.ATRB_SID"
+                                k-value-primitive="true"                                
+                                k-filter="'contains'"
+                                k-auto-bind="true"
+                                k-data-source="attributeDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 150px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.ATRB_RVS_NBR">
+                </td>
+                <td>
+                    <input kendo-numeric-text-box class="dataValueNumeric" decimals="0" format="'#'" min="0" ng-model="dataItem.ATRB_MTX_SID">
+                </td>
+                <td>
+                    <input kendo-numeric-text-box class="dataValueNumericFull" decimals="0" format="'#'" min="0" ng-model="dataItem.OBJ_SID">
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ATRB_VAL" placeholder="Data Value">
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.ATRB_VAL_MAX" placeholder="Data Value Max">
+                </td>
+                <td>
+                    <span class="fl ">
+                        <select kendo-drop-down-list
+                                k-placeholder="'Select MDX'"
+                                k-data-text-field="'Text'"
+                                k-data-value-field="'Value'"
+                                k-ng-model="dataItem.MDX_CD"
+                                k-value-primitive="true"
+                                k-auto-bind="true"
+                                k-data-source="MdxDataSource"
+                                class="opUiContainer sm abField"
+                                style="width: 75px;"></select>
+                    </span>
+                </td>
+                <td>
+                    <select kendo-drop-down-list
+                            k-placeholder="'Select customer'"
+                            k-data-text-field="'CUST_NM'"
+                            k-data-value-field="'CUST_SID'"
+                            k-ng-model="dataItem.CUST_MBR_SID"
+                            k-value-primitive="true"
+                            k-filter="'contains'"
+                            k-auto-bind="true"
+                            k-data-source="MyCustomersInfoDataSource"
+                            class="opUiContainer sm abField"
+                            style="width: 150px;"></select>
+                </td>
+                <td>
+                    <input class="form-control md dataValue" type="text" ng-model="dataItem.BTCH_ID" placeholder="Data Value Max">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    #dataFixAttributes .dataValue {
+        height: 30px;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    #dataFixAttributes .dataValueNumeric {
+        font-size: 11px;
+        width: 75px;
+    }
+
+    #dataFixAttributes .dataValueNumericFull {
+        font-size: 11px;
+        width: 150px;
+    }
+
+    #dataFixAttributes table thead th {
+        text-align: center;
+        font-size: 13px;
+    }
+
+    #dataFixAttributes table tbody td {
+        padding-right: 2px;
+    }
+
+    #dataFixAttributes {
+        max-height: 250px;
+        overflow: auto;
+    }
+
+        #dataFixAttributes .abValue {
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+            width: 100%;
+        }
+
+    .k-animation-container ul {
+        min-width: 50px !important
+    }
+
+    .filterRow {
+        margin-bottom: 7px;
+    }
+
+        .filterRow .k-dropdown {
+            border: 1px solid #e5e5e5;
+            border-radius: 3px;
+        }
+
+    .icnBtn {
+        border-radius: 4px;
+        width: 24px;
+        padding: 2px 5px;
+        margin: 2px 12px 2px 0;
+        cursor: pointer;
+    }
+
+        .icnBtn i {
+            color: #ffffff;
+        }
+
+    .icnSkyBtn {
+        background-color: #00AEEF;
+    }
+
+        .icnSkyBtn:hover {
+            background-color: #0071C5;
+        }
+
+    .icnGryBtn {
+        background-color: #bbbbbb;
+    }
+
+        .icnGryBtn:hover {
+            background-color: #cccccc;
+        }
+
+    .k-window-titlebar.k-dialog-titlebar.k-header {
+        display: none;
+    }
+
+    .btn-def {
+        margin: 0 0 0 15px;
+    }
+
+    .h5-small {
+        font-size: 12px;
+        color: #444444;
+        font-weight: 200;
+        margin-left: 10px;
+        font-style: italic;
+    }
+
+    .curRule {
+        color: #0071C5;
+        margin-left: 10px;
+    }
+
+    .icnSky {
+        cursor: pointer;
+        color: #00AEEF;
+        margin-left: 8px;
+    }
+
+    .menu-container li a {
+        cursor: pointer;
+    }
+
+    .sm-help {
+        font-size: 11px;
+        color: #666666;
+        line-height: 1.1em;
+    }
+
+        .sm-help I {
+            color: #FFA300;
+        }
+</style>

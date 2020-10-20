@@ -1,8 +1,8 @@
 ﻿
 /*
-File Updated: 1/14/2020 1:26:45 PM
+File Updated: 7/22/2020 3:28:40 PM
 On: MHTIPPIN-MOBL
-From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
+From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
 
 namespace Intel.MyDeals.Entities {
@@ -137,6 +137,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute AR_SETTLEMENT_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "AR_SETTLEMENT_LVL",
+			ATRB_DESC = "AR Settlement Level",
+			ATRB_LBL = "AR Settlement Level",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3719,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute AUTO_APPROVE_RULE_INFO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "AUTO_APPROVE_RULE_INFO",
+			ATRB_DESC = "Auto-approval Information",
+			ATRB_LBL = "Auto-approval Information",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 72,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute AVG_NET_PRC = new MyDealsAttribute()
 		{
@@ -426,6 +458,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
+		public static MyDealsAttribute CNSMPTN_LKBACK_PERD_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CNSMPTN_LKBACK_PERD_DT",
+			ATRB_DESC = "Consumption Lookback Period Date",
+			ATRB_LBL = "Consumption Lookback Period Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3455,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute CNTRCT_CUST_TYPE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CNTRCT_CUST_TYPE",
@@ -536,6 +584,70 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:c}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_PLATFORM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
+			ATRB_DESC = "Consumption Customer Platform",
+			ATRB_LBL = "Customer Platform",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3456,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_RPT_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
+			ATRB_DESC = "Consumption Customer Reported Geo",
+			ATRB_LBL = "Customer Reported Region",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3458,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_CUST_SEGMENT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_CUST_SEGMENT",
+			ATRB_DESC = "Consumption Customer Segment",
+			ATRB_LBL = "Customer Segment",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3457,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_LOOKBACK_PERIOD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_LOOKBACK_PERIOD",
+			ATRB_DESC = "Consumption Lookback Period",
+			ATRB_LBL = "Consumption Lookback Period (Months)",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3461,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute CONSUMPTION_REASON = new MyDealsAttribute()
@@ -922,6 +1034,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute CUST_CIM_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CUST_CIM_ID",
+			ATRB_DESC = "Customer CIM ID",
+			ATRB_LBL = "Customer CIM ID",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 2023,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute CUST_DIV_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CUST_DIV_NM",
@@ -1204,6 +1332,86 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "PRD",
 			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_AR_SETL_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_AR_SETL_LVL",
+			ATRB_DESC = "Vistex Customer Default AR Settlement Level",
+			ATRB_LBL = "Vistex Customer Default AR Settlement Level",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2026,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_CUST_RPT_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_CUST_RPT_GEO",
+			ATRB_DESC = "Vistex Customer Default Customer Reported Geo",
+			ATRB_LBL = "Vistex Customer Default Customer Reported Geo",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2027,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_LOOKBACK_PERD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_LOOKBACK_PERD",
+			ATRB_DESC = "Vistex Customer Default Lookback Period",
+			ATRB_LBL = "Vistex Customer Default Lookback Period",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2029,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_PERD_PRFL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_PERD_PRFL",
+			ATRB_DESC = "Vistex Customer Default Period Profile",
+			ATRB_LBL = "Vistex Customer Default Period Profile",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2025,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_TNDR_AR_SETL_LVL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_TNDR_AR_SETL_LVL",
+			ATRB_DESC = "Vistex Customer Default Tender AR Settlement Level",
+			ATRB_LBL = "Vistex Customer Default Tender AR Settlement Level",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2028,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
@@ -1518,7 +1726,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "EXCLUDE_AUTOMATION",
 			ATRB_DESC = "Exclude Automation from Price Rule",
-			ATRB_LBL = "Exclude Automation",
+			ATRB_LBL = "Exclude from Price Rules",
 			ATRB_MAX_LEN = 3,
 			ATRB_SID = 90012,
 			DATA_TYPE_CD = "VARCHAR",
@@ -2426,6 +2634,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute IS_HYBRID_PRC_STRAT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_HYBRID_PRC_STRAT",
+			ATRB_DESC = "Is a Hybrid Pricing Strategy",
+			ATRB_LBL = "Is Hybrid PS",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3718,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute IS_SUPER_USER = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_SUPER_USER",
@@ -2513,6 +2737,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Redeal Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3673,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute LAST_TRKR_START_DT_CHK = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_TRKR_START_DT_CHK",
+			ATRB_DESC = "Prior Tracker Start Date for Checks",
+			ATRB_LBL = "Prior Tracker Start Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3655,
 			DATA_TYPE_CD = "DATE",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
@@ -3114,6 +3354,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute PERIOD_PROFILE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PERIOD_PROFILE",
+			ATRB_DESC = "Period Profile",
+			ATRB_LBL = "Period Profile",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3717,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute PNL_SPLIT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PNL_SPLIT",
@@ -3530,6 +3786,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute QUOTE_LN_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QUOTE_LN_ID",
+			ATRB_DESC = "Quote Line ID",
+			ATRB_LBL = "Quote Line ID",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3716,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute RATE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "RATE",
@@ -3622,7 +3894,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3638,7 +3910,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3769,6 +4041,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute SALESFORCE_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SALESFORCE_ID",
+			ATRB_DESC = "Sales Force ID",
+			ATRB_LBL = "Sales Force ID",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 3715,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "NA",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute SBS_NM = new MyDealsAttribute()
 		{
@@ -4281,6 +4569,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute VISTEX_CUST_FLAG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "VISTEX_CUST_FLAG",
+			ATRB_DESC = "Vistex Customer Flag",
+			ATRB_LBL = "Vistex Customer Flag",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 2024,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute VOLUME = new MyDealsAttribute()
 		{

@@ -46,7 +46,13 @@ namespace Intel.MyDeals.BusinessLogic
                 // Clear Passed Validation for PTR and WIP
                 if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
                 {
-                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId()));
+                    List<int> salesForceIds = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.SALESFORCE_ID 
+                        && d.AtrbValue.ToString() != "" 
+                        && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId()))
+                        .Select(d => d.DcID).ToList();
+                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION 
+                        && (d.DcType == OpDataElementType.PRC_TBL_ROW.ToId() || d.DcType == OpDataElementType.WIP_DEAL.ToId())
+                        && !salesForceIds.Contains(d.DcID) );
                     foreach (OpDataElement de in passedAtrbs)
                     {
                         de.AtrbValue = PassedValidation.Dirty;
@@ -607,6 +613,7 @@ namespace Intel.MyDeals.BusinessLogic
                     //}
 
                     if (myDealsData.RollupValidationMessages(dc, ignoreTypes, ref dataHasValidationErrors)) dcHasErrors = true;
+                    bool isSalesForceDc = myDealsData.SalesForceObjectCheck(dc);
 
                     if (savePacket.ValidateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
@@ -640,8 +647,15 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL)
                         {
-                            if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
-                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                            if (!isSalesForceDc) // Normal deals flow - dirty on errors or changes
+                            {
+                                if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
+                                dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                            }
+                            else // Salesforce flow should come pre-validated, only change if errors, not changes
+                            {
+                                dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, dcHasErrors ? PassedValidation.Dirty : PassedValidation.Complete);
+                            }
                         }
                     }
 
@@ -724,7 +738,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpDataElementTypeMapping elMapping = null;
 
-            // look at each PTR seperately
+            // look at each PTR separately
             foreach (OpDataCollector dcPtr in allPtrs)
             {
                 ProdMappings items = null;
@@ -899,7 +913,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpLog.Log("SavePacketsBase - Start.");
 
-            // Save Data Cycle: Point 9
+            // Save Data Cycle: Point 9 - Full reconstituted Mid Tier objects here, Apply rules and kick off the save cycle data culling/actions building
 
             // How this should work:
             // Step 1 - get all of the related DEs for each object given a set of object levels (OpDataElementType) and IDs
@@ -929,6 +943,12 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         hasCriticalErrors = true;
                     }
+                    // Approved Price Table Row product errors safety check - If product errors AND PTR is approved, roll back all row saves (DE88221)
+                    if (opDataElementType == OpDataElementType.PRC_TBL_ROW && myDealsData.ContainsKey(opDataElementType) 
+                        && myDealsData[opDataElementType].Messages.Messages.Where(m => m.Message.Contains("Changes to this active deal/row have been restored to their previous saved values.")).Any())
+                    {
+                        RollbackActiveInvalidProductRows(myDealsData);
+                    }
                 }
             }
 
@@ -957,6 +977,38 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpLog.Log("SavePacketsBase - Complete.");
             return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
+        }
+
+        private static void RollbackActiveInvalidProductRows(MyDealsData myDealsData)
+        {
+            // This rolls back any Approved/Active PTR/Wip objects that suffered from an invalid product check (DE88221)
+            // Triggered in CheckForCrossVerticalProducts DC rule by appended warning message
+            List<int> badTableRowProductsIds = myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.Messages.Where(m => m.Message.Contains("Changes to this active deal/row have been restored to their previous saved values.")).Select(m => m.KeyIdentifier).ToList();
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                if (badTableRowProductsIds.Contains(dc.DcParentID))
+                {
+                    // At WIP level, remove new product entries, then roll back all changes
+                    List<OpDataElement> dePrds = dc.DataElements.Where(e => e.State == OpDataElementState.Modified && e.AtrbCd == AttributeCodes.PRODUCT_FILTER).ToList();
+                    dc.DataElements.RemoveAll(e => e.State == OpDataElementState.Modified && e.AtrbCd == AttributeCodes.PRODUCT_FILTER);
+                    foreach (OpDataElement de in dc.DataElements)
+                    {
+                        de.AtrbValue = de.OrigAtrbValue; // rolls back all WIP items
+                    }
+                }
+            }
+
+            // At PTR level, roll back all changes
+            foreach (OpDataCollector ptrDc in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
+            {
+                if (badTableRowProductsIds.Contains(ptrDc.DcID))
+                {
+                    foreach (OpDataElement de in ptrDc.DataElements)
+                    {
+                        de.AtrbValue = de.OrigAtrbValue; // rolls back all WIP items
+                    }
+                }
+            }
         }
 
         private static void TransferActions(this MyDealsData myDealsDataResults, MyDealsData myDealsDataWithErrors)

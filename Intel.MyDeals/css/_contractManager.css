@@ -154,8 +154,8 @@
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
-    #secHeader {
-        /*height: 68px;*/
+     #secHeader {
+         /*height: 68px;*/
         margin-top: -68px;
         font-size: 14px;
         padding: 0px 16px 3px 0;
@@ -375,7 +375,7 @@
         /*border: 2px solid #000000;*/
         width: 15px;
         height: 15px;
-        /*padding: 0px;*/ /*Raise 1 px for radious decrease, 2 px was default*/
+        /*padding: 0px;*/ /*Raise 1 px for radius decrease, 2 px was default*/
         padding: 2px;
         color: #FC4C02; /*Set text to Orange*/
         text-align: center;
@@ -426,6 +426,12 @@
         margin-bottom: 15px;
     }
 
+    .ptLnavSubTitle {
+        font-size: 14px;
+        text-align: left;
+        margin: 10px 10px 5px 10px;
+    }
+
     .smTabTitle {
         padding: 5px 8px 2px 4px;
         -ms-border-top-right-radius: 4px;
@@ -433,6 +439,18 @@
         color: #aaaaaa;
         background: #eeeeee;
         cursor: pointer;
+    }
+
+    .checkbox-custom {
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 14px;
+        padding: 2px;
+        text-align: center;
     }
 
     .smTabTitle:hover {
@@ -524,8 +542,33 @@
     .validf_, .validf_0, .validf_Dirty {
         color: #f9521a;
     }
- 
 
+    .isHybridIdent, .isHybridIdent_Complete {
+        font-size: 10px;
+        font-weight: bold;
+        color: blue; 
+        position: relative; 
+        margin-left: 6.5px;
+        margin-top: -19px;
+    }
+
+    .isHybridIdent_Finalizing, .isHybridIdent_Valid, .isHybridIdent_Dirty, .isHybridIdent_0, .isHybridIdent_ {
+        font-size: 10px;
+        font-weight: bold;
+        color: white; 
+        position: relative; 
+        margin-left: 6.5px;
+        margin-top: -19px;
+    }
+ 
+    .isHybridIdentHeader, .isHybridIdentHeader_Complete, .isHybridIdentHeader_Finalizing, .isHybridIdentHeader_Valid, .isHybridIdentHeader_Dirty, .isHybridIdentHeader_0, .isHybridIdentHeader_ {
+        font-size: 11px;
+        font-weight: bold;
+        color: blue; 
+        position: relative; 
+        margin-left: 9px;
+        margin-top: -25px;
+    }
 
     /*Navigation Styles*/
     .psNav {

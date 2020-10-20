@@ -249,6 +249,12 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\DataFixController.cs" />
+    <Compile Include="Controllers\API\DealMassUpdateController.cs" />
+    <Compile Include="Controllers\API\DownStreamController.cs" />
+    <Compile Include="Controllers\API\IntegrationController.cs" />
+    <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
+    <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
@@ -287,6 +293,7 @@
     <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\MeetCompController.cs" />
     <Compile Include="Controllers\API\FunfactController.cs" />
+    <Compile Include="Controllers\API\VistexServiceController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -321,8 +328,10 @@
     <Content Include="app\admin\admin.module.js" />
     <Content Include="app\admin\admin.route.js" />
     <Content Include="app\admin\adminTools\admin.admintools.controller.js" />
+    <Content Include="app\admin\adminTools\admin.testtenders.controller.js" />
     <Content Include="app\admin\adminTools\admintools.html" />
     <Content Include="app\admin\adminTools\admintools.service.js" />
+    <Content Include="app\admin\adminTools\testtenders.html" />
     <Content Include="app\admin\cache\admin.cache.controller.js" />
     <Content Include="app\admin\cache\cache.html" />
     <Content Include="app\admin\constants\admin.constants.controller.js" />
@@ -332,8 +341,14 @@
     <Content Include="app\admin\customer\admin.customer.controller.js" />
     <Content Include="app\admin\customer\customer.html" />
     <Content Include="app\admin\customer\customer.service.js" />
+    <Content Include="app\admin\dataFix\admin.dataFix.controller.js" />
+    <Content Include="app\admin\dataFix\dataFix.html" />
+    <Content Include="app\admin\dataFix\dataFix.service.js" />
     <Content Include="app\admin\dataQuality\dataQuality.html" />
     <Content Include="app\admin\dataQuality\dataQuality.service.js" />
+    <Content Include="app\admin\dealMassUpdate\admin.dealMassUpdate.controller.js" />
+    <Content Include="app\admin\dealMassUpdate\dealMassUpdate.html" />
+    <Content Include="app\admin\dealMassUpdate\dealMassUpdate.service.js" />
     <Content Include="app\admin\dropdowns\admin.dropdowns.controller.js" />
     <Content Include="app\admin\dropdowns\dropdowns.html" />
     <Content Include="app\admin\dropdowns\dropdowns.service.js" />
@@ -352,6 +367,18 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\legalExceptions\addLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\addLegalException.html" />
+    <Content Include="app\admin\legalExceptions\updateLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\updateLegalException.html" />
+    <Content Include="app\admin\legalExceptions\viewLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\viewLegalException.html" />
+    <Content Include="app\admin\legalExceptions\addAmendment.controller.js" />
+    <Content Include="app\admin\legalExceptions\addAmendment.html" />
+    <Content Include="app\admin\legalExceptions\compareLegalException.html" />
+    <Content Include="app\admin\legalExceptions\compareLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\viewLegalExceptionDealList.controller.js" />
+    <Content Include="app\admin\legalExceptions\viewLegalExceptionDealList.html" />
     <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.controller.js" />
     <Content Include="app\admin\meetComp\bulkUploadMeetCompModal.html" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.html" />
@@ -373,6 +400,9 @@
     <Content Include="app\admin\legalExceptions\admin.legalException.controller.js" />
     <Content Include="app\admin\legalExceptions\legalExceptions.html" />
     <Content Include="app\admin\legalExceptions\legalExceptions.service.js" />
+    <Content Include="app\admin\pushDealstoVistex\admin.pushDealstoVistex.controller.js" />
+    <Content Include="app\admin\pushDealstoVistex\pushDealstoVistex.html" />
+    <Content Include="app\admin\pushDealstoVistex\pushDealstoVistex.service.js" />
     <Content Include="app\admin\quoteLetter\admin.quoteLetter.controller.js" />
     <Content Include="app\admin\quoteLetter\quoteLetter.html" />
     <Content Include="app\admin\quoteLetter\quoteLetter.service.js" />
@@ -408,6 +438,20 @@
     <Content Include="app\admin\funfact\admin.funfact.controller.js" />
     <Content Include="app\admin\funfact\funfact.html" />
     <Content Include="app\admin\funfact\funfact.service.js" />
+    <Content Include="app\admin\vistexcustomermapping\admin.vistexcustomermapping.controller.js" />
+    <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.html" />
+    <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
+    <Content Include="app\admin\vistex\admin.vistexTestAPI.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistex.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexOutbound.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexProductVertical.controller.js" />
+    <Content Include="app\admin\vistex\admin.vistexProductVerticalOutbound.controller.js" />
+    <Content Include="app\admin\vistex\dsa.service.js" />
+    <Content Include="app\admin\vistex\vistextestapi.html" />
+    <Content Include="app\admin\vistex\vistex.html" />
+    <Content Include="app\admin\vistex\vistexOutbound.html" />
+    <Content Include="app\admin\vistex\vistexProductVertical.html" />
+    <Content Include="app\admin\vistex\vistexProductVerticalOutbound.html" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />
@@ -560,6 +604,10 @@
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
     <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\csrfRequestVerificationToken.js" />
+    <Content Include="app\core\directives\datafixActionBuilder\datafixActionBuilder.directive.html" />
+    <Content Include="app\core\directives\datafixActionBuilder\datafixActionBuilder.directive.js" />
+    <Content Include="app\core\directives\datafixAttributeBuilder\datafixAttributeBuilder.directive.html" />
+    <Content Include="app\core\directives\datafixAttributeBuilder\datafixAttributeBuilder.directive.js" />
     <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.css" />
     <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.html" />
     <Content Include="app\core\directives\dealPopup\dealPopupIcon.directive.js" />
@@ -1840,6 +1888,7 @@
     <Content Include="Views\Error\LostAccountToken.cshtml" />
     <Content Include="Views\ToolManual\Index.cshtml" />
     <Content Include="Views\Reporting\Index.cshtml" />
+    <Content Include="Views\CodingPractices\CiCdPipeline.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

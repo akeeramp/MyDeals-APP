@@ -15,7 +15,7 @@ namespace Intel.MyDeals.Entities
         public List<string> InValidProducts { get; set; }
         public List<string> ProductsRequiredBench { get; set; }
         public List<MeetComp> ValidatedMeetComps { get; set; }
-        public List<MeetComp> DuplicateMeetCompsSKU { get; set; }
+        public List<MeetComp> DuplicateMeetCompsSKU{ get; set; }
     }
 
     public class MeetCompProductValidation

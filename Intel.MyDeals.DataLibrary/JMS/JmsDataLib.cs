@@ -1,17 +1,20 @@
 ﻿extern alias opaqueTools;
-
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.Entities;
 using opaqueTools.Intel.Opaque.Tools;
 using Intel.MyDeals.DataAccessLib;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
+using System.Net;
+using System.Text;
 using Intel.Opaque;
+using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.DataLibrary
@@ -24,13 +27,15 @@ namespace Intel.MyDeals.DataLibrary
         private string jmsUID;
         private Dictionary<string, string> jmsEnvs;
 
-        private IConnection connection;
-        private ISession session;
-        private IQueue destination;
+        private IConnection _connection;
+        private ISession _session;
+        private IQueue _destination;
 
         // This is all communications to our DB as well as SAP
         public JmsDataLib()
         {
+            // In case we need it on errors and no token
+            //_mIdsid = OpUserStack.MyOpUserToken == null? "dmyGA" : OpUserStack.MyOpUserToken.Usr.Idsid;
             _mIdsid = OpUserStack.MyOpUserToken.Usr.Idsid;
 
             jmsEnvs = DataLibrary.GetEnvConfigs();
@@ -305,6 +310,119 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public class Bearer
+        {
+            public string access_token { get; set; }
+        }
+
+        public bool PublishBackToSfTenders(string data)
+        {
+            OpLog.Log("JMS - Publish to SF Tenders");
+
+            bool sendSuccess = false;
+
+            // Default to Dev Response Environment, update connection if it falls to another environment.
+            string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : ""; 
+
+            if (url == "") return false; // If no URL is defined, bail out of the send
+
+            // APOGEE
+            //string consumerKey = "client_id_value"; //"client_id_value";
+            //string consumerSecret = "client_secret_value"; //“client_secret_value";
+            //string accessToken;
+
+            //byte[] byte1 = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" + consumerKey + "&client_secret=" + consumerSecret);
+            ////Console.WriteLine(byte1);
+            //HttpWebRequest bearerReq = WebRequest.Create(url) as HttpWebRequest;
+            //bearerReq.Accept = "application/json";
+            //bearerReq.Method = "POST";
+            //bearerReq.ContentType = "application/x-www-form-urlencoded";
+            //bearerReq.ContentLength = byte1.Length;
+            //bearerReq.KeepAlive = false;
+            //Stream newStream = bearerReq.GetRequestStream();
+
+
+            //newStream.Write(byte1, 0, byte1.Length);
+
+            //WebResponse bearerResp = bearerReq.GetResponse();
+
+            ////Code dies in next block *FIX*
+            //using (var reader = new StreamReader(bearerResp.GetResponseStream(), Encoding.UTF8))
+            //{
+            //    var response = reader.ReadToEnd();
+            //    //Console.WriteLine(response);
+            //    Bearer bearer = JsonConvert.DeserializeObject<Bearer>(response);
+            //    accessToken = bearer.access_token;
+            //}
+
+            ////Console.WriteLine(accessToken);
+
+            //HttpWebRequest APIReq = WebRequest.Create("apigee_proxy_url") as HttpWebRequest;
+
+
+            //APIReq.Method = "GET";
+            //APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
+            ////Console.WriteLine();
+            //using (StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream()))
+            //{
+            //    string result = responseReader.ReadToEnd();
+            //    int j = 0;
+            //}
+            // END APOGEE
+
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            //request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
+            request.Credentials = new System.Net.NetworkCredential("myDls2SF", "f@s_dlsYmz");
+
+            request.Method = "POST"; // Set the Method property of the request to POST.  
+
+            request.KeepAlive = false;
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(data);
+
+            request.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+            request.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+
+            // Get the request stream, write data, then close the stream
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            try
+            {
+                WebResponse response = request.GetResponse(); // Get the response.
+                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                // Get the stream containing content returned by the server.  
+                // The using block ensures the stream is automatically closed.
+                using (dataStream = response.GetResponseStream())
+                {
+                    // Open the stream using a StreamReader for easy access.  
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.  
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.  
+                    responseObjectDictionary["Data"] = responseFromServer;
+                    //Logging
+                    if (responseObjectDictionary["Data"] == "Request captured successfully") sendSuccess = true;
+                    OpLog.Log("JMS - Publish to SF Tenders Completed: " + responseObjectDictionary["Data"]);
+                }
+
+                response.Close();
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("JMS - Publish to SF Tenders ERROR: " + ex);
+            }
+
+            return sendSuccess;
+        }
+
         public void Publish(string brokerURI,
                        string userName,
                        string queueName,
@@ -324,19 +442,19 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
+                _connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
-                connection.ExceptionListener += new ExceptionListener(OnException);
+                _connection.ExceptionListener += new ExceptionListener(OnException);
 
                 // create the session
-                session = connection.CreateSession(ackMode);
+                _session = _connection.CreateSession(ackMode);
 
                 // create the destination
-                destination = session.GetQueue(queueName);
+                _destination = _session.GetQueue(queueName);
 
                 // create the producer
-                IMessageProducer msgProducer = session.CreateProducer(destination);
+                IMessageProducer msgProducer = _session.CreateProducer(_destination);
 
                 ITextMessage msg;
 
@@ -344,7 +462,7 @@ namespace Intel.MyDeals.DataLibrary
                 for (int i = 0; i < data.Count; i++)
                 {
                     // create text message
-                    msg = session.CreateTextMessage();
+                    msg = _session.CreateTextMessage();
 
                     // set message text
                     msg.Text = (String)data[i];
@@ -359,7 +477,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
 
                 // close the connection
-                connection.Close();
+                _connection.Close();
             }
             catch (Exception e)
             {
@@ -405,13 +523,13 @@ namespace Intel.MyDeals.DataLibrary
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
 
                 // create the connection
-                connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
+                _connection = queueFactory.CreateConnection(userName, jmsEnvs.ContainsKey("jmsPWD") ? StringEncrypter.StringDecrypt(jmsEnvs["jmsPWD"], "JMS_Password") : "");
 
                 // set the exception listener
-                connection.ExceptionListener += new ExceptionListener(OnException);
+                _connection.ExceptionListener += new ExceptionListener(OnException);
 
                 // create the session
-                ISession session = connection.CreateSession(ackMode);
+                ISession session = _connection.CreateSession(ackMode);
 
                 IQueue destination = session.GetQueue(queueName);
 
@@ -421,13 +539,13 @@ namespace Intel.MyDeals.DataLibrary
 
                 session.Close();
 
-                connection.Close();
+                _connection.Close();
 
                 return jmsEnvs;
             }
             catch (Exception ex)
             {
-                connection.Close();
+                _connection.Close();
                 throw ex;
             }
         }
@@ -477,5 +595,231 @@ namespace Intel.MyDeals.DataLibrary
 
             return modifiedURL;
         }
+
+
+        #region Tenders Integration Items for IQR
+        public Guid SaveTendersDataToStage(string dataType, List<int> dealsList, string jsonDataPacket)
+        {
+            Guid myGuid = Guid.Empty;
+
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_INS_DSA_RQST_RSPN_LOG()
+                {
+                    in_rqst_type = dataType,
+                    in_deal_lst = new type_int_list(dealsList.ToArray()),
+                    in_json_data = jsonDataPacket
+                };
+
+                using (var ret = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_RESULT = DB.GetReaderOrdinal(ret, "RESULT");
+
+                    while (ret.Read())
+                    {
+                        myGuid = ret.GetFieldValue<System.Guid>(IDX_RESULT);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return myGuid;
+        }
+
+        public List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord)
+        {
+            Guid myGuid = Guid.Empty;
+
+            // Uses TenderTransferObjects class
+            List<TenderTransferObject> retData = new List<TenderTransferObject>();
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA()
+                {
+                    in_rqst_type = dataType
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    if (rdr != null && rdr.HasRows) // ret comes back and has success row = it ran without fail
+                    {
+                        int IDX_RQST_SID = DB.GetReaderOrdinal(rdr, "RQST_SID");
+                        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                        int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+                        int IDX_RQST_JSON_DATA = DB.GetReaderOrdinal(rdr, "RQST_JSON_DATA");
+                        int IDX_RQST_STS = DB.GetReaderOrdinal(rdr, "RQST_STS");
+
+                        while (rdr.Read())
+                        {
+                            retData.Add(new TenderTransferObject
+                            {
+                                RqstSid = (IDX_RQST_SID < 0 || rdr.IsDBNull(IDX_RQST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RQST_SID),
+                                DealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                                BtchId = (IDX_BTCH_ID < 0 || rdr.IsDBNull(IDX_BTCH_ID)) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID),
+                                RqstJsonData = (IDX_RQST_JSON_DATA < 0 || rdr.IsDBNull(IDX_RQST_JSON_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_JSON_DATA),
+                                RqstSts = (IDX_RQST_STS < 0 || rdr.IsDBNull(IDX_RQST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_STS)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            if (specificRecord != Guid.Empty) // if we open up other stages to support this, cull down to pending stage below.
+            {
+                // Return only the matching item
+                return retData.Where(r => r.BtchId == specificRecord).ToList();
+            }
+
+            return retData;
+        }
+
+        public void UpdateTendersStage(Guid btchId, string rqstStatus) // Update the processing status of in/out bound tender data
+        {
+            // Add type_int_dictionary here later
+            OpLog.Log("Tenders - SetTendersIOBoundStage");
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_rqst_sts = rqstStatus,
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+        }
+
+        public List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_CHECK_SF_ID()
+            {
+                CntrctSFID = salesForceIdCntrct,
+                WipSFID = salesForceIdDeal,
+                CustId = custId
+            };
+            var ret = new List<TendersSFIDCheck>();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_Cntrct_SF_ID = DB.GetReaderOrdinal(rdr, "Cntrct_SF_ID");
+                    int IDX_Cntrct_SID = DB.GetReaderOrdinal(rdr, "Cntrct_SID");
+                    int IDX_Wip_SF_ID = DB.GetReaderOrdinal(rdr, "Wip_SF_ID");
+                    int IDX_Wip_SID = DB.GetReaderOrdinal(rdr, "Wip_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new TendersSFIDCheck
+                        {
+                            Cntrct_SF_ID = (IDX_Cntrct_SF_ID < 0 || rdr.IsDBNull(IDX_Cntrct_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Cntrct_SF_ID),
+                            Cntrct_SID = (IDX_Cntrct_SID < 0 || rdr.IsDBNull(IDX_Cntrct_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Cntrct_SID),
+                            Wip_SF_ID = (IDX_Wip_SF_ID < 0 || rdr.IsDBNull(IDX_Wip_SF_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Wip_SF_ID),
+                            Wip_SID = (IDX_Wip_SID < 0 || rdr.IsDBNull(IDX_Wip_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Wip_SID)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
+        public int FetchCustFromCimId(string custCimId)
+        {
+            int retCustId = 0;
+            // TO DO: Fill in with correct passed data after verification
+
+            var cmd = new Procs.dbo.PR_MYDL_CUST_CIM_ID_MAP_DTL()
+            {
+                in_cust_cim_id = custCimId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+                    //int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+
+                    while (rdr.Read())
+                    {
+                        retCustId = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retCustId;
+        }
+
+        public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
+        {
+            ProductEpmObject retObj = new ProductEpmObject();
+
+            var cmd = new Procs.dbo.PR_MYDL_PRD_PCSR_EPM_MAP_DTL()
+            {
+                in_prd_epm_id = epmId
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PRD_GRP_EPM_ID = DB.GetReaderOrdinal(rdr, "PRD_GRP_EPM_ID");
+                    int IDX_PCSR_NBR_SID = DB.GetReaderOrdinal(rdr, "PCSR_NBR_SID");
+                    int IDX_EDW_PCSR_NBR = DB.GetReaderOrdinal(rdr, "EDW_PCSR_NBR");
+                    int IDX_MYDL_PCSR_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PCSR_NBR");
+
+                    while (rdr.Read())
+                    {
+                        retObj.PrdGrpEpmId = (IDX_PRD_GRP_EPM_ID < 0 || rdr.IsDBNull(IDX_PRD_GRP_EPM_ID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PRD_GRP_EPM_ID);
+                        retObj.PcsrNbrSid = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
+                            ? default(System.Int32)
+                            : rdr.GetFieldValue<System.Int32>(IDX_PCSR_NBR_SID);
+                        retObj.EdwPcsrNbr = (IDX_EDW_PCSR_NBR < 0 || rdr.IsDBNull(IDX_EDW_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_EDW_PCSR_NBR);
+                        retObj.MydlPcsrNbr = (IDX_MYDL_PCSR_NBR < 0 || rdr.IsDBNull(IDX_MYDL_PCSR_NBR))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_MYDL_PCSR_NBR);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retObj;
+        }
+
+        #endregion Tenders Integration Items for IQR
+
     }
 }

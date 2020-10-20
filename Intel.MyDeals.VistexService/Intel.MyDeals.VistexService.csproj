@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD5EE68C-88BB-4372-8B9D-F824C0E66933}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Intel.MyDeals.VistexService</RootNamespace>
+    <AssemblyName>Intel.MyDeals.VistexService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'cons|AnyCPU' ">
+    <OutputPath>bin\App.cons.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'cinr|AnyCPU' ">
+    <OutputPath>bin\App.cinr.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'itt|AnyCPU' ">
+    <OutputPath>bin\App.itt.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'utt|AnyCPU' ">
+    <OutputPath>bin\App.utt.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ciar|AnyCPU' ">
+    <OutputPath>bin\App.debug.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'prod|AnyCPU' ">
+    <OutputPath>bin\App.prod.config\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Intel.Opaque">
+      <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque.Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque.Utilities.Server">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessFlow.cs" />
+    <Compile Include="DataAccessLayer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VistexAdminDataLib.cs" />
+    <Compile Include="VistexCommonLogging.cs" />
+    <Compile Include="VistexHttpService.cs" />
+    <Compile Include="VistexParams.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.ciar.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.cinr.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App.cons.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.Debug.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.dev.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.itt.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.Release.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.utt.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="App.prod.config">
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Include="RunCommands\VISTEXSapPoUploadCustomer.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadDeal.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadProduct.cmd" />
+    <None Include="RunCommands\VISTEXSapPoUploadVertical.cmd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
+      <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
+      <Name>Intel.MyDeals.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll" />
+  <Target Name="App_config_AfterCompile" AfterTargets="AfterBuild">
+    <!--Generate transformed app config in the intermediate directory-->
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\Dev\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\dev\$(TargetFileName).config" Transform="App.dev.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\itt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\itt\$(TargetFileName).config" Transform="App.itt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\utt\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\utt\$(TargetFileName).config" Transform="App.utt.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cons\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cons\$(TargetFileName).config" Transform="App.cons.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\ciar\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\ciar\$(TargetFileName).config" Transform="App.ciar.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\cinr\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\cinr\$(TargetFileName).config" Transform="App.cinr.config" />
+    <MakeDir Directories="$(IntermediateOutputPath)\EnvConfig\prod\" />
+    <TransformXml Source="App.config" Destination="$(IntermediateOutputPath)\EnvConfig\prod\$(TargetFileName).config" Transform="App.prod.config" />
+    <!--Force build process to use the transformed configuration file from now on.-->
+    <!--<ItemGroup>
+      <AppConfigWithTargetPath Remove="App.config" />
+      <AppConfigWithTargetPath Include="$(IntermediateOutputPath)$(TargetFileName).config">
+        <TargetPath>$(TargetFileName).config</TargetPath>
+      </AppConfigWithTargetPath>
+    </ItemGroup>-->
+  </Target>
+</Project>

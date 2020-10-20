@@ -343,6 +343,11 @@
             type: "string",
             width: 100
         }, {
+            field: "QUOTE_LN_ID",
+            title: "Quote Line ID",
+            type: "string",
+            width: 100
+        }, {
             field: "GEO_COMBINED",
             title: "Geo",
             type: "string",

@@ -86,13 +86,16 @@
     <Compile Include="CostTestDataItem.cs" />
     <Compile Include="CostTestDetails.cs" />
     <Compile Include="DashboardFilter.cs" />
+    <Compile Include="DataFix.cs" />
     <Compile Include="DcPath.cs" />
     <Compile Include="DcPathTitle.cs" />
+    <Compile Include="DealMassUpdate.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
+    <Compile Include="DsaLogs.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="EmployeeCustomers.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="PriceRule.cs" />
     <Compile Include="ProductLookupPacket.cs" />
     <Compile Include="ProductTranslatePacket.cs" />
+    <Compile Include="PushDealstoVistex.cs" />
     <Compile Include="QuoteLetterSave.cs" />
     <Compile Include="QuoteLetterFile.cs" />
     <Compile Include="QuoteLetterData.cs" />
@@ -179,6 +183,12 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\in_t_obj_atrb.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_obj_actn.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\T_NOTIF_INFO.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -253,6 +263,7 @@
     <Compile Include="Templating\TemplateExtensions\DcsProduct.cs" />
     <Compile Include="Templating\TemplateExtensions\DealTemplateDataGram.cs" />
     <Compile Include="TenderActionItem.cs" />
+    <Compile Include="TenderTransferObjects.cs" />
     <Compile Include="TimeFlowHelper.cs" />
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />
@@ -270,6 +281,7 @@
     <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
+    <Compile Include="VistexLogFilters.cs" />
     <Compile Include="WfActnItem.cs" />
     <Compile Include="WipDealQuickViewPacket.cs" />
     <Compile Include="WorkFlowQueueItem.cs" />

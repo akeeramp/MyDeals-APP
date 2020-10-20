@@ -19,6 +19,7 @@ function opPopover($compile, dataService, $timeout, logger) {
         link: function (scope, element, attrs) {
             var capColumns = [
                   { field: "CAP", title: "CAP", template: "#= isNaN(CAP) ? CAP : kendo.toString(parseFloat(CAP), 'c') #" },
+                  { field: "Level4", title: "Deal Product Name", template: " #= kendo.toString(Level4) #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "CAP_START", title: "Start Date", template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') #" },
                   { field: "CAP_END", title: "End Date", template: " #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" }

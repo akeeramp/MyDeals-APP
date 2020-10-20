@@ -12,12 +12,12 @@ namespace Intel.MyDeals.Entities.Logging
     {
         private static string _toEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 
-//// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
-//#if DEBUG
-//        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
-//#else
-//        private static string ToEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
-//#endif
+        //// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
+        //#if DEBUG
+        //        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
+        //#else
+        //        private static string ToEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+        //#endif
 
         private static string _fromEmail = "MyDealsSupport@intel.com";
         public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
@@ -66,6 +66,12 @@ namespace Intel.MyDeals.Entities.Logging
 
             // Get the tools environment
             string env = OpLog.GetEnv();
+
+            // if it is a local environment, only send it to the current user, otherwise, set it to the standard developers list above.
+            if (env == "LOCAL")
+            {
+                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com";
+            }
 
             // construct message
             string shortMsg = msg.Message.Truncate(50) + "...";  // Was string shortMsg = msg.Message.Truncate(50) + "...";

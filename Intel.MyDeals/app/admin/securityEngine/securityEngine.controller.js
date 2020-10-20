@@ -21,6 +21,7 @@
     	vm.save = save;
     	vm.reset = reset;
     	vm.magicWandSelect = magicWandSelect;
+        vm.changeTabs = changeTabs;
     	vm.onObjTypeChange = onObjTypeChange;
 
     	// Variables     
@@ -31,7 +32,7 @@
     	vm.currentTabMode = vm.tabModeEnum.AtrbSecurity;
     	vm.pendingSaveArray = []; 
 
-    	var bestGuessAttributes = ["BACK_DATE_RSN", "BLLG_DT", "BOM_SYSTEM_CONFIG", "CA_DATA_CA_ID", "CAP", "COMMENT_HISTORY", "COMP_PRICE_CPU", "COMP_PRICE_CS", "COMP_PRODUCT_CPU_OTHER", "COMP_PRODUCT_CS_OTHER", "COMPETITIVE_NAME", "COMPETITIVE_PRODUCT", "COMPETITIVE_PRODUCT_CPU", "COMPETITIVE_PRODUCT_CS", "DEAL_CORP_ACCNT_DIV", "COST_TEST_OVERRIDE", "COST_TEST_RESULT", "CPU_SPLIT", "CREDIT_AMT", "CREDIT_VOLUME", "CS_SHIP_AHEAD_DT", "CS_SHIP_AHEAD_END_DT", "CS_SHIP_AHEAD_STRT_DT", "CS_SPLIT", "CUST_MBR_SID", "DEAL_CORP_ACCNT_DIV", "DEAL_CUST_DIV_NM", "DEAL_DESC", "DEAL_MSP_PRC", "DEAL_NBR", "DEAL_PGM_TYPE", "DEAL_PRC_CONFLICT", "DEAL_SOLD_TO_ID", "WF_STG_CD", "OBJ_SET_TYPE_CD", "DEBIT_AMT", "DEBIT_VOLUME", "DIVISION_APPROVAL_PRICE", "ECAP_PRICE", "REBATE_TYPE", "END_CAP", "END_CUSTOMER_RETAIL", "END_DT", "END_VOL", "EXPIRE_YCS", "IDMS_SHEET_COMMENT", "LAST_MOD_BY", "LAST_MOD_DT", "LEGAL_COMMENTS", "LINE_NBR", "MARKET_SEGMENT", "MEETCOMP_TEST_RESULT", "MRKT_SEG", "NORTHBRIDGE_SPLIT", "NUM_OF_TIERS", "ON_ADD_DT", "ORIG_ECAP_TRKR_NBR", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "PNL_SPLIT", "PnL_Split_for_KITS", "PORTFOLIO", "PRD_NM_COMBINED", "PRODUCT_FILTER", "PRODUCT_TITLE", "PROG_VOLTIER_NM", "PROGRAM_GEO", "PROGRAM_GEO_COMBINED", "PGM_PAYMENT", "PROGRAM_TYPE", "PROGRAM_TYPE_VOL_TIER", "QLTR_PROJECT", "QLTR_TERMS", "RATE", "RATE_BASED_ON", "REBATE_BILLING_END", "REBATE_BILLING_START", "REBATE_DEAL_ID", "REQ_BY", "REQ_DT", "RETAIL_CYCLE", "SA_COST_TEST_RESULTS", "SERVER_DEAL_TYPE", "SOUTHBRIDGE_SPLIT", "START_DT", "STRT_CAP", "STRT_VOL", "TENDER_PRICE", "TIER_NBR", "TOTAL_DOLLAR_AMOUNT", "TRGT_RGN", "TRKR_END_DT", "TRKR_NBR", "TRKR_START_DT", "VOLUME", "YCS_OVERLAP_OVERRIDE"];
+    	var bestGuessAttributes = ["BACK_DATE_RSN", "BLLG_DT", "BOM_SYSTEM_CONFIG", "CA_DATA_CA_ID", "CAP", "COMMENT_HISTORY", "COMP_PRICE_CPU", "COMP_PRICE_CS", "COMP_PRODUCT_CPU_OTHER", "COMP_PRODUCT_CS_OTHER", "COMPETITIVE_NAME", "COMPETITIVE_PRODUCT", "COMPETITIVE_PRODUCT_CPU", "COMPETITIVE_PRODUCT_CS", "DEAL_CORP_ACCNT_DIV", "COST_TEST_OVERRIDE", "COST_TEST_RESULT", "CPU_SPLIT", "CREDIT_AMT", "CREDIT_VOLUME", "CS_SHIP_AHEAD_DT", "CS_SHIP_AHEAD_END_DT", "CS_SHIP_AHEAD_STRT_DT", "CS_SPLIT", "CUST_MBR_SID", "DEAL_CORP_ACCNT_DIV", "DEAL_CUST_DIV_NM", "DEAL_DESC", "DEAL_MSP_PRC", "DEAL_NBR", "DEAL_PGM_TYPE", "DEAL_PRC_CONFLICT", "DEAL_SOLD_TO_ID", "WF_STG_CD", "OBJ_SET_TYPE_CD", "DEBIT_AMT", "DEBIT_VOLUME", "DIVISION_APPROVAL_PRICE", "ECAP_PRICE", "REBATE_TYPE", "END_CAP", "END_CUSTOMER_RETAIL", "END_DT", "END_VOL", "EXPIRE_YCS", "IDMS_SHEET_COMMENT", "LAST_MOD_BY", "LAST_MOD_DT", "LEGAL_COMMENTS", "LINE_NBR", "MARKET_SEGMENT", "MEETCOMP_TEST_RESULT", "MRKT_SEG", "NORTHBRIDGE_SPLIT", "NUM_OF_TIERS", "ON_ADD_DT", "ORIG_ECAP_TRKR_NBR", "PAYOUT_BASED_ON", "PERIOD_PROFILE", "PROGRAM_PAYMENT", "PNL_SPLIT", "PnL_Split_for_KITS", "PORTFOLIO", "PRD_NM_COMBINED", "PRODUCT_FILTER", "PRODUCT_TITLE", "PROG_VOLTIER_NM", "PROGRAM_GEO", "PROGRAM_GEO_COMBINED", "PGM_PAYMENT", "PROGRAM_TYPE", "PROGRAM_TYPE_VOL_TIER", "QLTR_PROJECT", "QLTR_TERMS", "QUOTE_LN_ID", "RATE", "RATE_BASED_ON", "REBATE_BILLING_END", "REBATE_BILLING_START", "REBATE_DEAL_ID", "REQ_BY", "REQ_DT", "RETAIL_CYCLE", "SA_COST_TEST_RESULTS", "SERVER_DEAL_TYPE", "SOUTHBRIDGE_SPLIT", "START_DT", "STRT_CAP", "STRT_VOL", "TENDER_PRICE", "TIER_NBR", "TOTAL_DOLLAR_AMOUNT", "TRGT_RGN", "TRKR_END_DT", "TRKR_NBR", "TRKR_START_DT", "VOLUME", "YCS_OVERLAP_OVERRIDE"];
         var bestGuessActions = ["CAN_CREATE_QTR_RETRO_DEALS", "CAN_CREATE_RETRO_DEALS", "CAN_MANAGE_CHIPSET_SPLITOUT", "CAN_MANAGE_COMPETITIVE_PRODUCTS", "CAN_MANAGE_EMAIL", "CAN_REMOVE_WB_LOCK", "CAN_VIEW_COST_TEST", "CAN_VIEW_LEGAL_COMMENTS", "CAN_VIEW_MEET_COMP", "C_ADD_ATTACHMENTS", "C_DELETE_ATTACHMENTS", "C_APPROVE ", "C_CAN_VIEW_ADMINTOOL", "C_CAN_VIEW_C2A_INTERFACE", "C_COPY_DEAL", "C_CREATE_DEAL", "C_FAST_TRACK", "C_IDMS_ACTION_DISABLED ", "C_IDMS_READ_ONLY ", "C_REJECT_DEAL", "C_REQ_COMPONENTS", "C_EDIT_CONTRACT", "C_EDIT_PRODUCT", "C_VIEW_ATTACHMENTS", "C_VIEW_QUOTE_LETTER", "DEAL_READ_ONLY"];
 
     	vm.dropDownDatasource = {};
@@ -61,7 +62,7 @@
     	vm.default.attrActionName = "ATRB_REQUIRED";
     	vm.default.objTypeName = "CNTRCT";
 
-    	vm.filtered = {}; // A copy of vm.selected's values to create the grid
+        vm.filtered = {}; // A copy of vm.selected's values to create the grid
     	vm.filtered.attributes = [];
 		
     	vm.isDropdownsLoaded = false; // Determines load for k-ng-delay on dropdowns
@@ -171,6 +172,7 @@
     	vm.dropDownOptions.objType = {
     		autoBind: false,
     		select: vm.onObjTypeChange,
+    		//change: vm.onObjTypeChange,
     		dataTextField: "Alias",
     		dataSource: {
     			type: "json",
@@ -212,9 +214,9 @@
 					.then(function (response) {
 						vm.dealTypeAtrbs = response.data;
 						var defaultObjType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
-						vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
+                        vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
 						vm.drilledDownStages = filterObjTypeForStages(defaultObjType.Alias);
-						deferred.resolve(response);
+                        deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get Deal Type Attributes.", error, error.statusText);
 						deferred.reject();
@@ -477,6 +479,11 @@
 				//isModified: true
     		};
 
+            if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+                objToSave.OBJ_TYPE = "All WF Stages";
+                objToSave.OBJ_TYPE_SID = 0;
+            }
+
     		// Is this the clickable colored-box element?
     		if (!child.hasClass("atrbContainer")) {
     			return;
@@ -499,7 +506,7 @@
 
     		if (vm.pendingSaveArray[index] != null) {
     			// store orignallyChecked in case of another click on the colored box
-    			objToSave.originallyChecked = vm.pendingSaveArray[index].originallyChecked
+                objToSave.originallyChecked = vm.pendingSaveArray[index].originallyChecked;
 				// Check if the object was modified
     			objToSave.isModified = (objToSave.originallyChecked != objToSave.isNowChecked);
     		} else {
@@ -582,6 +589,12 @@
         	vm.dropDown.dealSecurity;
         }
 
+        function changeTabs() {
+            //var dropDownList = $("#serviceAccounts").getKendoDropDownList();
+            //dropDownList.value(1);
+            //dropDownList.trigger("change");
+        }
+
         function onObjTypeChange(e) {
         	// Note: kendo select event being called twice: once on click and once on deselect 
         	vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
@@ -627,6 +640,12 @@
                     }
                 }
             }
+
+            //if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+            //    filteredDeals = [];
+            //    filteredDeals.push({ "Stage": "All WF Stages", "Id": 0 });
+            //}
+
             return filteredDeals;
         }
         function filterObjTypeForStages(objTypeName) {
@@ -639,7 +658,13 @@
         			}
         		}
         	}
-        	return filteredStages;
+
+            if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) {
+                filteredStages = [];
+                filteredStages.push({ "Stage": "All WF Stages", "Id": 0 });
+            }
+
+            return filteredStages;
         }
 
         function getSelectedObjType() {

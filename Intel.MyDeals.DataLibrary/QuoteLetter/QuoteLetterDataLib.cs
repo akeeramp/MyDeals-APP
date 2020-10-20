@@ -157,20 +157,6 @@ namespace Intel.MyDeals.DataLibrary
             quoteLetterData.TemplateInfo = quoteLetterTemplateData;
         }
 
-        private static string EscapeSpecialChars(string val)
-        {
-            val = val.Replace("&amp;", "and");
-            val = val.Replace("&", "and");
-            val = val.Replace("<", "&lt;");
-            val = val.Replace(">", "&gt;");
-            val = val.Replace("'", "&apos;");
-            val = val.Replace("\"", "&quot;");
-            val = val.Replace("{", "(");
-            val = val.Replace("}", ")");
-            val = val.Replace("+", "_");
-            return val;
-        }
-
         /// <summary>
         /// Get quote letter body based on deal id list
         /// </summary>
@@ -287,9 +273,9 @@ namespace Intel.MyDeals.DataLibrary
                 !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.CONTRACT_PRODUCT) &&
                 !string.IsNullOrWhiteSpace(quoteLetterData.ContentInfo.REBATE_TYPE))
             {
-                var custNm = EscapeSpecialChars(quoteLetterData.ContentInfo.CUST_NM);
-                var endcust = EscapeSpecialChars(quoteLetterData.ContentInfo.END_CUSTOMER);
-                var sku = EscapeSpecialChars(quoteLetterData.ContentInfo.CONTRACT_PRODUCT).Split(',')[0];
+                var custNm = quoteLetterData.ContentInfo.CUST_NM;
+                var endcust = quoteLetterData.ContentInfo.END_CUSTOMER;
+                var sku = quoteLetterData.ContentInfo.CONTRACT_PRODUCT.Split(',')[0];
                 var ecapType = quoteLetterData.ContentInfo.REBATE_TYPE;
 
                 fileName = $"{custNm} {(ecapType.ToUpper() == "TENDER" ? endcust : string.Empty)} {sku} {ecapType} {dealId}.pdf";

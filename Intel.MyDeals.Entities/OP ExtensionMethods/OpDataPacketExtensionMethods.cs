@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Force.DeepCloner;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
@@ -13,6 +14,23 @@ namespace Intel.MyDeals.Entities
         {
             // If any element is not valid, it should fail.
             return odp != null && odp.AllDataElements.All(de => de.IsValid(attributeCollection));
+        }
+
+        public static OpDataElement AddNewEmptyAttribute(MyDealsAttribute passedAtrb, OpDataCollector dc)
+        {
+            return new OpDataElement
+            {
+                DcID = dc.DcID,
+                DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
+                DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
+                DcParentID = dc.DcParentID,
+                AtrbID = passedAtrb.ATRB_SID,
+                AtrbValue = "",
+                OrigAtrbValue = "",
+                PrevAtrbValue = "",
+                AtrbCd = passedAtrb.ATRB_COL_NM,
+                State = OpDataElementState.Unchanged
+            };
         }
 
         public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null, List<int> dealIds = null, AttributeCollection atrbMstr = null)
@@ -96,6 +114,14 @@ namespace Intel.MyDeals.Entities
                 packet.AddAuditActions(majorFieldNoRedealIds);
                 packet.AddQuoteLetterActions(majorFieldNoRedealIds);
                 //packet.AddAuditActions(majorFieldNoRedealIds); // Pulled out since Doug doesn't think that we need to re-trigger cost testing.
+            }
+
+            if (wonTenderIds.Any() && !majorFieldNoRedealIds.Any()) // Added this path for Salesforce Tenders not matching above path due to Stage being set to WON and IsChanged.
+            {
+                packet.AttachAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, 80, wonTenderIds); // Set actions - save them.
+                packet.AddGoingActiveActions(wonTenderIds);
+                packet.AddAuditActions(wonTenderIds);
+                packet.AddQuoteLetterActions(wonTenderIds);
             }
 
             if (majorFieldQuoteOnlyIds.Any())
@@ -189,6 +215,27 @@ namespace Intel.MyDeals.Entities
                 //    dc.AddTimelineComment($"Deal state changed from {de.OrigAtrbValue} to {de.AtrbValue}");
                 //}
                 dc.AddTimelineComment("Tracker number(s) generated");
+
+
+                // Tracker Split as a user selected date happens here, LAST_TRKR_START_DT_CHK is the bounds that users cannot pass with 
+                // LAST_REDEAL_DT to limit the tracker effective start date at re-deal completion
+                IOpDataElement deDealStartDate = dc.GetDataElement(AttributeCodes.START_DT);
+                IOpDataElement deCurrentTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_REDEAL_DT);
+                IOpDataElement deLastTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
+
+                if (deLastTrackerSetDate == null)
+                {
+                    dc.DataElements.Add(AddNewEmptyAttribute(Attributes.LAST_TRKR_START_DT_CHK, dc));
+                    deLastTrackerSetDate = dc.GetDataElement(AttributeCodes.LAST_TRKR_START_DT_CHK);
+                }
+
+                if (deDealStartDate != null && deCurrentTrackerSetDate != null) // Safety check for forced re-deals of existing deals - shouldn't happen once data is populated
+                {
+                    deLastTrackerSetDate.AtrbValue = deCurrentTrackerSetDate == null ||
+                                                     deCurrentTrackerSetDate.AtrbValue.ToString() == ""
+                        ? deDealStartDate.AtrbValue
+                        : deCurrentTrackerSetDate.AtrbValue;
+                }
             }
 
             if (packet.PacketType == OpDataElementType.WIP_DEAL) packet.ResetRedealFlagsOnActive(dealIds);
@@ -324,6 +371,11 @@ namespace Intel.MyDeals.Entities
                 });
             }
             return dcHasErrors;
+        }
+
+        public static bool SalesForceObjectCheck(this MyDealsData myDealsData, OpDataCollector dc)
+        {
+            return dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "";
         }
 
     }

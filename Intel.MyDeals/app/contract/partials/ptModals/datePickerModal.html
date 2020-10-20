@@ -16,7 +16,7 @@
 					   k-placeholder="$ctrl.placeholderText"
 					   k-options="$ctrl.datepickerOptions"
 					   style="width: 100%;" />
-				<p ng-show="!$ctrl.isValidDate" class="err-Control">
+				<p ng-show="!$ctrl.isValidDate || $ctrl.isDateOverlap" class="err-Control" style="font-size:large">
 					{{$ctrl.errorMsg }}
 				</p>
 			</div>

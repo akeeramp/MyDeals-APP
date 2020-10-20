@@ -44,6 +44,11 @@ namespace Intel.MyDeals.Controllers
             return View(AppLib.AVM);
         }
 
+        public ActionResult CiCdPipeline()
+        {
+            return View(AppLib.AVM);
+        }
+
         #endregion
 
 

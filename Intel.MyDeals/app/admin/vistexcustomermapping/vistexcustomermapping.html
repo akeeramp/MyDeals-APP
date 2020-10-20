@@ -1,0 +1,27 @@
+﻿<div class="col-md-12">
+    <h2>Customer Mapping</h2>
+</div>
+<br />
+<div ng-show="!accessAllowed" class="col-md-12">
+    <h3 style="font-weight: bold; color: red"><i class="intelicon-alert-solid icon-lg"></i> Note: Access to this page is not allowed </h3>
+</div>
+
+<div ng-show="accessAllowed" class="col-md-12" style="padding-top: 20px;">
+    <div kendo-grid="vistexcustomerGrid" class="table vistex-grid" expand-k-grid options="vm.gridOptions"></div>    
+</div>
+<div ng-include="'app/contract/partials/ptModals/multiSelectModal.html'"></div>
+<style>
+
+    .vistex-grid.k-grid thead th {
+        white-space: normal;
+    }
+
+    #cmbCustomerReportedGeo_taglist {
+        font-size: 10px;
+    }
+
+        #cmbCustomerReportedGeo_taglist .k-i-close {
+            font-size: 10px;
+            color: whitesmoke;
+        }
+</style>

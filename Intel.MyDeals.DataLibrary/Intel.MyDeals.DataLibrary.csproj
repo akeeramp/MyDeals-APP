@@ -68,6 +68,10 @@
     <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
       <HintPath>..\Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -98,17 +102,21 @@
     <Compile Include="Admins\ApprovalRules.cs" />
     <Compile Include="Admins\ConstantsAdminDataLib.cs" />
     <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
+    <Compile Include="Admins\VistexAdminDataLib.cs" />
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
     <Compile Include="CapMsp\CapMspDataLib.cs" />
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
     <Compile Include="CostTest\CostTestDataLib.cs" />
     <Compile Include="Dashboard\DashboardDataLib.cs" />
+    <Compile Include="DataFix\DataFixDataLib.cs" />
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
+    <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
     <Compile Include="Notifications\NotificationsDataLib.cs" />
     <Compile Include="ProductMicroPacket.cs" />
+    <Compile Include="PushDealstoVistex\PushDealstoVistexDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetter.cs">
       <SubType>Component</SubType>
@@ -147,6 +155,8 @@
     <Compile Include="Timeline\TimelineDataLib.cs" />
     <Compile Include="UI Templates\UiTemplateDataLib.cs" />
     <Compile Include="Funfact\FunfactDataLib.cs" />
+    <Compile Include="VistexCustomerMapping\VistexCustomerMappingDataLib.cs" />
+    <Compile Include="VistexService\VistexServiceDataLib.cs" />
     <Compile Include="WorkFlow\WorkFlowDataLib.cs" />
     <Compile Include="_data\PricingTableData.cs" />
   </ItemGroup>
@@ -179,6 +189,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

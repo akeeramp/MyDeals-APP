@@ -36,6 +36,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             _productDataLib = new ProductDataLib();
             _dataCollectionsDataLib = new DataCollectionsDataLib();
+            _constantsLookupsLib = new ConstantsLookupsLib();
         }
 
         #region Products

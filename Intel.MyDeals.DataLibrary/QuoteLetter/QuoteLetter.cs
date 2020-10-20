@@ -29,6 +29,7 @@ namespace Intel.MyDeals.DataLibrary
 
         string GetValue(string key)
         {
+            // This fixes basic issues on getting the initial value
             string retVal = source.Descendants("PARAMETERS").Select(el => (el.Element(key) == null) ? string.Empty : ((string)el.Element(key)).Replace("\\n", "<br />")).FirstOrDefault();
             if (retVal.Contains("&") && !retVal.Contains("&amp;")) // stand alone &s need to be replaced
             {
@@ -100,8 +101,9 @@ namespace Intel.MyDeals.DataLibrary
 
         static string EscapeSpecialChars(string xml)
         {
+            // This fixes final values - there is some repeat from initial values.  Stand along & are removed here since they also caught &apos;
             xml = xml.Replace("&amp;", "and");
-            xml = xml.Replace("&", "and");
+            //xml = xml.Replace("&", "and");
             xml = xml.Replace("<", "&lt;");
             xml = xml.Replace(">", "&gt;");
             xml = xml.Replace("'", "&apos;");

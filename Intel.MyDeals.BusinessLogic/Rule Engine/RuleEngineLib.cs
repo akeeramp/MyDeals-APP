@@ -108,8 +108,8 @@ namespace Intel.MyDeals.BusinessLogic
                     List<rule> lstRuleMerge = new List<rule>();
                     foreach (string strXmlRulesAttribute in strXmlRulesAttributes)
                     {
-                        List<rule> lstTemp = priceRuleCriteria.Criterias.Rules.Where(x => x.field == strXmlRulesAttribute).ToList();
-                        lstTemp.First().values = string.Join(",", lstTemp.Select(x => string.Join(",", x.values))).Split(',').Distinct().OrderBy(x => x).ToList();
+                        List<rule> lstTemp= priceRuleCriteria.Criterias.Rules.Where(x => x.field == strXmlRulesAttribute).ToList();
+                        lstTemp.First().values = string.Join(",", lstTemp.Select(x => string.Join(",", x.values))).Split(',').Distinct().OrderBy(x=>x).ToList();
                         lstRuleMerge.Add(lstTemp.First());
                     }
                     priceRuleCriteria.Criterias.Rules.RemoveAll(x => strXmlRulesAttributes.Contains(x.field));

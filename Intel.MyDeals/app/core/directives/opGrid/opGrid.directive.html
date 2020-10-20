@@ -33,7 +33,7 @@
                             </td>
                         </tr>
                     </table>
-                </button>
+                </button>                
                 <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" ng-show="isVisibleAdditionalDiscounts" title="Show/Hide Additional Discounts and Requirements.">
                     <table>
                         <tr>
@@ -238,43 +238,43 @@
             </div>
 
             <!--<div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                <div class="btn-group btn-group-font">
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 9px;">A</div></label>
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 6px;">A</div></label>
-                    <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 3px;">A</div></label>
-                </div>
-            </div>-->
+        <div class="btn-group btn-group-font">
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 9px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 6px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn ng-pristine ng-untouched ng-valid ng-not-empty" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 3px;">A</div></label>
+        </div>
+    </div>-->
             <!--<div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
-                <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
-                    <table>
-                        <tr>
-                            <td>
-                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                            </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                Export to Excel<br />
-                                Custom Columns
-                            </td>
-                        </tr>
-                    </table>
-                </button>
-            </div>
+        <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        Export to Excel<br />
+                        Custom Columns
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>
 
-            <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
-                <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcel()" title="Export to Excel every column.">
-                    <table>
-                        <tr>
-                            <td>
-                                <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                            </td>
-                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                Export to Excel<br />
-                                ALL Columns
-                            </td>
-                        </tr>
-                    </table>
-                </button>
-            </div>-->
+    <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
+        <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcel()" title="Export to Excel every column.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                        Export to Excel<br />
+                        ALL Columns
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>-->
 
 
             <div class="clearboth"></div>
@@ -297,7 +297,7 @@
     #dealEditor > .k-auto-scrollable {
         min-height: 60px;
     }
-
+     
     .btnYes {
         background: #a49d00 !important;
         color: black;
@@ -788,27 +788,22 @@
     .op-grid .opUiContainer.md.k-grid td {
         height: inherit !important;
     }
-
     .toggleSelect {
         background-color: #eeeeee !important;
     }
 
     /*remove the "x" clear button pseudo element from text inputs that only appears in IE as it was causing some of our code to not execute if clicked*/
-    ::-ms-clear {
-        display: none;
-    }
+    ::-ms-clear { display: none; }
 
     .opGridSearchInput {
         width: 270px;
         font-size: 16px
     }
-
     @media (max-width: 1180px) {
         .opGridSearchInput {
             width: 200px;
         }
     }
-
     @media (max-width: 1100px) {
         .opGridSearchInput {
             width: 140px;

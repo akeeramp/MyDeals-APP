@@ -56,6 +56,25 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
         }
 
+        // These are driven through the normal drop down items at Dropdown data Lib, so no need here
+        //[TestCase("REBATE_TYPE", "Acer")]
+        //public void DropDnLib_GetDropdownsPerCustomer(string atrbCd, string custNm)
+        //{
+        //    IEnumerable<BasicDropdown> basicDropDownIEnum = new DropdownLib().GetDropdownsPerCustomer(atrbCd, custNm);
+        //    Assert.IsTrue(basicDropDownIEnum.Any());
+        //    Assert.IsFalse(basicDropDownIEnum.Where(d => d.ATRB_CD != atrbCd && (d.CUST_NM != custNm || d.CUST_NM != "ALL CUSTOMERS")).Any());
+
+        //}
+
+        //[TestCase("REBATE_TYPE", "ECAP")]
+        //public void DropDnLib_GetDropdowns(string atrbCd, int custId)
+        //{
+        //    IEnumerable<BasicDropdown> basicDropDownIEnum = new DropdownLib().GetDropdownsPerCustomerId(atrbCd, custId);
+        //    Assert.IsTrue(basicDropDownIEnum.Any());
+        //    Assert.IsFalse(basicDropDownIEnum.Where(d => d.ATRB_CD != atrbCd && (d.CUST_MBR_SID != custId || d.CUST_MBR_SID != 1)).Any());
+
+        //}
+
         [TestCase("REBATE_TYPE")]
         public void DropDnLib_GetDistinctDropdownCodes(string atrbCd)
         {

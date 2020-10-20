@@ -15,9 +15,20 @@
             getBasicDropdowns: getBasicDropdowns,
             getDealTypesDropdowns: getDealTypesDropdowns,
             getDropdownGroups: getDropdownGroups,
+            getCustsDropdowns: getCustsDropdowns,
             updateBasicDropdowns: updateBasicDropdowns,
             deleteBasicDropdowns: deleteBasicDropdowns,
             insertBasicDropdowns: insertBasicDropdowns,
+            getDropdown: getDropdown,
+            getOpDataElements: getOpDataElements
+        }
+
+        function getOpDataElements() {
+            return dataService.get(apiBaseUrl + 'GetOpDataElements');
+        }
+
+        function getDropdown(strDropDownType) {
+            return dataService.get(apiBaseUrl + strDropDownType);
         }
 
         function getBasicDropdowns(isForceReGet) {
@@ -33,9 +44,15 @@
         }
 
         function getDropdownGroups(isForceReGet) {
-        	var isGetViaAngularCache= true;
-        	if (isForceReGet) { isGetViaAngularCache = false; }
-        	return dataService.get(apiBaseUrl + 'GetDropdownGroups', null, null, isGetViaAngularCache);
+            var isGetViaAngularCache = true;
+            if (isForceReGet) { isGetViaAngularCache = false; }
+            return dataService.get(apiBaseUrl + 'GetDropdownGroups', null, null, isGetViaAngularCache);
+        }
+
+        function getCustsDropdowns(isForceReGet) {
+            var isGetViaAngularCache = true;
+            if (isForceReGet) { isGetViaAngularCache = false; }
+            return dataService.get(apiBaseUrl + 'GetCustomersList', null, null, isGetViaAngularCache);
         }
 
         function updateBasicDropdowns(dropdown) {

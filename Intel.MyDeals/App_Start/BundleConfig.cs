@@ -95,6 +95,8 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/overlappingDeals/overlappingDeals.directive.js"
                 , "~/app/core/directives/ping/ping.directive.js"
                 , "~/app/core/directives/ruleAttributeBuilder/ruleAttributeBuilder.directive.js"
+                , "~/app/core/directives/datafixAttributeBuilder/datafixAttributeBuilder.directive.js"
+                , "~/app/core/directives/datafixActionBuilder/datafixActionBuilder.directive.js"
                 , "~/app/core/directives/searchResults/searchResults.directive.js"
                 , "~/app/core/directives/securityLoader/securityLoader.directive.js"
                 , "~/app/core/directives/trashcan/trashcan.directive.js"
@@ -114,6 +116,11 @@ namespace Intel.MyDeals
                 , "~/app/shared/_requestVerificationToken.js"
                 , "~/app/admin/admintools/admintools.service.js"
                 , "~/app/admin/admintools/admin.admintools.controller.js"
+                , "~/app/admin/admintools/admin.testtenders.controller.js"
+                , "~/app/admin/dealMassUpdate/admin.dealMassUpdate.controller.js"
+                , "~/app/admin/dealMassUpdate/dealMassUpdate.service.js"
+                , "~/app/admin/pushDealstoVistex/admin.pushDealstoVistex.controller.js"
+                , "~/app/admin/pushDealstoVistex/pushDealstoVistex.service.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/cache.manager.resize.directive.js"
@@ -123,6 +130,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/constants/constants.service.js"
                 , "~/app/admin/customer/admin.customer.controller.js"
                 , "~/app/admin/customer/customer.service.js"
+                , "~/app/admin/vistexcustomermapping/admin.vistexcustomermapping.controller.js"
+                , "~/app/admin/vistexcustomermapping/vistexcustomermapping.service.js"
                 , "~/app/admin/dataquality/admin.dataquality.controller.js"
                 , "~/app/admin/dataquality/dataquality.service.js"
                 , "~/app/admin/dropdowns/admin.dropdowns.controller.js"
@@ -142,6 +151,12 @@ namespace Intel.MyDeals
                 , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"
                 , "~/app/admin/legalExceptions/legalExceptions.service.js"
                 , "~/app/admin/legalExceptions/admin.legalException.controller.js"
+                , "~/app/admin/legalExceptions/compareLegalException.controller.js"
+                , "~/app/admin/legalExceptions/addAmendment.controller.js"
+                , "~/app/admin/legalExceptions/addLegalException.controller.js"
+                , "~/app/admin/legalExceptions/updateLegalException.controller.js"
+                , "~/app/admin/legalExceptions/viewLegalException.controller.js"
+                , "~/app/admin/legalExceptions/viewLegalExceptionDealList.controller.js"
                 , "~/app/admin/notifications/notifications.controller.js"
                 , "~/app/admin/notifications/notificationsModal.controller.js"
                 , "~/app/admin/notifications/notificationsSettings.controller.js"
@@ -155,9 +170,15 @@ namespace Intel.MyDeals
                 , "~/app/admin/productIncExc/admin.productEntryIncExc.controller.js"
                 , "~/app/admin/productIncExc/productEntryIncExc.service.js"
                 , "~/app/admin/rules/admin.rules.controller.js"
-                 , "~/app/admin/ruleOwner/admin.ruleOwner.controller.js"
+                , "~/app/admin/ruleOwner/admin.ruleOwner.controller.js"
                 , "~/app/admin/rules/ruleDetailsModal.controller.js"
                 , "~/app/admin/rules/rules.service.js"
+                , "~/app/admin/vistex/admin.vistex.controller.js"
+                , "~/app/admin/vistex/admin.vistexTestAPI.controller.js"
+                , "~/app/admin/vistex/admin.vistexOutbound.controller.js"
+                , "~/app/admin/vistex/admin.vistexProductVertical.controller.js"
+                , "~/app/admin/vistex/admin.vistexProductVerticalOutbound.controller.js"
+                , "~/app/admin/vistex/dsa.service.js"
                 , "~/app/admin/rules/rulesSimulationModal.controller.js"
                 , "~/app/admin/meetComp/bulkUploadMeetCompModal.controller.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
@@ -264,6 +285,8 @@ namespace Intel.MyDeals
                 , "~/app/reporting/reporting.route.js"
                 , "~/app/reporting/reporting.service.js"
                 , "~/app/reporting/dash/reporting.dashboard.controller.js"
+                , "~/app/admin/dataFix/admin.dataFix.controller.js"
+                , "~/app/admin/dataFix/dataFix.service.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
@@ -279,7 +302,7 @@ namespace Intel.MyDeals
                 "~/css/jquery-ui.min.css",
                 "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
-                "~/css/kendo.intel.css",                
+                "~/css/kendo.intel.css",
                 "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",
                 "~/css/select2.min.css",

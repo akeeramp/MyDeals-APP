@@ -562,6 +562,11 @@
                 type: "string",
                 width: 140
             }, {
+                field: "QUOTE_LN_ID",
+                title: "Quote Line Id",
+                type: "string",
+                width: 140
+            }, {
                 field: "DEAL_GRP_NM ",
                 title: "Kit Name",
                 type: "string",
@@ -592,6 +597,34 @@
                 type: "string",
                 template: "#= moment(CHG_DTM).format('MM/DD/YYYY HH:mm:ss') #",
                 width: 140
+            },
+            {
+                field: "AR_SETTLEMENT_LVL",
+                title: "AR Settlement Level",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL"
+            },
+            {
+                field: "PERIOD_PROFILE",
+                title: "Period Profile",
+                type: "singleselect",
+                width: 160,
+                lookupText: "DROP_DOWN",
+                lookupValue: "DROP_DOWN",
+                lookupUrl: "/api/Dropdown/GetDropdowns/PERIOD_PROFILE"
+            }, {
+                field: "CONSUMPTION_LOOKBACK_PERIOD",
+                title: "Consumption Lookback Period",
+                type: "number",
+                width: 160
+            }, {
+                field: "AUTO_APPROVE_RULE_INFO",
+                title: "Auto-Approved By",
+                type: "string",
+                width: 100
             }
         ];
 
@@ -657,6 +690,11 @@
                 source: null
             }, {
                 field: "END_CUSTOMER_RETAIL",
+                operator: "LIKE",
+                value: "",
+                source: null
+            }, {
+                field: "QUOTE_LN_ID",
                 operator: "LIKE",
                 value: "",
                 source: null
@@ -754,12 +792,32 @@
                     if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
                     if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
 
+
                     var fields = $scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model.fields;
                     for (var key in fields) {
                         if (fields.hasOwnProperty(key)) {
                             if (fields[key].type === "date") {
                                 gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
                             }
+                        }
+                    }
+                    if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                        if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                                gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
+                                if (!errs.WIP_DEAL) errs.WIP_DEAL = [];
+                                errs.WIP_DEAL.push("End Customer text can not be longer than 60 Characters");
+                            }
+                        }
+                        else {
+                            if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                            }
+                            gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString().toUpperCase();
                         }
                     }
 
@@ -808,7 +866,7 @@
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.Errors && !angular.equals(data.Errors, {})) {
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
-                $scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////
+                //$scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////              
                 $scope.setBusy("", "");
                 return;
             }
@@ -1563,8 +1621,12 @@
                         $scope.$root.pc = null;
                     }
 
-                    $("#dealEditor").data("kendoGrid").dataSource.read();
-                    $("#dealEditor").data("kendoGrid").refresh();
+                    var wip_ids = [];
+                    for (var i = 0; i < tenders.length; i++) {
+                        wip_ids.push(tenders[i].DC_ID);
+                    }
+
+                    $scope.refreshGridRows(wip_ids, null);
 
                     $scope.setBusy("", "");
                     $scope.actionType = "";
@@ -1782,7 +1844,17 @@
                 }
                 else { // If it passes, do this
                     if ($scope.isValid) {
-                        $scope.copyTenderFolioContract();
+                        if (ct._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && ct.CUST_ACCNT_DIV == "") {
+                            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                                $scope.copyTenderFolioContract();
+                            },
+                                function () {
+                                    return;
+                                });
+                        }
+                        else {
+                            $scope.copyTenderFolioContract();
+                        }
                     } else {
                         $timeout(function () {
                             if (!!$("input.isError")[0]) $("input.isError")[0].focus();

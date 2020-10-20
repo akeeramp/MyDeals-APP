@@ -10,7 +10,7 @@ using System.Net;
 namespace Intel.MyDeals.JMSQueueApp
 {
     /// <summary>
-    ///  Data access for the JMS Quee
+    ///  Data access for the JMS Queue
     /// </summary>
     public class DataAccessLayer
     {

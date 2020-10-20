@@ -64,7 +64,7 @@ namespace Intel.MyDeals.Controllers.API
                 Stream stream = new MemoryStream(fileBodyFinalBytes);
                 result.Content = new StreamContent(stream);
             }
-
+            
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fileAttahment.FILE_NM));
 

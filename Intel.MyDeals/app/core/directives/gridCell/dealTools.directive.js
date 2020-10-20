@@ -12,6 +12,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isCommentEnabled: '<?',
             isFileAttachmentEnabled: '<?',
             isHistoryEnabled: '<?',
+            isSalesForceDeal: '@isSalesForceDeal',
             isQuoteLetterEnabled: '<?',
             isDeleteEnabled: '<?',
             isSplitEnabled: '<?',
@@ -28,11 +29,19 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             if ($scope.dataItem.PS_WF_STG_CD === undefined && $scope.dataItem.items !== undefined) {
                 $scope.dataItem = $scope.dataItem.items[0];
             }
+
             if (!$scope.isEditable || $scope.isEditable === "false" || $scope.isEditable === false || $scope.dataItem.PS_WF_STG_CD === "Cancelled") {
                 $scope.editable = (1 === 2);
             }
             else {
                 $scope.editable = (1 === 1);
+            }
+
+            if ($scope.dataItem.SALESFORCE_ID === undefined || $scope.dataItem.SALESFORCE_ID === "") {
+                $scope.isSalesForceDeal = false;
+            }
+            else {
+                $scope.isSalesForceDeal = true;
             }
 
             if (!!$scope.isEditable) $scope.isEditable = false;
@@ -213,6 +222,16 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
 
             // HOLD Items  
+            // This will return Pricing Strategy enabled or not to show hold icon
+            $scope.getHoldVisibility = function (dataItem) {
+                var isPSEnabled = {};
+                if (dataItem.OBJ_PATH_HASH !== undefined) {
+                    isPSEnabled = JSON.parse(dataItem.OBJ_PATH_HASH);
+                    if ($scope.$parent.$parent.$parent.PS[isPSEnabled.PS] === "1") return true; // $scope.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
+                }
+                return false;
+            }
+
             $scope.getHoldValue = function (dataItem) {
                 if (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won') return 'NoShowHold';
 
@@ -223,7 +242,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 }
                 else {
                     if ((!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) && dataItem.WF_STG_CD !== 'Cancelled') return 'CanHold';
-                    else return 'NoHold';
+                        else return 'NoHold';
                 }
             }
             $scope.holdItems = {
@@ -361,7 +380,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 var fVal = $scope.getFileValue(dataItem);
 
                 //Forces datasource web API call
-                //$scope.attachmentsDataSource.read();
+              // $scope.attachmentsDataSource.read();
                 if (fVal === "HasFile" || fVal === "AddFile") {
                     $scope.openAttachments();
                 }
@@ -401,7 +420,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                 });
             }
 
-            $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
+            $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen. Changed to 0 as part of DE83606
             $scope.initComplete = false;
 
             $scope.getAttachmentDatasourceURL = function () {
@@ -421,7 +440,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     kendo.ui.progress($("#attachmentsGrid"), true);
                 },
                 requestEnd: function (e) {
-                    var view = e.sender._data.length > 0 ? e.sender._data : e.response;
+                    var view = e.sender._data.length > 0? e.sender._data : e.response;
 
                     $scope.attachmentCount = (view === null || view === undefined) ? 0 : view.length;
                     console.log($scope.attachmentCount);
@@ -558,7 +577,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
                     closable: false,
                     modal: true,
                     close: function(e){
-                        //alert("Hi");
+                        // alert("Hi");
                         $scope.initComplete = false;
                         $scope.attachmentCount = 1;
                         $("#attachmentsGrid").remove();

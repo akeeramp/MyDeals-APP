@@ -2,7 +2,7 @@
     <div class="opUiLabel buttonGroupLabel" style="width:100%" ng-class="{isRequired: opIsRequired}">
         <span>
             {{opLabel}}
-            <span class="geo-desc" ng-show="hasMultipleGeos()">** This will create a deal for each geo in the same line unless you select to blend.</span>
+            <span class="geo-desc" ng-show="hasMultipleGeos()">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
         </span>
         <span style="float:right" ng-if="opExtra">
             <input ng-model="blend.blended" ng-change="updateBlend()" type="checkbox" /> Blend Geos

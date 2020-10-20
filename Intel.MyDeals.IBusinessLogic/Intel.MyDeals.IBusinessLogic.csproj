@@ -68,13 +68,18 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarLib.cs" />
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
+    <Compile Include="DataFix\IDataFixLib.cs" />
     <Compile Include="DataQuality\IDataQualityLib.cs" />
+    <Compile Include="DealMassUpdate\IDealMassUpdateLib.cs" />
+    <Compile Include="DSA\IDsaEngineLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
+    <Compile Include="Integration\IIntegrationLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />
     <Compile Include="MeetComp\IMeetCompLib.cs" />
     <Compile Include="ManualEngine\IManualEngineLib.cs" />
     <Compile Include="Notifications\INotificationsLib.cs" />
+    <Compile Include="PushDealstoVistex\IPushDealstoVistexLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterLib.cs" />
     <Compile Include="Reporting\IReportingLib.cs" />
     <Compile Include="Tenders\ITendersLib.cs" />
@@ -98,6 +103,8 @@
     <Compile Include="OpLog\IOpLogLib.cs" />
     <Compile Include="UserPreferences\IUserPreferences.cs" />
     <Compile Include="Funfact\IFunfactLib.cs" />
+    <Compile Include="VistexCustomerMapping\IVistexCustomerMappingLib.cs" />
+    <Compile Include="VistexService\IVistexServiceLib.cs" />
     <Compile Include="Workflow\IWorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +120,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

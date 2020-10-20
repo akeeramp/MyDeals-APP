@@ -6,6 +6,7 @@ namespace Intel.MyDeals.IDataLibrary
 	public interface IDropdownDataLib
 	{
 		List<BasicDropdown> GetBasicDropdowns();
+        List<DropDowns> GetOpDataElements();
 
         List<Dropdown> GetDropdowns();
         

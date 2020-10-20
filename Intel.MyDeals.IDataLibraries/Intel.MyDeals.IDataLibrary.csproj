@@ -56,12 +56,15 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
+    <Compile Include="DataFix\IDataFixDataLib.cs" />
     <Compile Include="DataQuality\IDataQualityDataLib.cs" />
+    <Compile Include="DealMassUpdate\IDealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />
     <Compile Include="JMS\IJmsDataLib.cs" />
     <Compile Include="MyDealsManual\IMyDealsManualDataLib.cs" />
     <Compile Include="Notifications\INotificationsDataLib.cs" />
+    <Compile Include="PushDealstoVistex\IPushDealstoVistexDataLib.cs" />
     <Compile Include="QuoteLetter\IQuoteLetterDataLib.cs" />
     <Compile Include="Reporting\IReportingDataLib.cs" />
     <Compile Include="Search\IAdvancedSearchDataLib.cs" />
@@ -84,6 +87,8 @@
     <Compile Include="Timeline\ITimelineDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
     <Compile Include="Funfact\IFunfactDataLib.cs" />
+    <Compile Include="VistexCustomerMapping\IVistexCustomerMappingDataLib.cs" />
+    <Compile Include="VistexService\IVistexServiceDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>
   <ItemGroup>

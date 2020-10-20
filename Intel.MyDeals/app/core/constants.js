@@ -186,6 +186,9 @@
                     "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "OBJ_SET_TYPE_CD": {
                         "Groups": ["All"]
                     },
@@ -288,7 +291,16 @@
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
                     "TERMS": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "QUOTE_LN_ID": {
                         "Groups": ["Deal Info"]
                     },
                     "REBATE_BILLING_START": {
@@ -297,12 +309,24 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -338,6 +362,9 @@
                     },
                     "DIV_APPROVED_BY": {
                         "Groups": ["Deal Info"]
+                    },
+                    "AUTO_APPROVE_RULE_INFO": {
+                        "Groups": ["All"]
                     }
                 },
                 "VOL_TIER": {
@@ -372,6 +399,9 @@
                         "Groups": ["All"]
                     },
                     "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "LAST_REDEAL_DT": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {
@@ -431,6 +461,12 @@
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
@@ -440,12 +476,24 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -544,6 +592,9 @@
                     "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
+                    "LAST_REDEAL_DT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "OBJ_SET_TYPE_CD": {
                         "Groups": ["All"]
                     },
@@ -598,6 +649,12 @@
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
@@ -610,12 +667,24 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },                    
                     //"COST_TEST_RESULT": {
                     //    "Groups": ["Cost Test"]
                     //},
@@ -775,6 +844,9 @@
                         "Groups": ["All"]
                     },
                     "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "LAST_REDEAL_DT": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {
@@ -939,6 +1011,12 @@
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
+                    "PERIOD_PROFILE": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
+                    "AR_SETTLEMENT_LVL": {
+                        "Groups": ["Deal Info", "Payment"]
+                    },
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
@@ -948,12 +1026,24 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },                    
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
@@ -989,12 +1079,15 @@
                     },
                     "DIV_APPROVED_BY": {
                         "Groups": ["Deal Info"]
+                    },
+                    "AUTO_APPROVE_RULE_INFO": {
+                        "Groups": ["All"]
                     }
                 }
             },
             "requiredForTender": ["VOLUME", "END_CUSTOMER_RETAIL"],
             "hideForTender": ["DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "DC_PARENT_ID"],
-            "hideForNonTender": ["EXCLUDE_AUTOMATION","MEETCOMP_TEST_RESULT", "COST_TEST_RESULT"],
+            "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID"],
             "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION","tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
         });
 })();

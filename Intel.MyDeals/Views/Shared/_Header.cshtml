@@ -1,4 +1,6 @@
-﻿@using Intel.MyDeals.Entities
+﻿@using System
+@using System.Collections.Generic
+@using Intel.MyDeals.Entities
 @using Intel.Opaque
 @using Intel.MyDeals.App
 @{
@@ -82,7 +84,7 @@
         <table style="display: table; width:100%">
             <tr>
                 <td>
-                    <div class="navbar-header">
+                    <div class="navbar-header" style="margin-left: 5px;">
                         <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
                         <a class="navbar-brand" href="@Url.Action("Index", "Home", new {Area = ""})" title="Back to the My Deals Dashboard">My Deals</a>
                     </div>
@@ -160,7 +162,19 @@
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-
+                    @if (env != "PROD" && isDeveloper)
+                    {
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">DSA</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/vistex/vistextestapi">Test API </a></li>
+                                <li><a href="Admin#/vistex">Vistex Logs</a></li>
+                                <li><a href="Admin#/vistex/vistexOutbound">Vistex Outbound</a></li>
+                                <li><a href="Admin#/vistex/vistexProductVertical">Product Vertical Logs</a></li>
+                                <li><a href="Admin#/vistex/vistexProductVerticalOutbound">Product Vertical Outbound</a></li>
+                            </ul>
+                        </li>
+                    }
                     <li class="dropdown-submenu">
                         <a tabindex="-1">TroubleShooting</a>
                         <ul class="dropdown-menu" style="width: 300px;">
@@ -206,13 +220,25 @@
 
                     @if (isDeveloper)
                     {
-                        <li><a href="Admin#/cache">Cache Manager</a></li>
-                        <li><a href="Admin#/oplog">Log Viewer</a></li>
-                        <li><a href="Admin#/constants">Constants</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Monitoring</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/cache">Cache Manager</a></li>
+                                <li><a href="Admin#/oplog">Log Viewer</a></li>
+                                <li><a href="Admin#/constants">Constants</a></li>
+                            </ul>
+                        </li>
                     }
                     @if (isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/customers">Customer</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Customer</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/customers">Customer</a></li>
+                                <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
+                            </ul>
+
+                        </li>
                         <li><a href="Admin#/geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
                     }
@@ -228,7 +254,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
@@ -248,8 +274,13 @@
 
                     @if (isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/dropdowns">UI Control Values</a></li>
+                        <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>
                         <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
+
+                    }
+                    @if (isDeveloper)                    {
+                        
+                        <li><a href="Admin#/dataFix">Data Fix</a></li>
                     }
 
                     @if (isDeveloper)
@@ -262,29 +293,41 @@
                             </ul>
                         </li>
 
-                        <li><a href="Admin#/workflow">WorkFlow</a></li>
-                        <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">WorkFlow</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/workflow">WorkFlow</a></li>
+                                <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                            </ul>
+                        </li>
                     }
 
-                    @if (isDeveloper)
+                    @if (isDeveloper) // Was isDeveloper || isRealSA
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Admin Tools</a>
                             <ul class="dropdown-menu">
-                                <li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                                @if (isDeveloper)
+                                {
+                                    <li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                                    <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                    <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
+                                    <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
+                                }
                             </ul>
                         </li>
                     }
 
                     @if (usrRole == "DA" || isRealSA || isDeveloper || isCustomerAdmin) // DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access.
                     {
-                        <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>//User Customer Assignments
+                        <li><a href="Admin#/manageEmployee">User Administration Screen</a></li>
+                        //User Customer Assignments
                     }
 
                     @if (usrRole == "DA" || usrRole == "GA" || isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
-                            <a tabindex="-1">Rules Management</a>
+                            <a tabindex="-1">Approval Rules Management</a>
                             <ul class="dropdown-menu">
                                 <li><a href="Admin#/rules/">Price Rules</a></li>
                                 <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
@@ -294,9 +337,9 @@
 
                     @if (env == "LOCAL" && usrWwid == 10548414)
                     {
-                        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>//User Customer Assignments
+                        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>
+                        //User Customer Assignments
                     }
-
                 </ul>
             </li>
 

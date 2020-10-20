@@ -13,19 +13,19 @@ namespace Intel.MyDeals.App
 
         private static string GetSiteRoot()
         {
-            string port = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT"];
+            string port = HttpContext.Current.Request.ServerVariables["SERVER_PORT"];
             if (port == null || port == "80" || port == "443")
                 port = "";
             else
                 port = ":" + port;
 
-            string protocol = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT_SECURE"];
+            string protocol = HttpContext.Current.Request.ServerVariables["SERVER_PORT_SECURE"];
             if (protocol == null || protocol == "0")
                 protocol = "http://";
             else
                 protocol = "https://";
 
-            string sOut = protocol + System.Web.HttpContext.Current.Request.ServerVariables["SERVER_NAME"] + port + System.Web.HttpContext.Current.Request.ApplicationPath;
+            string sOut = protocol + HttpContext.Current.Request.ServerVariables["SERVER_NAME"] + port + HttpContext.Current.Request.ApplicationPath;
 
             if (sOut.EndsWith("/"))
             {
@@ -121,9 +121,14 @@ namespace Intel.MyDeals.App
                 throw new MissingFieldException("WebConfig is missing the 'Environment' entry.");
             }
 
-            // JmsQ Configuration Settings - because Phil likes it this way...
+            // JmsQ/Vistex/Tenders Configuration Settings - because Phil likes it this way...
             Dictionary<string, string> envConfigs = new Dictionary<string, string>();
-            List<string> jmsConfigItems = new List<string> { "jmsServer", "jmsQueue", "jmsUID", "jmsPWD", "jmsResponseDir" };
+            List<string> jmsConfigItems = new List<string>
+            {
+                "jmsServer", "jmsQueue", "jmsUID", "jmsPWD", "jmsResponseDir",
+                "vistexBaseURL", "vistexUID", "vistexPWD",
+                "tendersResponseURL"
+            };
 
             foreach (string jmsConfigItem in jmsConfigItems)
             {

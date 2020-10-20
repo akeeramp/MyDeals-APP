@@ -49,15 +49,20 @@
         <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
+        
+        <!-- SalesForce icon -->
+        <div class='fl md-icon' ng-if="isSalesForceDeal">
+            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal" ></i>
+        </div>
 
         <!-- Cancel/Rollback/Delete icon -->
         <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->
         <div class='fl md-icon' ng-if="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
             <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
                title="Unable to delete this deal at this stage"></i>
-            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER !== '1'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0')" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
                title="Click to delete this deal" ng-click="openDeleteDialog()"></i>
-            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+            <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
                title="Click to Cancel this deal" ng-click="openCancelDialog()"></i>
 
             <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
@@ -71,7 +76,7 @@
         </div>
 
         <!-- Hold icon -->
-        <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false">
+        <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false">
             <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
         </div>
         <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false ">

@@ -20,14 +20,16 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IDropdownLib _dropdownLib;
         private readonly IPricingStrategiesLib _pricingStrategiesLib;
         private readonly IPricingTablesLib _pricingTablesLib;
+        //private readonly IDsaWorkQueueLib _dsaWorkQueueLib;
 
-        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib, IPricingTablesLib pricingTablesLib, IPricingStrategiesLib pricingStrategiesLib)
+        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib, IPricingTablesLib pricingTablesLib, IPricingStrategiesLib pricingStrategiesLib) //, IDsaWorkQueueLib dsaWorkQueueLib
         {
             _dataCollectorLib = dataCollectorLib;
             _uiTemplateLib = uiTemplateLib;
             _dropdownLib = dropdownLib;
             _pricingStrategiesLib = pricingStrategiesLib;
             _pricingTablesLib = pricingTablesLib;
+            //_dsaWorkQueueLib = dsaWorkQueueLib;
         }
 
         /// <summary>
@@ -228,215 +230,6 @@ namespace Intel.MyDeals.BusinessLogic
             return baseContract;
         }
 
-        public OpDataCollectorFlattenedDictList SaveSalesForceTenderData(int custId, int contractId, ContractTransferPacket upperContractData)
-        {
-            // load contract header if it exists
-            //List<int> passedIds  = new List<int>();
-            //passedIds.Add(contractId);
-
-            //var stage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA ? WorkFlowStages.Requested : WorkFlowStages.Draft;
-            //MyDealsData myDealsData = OpDataElementType.CNTRCT.GetByIDs(passedIds, new List<OpDataElementType> { OpDataElementType.CNTRCT }); // Make the save object
-
-            //if (myDealsData[OpDataElementType.CNTRCT].GroupID != null) // No contract header, so make a new one.
-
-
-            SavePacket savePacket = new SavePacket(new ContractToken("ContractToken Created - SaveContract")
-            {
-                CustId = custId,
-                ContractId = contractId
-            });
-
-            OpDataCollectorFlattenedDictList baseContract = null;
-            int CNTRCT_ID = contractId; // -100
-            if (contractId <= 0) // If the contract header is a new one, save it and get a real number.
-            {
-                // START SAVE CONTRACT HEADER
-                baseContract = SaveContract(upperContractData.Contract, savePacket);
-
-                foreach (var item in baseContract)
-                {
-                    if (item.Key.ToString() == OpDataElementType.CNTRCT.ToString())
-                    {
-                        foreach (var itm in item.Value)
-                        {
-                            if (itm.ContainsKey("_actions")) //if (itm.ContainsKey("DC_ID"))
-                            {
-                                List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-                                if (actionIdChangeAltId != null)
-                                    int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CNTRCT_ID);
-                            }
-                        }
-                    }
-                }
-                // END SAVE CONTRACT HEADER
-            }
-
-            // Do deal check first, if not in, insert
-            // START SAVE PS SECTION
-            SavePacket savePacketPS = new SavePacket(new ContractToken("ContractToken Created - SavePricingStrategy")
-            {
-                CustId = custId,
-                ContractId = CNTRCT_ID
-            });
-
-            foreach (var ps in upperContractData.PricingStrategy)
-            {
-                if (ps.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                {
-                    ps[AttributeCodes.DC_PARENT_ID.ToString()] = CNTRCT_ID;
-                }
-
-                if (ps.ContainsKey(AttributeCodes.TITLE.ToString()))
-                {
-                    ps[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ps[AttributeCodes.TITLE.ToString()].ToString();
-                }
-            }
-
-            OpDataCollectorFlattenedDictList prcPsData = _pricingStrategiesLib.SavePricingStrategy(upperContractData.PricingStrategy, savePacketPS);
-            // END SAVE PS SECTION
-
-            // START SAVE PT SECTION
-            int CONT_PS_ID = -100;
-            foreach (var item in prcPsData)
-            {
-                if (item.Key.ToString() == OpDataElementType.PRC_ST.ToString())
-                {
-                    foreach (var itm in item.Value)
-                    {
-                        if (itm.ContainsKey("_actions"))
-                        {
-                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-                            if (actionIdChangeAltId != null)
-                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PS_ID);
-                        }
-                    }
-                }
-            }
-
-            foreach (var pt in upperContractData.PricingTable)
-            {
-                if (!pt.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                {
-                    pt.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PS_ID);
-                }
-                else
-                {
-                    pt[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PS_ID;
-                }
-
-                if (pt.ContainsKey(AttributeCodes.TITLE.ToString()))
-                {
-                    pt[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + pt[AttributeCodes.TITLE.ToString()].ToString();
-                }
-            }
-
-            SavePacket savePacketPT = new SavePacket(new ContractToken("ContractToken Created - SavePricingTable")
-            {
-                CustId = custId,
-                ContractId = CNTRCT_ID
-            });
-
-            OpDataCollectorFlattenedDictList PRC_TBL_DATA = _pricingTablesLib.SavePricingTable(upperContractData.PricingTable, savePacketPT);
-            // END SAVE PT SECTION
-
-            // START SAVE PTR SECTION, PTR??? - this is a SF deal, so only one PTR allowed
-            int CONT_PT_ID = -100;
-            foreach (var item in PRC_TBL_DATA)
-            {
-                if (item.Key.ToString() == OpDataElementType.PRC_TBL.ToString())
-                {
-                    foreach (var itm in item.Value)
-                    {
-                        if (itm.ContainsKey("_actions"))
-                        {
-                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-                            if (actionIdChangeAltId != null)
-                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PT_ID);
-                        }
-                    }
-                }
-            }
-            foreach (var ptr in upperContractData.PricingTableRow)
-            {
-                if (!ptr.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                {
-                    ptr.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PT_ID);
-                }
-                else
-                {
-                    ptr[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PT_ID;
-                }
-
-                if (ptr.ContainsKey(AttributeCodes.TITLE.ToString()))
-                {
-                    ptr[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + ptr[AttributeCodes.TITLE.ToString()].ToString();
-                }
-            }
-
-            ContractToken savePacketPTR = new ContractToken("ContractToken Created - SavePricingTableRow")
-            {
-                CustId = custId,
-                ContractId = CNTRCT_ID
-            };
-
-            // Use the other Price Table save call to specifically save the PTR only.
-            OpDataCollectorFlattenedDictList PRC_TBL_ROW_DATA = _pricingTablesLib.SavePricingTable(null, upperContractData.PricingTableRow, null, savePacketPTR);
-
-            // END SAVE PTR SECTION
-
-            // START SAVE WIP DEAL SECTION, Sales Force is only sending one deal
-            int CONT_PTR_ID = -100;
-            foreach (var item in PRC_TBL_ROW_DATA)
-            {
-                if (item.Key.ToString() == OpDataElementType.PRC_TBL_ROW.ToString())
-                {
-                    foreach (var itm in item.Value)
-                    {
-                        if (itm.ContainsKey("_actions"))
-                        {
-                            List<OpDataAction> actionIdChangeAltId = itm["_actions"] as List<OpDataAction>;
-
-                            if (actionIdChangeAltId != null)
-                                int.TryParse(actionIdChangeAltId[0].AltID.ToString(), out CONT_PTR_ID);
-                        }
-                    }
-                }
-            }
-            foreach (var wip in upperContractData.WipDeals)
-            {
-                if (!wip.ContainsKey(AttributeCodes.DC_PARENT_ID.ToString()))
-                {
-                    wip.Add(AttributeCodes.DC_PARENT_ID.ToString(), CONT_PTR_ID);
-                }
-                else
-                {
-                    wip[AttributeCodes.DC_PARENT_ID.ToString()] = CONT_PTR_ID;
-                }
-
-                if (wip.ContainsKey(AttributeCodes.TITLE.ToString()))
-                {
-                    wip[AttributeCodes.TITLE.ToString()] = CNTRCT_ID + wip[AttributeCodes.TITLE.ToString()].ToString();
-                }
-            }
-
-            ContractToken savePacketWIP = new ContractToken("ContractToken Created - Save WIP Deal")
-            {
-                CustId = custId,
-                ContractId = CNTRCT_ID
-            };
-
-            // Use the other Price Table save call to specifically save the PTR only.
-            OpDataCollectorFlattenedDictList WIP_ROW_DATA = _pricingTablesLib.SavePricingTable(null, null, upperContractData.WipDeals, savePacketWIP);
-
-
-            // END SAVE WIP DEAL SECTION
-
-            int r = 100;
-            return baseContract;
-        }
 
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
