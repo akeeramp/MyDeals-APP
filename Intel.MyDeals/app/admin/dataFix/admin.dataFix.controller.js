@@ -87,11 +87,12 @@
                 if (requiredFields.length > 0) {
                     kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
                 } else {
-                    vm.disabled = true;
+                    vm.disabled = true;                    
                     dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
                         if (result.data.RESULT == "1") {                            
                             vm.isSuccess = true;
                             logger.success("Data fix has been updated successfully!");
+                            vm.Init();
                         } else {
                             logger.error("Unable to update data fix");
                         }                        
@@ -116,6 +117,8 @@
         vm.ok = function () {
             vm.IsEditMode = false;
             vm.disabled = false; 
+            vm.isAtrbSelected = true;
+            vm.isActnSelected = true;
         }
 
         vm.dataSourceDataFixes = new kendo.data.DataSource({
