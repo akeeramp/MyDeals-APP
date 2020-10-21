@@ -2315,7 +2315,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3716,
                 AtrbCd = AttributeCodes.QUOTE_LN_ID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Label = "Quote Line ID",
+                Label = "Quote Line Number",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 180,

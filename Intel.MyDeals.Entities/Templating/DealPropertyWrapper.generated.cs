@@ -3789,8 +3789,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute QUOTE_LN_ID = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QUOTE_LN_ID",
-			ATRB_DESC = "Quote Line ID",
-			ATRB_LBL = "Quote Line ID",
+			ATRB_DESC = "Quote Line Number",
+			ATRB_LBL = "Quote Line Number",
 			ATRB_MAX_LEN = 50,
 			ATRB_SID = 3716,
 			DATA_TYPE_CD = "VARCHAR",
