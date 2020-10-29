@@ -1750,7 +1750,7 @@
             TENDER_PUBLISHED: 0,
             START_DT: "01/01/2018", // These are just set to whatever, switched out mid tier to current Q
             END_DT: "04/30/2018", // These are just set to whatever, switched out mid tier to current Q
-            C2A_DATA_C2A_ID: "Tender Folio Auto-Filled",
+            C2A_DATA_C2A_ID: "Tender Folio Auto",
             MEETCOMP_TEST_RESULT: "Not Run Yet",
             COST_TEST_RESULT: "Not Run Yet",
             CUST_ACCPT: "Acceptance Not Required in C2A",
