@@ -236,7 +236,26 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                         //FIXME: for now we fail silently and users will likely think they just misclicked the first time, but this does need to be addressed eventually.
                         //console.log("ouch")
                     } else {
-                        var msValues = multiselect.value();
+                       
+                        var msValues = multiselect.dataItems();
+                        //var test = multiselect.value();
+                        var soldToIdVal = [];
+                        for (var k = 0; k < msValues.length; k++)
+                        {
+                            if (msValues[k].subAtrbCd)
+                            {
+                                soldToIdVal.push(msValues[k].subAtrbCd);
+                            }                            
+                        }
+                        if (soldToIdVal.length > 0) {
+
+                            var msValues= soldToIdVal
+                        }
+                        else
+                        {
+                            var msValues = multiselect.value();
+                        }
+                        
 
                         for (var i = 0; i < msValues.length; i++) {
                             var matches = treeview.findByText(msValues[i]);
@@ -282,7 +301,15 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
 
             scope.onDeselect = function (e) {
-                var item = e.dataItem.DROP_DOWN;
+                var chkSoldToID = e.dataItem.subAtrbCd;
+                if (chkSoldToID) {
+                    var item = chkSoldToID;
+                }
+                else
+                {
+                    var item = e.dataItem.DROP_DOWN;
+                }
+               
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
                 var matches = treeview.findByText(item);
@@ -316,7 +343,16 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 function gatherStates(nodes) {
                     for (var i = 0; i < nodes.length; i++) {
                         if (nodes[i].checked) {
-                            checkedNodes.push(nodes[i].DROP_DOWN);
+
+                            var chkSoldToID = treeview.$angular_scope.opLookupText; //check for Sold_To_Id Field  
+                            if (chkSoldToID == "subAtrbCd")
+                            {
+                                checkedNodes.push(nodes[i].dropdownName);
+                            }
+                            else
+                            {
+                                checkedNodes.push(nodes[i].DROP_DOWN);
+                            }                                                       
                         }
 
                         if (nodes[i].hasChildren) {
