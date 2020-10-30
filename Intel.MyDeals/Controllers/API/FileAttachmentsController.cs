@@ -110,7 +110,11 @@ namespace Intel.MyDeals.Controllers.API
                 fName = fName.Replace(s, "_");
             }
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fName));
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = fName
+            };
+            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf"); // Letting mime type define automatically instead of doing this
 
             return result;
         }
