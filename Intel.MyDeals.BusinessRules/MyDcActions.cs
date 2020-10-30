@@ -2278,6 +2278,9 @@ namespace Intel.MyDeals.BusinessRules
             Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
             Dictionary<int, string> endVolDict = endVols.ToDictionary(pair => pair.Key, pair => pair.Value);
 
+            // Safety pullout since vol tier rules are also run on approvals screen where tiers information is not pulled.  Skip tiers data check if there is no tiers data.
+            if (startVolDict.Count == 0 || endVolDict.Count == 0) return;
+
             int prevStartVal = 0;
             int prevEndVal = 0;
             for (int tierKey = 1; tierKey <= 10; tierKey++)
