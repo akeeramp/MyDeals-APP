@@ -161,23 +161,105 @@ namespace Intel.MyDeals.BusinessLogic
             return $"{opDataElementType}_{field}";
         }
 
+        private List<int> GetArrayValue(SearchFilter item)
+        {
+            List<int> aRtn = new List<int>();
+
+            if (item.Value.ToString().IndexOf("[") >= 0)
+            {
+                StringBuilder sb = new StringBuilder(item.Value.ToString());
+
+                string myString = sb
+                    .Replace("\r\n", "")
+                    .Replace("*", "%")
+                    .Replace("{", "")
+                    .Replace("}", "")
+                    .Replace("[  ", "")
+                    .Replace("[ ", "")
+                    .Replace("[", "")
+                    .Replace("]", "")
+                    .Replace("% ", "%")
+                    .Replace("\"", "")
+                    .Replace(", ", ",")
+                    .Replace(", ", ",")
+                    .ToString();
+
+                foreach (string s in myString.Split(','))
+                {
+                    aRtn.Add(Int32.Parse(s));
+                }
+            }
+            return aRtn;
+        }
+
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
-            var autoApproveRuleval = "";         
+            var autoApproveRuleval = "";
             bool autoApproveRuleFlag = false;
+            bool isTenderSearch = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
+
+            // Deal with right sice customer search filters - pull out list of what the user is searching for and replace user customers list with intersection, then remove search cust from filters
+            List<SearchFilter> remList = new List<SearchFilter>();
+            string initListString = "";
+            foreach (string s in initSearchList)
+            {
+                if (s.Contains("cnt.CUST_MBR_SID"))
+                {
+                    initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "");
+                    if (s.Contains("CNTRCT_TENDER_PUBLISHED"))
+                    {
+                        initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "").Replace("AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1", "");
+                        isTenderSearch = true;
+                    }
+                }
+            }
+
+            // Turn GetMyCusts string into array of CustMbrSids for intersection
+            List<int> initialCustList = new List<int>();
+            foreach (string s in initListString.Split(','))
+            {
+                initialCustList.Add(Int32.Parse(s));
+            }
+
+            // Pull out cust search item, process it as list of ints, run the intersection, then remove from search lists
+            foreach (var i in customSearchOption)
+            {
+                var field = i.Field;
+
+                if (field == "Customer.CUST_NM")
+                {
+                    var x = i.Value;
+
+                    List<int> userDefinedCustSearchList = GetArrayValue(i);
+                    IEnumerable<int> newData = initialCustList.Intersect(userDefinedCustSearchList); // Get differences between initSearchList and userDefinedCustSearchList
+                    remList.Add(i);
+
+                    initSearchList.Remove(initSearchList.First(s => s.Contains("cnt.CUST_MBR_SID")));
+                    string newCustFilter = "cnt.CUST_MBR_SID IN (" + string.Join(", ", newData.Select(n => n.ToString()).ToArray()) + ") ";
+                    if (isTenderSearch)
+                    {
+                        newCustFilter += "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1 ";
+                    }
+                    initSearchList.Add(newCustFilter);
+                }
+            }
+            foreach (var i in remList)
+            {
+                customSearchOption.Remove(i);
+            }
 
             //Special case for AUTO_APPROVE_RULE_INFO
             foreach (var i in customSearchOption)
             {
                 var field = i.Field;
-                
+
                 if (field == "AUTO_APPROVE_RULE_INFO")
                 {
-                    autoApproveRuleFlag = true;                   
+                    autoApproveRuleFlag = true;
                     break;
-                }              
+                }
             }
 
             List<string> searchAtrbs = new List<string>
@@ -199,10 +281,10 @@ namespace Intel.MyDeals.BusinessLogic
             // Set End Date
             if (!userDefEnd && !userDefContract && !userDefDeal) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
 
-            // Customers
+            // Customers (Left side customers list comes in as names unfortunately, so just tack it on)
             if (data.Customers.Any() && !userDefContract && !userDefDeal)
             {
-                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;",".")}')");
+                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;", ".")}')");
             }
 
             // Add Custom Search
@@ -239,15 +321,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             //Special case for AUTO_APPROVE_RULE_INFO. Modify the concatenation string for 'AUTO_APPROVE_RULE_INFO' field as it is needed from database side
             if (autoApproveRuleFlag == true)
-            {                
+            {
                 for (int i = 0; i < modifiedSearchList.Count; i++)
-                {                    
-                    if(modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
+                {
+                    if (modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
                     {
-                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!")) 
+                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!"))
                         {
-                            string[] val =  modifiedSearchList[i].Split("=".ToCharArray());
-                            autoApproveRuleval = val[val.Length -1];
+                            string[] val = modifiedSearchList[i].Split("=".ToCharArray());
+                            autoApproveRuleval = val[val.Length - 1];
                             modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID ={autoApproveRuleval} OR {opDataElementType}_RULE_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_WWID ={autoApproveRuleval})";
                         }
                         if (modifiedSearchList[i].Contains("LIKE"))
@@ -259,14 +341,14 @@ namespace Intel.MyDeals.BusinessLogic
                         if (modifiedSearchList[i].Contains("!="))
                         {
                             string[] val = modifiedSearchList[i].Split("!=".ToCharArray());
-                            autoApproveRuleval = val[val.Length - 1];                           
+                            autoApproveRuleval = val[val.Length - 1];
                             modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID !={autoApproveRuleval} AND {opDataElementType}_RULE_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_WWID !={autoApproveRuleval})";
 
-                        }                      
+                        }
                     }
                 }
             }
-           
+
             // create the full string
             rtn += string.Join(" AND ", modifiedSearchList);
 
