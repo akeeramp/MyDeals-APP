@@ -161,12 +161,83 @@ namespace Intel.MyDeals.BusinessLogic
             return $"{opDataElementType}_{field}";
         }
 
+        private List<int> GetArrayValue(SearchFilter item)
+        {
+            List<int> aRtn = new List<int>();
+
+            if (item.Value.ToString().IndexOf("[") >= 0)
+            {
+                StringBuilder sb = new StringBuilder(item.Value.ToString());
+
+                string myString = sb
+                    .Replace("\r\n", "")
+                    .Replace("*", "%")
+                    .Replace("{", "")
+                    .Replace("}", "")
+                    .Replace("[  ", "")
+                    .Replace("[ ", "")
+                    .Replace("[", "")
+                    .Replace("]", "")
+                    .Replace("% ", "%")
+                    .Replace("\"", "")
+                    .Replace(", ", ",")
+                    .Replace(", ", ",")
+                    .ToString();
+
+                foreach (string s in myString.Split(','))
+                {
+                    aRtn.Add(Int32.Parse(s));
+                }
+            }
+            return aRtn;
+        }
+
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
             var autoApproveRuleval = "";         
             bool autoApproveRuleFlag = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
+
+            // Deal with right sice customer search filters - pull out list of what the user is searching for and replace user customers list with intersection, then remove search cust from filters
+            List<SearchFilter> remList = new List<SearchFilter>();
+            string initListString = "";
+            foreach (string s in initSearchList)
+            {
+                if (s.Contains("cnt.CUST_MBR_SID"))
+                {
+                    initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")","");
+                }
+            }
+
+            // Turn GetMyCusts string into array of CustMbrSids for intersection
+            List<int> initialCustList = new List<int>();
+            foreach (string s in initListString.Split(','))
+            {
+                initialCustList.Add(Int32.Parse(s));
+            }
+
+            // Pull out cust search item, process it as list of ints, run the intersection, then remove from search lists
+            foreach (var i in customSearchOption)
+            {
+                var field = i.Field;
+
+                if (field == "Customer.CUST_NM")
+                {
+                    var x = i.Value;
+
+                    List<int> userDefinedCustSearchList = GetArrayValue(i);
+                    IEnumerable<int> newData = initialCustList.Intersect(userDefinedCustSearchList); // Get differences between initSearchList and userDefinedCustSearchList
+                    remList.Add(i);
+
+                    initSearchList.Remove(initSearchList.First(s => s.Contains("cnt.CUST_MBR_SID")));
+                    initSearchList.Add("cnt.CUST_MBR_SID IN (" + string.Join(",", newData.Select(n => n.ToString()).ToArray())  + ")");
+                }
+            }
+            foreach (var i in remList)
+            {
+                customSearchOption.Remove(i);
+            }
 
             //Special case for AUTO_APPROVE_RULE_INFO
             foreach (var i in customSearchOption)
@@ -199,7 +270,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Set End Date
             if (!userDefEnd && !userDefContract && !userDefDeal) modifiedSearchList.Add($"{opDataElementType}_{AttributeCodes.END_DT} >= '{data.StrStart:MM/dd/yyyy}'");
 
-            // Customers
+            // Customers (Left side customers list comes in as names unfortunately, so just tack it on)
             if (data.Customers.Any() && !userDefContract && !userDefDeal)
             {
                 modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;",".")}')");

@@ -227,7 +227,7 @@
                                 }
                             }),
                             dataTextField: "CUST_NM",
-                            dataValueField: "CUST_NM",
+                            dataValueField: "CUST_SID",
                             tagMode: "single",
                             valuePrimitive: true
                         });
@@ -235,7 +235,7 @@
                     extra: false
                 },
                 lookupText: "CUST_NM",
-                lookupValue: "CUST_NM",
+                lookupValue: "CUST_SID",
                 lookupUrl: "/api/Customers/GetMyCustomersNameInfo"
             }, {
                 field: "CUST_ACCNT_DIV",
