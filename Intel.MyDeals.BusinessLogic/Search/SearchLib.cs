@@ -197,6 +197,7 @@ namespace Intel.MyDeals.BusinessLogic
             string rtn = string.Empty;
             var autoApproveRuleval = "";         
             bool autoApproveRuleFlag = false;
+            bool isTenderSearch = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
 
             // Deal with right sice customer search filters - pull out list of what the user is searching for and replace user customers list with intersection, then remove search cust from filters
@@ -207,6 +208,11 @@ namespace Intel.MyDeals.BusinessLogic
                 if (s.Contains("cnt.CUST_MBR_SID"))
                 {
                     initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")","");
+                    if (s.Contains("CNTRCT_TENDER_PUBLISHED"))
+                    {
+                        initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "").Replace("AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1", "");
+                        isTenderSearch = true;
+                    }
                 }
             }
 
@@ -231,7 +237,12 @@ namespace Intel.MyDeals.BusinessLogic
                     remList.Add(i);
 
                     initSearchList.Remove(initSearchList.First(s => s.Contains("cnt.CUST_MBR_SID")));
-                    initSearchList.Add("cnt.CUST_MBR_SID IN (" + string.Join(",", newData.Select(n => n.ToString()).ToArray())  + ")");
+                    string newCustFilter = "cnt.CUST_MBR_SID IN (" + string.Join(", ", newData.Select(n => n.ToString()).ToArray()) + ") ";
+                    if (isTenderSearch)
+                    {
+                        newCustFilter += "AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1 ";
+                    }
+                    initSearchList.Add(newCustFilter);
                 }
             }
             foreach (var i in remList)
