@@ -1562,6 +1562,11 @@
     <Content Include="Scripts\Angular\1.6.9\angular-sanitize.min.js" />
     <Content Include="Scripts\Angular\1.6.9\angular-ui-router.min.js" />
     <Content Include="Scripts\Angular\1.6.9\angular.min.js" />
+    <Content Include="Scripts\Angular\1.8.0\angular-animate.min.js" />
+    <Content Include="Scripts\Angular\1.8.0\angular-mocks.js" />
+    <Content Include="Scripts\Angular\1.8.0\angular-sanitize.min.js" />
+    <Content Include="Scripts\Angular\1.8.0\angular-ui-router.min.js" />
+    <Content Include="Scripts\Angular\1.8.0\angular.min.js" />
     <Content Include="Scripts\Angular\angular-filter.min.js" />
     <Content Include="Scripts\Angular\angular-linq.min.js" />
     <Content Include="Scripts\Angular\clipboard.min.js" />
@@ -1889,6 +1894,9 @@
     <Content Include="Views\ToolManual\Index.cshtml" />
     <Content Include="Views\Reporting\Index.cshtml" />
     <Content Include="Views\CodingPractices\CiCdPipeline.cshtml" />
+    <Content Include="Scripts\Angular\1.8.0\angular-animate.min.js.map" />
+    <Content Include="Scripts\Angular\1.8.0\angular-sanitize.min.js.map" />
+    <Content Include="Scripts\Angular\1.8.0\angular.min.js.map" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
