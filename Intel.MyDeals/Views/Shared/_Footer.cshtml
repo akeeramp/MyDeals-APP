@@ -16,7 +16,7 @@
     <div class="fl env"><b>@environment</b></div>
 
     <div class="fr">Intel Confidential</div>
-    <div class="float_center ping"><ping></ping></div>
+    <div class="fr ping"><ping></ping></div>
 </div>
 
 <style>
@@ -25,26 +25,22 @@
         bottom: 0;
         background-color: #0071C5;
         color: #ffffff;
-        width: 100%; height: 15px;
+        width: 100%;
+        height: 15px;
         font-size: 10px;
         padding: 0 10px;
     }
+
     .env {
         padding: 0 20px;
         color: #f3D54E;
         background-color: indianred;
     }
+
     .ping {
         align-content: center;
-        margin: 0 0 0 10px;
+        margin: 0 10px 0 0;
         font-size: 10px;
-    }
-
-    .float_center {
-        float: left;
-        position: relative;
-        right: 40%; /* Normally, Right 50% (or left -50%), but we have some oddness going on, so right 40 looks correct */
-        text-align: left;
     }
 
 </style>
