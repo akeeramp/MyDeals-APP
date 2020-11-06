@@ -1437,13 +1437,13 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 Label = "Group Type",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 140,
-                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                Width = 140
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1452,13 +1452,13 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/PROGRAM",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 Label = "Group Type",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 140,
-                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/PROGRAM",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                Width = 140
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -1467,13 +1467,13 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/VOL_TIER",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 Label = "Group Type",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 140,
-                LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE/VOL_TIER",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                Width = 140
             });
             //items.Add(new UiTemplateContainerItem  // WIP All types
             //{
@@ -2712,8 +2712,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 240,
                 IsDefaultable = true,
-                Label = "AR Settlement Level",
-                UiType = "DROPDOWN",
                 Template = "#=gridUtils.uiControlWrapper(data, 'AR_SETTLEMENT_LVL')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL",
                 LookupText = "DROP_DOWN",

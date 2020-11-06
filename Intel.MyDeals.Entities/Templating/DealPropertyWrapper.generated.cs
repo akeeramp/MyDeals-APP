@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 11/5/2020 8:47:17 PM
+File Updated: 11/6/2020 11:40:51 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
@@ -152,7 +152,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute AUTO_APPROVE_RULE_INFO = new MyDealsAttribute()
 		{
@@ -1144,7 +1144,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute DEAL_DESC = new MyDealsAttribute()
 		{
