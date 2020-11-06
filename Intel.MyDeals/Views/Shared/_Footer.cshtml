@@ -11,13 +11,13 @@
     }
 }
 
-<div class="footer-bar">
-    <div class="fl" ondblclick="eggDd()" style="padding-right: 20px">@appVer</div>
-    <div class="fl env"><b>@environment</b></div>
+    <div class="footer-bar">
+        <div class="fl" ondblclick="eggDd()" style="padding-right: 20px">@appVer</div>
+        <div class="fl env"><b>@environment</b></div>
 
-    <div class="fr">Intel Confidential</div>
-    <div class="float_center ping"><ping></ping></div>
-</div>
+        <div class="fr">Intel Confidential</div>
+        <div class="fr ping"><ping></ping></div>
+    </div>
 
 <style>
     .footer-bar {
@@ -36,15 +36,8 @@
     }
     .ping {
         align-content: center;
-        margin: 0 0 0 10px;
+        margin: 0 10px 0 0;
         font-size: 10px;
-    }
-
-    .float_center {
-        float: left;
-        position: relative;
-        right: 40%; /* Normally, Right 50% (or left -50%), but we have some oddness going on, so right 40 looks correct */
-        text-align: left;
     }
 
 </style>

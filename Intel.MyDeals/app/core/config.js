@@ -40,7 +40,7 @@
 
     var config = {
         appErrorPrefix: '[NG-Modular Error] ', //Configure the exceptionHandler decorator
-        appTitle: 'MyDeals Modular Demo',
+        appTitle: 'My Deals Modular Demo',
         version: '1.0.0'
     };
 
