@@ -15,7 +15,10 @@ namespace Intel.MyDeals.VistexService
         SendVerticalsVistex,
         ProcessDealsTenders,
         TestPipelines,
-        TenderReturn
+        TenderReturn,
+        SendErrorDealsVistex,
+        SendFailProductsVistex
+        
     }
 
     public class JobModeCode
@@ -27,13 +30,15 @@ namespace Intel.MyDeals.VistexService
         public const char ProcessDealsTenders = 'T';
         public const char TestPipelines = 'X';
         public const char TenderReturn = 'R';
+        public const char SendErrorDealsVistex = 'E';
+        public const char SendFailProductsVistex = 'F';
     }
 
     public class VistexParams
     {
         public int sleepSeconds = 0;
-        public JobMode jobMode = JobMode.TenderReturn;
-        public char jobType = JobModeCode.TenderReturn; // Default to run as SendDealsVistex is nothing is passed
+        public JobMode jobMode = JobMode.SendDealsVistex;
+        public char jobType = JobModeCode.SendDealsVistex; // Default to run as SendDealsVistex is nothing is passed
         public bool pauseOnEnd = false;
         public bool displayHelpOnly = false;
         public bool outputLogging = true;
@@ -259,6 +264,20 @@ namespace Intel.MyDeals.VistexService
                             jobType = JobModeCode.TenderReturn;
                             break;
 
+                        case "sendErrorDealsVistex":
+                        case "se":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendErrorDealsVistex;
+                            jobType = JobModeCode.SendErrorDealsVistex;
+                            break;
+
+                        case "sendFailProductsVistex":
+                        case "sf":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendFailProductsVistex;
+                            jobType = JobModeCode.SendFailProductsVistex;
+                            break;
+                            
                         default:
                             errorMessages.Add(String.Format("Invalid Mode: {0}", arr[1]));
                             break;

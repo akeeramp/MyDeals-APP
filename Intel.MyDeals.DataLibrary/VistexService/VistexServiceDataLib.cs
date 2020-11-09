@@ -17,6 +17,7 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
+using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -53,7 +54,7 @@ namespace Intel.MyDeals.DataLibrary
         }
         private string GetVistexUrlByMode(string mode)
         {
-            if(mode == "D")
+            if ((mode == "D") || (mode == "E"))
             {
                 return vistexBaseURL + "/" + vistexDealApi;
             }
@@ -65,7 +66,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return vistexBaseURL + "/" + vistexProdApi;
             }
-            else if (mode == "V")
+            else if ((mode == "V") || mode == "F")
             {
                 return vistexBaseURL + "/" + vistexVertApi;
             }
@@ -147,9 +148,9 @@ namespace Intel.MyDeals.DataLibrary
             List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
             {
-                in_rqst_type = packetType
+                in_rqst_type = packetType,
+                in_err_mode = (runMode == "E" || runMode == "F") ? false : true
             };
-
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
                 int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
@@ -176,7 +177,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 in_rqst_type = packetType
             };
-
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
                 int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
@@ -317,20 +317,23 @@ namespace Intel.MyDeals.DataLibrary
 
         public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages) //VTX_OBJ: DEALS
         {
-            type_int_dictionary opDealMessages = new type_int_dictionary();
-            opDealMessages.AddRows(dealsMessages.Select(itm => new Opaque.Tools.OpPair<int, string>
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dealsMessages)
             {
-                First = itm.Key,
-                Second = itm.Value
-            }));
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.Key;
+                dr["RSPN_MSG"] = eachResp.Value;
+                dr["RQST_STS"] = eachResp.Value.StartsWith("S:") ? "PO_Processing_Complete" : (eachResp.Value.StartsWith("E:") ? "PO_Error_Resend" : "PO_Processing_Complete");
+                opDealMessages.Rows.Add(dr);
+            }
 
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
                 in_btch_id = batchId,
-                in_rqst_sts = "PO_Processing_Complete", // Default close the 
+                //in_rqst_sts = "",
                 in_deal_rspn_err = opDealMessages
             };
-
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))

@@ -41,6 +41,14 @@ namespace Intel.MyDeals.VistexService
             {
                 fileName = "TenderReturn";
             }
+            else if (mode == "/mode:se")
+            {
+                fileName = "ErrorDeal";
+            }
+            else if (mode == "/mode:sf")
+            {
+                fileName = "ErrorVertical";
+            }
             _logFile = Path.Combine(VistexCommonLogging.StartupPath, "Logs", String.Format(mode == "/mode:tr" ? "TenderDebugLog_" : "VistexDebugLog_" +fileName+"_{0:0}_{1}.txt",
                                 Math.Abs((DateTime.Now - (new DateTime(DateTime.Now.Year, 1, 1))).TotalMinutes),
                                 DateTime.Now.Second
@@ -182,6 +190,18 @@ namespace Intel.MyDeals.VistexService
                     VistexCommonLogging.WriteToLog("Processing Tenders Return in My Deals...");
                     await SendTenderReturn("R");
                     // Not implemented yet
+                    break;
+                case JobMode.SendErrorDealsVistex:
+                    Console.WriteLine("Sending Error Deals Data to Vistex from My Deals...");
+                    VistexCommonLogging.WriteToLog("Initiated - Sending Deals Data to Vistex from My Deals...");
+                    await SendDealsDataToSapPo("E");
+                    VistexCommonLogging.WriteToLog("Completed - Sending Deals Data to Vistex from My Deals...");
+                    break;
+                case JobMode.SendFailProductsVistex:
+                    Console.WriteLine("Sending Error Verticals to Vistex from My Deals...");
+                    VistexCommonLogging.WriteToLog("Initiated - Sending Verticals to Vistex from My Deals...");
+                    await SendVerticalsToSapPo();
+                    VistexCommonLogging.WriteToLog("Completed - Sending Verticals to Vistex from My Deals...");
                     break;
                 case JobMode.TestPipelines:
                     Console.WriteLine("Starting: Testing Connection to Vistex SAP PO...");
