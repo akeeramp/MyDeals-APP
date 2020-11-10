@@ -2805,7 +2805,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
                     // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
-                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString() == prdMapping.Key).FirstOrDefault();
+                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString().ToUpper() == prdMapping.Key.ToUpper()).FirstOrDefault();
                     int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
                     deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
