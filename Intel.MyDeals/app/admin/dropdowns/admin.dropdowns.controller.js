@@ -56,7 +56,8 @@
                         actionButtonText: 'Delete Dropdown',
                         hasActionButton: true,
                         headerText: 'Delete Confirmation',
-                        bodyText: 'Are you sure you would like to Delete this Dropdown Item?'
+                        bodyText: 'Entries currently used in a deal should be deactivated, not deleted.If the entry is currently on a deal it will deactivate instead of deleting.'
+                        
                     };
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
                         dropdownsService.deleteBasicDropdowns(e.data.models[0].ATRB_LKUP_SID)
@@ -68,7 +69,7 @@
                                     vm.nonCorpInheritableValues.splice(indx, 1);
                                 }
                             }
-                            logger.success("Dropdown Deleted.");
+                            logger.success("Dropdown Deleted or Deactivated.");
                         }, function (response) {
                             logger.error("Unable to delete Dropdown.", response, response.statusText);
                             cancelChanges();
