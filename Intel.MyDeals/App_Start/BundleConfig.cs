@@ -157,6 +157,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/legalExceptions/updateLegalException.controller.js"
                 , "~/app/admin/legalExceptions/viewLegalException.controller.js"
                 , "~/app/admin/legalExceptions/viewLegalExceptionDealList.controller.js"
+                , "~/app/admin/legalExceptions/downloadLegalException.controller.js"
                 , "~/app/admin/notifications/notifications.controller.js"
                 , "~/app/admin/notifications/notificationsModal.controller.js"
                 , "~/app/admin/notifications/notificationsSettings.controller.js"

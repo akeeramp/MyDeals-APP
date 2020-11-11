@@ -17,6 +17,7 @@
             updateLegalException: updateLegalException,
             deleteLegalException: deleteLegalException,
             getVersionDetailsPCTExceptions: getVersionDetailsPCTExceptions,
+            getDownloadLegalException: getDownloadLegalException,
         }
 
         function getLegalExceptions(verticalId) {
@@ -37,6 +38,10 @@
 
         function getVersionDetailsPCTExceptions(id,excludeCurrVer) {
             return dataService.get(apiBaseUrl + 'GetVersionDetailsPCTExceptions' + "/" + id + "/" + excludeCurrVer);
+        }
+       
+        function getDownloadLegalException(exceptionSid, chkPreviousVersion, chkDealList) {
+            return dataService.get(apiBaseUrl + 'GetDownloadLegalException' + "/" + exceptionSid + "/" + chkPreviousVersion + "/" + chkDealList);
         }
 
         function userHasAccess() {
