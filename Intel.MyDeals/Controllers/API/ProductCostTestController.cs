@@ -125,6 +125,20 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         /// <summary>
+        /// Legal Exception Export  
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetDownloadLegalException/{exceptionSid}/{chkPreviousVersion}/{chkDealList}")]
+        public List<LegalExceptionExport> GetDownloadLegalException(string exceptionSid,bool chkPreviousVersion,bool chkDealList)
+        {
+
+            return SafeExecutor(() => _productCostTestLib.DownloadLegalException(exceptionSid, chkPreviousVersion, chkDealList)
+               , $"Unable to Download Legal Exception Data "
+           );
+           
+        }
+
+        /// <summary>
         /// Create LegalException
         /// </summary>
         /// <returns></returns>

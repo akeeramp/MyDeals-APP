@@ -19334,6 +19334,54 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
+
+		///<summary>
+		/// ID: 1514574377
+		/// Modified: 11/3/2020 3:27:21 AM
+		/// Parameters: 3
+		///</summary>
+		public partial class PR_MYDL_GET_PCT_LGL_EXCPT_DWNLD : SP
+		{
+			public PR_MYDL_GET_PCT_LGL_EXCPT_DWNLD()
+			{
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_GET_PCT_LGL_EXCPT_DWNLD]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase in_pct_excpt_lst
+			{
+				set { SetParmeter("in_pct_excpt_lst", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("in_pct_excpt_lst"); }
+			}
+
+			///<summary>
+			/// DataType: bit
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Boolean in_incld_all_excpt_ver
+			{
+				set { SetParmeter("in_incld_all_excpt_ver", value); }
+				get { return (Boolean)GetParameter("in_incld_all_excpt_ver"); }
+			}
+
+			///<summary>
+			/// DataType: bit
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Boolean in_incld_excpt_deal
+			{
+				set { SetParmeter("in_incld_excpt_deal", value); }
+				get { return (Boolean)GetParameter("in_incld_excpt_deal"); }
+			}
+		}
+
 		///<summary>
 		/// ID: 1721773191
 		/// Modified: 2/2/2020 10:05:32 PM

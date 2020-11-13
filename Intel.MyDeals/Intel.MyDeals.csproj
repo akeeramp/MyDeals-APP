@@ -369,6 +369,8 @@
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
     <Content Include="app\admin\legalExceptions\addLegalException.controller.js" />
     <Content Include="app\admin\legalExceptions\addLegalException.html" />
+    <Content Include="app\admin\legalExceptions\downloadLegalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\downloadLegalException.html" />
     <Content Include="app\admin\legalExceptions\updateLegalException.controller.js" />
     <Content Include="app\admin\legalExceptions\updateLegalException.html" />
     <Content Include="app\admin\legalExceptions\viewLegalException.controller.js" />

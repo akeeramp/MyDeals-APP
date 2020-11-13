@@ -6923,6 +6923,224 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class ManageUsersInfo
 
+
+
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on PAYELMOX-MOBL1
+	/// by payelmox
+	/// at 11/4/2020 6:06:50 PM
+	///</summary>
+
+	[DataContract]
+	public partial class LegalExceptionExport
+	{
+
+		[DataMember]
+		public System.Boolean ACTV_IND { set; get; }
+
+
+		[DataMember]
+		public System.String APRV_ATRNY { set; get; }
+
+
+		[DataMember]
+		public System.String BUSNS_OBJ { set; get; }
+
+
+		[DataMember]
+		public System.DateTime CHG_DTM { set; get; }
+
+
+		[DataMember]
+		public System.String CHG_EMP_NAME { set; get; }
+
+
+		[DataMember]
+		public System.Int32 CHG_EMP_WWID { set; get; }
+
+
+		[DataMember]
+		public System.String COST { set; get; }
+
+
+		[DataMember]
+		public System.DateTime CRE_DTM { set; get; }
+
+
+		[DataMember]
+		public System.Int32 CRE_EMP_WWID { set; get; }
+
+
+		[DataMember]
+		public System.String CUST_PRD { set; get; }
+
+
+		[DataMember]
+		public System.String DEALS_USED_IN_EXCPT { set; get; }
+
+
+		[DataMember]
+		public System.DateTime DT_APRV { set; get; }
+
+
+		[DataMember]
+		public System.String EXCPT_RSTRIC_DURN { set; get; }
+
+
+		[DataMember]
+		public System.String FRCST_VOL_BYQTR { set; get; }
+
+
+		[DataMember]
+		public System.String INTEL_PRD { set; get; }
+
+
+		[DataMember]
+		public System.Boolean IS_DSBL { set; get; }
+
+
+		[DataMember]
+		public System.String JSTFN_PCT_EXCPT { set; get; }
+
+
+		[DataMember]
+		public System.String MEET_COMP_PRC { set; get; }
+
+
+		[DataMember]
+		public System.String MEET_COMP_PRD { set; get; }
+
+
+		[DataMember]
+		public System.Int32 MYDL_PCT_LGL_EXCPT_SID { set; get; }
+
+
+		[DataMember]
+		public System.String OTHER { set; get; }
+
+
+		[DataMember]
+		public System.String PCT_EXCPT_NBR { set; get; }
+
+
+		[DataMember]
+		public System.DateTime PCT_LGL_EXCPT_END_DT { set; get; }
+
+
+		[DataMember]
+		public System.DateTime PCT_LGL_EXCPT_STRT_DT { set; get; }
+
+
+		[DataMember]
+		public System.String PRC_RQST { set; get; }
+
+
+		[DataMember]
+		public System.String PTNTL_MKT_IMPCT { set; get; }
+
+
+		[DataMember]
+		public System.String RQST_ATRNY { set; get; }
+
+
+		[DataMember]
+		public System.String RQST_CLNT { set; get; }
+
+
+		[DataMember]
+		public System.String SCPE { set; get; }
+
+
+		[DataMember]
+		public System.DateTime VER_CRE_DTM { set; get; }
+
+
+		[DataMember]
+		public System.Int32 VER_NBR { set; get; }
+
+
+		/*
+		private static List<LegalExceptionExport> LegalExceptionExportFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<LegalExceptionExport>();
+		int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+		int IDX_APRV_ATRNY = DB.GetReaderOrdinal(rdr, "APRV_ATRNY");
+		int IDX_BUSNS_OBJ = DB.GetReaderOrdinal(rdr, "BUSNS_OBJ");
+		int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+		int IDX_CHG_EMP_NAME = DB.GetReaderOrdinal(rdr, "CHG_EMP_NAME");
+		int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+		int IDX_COST = DB.GetReaderOrdinal(rdr, "COST");
+		int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+		int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+		int IDX_CUST_PRD = DB.GetReaderOrdinal(rdr, "CUST_PRD");
+		int IDX_Deal_List = DB.GetReaderOrdinal(rdr, "Deal_List");
+		int IDX_DT_APRV = DB.GetReaderOrdinal(rdr, "DT_APRV");
+		int IDX_EXCPT_RSTRIC_DURN = DB.GetReaderOrdinal(rdr, "EXCPT_RSTRIC_DURN");
+		int IDX_FRCST_VOL_BYQTR = DB.GetReaderOrdinal(rdr, "FRCST_VOL_BYQTR");
+		int IDX_INTEL_PRD = DB.GetReaderOrdinal(rdr, "INTEL_PRD");
+		int IDX_IS_DSBL = DB.GetReaderOrdinal(rdr, "IS_DSBL");
+		int IDX_JSTFN_PCT_EXCPT = DB.GetReaderOrdinal(rdr, "JSTFN_PCT_EXCPT");
+		int IDX_MEET_COMP_PRC = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRC");
+		int IDX_MEET_COMP_PRD = DB.GetReaderOrdinal(rdr, "MEET_COMP_PRD");
+		int IDX_MYDL_PCT_LGL_EXCPT_SID = DB.GetReaderOrdinal(rdr, "MYDL_PCT_LGL_EXCPT_SID");
+		int IDX_OTHER = DB.GetReaderOrdinal(rdr, "OTHER");
+		int IDX_PCT_EXCPT_NBR = DB.GetReaderOrdinal(rdr, "PCT_EXCPT_NBR");
+		int IDX_PCT_LGL_EXCPT_END_DT = DB.GetReaderOrdinal(rdr, "PCT_LGL_EXCPT_END_DT");
+		int IDX_PCT_LGL_EXCPT_STRT_DT = DB.GetReaderOrdinal(rdr, "PCT_LGL_EXCPT_STRT_DT");
+		int IDX_PRC_RQST = DB.GetReaderOrdinal(rdr, "PRC_RQST");
+		int IDX_PTNTL_MKT_IMPCT = DB.GetReaderOrdinal(rdr, "PTNTL_MKT_IMPCT");
+		int IDX_RQST_ATRNY = DB.GetReaderOrdinal(rdr, "RQST_ATRNY");
+		int IDX_RQST_CLNT = DB.GetReaderOrdinal(rdr, "RQST_CLNT");
+		int IDX_SCPE = DB.GetReaderOrdinal(rdr, "SCPE");
+		int IDX_VER_CRE_DTM = DB.GetReaderOrdinal(rdr, "VER_CRE_DTM");
+		int IDX_VER_NBR = DB.GetReaderOrdinal(rdr, "VER_NBR");
+
+		while (rdr.Read()){
+		ret.Add(new LegalExceptionExport {
+		ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+		APRV_ATRNY = (IDX_APRV_ATRNY < 0 || rdr.IsDBNull(IDX_APRV_ATRNY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APRV_ATRNY),
+		BUSNS_OBJ = (IDX_BUSNS_OBJ < 0 || rdr.IsDBNull(IDX_BUSNS_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BUSNS_OBJ),
+		CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+		CHG_EMP_NAME = (IDX_CHG_EMP_NAME < 0 || rdr.IsDBNull(IDX_CHG_EMP_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMP_NAME),
+		CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+		COST = (IDX_COST < 0 || rdr.IsDBNull(IDX_COST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST),
+		CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+		CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+		CUST_PRD = (IDX_CUST_PRD < 0 || rdr.IsDBNull(IDX_CUST_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_PRD),
+		Deal_List = (IDX_Deal_List < 0 || rdr.IsDBNull(IDX_Deal_List)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_List),
+		DT_APRV = (IDX_DT_APRV < 0 || rdr.IsDBNull(IDX_DT_APRV)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DT_APRV),
+		EXCPT_RSTRIC_DURN = (IDX_EXCPT_RSTRIC_DURN < 0 || rdr.IsDBNull(IDX_EXCPT_RSTRIC_DURN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXCPT_RSTRIC_DURN),
+		FRCST_VOL_BYQTR = (IDX_FRCST_VOL_BYQTR < 0 || rdr.IsDBNull(IDX_FRCST_VOL_BYQTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRCST_VOL_BYQTR),
+		INTEL_PRD = (IDX_INTEL_PRD < 0 || rdr.IsDBNull(IDX_INTEL_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INTEL_PRD),
+		IS_DSBL = (IDX_IS_DSBL < 0 || rdr.IsDBNull(IDX_IS_DSBL)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_DSBL),
+		JSTFN_PCT_EXCPT = (IDX_JSTFN_PCT_EXCPT < 0 || rdr.IsDBNull(IDX_JSTFN_PCT_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSTFN_PCT_EXCPT),
+		MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRC),
+		MEET_COMP_PRD = (IDX_MEET_COMP_PRD < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRD),
+		MYDL_PCT_LGL_EXCPT_SID = (IDX_MYDL_PCT_LGL_EXCPT_SID < 0 || rdr.IsDBNull(IDX_MYDL_PCT_LGL_EXCPT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MYDL_PCT_LGL_EXCPT_SID),
+		OTHER = (IDX_OTHER < 0 || rdr.IsDBNull(IDX_OTHER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OTHER),
+		PCT_EXCPT_NBR = (IDX_PCT_EXCPT_NBR < 0 || rdr.IsDBNull(IDX_PCT_EXCPT_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCT_EXCPT_NBR),
+		PCT_LGL_EXCPT_END_DT = (IDX_PCT_LGL_EXCPT_END_DT < 0 || rdr.IsDBNull(IDX_PCT_LGL_EXCPT_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PCT_LGL_EXCPT_END_DT),
+		PCT_LGL_EXCPT_STRT_DT = (IDX_PCT_LGL_EXCPT_STRT_DT < 0 || rdr.IsDBNull(IDX_PCT_LGL_EXCPT_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PCT_LGL_EXCPT_STRT_DT),
+		PRC_RQST = (IDX_PRC_RQST < 0 || rdr.IsDBNull(IDX_PRC_RQST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_RQST),
+		PTNTL_MKT_IMPCT = (IDX_PTNTL_MKT_IMPCT < 0 || rdr.IsDBNull(IDX_PTNTL_MKT_IMPCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PTNTL_MKT_IMPCT),
+		RQST_ATRNY = (IDX_RQST_ATRNY < 0 || rdr.IsDBNull(IDX_RQST_ATRNY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_ATRNY),
+		RQST_CLNT = (IDX_RQST_CLNT < 0 || rdr.IsDBNull(IDX_RQST_CLNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_CLNT),
+		SCPE = (IDX_SCPE < 0 || rdr.IsDBNull(IDX_SCPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SCPE),
+		VER_CRE_DTM = (IDX_VER_CRE_DTM < 0 || rdr.IsDBNull(IDX_VER_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_VER_CRE_DTM),
+		VER_NBR = (IDX_VER_NBR < 0 || rdr.IsDBNull(IDX_VER_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_VER_NBR)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
+	} // End of class LegalExceptionExport
+
+
 	///<summary>
 	/// Class created via template - Do Not Modify!
 	/// To modify this code, re-execute the template, or extend as partial.
@@ -6930,7 +7148,7 @@ namespace Intel.MyDeals.Entities {
 	/// by sauravku
 	/// at 10/15/2020 8:56:25 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class TimelineItem {
 	

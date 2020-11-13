@@ -1694,6 +1694,161 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
 
 }
 
+//Export to excel Legal exception
+gridUtils.dsToExcelLegalException = function (grid, ds, title, onlyVisible, dealListChk) {
+
+    var rows = [{ cells: [] }];
+    var rowsProd = [{ cells: [] }];
+    var gridColumns = grid.columns;
+    var colWidths = [""];
+    var colHidden = false;
+    var hasProds = true;
+    if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
+
+    var forceHide = [];
+
+    // Create element to generate templates in.
+    var elem = document.createElement('div');
+
+    var colList = [];
+    for (var i = 2; i < gridColumns.length; i++) {
+        colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+        if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
+        if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+            var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
+                ? gridColumns[i].excelHeaderLabel
+                : gridColumns[i].title;
+            if (!dealListChk) {
+                if (colTitle != "Deal List" && colTitle != "PCT Legal Exception Sid") {
+                    rows[0].cells.push({
+                        value:  colTitle,
+                        textAlign: "left",
+                        background: "#0071C5",
+                        color: "#ffffff",
+                        wrap: false,
+                        width: "230px"
+                    });
+                    colList.push(gridColumns[i].field);
+
+                    colWidths.push({ autoWidth: true });
+
+                }
+            }
+            else if (dealListChk) {
+                if (colTitle != "PCT Legal Exception Sid")
+                {
+                    rows[0].cells.push({
+                        value: colTitle,
+                        textAlign: "left",
+                        background: "#0071C5",
+                        color: "#ffffff",
+                        wrap: false,
+                        width: "230px"
+                    });
+                    colList.push(gridColumns[i].field);
+
+                    colWidths.push({ autoWidth: true });
+
+                }               
+            }
+        }
+    }
+    var titles = ["Active", "Hidden", "PCT Legal Exception Sid", "PCT Exception No.", "Version No.", "Intel Product", "Scope", "Price Request", "Cost", "Exception Start Date", "Exception End Date", "Customer Product", " Comp Product", "Comp Price", "Business Object", "Potential Market Impact", "Justification for PCT Expiry", "Exceptions, Restrictions & Durations", "Requesting Client", "Requesting Attorney", "Approving Attorney", "Date Approved", "Entered By", "Entered Date"];
+    for (var t = 0; t < titles.length; t++) {
+        rowsProd[0].cells.push({
+            value: titles[t],
+            textAlign: "left",
+            background: "#0071C5",
+            color: "#ffffff",
+            wrap: true
+        });
+    }
+    var data = onlyVisible ? ds : ds;
+    for (var i = 0; i < data.length; i++) {
+        //push single row for every record
+        var dataItem = data[i];
+        if (dataItem !== undefined && dataItem !== null) {
+            var cells = [];
+            for (var c = 0; c < gridColumns.length; c++) {
+                colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
+                if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                    // get default value
+                    if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
+                        dataItem[gridColumns[c].field] = "";                                      
+                        var val = dataItem[gridColumns[c].field];                   
+                    if (gridColumns[c].field != 'Id' && gridColumns[c].field != "" && gridColumns[c].field) {
+                        // now look for templates
+                        if (gridColumns[c].template || gridColumns[c].excelTemplate) {
+                            var templateHtml = gridColumns[c].excelTemplate !== undefined
+                                ? gridColumns[c].excelTemplate
+                                : gridColumns[c].template;
+
+                            templateHtml = "#=" + gridColumns[c].field + "#";
+                            var columnTemplate = kendo.template(templateHtml);
+                            // Generate the template content for the current cell.
+
+                            var newHtmlVal = columnTemplate(dataItem);
+                            newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            elem.innerHTML = newHtmlVal;
+
+                            // Output the text content of the templated cell into the exported cell.                                   
+                            val = (newHtmlVal).replace(/null/g, '').replace(/undefined/g, '')
+                                .replace(/LINEBREAKTOKEN/g, '\n');
+                            var regex = /<br\s*[\/]?>/gi;
+                            val = val.replace(regex, "\r");
+
+                        }
+
+                        // Replace special characters that are killers - do it here to catch templated items as well as normal ones.                               
+                        val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
+                        if (!dealListChk) {
+                            if (gridColumns[c].field != "DEALS_USED_IN_EXCPT" && gridColumns[c].field !="MYDL_PCT_LGL_EXCPT_SID" ) {
+
+                                cells.push({
+                                    value: val,
+                                    wrap: true,
+                                    width: "230px"
+                                });
+                            }
+                        }
+                        else if (dealListChk) {
+                            if (gridColumns[c].field != "MYDL_PCT_LGL_EXCPT_SID")
+                            {
+                                cells.push({
+                                    value: val,
+                                    wrap: true,
+                                    width: "230px"
+                                });
+                            }                          
+
+                        }
+                    }
+                }
+            }
+            rows.push({
+                cells: cells
+            });
+        }
+    }
+    // sheets
+    var sheets = [
+        {
+            columns: colWidths,
+            title: title,
+            frozenRows: 1,
+            rows: rows
+        }
+    ];
+    var workbook = new kendo.ooxml.Workbook({
+        sheets: sheets
+    });
+
+    //save the file as Excel file with extension xlsx
+    kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: title });
+}
+
+
 //Export To Excel for Price Rule
 gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
 
