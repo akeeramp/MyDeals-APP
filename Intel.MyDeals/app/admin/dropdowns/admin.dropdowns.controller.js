@@ -56,7 +56,7 @@
                         actionButtonText: 'Delete Dropdown',
                         hasActionButton: true,
                         headerText: 'Delete Confirmation',
-                        bodyText: 'Entries currently used in a deal should be deactivated, not deleted.If the entry is currently on a deal it will deactivate instead of deleting.'
+                        bodyText: 'Entries currently used in a deal should be deactivated, not deleted. If the entry is currently on a deal it will deactivate instead of deleting.'
                         
                     };
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
@@ -77,7 +77,7 @@
                             cancelChanges();
                         });
                     }, function (response) {
-                        cancelChanges();
+                            cancelChanges();
                     });
                     
                 },
