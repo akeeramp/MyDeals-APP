@@ -56,7 +56,7 @@
         </div>
 
         <!-- Cancel/Rollback/Delete icon -->
-        <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->
+        <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}},C{{dataItem._actionsPS.Cancel}},S{{dataItem.WF_STG_CD}})-->
         <div class='fl md-icon' ng-if="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
             <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
                title="Unable to delete this deal at this stage"></i>

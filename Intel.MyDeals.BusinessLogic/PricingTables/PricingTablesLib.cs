@@ -54,14 +54,14 @@ namespace Intel.MyDeals.BusinessLogic
                     opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested, true);
             }
 
-            //if (data.ContainsKey(OpDataElementType.CNTRCT) && data[OpDataElementType.PRC_ST].Count > 0 && data[OpDataElementType.PRC_ST][0].ContainsKey("_actions"))
-            //{
+            if (data.ContainsKey(OpDataElementType.PRC_ST) && data[OpDataElementType.PRC_ST].Count > 0 && data[OpDataElementType.PRC_ST][0].ContainsKey("_actions"))
+            {
                 var prntActions = data[OpDataElementType.PRC_ST][0]["_actions"];
                 foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
                 {
                     item["_actionsPS"] = prntActions;
                 }
-            //}
+            }
 
             return data;
             //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
