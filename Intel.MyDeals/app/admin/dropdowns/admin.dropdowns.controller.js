@@ -70,6 +70,8 @@
                                 }
                             }
                             logger.success("Dropdown Deleted or Deactivated.");
+                            var grid = $("#dropdownGrid").data("kendoGrid");
+                            grid.refresh();  
                         }, function (response) {
                             logger.error("Unable to delete Dropdown.", response, response.statusText);
                             cancelChanges();
