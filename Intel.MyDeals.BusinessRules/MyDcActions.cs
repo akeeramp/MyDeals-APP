@@ -1125,6 +1125,9 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (paymentType.Contains("Frontend")) return;  // Bail out of this check for Front End deals since they might have overlap crush which doesn't reset billings end dates
 
             // For front end YCS2 do not check for billing dates
 
