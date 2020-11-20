@@ -374,7 +374,8 @@ namespace Intel.MyDeals.BusinessLogic
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
-            string geoCombined = workRecordDataFields.recordDetails.quote.Region != "APJ"? workRecordDataFields.recordDetails.quote.Region: "ASMO,IJKK";
+            string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ"? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region: "ASMO,IJKK";
+            string qltrBidGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].EndCustomerRegion;
             string dealType = workRecordDataFields.recordDetails.quote.DealType;
             // Embedded Array Items
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
@@ -549,6 +550,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PTR_SYS_PRD), translatedValidProductJson); // Json representation of Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.QLTR_BID_GEO), qltrBidGeo);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PERIOD_PROFILE), "Bi-Weekly (2 weeks)");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL), defArSettlementLvl);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "SalesForce Created Pricing Table Row: " + userEnteredProductName);
@@ -596,6 +598,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateProductDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRODUCT_FILTER), myPrdMbrSid.ToString(), myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId]);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.QLTR_BID_GEO), qltrBidGeo);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PERIOD_PROFILE), "Bi-Weekly (2 weeks)");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL), defArSettlementLvl);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SYS_COMMENTS), "SalesForce Created Deals: " + userEnteredProductName + "; Deal moved from Requested to Submitted after creation.");
