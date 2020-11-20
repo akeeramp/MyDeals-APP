@@ -374,7 +374,7 @@ namespace Intel.MyDeals.BusinessLogic
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
-            string geoCombined = workRecordDataFields.recordDetails.quote.Region != "APJ"? workRecordDataFields.recordDetails.quote.Region: "ASMO,IJKK";
+            string geoCombined = workRecordDataFields.recordDetails.quote.Region != "APJ"? workRecordDataFields.recordDetails.quote.Region: "APAC,IJKK";
             string dealType = workRecordDataFields.recordDetails.quote.DealType;
             // Embedded Array Items
             DateTime dealStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
