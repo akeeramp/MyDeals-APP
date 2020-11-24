@@ -24,6 +24,8 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     //    "format": format
     //});
 
+    var msg = "";
+    var msgClass = "";
     // When payout is based on billings, show blank for Billing startdate and end date fields, as these are readonly fields
     if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -33,15 +35,37 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         return tmplt
     }
 
-    // MUCH FASTER
-    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv"';
-    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-    //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-    //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
-    tmplt += '</div>';
-    return tmplt;
+    //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
+    if (field == 'REBATE_BILLING_START')
+    {       
+        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");
+        var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+        if (moment(dt1).isAfter(moment(dt2).add(6, 'months')))
+        {
+            msg = "title = 'The Billing Start Date is more than 6 months in the past'";
+            msgClass = "isSoftWarnCell";
+        }
+
+        // MUCH FASTER
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;     
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';      
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    else
+    {
+        // MUCH FASTER
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv"';
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+        //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+        //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
 }
 
 gridUtils.uiControlDealWrapper = function (passedData, field, format) {

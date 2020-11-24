@@ -73,11 +73,11 @@ namespace Intel.MyDeals.BusinessRules
 
             if (payoutBasedOn.Equals("Consumption", StringComparison.InvariantCultureIgnoreCase) && !dcRebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
             {
-                // if payout is based on Consumption push the billing start date to one year prior to deal start date and 
+                // if payout is based on Consumption push the billing start date to Deal Start Date and
                 // End date =  Billing End date
                 if (string.IsNullOrEmpty(billStartDate?.AtrbValue.ToString()))
-                {
-                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).AddYears(-1).ToString("MM/dd/yyyy");
+                {                    
+                    item[AttributeCodes.REBATE_BILLING_START] = DateTime.Parse(dcSt).ToString("MM/dd/yyyy");
                     item[AttributeCodes.REBATE_BILLING_END] = DateTime.Parse(dcEn).ToString("MM/dd/yyyy");
                 }
             }
@@ -1149,8 +1149,11 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                     deBllgStart.SetAtrbValue(dt);
-                } else { // Consumption deal - push it a year prior to start date
-                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
+                } 
+                else
+                {              
+                    // Consumption deal- billing start date set it same as Deal start date when deal start date is modified  
+                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                     deBllgStart.SetAtrbValue(dt);
                 }
                 
