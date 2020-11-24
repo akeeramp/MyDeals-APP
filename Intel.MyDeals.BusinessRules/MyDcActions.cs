@@ -1101,7 +1101,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
                     List<string> dropDowns = DataCollections.GetDropdowns().Where(d => d.dropdownCategory == (de.AtrbCd == AttributeCodes.QLTR_BID_GEO ? "Geo" : de.AtrbCd) && d.active == 1).Select(d => d.dropdownName).ToList();
-                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.ToUpper()).Except(dropDowns.Select(d => d.ToUpper())).ToList();
+                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.Trim().ToUpper()).Except(dropDowns.Select(d => d.Trim().ToUpper())).ToList();
                     if (unMatchedValues.Count > 0)
                     {
                         de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
