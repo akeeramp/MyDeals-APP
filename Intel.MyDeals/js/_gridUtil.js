@@ -36,13 +36,13 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     }
 
     //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
-    if (field == 'REBATE_BILLING_START')
+    if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption')
     {       
-        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");
+        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");        
         var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
         if (moment(dt1).isAfter(moment(dt2).add(6, 'months')))
         {
-            msg = "title = 'The Billing Start Date is more than 6 months in the past'";
+            msg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
             msgClass = "isSoftWarnCell";
         }
 
