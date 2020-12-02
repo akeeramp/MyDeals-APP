@@ -12,6 +12,7 @@
         return {
             getActions: getActions
             , updateAction: updateAction
+            , clearAction: clearAction
         }
 
         function getActions(category, subCategory) {
@@ -24,6 +25,10 @@
             }
 
             return dataService.post(URL + 'Update/' + category + '/' + subCategory + '/' + key, dto);
+        }
+
+        function clearAction(category, subCategory) {
+            return dataService.post(URL + 'Clear/' + category + '/' + subCategory, null);
         }
     }
 })();

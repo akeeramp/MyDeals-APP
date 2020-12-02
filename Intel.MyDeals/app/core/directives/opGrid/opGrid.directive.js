@@ -819,6 +819,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
             }
 
+            $scope.clearCurrentLayout = function () {
+                if (confirm("Are you sure that you want to clear/reset this layout?")) {
+                    userPreferencesService.clearAction(
+                        $scope.opName, // CATEGORY
+                        "CustomLayoutFor" + $scope.dealTypes[0]) // SUBCATEGORY
+                        .then(function (response) {
+                        }, function (response) {
+                            logger.error("Unable to clear Custom Layout.", response, response.statusText);
+                        });
+                }
+
+                // Clear out stored session... next time we will load it
+                $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
+            }
+
             $scope.getColumnOrder = function () {
                 var grid = $scope.grid;
                 var columnOrderArr = [];
