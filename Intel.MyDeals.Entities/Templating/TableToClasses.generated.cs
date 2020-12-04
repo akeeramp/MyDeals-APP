@@ -9089,4 +9089,68 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class DataFixDdl
 
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on PAYELMOX-MOBL1
+	/// by payelmox
+	/// at 12/4/2020 12:41:03 PM
+	///</summary>
+
+	[DataContract]
+	public partial class batchJobTiming
+	{
+
+		[DataMember]
+		public System.String BTCH_JOB_EXEC_DTM { set; get; }
+
+
+		[DataMember]
+		public System.String BTCH_JOB_NM { set; get; }
+
+
+		[DataMember]
+		public System.String BTCH_JOB_SCH_TM { set; get; }
+
+
+		[DataMember]
+		public System.String BTCH_JOB_STS { set; get; }
+
+
+		[DataMember]
+		public System.String BTCH_TYPE { set; get; }
+
+
+		[DataMember]
+		public System.String ERR_MSG { set; get; }
+
+
+		/*
+		private static List<batchJobTiming> batchJobTimingFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<batchJobTiming>();
+		int IDX_BTCH_JOB_EXEC_DTM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_EXEC_DTM");
+		int IDX_BTCH_JOB_NM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_NM");
+		int IDX_BTCH_JOB_SCH_TM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_SCH_TM");
+		int IDX_BTCH_JOB_STS = DB.GetReaderOrdinal(rdr, "BTCH_JOB_STS");
+		int IDX_BTCH_TYPE = DB.GetReaderOrdinal(rdr, "BTCH_TYPE");
+		int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+
+		while (rdr.Read()){
+		ret.Add(new batchJobTiming {
+		BTCH_JOB_EXEC_DTM = (IDX_BTCH_JOB_EXEC_DTM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_EXEC_DTM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_EXEC_DTM),
+		BTCH_JOB_NM = (IDX_BTCH_JOB_NM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_NM),
+		BTCH_JOB_SCH_TM = (IDX_BTCH_JOB_SCH_TM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_SCH_TM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_SCH_TM),
+		BTCH_JOB_STS = (IDX_BTCH_JOB_STS < 0 || rdr.IsDBNull(IDX_BTCH_JOB_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_STS),
+		BTCH_TYPE = (IDX_BTCH_TYPE < 0 || rdr.IsDBNull(IDX_BTCH_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_TYPE),
+		ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
+	} // End of class batchJobTiming
 }

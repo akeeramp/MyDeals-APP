@@ -226,6 +226,7 @@
                                 <li><a href="Admin#/cache">Cache Manager</a></li>
                                 <li><a href="Admin#/oplog">Log Viewer</a></li>
                                 <li><a href="Admin#/constants">Constants</a></li>
+                                <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
                             </ul>
                         </li>
                     }
@@ -246,6 +247,8 @@
                     {
                         <li><a href="Admin#/meetcomp">Meet Comp</a></li>
                     }
+
+                   
 
                     @if (isRealSA || isDeveloper)
                     {
@@ -278,8 +281,9 @@
                         <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
 
                     }
-                    @if (isDeveloper)                    {
-                        
+                    @if (isDeveloper)
+                    {
+
                         <li><a href="Admin#/dataFix">Data Fix</a></li>
                     }
 

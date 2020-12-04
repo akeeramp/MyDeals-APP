@@ -19383,6 +19383,33 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 979638683
+		/// Modified: 12/2/2020 11:40:30 PM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_GET_BTCH_DB_LOG_DTL : SP
+		{
+			public PR_MYDL_GET_BTCH_DB_LOG_DTL()
+			{
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_GET_BTCH_DB_LOG_DTL]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_log_type
+			{
+				set { SetParmeter("in_log_type", value); }
+				get { return (String)GetParameter("in_log_type"); }
+			}
+		}
+
+
+		///<summary>
 		/// ID: 1721773191
 		/// Modified: 2/2/2020 10:05:32 PM
 		/// Parameters: 24

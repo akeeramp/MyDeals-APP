@@ -146,6 +146,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/mydealsmanual/MyDealsManual.controller.js"
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
+                , "~/app/admin/batchTiming/admin.batchTiming.controller.js"
+                , "~/app/admin/batchTiming/batchTiming.service.js"
                 , "~/app/admin/iCostProducts/directive/pct.queryBuilder.directive.js"
                 , "~/app/admin/iCostProducts/admin.iCostProduct.service.js"
                 , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"

@@ -59,6 +59,19 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         /// <summary>
+        /// To get the batch Job Timing
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetBatchJobTiming/{logType}")]
+        public List<batchJobTiming> GetBatchJobTiming(string logType)
+        {
+
+            return SafeExecutor(() => _loggingLib.getBatchJobTiming(logType)
+               , $"Unable to get Batch Job Timing."
+           );
+        }
+
+        /// <summary>
         /// API for the web UI to send warning logs to
         /// </summary>
         /// <param name="message"> A string which will be logged </param>

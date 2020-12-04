@@ -42,6 +42,52 @@ namespace Intel.MyDeals.DataLibrary
             return ret.FirstOrDefault();
         }
 
+
+        /// <summary>
+        ///To get the Batch Job Timing 
+        /// </summary>
+        public List<batchJobTiming> getBatchJobTiming(string logType)
+        {
+            var ret = new List<batchJobTiming>();
+            try
+            {
+                Procs.dbo.PR_MYDL_GET_BTCH_DB_LOG_DTL cmd = new Procs.dbo.PR_MYDL_GET_BTCH_DB_LOG_DTL()
+                {
+
+                    in_log_type = logType
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+
+                    int IDX_BTCH_JOB_EXEC_DTM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_EXEC_DTM");
+                    int IDX_BTCH_JOB_NM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_NM");
+                    int IDX_BTCH_JOB_SCH_TM = DB.GetReaderOrdinal(rdr, "BTCH_JOB_SCH_TM");
+                    int IDX_BTCH_JOB_STS = DB.GetReaderOrdinal(rdr, "BTCH_JOB_STS");
+                    int IDX_BTCH_TYPE = DB.GetReaderOrdinal(rdr, "BTCH_TYPE");
+                    int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new batchJobTiming
+                        {
+                            BTCH_JOB_EXEC_DTM = (IDX_BTCH_JOB_EXEC_DTM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_EXEC_DTM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_EXEC_DTM),
+                            BTCH_JOB_NM = (IDX_BTCH_JOB_NM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_NM),
+                            BTCH_JOB_SCH_TM = (IDX_BTCH_JOB_SCH_TM < 0 || rdr.IsDBNull(IDX_BTCH_JOB_SCH_TM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_SCH_TM),
+                            BTCH_JOB_STS = (IDX_BTCH_JOB_STS < 0 || rdr.IsDBNull(IDX_BTCH_JOB_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_JOB_STS),
+                            BTCH_TYPE = (IDX_BTCH_TYPE < 0 || rdr.IsDBNull(IDX_BTCH_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BTCH_TYPE),
+                            ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG)
+                        });
+                    } // while
+                   
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return ret;
+        }
+
         /// <summary>
         /// Saves a List of log data to db,
         /// Called from DbLogPerf asynchronously
