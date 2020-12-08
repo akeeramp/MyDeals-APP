@@ -184,10 +184,10 @@ namespace Intel.MyDeals.Entities
 
         public class Header
         {
-            public string source_system { get; set; }
-            public string target_system { get; set; }
-            public string action { get; set; }
             public string xid { get; set; }
+            public string target_system { get; set; }
+            public string source_system { get; set; }
+            public string action { get; set; }
         }
 
         public class RecordDetails
@@ -210,7 +210,6 @@ namespace Intel.MyDeals.Entities
                 public string ShipmentStartDate { get; set; }
                 public string ShipmentEndDate { get; set; }
                 public string ServerDealType { get; set; }
-                public string Region { get; set; }
 
                 [JsonProperty("QuoteLine")]
                 public List<QuoteLine> quoteLine { get; set; }
@@ -232,6 +231,8 @@ namespace Intel.MyDeals.Entities
                     public string EffectivePricingStartDate { get; set; }
                     public string Wwid { get; set; }
                     public string QuoteLineNumber { get; set; }
+                    public string Region { get; set; }
+                    public string EndCustomerRegion { get; set; }
                     public string GroupType { get; set; }
                     public string MarketSegment { get; set; }
                     [JsonProperty("Product")]
