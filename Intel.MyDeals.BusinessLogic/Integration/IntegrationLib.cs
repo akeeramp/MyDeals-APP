@@ -1280,6 +1280,13 @@ namespace Intel.MyDeals.BusinessLogic
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
 
+                if (opUserToken.Usr.Idsid != null && ((opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") && requestType == "UpdateStatus")) // User not in system, try generic
+                {
+                    opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA role in this case for approvals only
+                    tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
+                }
+
                 if (opUserToken.Usr.Idsid != null) // Bad user lookup
                 {
                     if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
@@ -1287,7 +1294,8 @@ namespace Intel.MyDeals.BusinessLogic
                         workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
                         goodOperationFlag = false;
                     }
-                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                    if (opUserToken.Role.RoleTypeCd != "GA" || 
+                            !(requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))) // Wrong role for create/update, but allow normal roles to approvals
                     {
                         workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
                         goodOperationFlag = false;
