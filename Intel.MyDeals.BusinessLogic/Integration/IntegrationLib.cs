@@ -1294,11 +1294,17 @@ namespace Intel.MyDeals.BusinessLogic
                         workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
                         goodOperationFlag = false;
                     }
-                    if (opUserToken.Role.RoleTypeCd != "GA" || 
-                            !(requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))) // Wrong role for create/update, but allow normal roles to approvals
+                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role for create/update, but allow normal roles to approvals
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
-                        goodOperationFlag = false;
+                        if (requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))
+                        {
+                            // Skip since this is an update
+                        }
+                        else
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
+                            goodOperationFlag = false;
+                        }
                     }
                     if (!goodRequestTypes.Contains(requestType))
                     {
