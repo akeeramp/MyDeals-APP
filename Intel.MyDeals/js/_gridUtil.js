@@ -2362,6 +2362,9 @@ gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined || data._actionsPS === undefined) return "";
 
     var ar = data["WF_STG_CD"];
+    var prntWfStg = data["PS_WF_STG_CD"];
+    var salesForceId = data["SALESFORCE_ID"];
+
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
@@ -2381,6 +2384,11 @@ gridUtils.getBidActions = function (data) {
     }
     if (actions["Hold"] == true) {
         delete actions["Hold"];
+    }
+    // If it is an IQR deal in Requested, prevent user from pushing it down to Draft
+    if (salesForceId !== undefined && salesForceId !== "" && prntWfStg === "Requested") {
+        delete actions["Revise"];
+        delete data._actionsPS["Revise"];
     }
 
     // if contract is not published
