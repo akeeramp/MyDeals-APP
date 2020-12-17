@@ -393,6 +393,7 @@ namespace Intel.MyDeals.BusinessLogic
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
             string productEpmId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductNameEPMID; // For lookup
+            string dealDescription = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription == null ? "": workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription;
             // Safety setting back date reason in case we need it and they don't send it...
             string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason != "" ?
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason :
@@ -560,6 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL), defArSettlementLvl);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "SalesForce Created Pricing Table Row: " + userEnteredProductName);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
 
 
             myDealsData[OpDataElementType.WIP_DEAL] = new OpDataPacket<OpDataElementType>
@@ -629,6 +631,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.GEO_APPROVED_BY), gaWwid);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.GEO_APPROVED_DT), DateTime.Now.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
 
@@ -916,6 +919,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[i].ExcludeAutomation ? "Yes" : "No";
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.EXCLUDE_AUTOMATION), excludeAutomationFlag);
+
+            string dealDescription = workRecordDataFields.recordDetails.quote.quoteLine[i].DealDescription;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
 
             // Clear out system comments to all objects so that updates don't stack comments incorrectly
             //UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), ""); // Removed since we actually don't need to do this at CNTRCT
