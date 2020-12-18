@@ -134,6 +134,15 @@
                 }
             },
             {
+                state: 'admin.batchTiming',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/batchTiming/batchTiming.html',
+                    url: 'batchTiming',
+                    controller: 'batchTimingController as vm',
+                }
+            },
+            {
                 state: 'admin.products',
                 abstract: false,
                 config: {

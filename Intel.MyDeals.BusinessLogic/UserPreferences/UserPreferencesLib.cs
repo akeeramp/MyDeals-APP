@@ -47,5 +47,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _userPreferencesDataLib.UpdateUserPreferences(category, subCategory, key, value).ToList();
         }
+
+        public List<UserPreferences> ClearUserPreferences(string clearMode, string category, string subCategory)
+        {
+            return _userPreferencesDataLib.ClearUserPreferences(clearMode, category, subCategory).ToList();
+        }
+
     }
 }

@@ -12,5 +12,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes);
         bool UploadUiPerfLogsSync(IEnumerable<LogPerformanceTime> logPerformanceTimes);
+
+        List<batchJobTiming> getBatchJobTiming(string logType);
     }
 }

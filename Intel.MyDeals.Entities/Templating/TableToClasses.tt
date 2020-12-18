@@ -456,6 +456,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "LegalExceptionExport";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//To get the Batch Job Timing 
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_BTCH_DB_LOG_DTL] @in_log_type = 'BTCH_JOB_DTL'");
+	ds.Tables[0].TableName = "batchJobTiming";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	
 	PopIndent();
 	WriteLine("}"); // End NameSpace

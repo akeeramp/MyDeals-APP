@@ -1028,6 +1028,16 @@ gridUtils.uiBidStatusControlWrapper = function (passedData, field) {
     return tmplt;
 }
 
+gridUtils.uiValidationErrorDetail = function (passedData) {
+    var values = Object.values(passedData._behaviors.validMsg);
+    var formattedMessage = '';
+    values.forEach((msg) => {
+        formattedMessage += msg;
+    });
+    var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-alert-solid\" }}' title='Validation: {{ (dataItem.PASSED_VALIDATION === \"Dirty\" ?\"" + formattedMessage + "\" : dataItem.PASSED_VALIDATION) || \"Not validated yet\" }}'></i></div></div>";
+    return tmplt;
+}
+
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
@@ -2352,6 +2362,9 @@ gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined || data._actionsPS === undefined) return "";
 
     var ar = data["WF_STG_CD"];
+    var prntWfStg = data["PS_WF_STG_CD"];
+    var salesForceId = data["SALESFORCE_ID"];
+
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
@@ -2371,6 +2384,11 @@ gridUtils.getBidActions = function (data) {
     }
     if (actions["Hold"] == true) {
         delete actions["Hold"];
+    }
+    // If it is an IQR deal in Requested, prevent user from pushing it down to Draft
+    if (salesForceId !== undefined && salesForceId !== "" && prntWfStg === "Requested") {
+        delete actions["Revise"];
+        delete data._actionsPS["Revise"];
     }
 
     // if contract is not published

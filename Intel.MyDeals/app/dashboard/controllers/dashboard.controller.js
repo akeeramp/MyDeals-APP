@@ -106,6 +106,16 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
             });
     }
 
+    $scope.clearCurrentLayout = function () {
+        userPreferencesService.clearAction(
+            "Dashboard", // CATEGORY
+            "Widgets") // SUBCATEGORY
+            .then(function (response) {
+            }, function (response) {
+                logger.error("Unable to clear Custom Layout.", response, response.statusText);
+            });
+    }
+
     $scope.gridsterOptions = {
         margins: [20, 10], // TODO: the resize bug will show in browser resoltuions of around 1558x742. We still need to fix this
         columns: 18,

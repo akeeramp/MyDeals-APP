@@ -4,6 +4,7 @@ using Intel.MyDeals.Entities.Logging;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -34,6 +35,12 @@ namespace Intel.MyDeals.BusinessLogic
         {
             _loggingDataLib.UploadDbLogPerfLogs(messages);
             return true;
+        }
+
+        public List<batchJobTiming> getBatchJobTiming(string logType)
+        {
+            return _loggingDataLib.getBatchJobTiming(logType).ToList();
+           
         }
 
         public bool UploadUiPerfLogs(IEnumerable<LogPerformanceTime> logPerformanceTimes)

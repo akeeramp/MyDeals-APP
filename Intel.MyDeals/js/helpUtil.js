@@ -1,19 +1,19 @@
 ﻿// NOTE: All values (right-hand column) must correspond to one of the href found in the Help\index.cshtml file.
 var HelpTopicEnum = Object.freeze({
-    "MeetComp_AutoPopulation":          "meetauto",
-    "DealManager_ContractNavigator":    "nav",
-    "PriceTableEditor_Features":        "PTEFeatures",
-    "DealEditor_Features":              "dealedit",
-    "Dashboard_Filtering":              "filterDashboard",
-    "ContractManager_Features":         "managefeatures",
-    "CostTest_DA":                      "costtestda",
-    "CostTest_SuperGA":                 "costtestga",
-    "ContractManager_OverlappingDealsCheck": "overlap",
-    "ContractManager_ContractAndDealViews":  "contractdeal",
-    "CreateContract_ContractDetails":   "details",
-    "Dashboard_AdvancedSearch":         "advsearch",
-    "Tenders_ManagingTenders":          "tendersmanage",
-    "ContractManager_GroupingExclusions":    "exclude"
+    "MeetComp_AutoPopulation":          "Auto+Population",
+    "DealManager_ContractNavigator":    "Contract+Navigator",
+    "PriceTableEditor_Features":        "Pricing+Table+Editor+Features",
+    "DealEditor_Features":              "Deal+Editor+Features",
+    "Dashboard_Filtering":              "Filtering+Dashboard",
+    "ContractManager_Features":         "Features",
+    "CostTest_DA":                      "Cost+Test",
+    "CostTest_SuperGA":                 "Cost+Test",
+    "ContractManager_OverlappingDealsCheck": "Overlapping+Deals+Check",
+    "ContractManager_ContractAndDealViews":  "Contract+and+Deals+Views",
+    "CreateContract_ContractDetails":   "Contract+Details",
+    "Dashboard_AdvancedSearch":         "Advanced+Search",
+    "Tenders_ManagingTenders":          "Managing+Tenders",
+    "ContractManager_GroupingExclusions":    "Grouping+Exclusions"
 });
 
 function openInNewTab(url) {
@@ -23,8 +23,8 @@ function openInNewTab(url) {
 
 function showHelpTopic(helpTopic) {
     if (helpTopic && String(helpTopic).length > 0) {
-        openInNewTab('Help?topic=' + helpTopic, '_blank');
+        openInNewTab('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
     } else {
-        openInNewTab('Help?topic=intro', '_blank');
+        openInNewTab('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
     }
 }

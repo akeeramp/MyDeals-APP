@@ -8,5 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<UserPreferences> GetUserPreferences(string category, string subCategory);
         List<UserPreferences> UpdateUserPreferences(string category, string subCategory, string key, string value);
+        List<UserPreferences> ClearUserPreferences(string clearMode, string category, string subCategory);
     }
 }
