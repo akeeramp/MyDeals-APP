@@ -320,7 +320,7 @@
                             }
                         }),
                         dataTextField: "CUST_NM",
-                        dataValueField: "CUST_NM",
+                        dataValueField: "CUST_SID",
                         tagMode: "single",
                         valuePrimitive: true
                     });

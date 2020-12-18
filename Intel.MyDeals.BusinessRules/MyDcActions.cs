@@ -1101,7 +1101,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
                     List<string> dropDowns = DataCollections.GetDropdowns().Where(d => d.dropdownCategory == (de.AtrbCd == AttributeCodes.QLTR_BID_GEO ? "Geo" : de.AtrbCd) && d.active == 1).Select(d => d.dropdownName).ToList();
-                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.ToUpper()).Except(dropDowns.Select(d => d.ToUpper())).ToList();
+                    List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.Trim().ToUpper()).Except(dropDowns.Select(d => d.Trim().ToUpper())).ToList();
                     if (unMatchedValues.Count > 0)
                     {
                         de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
@@ -1119,20 +1119,17 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
-            if (payout.Equals("Billings", StringComparison.InvariantCultureIgnoreCase)) return;
-
-            // Billing dates should be only for deals which have Payout Based on = Consumption ?? Yes.
+            IOpDataElement payoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
             IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-            //string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            
+            string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (paymentType.Contains("Frontend")) return;  // Bail out of this check for Front End deals since they might have overlap crush which doesn't reset billings end dates
 
             // For front end YCS2 do not check for billing dates
-
 
             if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
             if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
@@ -1148,17 +1145,17 @@ namespace Intel.MyDeals.BusinessRules
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-
-                if (deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                if (payoutBasedOn.AtrbValue.ToString().Equals("Billings", StringComparison.InvariantCultureIgnoreCase) || deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                     deBllgStart.SetAtrbValue(dt);
-                } else {
+                }
+                else
+                { // Consumption deal - push it a year prior to start date
                     var dt = DateTime.Parse(deStart.AtrbValue.ToString()).AddYears(-1).ToString("MM/dd/yyyy");
                     deBllgStart.SetAtrbValue(dt);
-
                 }
-                
+
             }
 
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
@@ -2805,7 +2802,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
                     // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
-                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString() == prdMapping.Key).FirstOrDefault();
+                    IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString().ToUpper() == prdMapping.Key.ToUpper()).FirstOrDefault();
                     int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
                     deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);

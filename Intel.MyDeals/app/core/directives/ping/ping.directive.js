@@ -23,10 +23,10 @@ function ping($timeout) {
             $scope.getClassName = function () {
                 if ($scope.pingTime === undefined || $scope.pingTime === null) {
                     return "none";
-                } else if ($scope.pingTime > 200) {
+                } else if ($scope.pingTime < 150) {
                     return "low";
-                } else if ($scope.pingTime > 100) {
-                    return "low";
+                } else if ($scope.pingTime < 400) {
+                    return "med";
                 }
                 return "high";
             }

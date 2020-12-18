@@ -402,6 +402,12 @@ namespace Intel.MyDeals.BusinessLogic
                 ptr.SetDataElementsValue(AttributeCodes.HAS_TRACKER, ""); // copied items can't have a tracker
                 ptr.SetDataElementsValue(AttributeCodes.IN_REDEAL, ""); // copied items can't be in redeal
                 ptr.SetDataElementsValue(AttributeCodes.IS_CANCELLED, ""); // copied items can't be already cancelled
+                IOpDataElement checkForSFID = ptr.GetDataElement(AttributeCodes.SALESFORCE_ID);
+                if (checkForSFID != null) // Reset Salesforce IDs to blank if user attempts to copy one
+                {
+                    ptr.SetDataElementsValue(AttributeCodes.SALESFORCE_ID, ""); // copied items can't be from IQR source
+                    ptr.SetDataElementsValue(AttributeCodes.SYS_COMMENTS, ""); // Blank IQR comments
+                }
 
                 // Set important values within all DEs now
                 foreach (OpDataElement de in ptr.DataElements)

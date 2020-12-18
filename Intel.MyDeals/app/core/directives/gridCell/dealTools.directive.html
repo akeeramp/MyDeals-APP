@@ -9,7 +9,7 @@
         <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
             <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
         </div>
-        
+
         <!-- Split group icon -->
         <div ng-if="isSplitEnabled" class='fl'>
             <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
@@ -49,14 +49,14 @@
         <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
-        
+
         <!-- SalesForce icon -->
         <div class='fl md-icon' ng-if="isSalesForceDeal">
-            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal" ></i>
+            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal"></i>
         </div>
 
         <!-- Cancel/Rollback/Delete icon -->
-        <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}})-->
+        <!--(T{{dataItem.HAS_TRACKER}},R{{dataItem.IN_REDEAL}},C{{dataItem._actionsPS.Cancel}},S{{dataItem.WF_STG_CD}})-->
         <div class='fl md-icon' ng-if="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
             <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
                title="Unable to delete this deal at this stage"></i>

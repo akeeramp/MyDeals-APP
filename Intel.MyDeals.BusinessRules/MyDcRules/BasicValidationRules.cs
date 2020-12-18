@@ -752,7 +752,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.ClearNewDefaultValues,
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD }) && de.DcID < 0 && (de.IsHidden || de.IsReadOnly)
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD }) && de.AtrbValue.ToString() == "-1" && de.DcID < 0 && (de.IsHidden || de.IsReadOnly)
                         }
                     }
                 },
