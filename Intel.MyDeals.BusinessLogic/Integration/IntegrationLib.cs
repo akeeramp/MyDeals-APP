@@ -1339,7 +1339,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (saveSuccessful != Guid.Empty
                 ) // Then we can close out the processing record and go for an immediate send back
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete", deadIdList);
                     executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
                 }
                 // Attempt to close out response now
@@ -1347,7 +1347,7 @@ namespace Intel.MyDeals.BusinessLogic
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
 
                 if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
-                _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+                _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete", deadIdList);
                 executionResponse += "Response object successfully returned<br><br>";
                 //executionResponse += jsonData + "<br>";
             }
@@ -1367,7 +1367,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete", new List<int>() { workRecord.DealId });
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
                 }
             }

@@ -38,22 +38,18 @@ namespace Intel.MyDeals.BusinessLogic
                 // Construct the send JSON from the list of bodies we got
                 if (dataRecords.Count > 0)
                 {
-                    string jsonData = "";
-                    int indx = 0;
-                    for (; indx < dataRecords.Count; indx++)
+                    string jsonData = "";                    
+                    for (int indx = 0; indx < dataRecords.Count; indx++)
                     {
                         jsonData = jsonData + "," + dataRecords[indx].RqstJsonData;
-                        //Checking less the 5MB packet size
-                        if (jsonData.Length * sizeof(Char) > 5000000 || indx == dataRecords.Count - 1)
-                        {
-                            jsonData = jsonData.Remove(0, 1);
-                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
-                            responseObj = sendDealdataToSapPo(dataRecords[0].BatchId, jsonData, responseObj);
-                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
-
-                            jsonData = "";
-                        }
                     }
+                    
+                    jsonData = jsonData.Remove(0, 1);
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
+                    responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords);
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
+
+                    jsonData = "";
                 }
                 else
                 {
@@ -78,10 +74,11 @@ namespace Intel.MyDeals.BusinessLogic
             return responseObj;
         }
 
-        public VistexDFDataResponseObject sendDealdataToSapPo(Guid BatchId, string jsonData, VistexDFDataResponseObject responseObj)
+        public VistexDFDataResponseObject sendDealdataToSapPo(string jsonData, VistexDFDataResponseObject responseObj, List<VistexQueueObject> dataRecords)
         {
             try
             {
+                Guid BatchId = dataRecords[0].BatchId;
                 string header = "{\"VistexDealsSendHeader\":{\"BatchId\":\"" + BatchId.ToString() + "\",\"Action\":\"Create\",\"SourceSystem\":\"MyDeals\",\"TargetSystem\":\"Vistex\",\"Agreements\":{\"AgreementDetails\":[";
                 //Footer item
                 string footer = "]}}}";
@@ -93,7 +90,7 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Success ") + Environment.NewLine);
 
                 //Update Status
-                SetVistexDealOutBoundStage(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback");
+                SetVistexDealOutBoundStageD(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Send_Completed" : "PO_Error_Rollback", dataRecords);
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - SetVistexDealOutBoundStage - Status Update Successful") + Environment.NewLine);
 
             }
@@ -131,19 +128,23 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj.BatchName = "PRODUCT_VERTICAL";
 
                 //UpDate Status                
-                SetVistexDealOutBoundStage(batchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback");
+                SetVistexDealOutBoundStageV(batchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback", responseObj.BatchMessage);
 
             }
 
             return responseObj;            
         }
 
-        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
+        public void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage) //VTX_OBJ: Customer, Product, Vertical
         {
-            _vistexServiceDataLib.SetVistexDealOutBoundStage(btchId, rqstStatus);
+            _vistexServiceDataLib.SetVistexDealOutBoundStageV(btchId, rqstStatus, BatchMessage);
+        }
+        public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords) //VTX_OBJ: Deals
+        {
+            _vistexServiceDataLib.SetVistexDealOutBoundStageD(btchId, rqstStatus, dataRecords);
         }
 
-        
+
         public VistexDFDataLoadObject GetVistexDFStageData(string runMode)
         {
             return _vistexServiceDataLib.GetVistexDFStageData(runMode);

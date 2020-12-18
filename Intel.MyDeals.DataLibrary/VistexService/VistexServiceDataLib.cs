@@ -149,7 +149,7 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
             {
                 in_rqst_type = packetType,
-                in_err_mode = (runMode == "E" || runMode == "F") ? false : true
+                in_err_mode = (runMode == "E" || runMode == "F") ? true : false
             };
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
@@ -196,22 +196,77 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
+        public void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage) //VTX_OBJ: Vertical
         {
             // Add type_int_dictionary here later
             OpLog.Log("Vistex - SetVistexDealOutBoundStage");
             try
             {
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = 0;
+                dr["RSPN_MSG"] = BatchMessage;
+                dr["RQST_STS"] = "PO_Send_Completed";
+                opDealMessages.Rows.Add(dr);
+                
                 var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
                 {
                     in_btch_id = btchId,
-                    in_rqst_sts = rqstStatus,                    
+                    in_dsa_rspn_log = opDealMessages,                    
                 };
                 DataAccess.ExecuteNonQuery(cmd);
+
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessagess = new in_dsa_rspn_log();
+
+                DataRow drr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = 0;
+                dr["RSPN_MSG"] = BatchMessage;
+                dr["RQST_STS"] = rqstStatus;
+                opDealMessages.Rows.Add(dr);
+
+                var cmdd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_dsa_rspn_log = opDealMessages,
+                };
+                DataAccess.ExecuteNonQuery(cmdd);
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
+            }
+        }
+        public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords) //VTX_OBJ: Deals
+        {
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dataRecords)
+            {
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.DealId;
+                dr["RSPN_MSG"] = null;
+                dr["RQST_STS"] = rqstStatus;
+                opDealMessages.Rows.Add(dr);
+            }
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = btchId,
+                in_dsa_rspn_log = opDealMessages
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);                
             }
         }
 
@@ -330,9 +385,8 @@ namespace Intel.MyDeals.DataLibrary
 
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
-                in_btch_id = batchId,
-                //in_rqst_sts = "",
-                in_deal_rspn_err = opDealMessages
+                in_btch_id = batchId,                
+                in_dsa_rspn_log = opDealMessages
             };
             try
             {
