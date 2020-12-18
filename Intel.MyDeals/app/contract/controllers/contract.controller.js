@@ -4358,15 +4358,9 @@
             else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter(maximumDate)) {
                 $scope.contractData._behaviors
                     .validMsg['END_DT'] = moment(ct.END_DT).isAfter(maximumDate)
-                    ? "End date cannot be greater than - " + maximumDate
+                        ? "End date cannot be greater than - " + maximumDate
                         : "End date cannot be less than Start Date";
                 $scope.contractData._behaviors.isError["END_DT"] = true;
-                $scope.isValid = false;
-            }
-            else if (ct.C2A_DATA_C2A_ID.length > 18)
-            {
-                $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "C2A# cannot exceed 18 characters";
-                $scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"] = true;
                 $scope.isValid = false;
             }
             else {
