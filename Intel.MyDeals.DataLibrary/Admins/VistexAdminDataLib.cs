@@ -212,7 +212,8 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-                OpLogPerf.Log(ex);                
+                OpLogPerf.Log(ex);
+                //return '';
                 //throw;
             }
             return batchId;

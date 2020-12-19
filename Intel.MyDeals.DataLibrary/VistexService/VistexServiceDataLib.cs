@@ -221,16 +221,16 @@ namespace Intel.MyDeals.DataLibrary
                 //Hard Coded PO_Send_Completed
                 in_dsa_rspn_log opDealMessagess = new in_dsa_rspn_log();
 
-                DataRow drr = opDealMessages.NewRow();
-                dr["OBJ_SID"] = 0;
-                dr["RSPN_MSG"] = BatchMessage;
-                dr["RQST_STS"] = rqstStatus;
-                opDealMessages.Rows.Add(dr);
+                DataRow drr = opDealMessagess.NewRow();
+                drr["OBJ_SID"] = 0;
+                drr["RSPN_MSG"] = BatchMessage;
+                drr["RQST_STS"] = rqstStatus;
+                opDealMessagess.Rows.Add(drr);
 
                 var cmdd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
                 {
                     in_btch_id = btchId,
-                    in_dsa_rspn_log = opDealMessages,
+                    in_dsa_rspn_log = opDealMessagess,
                 };
                 DataAccess.ExecuteNonQuery(cmdd);
             }
