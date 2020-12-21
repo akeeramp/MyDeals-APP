@@ -100,6 +100,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _productCostTestDataLib.GetVersionDetailsPCTExceptions(PCT_LGL_EXCPT_SID,excludeCurrVer).ToList();
         }
 
+        public List<LegalExceptionExport> DownloadLegalException(string data, bool excludeCurrVer, bool dealList)
+        {
+            return _productCostTestDataLib.DownloadLegalException(data, excludeCurrVer,dealList).ToList();
+        }
+
         public List<PCTLegalException> GetLegalExceptions(DateTime endDate)
         {
             return _productCostTestDataLib.GetLegalExceptions().Where(l => l.ACTV_IND && l.PCT_LGL_EXCPT_END_DT >= endDate).ToList();

@@ -24,6 +24,9 @@ namespace Intel.MyDeals.VistexService
             {"C", "http://sappodev.intel.com:8415/RESTAdapter/VistexCustomer"},
             {"P", "http://sappodev.intel.com:8415/RESTAdapter/ProductMain"},
             {"V", "https://sappodev.intel.com:8215/RESTAdapter/ProductVertical"},
+            {"E", "https://sappodev.intel.com:8215/RESTAdapter/MyDeals"},
+            {"F", "https://sappodev.intel.com:8215/RESTAdapter/ProductVertical"}
+
         };
 
         private static HttpClient MyDealsClient

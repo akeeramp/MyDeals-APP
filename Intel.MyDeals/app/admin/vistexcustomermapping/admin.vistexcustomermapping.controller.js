@@ -215,6 +215,10 @@
         }
 
         vm.LookBackPeriodEditor = function (container, options) {
+            // hard coded value on editor to display all -1 default options as blank. Gets converted back to -1 on save
+            if (options.model.DFLT_LOOKBACK_PERD === -1) {
+                options.model.DFLT_LOOKBACK_PERD = "";
+            }
             var LookBackEditor = $('<input id="Look_Back' + options.field + '" data-bind="value:' + options.field + '"/>')
                 .appendTo(container)
                 .kendoNumericTextBox({

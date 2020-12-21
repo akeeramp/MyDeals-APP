@@ -683,16 +683,26 @@ namespace Intel.MyDeals.DataLibrary
             return retData;
         }
 
-        public void UpdateTendersStage(Guid btchId, string rqstStatus) // Update the processing status of in/out bound tender data
+        public void UpdateTendersStage(Guid btchId, string rqstStatus, List<int> deadIdList) // Update the processing status of in/out bound tender data
         {
             // Add type_int_dictionary here later
             OpLog.Log("Tenders - SetTendersIOBoundStage");
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+            foreach(var deal in deadIdList)
+            {
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = deal;
+                dr["RSPN_MSG"] = null;
+                dr["RQST_STS"] = rqstStatus;
+                opDealMessages.Rows.Add(dr);
+            }            
+
             try
             {
-                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
                 {
                     in_btch_id = btchId,
-                    in_rqst_sts = rqstStatus,
+                    in_dsa_rspn_log = opDealMessages
                 };
                 DataAccess.ExecuteNonQuery(cmd);
             }

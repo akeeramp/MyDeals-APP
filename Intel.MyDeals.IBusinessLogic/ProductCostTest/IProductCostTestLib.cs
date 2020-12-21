@@ -28,5 +28,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<PCTLegalException> GetLegalExceptions(DateTime endDate);
 
         List<VersionHistPCTExceptions> GetVersionDetailsPCTExceptions(int PCT_LGL_EXCPT_SID,int excludeCurrVer);
+        List<LegalExceptionExport> DownloadLegalException(string data, bool excludeCurrVer, bool dealList);
+
     }
 }

@@ -233,6 +233,7 @@ namespace Intel.MyDeals.Entities
                     public string QuoteLineNumber { get; set; }
                     public string Region { get; set; }
                     public string EndCustomerRegion { get; set; }
+                    public string DealDescription { get; set; }
                     public string GroupType { get; set; }
                     public string MarketSegment { get; set; }
                     [JsonProperty("Product")]

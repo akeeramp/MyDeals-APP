@@ -819,6 +819,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
             }
 
+            $scope.clearCurrentLayout = function () {
+                if (confirm("Are you sure that you want to clear/reset this layout?")) {
+                    userPreferencesService.clearAction(
+                        $scope.opName, // CATEGORY
+                        "CustomLayoutFor" + $scope.dealTypes[0]) // SUBCATEGORY
+                        .then(function (response) {
+                        }, function (response) {
+                            logger.error("Unable to clear Custom Layout.", response, response.statusText);
+                        });
+                }
+
+                // Clear out stored session... next time we will load it
+                $scope.$storage[$scope.opName + "_CustomLayoutFor" + $scope.dealTypes[0]] = undefined;
+            }
+
             $scope.getColumnOrder = function () {
                 var grid = $scope.grid;
                 var columnOrderArr = [];
@@ -1290,44 +1305,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                             });
                     }
-                } else if (col.uiType.toUpperCase() === "MULTISELECT") {
+                }
 
+                else if (col.uiType.toUpperCase() === "MULTISELECT") {
                     var lookupText = field.opLookupText;
-                    var id = "";
-                    if (col.field === "DEAL_SOLD_TO_ID") {
-                        // TODO:change to dynamic
-                        id = options.model["CUST_MBR_SID"];
-                        id += "/" + options.model["GEO_COMBINED"].replace(/\//g, ',');
-                        id += "/" + options.model["CUST_ACCNT_DIV"].replace(/\//g, ',');
-
-                        lookupText = "subAtrbCd";
-                    }
-
-                    ////Note: this was first approach, had issues with reading back in string format and getting linked rows to sync
-                    //$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
-                    //	.appendTo(container)
-                    //	.kendoMultiSelect({
-                    //		autoBind: false,
-                    //		valuePrimitive: true,
-                    //		dataTextField: field.opLookupText,
-                    //		dataValueField: field.opLookupValue,
-                    //		dataSource: {
-                    //			type: "json",
-                    //			transport: {
-                    //				read: {
-                    //					url: field.opLookupUrl + "/" + id,
-                    //					dataType: 'json',
-                    //					type: "GET",
-                    //				}
-                    //			}
-                    //		}
-                    //	});
-
+                    var id = "";                   
                     //Note: this was second approach - this appending approach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
                     var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
 
-                } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
+                }
+
+                else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
                     //note: as this is a reusable directive we probably shouldn't put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
@@ -1338,11 +1327,26 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                     else if (options.field.toUpperCase() === "CONSUMPTION_CUST_PLATFORM"
                         || options.field.toUpperCase() === "CONSUMPTION_CUST_SEGMENT"
-                        || options.field.toUpperCase() === "CONSUMPTION_CUST_RPT_GEO") {
+                        || options.field.toUpperCase() === "CONSUMPTION_CUST_RPT_GEO" || options.field.toUpperCase() === "DEAL_SOLD_TO_ID") {
                         var cur_cust_mbr_sid = options.model["CUST_MBR_SID"];
                         col.enableSelectAll = true;
                         col.enableDeselectAll = true;
-                        openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
+                       
+                        if (options.field.toUpperCase() === "DEAL_SOLD_TO_ID")
+                        {
+                            cur_cust_mbr_sid = "/" + options.model["CUST_MBR_SID"];                           
+                            cur_cust_mbr_sid += "/" + options.model["GEO_COMBINED"].replace(/\//g, ',');
+                            cur_cust_mbr_sid += "/" + options.model["CUST_ACCNT_DIV"].replace(/\//g, ',');
+                            col.lookupText = "subAtrbCd";
+                            col.lookupValue = "dropdownName";
+                            
+                            openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
+                        }
+                        else
+                        {
+                            openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
+                        }
+                        
                     }
 
                     //else if (options.field.toUpperCase() === "DEAL_GRP_EXCLDS") {

@@ -41,6 +41,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("Clear/{category}/{subCategory}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<UserPreferences> Clear(string category, string subCategory, [FromBody] dynamic bodyParam)
+        {
+            return SafeExecutor(() => _userPreferencesLib.ClearUserPreferences("Clear", category, subCategory)
+                , $"Unable to Clear UserPreferences");
+        }
+
+        [Authorize]
         [Route("SetOpUserToken")]
         [HttpPost]
         [AntiForgeryValidate]

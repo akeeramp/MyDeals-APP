@@ -450,6 +450,17 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DATA_FIX_DROPDOWNS]");
 	ds.Tables[0].TableName = "DataFixDdl";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get the Legal Exception Export Data
+	ds = dbobjects.ExecuteDataSet("DECLARE @in_pct_excpt_lst AS [dbo].[type_int_list]; INSERT INTO @in_pct_excpt_lst VALUES (-2); DECLARE @in_incld_all_excpt_ver AS bit = 0; DECLARE @in_incld_excpt_deal AS bit = 0; EXEC [dbo].[PR_MYDL_GET_PCT_LGL_EXCPT_DWNLD]  @in_pct_excpt_lst, @in_incld_all_excpt_ver, @in_incld_excpt_deal");
+	ds.Tables[0].TableName = "LegalExceptionExport";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get the Batch Job Timing 
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_BTCH_DB_LOG_DTL] @in_log_type = 'BTCH_JOB_DTL'");
+	ds.Tables[0].TableName = "batchJobTiming";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	
 	PopIndent();
 	WriteLine("}"); // End NameSpace

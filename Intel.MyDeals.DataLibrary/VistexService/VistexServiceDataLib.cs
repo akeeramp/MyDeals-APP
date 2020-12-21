@@ -17,6 +17,7 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
+using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -53,7 +54,7 @@ namespace Intel.MyDeals.DataLibrary
         }
         private string GetVistexUrlByMode(string mode)
         {
-            if(mode == "D")
+            if ((mode == "D") || (mode == "E"))
             {
                 return vistexBaseURL + "/" + vistexDealApi;
             }
@@ -65,7 +66,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return vistexBaseURL + "/" + vistexProdApi;
             }
-            else if (mode == "V")
+            else if ((mode == "V") || mode == "F")
             {
                 return vistexBaseURL + "/" + vistexVertApi;
             }
@@ -147,9 +148,9 @@ namespace Intel.MyDeals.DataLibrary
             List<VistexQueueObject> lstVistex = new List<VistexQueueObject>();
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_DATA
             {
-                in_rqst_type = packetType
+                in_rqst_type = packetType,
+                in_err_mode = (runMode == "E" || runMode == "F") ? true : false
             };
-
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
                 int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
@@ -176,7 +177,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 in_rqst_type = packetType
             };
-
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
                 int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
@@ -196,22 +196,77 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
-        public void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus) //VTX_OBJ: VERTICALS
+        public void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage) //VTX_OBJ: Vertical
         {
             // Add type_int_dictionary here later
             OpLog.Log("Vistex - SetVistexDealOutBoundStage");
             try
             {
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = 0;
+                dr["RSPN_MSG"] = BatchMessage;
+                dr["RQST_STS"] = "PO_Send_Completed";
+                opDealMessages.Rows.Add(dr);
+                
                 var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
                 {
                     in_btch_id = btchId,
-                    in_rqst_sts = rqstStatus,                    
+                    in_dsa_rspn_log = opDealMessages,                    
                 };
                 DataAccess.ExecuteNonQuery(cmd);
+
+                //Hard Coded PO_Send_Completed
+                in_dsa_rspn_log opDealMessagess = new in_dsa_rspn_log();
+
+                DataRow drr = opDealMessagess.NewRow();
+                drr["OBJ_SID"] = 0;
+                drr["RSPN_MSG"] = BatchMessage;
+                drr["RQST_STS"] = rqstStatus;
+                opDealMessagess.Rows.Add(drr);
+
+                var cmdd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+                {
+                    in_btch_id = btchId,
+                    in_dsa_rspn_log = opDealMessagess,
+                };
+                DataAccess.ExecuteNonQuery(cmdd);
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
+            }
+        }
+        public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords) //VTX_OBJ: Deals
+        {
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dataRecords)
+            {
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.DealId;
+                dr["RSPN_MSG"] = null;
+                dr["RQST_STS"] = rqstStatus;
+                opDealMessages.Rows.Add(dr);
+            }
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
+            {
+                in_btch_id = btchId,
+                in_dsa_rspn_log = opDealMessages
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);                
             }
         }
 
@@ -317,20 +372,22 @@ namespace Intel.MyDeals.DataLibrary
 
         public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages) //VTX_OBJ: DEALS
         {
-            type_int_dictionary opDealMessages = new type_int_dictionary();
-            opDealMessages.AddRows(dealsMessages.Select(itm => new Opaque.Tools.OpPair<int, string>
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            foreach (var eachResp in dealsMessages)
             {
-                First = itm.Key,
-                Second = itm.Value
-            }));
+                DataRow dr = opDealMessages.NewRow();
+                dr["OBJ_SID"] = eachResp.Key;
+                dr["RSPN_MSG"] = eachResp.Value;
+                dr["RQST_STS"] = eachResp.Value.StartsWith("S:") ? "PO_Processing_Complete" : (eachResp.Value.StartsWith("E:") ? "PO_Error_Resend" : "PO_Processing_Complete");
+                opDealMessages.Rows.Add(dr);
+            }
 
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
-                in_btch_id = batchId,
-                in_rqst_sts = "PO_Processing_Complete", // Default close the 
-                in_deal_rspn_err = opDealMessages
+                in_btch_id = batchId,                
+                in_dsa_rspn_log = opDealMessages
             };
-
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))

@@ -408,7 +408,7 @@
             $scope.ptTitle = "Tender Table";
             $scope.ptTitleLbl = "Enter Tender Table Name";
             $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
-            $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto-Filled";
+            $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto";
             $scope.isTenderContract = $scope.contractData["IS_TENDER"];
             if ($location.url().split('tender=').length > 1 || $scope.isTenderContract) {
                 $scope.contractData["IS_TENDER"] = "1";
@@ -4358,7 +4358,7 @@
             else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter(maximumDate)) {
                 $scope.contractData._behaviors
                     .validMsg['END_DT'] = moment(ct.END_DT).isAfter(maximumDate)
-                    ? "End date cannot be greater than - " + maximumDate
+                        ? "End date cannot be greater than - " + maximumDate
                         : "End date cannot be less than Start Date";
                 $scope.contractData._behaviors.isError["END_DT"] = true;
                 $scope.isValid = false;
@@ -4366,6 +4366,8 @@
             else {
                 $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "";
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = false;
+                $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
+                $scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"] = false;
             }
 
             // Clear all values

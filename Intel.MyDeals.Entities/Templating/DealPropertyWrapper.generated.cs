@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/22/2020 3:28:40 PM
+File Updated: 11/6/2020 11:40:51 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
@@ -152,7 +152,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute AUTO_APPROVE_RULE_INFO = new MyDealsAttribute()
 		{
@@ -367,7 +367,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "C2A_DATA_C2A_ID",
 			ATRB_DESC = "C2A ID",
 			ATRB_LBL = "C2A ID",
-			ATRB_MAX_LEN = 500,
+			ATRB_MAX_LEN = 18,
 			ATRB_SID = 3576,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -664,7 +664,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute CONSUMPTION_REASON_CMNT = new MyDealsAttribute()
 		{
@@ -1039,7 +1039,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "CUST_CIM_ID",
 			ATRB_DESC = "Customer CIM ID",
 			ATRB_LBL = "Customer CIM ID",
-			ATRB_MAX_LEN = 20,
+			ATRB_MAX_LEN = 1000,
 			ATRB_SID = 2023,
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
@@ -1144,7 +1144,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute DEAL_DESC = new MyDealsAttribute()
 		{
@@ -1726,7 +1726,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "EXCLUDE_AUTOMATION",
 			ATRB_DESC = "Exclude Automation from Price Rule",
-			ATRB_LBL = "Exclude from Price Rules",
+			ATRB_LBL = "Exclude Automation",
 			ATRB_MAX_LEN = 3,
 			ATRB_SID = 90012,
 			DATA_TYPE_CD = "VARCHAR",
@@ -3368,7 +3368,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute PNL_SPLIT = new MyDealsAttribute()
 		{
@@ -3789,8 +3789,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute QUOTE_LN_ID = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QUOTE_LN_ID",
-			ATRB_DESC = "Quote Line ID",
-			ATRB_LBL = "Quote Line ID",
+			ATRB_DESC = "Quote Line Number",
+			ATRB_LBL = "Quote Line Number",
 			ATRB_MAX_LEN = 50,
 			ATRB_SID = 3716,
 			DATA_TYPE_CD = "VARCHAR",

@@ -366,6 +366,16 @@ function attributeSearchGrid($compile, objsetService, $timeout, $filter, $localS
                     });
             }
 
+            $scope.clearCurrentLayout = function () {
+                userPreferencesService.clearAction(
+                    "AdvancedSearch",
+                    $scope.layoutName).then(function (response) {
+                        $scope.$storage["AdvancedSearch" + $scope.layoutName] = undefined;
+                    }, function (response) {
+                        logger.error("Unable to clear Custom Layout.", response, response.statusText);
+                    });
+            }
+
 
 
 

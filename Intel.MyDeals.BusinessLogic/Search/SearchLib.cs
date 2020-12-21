@@ -195,7 +195,7 @@ namespace Intel.MyDeals.BusinessLogic
         private string BuildWhereClause(SearchParams data, OpDataElementType opDataElementType, List<string> initSearchList, List<SearchFilter> customSearchOption, bool userDefStart, bool userDefEnd, bool userDefContract, bool userDefDeal)
         {
             string rtn = string.Empty;
-            var autoApproveRuleval = "";
+            var autoApproveRuleval = "";         
             bool autoApproveRuleFlag = false;
             bool isTenderSearch = false;
             List<string> modifiedSearchList = initSearchList ?? new List<string>();
@@ -207,7 +207,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (s.Contains("cnt.CUST_MBR_SID"))
                 {
-                    initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "");
+                    initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")","");
                     if (s.Contains("CNTRCT_TENDER_PUBLISHED"))
                     {
                         initListString = s.Replace("cnt.CUST_MBR_SID IN (", "").Replace(")", "").Replace("AND WIP_DEAL_REBATE_TYPE = 'TENDER' AND WIP_DEAL_OBJ_SET_TYPE_CD != 'PROGRAM' AND CNTRCT_TENDER_PUBLISHED = 1", "");
@@ -254,12 +254,12 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (var i in customSearchOption)
             {
                 var field = i.Field;
-
+                
                 if (field == "AUTO_APPROVE_RULE_INFO")
                 {
-                    autoApproveRuleFlag = true;
+                    autoApproveRuleFlag = true;                   
                     break;
-                }
+                }              
             }
 
             List<string> searchAtrbs = new List<string>
@@ -284,7 +284,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Customers (Left side customers list comes in as names unfortunately, so just tack it on)
             if (data.Customers.Any() && !userDefContract && !userDefDeal)
             {
-                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;", ".")}')");
+                modifiedSearchList.Add($"{AttributeCodes.CUST_NM} IN ('{string.Join("','", data.Customers).Replace("&per;",".")}')");
             }
 
             // Add Custom Search
@@ -321,15 +321,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             //Special case for AUTO_APPROVE_RULE_INFO. Modify the concatenation string for 'AUTO_APPROVE_RULE_INFO' field as it is needed from database side
             if (autoApproveRuleFlag == true)
-            {
+            {                
                 for (int i = 0; i < modifiedSearchList.Count; i++)
-                {
-                    if (modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
+                {                    
+                    if(modifiedSearchList[i].Contains("AUTO_APPROVE_RULE_INFO"))
                     {
-                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!"))
+                        if (modifiedSearchList[i].Contains("=") && !modifiedSearchList[i].Contains("!")) 
                         {
-                            string[] val = modifiedSearchList[i].Split("=".ToCharArray());
-                            autoApproveRuleval = val[val.Length - 1];
+                            string[] val =  modifiedSearchList[i].Split("=".ToCharArray());
+                            autoApproveRuleval = val[val.Length -1];
                             modifiedSearchList[i] = $"({modifiedSearchList[i]} OR {opDataElementType}_RULE_SID ={autoApproveRuleval} OR {opDataElementType}_RULE_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_NM ={autoApproveRuleval} OR {opDataElementType}_OWNER_WWID ={autoApproveRuleval})";
                         }
                         if (modifiedSearchList[i].Contains("LIKE"))
@@ -341,14 +341,14 @@ namespace Intel.MyDeals.BusinessLogic
                         if (modifiedSearchList[i].Contains("!="))
                         {
                             string[] val = modifiedSearchList[i].Split("!=".ToCharArray());
-                            autoApproveRuleval = val[val.Length - 1];
+                            autoApproveRuleval = val[val.Length - 1];                           
                             modifiedSearchList[i] = $"({modifiedSearchList[i]} AND {opDataElementType}_RULE_SID !={autoApproveRuleval} AND {opDataElementType}_RULE_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_NM !={autoApproveRuleval} AND {opDataElementType}_OWNER_WWID !={autoApproveRuleval})";
 
-                        }
+                        }                      
                     }
                 }
             }
-
+           
             // create the full string
             rtn += string.Join(" AND ", modifiedSearchList);
 

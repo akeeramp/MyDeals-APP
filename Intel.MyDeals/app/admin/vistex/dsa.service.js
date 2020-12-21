@@ -52,7 +52,7 @@
 
         function callAPI(apiName, runMode) {
             if (apiName.indexOf())
-            if (runMode == "D") {
+                if ((runMode == "D") || (runMode == "E")) {
                 return dataService.get(vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode);
             } else if (runMode == "R") {
                 return dataService.get(tenderApiBase + apiName);

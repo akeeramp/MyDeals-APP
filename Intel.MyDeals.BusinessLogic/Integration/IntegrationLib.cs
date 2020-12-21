@@ -16,7 +16,7 @@ using Intel.MyDeals.BusinessRules;
 
 namespace Intel.MyDeals.BusinessLogic
 {
-    public class IntegrationLib : IIntegrationLib
+    public class IntegrationLib: IIntegrationLib
     {
         private readonly IJmsDataLib _jmsDataLib; // change out later to IntegrationDataLib
         private readonly IOpDataCollectorLib _dataCollectorLib;
@@ -63,7 +63,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (var key in myDealsData.Keys)
             {
                 foreach (OpDataCollector dc in myDealsData[key].AllDataCollectors)
-                {
+                { 
                     foreach (OpDataElement de in dc.DataElements)
                     {
                         if (removeElemets.Contains(de.AtrbCd))
@@ -129,7 +129,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string validErrors = "";
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.CNTRCT].AllDataCollectors)
                 {
-                    foreach (OpMsg opMsg in dc.Message.Messages)
+                    foreach (OpMsg opMsg in dc.Message.Messages) 
                     {
                         validErrors += validErrors.Length == 0 ? opMsg.Message : "; " + opMsg.Message;
                     }
@@ -177,23 +177,23 @@ namespace Intel.MyDeals.BusinessLogic
             return singleCustomer;
         }
 
-        private ProdMappings TranslateIQRProducts(ProductEpmObject epmProduct, int epmId, int custId, string geoCombined, DateTime strtDt, DateTime endDt,
-            ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)
+        private ProdMappings TranslateIQRProducts(ProductEpmObject epmProduct, int epmId, int custId, string geoCombined, DateTime strtDt, DateTime endDt, 
+            ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)          
         {
             ProdMappings returnedProducts = new ProdMappings();
             PRD_LOOKUP_RESULTS prd = new PRD_LOOKUP_RESULTS();
-            prd.PRD_MBR_SID = epmProduct.PcsrNbrSid;
+            prd.PRD_MBR_SID = epmProduct.PcsrNbrSid; 
             List<PRD_LOOKUP_RESULTS> temp_products = new List<PRD_LOOKUP_RESULTS>();
             temp_products.Add(prd);
-
+            
             ProductsLib pl = new ProductsLib();
 
             var result = pl.GetProductAttributes(temp_products);
             if (result != null && result.Count == 1)
             {
                 var opt = pl.GetCAPForProduct(epmProduct.PcsrNbrSid, custId, geoCombined, strtDt, endDt);
-
-                if (opt.Count == 1)
+                
+                if(opt.Count == 1)
                 {
                     if (opt[0].CAP == "No CAP")
                     {
@@ -208,7 +208,7 @@ namespace Intel.MyDeals.BusinessLogic
                     result[0].YCS2 = opt[0].YCS2;
                     result[0].YCS2_START = opt[0].YCS2_START;
                     result[0].YCS2_END = opt[0].YCS2_END;
-
+                    
                     foreach (var newItem in result.Select(row => new ProdMapping()
                     {
                         CAP = row.CAP,
@@ -220,7 +220,7 @@ namespace Intel.MyDeals.BusinessLogic
                         HAS_L2 = row.HAS_L2,
                         HIER_NM_HASH = row.HIER_NM_HASH,
                         HIER_VAL_NM = row.HIER_VAL_NM,
-                        MM_MEDIA_CD = row.MM_MEDIA_CD == null ? "All" : row.MM_MEDIA_CD,
+                        MM_MEDIA_CD = row.MM_MEDIA_CD == null? "All": row.MM_MEDIA_CD,
                         PRD_CAT_NM = row.PRD_CAT_NM,
                         PRD_END_DTM = row.PRD_END_DTM.ToString("MM/dd/yyyy"),
                         PRD_MBR_SID = row.PRD_MBR_SID.ToString(),
@@ -331,7 +331,7 @@ namespace Intel.MyDeals.BusinessLogic
             else if (pctResults.Count == 0) // 0 records returned for product dimension not being set correctly causing mismatch meet comp save result
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "PCT/MCT Not Run Yet"));
-            }
+            }    
             else
             {
                 if (pctResults.Any(m => m.MEETCOMP_TEST_RESULT == "Fail"))
@@ -374,7 +374,7 @@ namespace Intel.MyDeals.BusinessLogic
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
-            string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ" ? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region : "APAC,IJKK";
+            string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ"? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region: "APAC,IJKK";
             string qltrBidGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].EndCustomerRegion != "APJ" ? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].EndCustomerRegion : "APAC,IJKK";
             string dealType = workRecordDataFields.recordDetails.quote.DealType;
             // Embedded Array Items
@@ -383,7 +383,7 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string terms = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].AdditionalTandC;
-            string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ExcludeAutomation ? "Yes" : "No";
+            string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ExcludeAutomation? "Yes": "No";
             string quoteLineId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Name;
             string quoteLineNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].QuoteLineNumber;
             string groupType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].GroupType;
@@ -393,6 +393,7 @@ namespace Intel.MyDeals.BusinessLogic
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
             string productEpmId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductNameEPMID; // For lookup
+            string dealDescription = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription == null ? "": workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealDescription;
             // Safety setting back date reason in case we need it and they don't send it...
             string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason != "" ?
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason :
@@ -409,7 +410,7 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id [" + epmId + "]. Please contact L2 Support", "Product EMP ID not found"));
                 return initWipId; // Bail out - no products matched
             }
-
+            
             List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrors = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
             //GET Product JSON by PRD_MBR_SID
             ProdMappings myTranslatedProduct = TranslateIQRProducts(productLookupObj, epmId, custId, geoCombined, dealStartDate, dealEndDate, ref productErrors);
@@ -424,11 +425,11 @@ namespace Intel.MyDeals.BusinessLogic
 
             int myPrdMbrSid = singleProduct != null ? ToInt32(singleProduct.PRD_MBR_SID) : 0;
             string myPrdCat = singleProduct != null ? singleProduct.PRD_CAT_NM : "";
-            string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD : ""; //singleProduct?.MM_MEDIA_CD
+            string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD: ""; //singleProduct?.MM_MEDIA_CD
             #endregion Product Check
 
             #region Deal Stability Check
-            if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null ||
+            if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null || 
                 dealType == "" || groupType == "" || marketSegment == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error: failed to create the Tender Deal due to missing expected fields {Fields}", "Missing expected fields"));
@@ -465,7 +466,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Consumption Lookback Period from Customer Data, Set to 0 if non defined
             MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
-            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1;
+            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1; 
             if (lookbackDefaultVal < 0) lookbackDefaultVal = 0;  // Normally set to -1 in no customer default, but for IQR, needs valid value.
 
             // Add PS Data
@@ -560,6 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL), defArSettlementLvl);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "SalesForce Created Pricing Table Row: " + userEnteredProductName);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
 
 
             myDealsData[OpDataElementType.WIP_DEAL] = new OpDataPacket<OpDataElementType>
@@ -629,6 +631,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.GEO_APPROVED_BY), gaWwid);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.GEO_APPROVED_DT), DateTime.Now.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PASSED_VALIDATION), PassedValidation.Complete.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
 
@@ -917,6 +920,9 @@ namespace Intel.MyDeals.BusinessLogic
             string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[i].ExcludeAutomation ? "Yes" : "No";
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.EXCLUDE_AUTOMATION), excludeAutomationFlag);
 
+            string dealDescription = workRecordDataFields.recordDetails.quote.quoteLine[i].DealDescription;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
+
             // Clear out system comments to all objects so that updates don't stack comments incorrectly
             //UpdateDeValue(myDealsData[OpDataElementType.CNTRCT].Data[folioId].GetDataElement(AttributeCodes.SYS_COMMENTS), ""); // Removed since we actually don't need to do this at CNTRCT
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
@@ -961,15 +967,13 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Using this to allow us to dive right into rules engines
-            SavePacket savePacket = new SavePacket()
-            {
+            SavePacket savePacket = new SavePacket() { 
                 MyContractToken = new ContractToken("ContractToken Created - SaveFullContract")
                 {
                     CustId = custId,
                     ContractId = folioId
-                },
-                ValidateIds = new List<int> { dealId }
-            };
+                }, 
+                ValidateIds = new List<int> { dealId } };
 
             bool hasValidationErrors = myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
             foreach (OpDataElementType dpKey in myDealsData.Keys) // dpKey is like OpDataElementType.WIP_DEAL
@@ -1050,7 +1054,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Check post validation data to see if we triggered a hard or soft re-deal to set up for second save run.
             IOpDataElement OrigRedealBit = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IN_REDEAL);
             IOpDataElement OrigWfStg = myDealsData[OpDataElementType.PRC_ST].Data[psId].GetDataElement(AttributeCodes.WF_STG_CD);
-            if ((OrigRedealBit.AtrbValue.ToString() == "1" && OrigRedealBit.State == OpDataElementState.Modified)
+            if ((OrigRedealBit.AtrbValue.ToString() == "1" && OrigRedealBit.State == OpDataElementState.Modified) 
                 || (OrigWfStg.AtrbValue.ToString() == WorkFlowStages.Requested && OrigWfStg.State == OpDataElementState.Modified))
             {
                 // Just did a re-deal of some form, DO A SECOND SAVE to set Submitted and update Tracker Start Date.
@@ -1257,7 +1261,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus" };
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus"};
             string executionResponse = "";
 
             List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
@@ -1282,6 +1286,13 @@ namespace Intel.MyDeals.BusinessLogic
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
 
+                if (opUserToken.Usr.Idsid != null && ((opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") && requestType == "UpdateStatus")) // User not in system, try generic
+                {
+                    opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA role in this case for approvals only
+                    tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
+                }
+
                 if (opUserToken.Usr.Idsid != null) // Bad user lookup
                 {
                     if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
@@ -1289,10 +1300,17 @@ namespace Intel.MyDeals.BusinessLogic
                         workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
                         goodOperationFlag = false;
                     }
-                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role
+                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role for create/update, but allow normal roles to approvals
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
-                        goodOperationFlag = false;
+                        if (requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))
+                        {
+                            // Skip since this is an update
+                        }
+                        else
+                        {
+                            workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
+                            goodOperationFlag = false;
+                        }
                     }
                     if (!goodRequestTypes.Contains(requestType))
                     {
@@ -1341,7 +1359,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (saveSuccessful != Guid.Empty
                 ) // Then we can close out the processing record and go for an immediate send back
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete", deadIdList);
                     executionResponse += "Successful, response object created (" + saveSuccessful + ")<br>";
                 }
                 // Attempt to close out response now
@@ -1349,7 +1367,7 @@ namespace Intel.MyDeals.BusinessLogic
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(jsonData);
 
                 if (saveSuccessfulReturnToTenders != true) continue; // Couldn't return data to tenders, skip close out of safety record.
-                _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete");
+                _jmsDataLib.UpdateTendersStage(saveSuccessful, "PO_Processing_Complete", deadIdList);
                 executionResponse += "Response object successfully returned<br><br>";
                 //executionResponse += jsonData + "<br>";
             }
@@ -1369,7 +1387,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveSuccessfulReturnToTenders == true) // The return data has been sent back to tenders, close out our safety record
                 {
-                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete");
+                    _jmsDataLib.UpdateTendersStage(workRecord.BtchId, "PO_Processing_Complete", new List<int>() { workRecord.DealId });
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
                 }
             }

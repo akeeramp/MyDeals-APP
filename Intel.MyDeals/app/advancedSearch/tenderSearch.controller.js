@@ -344,7 +344,7 @@
             width: 100
         }, {
             field: "QUOTE_LN_ID",
-            title: "Quote Line ID",
+            title: "Quote Line Number",
             type: "string",
             width: 100
         }, {

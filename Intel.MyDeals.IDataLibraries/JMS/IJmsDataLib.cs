@@ -40,7 +40,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord);
 
-        void UpdateTendersStage(Guid btchId, string rqstStatus);
+        void UpdateTendersStage(Guid btchId, string rqstStatus, List<int> deadIdList);
 
         List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId);
 

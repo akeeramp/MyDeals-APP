@@ -7,6 +7,8 @@ using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using Intel.Opaque.Tools;
 using Newtonsoft.Json;
+using System.Data;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -186,21 +188,34 @@ namespace Intel.MyDeals.DataLibrary
                 { dealId.HasValue? dealId.Value:0, strErrorMessage }
             };
 
-            type_int_dictionary opPair = new type_int_dictionary();
-            opPair.AddRows(myDict.Select(itm => new OpPair<int, string>
-            {
-                First = itm.Key,
-                Second = itm.Value
-            }));
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
 
-            strErrorMessage = strErrorMessage.Trim();
-            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG
+            DataRow dr = opDealMessages.NewRow();
+            dr["OBJ_SID"] = dealId;
+            dr["RSPN_MSG"] = strErrorMessage.Trim();
+            dr["RQST_STS"] = vistexStage.ToString("g");
+            opDealMessages.Rows.Add(dr);
+            
+            type_int_dictionary opPair = new type_int_dictionary();
+            
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
                 in_btch_id = batchId,
-                in_rqst_sts = vistexStage.ToString("g"),
-                in_deal_rspn_err = opPair
+                in_dsa_rspn_log = opDealMessages
             };
-            DataAccess.ExecuteNonQuery(cmd);
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                //return '';
+                //throw;
+            }
             return batchId;
         }
     }

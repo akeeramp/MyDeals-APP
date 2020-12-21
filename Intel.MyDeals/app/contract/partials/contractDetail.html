@@ -239,11 +239,12 @@
                              ng-model="contractData"
                              op-cd="'C2A_DATA_C2A_ID'"
                              op-type="'TEXTBOX'"
-                             op-label="'C2A# or link to contract:'"
+                             op-label="'C2A Contract #:'"
                              op-is-form="true"
                              op-is-stealth="true"
                              op-ui-mode="'VERTICAL'"></div>
                         <div ng-if="!contractData._behaviors.isHidden['C2A_DATA_C2A_ID']" class="description">{{constants.C2AIdDesc}}</div>
+                        <p ng-if="contractData.C2A_DATA_C2A_ID.length > 18" style="color: red; font-weight: bolder">Please note, values longer than 18 characters will be truncated in Vistex.</p>
                     </div>
                     <div class="col-md-11 row" ng-if="!C_VIEW_ATTACHMENTS">
                         <div class="panel panel-default">
@@ -256,7 +257,7 @@
                     <div ng-if="C_VIEW_ATTACHMENTS">
                         <!--TODO Move these to FileUploaddirective-->
                         <div class="col-md-11 row" ng-if="C_ADD_ATTACHMENTS">
-                            <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span><span class="description">{{constants.uplodaFileHelpText}}</span></div>
+                            <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">&nbsp;&nbsp;&nbsp;&nbsp;Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span><span class="description">{{constants.uplodaFileHelpText}}</span></div>
                             <div ng-class="{fileAttachmentRequired: contractData.AttachmentError}">
                                 <input class="fileAttachmentRequired" id="fileUploader"
                                        type="file" name="files"

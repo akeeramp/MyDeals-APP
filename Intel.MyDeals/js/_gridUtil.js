@@ -24,6 +24,8 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     //    "format": format
     //});
 
+    var msg = "";
+    var msgClass = "";
     // When payout is based on billings, show blank for Billing startdate and end date fields, as these are readonly fields
     if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -33,15 +35,37 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         return tmplt
     }
 
-    // MUCH FASTER
-    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv"';
-    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-    //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-    //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
-    tmplt += '</div>';
-    return tmplt;
+    //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
+    if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption')
+    {       
+        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");        
+        var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+        if (moment(dt1).isAfter(moment(dt2).add(6, 'months')))
+        {
+            msg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
+            msgClass = "isSoftWarnCell";
+        }
+
+        // MUCH FASTER
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;     
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';      
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    else
+    {
+        // MUCH FASTER
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv"';
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+        //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+        //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
 }
 
 gridUtils.uiControlDealWrapper = function (passedData, field, format) {
@@ -1004,6 +1028,16 @@ gridUtils.uiBidStatusControlWrapper = function (passedData, field) {
     return tmplt;
 }
 
+gridUtils.uiValidationErrorDetail = function (passedData) {
+    var values = Object.values(passedData._behaviors.validMsg);
+    var formattedMessage = '';
+    values.forEach((msg) => {
+        formattedMessage += msg;
+    });
+    var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-alert-solid\" }}' title='Validation: {{ (dataItem.PASSED_VALIDATION === \"Dirty\" ?\"" + formattedMessage + "\" : dataItem.PASSED_VALIDATION) || \"Not validated yet\" }}'></i></div></div>";
+    return tmplt;
+}
+
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
@@ -1694,6 +1728,161 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
 
 }
 
+//Export to excel Legal exception
+gridUtils.dsToExcelLegalException = function (grid, ds, title, onlyVisible, dealListChk) {
+
+    var rows = [{ cells: [] }];
+    var rowsProd = [{ cells: [] }];
+    var gridColumns = grid.columns;
+    var colWidths = [""];
+    var colHidden = false;
+    var hasProds = true;
+    if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
+
+    var forceHide = [];
+
+    // Create element to generate templates in.
+    var elem = document.createElement('div');
+
+    var colList = [];
+    for (var i = 2; i < gridColumns.length; i++) {
+        colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+        if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
+        if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+            var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
+                ? gridColumns[i].excelHeaderLabel
+                : gridColumns[i].title;
+            if (!dealListChk) {
+                if (colTitle != "Deal List" && colTitle != "PCT Legal Exception Sid") {
+                    rows[0].cells.push({
+                        value:  colTitle,
+                        textAlign: "left",
+                        background: "#0071C5",
+                        color: "#ffffff",
+                        wrap: false,
+                        width: "230px"
+                    });
+                    colList.push(gridColumns[i].field);
+
+                    colWidths.push({ autoWidth: true });
+
+                }
+            }
+            else if (dealListChk) {
+                if (colTitle != "PCT Legal Exception Sid")
+                {
+                    rows[0].cells.push({
+                        value: colTitle,
+                        textAlign: "left",
+                        background: "#0071C5",
+                        color: "#ffffff",
+                        wrap: false,
+                        width: "230px"
+                    });
+                    colList.push(gridColumns[i].field);
+
+                    colWidths.push({ autoWidth: true });
+
+                }               
+            }
+        }
+    }
+    var titles = ["Active", "Hidden", "PCT Legal Exception Sid", "PCT Exception No.", "Version No.", "Intel Product", "Scope", "Price Request", "Cost", "Exception Start Date", "Exception End Date", "Customer Product", " Comp Product", "Comp Price", "Business Object", "Potential Market Impact", "Justification for PCT Expiry", "Exceptions, Restrictions & Durations", "Requesting Client", "Requesting Attorney", "Approving Attorney", "Date Approved", "Entered By", "Entered Date"];
+    for (var t = 0; t < titles.length; t++) {
+        rowsProd[0].cells.push({
+            value: titles[t],
+            textAlign: "left",
+            background: "#0071C5",
+            color: "#ffffff",
+            wrap: true
+        });
+    }
+    var data = onlyVisible ? ds : ds;
+    for (var i = 0; i < data.length; i++) {
+        //push single row for every record
+        var dataItem = data[i];
+        if (dataItem !== undefined && dataItem !== null) {
+            var cells = [];
+            for (var c = 0; c < gridColumns.length; c++) {
+                colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
+                if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                    // get default value
+                    if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
+                        dataItem[gridColumns[c].field] = "";                                      
+                        var val = dataItem[gridColumns[c].field];                   
+                    if (gridColumns[c].field != 'Id' && gridColumns[c].field != "" && gridColumns[c].field) {
+                        // now look for templates
+                        if (gridColumns[c].template || gridColumns[c].excelTemplate) {
+                            var templateHtml = gridColumns[c].excelTemplate !== undefined
+                                ? gridColumns[c].excelTemplate
+                                : gridColumns[c].template;
+
+                            templateHtml = "#=" + gridColumns[c].field + "#";
+                            var columnTemplate = kendo.template(templateHtml);
+                            // Generate the template content for the current cell.
+
+                            var newHtmlVal = columnTemplate(dataItem);
+                            newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            elem.innerHTML = newHtmlVal;
+
+                            // Output the text content of the templated cell into the exported cell.                                   
+                            val = (newHtmlVal).replace(/null/g, '').replace(/undefined/g, '')
+                                .replace(/LINEBREAKTOKEN/g, '\n');
+                            var regex = /<br\s*[\/]?>/gi;
+                            val = val.replace(regex, "\r");
+
+                        }
+
+                        // Replace special characters that are killers - do it here to catch templated items as well as normal ones.                               
+                        val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
+                        if (!dealListChk) {
+                            if (gridColumns[c].field != "DEALS_USED_IN_EXCPT" && gridColumns[c].field !="MYDL_PCT_LGL_EXCPT_SID" ) {
+
+                                cells.push({
+                                    value: val,
+                                    wrap: true,
+                                    width: "230px"
+                                });
+                            }
+                        }
+                        else if (dealListChk) {
+                            if (gridColumns[c].field != "MYDL_PCT_LGL_EXCPT_SID")
+                            {
+                                cells.push({
+                                    value: val,
+                                    wrap: true,
+                                    width: "230px"
+                                });
+                            }                          
+
+                        }
+                    }
+                }
+            }
+            rows.push({
+                cells: cells
+            });
+        }
+    }
+    // sheets
+    var sheets = [
+        {
+            columns: colWidths,
+            title: title,
+            frozenRows: 1,
+            rows: rows
+        }
+    ];
+    var workbook = new kendo.ooxml.Workbook({
+        sheets: sheets
+    });
+
+    //save the file as Excel file with extension xlsx
+    kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: title });
+}
+
+
 //Export To Excel for Price Rule
 gridUtils.dsToExcelPriceRule = function (grid, ds, title, onlyVisible) {
 
@@ -2173,6 +2362,9 @@ gridUtils.getBidActions = function (data) {
     if (data.BID_ACTNS === undefined || data._actionsPS === undefined) return "";
 
     var ar = data["WF_STG_CD"];
+    var prntWfStg = data["PS_WF_STG_CD"];
+    var salesForceId = data["SALESFORCE_ID"];
+
     if (ar !== undefined && ar !== null && ar === "no access") {
         return "<div class='noaccess'>no access</div>";
     }
@@ -2192,6 +2384,11 @@ gridUtils.getBidActions = function (data) {
     }
     if (actions["Hold"] == true) {
         delete actions["Hold"];
+    }
+    // If it is an IQR deal in Requested, prevent user from pushing it down to Draft
+    if (salesForceId !== undefined && salesForceId !== "" && prntWfStg === "Requested") {
+        delete actions["Revise"];
+        delete data._actionsPS["Revise"];
     }
 
     // if contract is not published

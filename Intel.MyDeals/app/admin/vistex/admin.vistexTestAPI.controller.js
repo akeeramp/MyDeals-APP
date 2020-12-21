@@ -23,7 +23,10 @@
             "D": 'GetVistexDealOutBoundData',
             "P": 'GetVistexDFStageData',
             "V": 'GetVistexDFStageData',
-            "R": 'ReturnSalesForceTenderResults'
+            "R": 'ReturnSalesForceTenderResults',
+            "E": 'GetVistexDealOutBoundData',
+            "F": 'GetVistexDealOutBoundData'
+
         };
         //Creating API
         vm.apiList.push({ API_ID: 1, API_NM: "Customer ", API_CD: "C" });
@@ -31,6 +34,8 @@
         vm.apiList.push({ API_ID: 3, API_NM: "Product ", API_CD: "P" });
         vm.apiList.push({ API_ID: 4, API_NM: "Product Vertical", API_CD: "V" });
         vm.apiList.push({ API_ID: 5, API_NM: "Tender Return", API_CD: "R" });
+        vm.apiList.push({ API_ID: 6, API_NM: "Deal Failed", API_CD: "E" });
+        vm.apiList.push({ API_ID: 7, API_NM: "Prod VerticalFailed", API_CD: "F" });
 
         vm.apiDs = new kendo.data.DataSource({
             transport: {

@@ -88,24 +88,24 @@
         <div ng-show="showPendingInfo">
             <div style="padding: 15px 25px; height: 190px;">
                 <p>
-                    A C2A number, link or attachment is required in order to change your contract from Pending to Accepted.
+                    'C2A Contract # or attaching the contract associated with this deal is required in order to change your contract from Pending to Accepted'
                     <div style="text-align: center; margin-top: 34px;">
                         <button class="btn btn-sm btn-skyblue" type="button" ng-click="showPending('showPendingFile')"
                                 style="margin: 0 20px -30px 20px; width: 110px; height: 100px;">
                             <div style="text-align: center;">
                                 <div><i class="intelicon-attach-document-outlined" style="font-size: 60px;"></i></div>
-                                Add Attachment
+                                Attach Contract
                             </div>
                         </button>
                         <button class="btn btn-sm btn-skyblue" type="button" ng-click="showPending('showPendingC2A')"
                                 style="margin: 0 20px -30px 20px; width: 110px; height: 100px;">
                             <div style="text-align: center;">
                                 <div><i class="intelicon-user-approved-selected-outlined" style="font-size: 60px;"></i></div>
-                                Add C2A Number
+                                 Add C2A Contract #
                             </div>
                         </button>
                     </div>
-            </div>
+</div>
             <div style="text-align: center;">
                 <button class="btn btn-sm btn-grey" type="button" ng-click="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
                     Cancel
@@ -114,13 +114,16 @@
         </div>
         <div ng-show="showPendingFile">
             <div style="padding: 15px 25px; height: 190px;">
-                <input class="fileAttachmentRequired" id="fileUploader"
-                       type="file" name="files"
-                       kendo-upload="files"
-                       k-upload="filePostAddParams"
-                       k-success="onSuccess"
-                       k-async="fileUploadOptions" />
-
+                <p>
+                    Attach the contract associated with this deal to change your My Deals contract from Pending to Accepted.
+                </p>
+                <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">&nbsp;&nbsp;&nbsp;&nbsp;Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
+                          <input class="fileAttachmentRequired" id="fileUploader"
+                              type="file" name="files"
+                              kendo-upload="files"
+                              k-upload="filePostAddParams"
+                              k-success="onSuccess"
+                              k-async="fileUploadOptions" />
             </div>
             <div style="text-align: center;">
                 <button class="btn btn-sm btn-grey" type="button"
@@ -137,17 +140,19 @@
         </div>
         <div ng-show="showPendingC2A">
             <div style="padding: 15px 25px; height: 190px;">
-                <p>A C2A number, link or attachment is required in order to change your contract from Pending to Accepted.
-                <p style="margin-top: 60px;">
-                    C2A# or link to contract:<br />
-                    <input type="text" placeholder="enter C2A number or link" class="k-input"
+                <p>
+                    Enter C2A Contract # for this deal to change your My Deals contract from Pending to Accepted
+                <p style="margin-top: 60px;">                    
+                    C2A Contract #:<br />
+                    <input type="text" placeholder="Enter C2A Number" class="k-input"
                            ng-model="root.contractData.C2A_DATA_C2A_ID" style="width: 280px; padding: 4px;">
                     <button class="btn btn-sm btn-skyblue" type="button"
-                            ng-class="{'disabled': root.contractData.C2A_DATA_C2A_ID.trim() === ''}"
-                            ng-click="continueAction(true)" style="margin: -2px 10px 0 10px; width: 110px;">
+                            ng-class="{'disabled': (root.contractData.C2A_DATA_C2A_ID.trim() === '' )}"
+                            ng-click="(root.contractData.C2A_DATA_C2A_ID.trim() === '' ) || continueAction(true)" style="margin: -2px 10px 0 10px; width: 110px;">
                         Use C2A Number
                     </button>
                 </p>
+                <p ng-if="root.contractData.C2A_DATA_C2A_ID.length > 18" style="color: red; font-weight: bolder">Please note, values longer than 18 characters will be truncated in Vistex.</p>
             </div>
             <div style="text-align: center;">
                 <button class="btn btn-sm btn-grey" type="button" ng-click="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">

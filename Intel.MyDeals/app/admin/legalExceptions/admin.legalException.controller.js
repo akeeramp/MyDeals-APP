@@ -390,6 +390,44 @@
         }
 
         //--------------------------------------------------------------------
+        // Download Legal Exception 
+        //--------------------------------------------------------------------
+        $scope.downloadException = function () {
+
+            var selectedData = $linq.Enumerable().From(filterData)
+                .Where(function (x) {
+                    return (x.IS_SELECTED == true);
+                })
+                .ToArray();
+
+            if (selectedData.length > 0) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    templateUrl: 'app/admin/legalExceptions/downloadLegalException.html',
+                    controller: 'downloadLegalExceptionController',
+                    controllerAs: 'vm',
+                    size: 'sm',
+                    windowClass: 'prdSelector-modal-window',
+                    backdrop: false,
+                    resolve: {
+                        dataItem: function () {
+                            return selectedData;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (returnData) {
+                    vm.cancel();
+                }, function () { });
+            }
+            else {
+                logger.warning("Please select a current version exception to Download.");
+            }
+
+        }
+
+        //--------------------------------------------------------------------
         // Compare Legal Exceptions
         //--------------------------------------------------------------------
 
@@ -532,11 +570,12 @@
             columns: [
 
                 {
+                    headerTemplate: "<div class='dealTools'><p  style='font-weight: bold;font-size:14px;'>Select All</p><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.Select_All' style='height: 17px; width: 17px; border: 2px solid; cursor: pointer;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>",
                     command: [
 
                         { name: "select", template: "<div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' ng-model='dataItem.IS_SELECTED' style='height: 17px; width: 17px; border: 2px solid; cursor: pointer;' ng-click='selectItem(\"FALSE\",$event, dataItem)' /> </div>" }
                     ],
-                    width: 40,
+                    width: 58,
                     attributes: { style: "text-align: center;" },
                     hidden: !editNotAllowed
                 },
@@ -556,6 +595,7 @@
                     hidden: !editNotAllowed
                 },
                 {
+                    title: "Active",
                     field: "ACTV_IND",
                     width: 115,
                     headerTemplate: "<div class='isRequired'> Active </div>",
@@ -565,6 +605,7 @@
                     editable: $scope.isEditable
                 },
                 {
+                    title: "Hidden",
                     field: "IS_DSBL",
                     width: 115,
                     headerTemplate: "<div class='isRequired'> Hidden </div>",
@@ -576,6 +617,7 @@
                     }
                 },
                 {
+                    title: "PCT Legal Exception Sid",
                     field: "MYDL_PCT_LGL_EXCPT_SID",
                     hidden: true,
                     width: 120,
@@ -665,6 +707,14 @@
                     hidden: vm.hideColInGrid
                 },
                 {
+                    title: "Forecasted Volume By Quarter",
+                    field: "FRCST_VOL_BYQTR",
+                    headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
+                    hidden: true,
+                    width: 120,
+                    filterable: { multi: true, search: true }
+                },
+                {
                     field: "CUST_PRD",
                     title: "Customer Product",
                     editor: textareaEditor,
@@ -695,6 +745,7 @@
                     hidden: vm.hideColInGrid
                 },
                 {
+                    title: "Deal List",
                     field: "DEALS_USED_IN_EXCPT",
                     hidden: true,
                     width: 120,
@@ -1036,26 +1087,43 @@
             var query = new kendo.data.Query(allData);
             filterData = query.filter(filters).data;
 
-            if (event.target.checked) {
+            if (dataItem.Select_All)
+            {
                 for (var i = 0; i < filterData.length; i++)
-                {
-                    if (filterData[i].id == dataItem.id)
-                    {
+                {                  
                         filterData[i].IS_SELECTED = true;
-                        filterData[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
-                        filterData[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
-                        filterData[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
-                        filterData[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
-                    }
-                }              
+                                       
+                }     
             }
-            else {
+            else if (dataItem.Select_All == false)
+            {
                 for (var i = 0; i < filterData.length; i++) {
-                    if (filterData[i].id == dataItem.id) {
-                        filterData[i].IS_SELECTED = false;
+                    filterData[i].IS_SELECTED = false;                    
+                }   
+            }
+            else
+            {
+                if (event.target.checked) {
+                    for (var i = 0; i < filterData.length; i++)
+                    {
+                        if (filterData[i].id == dataItem.id)
+                        {
+                            filterData[i].IS_SELECTED = true;
+                            filterData[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
+                            filterData[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
+                            filterData[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
+                            filterData[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
+                        }
+                    }              
+                }
+                else {
+                    for (var i = 0; i < filterData.length; i++) {
+                        if (filterData[i].id == dataItem.id) {
+                            filterData[i].IS_SELECTED = false;
 
-                    }
-                }              
+                        }
+                    }              
+                }
             }
         }
 
@@ -1146,8 +1214,11 @@
             {
                 rtn += '<a role="button" class="k-button k-button-icontext"  ng-click="openAmendment()"><span class="k-icon k-i-plus"></span>Add Amendment</a> ';
             }
-
-
+            if (amendmentAllowed)
+            {
+                rtn += '<a role="button" class="k-button k-button-icontext"  ng-click="downloadException()"><span class="intelicon-ms-excel-outlined" style="font-size:23px;"></span>Download</a> ';
+            }
+          
             rtn += '<a role="button" class="k-button k-button-icontext" style="float: right; background-color: {{vm.btnColor}}" ng-click="showHideAllCol()"><i id="btnWordWrapControl" class="{{vm.btnName}}" title="{{vm.toolTip}}' +'" style="font-size:25px;"></i></a>';
             return rtn;
         }
