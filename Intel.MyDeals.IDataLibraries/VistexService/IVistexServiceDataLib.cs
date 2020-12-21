@@ -11,8 +11,10 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<VistexQueueObject> GetVistexDataOutBound(string packetType);
 
-        void SetVistexDealOutBoundStage(Guid btchId, string rqstStatus);
-        
+        void SetVistexDealOutBoundStageV(Guid btchId, string rqstStatus, string BatchMessage);
+
+        void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords);
+
         VistexDFDataLoadObject GetVistexDFStageData(string runMode);
 
         void UpdateVistexDFStageData(VistexDFDataResponseObject responseObj);
