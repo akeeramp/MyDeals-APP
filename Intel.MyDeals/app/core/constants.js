@@ -87,7 +87,7 @@
             "helptipMsgAttachment": "Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.",
             "pastDateConfirmText": "You have Selected a date in the past which means the dates you will enter will be considered backdated",
             "FileAttachementDesc": "Either an attachment to deal request is uploaded or C2A id or link is enter above.",
-            "C2AIdDesc": "Please enter the C2A Contract # associated with the contract.",
+            "C2AIdDesc": "Please enter the C2A Contract # associated with the contract. Please note, values longer than 18 characters will be truncated in Vistex.",
             "ContractDetails": 'contract.details',
             "uplodaFileHelpText": "Your attachments will upload after clicking the Save Contract button."
         })
