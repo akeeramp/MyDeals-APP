@@ -2190,14 +2190,15 @@ namespace Intel.MyDeals.BusinessRules
 
             if (salesForceId == "") return;
 
-            List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
+            // Salesforce wants everything read only, including comments.  If they change their minds, this comes back in.
+            //List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
 
             foreach (IOpDataElement de in r.Dc.DataElements)
             {
-                if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
-                {
+                //if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
+                //{
                     de.IsReadOnly = true;
-                }
+                //}
             }
         }
 
