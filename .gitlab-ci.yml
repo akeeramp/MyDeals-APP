@@ -1,0 +1,122 @@
+variables:
+  EXE_RELEASE_FOLDER: 'MyDeals\bin\Release'
+  MSI_RELEASE_FOLDER: 'Setup\bin\Release'
+  TEST_FOLDER: 'Tests\bin\Release'
+  DEPLOY_FOLDER: 'C:\Projects\MyDeals\Builds'
+  NUGET_PATH: 'C:\NuGet\nuget.exe'
+  MSBUILD_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe'
+  NUNIT_PATH: 'C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe'
+  DEV_DEPLOY_PATH: '\\HF2DEVMYD2W01.amr.corp.intel.com\MyDeals'
+  ITT_DEPLOY_PATH: '\\HF2ITTMYD2W01.amr.corp.intel.com\MyDeals'
+  CONS1_DEPLOY_PATH: '\\FM7CONMYD2W01.amr.corp.intel.com\MyDeals'
+  CONS2_DEPLOY_PATH: '\\FM7CONMYD2W02.amr.corp.intel.com\MyDeals'
+  CIAR_DEPLOY_PATH: '\\FM7CIAMYD2W01.amr.corp.intel.com\MyDeals'
+
+stages:
+  - Restore
+  - Build
+  - Dev_Deploy
+  - ITT_Deploy
+  - CONS_Deploy
+  - CIAR_Deploy
+
+restore_packages:
+  stage: Restore
+  script:
+    - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - 'packages/'
+
+build_job:
+  stage: Build
+  script:
+    - '& "$env:MSBUILD_PATH" /p:OutDir=$CI_PROJECT_DIR/output /p:TransformConfigFiles=true /p:Configuration=Release /p:Platform="Any CPU" /p:GenerateSerializationAssemblies=Off'  # build the project
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - output/_PublishedWebsites/
+  dependencies:
+    - restore_packages
+
+dev_deploy:
+  stage: Dev_Deploy
+  script:
+    - '& robocopy output/_PublishedWebsites/Intel.MyDeals $env:DEV_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/Dev $env:DEV_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item output/_PublishedWebsites/Intel.MyDeals -Destination deployed/DEV -Recurse' 
+  #  - EXIT 0
+  dependencies:
+    - build_job
+  when: manual
+  allow_failure: true
+  environment:
+      name: DEV
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/DEV/
+
+itt_deploy:
+  stage: ITT_Deploy
+  script:
+    - '& robocopy deployed/DEV/ $env:ITT_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/DEV/EnvConfig/itt $env:ITT_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/DEV -Destination deployed/ITT -Recurse' 
+  when: manual
+  allow_failure: true
+  environment:
+      name: ITT
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/ITT/
+
+cons1_deploy:
+  stage: CONS_Deploy
+  script:
+    - '& robocopy deployed/ITT/ $env:CONS1_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/ITT/EnvConfig/cons $env:CONS1_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
+  when: manual
+  allow_failure: true
+  environment:
+      name: CONS
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/CONS/
+
+cons2_deploy:
+  stage: CONS_Deploy
+  script:
+    - '& robocopy deployed/ITT/ $env:CONS2_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/ITT/EnvConfig/cons $env:CONS2_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
+  when: manual
+  allow_failure: true
+  environment:
+      name: CONS
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/CONS/
+
+ciar_deploy:
+  stage: CIAR_Deploy
+  script:
+    - '& robocopy deployed/CONS/ $env:CIAR_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CONS/EnvConfig/cons $env:CIAR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/CONS -Destination deployed/CIAR -Recurse' 
+  when: manual
+  only: 
+    - /^RC_[0-9]+(?:.[0-9]+)+$/
+  allow_failure: true
+  environment:
+      name: CIAR
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/CIAR/      
+# 
