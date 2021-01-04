@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+// need to fix reference issue on build server -- using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Intel.MyDeals.Tests.Controllers
 {
