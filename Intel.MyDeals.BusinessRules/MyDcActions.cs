@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessRules
 {
+    //test changes for new story
+
     /// <summary>
     /// Place all MyDeals specific actions here.
     /// Most of the actions used will come from BusinessLogicDcActions
