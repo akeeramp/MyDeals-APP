@@ -444,4 +444,3 @@ function ruleAttributeBuilder($compile, objsetService, $timeout, $filter, $local
         }
     };
 }
-

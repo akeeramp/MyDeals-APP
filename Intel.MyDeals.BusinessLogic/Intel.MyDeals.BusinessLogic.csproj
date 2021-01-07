@@ -62,7 +62,7 @@
     </Reference>
     <Reference Include="Intel.Opaque.Utilities.Server, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Intel.MyDeals.VistexService\bin\Debug\Intel.Opaque.Utilities.Server.dll</HintPath>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
     </Reference>
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>

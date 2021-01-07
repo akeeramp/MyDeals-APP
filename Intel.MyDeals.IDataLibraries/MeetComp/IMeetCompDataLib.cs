@@ -10,7 +10,7 @@ namespace Intel.MyDeals.IDataLibrary
 
 
         List<MEET_COMP_DIM> GetMeetCompDIMData(int CUST_MBR_SID, string MODE);
-        
+
 
         List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND);
 

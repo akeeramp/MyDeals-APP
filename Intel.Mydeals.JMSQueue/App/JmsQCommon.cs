@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Intel.Opaque.Tools;
 using System.Configuration;
+using System.Net;
+using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.JMSQueueApp
 {
@@ -314,7 +316,22 @@ namespace Intel.MyDeals.JMSQueueApp
                     myMail.Body = sb.ToString();
                     myMail.IsBodyHtml = false;
 
-                    client.Send(myMail);
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.EnableSsl = true;
+                    //SMTP Change for Port Number and Host Name
+                    client.Host = "smtpauth.intel.com";
+                    client.Port = 587;
+                    try
+                    {
+                        client.Send(myMail);
+                    }
+                    catch(Exception EX)
+                    {
+
+                    }
+                    
                 }
             }
         }
