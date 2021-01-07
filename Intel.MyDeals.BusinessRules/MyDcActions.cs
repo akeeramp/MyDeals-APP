@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyDcActions
     {
-        public static Dictionary<string, bool> SecurityActionCache { get; set; }
+        public static Dictionary<string, bool> SecurityActionCache { get; set; }  
 
         /// <summary>
         /// Execute the appropiate action based on the condition statement
