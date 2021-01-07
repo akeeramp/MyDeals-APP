@@ -162,7 +162,7 @@
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    @if (env != "PROD" && isDeveloper)
+                    @if (isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">DSA</a>
