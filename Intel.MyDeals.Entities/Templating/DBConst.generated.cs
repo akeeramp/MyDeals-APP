@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/22/2020 3:26:03 PM
+File Updated: 1/7/2021 3:17:09 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180, MYDEALS
 */
@@ -2829,6 +2829,7 @@ namespace Intel.MyDeals.Entities {
 		public const string BATCH_STATUS = "BATCH_STATUS";
 		public const string BKUP_EXPIRE_DAYS = "BKUP_EXPIRE_DAYS";
 		public const string BKUP_NOTIFY_DAYS = "BKUP_NOTIFY_DAYS";
+		public const string BLLG_TENDER_CUTOVER_DEAL = "BLLG_TENDER_CUTOVER_DEAL";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
@@ -2839,9 +2840,12 @@ namespace Intel.MyDeals.Entities {
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUSTOMER_ADMINS_LIST = "CUSTOMER_ADMINS_LIST";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
+		public const string CUTOFF_PCSR_FMLY_AT_L4_DT = "CUTOFF_PCSR_FMLY_AT_L4_DT";
+		public const string DATA_FIX_ACTIONS = "DATA_FIX_ACTIONS";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string DCS_DEAL_NOFILTER = "DCS_DEAL_NOFILTER";
 		public const string DEAL_ATRB_IGNR = "DEAL_ATRB_IGNR";
+		public const string DSA_DLAY_RSPN_MIN = "DSA_DLAY_RSPN_MIN";
 		public const string DSA_MAX_JSON_SIZE_MB = "DSA_MAX_JSON_SIZE_MB";
 		public const string DSA_RQST_RSPN_LOG_DAYS = "DSA_RQST_RSPN_LOG_DAYS";
 		public const string ECAP_KIT_MIGRATION = "ECAP_KIT_MIGRATION";
@@ -2859,6 +2863,7 @@ namespace Intel.MyDeals.Entities {
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string IDMS_DEAL_MIGRATION = "IDMS_DEAL_MIGRATION";
+		public const string IQR_Atomic_Lock_Key = "IQR_Atomic_Lock_Key";
 		public const string JMSQ_ERROR_REPORT_DAYS_BACK = "JMSQ_ERROR_REPORT_DAYS_BACK";
 		public const string JMSQ_PROCESS_TIMEOUT = "JMSQ_PROCESS_TIMEOUT";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
@@ -2895,6 +2900,7 @@ namespace Intel.MyDeals.Entities {
 		public const string TENDER_SEARCH_MAX_VALUE = "TENDER_SEARCH_MAX_VALUE";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string VERBOSE_LOG_TO_DB = "VERBOSE_LOG_TO_DB";
+		public const string VISTEX_SEND_PND_SBMT_DEAL = "VISTEX_SEND_PND_SBMT_DEAL";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
 	}

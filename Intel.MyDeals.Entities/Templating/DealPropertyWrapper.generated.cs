@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 11/6/2020 11:40:51 AM
+File Updated: 1/7/2021 3:18:18 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBITT01\RDMITT1,3180, MYDEALS
 */
@@ -367,7 +367,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "C2A_DATA_C2A_ID",
 			ATRB_DESC = "C2A ID",
 			ATRB_LBL = "C2A ID",
-			ATRB_MAX_LEN = 18,
+			ATRB_MAX_LEN = 500,
 			ATRB_SID = 3576,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -3846,7 +3846,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -3862,7 +3862,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};

@@ -303,19 +303,19 @@ namespace Intel.MyDeals.DataLibrary
                         textWatermark1.Color = System.Drawing.Color.Gray;
                         textWatermark1.Font.Bold = true;
                         textWatermark1.Font.Size = Telerik.Reporting.Drawing.Unit.Point(72D);
+                        textWatermark1.Opacity = 0.25D;
                         textWatermark1.Orientation = Telerik.Reporting.Drawing.WatermarkOrientation.Diagonal;
                         textWatermark1.Position = Telerik.Reporting.Drawing.WatermarkPosition.Behind;
                         textWatermark1.PrintOnFirstPage = true;
                         textWatermark1.PrintOnLastPage = true;
                         if (isTenderOfferStg == "Offer")
                         {
-                            textWatermark1.Text = "Offer";
+                            textWatermark1.Text = "Offer Letter";
                         }
                         else
                         {
-                            textWatermark1.Text = "Not an Offer";
+                            textWatermark1.Text = "Not an Offer Letter";
                         }
-                        textWatermark1.Opacity = 0.3D;
 
                         reportToExport.PageSettings.Watermarks.Add(textWatermark1);
                     }
