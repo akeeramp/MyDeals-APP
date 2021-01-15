@@ -2841,11 +2841,11 @@ namespace Intel.MyDeals.BusinessRules
                         }
                         else if (numOfL1s == 1 && numOfL2s > 1)
                         {
-                            dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.");
+                            dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.");
                         }
                         else if (numOfL1s == 2 && numOfL2s >= 1)
                         {
-                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
+                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty meet this requirement.");
                         }
 
                     }
@@ -2889,7 +2889,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 if (qtySecondary1 != 1)
                 {
-                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.", 1);
+                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.", 1);
                 }
             }
 
