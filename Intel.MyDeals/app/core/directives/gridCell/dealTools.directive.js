@@ -16,7 +16,8 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isQuoteLetterEnabled: '<?',
             isDeleteEnabled: '<?',
             isSplitEnabled: '<?',
-            isPublishable: '<?'
+            isPublishable: '<?',
+            isDaUser: '<?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
@@ -58,6 +59,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
             $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
             $scope.isSplitEnabled = $scope.assignVal("isSplitEnabled", true);
+            //$scope.isDaUser = $scope.assignVal("isDaUser", true);
 
             if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
 
@@ -80,6 +82,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false : rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
             $scope.C_DEL_DEALS = ((window.usrRole === "FSE" || window.usrRole === "GA") && ($scope.dataItem.SALESFORCE_ID === undefined || $scope.dataItem.SALESFORCE_ID === "")); // This is taken from contract.controller.js line 105.  This definately is not coming in correctly from there...
+            $scope.isDaUser = (window.usrRole === "DA");
 
             if ($scope.C_DEL_DEALS === undefined || $scope.C_DEL_DEALS === false) { // In tenders screen for DA user, this is undefined but skipping over.
                 $scope.isDeleteEnabled = false;
