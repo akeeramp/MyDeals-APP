@@ -425,7 +425,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
-                            //US761410: Updated Error Message with validations when products with different product types are entered 
+                            //US761410: Updated Error Message with validations when products with different product types are entered. 
                             Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
                             for (var j = 0; j < validContractProducts.Count; j++)
                             {
