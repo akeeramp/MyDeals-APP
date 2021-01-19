@@ -423,6 +423,49 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                           
+                            Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
+                            for (var j = 0; j < validContractProducts.Count; j++)
+                            {
+                                List<string> subList = new List<string>();
+                               foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                                {                                 
+                                    foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                                    {
+                                        if (validContractProducts[j] == prodMapping.PRD_CAT_NM)
+                                        {
+                                            subList.Add(kvp.Key.ToString());                                    
+                                        }
+                                    }                                    
+                                }
+                                ItemsDic.Add((validContractProducts[j]).ToString(), subList);
+                            }
+                          foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
+                            {
+                                if (kvp.Value.Count >= 5)
+                                {
+                                    int cnt = 0;
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  ";
+                                    foreach (string val in kvp.Value)
+                                    {
+                                        if (cnt < 5)
+                                            ErrMsg = ErrMsg + val + ", ";
+                                        else
+                                            ErrMsg = ErrMsg + "...";
+                                        cnt++;
+                                    }
+                                }
+                                else
+                                {
+                                    var str = String.Join(", ", kvp.Value);
+
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  " + str;
+                                }
+                            }
+                            ErrMsg=ErrMsg+ "\n Below are the valid combinations to add the products into the deal:";
+                            ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
+                            ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
+                            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product type.";
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -433,6 +476,48 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
+                            for (var j = 0; j < validContractProducts.Count; j++)
+                            {
+                                List<string> subList = new List<string>();
+                                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                                {
+                                    foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                                    {
+                                        if (validContractProducts[j] == prodMapping.PRD_CAT_NM)
+                                        {
+                                            subList.Add(kvp.Key.ToString());
+                                        }
+                                    }
+                                }
+                                ItemsDic.Add((validContractProducts[j]).ToString(), subList);
+                            }
+                            foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
+                            {
+                                if (kvp.Value.Count >= 5)
+                                {
+                                    int cnt = 0;
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  ";
+                                    foreach (string val in kvp.Value)
+                                    {
+                                        if (cnt < 5)
+                                            ErrMsg = ErrMsg + val + ", ";
+                                        else
+                                            ErrMsg = ErrMsg + "...";
+                                        cnt++;
+                                    }
+                                }
+                                else
+                                {
+                                    var str = String.Join(", ", kvp.Value);
+
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  " + str;
+                                }
+                            }
+                            ErrMsg = ErrMsg + "\n Below are the valid combinations to add the products into the deal:";
+                            ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
+                            ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
+                            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product type.";
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -443,6 +528,48 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
+                            for (var j = 0; j < validContractProducts.Count; j++)
+                            {
+                                List<string> subList = new List<string>();
+                                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                                {
+                                    foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                                    {
+                                        if (validContractProducts[j] == prodMapping.PRD_CAT_NM)
+                                        {
+                                            subList.Add(kvp.Key.ToString());
+                                        }
+                                    }
+                                }
+                                ItemsDic.Add((validContractProducts[j]).ToString(), subList);
+                            }
+                            foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
+                            {
+                                if (kvp.Value.Count >= 5)
+                                {
+                                    int cnt = 0;
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  ";
+                                    foreach (string val in kvp.Value)
+                                    {
+                                        if (cnt < 5)
+                                            ErrMsg = ErrMsg + val + ", ";
+                                        else
+                                            ErrMsg = ErrMsg + "...";
+                                        cnt++;
+                                    }
+                                }
+                                else
+                                {
+                                    var str = String.Join(", ", kvp.Value);
+
+                                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  " + str;
+                                }
+                            }
+                            ErrMsg = ErrMsg + "\n Below are the valid combinations to add the products into the deal:";
+                            ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
+                            ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
+                            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product type.";
                             BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
