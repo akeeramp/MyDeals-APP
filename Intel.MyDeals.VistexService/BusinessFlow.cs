@@ -62,7 +62,7 @@ namespace Intel.MyDeals.VistexService
                     VistexCommonLogging.WriteToLog("Business Flow - SendDealsDataToSapPo - Success");
                 }
                 VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
-                VistexCommonLogging.SendMail("Deals", dataRecord, null);
+                VistexCommonLogging.SendMail(runMode == "D" ? "Deals" : "Deal-Error-Resend", dataRecord, null);
             }
             catch (Exception ex)
             {

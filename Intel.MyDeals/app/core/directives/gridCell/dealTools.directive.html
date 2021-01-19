@@ -6,10 +6,16 @@
         <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
 
         <!-- Checkbox -->
-        <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
-            <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
+        <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && ((!dataItem.SALESFORCE_ID || dataItem.SALESFORCE_ID === '') || isDaUser === true)">
+            <!-- ng-disabled="dataItem.SALESFORCE_ID !== ''" was another option, but visually couldn't change it from notmal looking check box, so... -->
+            <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all checked rows"></label>
         </div>
-        
+
+        <!-- SalesForce Checkbox Disabled icon except for DA users -->
+        <div class='fl md-icon' ng-if="isSalesForceDeal && isDaUser != true">
+            <i class="intelicon-minus-max" ng-attr-title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
+        </div>
+
         <!-- Split group icon -->
         <div ng-if="isSplitEnabled" class='fl'>
             <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
@@ -49,10 +55,10 @@
         <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
-        
+
         <!-- SalesForce icon -->
         <div class='fl md-icon' ng-if="isSalesForceDeal">
-            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal" ></i>
+            <i class="intelicon-cloud-outlined" ng-attr-title="Deal created in IQR" style="font-size: 20px !important;" title="IQR Deal"></i>
         </div>
 
         <!-- Cancel/Rollback/Delete icon -->
@@ -91,7 +97,7 @@
     <div ng-if="isPublishable == true">
         <!-- Checkbox -->
         <div class='fl'>
-            <input type="checkbox" ng-model="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
+            <input type="checkbox" ng-model="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all checked rows"></label>
         </div>
     </div>
 </div>
@@ -107,17 +113,17 @@
             color: #00AEEF;
         }
 
-            .dealTools .md-icon i:hover {
-                color: #003C71 !important;
-            }
+        .dealTools .md-icon i:hover {
+            color: #003C71 !important;
+        }
 
     .dealTools .md-icon-disabled {
         padding: 4px 2px 0 1px;
     }
 
-        .dealTools .md-icon-disabled i {
-            color: #00AEEF;
-        }
+    .dealTools .md-icon-disabled i {
+        color: #00AEEF;
+    }
 
     .dealTools input[type=radio].with-font,
     .dealTools input[type=checkbox].with-font {

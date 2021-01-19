@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessRules
 {
+    //test changes for new story
+
     /// <summary>
     /// Place all MyDeals specific actions here.
     /// Most of the actions used will come from BusinessLogicDcActions
@@ -20,7 +22,7 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyDcActions
     {
-        public static Dictionary<string, bool> SecurityActionCache { get; set; }
+        public static Dictionary<string, bool> SecurityActionCache { get; set; }  
 
         /// <summary>
         /// Execute the appropiate action based on the condition statement
@@ -2317,14 +2319,15 @@ namespace Intel.MyDeals.BusinessRules
 
             if (salesForceId == "") return;
 
-            List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
+            // Salesforce wants everything read only, including comments.  If they change their minds, this comes back in.
+            //List<string> skipReadOnlyCheckAtrbs = new List<string> { AttributeCodes.DEAL_DESC };
 
             foreach (IOpDataElement de in r.Dc.DataElements)
             {
-                if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
-                {
+                //if (!skipReadOnlyCheckAtrbs.Contains(de.AtrbCd)) // If this is not a skip attribute, set to read only
+                //{
                     de.IsReadOnly = true;
-                }
+                //}
             }
         }
 
@@ -2965,11 +2968,11 @@ namespace Intel.MyDeals.BusinessRules
                         }
                         else if (numOfL1s == 1 && numOfL2s > 1)
                         {
-                            dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.");
+                            dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.");
                         }
                         else if (numOfL1s == 2 && numOfL2s >= 1)
                         {
-                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty and their Qty meet this requirement.");
+                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty meet this requirement.");
                         }
 
                     }
@@ -3013,7 +3016,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 if (qtySecondary1 != 1)
                 {
-                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty and their Qty meet this requirement.", 1);
+                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.", 1);
                 }
             }
 

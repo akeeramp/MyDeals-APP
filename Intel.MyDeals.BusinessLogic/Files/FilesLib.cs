@@ -78,7 +78,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (de == null)
             {
-                dc.DataElements.Add (new OpDataElement {
+                dc.DataElements.Add(new OpDataElement
+                {
                     DcID = deCust.DcID,
                     DcType = deCust.DcType,
                     DcParentType = deCust.DcParentType,

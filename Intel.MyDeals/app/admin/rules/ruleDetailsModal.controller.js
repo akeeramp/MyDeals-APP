@@ -1,4 +1,4 @@
-﻿angular
+angular
     .module("app.admin")
     .controller("RuleModalController", RuleModalController)
     .run(SetRequestVerificationToken);
