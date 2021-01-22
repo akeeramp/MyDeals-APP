@@ -479,24 +479,24 @@ namespace Intel.MyDeals.BusinessRules
             }
             foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
             {
-                if (kvp.Value.Count >= 5)
+                if (kvp.Value.Count > 5)
                 {
                     int cnt = 0;
-                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  ";
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  ";
                     foreach (string val in kvp.Value)
                     {
                         if (cnt < 5)
-                            ErrMsg = ErrMsg + val + ", ";
-                        else
-                            ErrMsg = ErrMsg + "...";
+                            ErrMsg = ErrMsg + val + ", ";                        
                         cnt++;
                     }
+                    
+                        ErrMsg = ErrMsg + "...";
                 }
                 else
                 {
                     var str = String.Join(", ", kvp.Value);
 
-                    ErrMsg = ErrMsg + Environment.NewLine + kvp.Key.ToString() + ":  " + str;
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  " + str;
                 }
             }
             ErrMsg = ErrMsg + "\n Below are the valid combinations to add the products into the deal:";
