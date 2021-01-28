@@ -7464,6 +7464,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("in_deal_lst", value); }
 				get { return (SqlTableValueParameterBase)GetParameter("in_deal_lst"); }
 			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Boolean in_vstx_cust_flag
+			{
+				set { SetParmeter("in_vstx_cust_flag", value); }
+				get { return (Boolean)GetParameter("in_vstx_cust_flag"); }
+			}
 		}
 
 		///<summary>
