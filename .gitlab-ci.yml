@@ -45,7 +45,8 @@ dev_deploy:
   script:
     - '& robocopy output/_PublishedWebsites/Intel.MyDeals $env:DEV_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/Dev $env:DEV_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& Copy-Item output/_PublishedWebsites/Intel.MyDeals -Destination deployed/DEV -Recurse' 
+    - '& Copy-Item output/_PublishedWebsites/Intel.MyDeals -Destination deployed/DEV -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-DEV
   #  - EXIT 0
   dependencies:
     - build_job

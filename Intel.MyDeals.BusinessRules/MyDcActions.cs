@@ -425,6 +425,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered. 
+                            ErrMsg=ErrorMessage(dePrdUsr, items,validContractProducts, ErrMsg);
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -435,6 +437,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered 
+                           ErrMsg= ErrorMessage(dePrdUsr, items, validContractProducts, ErrMsg);
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -445,6 +449,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered 
+                            ErrMsg= ErrorMessage(dePrdUsr, items, validContractProducts, ErrMsg);
                             BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
@@ -452,7 +458,53 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
+        public static string ErrorMessage(IOpDataElement dePrdUsr, ProdMappings items,List<string> validContractProducts, string ErrMsg)
+        {
+            
+            Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
+            for (var j = 0; j < validContractProducts.Count; j++)
+            {
+                List<string> subList = new List<string>();
+                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                {
+                    foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                    {
+                        if (validContractProducts[j] == prodMapping.PRD_CAT_NM)
+                        {
+                            subList.Add(kvp.Key.ToString());
+                        }
+                    }
+                }
+                ItemsDic.Add((validContractProducts[j]).ToString(), subList);
+            }
+            foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
+            {
+                if (kvp.Value.Count > 5)
+                {
+                    int cnt = 0;
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  ";
+                    foreach (string val in kvp.Value)
+                    {
+                        if (cnt < 5)
+                            ErrMsg = ErrMsg + val + ", ";                        
+                        cnt++;
+                    }
+                    
+                        ErrMsg = ErrMsg + "...";
+                }
+                else
+                {
+                    var str = String.Join(", ", kvp.Value);
 
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  " + str;
+                }
+            }
+            ErrMsg = ErrMsg + "\n Below are the valid combinations to add the products into the deal:";
+            ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
+            ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
+            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product type.";
+            return ErrMsg;
+        }
         public static void CheckGeos(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
