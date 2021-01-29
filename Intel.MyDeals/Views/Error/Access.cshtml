@@ -7,31 +7,39 @@
     <img src="/images/intel-logo-white-100.png" id="intelLogo" />
     <span class="main-logo-title">Deal Management Suite</span>
     <i class="fr intelicon-help-solid" style="color: #ffffff; font-size: 30px; margin-top: 5px;"></i>
-    
+
 </div>
 
 <div class="container-fluid">
     <div class="row">
         <h1>It appears you do not have access to an app in the My Deals Suite...</h1>
+        <h2>To gain access please visit <a href="http://ags.intel.com">AGS</a> and select one of the described roles below.</h2>
     </div>
+
     <div class="row">
         <div class="col-md-6 col-xs-12">
             <div class="info-container">
-                <h3>Main User Rules</h3>
+                <h3>Main User Rules (Create and Approve Deals Roles)</h3>
                 <div class="info-box-container">
 
                     <div class="role-title">
                         FSE - Field Sales Engineer
                     </div>
                     <div class="role-desc">
-                        Create, review and submit requests for assigned Customers.
+                        Create, review, and submit requests for assigned Customers.
+                    </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access FSE
                     </div>
 
                     <div class="role-title">
                         GA - Geo Approver
                     </div>
                     <div class="role-desc">
-                        Create, review and approve requests for assigned Customers.
+                        Create, review, and approve requests for assigned Customers.
+                    </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access Geo Approver
                     </div>
 
                     <div class="role-title">
@@ -40,13 +48,42 @@
                     <div class="role-desc">
                         Reviews, approves, or rejects requests.
                     </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access Division Approver
+                    </div>
+
+                </div>
+            </div>
+            <div class="info-container">
+                <h3>Administrative Support Roles</h3>
+                <div class="info-box-container">
+
+                    <div class="role-title">
+                        SA - System Administrator
+                    </div>
+                    <div class="role-desc">
+                        System Administrator for My Deals. Performs system administrative tasks and provide first level user support.  Also, can manage Product Classifications and User Customer Account assignments.
+                    </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - System Admin Access Deal Manager
+                    </div>
+
+                    <div class="role-title">
+                        CA - Customer Administrator
+                    </div>
+                    <div class="role-desc">
+                        Customer Administrator for My Deals. Performs administrative tasks relating to the maintenance of User Customer Account assignments and customer level attributes. No other administrative tools are accessible.
+                    </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - Customer Admin Deal Manager
+                    </div>
 
                 </div>
             </div>
         </div>
         <div class="col-md-6 col-xs-12">
             <div class="info-container">
-                <h3>Support Roles</h3>
+                <h3>Support User Roles (Non-Approval/Read Only Deal Roles)</h3>
                 <div class="info-box-container">
 
                     <div class="role-title">
@@ -55,12 +92,18 @@
                     <div class="role-desc">
                         View or reference requests for given geography, customer, and division.
                     </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access Rebate Analyst
+                    </div>
 
                     <div class="role-title">
                         Legal - Legal Representative
                     </div>
                     <div class="role-desc">
                         Reviews and edits Legal Classifications and Legal Exceptions.
+                    </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access Legal
                     </div>
 
                     <div class="role-title">
@@ -69,6 +112,9 @@
                     <div class="role-desc">
                         View or reference requests for given geography and cannot submit nor modify requests.
                     </div>
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access Finance
+                    </div>
 
                     <div class="role-title">
                         CBA - Customer Business Analyst
@@ -76,20 +122,13 @@
                     <div class="role-desc">
                         View or reference requests for given geography and customer. CBA cannot submit nor modify requests.
                     </div>
-
-                    <div class="role-title">
-                        SA - System Administrator
-                    </div>
-                    <div class="role-desc">
-                        System Administrator for My Deals. Perform system administrative tasks (manage product classifications and user customer assignments) and provide first level user support.
+                    <div class="role-ags">
+                        AGS roles: DEAL MANAGEMENT PRODUCTION - User Access CBA
                     </div>
 
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <h2>To gain access please visit <a href="http://ags.intel.com">AGS</a> and select one of the described roles above.</h2>
     </div>
 </div>
 
@@ -105,8 +144,9 @@
 
     #intelLogo {
         width: 50px;
-        height: 33px;   
+        height: 33px;
     }
+
     .main-logo-title {
         margin-left: 8px;
     }
@@ -115,9 +155,10 @@
         font-weight: normal;
         font-weight: 200;
     }
-    .lnk a {
-        color: #00AEEF;
-    }
+
+        .lnk a {
+            color: #00AEEF;
+        }
 
     .noaccess-header {
         background-color: #0071C5;
@@ -145,7 +186,7 @@
         font-weight: bold;
         font-weight: 700;
         font-style: normal;
-        margin: 40px 10px 20px 10px;
+        margin: 30px 10px 20px 10px;
         text-align: center;
     }
 
@@ -155,7 +196,7 @@
         font-weight: bold;
         font-weight: 700;
         font-style: normal;
-        margin: 40px 10px 20px 10px;
+        margin: 0px 10px 20px 0px;
         text-align: center;
     }
 
@@ -181,9 +222,19 @@
         font-family: "Intel Clear", "Arial";
         font-size: 12px;
         font-weight: normal;
-        font-weight: 200;
+        font-weight: 300;
         font-style: normal;
         color: #000000;
-        margin: 10px 10px 20px 20px;
+        margin: 0 10px 0 20px;
+    }
+
+    .role-ags {
+        font-family: "Intel Clear", "Arial";
+        font-size: 10px;
+        font-weight: normal;
+        font-weight: 200;
+        font-style: normal;
+        color: #606060;
+        margin: 3px 10px 5px 20px;
     }
 </style>
