@@ -13,9 +13,6 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public string DEAL_IDS { get; set; }
 
-        [DataMember]
-        public bool VSTX_CUST_FLAG { get; set; }
-
     }
 
     public class PushDealstoVistexResults

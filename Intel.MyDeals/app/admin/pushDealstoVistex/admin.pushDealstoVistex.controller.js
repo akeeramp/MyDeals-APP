@@ -10,7 +10,7 @@
     PushDealstoVistexcontroller.$inject = ['pushDealstoVistexService', '$scope', 'logger'];
 
     function PushDealstoVistexcontroller(pushDealstoVistexService, $scope, logger) {
-               
+
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
             // Kick not valid users out of the page
@@ -23,7 +23,6 @@
         $scope.DealstoSend = {};
         $scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
         $scope.ShowResults = false;
-        $scope.VstxCustFlag = 1;
 
         $scope.ValidateAndSendDeals = function () {
             var data = {};
@@ -48,7 +47,6 @@
 
             if (isDealIdsValid) {
                 data.DEAL_IDS = $scope.DealstoSend.DEAL_IDS;
-                data.VSTX_CUST_FLAG = $scope.VstxCustFlag;
                 pushDealstoVistexService.PushDealstoVistex(data).then(function (response) {
                         vm.Results = response.data;
                         $scope.UpdCnt.all = vm.Results.length;
@@ -66,13 +64,6 @@
                 $scope.ShowResults = false;
                 logger.warning("Please fix validation errors");
             }
-        }
-
-        //To send data to DSA Outbound table 
-        vm.toggleType = function (currentState) {
-
-            $scope.VstxCustFlag = currentState;
-
         }
 
         vm.dataSource = new kendo.data.DataSource({

@@ -23,8 +23,7 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_PUSH_DEALS_TO_VISTEX
                 {
 
-                    in_deal_lst = new type_int_list(Ids.ToArray()),
-                     in_vstx_cust_flag = dealIds.VSTX_CUST_FLAG
+                    in_deal_lst = new type_int_list(Ids.ToArray())
 
                 }))
                 {
