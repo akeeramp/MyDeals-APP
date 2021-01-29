@@ -17,6 +17,19 @@
                      op-ui-mode="'HORIZONTAL'"></div>
             </div>
 
+            <div class="row">
+                <div class="col-md-8 row dateRangeLabel" style="margin-left:0px; ">
+                    <div>
+                        Vistex Customer Flag :
+                        <toggle ng-model="VstxCustFlag"
+                                style="padding-left:16px;"
+                                size="btn-sm"
+                                ng-click="vm.toggleType(VstxCustFlag) ">
+                        </toggle>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-12">
                 <div class="col-md-2 font-weight-bold ">
                 </div>
@@ -26,6 +39,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="col-md-6" ng-if="ShowResults == true">
             <div class="row">
