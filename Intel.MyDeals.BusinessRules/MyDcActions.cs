@@ -1192,7 +1192,23 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
             // US705342 get dates for previous quarter
-            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null);
+            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt, null, null);
+            int qtr = currentQuarterDetails.QTR_NBR - 1;
+            int yr = 0;
+            if (qtr >= 1) // Not the first quarter of this year, so stay in year
+            {
+                yr = currentQuarterDetails.YR_NBR;
+                qtr = 4;
+                yr = currentQuarterDetails.YR_NBR - 1;
+            }
+            else // Currently in Q1 of the year, go back to Q4 of previous year
+            {
+                qtr = 4;
+                yr = currentQuarterDetails.YR_NBR - 1;
+            }
+
+            //var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null); // US890081 - Change 3 month check to Qtr/Yr based check
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, null, (short)yr, (short)qtr);
 
             // changed billing start date to equal deal start date as part of US705342
             // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
