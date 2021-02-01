@@ -7475,6 +7475,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("in_vstx_cust_flag", value); }
 				get { return (Boolean)GetParameter("in_vstx_cust_flag"); }
 			}
+
 		}
 
 		///<summary>

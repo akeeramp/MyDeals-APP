@@ -10,7 +10,7 @@
     PushDealstoVistexcontroller.$inject = ['pushDealstoVistexService', '$scope', 'logger'];
 
     function PushDealstoVistexcontroller(pushDealstoVistexService, $scope, logger) {
-               
+
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
             // Kick not valid users out of the page
@@ -50,17 +50,17 @@
                 data.DEAL_IDS = $scope.DealstoSend.DEAL_IDS;
                 data.VSTX_CUST_FLAG = $scope.VstxCustFlag;
                 pushDealstoVistexService.PushDealstoVistex(data).then(function (response) {
-                        vm.Results = response.data;
-                        $scope.UpdCnt.all = vm.Results.length;
-                        $scope.UpdCnt.error = vm.Results.filter(x => x.ERR_FLAG === 1).length;
-                        $scope.UpdCnt.success = vm.Results.filter(x => x.ERR_FLAG === 0).length;
-                        vm.dataSource.read();
-                        $scope.ShowResults = true;
-                        logger.success("Please Check The Results.");
-                    }, function (response) {
-                        logger.error("Unable to Send deal(s) to Vistex");
-                        $scope.setBusy("", "");
-                    });
+                    vm.Results = response.data;
+                    $scope.UpdCnt.all = vm.Results.length;
+                    $scope.UpdCnt.error = vm.Results.filter(x => x.ERR_FLAG === 1).length;
+                    $scope.UpdCnt.success = vm.Results.filter(x => x.ERR_FLAG === 0).length;
+                    vm.dataSource.read();
+                    $scope.ShowResults = true;
+                    logger.success("Please Check The Results.");
+                }, function (response) {
+                    logger.error("Unable to Send deal(s) to Vistex");
+                    $scope.setBusy("", "");
+                });
             }
             else {
                 $scope.ShowResults = false;

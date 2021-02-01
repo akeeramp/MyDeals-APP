@@ -27,29 +27,29 @@
                                 ng-click="vm.toggleType(VstxCustFlag) ">
                         </toggle>
                     </div>
-                </div>               
+                </div>
             </div>
 
             <div class="col-md-12">
-                 <div class="col-md-2 font-weight-bold ">
-                 </div>
-                 <div class="col-md-2">
+                <div class="col-md-2 font-weight-bold ">
+                </div>
+                <div class="col-md-2">
                     <div>
-                       <button ng-click="ValidateAndSendDeals()" class="btn btn-primary">Send Deals</button>
+                        <button ng-click="ValidateAndSendDeals()" class="btn btn-primary">Send Deals</button>
                     </div>
-                 </div>
+                </div>
             </div>
 
         </div>
-            <div class="col-md-6" ng-if="ShowResults == true">
-                <div class="row">
-                    <a style="text-decoration:underline"><b>Results:</b></a>
-                    Deals Processed: {{UpdCnt.all}}, <i style="color:red;font-weight:bold">Errors: {{UpdCnt.error}}</i>, Successful Updated: {{UpdCnt.success}}
-                </div>
-                <div class="row">
-                    <div id="grid" kendo-grid="DealMassupdateGrid" expand-k-grid options="vm.gridOptions">
-                    </div>
+        <div class="col-md-6" ng-if="ShowResults == true">
+            <div class="row">
+                <a style="text-decoration:underline"><b>Results:</b></a>
+                Deals Processed: {{UpdCnt.all}}, <i style="color:red;font-weight:bold">Errors: {{UpdCnt.error}}</i>, Successful Updated: {{UpdCnt.success}}
+            </div>
+            <div class="row">
+                <div id="grid" kendo-grid="DealMassupdateGrid" expand-k-grid options="vm.gridOptions">
                 </div>
             </div>
+        </div>
     </div>
 </div>
