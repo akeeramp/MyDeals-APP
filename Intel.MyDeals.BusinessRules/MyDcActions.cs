@@ -505,7 +505,7 @@ namespace Intel.MyDeals.BusinessRules
             ErrMsg = ErrMsg + "\n Below are the valid vertical combinations allowed in My Deals:";
             ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
             ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
-            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product Vertical.";
+            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product vertical.";
             return ErrMsg;
         }
 
