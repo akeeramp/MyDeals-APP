@@ -425,6 +425,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered. 
+                            ErrMsg = ErrorMessage(dePrdUsr, items, validContractProducts, ErrMsg);
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -435,6 +437,9 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered 
+                            ErrMsg = ErrorMessage(dePrdUsr, items, validContractProducts, ErrMsg);
+
                             dePrdUsr.AddMessage(ErrMsg);
                             break;
                         }
@@ -445,12 +450,63 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             string ErrMsg = hasTrkr == "1" ? $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid." + activeDealProdError :
                                 $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.";
+                            //US761410: Updated Error Message with validations when products with different product types are entered 
+                            ErrMsg = ErrorMessage(dePrdUsr, items, validContractProducts, ErrMsg);
+
                             BusinessLogicDeActions.AddValidationMessage(dePrdUsr, ErrMsg);
                             break;
                         }
                     }
                 }
             }
+        }
+
+        public static string ErrorMessage(IOpDataElement dePrdUsr, ProdMappings items, List<string> validContractProducts, string ErrMsg)
+        {
+
+            Dictionary<string, List<string>> ItemsDic = new Dictionary<string, List<string>>();
+            for (var j = 0; j < validContractProducts.Count; j++)
+            {
+                List<string> subList = new List<string>();
+                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                {
+                    foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                    {
+                        if (validContractProducts[j] == prodMapping.PRD_CAT_NM)
+                        {
+                            subList.Add(kvp.Key.ToString());
+                        }
+                    }
+                }
+                ItemsDic.Add((validContractProducts[j]).ToString(), subList);
+            }
+            foreach (var kvp in ItemsDic.OrderBy(x => x.Value.Count))
+            {
+                if (kvp.Value.Count > 5)
+                {
+                    int cnt = 0;
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  ";
+                    foreach (string val in kvp.Value)
+                    {
+                        if (cnt < 5)
+                            ErrMsg = ErrMsg + val + ", ";
+                        cnt++;
+                    }
+
+                    ErrMsg = ErrMsg + "...";
+                }
+                else
+                {
+                    var str = String.Join(", ", kvp.Value);
+
+                    ErrMsg = ErrMsg + "\n" + kvp.Key.ToString() + ":  " + str;
+                }
+            }
+            ErrMsg = ErrMsg + "\n Below are the valid vertical combinations allowed in My Deals:";
+            ErrMsg = ErrMsg + "\n Combination 1: DT, Mb, SrvrWS, EIA CPU";
+            ErrMsg = ErrMsg + "\n Combination 2: CS, EIA CS";
+            ErrMsg = ErrMsg + "\n Combination 3: Non CPU/ CS product vertical cannot be combined with any other product vertical.";
+            return ErrMsg;
         }
 
         public static void CheckGeos(params object[] args)
@@ -1140,7 +1196,23 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
             // US705342 get dates for previous quarter
-            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null);
+            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt, null, null);
+            int qtr = currentQuarterDetails.QTR_NBR - 1;
+            int yr = 0;
+            if (qtr >= 1) // Not the first quarter of this year, so stay in year
+            {
+                yr = currentQuarterDetails.YR_NBR;
+                qtr = 4;
+                yr = currentQuarterDetails.YR_NBR - 1;
+            }
+            else // Currently in Q1 of the year, go back to Q4 of previous year
+            {
+                qtr = 4;
+                yr = currentQuarterDetails.YR_NBR - 1;
+            }
+
+            //var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null); // US890081 - Change 3 month check to Qtr/Yr based check
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, null, (short)yr, (short)qtr);
 
             // changed billing start date to equal deal start date as part of US705342
             // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
