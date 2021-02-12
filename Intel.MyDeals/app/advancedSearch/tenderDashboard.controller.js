@@ -1447,7 +1447,11 @@
                             return;
                         } else if (gridDS[d]["_actionsPS"][newVal] == false) {
                             linkedUnactionables.push(gridDS[d].DC_ID);
-                        } else {
+                        }//US860853
+                        else if (gridDS[d].Customer.PRC_GRP_CD == "" && newVal == "Approve" && window.usrRole == "DA") {
+                            linkedUnactionables.push(gridDS[d].DC_ID);
+                        }//US860853 END
+                        else {
                             //no mismatch, therefore we push it into the packet that we will send to the middle tier
                             tenders.push({
                                 DC_ID: gridDS[d].DC_ID,
@@ -1462,6 +1466,11 @@
                 }
             } else {
                 //not linked, so we will just push the single data item to the middle tier
+                //US860853
+                if (dataItem.Customer.PRC_GRP_CD == "" && newVal === "Approve" && window.usrRole == "DA") {
+                    kendo.alert("Price Group Code required for the customer");
+                    return;
+                }//US860853 END
                 tenders.push({
                     DC_ID: dataItem.DC_ID,
                     CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
@@ -1484,7 +1493,7 @@
             if (linkedUnactionables.length > 0) {
                 msg += "<br/><br/>The following deals cannot be Actioned:";
                 msg += "<br/><b>" + linkedUnactionables.join(", ") + "</b>";
-                msg += "<br/>Please check validations and/or Missing Cost/CAP."
+                msg += "<br/>Please check validations and/or Missing Cost/CAP/Price Code."
                 msg += "<br/><br/>All other selected deals will proceed with your selected Action."
             }
 
@@ -1677,7 +1686,9 @@
                 // only show if more than 1 result
                 // TODO: This is a temp fix API is getting the 2002 and 2003 level records, fix the API
                 response.data = $filter('where')(response.data, { CUST_LVL_SID: 2003 });
-
+                //US860853
+                if (response.data[0].PRC_GRP_CD == '') { kendo.alert("Missing Price Group Code"); }
+                //US860853 END
                 if (response.data.length <= 1) {
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;

@@ -398,7 +398,6 @@
                 $scope.PS[$scope.contractData.PRC_ST[n].DC_ID] = $scope.contractData.PRC_ST[n].IS_HYBRID_PRC_STRAT;
             }
         }
-
         var isCopyTender = (copyContractData !== undefined && copyContractData.data.length > 0 && copyContractData.data[0].IS_TENDER === "1");
         if ($location.url().split('tender=').length > 1 || $scope.contractData["IS_TENDER"] === "1" || isCopyTender || $scope.isTenderContract) {
             $scope.isTenderContract = true;
@@ -688,7 +687,9 @@
                     // only show if more than 1 result
                     // TODO: This is a temp fix API is getting the 2002 and 2003 level records, fix the API
                     response.data = $filter('where')(response.data, { CUST_LVL_SID: 2003 });
-
+                    //US860853
+                    if (response.data[0].PRC_GRP_CD == '') { kendo.alert("Missing Price Group Code"); }
+                    //US860853 END
                     if (response.data.length <= 1) {
                         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
@@ -5618,6 +5619,6 @@
                 $scope.setBusy("", "");
             });
         }
-
+        
     }
 })();
