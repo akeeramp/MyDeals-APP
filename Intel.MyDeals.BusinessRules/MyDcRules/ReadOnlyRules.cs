@@ -186,6 +186,24 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule // Set to read only if having tracker number but not in redeal
+                {
+                    Title="Readonly if tracker is present but not in redeal",
+                    ActionRule = MyDcActions.ReadOnlyNotInRedealWithTracker,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.CUST_ACCNT_DIV
+                            }
+                        }
+                    }
+                },
+
                 //new MyOpRule
                 //{
                 //    Title="Readonly if contract # is positive",
@@ -528,7 +546,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CAP_STRT_DT,
                                 AttributeCodes.COST_TEST_RESULT,
                                 AttributeCodes.COST_TYPE_USED,
-                                AttributeCodes.CUST_DIV_NM,
+                                AttributeCodes.CUST_DIV_NM,                               
                                 AttributeCodes.CREDIT_AMT,
                                 AttributeCodes.CREDIT_VOLUME,
                                 AttributeCodes.DEAL_GRP_NM,

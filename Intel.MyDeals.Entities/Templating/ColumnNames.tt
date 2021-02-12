@@ -22,7 +22,7 @@
 	
 
 	var dbobjects = new DBObjects(
-			string.Format(@"Database=MYDEALS;Server=EG1RDMDBITT01.amr.corp.intel.com\RDMITT1,3180;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;")
 		);
 
 	var TablesToProcess = new List<KeyValuePair<string, string>>();

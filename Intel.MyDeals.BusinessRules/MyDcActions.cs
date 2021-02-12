@@ -994,6 +994,29 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyNotInRedealWithTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string dealHasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            string dealInRedeal = r.Dc.GetDataElementValue(AttributeCodes.IN_REDEAL);
+            
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                if (dealHasTracker == "1" && dealInRedeal == "0")
+                {
+                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                    if (de != null)
+                    {
+                        de.IsReadOnly = true;
+                    } 
+                }
+            }
+        }
+
+
         public static void ReadOnlyFrontendWithNoTracker(params object[] args) // Set to read only if there is not a tracker and deal is frontend (DE38457)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

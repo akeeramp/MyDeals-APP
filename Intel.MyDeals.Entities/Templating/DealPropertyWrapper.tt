@@ -22,7 +22,7 @@
 	SqlConnection conn;
 	
 	// NOTE: DB Connection is defined in 2 places for this file - Make sure they are in sync.
-	conn = new SqlConnection(@"Database=MYDEALS;Server=EG1RDMDBITT01\RDMITT1,3180;integrated security=SSPI;");
+	conn = new SqlConnection(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;");
 
 	conn.Open();
 
@@ -32,7 +32,7 @@
 	// identity insert sequencing issues).
 	var dbobjects = new DBObjects(
 			//string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;")
-			string.Format(@"Database=MYDEALS;Server=EG1RDMDBITT01\RDMITT1,3180;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;")
 		);
 
 	//-- Write File Header Here --------------------------------------------------------------------------
