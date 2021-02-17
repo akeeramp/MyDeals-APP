@@ -419,7 +419,29 @@
                 }
             }
         }
-
+        //US860853
+        var checkpricegrpcode = function () {
+            if (($scope.root.contractData !== undefined || $scope.root.contractData !== null) && window.usrRole == "DA") {
+                if (root.contractData.PRC_ST !== undefined || root.contractData.PRC_ST !== null) {
+                    if ($scope.contractData.PRC_ST.length > 0 && $scope.contractData.IS_TENDER == 0) {
+                        if ($scope.contractData.Customer.PRC_GRP_CD == "") {
+                            for (var k = 0; k < $scope.contractData.PRC_ST.length; k++) {
+                                if (!$scope.contractData.PRC_ST[k]._actions["Approve"] && $scope.contractData.Customer.PRC_GRP_CD == "") {
+                                    $scope.contractData.PRC_ST[k]._actionReasons["Approve"]
+                                        += "\nPrice Group Code required for the customer";
+                                }
+                                if ($scope.contractData.PRC_ST[k]._actions["Approve"] && $scope.contractData.Customer.PRC_GRP_CD == "") {
+                                    $scope.contractData.PRC_ST[k]._actions["Approve"] = false;
+                                    $scope.contractData.PRC_ST[k]._actionReasons["Approve"] = "Price Group Code required for the customer";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        checkpricegrpcode()
+        
         //refreshContractDataComplete
         $scope.syncLinked = function (newField, newValue, data) {
             var ids = [];
