@@ -91,11 +91,11 @@
             vm.spinnerMessageDescription = "Please wait while updating the status..";
             dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
-                    angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data), function (dataItem) {
+                    angular.forEach(vm.Vistex.filter((x => x.BTCH_ID === response.data) && (x => x.DEAL_ID === dealId)), function (dataItem) {
                         dataItem.RQST_STS = vm.SelectedStatus;
                         dataItem.ERR_MSG = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
-                    });
-                    vm.vistexDataSource.read();
+                    });                  
+                    vm.vistexDataSource.read();                  
                     logger.success("Status has been updated with the message!");
                 } else {
                     logger.error("Unable to update the status!");
