@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 2/8/2021 11:40:55 PM
-On: MHTIPPIN-MOBL
+File Updated: 2/17/2021 1:49:57 PM
+On: SPENCEKE-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
 using System;
@@ -397,6 +397,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string CONSUMPTION_REASON_CMNT = "CONSUMPTION_REASON_CMNT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3454
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_SYS_CONFIG = "CONSUMPTION_SYS_CONFIG";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1036,6 +1045,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string FG_OLD_MTRL_NBR = "FG_OLD_MTRL_NBR";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 19
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string FLEX_ROW_TYPE = "FLEX_ROW_TYPE";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -2235,6 +2253,15 @@ namespace Intel.MyDeals.Entities {
 		public const string REBATE_TYPE = "REBATE_TYPE";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 57
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string RESET_VOLS_ON_PERIOD = "RESET_VOLS_ON_PERIOD";
+
+		///<summary>
 		/// DIM_SID: 30
 		/// DIM_CD: CSTST
 		/// ATRB_SID: 3466
@@ -2431,6 +2458,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string SYS_COMMENTS = "SYS_COMMENTS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3453
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SYS_PRICE_POINT = "SYS_PRICE_POINT";
 
 		///<summary>
 		/// DIM_SID: 3

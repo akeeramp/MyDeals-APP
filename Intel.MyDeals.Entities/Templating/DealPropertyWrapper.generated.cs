@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 2/8/2021 11:43:47 PM
-On: MHTIPPIN-MOBL
+File Updated: 2/17/2021 1:50:35 PM
+On: SPENCEKE-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
 
@@ -681,6 +681,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_SYS_CONFIG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_SYS_CONFIG",
+			ATRB_DESC = "Consumption System Configuration",
+			ATRB_LBL = "System Configuration",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3454,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute COST_MISSING_FLG = new MyDealsAttribute()
 		{
@@ -1817,6 +1833,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute FLEX_ROW_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "FLEX_ROW_TYPE",
+			ATRB_DESC = "Flex Deal Row Type",
+			ATRB_LBL = "Row Type",
+			ATRB_MAX_LEN = 10,
+			ATRB_SID = 19,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute FMLY_NM = new MyDealsAttribute()
 		{
@@ -3946,6 +3978,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute RESET_VOLS_ON_PERIOD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RESET_VOLS_ON_PERIOD",
+			ATRB_DESC = "Reset Volumes on Period",
+			ATRB_LBL = "Reset per Period",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 57,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute RETAIL_CYCLE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "RETAIL_CYCLE",
@@ -4297,6 +4345,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "NA",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CMNT_HIST"
+		};
+		public static MyDealsAttribute SYS_PRICE_POINT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SYS_PRICE_POINT",
+			ATRB_DESC = "Consumption System Price Point",
+			ATRB_LBL = "System Price Point",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3453,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute TENDER_PUBLISHED = new MyDealsAttribute()
 		{

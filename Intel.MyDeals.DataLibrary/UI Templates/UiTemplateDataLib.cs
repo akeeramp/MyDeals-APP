@@ -635,6 +635,21 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 57,
+                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                DataType = "string",
+                Label = "Reset per period",
+                Width = 140,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 5,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -2320,6 +2335,23 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'QUOTE_LN_ID')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 57,
+                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                DataType = "string",
+                Label = "Reset per period",
+                Width = 140,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
+                IsRequired = true
             });
             items.Add(new UiTemplateContainerItem  // WIP VT types
             {
