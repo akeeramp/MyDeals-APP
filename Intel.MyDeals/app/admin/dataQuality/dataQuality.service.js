@@ -27,8 +27,8 @@
             return dataService.post(apiBaseUrl + 'RunDQ', '"' + useCase + '"');
         }
 
-        function ExecuteCostGapFiller(startYearQtr, endYearQtr, prodIds) {
-            return dataService.post(apiBaseUrl + 'ExecuteCostGapFiller/' + startYearQtr + '/' + endYearQtr, prodIds);
+        function ExecuteCostGapFiller(startYearQtr, endYearQtr, prodIds, inNullCost) {
+            return dataService.post(apiBaseUrl + 'ExecuteCostGapFiller/' + startYearQtr + '/' + endYearQtr, prodIds, inNullCost);
         }
     }
 })();

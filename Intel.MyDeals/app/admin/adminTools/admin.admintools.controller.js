@@ -62,6 +62,7 @@
         $scope.executeCostFiller = function () {
             var isValid = validate();
             var reg = new RegExp(/^[0-9,]+$/);
+            //vm.isFillNullSelected = false;
             $scope.adminToolsData.productIds = $scope.adminToolsData.productIds.replace(/,+/g, ',').trim(' ');
             var isValidProdIds = reg.test($scope.adminToolsData.productIds);
             if (!isValidProdIds) {
@@ -69,7 +70,7 @@
                 $scope.adminToolsData._behaviors.validMsg["productIds"] = "Please enter comma (,) separated L4 product ids only";
             }
             if (isValid && isValidProdIds) {
-                adminTools.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, $scope.adminToolsData.productIds).then(function (response) {
+                adminTools.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, $scope.adminToolsData.productIds, vm.isFillNullSelected).then(function (response) {
                     logger.success("Cost Gap Filler executed succesfully");
                 });
             }

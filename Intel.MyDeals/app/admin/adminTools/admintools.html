@@ -95,29 +95,39 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-2 font-weight-bold dateRangeLabel">
+                Fill NULL Cost ? :
             </div>
-            <div class="col-md-2 btnExec">
-                <div>
-                    <button ng-click="executeCostFiller()" class="btn btn-primary">Execute COST Gap filler</button>
+            <div class="col-md-9"  style="height: 50px;">
+                <input style="height: 50px; width: 20px" type="checkbox" id="nullChk" ng-model="vm.isFillNullSelected" ng-checked="vm.isFillNullSelected">
+                </div>
+            </div>
+       </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2 font-weight-bold dateRangeLabel">
+                </div>
+                <div class="col-md-2 btnExec">
+                    <div>
+                        <button ng-click="executeCostFiller()" class="btn btn-primary">Execute COST Gap filler</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <br />
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-2 font-weight-bold dateRangeLabel">
-            </div>
-            <div class="col-md-2 btnExec">
-                <div>
-                    <button ng-click="executePostTest()" class="btn btn-primary">Execute Post Test</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-</div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2 font-weight-bold dateRangeLabel">
+                </div>
+                <div class="col-md-2 btnExec">
+                    <div>
+                        <button ng-click="executePostTest()" class="btn btn-primary">Execute Post Test</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 <style>
     .opUiElement {
         width: 95%

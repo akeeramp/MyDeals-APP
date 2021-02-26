@@ -20,8 +20,8 @@
 
         return service;
 
-        function ExecuteCostGapFiller(startYearQtr, endYearQtr, prodIds) {
-            return dataService.post(apiBaseUrl + 'ExecuteCostGapFiller/' + startYearQtr + '/' + endYearQtr, '"' + prodIds + '"');
+        function ExecuteCostGapFiller(startYearQtr, endYearQtr, prodIds,isnullCheck) {
+            return dataService.post(apiBaseUrl + 'ExecuteCostGapFiller/' + startYearQtr + '/' + endYearQtr + '/' + isnullCheck, '"' + prodIds + '"' );
         }
 
         function ExecutePostTest(jsonDataPacket) {

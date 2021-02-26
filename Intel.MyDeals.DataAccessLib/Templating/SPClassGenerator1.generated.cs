@@ -3322,6 +3322,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("in_prod_ids", value); }
 				get { return (String)GetParameter("in_prod_ids"); }
 			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+			public Boolean in_inc_null_cst
+			{
+				set { SetParmeter("in_inc_null_cst", value); }
+				get { return (Boolean)GetParameter("in_inc_null_cst"); }
+			}
 		}
 
 		///<summary>

@@ -12,6 +12,6 @@ namespace Intel.MyDeals.IDataLibrary
         IList<DataQualityUsecase> GetDataQualityUseCases();
         bool RunDQ(string useCase);
 
-        bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids);
+        bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids,bool incNullCost);
     }
 }

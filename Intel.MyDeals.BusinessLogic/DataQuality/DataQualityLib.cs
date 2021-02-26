@@ -18,9 +18,9 @@ namespace Intel.MyDeals.BusinessLogic
             _dataQualityDataLib = dataQualityDataLib;
         }
 
-        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids)
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, string in_prod_ids,bool inNullCost)
         {
-            return _dataQualityDataLib.ExecuteCostGapFiller(startYearQuarter,endYearQuarter, in_prod_ids);
+            return _dataQualityDataLib.ExecuteCostGapFiller(startYearQuarter,endYearQuarter, in_prod_ids, inNullCost);
         }
 
         public IList<DataQualityUsecase> GetDataQualityUseCases()

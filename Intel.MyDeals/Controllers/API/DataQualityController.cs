@@ -41,13 +41,14 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="startYearQuarter"></param>
         /// <param name="endYearQuarter"></param>
         /// <param name="in_prod_ids"></param>
+        /// <param name=" in_inc_null_cst"></param>
         /// <returns></returns>
         [HttpPost]
         [AntiForgeryValidate]
-        [Route("ExecuteCostGapFiller/{startYearQuarter}/{endYearQuarter}")]
-        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, [FromBody] string productIds)
+        [Route("ExecuteCostGapFiller/{startYearQuarter}/{endYearQuarter}/{isnullCheck}")]
+        public bool ExecuteCostGapFiller(int startYearQuarter, int endYearQuarter, [FromBody] string productIds,bool isnullCheck)     
         {
-            return SafeExecutor(() => _dataQualityLib.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, productIds)
+            return SafeExecutor(() => _dataQualityLib.ExecuteCostGapFiller(startYearQuarter, endYearQuarter, productIds, isnullCheck)
               , $"Unable run COST gap filler"
           );
         }
