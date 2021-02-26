@@ -437,6 +437,9 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
+                    },
                     "NUM_OF_TIERS": {
                         "Groups": ["All"]
                     },
