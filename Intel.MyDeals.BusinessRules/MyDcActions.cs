@@ -895,7 +895,7 @@ namespace Intel.MyDeals.BusinessRules
                 // value was a testing target string (something with Issue flavor) and has been changed
                 if (strTestingValues.Contains(deArSettlementLvl.OrigAtrbValue.ToString()) && deArSettlementLvl.AtrbValue.ToString() == "Cash")
                 {
-                    deArSettlementLvl.AddMessage(string.Concat("AR Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
+                    deArSettlementLvl.AddMessage(string.Concat("Settlement Level can be updated between [", string.Join(", ", strTestingValues), "] for deals with trackers.  Values have been reset to original values.  Please Re-validate to clear this message."));
                     deArSettlementLvl.AtrbValue = deArSettlementLvl.OrigAtrbValue;
                     deArSettlementLvl.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
                 }
@@ -1137,7 +1137,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, "Media");
             eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, "Server Deal Type");
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, "Period Profile");
-            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "AR Settlement Level");
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "Settlement Level");
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
@@ -2215,7 +2215,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     arSettlementLvl.AtrbValue = "";
                     arSettlementLvl.State = OpDataElementState.Modified;
-                    arSettlementLvl.AddMessage("AR Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
+                    arSettlementLvl.AddMessage("Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
                 }
             }
         }

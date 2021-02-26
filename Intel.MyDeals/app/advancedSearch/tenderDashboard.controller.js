@@ -600,7 +600,7 @@
             },
             {
                 field: "AR_SETTLEMENT_LVL",
-                title: "AR Settlement Level",
+                title: "Settlement Level",
                 type: "singleselect",
                 width: 160,
                 lookupText: "DROP_DOWN",

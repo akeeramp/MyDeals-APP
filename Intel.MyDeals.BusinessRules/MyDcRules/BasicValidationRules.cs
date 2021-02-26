@@ -594,7 +594,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="AR Settlement Level Validation for Active Deals",
+                    Title="Settlement Level Validation for Active Deals",
                     ActionRule = MyDcActions.ValidateArSettlementLevelForActiveDeal,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate },
