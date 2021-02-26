@@ -35,7 +35,7 @@
                 vm.ARSettlementLevel = response.data;
                 vm.TenderARSettlementLevel = response.data.filter(x => x.ACTV_IND == true);
             }, function (response) {
-                logger.error("Unable to get AR Settlement Levels.", response, response.statusText);
+                logger.error("Unable to get Settlement Levels.", response, response.statusText);
             });
         }
 
@@ -83,9 +83,9 @@
             if (model.DFLT_PERD_PRFL != null && model.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === model.DFLT_PERD_PRFL).length == 0)
                 validationMessages.push("Please provide valid <b>Period Profile</b>");
             if (model.DFLT_AR_SETL_LVL != null && model.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_AR_SETL_LVL).length == 0)
-                validationMessages.push("Please select a valid <b>Non-Tenders AR Settlement Level</b>");
+                validationMessages.push("Please select a valid <b>Non-Tenders Settlement Level</b>");
             if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0)
-                validationMessages.push("Please select a valid <b>Tenders AR Settlement Level</b>");
+                validationMessages.push("Please select a valid <b>Tenders Settlement Level</b>");
 
             if (isShowPopup && validationMessages.length > 0)
                 kendo.alert(validationMessages.join("</br>"));
@@ -112,7 +112,7 @@
         };
 
         vm.ARSettlementLevelOptions = {
-            placeholder: "Select AR Settlement Level",
+            placeholder: "Select Settlement Level",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -130,7 +130,7 @@
         };
 
         vm.TenderARSettlementLevelOptions = {
-            placeholder: "Select Tender AR Settlement Level",
+            placeholder: "Select Tender Settlement Level",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -298,14 +298,14 @@
                 },
                 {
                     field: "DFLT_TNDR_AR_SETL_LVL",
-                    title: "Tenders AR Settlement Level",
+                    title: "Tenders Settlement Level",
                     width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.TenderARSettlementLevelDropDownEditor
                 },
                 {
                     field: "DFLT_AR_SETL_LVL",
-                    title: "Non-Tenders AR Settlement Level",
+                    title: "Non-Tenders Settlement Level",
                     width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.ARSettlementLevelDropDownEditor

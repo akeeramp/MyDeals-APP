@@ -141,8 +141,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute AR_SETTLEMENT_LVL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "AR_SETTLEMENT_LVL",
-			ATRB_DESC = "AR Settlement Level",
-			ATRB_LBL = "AR Settlement Level",
+			ATRB_DESC = "Settlement Level",
+			ATRB_LBL = "Settlement Level",
 			ATRB_MAX_LEN = 50,
 			ATRB_SID = 3719,
 			DATA_TYPE_CD = "VARCHAR",
@@ -1341,8 +1341,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DFLT_AR_SETL_LVL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DFLT_AR_SETL_LVL",
-			ATRB_DESC = "Vistex Customer Default AR Settlement Level",
-			ATRB_LBL = "Vistex Customer Default AR Settlement Level",
+			ATRB_DESC = "Vistex Customer Default Settlement Level",
+			ATRB_LBL = "Vistex Customer Default Settlement Level",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2026,
 			DATA_TYPE_CD = "CUSTOM",
@@ -1405,8 +1405,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DFLT_TNDR_AR_SETL_LVL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DFLT_TNDR_AR_SETL_LVL",
-			ATRB_DESC = "Vistex Customer Default Tender AR Settlement Level",
-			ATRB_LBL = "Vistex Customer Default Tender AR Settlement Level",
+			ATRB_DESC = "Vistex Customer Default Tender Settlement Level",
+			ATRB_LBL = "Vistex Customer Default Tender Settlement Level",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2028,
 			DATA_TYPE_CD = "CUSTOM",

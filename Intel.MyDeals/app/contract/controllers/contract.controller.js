@@ -2778,7 +2778,7 @@
                                 }
                                 if (Object.keys(dictArSettlement).length > 1) {
                                     el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                                 }
@@ -2949,7 +2949,7 @@
                             if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
                                 && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
                                 sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                                sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
@@ -3134,7 +3134,7 @@
 
                         if (hasInvalidArSettlementForHybirdDeals) {
                             gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All AR Settlement Levels must be same within a Hybrid Pricing Strategy.";
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
@@ -3144,7 +3144,7 @@
                         if (hasInvalidArSettlementForHybirdDeals == false && gData[i].HAS_TRACKER == "1" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
                             && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
                             gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "AR Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
