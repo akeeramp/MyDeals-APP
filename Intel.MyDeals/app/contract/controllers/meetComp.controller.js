@@ -46,6 +46,9 @@ function MeetCompController($scope, $uibModalStack, $state, $stateParams, $filte
     $scope.OBJ_SID = dataItem.DC_ID;
     $scope.LAST_MEET_COMP_RUN = moment(gridUtils.convertLocalToPST(new Date())).subtract(4, 'hour');;
     $scope.PAGE_NM = 'MCTPOPUP';
+    //DE109068
+    $scope.QUOTE_LN_ID = dataItem.QUOTE_LN_ID;
+    //DE109068 END
 
     $scope.setBusy("Meet Comp...", "Please wait we are fetching Meet Comp Data...");
 

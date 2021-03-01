@@ -45,7 +45,9 @@
                 $scope.runIfStaleByHours = 3;
                 $scope.MC_MODE = "D";
                 $scope.PAGE_NM = $scope.pageNm;
-                
+                //DE109068
+                $scope.QUOTE_LN_ID = $scope.$parent.QUOTE_LN_ID;
+                //DE109068 END
                 $scope.meetCompMasterdata = [];
 
                 $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
@@ -187,6 +189,11 @@
                                     if (item[0].PS_STATUS.toLowerCase() == "submitted") {
                                         window.isEditableGrid = 'False';
                                     }
+                                    //DE109068
+                                    if (($scope.QUOTE_LN_ID !== undefined || $scope.QUOTE_LN_ID !== null) && $scope.QUOTE_LN_ID != "") {
+                                        window.isEditableGrid = 'False';
+                                    }
+                                    //DE109068 End
                                 }
                                 else {
                                     window.isEditableGrid = 'True';
