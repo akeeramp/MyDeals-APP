@@ -206,9 +206,9 @@
         });
         $scope.HybridDealType.push({
             DEAL_TYPE: "VOL TIER",
-            IS_HYBRID_PRC_STRAT: 'disabled',
-            UI_ENABLED: false,
-            UI_VISIBLE: false
+            IS_HYBRID_PRC_STRAT: 'active',
+            UI_ENABLED: true,
+            UI_VISIBLE: true
         });
 
         $scope.disableLinks = function (val) {
