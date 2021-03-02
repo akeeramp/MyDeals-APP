@@ -2446,8 +2446,6 @@ namespace Intel.MyDeals.BusinessRules
         }
 
 
-        // Test code change for new user story
-
         public static void ValidateTierStartVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
