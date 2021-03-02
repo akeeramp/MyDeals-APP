@@ -2445,6 +2445,9 @@ namespace Intel.MyDeals.BusinessRules
             ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Qty must be a whole number.", IsWholeNumber, r);
         }
 
+
+        // Test code change for new user story
+
         public static void ValidateTierStartVol(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
