@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 2/17/2021 1:49:57 PM
-On: SPENCEKE-MOBL
+File Updated: 3/3/2021 9:31:50 AM
+On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
 using System;
@@ -941,6 +941,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3349
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string END_CUSTOMER_COUNTRY = "END_CUSTOMER_COUNTRY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3348
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1524,6 +1533,15 @@ namespace Intel.MyDeals.Entities {
 		public const string IS_HYBRID_PRC_STRAT = "IS_HYBRID_PRC_STRAT";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3352
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_PRIMED_CUST = "IS_PRIMED_CUST";
+
+		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
 		/// ATRB_SID: 5043
@@ -2066,6 +2084,24 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3351
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string PRIMED_CUST_ID = "PRIMED_CUST_ID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3350
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRIMED_CUST_NM = "PRIMED_CUST_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3662
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -2354,11 +2390,29 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3009
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SEND_TO_VISTEX = "SEND_TO_VISTEX";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3347
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string SERVER_DEAL_TYPE = "SERVER_DEAL_TYPE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3353
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SETTLEMENT_PARTNER = "SETTLEMENT_PARTNER";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -3097,7 +3151,7 @@ namespace Intel.MyDeals.Entities {
 	//-- Build ObjectSet Data -----------------------------------------------------------------------------
 
 	public enum OpDataElementSetType {
-		TENDER = 2,
+		FLEX = 2,
 		ECAP = 3,
 		PROGRAM = 4,
 		VOL_TIER = 5,
@@ -3111,7 +3165,7 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(
 			new List<OpDataElementSetTypeItem>
 			{
-				new OpDataElementSetTypeItem {Id = 2, OpDeSetType = OpDataElementSetType.TENDER, Alias = "TENDER", Description = "Tender Deal Type", TemplateDealNumber = -6, TrackerDtLetter = "T", Order = 2 },
+				new OpDataElementSetTypeItem {Id = 2, OpDeSetType = OpDataElementSetType.FLEX, Alias = "FLEX", Description = "Flex Deal Type", TemplateDealNumber = -6, TrackerDtLetter = "F", Order = 2 },
 				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
@@ -3124,12 +3178,12 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.TENDER,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
 			}
 		);
 	}

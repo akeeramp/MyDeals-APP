@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 2/17/2021 1:50:35 PM
-On: SPENCEKE-MOBL
+File Updated: 3/3/2021 9:42:40 AM
+On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
 
@@ -1642,6 +1642,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute END_CUSTOMER_COUNTRY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_CUSTOMER_COUNTRY",
+			ATRB_DESC = "End Customer/Retail Country",
+			ATRB_LBL = "End Customer Country",
+			ATRB_MAX_LEN = 70,
+			ATRB_SID = 3349,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute END_CUSTOMER_RETAIL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_CUSTOMER_RETAIL",
@@ -2682,6 +2698,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute IS_PRIMED_CUST = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_PRIMED_CUST",
+			ATRB_DESC = "Is a Primed Customer",
+			ATRB_LBL = "Is Primed Cust",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3352,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute IS_SUPER_USER = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_SUPER_USER",
@@ -3642,6 +3674,38 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute PRIMED_CUST_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRIMED_CUST_ID",
+			ATRB_DESC = "Primed Customer ID",
+			ATRB_LBL = "Primed Customer ID",
+			ATRB_MAX_LEN = 10,
+			ATRB_SID = 3351,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute PRIMED_CUST_NM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRIMED_CUST_NM",
+			ATRB_DESC = "Primed Customer Name",
+			ATRB_LBL = "Primed Customer Name",
+			ATRB_MAX_LEN = 70,
+			ATRB_SID = 3350,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute PROD_INCLDS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PROD_INCLDS",
@@ -4154,6 +4218,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute SEND_TO_VISTEX = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SEND_TO_VISTEX",
+			ATRB_DESC = "Send to Vistex Flag",
+			ATRB_LBL = "Send to Vistex",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 3009,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute SERVER_DEAL_TYPE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SERVER_DEAL_TYPE",
@@ -4161,6 +4241,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Server Deal Type",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 3347,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute SETTLEMENT_PARTNER = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SETTLEMENT_PARTNER",
+			ATRB_DESC = "Settlement Partner",
+			ATRB_LBL = "Settlement Partner",
+			ATRB_MAX_LEN = 70,
+			ATRB_SID = 3353,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
