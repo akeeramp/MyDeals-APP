@@ -597,6 +597,7 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                     }
                 };
+                sendStageToIqr.header.xid = Guid.NewGuid().ToString();
                 sendStageToIqr.header.source_system = "MyDeals";
                 sendStageToIqr.header.target_system = "Tender";
                 sendStageToIqr.header.action = "UpdateStatus";
