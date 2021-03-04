@@ -44,7 +44,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opCd === "_dirty") {
             return;
         }
-
+        
         if (scope.opIsReadOnly === undefined) scope.opIsReadOnly = false;
         if (scope.opIsRequired === undefined) scope.opIsRequired = false;
         if (scope.opIsHidden === undefined) scope.opIsHidden = false;
@@ -56,6 +56,21 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opHelpMsg === undefined) scope.opHelpMsg = "";
         if (scope.opFilterable === undefined) scope.opFilterable = false;
 
+        //enable/disable UI control
+        scope.isUIDisable = function (name, label) {
+            var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
+            //for now the change is only for hybrid Voltier
+            if (hybCond == '1' && label.trim() == 'Number of Tiers') {
+                if (name == 1)
+                    return scope.opIsReadOnly;
+                else
+                    return true;
+            }
+            else {
+                return scope.opIsReadOnly;
+            }
+        };
+      
         // TODO make changes to propagate from directive bindings, used for numeric text box formating
         scope.opOptions = {
             format: "#",
@@ -117,7 +132,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'RADIOBUTTONGROUP' || scope.opType === 'BUTTONGROUP') {
             if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
-                dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {
+                dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {                 
                     scope.values = response.data;
                 }, function (response) {
                     logger.error("Unable to get lookup values.", response, response.statusText);
@@ -202,6 +217,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     return (scope.value.toLowerCase() == lookupVal.toString().toLowerCase());
                 }
             }
+
+            
         }
 
         if (scope.opType === 'MULTISELECT') {
@@ -491,7 +508,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         // Kendo tooltip content doesn't observe binding data changes, work around it to observe changes.
         scope.tooltipMsg = "{{opValidMsg}}";
         scope.helptipMsg = "{{opHelpMsg}}";
-
+      
+     
         function updateSeletedObject() {
             if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
                 var selected = [];
@@ -505,6 +523,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 return selected;
             }
         }
+       
     }
 
     return {
