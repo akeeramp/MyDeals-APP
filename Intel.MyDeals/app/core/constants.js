@@ -252,6 +252,9 @@
                     "YCS2_OVERLAP_OVERRIDE": {
                         "Groups": ["All"]
                     },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
+                    },
                     "VOLUME": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -973,6 +976,9 @@
                     //    "Groups": ["Deal Info"]
                     //},
                     "DEAL_DESC": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "RESET_VOLS_ON_PERIOD": {
                         "Groups": ["Deal Info"]
                     },
                     "VOLUME": {
