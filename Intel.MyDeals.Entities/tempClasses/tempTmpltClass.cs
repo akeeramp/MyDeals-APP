@@ -23,7 +23,7 @@ namespace Intel.MyDeals.Entities
             ///<summary>
             /// ID: 2
             ///</summary>
-            public const string TENDER = @"TENDER";
+            public const string FLEX = @"FLEX";
             ///<summary>
             /// ID: 6
             ///</summary>
@@ -44,14 +44,14 @@ namespace Intel.MyDeals.Entities
             ///<summary>
             /// All values associated with this lookup
             ///</summary>
-            public static readonly string[] Values = { @"All Deals", @"TENDER", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER" };
+            public static readonly string[] Values = { @"All Deals", @"FLEX", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER" };
 
             ///<summary>
             /// Keyed values associated with the lookup
             ///</summary>
             public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
                 {1, @"All Deals"},
-                {2, @"TENDER"},
+                {2, @"FLEX"},
                 {6, @"KIT"},
                 {3, @"ECAP"},
                 {4, @"PROGRAM"},
