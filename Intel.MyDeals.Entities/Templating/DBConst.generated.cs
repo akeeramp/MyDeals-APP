@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/3/2021 9:31:50 AM
+File Updated: 3/5/2021 5:20:19 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -3165,7 +3165,7 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(
 			new List<OpDataElementSetTypeItem>
 			{
-				new OpDataElementSetTypeItem {Id = 2, OpDeSetType = OpDataElementSetType.FLEX, Alias = "FLEX", Description = "Flex Deal Type", TemplateDealNumber = -6, TrackerDtLetter = "F", Order = 2 },
+				new OpDataElementSetTypeItem {Id = 2, OpDeSetType = OpDataElementSetType.FLEX, Alias = "FLEX", Description = "FLEX Deal Type", TemplateDealNumber = -6, TrackerDtLetter = "F", Order = 2 },
 				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },

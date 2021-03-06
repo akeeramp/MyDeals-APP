@@ -169,6 +169,19 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 19,
+                AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                IsDefaultable = true,
+                DataType = "string",
+                UiType = "BUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -259,19 +272,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-            //    Width = 100,
-            //    IsDefaultable = true,
-            //    UiType = "BUTTONGROUP",
-            //    LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/All_Deals",
-            //    LookupText = "DROP_DOWN",
-            //    LookupValue = "DROP_DOWN"
-            //});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -638,7 +638,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 57,
                 AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
                 Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
                 DataType = "string",
                 Label = "Reset Per Period",
@@ -986,6 +986,35 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
+            items.Add(new UiTemplateContainerItem  
+            {
+                Id = 19,
+                AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                IsDefaultable = true,
+                Label = "Row Type *",
+                Width = 80,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3353,
+                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Label = "Settlement Partner",
+                Width = 160,
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 21,
@@ -1014,6 +1043,7 @@ namespace Intel.MyDeals.DataLibrary
                 HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB",
                 IsRequired = true
             });
+
             items.Add(new UiTemplateContainerItem
             {
                 Id = 3662,
@@ -1056,15 +1086,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
                 IsHidden = true
             });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //	Id = 36,
-            //	AtrbCd = AttributeCodes.TITLE,
-            //	ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-            //	ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-            //	Width = 100,
-            //	Label = "Deal Description"
-            //});
 
             #endregion PRICING TABLE ROW
 
@@ -1583,34 +1604,33 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-
-            //items.Add(new UiTemplateContainerItem  // WIP KIT types
-            //{
-            //    Id = 3486, //TODO: check id
-            //    AtrbCd = AttributeCodes.NORTHBRIDGE_SPLIT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'NORTHBRIDGE_SPLIT')#",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Width = 115,
-            //    Format = "{0:c}",
-            //    Label = "Northbridge Split / PCH"
-            //});
-
-            //items.Add(new UiTemplateContainerItem  // WIP KIT types
-            //{
-            //    Id = 3487, //TODO: check id
-            //    AtrbCd = AttributeCodes.SOUTHBRIDGE_SPLIT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'SOUTHBRIDGE_SPLIT')#",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Width = 115,
-            //    Format = "{0:c}",
-            //    Label = "Southbridge Split"
-            //});
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 19,
+                AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                Width = 80,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'FLEX_ROW_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3353,
+                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 160,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'FLEX_ROW_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
 
             items.Add(new UiTemplateContainerItem  // WIP KIT types
             {
@@ -2109,6 +2129,43 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_LOOKBACK_PERIOD', 'number')#",
                 IsRequired = true
             });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3453,
+                AtrbCd = AttributeCodes.SYS_PRICE_POINT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 160,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3454,
+                AtrbCd = AttributeCodes.CONSUMPTION_SYS_CONFIG,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 160,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_SYS_CONFIG')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_SYS_CONFIG",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3454,
+                AtrbCd = AttributeCodes.SEND_TO_VISTEX,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 80,
+                IsFilterable = true,
+                IsSortable = true,
+                IsDefaultable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SEND_TO_VISTEX')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/SEND_TO_VISTEX",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
 
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -2275,6 +2332,37 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
+                Id = 3350,
+                AtrbCd = AttributeCodes.PRIMED_CUST_NM,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_NM')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3351,
+                AtrbCd = AttributeCodes.PRIMED_CUST_ID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_ID')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem   // We include this so that the subkit tab can filter against it, only appearing if any deals can have subkit or showing only the deals eligible for subkits
+            {
+                Id = 3352,
+                AtrbCd = AttributeCodes.IS_PRIMED_CUST,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Template = "#=gridUtils.uiControlWrapper(data, 'IS_PRIMED_CUST')#",
+                DataType = "object",
+                IsReadOnly = true,
+                IsFilterable = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
                 Id = 18,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -2342,7 +2430,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 57,
                 AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
                 Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
                 DataType = "string",
                 Label = "Reset Per Period",

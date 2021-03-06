@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/3/2021 9:42:40 AM
+File Updated: 3/5/2021 1:31:24 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -3688,7 +3688,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "Label"
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PRIMED_CUST_NM = new MyDealsAttribute()
 		{
@@ -3704,7 +3704,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PROD_INCLDS = new MyDealsAttribute()
 		{
