@@ -1,7 +1,7 @@
 ﻿<div class="opUiContainer {{opClass}}" style="{{opStyle}}" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="opUiLabel buttonGroupLabel" style="width:100%" ng-class="{isRequired: opIsRequired}">
         <span>
-            {{opLabel}}
+            {{opLabel}} 
             <span class="geo-desc" ng-show="hasMultipleGeos()">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
         </span>
         <span style="float:right" ng-if="opExtra">
@@ -15,35 +15,35 @@
             <div class="buttongroup">
 
                 <label class="buttongroupControl">
-                    <span name="{{item[opLookupValue]}}"
+                    <button name="{{item[opLookupValue]}}"
                           class="buttongroup-btn buttongroup-btn-first"
-                          ng-disabled="opIsReadOnly"
+                          ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$first"
                           ng-click="setValue(item[opLookupText])"
-                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty,'flowBtn inactive disabled':isUIDisable(item[opLookupValue],opLabel)}">
                         {{item[opLookupText]}}
-                    </span>
+                    </button>
 
-                    <span name="{{item[opLookupValue]}}"
+                    <button name="{{item[opLookupValue]}}"
                           class="buttongroup-btn"
-                          ng-disabled="opIsReadOnly"
+                          ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$middle"
                           ng-click="setValue(item[opLookupText])"
-                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty,'flowBtn inactive disabled':isUIDisable(item[opLookupValue],opLabel)}">
                         {{item[opLookupText]}}
-                    </span>
+                    </button>
 
-                    <span name="{{item[opLookupValue]}}"
+                    <button name="{{item[opLookupValue]}}"
                           class="buttongroup-btn  buttongroup-btn-last"
-                          ng-disabled="opIsReadOnly"
+                          ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$last"
                           ng-click="setValue(item[opLookupText])"
-                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty,'flowBtn inactive disabled':isUIDisable(item[opLookupValue],opLabel)}">
                         {{item[opLookupText]}}
                         <span class="button-group-tooltip" ng-if="item[opLookupText]=='All' && opLabel=='Media'">
                             (includes NA)   <!--note: this is as band-aid as it gets - if we rename "Media" or "All" OR if we move "All" out of the last position, we will no longer see this tip-->
                         </span>
-                    </span>
+                    </button>
                 </label>
 
             </div>
