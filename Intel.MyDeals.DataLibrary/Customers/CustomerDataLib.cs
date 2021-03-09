@@ -106,6 +106,7 @@ namespace Intel.MyDeals.DataLibrary
                     //US860853
                     int IDX_PRC_GRP_CD = DB.GetReaderOrdinal(rdr, "PRC_GRP_CD");
                     //US860853 END
+                    int IDX_VISTEX_CUST_FLAG = DB.GetReaderOrdinal(rdr, "VISTEX_CUST_FLAG");
                     while (rdr.Read())
                     {
                         retCustInfo.Add(new MyCustomersInformation
@@ -126,7 +127,8 @@ namespace Intel.MyDeals.DataLibrary
                             DFLT_TNDR_AR_SETL_LVL = (IDX_DFLT_TNDR_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_TNDR_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_TNDR_AR_SETL_LVL),
                             DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
                             HOST_GEO = (IDX_HOST_GEO < 0 || rdr.IsDBNull(IDX_HOST_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOST_GEO),
-                            PRC_GRP_CD = (IDX_PRC_GRP_CD < 0 || rdr.IsDBNull(IDX_PRC_GRP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_GRP_CD)
+                            PRC_GRP_CD = (IDX_PRC_GRP_CD < 0 || rdr.IsDBNull(IDX_PRC_GRP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_GRP_CD),
+                            VISTEX_CUST_FLAG = (IDX_VISTEX_CUST_FLAG < 0 || rdr.IsDBNull(IDX_VISTEX_CUST_FLAG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_VISTEX_CUST_FLAG)
                         });
                     } // while
 

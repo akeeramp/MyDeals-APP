@@ -62,6 +62,7 @@
         $scope.showMCTag = false;
         // custom Contract Titles
         $scope.isTenderContract = isTender;
+        $scope.isVistex = false;
         $scope.isVistexHybrid = 0;
         $scope.isPerformanceDisplayUser = window.isTester || window.isDeveloper;
 
@@ -1689,13 +1690,18 @@
             }
 
             $scope.isVistexHybrid = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined ? $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT : "0";
-
+            if (contractData != null
+                && contractData.data[0].Customer.VISTEX_CUST_FLAG != null && contractData.data[0].Customer.VISTEX_CUST_FLAG != undefined
+                && contractData.data[0].Customer.VISTEX_CUST_FLAG != '') {
+                $scope.isVistex = contractData.data[0].Customer.VISTEX_CUST_FLAG;
+            }
             var autofillData = {
                 'ISTENDER': $scope.isTenderContract,
                 'isVistexHybrid': $scope.isVistexHybrid,
                 'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
                 'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
-                'DEFAULT': getTenderBasedDefaults()
+                'DEFAULT': getTenderBasedDefaults(),
+                'ISVISTEX': $scope.isVistex
             }
 
             var autofillModal = $uibModal.open({
