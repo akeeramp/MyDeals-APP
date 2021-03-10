@@ -1626,7 +1626,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'FLEX_ROW_TYPE')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PARTNER')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
