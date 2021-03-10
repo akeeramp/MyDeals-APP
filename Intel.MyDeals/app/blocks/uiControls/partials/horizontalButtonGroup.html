@@ -16,7 +16,7 @@
 
                 <label class="buttongroupControl">
                     <button name="{{item[opLookupValue]}}"
-                          class="buttongroup-btn buttongroup-btn-first"
+                          class="buttongroup-btn buttongroup-btn-first "
                           ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$first"
                           ng-click="setValue(item[opLookupText])"
@@ -25,7 +25,7 @@
                     </button>
 
                     <button name="{{item[opLookupValue]}}"
-                          class="buttongroup-btn"
+                          class="buttongroup-btn "
                           ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$middle"
                           ng-click="setValue(item[opLookupText])"
@@ -34,7 +34,7 @@
                     </button>
 
                     <button name="{{item[opLookupValue]}}"
-                          class="buttongroup-btn  buttongroup-btn-last"
+                          class="buttongroup-btn  buttongroup-btn-last "
                           ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
                           ng-if="$last"
                           ng-click="setValue(item[opLookupText])"
@@ -54,3 +54,4 @@
     <div class="clearboth"></div>
 
 </div>
+
