@@ -121,12 +121,14 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<BasicDropdown> GetFilteredRebateTypes(bool isTender, string dealtypeCd)
         {
             return SafeExecutor(() =>
-                {
-                    var dropdowns = _dropdownLib.GetDropdowns(AttributeCodes.REBATE_TYPE, dealtypeCd);
-                    return isTender
-                    ? dropdowns.Where(d => d.DROP_DOWN.ToUpper() == "TENDER")
-                    : dropdowns.Where(d => d.DROP_DOWN.ToUpper() != "TENDER");
-                }
+            {
+                var dropdowns = _dropdownLib.GetDropdowns(AttributeCodes.REBATE_TYPE, dealtypeCd);
+                return isTender
+                ? dropdowns.Where(d => d.DROP_DOWN.ToUpper() == "TENDER")
+                : (dealtypeCd == "ECAP") || (dealtypeCd == "KIT")
+                    ? dropdowns.Where(d => d.DROP_DOWN.ToUpper() != "TENDER")
+                    : dropdowns.Where(d => d.DROP_DOWN.ToUpper() != "NONE");
+            }
                 , $"Unable to get Dropdowns for {AttributeCodes.REBATE_TYPE} and {dealtypeCd}"
             );
         }
