@@ -58,13 +58,28 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         //enable/disable UI control
         scope.isUIDisable = function (name, label) {
-            var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
-            //for now the change is only for hybrid Voltier
-            if (hybCond == '1' && label.trim() == 'Number of Tiers') {
-                if (name == 1)
+            if (label.trim() == 'Number of Tiers') {
+                var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
+                //for now the change is only for hybrid Voltier
+                if (hybCond == '1' && label.trim() == 'Number of Tiers') {
+                    if (name == 1)
+                        return scope.opIsReadOnly;
+                    else
+                        return true;
+                }
+                else {
                     return scope.opIsReadOnly;
-                else
+                }
+            }
+            else if (label.trim() == 'Payout Based On') {
+                var isVistex = scope.$parent.$parent.vm.autofillData.ISVISTEX;
+                var dealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
+                if (isVistex && name == 'Billings' && dealType == 'KIT') {
                     return true;
+                }
+                else {
+                    return scope.opIsReadOnly;
+                }
             }
             else {
                 return scope.opIsReadOnly;
