@@ -3001,5 +3001,23 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
+
+        public static void ValidateVistexKITPayoutBasedOn(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayoutValue = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+            var payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON).ToUpper();
+            var custSID = r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
+
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID.ToString() == custSID);
+
+            if (payoutBasedOn == "BILLINGS" && cust.VISTEX_CUST_FLAG)
+            {
+                dePayoutValue.AddMessage("Billings based KIT cannot be created for Vistex Customer");
+            }
+        }
     }
 }

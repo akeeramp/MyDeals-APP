@@ -953,6 +953,15 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Add Timeline Comments for New Items",
                     ActionRule = MyDcActions.NewObjTimeLineComment,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                },
+
+                new MyOpRule
+                {
+                    Title = "Billings based KIT cannot be created for Vistex Customer",
+                    ActionRule = MyDcActions.ValidateVistexKITPayoutBasedOn,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
                 }
 
 
