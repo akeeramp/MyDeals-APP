@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/5/2021 1:31:24 PM
+File Updated: 3/9/2021 9:48:49 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -637,8 +637,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute CONSUMPTION_LOOKBACK_PERIOD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CONSUMPTION_LOOKBACK_PERIOD",
-			ATRB_DESC = "Consumption Lookback Period",
-			ATRB_LBL = "Consumption Lookback Period (Months)",
+			ATRB_DESC = "Billing Rolling Lookback Period",
+			ATRB_LBL = "Billing Rolling Lookback Period (Months)",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3461,
 			DATA_TYPE_CD = "INT",
@@ -1412,6 +1412,22 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_SETTLEMENT_PARTNER = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_SETTLEMENT_PARTNER",
+			ATRB_DESC = "Vistex Customer Default Settlement Partner",
+			ATRB_LBL = "Vistex Customer Default Settlement Partner",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2030,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
