@@ -58,10 +58,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         //enable/disable UI control
         scope.isUIDisable = function (name, label) {
-            if (label.trim() == 'Number of Tiers') {
+            var dealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
+            var rowType = dealType == 'FLEX' ? scope.$parent.$parent.vm.autofillData.DEFAULT.FLEX_ROW_TYPE.value : true;
+            if (label.trim() == 'Number of Tiers' ) {
                 var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
-                //for now the change is only for hybrid Voltier
-                if (hybCond == '1' && label.trim() == 'Number of Tiers') {
+                //for now the change is only for hybrid Voltier 
+                if ((hybCond == '1' || rowType == 'Draining') && label.trim() == 'Number of Tiers') {
                     if (name == 1)
                         return scope.opIsReadOnly;
                     else
@@ -73,8 +75,10 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
             else if (label.trim() == 'Payout Based On') {
                 var isVistex = scope.$parent.$parent.vm.autofillData.ISVISTEX;
-                var dealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
                 if (isVistex && name == 'Billings' && dealType == 'KIT') {
+                    return true;
+                }
+                else if (dealType == 'FLEX' && name == 'Billings') {
                     return true;
                 }
                 else {
@@ -202,6 +206,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
 
             scope.setValue = function (val) {
+                var label = scope.$parent.$parent.vm.autofillData.DEFAULT.NUM_OF_TIERS.label;
                 if (!!scope.opExtra) {
                     //if extra, scope.value should be an array unless blended
                     if (scope.blend.blended) scope.value = convertFromBlend(scope.value); //convert to unblended format for calculations
@@ -219,6 +224,11 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
                 } else {
                     scope.value = val;
+                }
+
+                if (val == 'Draining' || val == 'Accrual') {
+                    rowType = val;
+                    scope.isUIDisable(val == 'Draining' ? 1 : 10, label);
                 }
             }
 
