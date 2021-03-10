@@ -206,7 +206,10 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
 
             scope.setValue = function (val) {
-                var label = scope.$parent.$parent.vm.autofillData.DEFAULT.NUM_OF_TIERS.label;
+                if (scope.$parent.$parent.vm.autofillData.DEALTYPE == 'FLEX') {
+                    var label = scope.$parent.$parent.vm.autofillData.DEFAULT.NUM_OF_TIERS.label;
+                }
+                
                 if (!!scope.opExtra) {
                     //if extra, scope.value should be an array unless blended
                     if (scope.blend.blended) scope.value = convertFromBlend(scope.value); //convert to unblended format for calculations
@@ -225,10 +228,11 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 } else {
                     scope.value = val;
                 }
-
-                if (val == 'Draining' || val == 'Accrual') {
-                    rowType = val;
-                    scope.isUIDisable(val == 'Draining' ? 1 : 10, label);
+                if (scope.$parent.$parent.vm.autofillData.DEALTYPE == 'FLEX') {
+                    if (val == 'Draining' || val == 'Accrual') {
+                        rowType = val;
+                        scope.isUIDisable(val == 'Draining' ? 1 : 10, label);
+                    }
                 }
             }
 
