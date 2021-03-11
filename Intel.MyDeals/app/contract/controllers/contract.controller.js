@@ -2665,6 +2665,9 @@
 
                 // Pricing Table Row
                 if (curPricingTableData.length > 0 && sData != undefined) {
+                    //validate settlement partner for PTE
+                    sData = $scope.validateSettlementPartner(sData);
+
                     // Only save if a product has been filled out
                     //sData = sData.filter(function (obj) {
                     //    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
@@ -2836,6 +2839,11 @@
                     var validated_DC_Id = [];
 
                     for (var s = 0; s < sData.length; s++) {
+                        //Adding settlment partner error into err object in PTE
+                        if (sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                             // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
@@ -3028,9 +3036,17 @@
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
+                    //validate settlement parter for DE
+                    gData = $scope.validateSettlementPartner(gData);
+
                     var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                     var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
                     for (var i = 0; i < gData.length; i++) {
+                        // Adding settlment partner error into err object in DE
+                        if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
 
@@ -5642,6 +5658,81 @@
                 logger.stickyError("Could not get deals.", result, result.statusText);
                 $scope.setBusy("", "");
             });
+        }
+        //validate settlement partner
+        $scope.validateSettlementPartner = function (data) {
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
+            //check if settlement is cash and pgm type is backend
+            var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+            if (cashObj && cashObj.length > 0) {
+                if (hybCond == '1') {
+                    retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
+                    if (!retCond) {
+                        angular.forEach(data, (item) => {
+                            $scope.setSettlementPartner(item, '1');
+                        });
+                    }
+                    else {
+                        $scope.clearSettlementPartner(data);
+                    }
+                }
+                else {
+                    retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
+                    if (!retCond) {
+                        angular.forEach(data, (item) => {
+                            if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '')) {
+                                $scope.setSettlementPartner(item, '0');
+                            }
+                            else {
+                                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash') {
+                                        item.SETTLEMENT_PARTNER = null;
+                                    }
+                                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $scope.clearSettlementPartner(data);
+                    }
+
+                }
+            }
+            else {
+                $scope.clearSettlementPartner(data);
+            }
+            return data;
+        }
+        $scope.clearSettlementPartner = function (data) {
+            angular.forEach(data, (item) => {
+                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash') {
+                        item.SETTLEMENT_PARTNER = null;
+                    }
+                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                }
+
+            });
+        }
+        $scope.setSettlementPartner = function (item, hybCond) {
+            if (!item._behaviors) item._behaviors = {};
+            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+            if (!item._behaviors.isError) item._behaviors.isError = {};
+            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+            item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
+            item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+            if (hybCond == '1') {
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+            }
+            else {
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For non-hybrid deal vendors must not be empty if settlement level is cash";
+            }
+
         }
         
     }
