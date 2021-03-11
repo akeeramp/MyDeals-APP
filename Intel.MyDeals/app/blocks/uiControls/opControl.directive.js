@@ -78,7 +78,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 if (isVistex && name == 'Billings' && dealType == 'KIT') {
                     return true;
                 }
-                else if (dealType == 'FLEX' && name == 'Billings') {
+                else if (dealType == 'FLEX' && name == 'Consumption') {
                     return true;
                 }
                 else {
