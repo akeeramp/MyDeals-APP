@@ -211,6 +211,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="End customer Required if Tender Deal",
                     ActionRule = MyDcActions.RequiredEndCustomer,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
 

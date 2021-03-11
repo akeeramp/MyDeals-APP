@@ -791,7 +791,6 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
-            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             if (deRebateTypeValue == "TENDER")
             {
