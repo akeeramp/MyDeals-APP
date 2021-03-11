@@ -777,6 +777,19 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3353,
+                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Label = "Settlement Partner",
+                Width = 160,
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3573,
                 AtrbCd = AttributeCodes.REBATE_OA_MAX_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -1032,19 +1045,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 3353,
-                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Label = "Settlement Partner",
-                Width = 160,
-                DataType = "string",
-                UiType = "EMBEDDEDMULTISELECT",
-                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
