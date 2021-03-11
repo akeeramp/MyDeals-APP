@@ -320,7 +320,7 @@
                 },
                 {
                     field: "DFLT_LOOKBACK_PERD",
-                    headerTemplate: 'Consumption Lookback Period (Months) <span title="Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
+                    headerTemplate: 'Billing Rolling Lookback Period (Months) <span title="Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
                     //title: "Consumption Lookback Period (Months)",
                     width: "200px",
                     filterable: { multi: true, search: true },
