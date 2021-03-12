@@ -2697,7 +2697,7 @@
                     var dictGeoCombined = {};
                     var dictPeriodProfile = {};
                     var dictArSettlement = {};
-                    var dictSettlementPartner = {};
+                    //var dictSettlementPartner = {};
                     var dictProgramPayment = {};
                     var dictOverarchingVolume = {};
                     var dictOverarchingDollar = {};
@@ -2735,7 +2735,7 @@
                                     }
                                     dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                     dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
-                                    dictSettlementPartner[sData[s]["SETTLEMENT_PARTNER"]] = s;
+                                    //dictSettlementPartner[sData[s]["SETTLEMENT_PARTNER"]] = s;
 
                                     // The next two values if left blank can come in as either null or "", make them one pattern.
                                     if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
@@ -2794,12 +2794,12 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                                 }
-                                if (Object.keys(dictSettlementPartner).length > 1) {
-                                    el._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                                    el._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                                }
+                                //if (Object.keys(dictSettlementPartner).length > 1) {
+                                //    el._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+                                //    el._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                                //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                                //}
                                 if (Object.keys(dictProgramPayment).length > 1) {
                                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
                                     el._behaviors.validMsg["PROGRAM_PAYMENT"] = "All Program Payments must be same within a Hybrid Pricing Strategy.";
@@ -3040,7 +3040,7 @@
                     gData = $scope.validateSettlementPartner(gData);
 
                     var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
-                    var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
+                    //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
                     for (var i = 0; i < gData.length; i++) {
                         // Adding settlment partner error into err object in DE
                         if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
@@ -3172,12 +3172,12 @@
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
 
-                        if (hasInvalidSettlementPartnerForHybirdDeals) {
-                            gData[i]._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                            gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                        }
+                        //if (hasInvalidSettlementPartnerForHybirdDeals) {
+                        //    gData[i]._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+                        //    gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                        //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                        //    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        //}
 
                         // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
                         // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
@@ -5686,7 +5686,7 @@
                             }
                             else {
                                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash') {
+                                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                         item.SETTLEMENT_PARTNER = null;
                                     }
                                     delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
@@ -5710,7 +5710,7 @@
         $scope.clearSettlementPartner = function (data) {
             angular.forEach(data, (item) => {
                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash') {
+                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                         item.SETTLEMENT_PARTNER = null;
                     }
                     delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
