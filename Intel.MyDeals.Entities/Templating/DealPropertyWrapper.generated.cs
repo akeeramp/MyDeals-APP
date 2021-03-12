@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/9/2021 9:48:49 PM
+File Updated: 3/11/2021 6:08:37 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -1426,8 +1426,8 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2030,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
+			DIM_CD = "CUST",
+			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
