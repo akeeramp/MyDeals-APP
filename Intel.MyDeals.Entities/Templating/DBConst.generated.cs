@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/9/2021 9:48:26 PM
+File Updated: 3/11/2021 6:08:20 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -813,8 +813,8 @@ namespace Intel.MyDeals.Entities {
 		public const string DFLT_PERD_PRFL = "DFLT_PERD_PRFL";
 
 		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
 		/// ATRB_SID: 2030
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
