@@ -23,6 +23,7 @@
         vm.PeriodProfile = [];
         vm.ARSettlementLevel = [];
         vm.TenderARSettlementLevel = [];
+        vm.SettlementPartner = [];
 
         vm.InitiateDropDowns = function () {
             dropdownsService.getDropdown('GetDropdowns/PERIOD_PROFILE').then(function (response) {
@@ -36,6 +37,12 @@
                 vm.TenderARSettlementLevel = response.data.filter(x => x.ACTV_IND == true);
             }, function (response) {
                 logger.error("Unable to get Settlement Levels.", response, response.statusText);
+            });
+
+            dropdownsService.getDropdown('GetDropdowns/SETTLEMENT_PARTNER').then(function (response) {
+                vm.SettlementPartner = response.data;
+            }, function (response) {
+                logger.error("Unable to get Settlement Partner list.", response, response.statusText);
             });
         }
 
@@ -69,7 +76,8 @@
                         DFLT_TNDR_AR_SETL_LVL: { editable: true, nullable: true },
                         DFLT_LOOKBACK_PERD: { editable: true, nullable: true },
                         DFLT_CUST_RPT_GEO: { editable: true, nullable: true },
-                        CUST_CIM_ID: { editable: true, nullable: true }
+                        CUST_CIM_ID: { editable: true, nullable: true },
+                        DFLT_SETTLEMENT_PARTNER: { editable: true }
                     }
                 }
             }
@@ -86,6 +94,8 @@
                 validationMessages.push("Please select a valid <b>Non-Tenders Settlement Level</b>");
             if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0)
                 validationMessages.push("Please select a valid <b>Tenders Settlement Level</b>");
+            if (model.DFLT_SETTLEMENT_PARTNER != null && model.DFLT_SETTLEMENT_PARTNER != '' && vm.Partner.filter(x => x.DROP_DOWN === model.DFLT_SETTLEMENT_PARTNER).length == 0)
+                validationMessages.push("Please select a valid <b>Settlement Partner</b>")
 
             if (isShowPopup && validationMessages.length > 0)
                 kendo.alert(validationMessages.join("</br>"));
@@ -147,6 +157,25 @@
             valuePrimitive: true
         };
 
+        vm.SettlementPartnerOptions = {
+            placeholder: "Select default settlement partner",
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        e.success(vm.Partner);
+                    }
+                }
+            },
+
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataTextField: "DROP_DOWN",
+            dataValueField: "DROP_DOWN",
+            valuePrimitive: true
+        };
+
         vm.PeriodProfileDropDownEditor = function (container, options) {
             var editor = $('<select kendo-combo-box k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
@@ -163,6 +192,16 @@
         vm.CustomerReportedGeoDropDownEditor = function (container, options) {
             vm.SelectedConsumptionReportedGeos = options.model.DFLT_CUST_RPT_GEO;
             var editor = $('<input id="txtEditedCustomerReportedGeo" class="k-input k-textbox" ng-readonly="true" type="text" name="' + options.field + '" style= "width:100%" title="' + vm.SelectedConsumptionReportedGeos + '" ng-click="vm.lookupEditorCustPlatformModal(dataItem)">').appendTo(container);
+        }
+
+        vm.SettlementPartDropDownEditor = function (container, options) {
+            vm.Partner = [];
+            vm.Partner = vm.SettlementPartner.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID);
+            if (vm.Partner.length == 0) {
+                vm.SettlementPartnerOptions.placeholder = 'No Settlement Partners are mapped';   
+            }
+            
+            var editor = $('<select kendo-combo-box k-options="vm.SettlementPartnerOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.CustPlatformModalReportedGeoOptions = {
@@ -330,8 +369,15 @@
                 {
                     field: "CUST_CIM_ID",
                     title: "CIM ID",
-                    width: "220px",
+                    width: "200px",
                     filterable: { multi: true, search: true }
+                },
+                {
+                    field: "DFLT_SETTLEMENT_PARTNER",
+                    title: "Default Settlement Partner",
+                    width: "250px",
+                    filterable: { multi: true, search: true },
+                    editor: vm.SettlementPartDropDownEditor
                 }
             ]
         }
