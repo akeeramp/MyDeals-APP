@@ -553,9 +553,45 @@ namespace Intel.MyDeals.BusinessRules
             r.Dc.AddTimelineComment($"Created { deTypeDesc }: { title }"); //r.Dc.AddTimelineComment($"Created { deTypeDesc } ({ r.Dc.DcID }): { title }"); // But deal # shows up as -1000 ID upon creation
         }
 
+        public static void ShowConsumptionFields(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> VistexConsumptionAtrbs = new List<string> {
+                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                AttributeCodes.SYS_PRICE_POINT
+            };
+
+            List<string> NonVistexConsumptionAtrbs = new List<string> {
+                AttributeCodes.CONSUMPTION_REASON,
+                AttributeCodes.CONSUMPTION_REASON_CMNT
+            };
+
+            int custId;
+            bool deCustMbrSidValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            if (cust.VISTEX_CUST_FLAG) // Is a Vistex Customer, LOCK OUT NON-Vistex Consumption fields
+            {
+                foreach (OpDataElement de in r.Dc.DataElements.Where(d => NonVistexConsumptionAtrbs.Contains(d.AtrbCd)))
+                {
+                    de.SetReadOnly();
+                }
+            }
+            else // Is a non Vistex Customer, LOCK OUT Vistex Consumption fields
+            {
+                foreach (OpDataElement de in r.Dc.DataElements.Where(d => VistexConsumptionAtrbs.Contains(d.AtrbCd)))
+                {
+                    de.SetReadOnly();
+                }
+            }
+            int j = 1;
+        }
+
         public static void SetCustDefaultValues(params object[] args)
         {
-
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
@@ -563,7 +599,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!(dePayoutBasedOn.HasValueChanged && dePayoutBasedOn.HasValue("Consumption"))) return;
 
             int custId;
-            bool deEcapTypeValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            bool deCustMbrSidValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
 

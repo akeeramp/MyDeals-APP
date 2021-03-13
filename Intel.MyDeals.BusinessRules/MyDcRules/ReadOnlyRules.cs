@@ -442,6 +442,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Consumption Fields Read Only based on Vistex Customer or not",
+                    ActionRule = MyDcActions.ShowConsumptionFields,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all
                     Title="Readonly if Backend Deal",
                     ActionRule = MyDcActions.ExecuteActions,
