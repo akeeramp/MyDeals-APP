@@ -216,7 +216,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsDefaultable = true,
                 DataType = "string",
                 UiType = "BUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/VOL_TIER",  //change to appropriate api
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/FLEX",  
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
