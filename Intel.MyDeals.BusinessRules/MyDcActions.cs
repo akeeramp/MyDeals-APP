@@ -560,7 +560,10 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> VistexConsumptionAtrbs = new List<string> {
                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
-                AttributeCodes.SYS_PRICE_POINT
+                AttributeCodes.SYS_PRICE_POINT,
+                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                AttributeCodes.CONSUMPTION_SYS_CONFIG
             };
 
             List<string> NonVistexConsumptionAtrbs = new List<string> {
