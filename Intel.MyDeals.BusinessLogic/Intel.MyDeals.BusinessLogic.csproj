@@ -102,6 +102,7 @@
     <Compile Include="CostTest\CostTestDetailExtensionMethods.cs" />
     <Compile Include="CostTest\CostTestLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
+    <Compile Include="CustomerVendors\CustomerVendorsLib.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />
     <Compile Include="DataFix\DataFixLib.cs" />

@@ -202,6 +202,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/workflowStage/workflowStages.service.js"
                 , "~/app/admin/meetComp/admin.meetComp.controller.js"
                 , "~/app/admin/meetComp/meetComp.service.js"
+                , "~/app/admin/CustomerVendors/admin.customerVendors.controller.js"
+                , "~/app/admin/CustomerVendors/customerVendors.service.js"
                 , "~/app/advancedSearch/advancedSearch.module.js"
                 , "~/app/advancedSearch/advancedSearch.route.js"
                 , "~/app/advancedSearch/advancedSearch.controller.js"
