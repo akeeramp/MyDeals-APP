@@ -414,6 +414,15 @@
                     , url: 'pushDealstoVistex'
                     , controller: 'PushDealstoVistexcontroller as vm'
                 }
+            },
+            {
+                state: 'admin.CustomerVendors',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/CustomerVendors/customerVendors.html'
+                    , url: 'CustomerVendors'
+                    , controller: 'CustomerVendorsController as vm'
+                }
             }
 
         ];

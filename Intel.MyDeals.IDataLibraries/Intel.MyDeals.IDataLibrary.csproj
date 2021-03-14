@@ -54,6 +54,7 @@
     <Compile Include="Constants Lookups\IConstantLookupDataLib.cs" />
     <Compile Include="CostTest\ICostTestDataLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
+    <Compile Include="CustomerVendors\ICustomerVendorsDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="DataFix\IDataFixDataLib.cs" />
