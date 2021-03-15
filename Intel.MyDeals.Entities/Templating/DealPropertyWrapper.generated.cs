@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/11/2021 6:08:37 PM
+File Updated: 3/15/2021 2:34:03 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -1657,22 +1657,6 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute END_CUSTOMER_COUNTRY = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "END_CUSTOMER_COUNTRY",
-			ATRB_DESC = "End Customer/Retail Country",
-			ATRB_LBL = "End Customer Country",
-			ATRB_MAX_LEN = 70,
-			ATRB_SID = 3349,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_CUSTOMER_RETAIL = new MyDealsAttribute()
 		{
@@ -3689,6 +3673,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute PRIMED_CUST_CNTRY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRIMED_CUST_CNTRY",
+			ATRB_DESC = "Primed Customer Country",
+			ATRB_LBL = "End Customer Country",
+			ATRB_MAX_LEN = 70,
+			ATRB_SID = 3349,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PRIMED_CUST_ID = new MyDealsAttribute()
 		{
