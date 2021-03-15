@@ -1160,7 +1160,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var shenaniganObj = null;
 
         // VOL-TIER
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
@@ -1871,7 +1871,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["TIER_NBR"] = pivotDim;
                                 data[r]["NUM_OF_TIERS"] = numPivotRows;
 
-                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                                     // Default to 0
                                     data[r]["RATE"] = 0;
 
