@@ -46,6 +46,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IMyDealsManualDataLib, MyDealsManualDataLib>();
             registerService.RegisterType<IReportingDataLib, ReportingDataLib>();
             registerService.RegisterType<IDataFixDataLib, DataFixDataLib>();
+            registerService.RegisterType<ICustomerVendorsDataLib, CustomerVendorsDataLib>();
         }
     }
 }
