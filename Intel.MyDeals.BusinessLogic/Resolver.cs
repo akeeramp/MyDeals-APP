@@ -52,6 +52,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IReportingLib, ReportingLib>();
             registerService.RegisterType<IDsaEngineLib, DsaEngineLib>();
             registerService.RegisterType<IDataFixLib, DataFixLib>();
+            registerService.RegisterType<ICustomerVendorsLib, CustomerVendorsLib>();
         }
     }
 }

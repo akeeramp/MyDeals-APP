@@ -66,6 +66,7 @@
     <Compile Include="Contracts\IContractsLib.cs" />
     <Compile Include="CostTest\ICostTestLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarLib.cs" />
+    <Compile Include="CustomerVendors\ICustomerVendorsLib.cs" />
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="DataFix\IDataFixLib.cs" />

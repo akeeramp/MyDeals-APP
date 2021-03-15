@@ -461,6 +461,16 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "batchJobTiming";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//To get Customer Vendor Mapped data 
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VNDR_CUST_MAP]");
+	ds.Tables[0].TableName = "CustomerVendors";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get Vendors Data
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VNDR_DATA]");
+	ds.Tables[0].TableName = "VendorsInfo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	
 	PopIndent();
 	WriteLine("}"); // End NameSpace

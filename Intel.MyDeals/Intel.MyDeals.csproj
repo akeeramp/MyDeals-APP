@@ -249,6 +249,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\CustomerVendorsController.cs" />
     <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
@@ -341,6 +342,8 @@
     <Content Include="app\admin\constants\constants.html" />
     <Content Include="app\admin\cache\cache.service.js" />
     <Content Include="app\admin\constants\constants.service.js" />
+    <Content Include="app\admin\CustomerVendors\customerVendors.html" />
+    <Content Include="app\admin\CustomerVendors\customerVendors.service.js" />
     <Content Include="app\admin\customer\admin.customer.controller.js" />
     <Content Include="app\admin\customer\customer.html" />
     <Content Include="app\admin\customer\customer.service.js" />
@@ -1788,6 +1791,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="app\admin\mydealsmanual\MyDealsManual.controller.js" />
+    <Content Include="app\admin\CustomerVendors\admin.customerVendors.controller.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
