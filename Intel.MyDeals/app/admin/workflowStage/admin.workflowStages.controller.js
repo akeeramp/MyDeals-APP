@@ -15,7 +15,10 @@
         var vm = this;
         var WorkFlowStageAttribute = '';
         vm.selectedItem = null;
-
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Master DropDown List populate method
         var loadDDLValues = function (e) {
             workflowStagesService.GetWFStgDDLValues()

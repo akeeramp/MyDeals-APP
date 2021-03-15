@@ -11,6 +11,11 @@
 
     function VistexTestAPIController($scope, logger, $timeout, dsaService) {
         var vm = this;
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.selectedApiID = 1;
         vm.apiList = [];
         vm.apiSelectedCD = "";

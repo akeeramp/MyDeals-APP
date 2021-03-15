@@ -11,7 +11,11 @@
 
     function CustomerController(customerService, $scope, logger, gridConstants) {
         var vm = this;
-
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!isCustomerAdmin && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;

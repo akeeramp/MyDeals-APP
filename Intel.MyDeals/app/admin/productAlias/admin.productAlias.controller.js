@@ -11,6 +11,10 @@
 
     function ProductAliasController(productAliasService, $scope, logger, confirmationModal, gridConstants, $linq) {
         var vm = this;
+           //Added By Bhuvaneswari for US932213
+        if (window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.validationMessage = "";
 
         vm.dataSource = new kendo.data.DataSource({

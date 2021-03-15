@@ -11,7 +11,11 @@
 
     function batchTimingController($uibModal, batchTimingService, $scope, logger, gridConstants) {
         var vm = this;
-
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;

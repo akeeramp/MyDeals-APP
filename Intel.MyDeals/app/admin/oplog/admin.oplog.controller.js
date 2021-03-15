@@ -16,6 +16,11 @@
 
         // Declare public variables, function at top followed by private functions
         var vm = this;
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.title = "Opaque Log Watcher";
         vm.opLogData = [];
         vm.logDetails = '';
