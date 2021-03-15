@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<DropDowns> GetOpDataElements();
 
-        IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
+        IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, int custId = 0);
 
         IEnumerable<BasicDropdown> GetDropdownsWithInactives(string atrbCd);
 

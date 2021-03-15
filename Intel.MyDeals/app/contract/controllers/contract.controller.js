@@ -20,6 +20,16 @@
             $scope.COST_TEST_RESULT = "";
         }
 
+        if (contractData != null) {
+            objsetService.getVendorDropDown("SETTLEMENT_PARTNER").then(
+                function (results) {
+                    $scope.getVendorDropDownResult = results;
+                },
+                function (response) {
+                }
+            );
+        }
+
         $scope.selectedTAB = 'PTR'; // Tender Deals
         $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
@@ -5696,7 +5706,12 @@
             //check if settlement is cash and pgm type is backend
             var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
             if (cashObj && cashObj.length > 0) {
-                if (hybCond == '1') {
+                if ($scope.getVendorDropDownResult.data.length == 0) {
+                    angular.forEach(data, (item) => {
+                        $scope.setSettlementPartner(item, '2');
+                    });
+                }
+                else if (hybCond == '1') {
                     retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                     if (!retCond) {
                         angular.forEach(data, (item) => {
@@ -5747,24 +5762,44 @@
                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                 }
-
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                    if (item._behaviors && item._behaviors.isReadOnly)
+                    delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+                }
             });
         }
-        $scope.setSettlementPartner = function (item, hybCond) {
+        $scope.setSettlementPartner = function (item, Cond) {
             if (!item._behaviors) item._behaviors = {};
             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
             if (!item._behaviors.isError) item._behaviors.isError = {};
             if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
             item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-            if (hybCond == '1') {
-                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy";
-            }
-            else {
-                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required if settlement level is cash";
+            if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+            if (item.HAS_TRACKER == 0) {
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash' && item.HAS_TRACKER === "0") {
+                    item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                }
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                    delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+                }
+                if ((item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
+                    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner mandatory for Cash Settlement level.";
+                }
+                else {
+                    if (Cond == '1') {
+                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+                    }
+                    else if (Cond == '2') {
+                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Please work with your RA to get Vendor data mapped to this customer.";
+                    }
+                    else {
+                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For non-hybrid deal vendors must not be empty if settlement level is cash";
+                    }
+                }
             }
 
         }
-        
+
     }
 })();

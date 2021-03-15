@@ -39,7 +39,16 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetDropdowns/{atrbCd}")]
         public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
         {
-            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd)
+            string authenticatedName = System.Threading.Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
+            int custId;
+            if (ContractsController._getCustomerId == null || !ContractsController._getCustomerId.Any() || !ContractsController._getCustomerId.ContainsKey(authenticatedName))
+            {
+                custId = 0;
+            }
+            else
+                custId = ContractsController._getCustomerId[authenticatedName];
+
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd, custId)
                 , $"Unable to get Dropdowns for {atrbCd}"
             );
         }
