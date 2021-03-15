@@ -2078,10 +2078,11 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
             string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+            if (rebateType == "TENDER" && payoutBasedOn == "Consumption" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
             {
                 deProject.IsRequired = true;
             }
