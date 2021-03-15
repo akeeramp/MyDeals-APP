@@ -607,6 +607,20 @@ namespace Intel.MyDeals.DataLibrary
 
         #endregion Product Vertical
 
+        #region Settlement_Partner
+        public static List<CustomerVendors> GetCustomerVendors()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getCustomerVendors ?? (_getCustomerVendors = new CustomerVendorsDataLib().GetCustomerVendors());
+            }
+        }
+
+        private static List<CustomerVendors> _getCustomerVendors;
+
+        #endregion
+
+
         #region Dropdowns
 
         public static List<BasicDropdown> GetBasicDropdowns()
