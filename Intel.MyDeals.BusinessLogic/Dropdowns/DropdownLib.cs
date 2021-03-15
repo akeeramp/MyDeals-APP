@@ -61,9 +61,14 @@ namespace Intel.MyDeals.BusinessLogic
         /// Get All Simple Dropdowns with grouping of atrbCd
         /// </summary>
         /// <returns>list of dropdowns</returns>
-        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, int custId = 0)
         {
             atrbCd = atrbCd.ToUpper();
+            if (atrbCd == AttributeCodes.SETTLEMENT_PARTNER && custId != 0)
+            {
+                return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.CUST_MBR_SID == custId && d.ACTV_IND).OrderBy(d => d.ORD);
+            }
             return _dataCollectionsDataLib.GetBasicDropdowns().
                 Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
         }

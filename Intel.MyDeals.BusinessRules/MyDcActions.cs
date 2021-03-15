@@ -1166,6 +1166,36 @@ namespace Intel.MyDeals.BusinessRules
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
+        public static void ReadOnlyIfSettlementLevelIsNotCash(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                IOpDataElement settlementLevel = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+                IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
+                IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+                string deTrackerValue = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
+                if (settlementLevel == null || settlementPartner == null || programPayment == null) return;
+                string settlementLevelValue = settlementLevel.AtrbValue.ToString();
+                if (programPayment.AtrbValue.ToString().Contains("Frontend") || settlementLevelValue != "Cash")
+                {
+                    settlementPartner.AtrbValue = string.Empty;
+                    settlementPartner.IsReadOnly = true;
+                }
+                else
+                {
+                    settlementPartner.IsReadOnly = false;
+                }
+                if(deTrackerValue != "")
+                {
+                    settlementPartner.IsReadOnly = true;
+                }
+            }
+        }
+
+
         public static void CheckDropDownValues(params object[] args)
         {
             Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
@@ -1176,6 +1206,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, "Server Deal Type");
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, "Period Profile");
             eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "Settlement Level");
+            eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, "Settlement Partner");
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
