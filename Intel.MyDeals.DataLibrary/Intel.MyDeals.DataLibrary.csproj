@@ -118,6 +118,7 @@
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />
     <Compile Include="Notifications\NotificationsDataLib.cs" />
+    <Compile Include="PrimeCustomers\PrimeCustomersDataLib.cs" />
     <Compile Include="ProductMicroPacket.cs" />
     <Compile Include="PushDealstoVistex\PushDealstoVistexDataLib.cs" />
     <Compile Include="QuoteLetter\QuoteLetterDataLib.cs" />

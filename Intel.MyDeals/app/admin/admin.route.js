@@ -423,6 +423,24 @@
                     , url: 'CustomerVendors'
                     , controller: 'CustomerVendorsController as vm'
                 }
+            },
+            {
+                state: 'admin.primeCustomers',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/PrimeCustomers/primecustomers.html'
+                    , url: 'PrimeCustomers'
+                    , controller: 'PrimeCustomersController as vm'
+                }
+            },
+            {
+                state: 'admin.unPrimeDeals',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/PrimeCustomers/unprimedeals.html'
+                    , url: 'UnprimeDeals'
+                    , controller: 'UnprimedealsController as vm'
+                }
             }
 
         ];

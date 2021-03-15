@@ -27,7 +27,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetCustomerVendors/{custId}")]
         public List<CustomerVendors> GetCustomerVendors(int custId)
         {
-            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(custId), $"Unable to Get Customer Vendors");
+            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(custId), $"Unable to Get Customer Vendors Info");
         }
 
         /// <summary>
