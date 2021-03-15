@@ -2665,6 +2665,9 @@
 
                 // Pricing Table Row
                 if (curPricingTableData.length > 0 && sData != undefined) {
+                    //validate settlement partner for PTE
+                    sData = $scope.validateSettlementPartner(sData);
+
                     // Only save if a product has been filled out
                     //sData = sData.filter(function (obj) {
                     //    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
@@ -2694,7 +2697,7 @@
                     var dictGeoCombined = {};
                     var dictPeriodProfile = {};
                     var dictArSettlement = {};
-                    var dictSettlementPartner = {};
+                    //var dictSettlementPartner = {};
                     var dictProgramPayment = {};
                     var dictOverarchingVolume = {};
                     var dictOverarchingDollar = {};
@@ -2732,7 +2735,7 @@
                                     }
                                     dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                     dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
-                                    dictSettlementPartner[sData[s]["SETTLEMENT_PARTNER"]] = s;
+                                    //dictSettlementPartner[sData[s]["SETTLEMENT_PARTNER"]] = s;
 
                                     // The next two values if left blank can come in as either null or "", make them one pattern.
                                     if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
@@ -2791,12 +2794,12 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                                 }
-                                if (Object.keys(dictSettlementPartner).length > 1) {
-                                    el._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                                    el._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                                }
+                                //if (Object.keys(dictSettlementPartner).length > 1) {
+                                //    el._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+                                //    el._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                                //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                                //}
                                 if (Object.keys(dictProgramPayment).length > 1) {
                                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
                                     el._behaviors.validMsg["PROGRAM_PAYMENT"] = "All Program Payments must be same within a Hybrid Pricing Strategy.";
@@ -2836,6 +2839,11 @@
                     var validated_DC_Id = [];
 
                     for (var s = 0; s < sData.length; s++) {
+                        //Adding settlment partner error into err object in PTE
+                        if (sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                             // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
@@ -2938,6 +2946,19 @@
                                         errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
                                     }
 
+                                    //Restrict multi-tier Vol Tier for 12 months or 1 year
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] > 1) {
+                                        if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[s]._behaviors.isError['END_DT'] = true;
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                        }
+                                    }
+
                                 }
                                 //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                 //{
@@ -3028,9 +3049,17 @@
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
+                    //validate settlement parter for DE
+                    gData = $scope.validateSettlementPartner(gData);
+
                     var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
-                    var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
+                    //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
                     for (var i = 0; i < gData.length; i++) {
+                        // Adding settlment partner error into err object in DE
+                        if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
 
@@ -3070,6 +3099,20 @@
                                 gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
+                            }
+                        }
+
+                        //Restrict multi-tier Vol Tier for 12 months or 1 year
+                        if (gData[i]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && gData[i]["NUM_OF_TIERS"] > 1) {
+                            if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(365, 'days'))) {
+                                if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                    gData[i]._behaviors.isError['END_DT'] = true;
+                                    gData[i]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                }
                             }
                         }
 
@@ -3117,7 +3160,9 @@
                         if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
                         if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
-
+                        //DE109856
+                        if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
+                        //END
                         // Hybrid pricing strategy logic for DEAL_COMB_TYPE
                         if (isHybridPricingStatergy) {
                             dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
@@ -3156,12 +3201,12 @@
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
 
-                        if (hasInvalidSettlementPartnerForHybirdDeals) {
-                            gData[i]._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                            gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                        }
+                        //if (hasInvalidSettlementPartnerForHybirdDeals) {
+                        //    gData[i]._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+                        //    gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                        //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                        //    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        //}
 
                         // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
                         // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
@@ -4858,10 +4903,11 @@
         //setting a few constants for the strings that occur a lot
         var GEO = "GEO_COMBINED";
         var MRKT_SEG = "MRKT_SEG";
-
-
+        
         //watch for user changing global auto-fill default values
         $scope.$watch('newPricingTable._defaultAtrbs', function (newValue, oldValue, el) {
+            var dealType = $scope.newPricingTable.OBJ_SET_TYPE_CD;
+            
             if (oldValue === newValue) return;
 
             if (oldValue != null && newValue == null) return;
@@ -4871,8 +4917,8 @@
                 if ($scope.currentPricingTable == null) {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = [marketSegment];
-                    if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
-                    if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption";
+                    if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];  
+                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["FLEX_ROW_TYPE"]) newValue["FLEX_ROW_TYPE"].value = "Accrual";
@@ -5642,6 +5688,81 @@
                 logger.stickyError("Could not get deals.", result, result.statusText);
                 $scope.setBusy("", "");
             });
+        }
+        //validate settlement partner
+        $scope.validateSettlementPartner = function (data) {
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
+            //check if settlement is cash and pgm type is backend
+            var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+            if (cashObj && cashObj.length > 0) {
+                if (hybCond == '1') {
+                    retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
+                    if (!retCond) {
+                        angular.forEach(data, (item) => {
+                            $scope.setSettlementPartner(item, '1');
+                        });
+                    }
+                    else {
+                        $scope.clearSettlementPartner(data);
+                    }
+                }
+                else {
+                    retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
+                    if (!retCond) {
+                        angular.forEach(data, (item) => {
+                            if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '')) {
+                                $scope.setSettlementPartner(item, '0');
+                            }
+                            else {
+                                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                                        item.SETTLEMENT_PARTNER = null;
+                                    }
+                                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $scope.clearSettlementPartner(data);
+                    }
+
+                }
+            }
+            else {
+                $scope.clearSettlementPartner(data);
+            }
+            return data;
+        }
+        $scope.clearSettlementPartner = function (data) {
+            angular.forEach(data, (item) => {
+                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                        item.SETTLEMENT_PARTNER = null;
+                    }
+                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                }
+
+            });
+        }
+        $scope.setSettlementPartner = function (item, hybCond) {
+            if (!item._behaviors) item._behaviors = {};
+            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+            if (!item._behaviors.isError) item._behaviors.isError = {};
+            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+            item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
+            item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+            if (hybCond == '1') {
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+            }
+            else {
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For non-hybrid deal vendors must not be empty if settlement level is cash";
+            }
+
         }
         
     }

@@ -216,7 +216,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsDefaultable = true,
                 DataType = "string",
                 UiType = "BUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/VOL_TIER",  //change to appropriate api
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/FLEX",  
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -777,6 +777,19 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3353,
+                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Label = "Settlement Partner",
+                Width = 160,
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3573,
                 AtrbCd = AttributeCodes.REBATE_OA_MAX_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -1032,19 +1045,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 3353,
-                AtrbCd = AttributeCodes.SETTLEMENT_PARTNER,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Label = "Settlement Partner",
-                Width = 160,
-                DataType = "string",
-                UiType = "EMBEDDEDMULTISELECT",
-                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -2150,7 +2150,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3461,
                 AtrbCd = AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                HeaderTemplate = "Consumption Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
+                HeaderTemplate = "Billing Rolling Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
                 //Label = "Consumption Cust Reported Geo",
                 Width = 170, // 110
                 Format = "{0:d}",

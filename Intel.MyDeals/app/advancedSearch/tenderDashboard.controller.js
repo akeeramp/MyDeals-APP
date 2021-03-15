@@ -617,7 +617,7 @@
                 lookupUrl: "/api/Dropdown/GetDropdowns/PERIOD_PROFILE"
             }, {
                 field: "CONSUMPTION_LOOKBACK_PERIOD",
-                title: "Consumption Lookback Period",
+                title: "Billing Rolling Lookback Period",
                 type: "number",
                 width: 160
             }, {

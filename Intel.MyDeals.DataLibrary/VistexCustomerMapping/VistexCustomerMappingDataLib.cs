@@ -36,6 +36,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
                     int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_DFLT_SETTLEMENT_PARTNER = DB.GetReaderOrdinal(rdr, "DFLT_SETTLEMENT_PARTNER");
 
                     while (rdr.Read())
                     {
@@ -50,6 +51,7 @@ namespace Intel.MyDeals.DataLibrary
                             DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
                             DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
                             CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
+                            DFLT_SETTLEMENT_PARTNER = (IDX_DFLT_SETTLEMENT_PARTNER < 0 || rdr.IsDBNull(IDX_DFLT_SETTLEMENT_PARTNER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_SETTLEMENT_PARTNER),
                         });
                     }
 
@@ -86,7 +88,8 @@ namespace Intel.MyDeals.DataLibrary
                     in_dflt_perd_prfl = data.DFLT_PERD_PRFL == null ? string.Empty : data.DFLT_PERD_PRFL,
                     in_dflt_cust_rpt_geo = data.DFLT_CUST_RPT_GEO,
                     in_dflt_lookback_perd = data.DFLT_LOOKBACK_PERD,
-                    in_cust_cim_id = data.CUST_CIM_ID
+                    in_cust_cim_id = data.CUST_CIM_ID,
+                    in_dflt_stlmnt_Prtnr = data.DFLT_SETTLEMENT_PARTNER
                 }))
                 {
                     int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
@@ -98,6 +101,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
                     int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
                     int IDX_CUST_CIM_ID = DB.GetReaderOrdinal(rdr, "CUST_CIM_ID");
+                    int IDX_DFLT_SETTLEMENT_PARTNER = DB.GetReaderOrdinal(rdr, "DFLT_SETTLEMENT_PARTNER");
 
                     while (rdr.Read())
                     {
@@ -112,6 +116,7 @@ namespace Intel.MyDeals.DataLibrary
                             DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
                             DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
                             CUST_CIM_ID = (IDX_CUST_CIM_ID < 0 || rdr.IsDBNull(IDX_CUST_CIM_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CIM_ID),
+                            DFLT_SETTLEMENT_PARTNER = (IDX_DFLT_SETTLEMENT_PARTNER < 0 || rdr.IsDBNull(IDX_DFLT_SETTLEMENT_PARTNER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_SETTLEMENT_PARTNER),
                         });
                     }
 
