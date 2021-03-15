@@ -20,6 +20,7 @@
             getVendorsData: getVendorsData
         }
 
+
         function getCustomerDropdowns(isForceReGet) {
             var isGetViaAngularCache = true;
             if (isForceReGet) { isGetViaAngularCache = false; }
@@ -35,7 +36,7 @@
         }
 
         function getCustomerVendors() {
-            return dataService.get(apiBaseUrl + 'GetCustomerVendors');
+            return dataService.post(apiBaseUrl + 'GetCustomerVendors');
         }
 
         function getVendorsData() {
