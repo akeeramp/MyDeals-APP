@@ -9,7 +9,7 @@
     customerVendorsService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
     function customerVendorsService($http, dataService, logger, $q) {
-        var apiBaseUrl = "api/CustomerVendors/";
+        var apiBaseUrl = "api/CustomerVendor/";
         var dropdownUrl = "api/Dropdown/";
 
         return {
@@ -35,7 +35,7 @@
         }
 
         function getCustomerVendors() {
-            return dataService.get(apiBaseUrl + 'GetCustomerVendors/' + 0);
+            return dataService.get(apiBaseUrl + 'GetCustomerVendors');
         }
 
         function getVendorsData() {

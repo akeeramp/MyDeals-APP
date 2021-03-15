@@ -24,7 +24,6 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(), "Unable to Get Prime Customers");
         }
 
-        [Authorize]
         [Route("SetPrimeCustomers")]
         [HttpPost]
         [AntiForgeryValidate]
@@ -36,7 +35,6 @@ namespace Intel.MyDeals.Controllers.API
         }
         
 
-        [Authorize]
         [Route("UpdatePrimeCustomer")]
         [HttpPost]
         [AntiForgeryValidate]
@@ -47,7 +45,7 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Authorize]
+
         [Route("GetCountries")]
         public IEnumerable<Countires> GetCountries()
         {
@@ -55,7 +53,7 @@ namespace Intel.MyDeals.Controllers.API
                 $"Unable to Get Countries");
         }
 
-        [Authorize]
+
         [Route("GetPrimeCustomers")]
         public IEnumerable<PrimeCustDropdown> GetPrimeCustomers()
         {
