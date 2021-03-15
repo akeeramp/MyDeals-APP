@@ -12,6 +12,10 @@
 
     function TestTendersController(adminTools,$scope, logger) {
         var vm = this;
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         $scope.testTendersData = {};
 
         $scope.testTendersData.CNTRCT_SF_ID = '50130000000X14c';

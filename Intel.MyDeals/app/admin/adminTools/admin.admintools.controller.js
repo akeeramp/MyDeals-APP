@@ -15,7 +15,10 @@
     function AdminToolsController(adminTools, $scope, logger) {
         var vm = this;
         $scope.adminToolsData = {};
-
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         $scope.adminToolsData.MinYear = parseInt(moment().format("YYYY")) - 6;
         $scope.adminToolsData.MaxYear = parseInt(moment().format("YYYY")) + 20;
 

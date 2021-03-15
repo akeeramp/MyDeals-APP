@@ -11,6 +11,10 @@
 
     function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;
+        //Added By Bhuvaneswari for US932213
+        if (window.usrRole != 'GA' && window.usrRole != 'DA' && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.rid = rid;
         vm.ruleId = 0;
         vm.Rules = [];

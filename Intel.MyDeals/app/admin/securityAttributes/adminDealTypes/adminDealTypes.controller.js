@@ -12,7 +12,10 @@
 
     function dealTypesController($uibModal, DealTypesService, $scope, logger, gridConstants, confirmationModal) {
         var vm = this;
-
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
             transport: {

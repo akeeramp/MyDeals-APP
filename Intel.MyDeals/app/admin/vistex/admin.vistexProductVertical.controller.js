@@ -11,6 +11,11 @@
 
     function VistexProductVerticalController($scope, logger, $timeout, dsaService) {
         var vm = this;
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.spinnerMessageHeader = "Product Vertical Logs";
         vm.spinnerMessageDescription = "Please wait while we loading product vertical logs..";
         vm.isBusyShowFunFact = true;

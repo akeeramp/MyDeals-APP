@@ -12,6 +12,9 @@
     function QuoteLetterController(quoteLetterService, $scope, logger, confirmationModal, gridConstants, $linq) {
 
         var vm = this;
+        if (window.usrRole != 'Legal' && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.isDropdownsLoaded = false;
         vm.selectedTemplate = null;
 

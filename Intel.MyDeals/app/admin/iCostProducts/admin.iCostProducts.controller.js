@@ -11,7 +11,10 @@
 
     function iCostProductsController(iCostProductService, logger, $scope, gridConstants, $state, $linq, pctRulesDrpDownValues, confirmationModal, $filter, $timeout) {
         var vm = this;
-
+           //Added By Bhuvaneswari for US932213
+        if (window.usrRole != 'Legal' && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.updateItem = updateItem;
         vm.addItem = addItem;
         vm.deleteItem = deleteItem;

@@ -12,6 +12,11 @@
 
     function meetCompController($scope, dataService, meetCompService, logger, $localStorage, confirmationModal, $linq, gridConstants, $timeout, $q, $uibModal) { 
         var vm = this;
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+            if (window.usrRole != 'SA' && !window.isDeveloper && !window.usrRole != 'DA' && !window.usrRole != 'Legal'&&!(window.usrRole != 'GA' && isSuper)) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.HasBulkUploadAccess = window.usrRole == "DA";
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             $timeout(function () {

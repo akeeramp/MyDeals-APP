@@ -11,7 +11,10 @@
 
     function ProductCategoryController(productCategoryService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
-
+           //Added By Bhuvaneswari for US932213
+        if (window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Functions
         vm.clearFilters = clearFilters;
         vm.hasFilters = hasFilters;

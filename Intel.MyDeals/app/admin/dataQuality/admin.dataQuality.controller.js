@@ -12,7 +12,10 @@
     function DataQualityController(dataQualityService, $scope, logger, confirmationModal, gridConstants, $linq) {
         var vm = this;
         vm.validationMessage = "";
-
+           //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {

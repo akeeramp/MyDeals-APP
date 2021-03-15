@@ -16,7 +16,10 @@
         var vm = this;
         vm.selectedItem = null;
         vm.filters = {};
-
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Master DropDown List populate method
         var loadDDLValues = function (e) {
             workflowService.GetDropDownValues()
