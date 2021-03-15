@@ -471,7 +471,27 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "VendorsInfo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	
+	//To get Prime Customers data
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRIM_CUST_DATA]");
+	ds.Tables[0].TableName = "PrimeCustomers";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get unprime deals
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_UNPRIM_DEALS]");
+	ds.Tables[0].TableName = "UnPrimeDeals";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get countries
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_CTRY_DATA]");
+	ds.Tables[0].TableName = "Countires";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get countries
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRIM_CUST]");
+	ds.Tables[0].TableName = "PrimeCustDropdown";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
