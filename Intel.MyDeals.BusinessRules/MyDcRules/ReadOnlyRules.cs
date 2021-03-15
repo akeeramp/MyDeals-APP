@@ -395,7 +395,6 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
                                 AttributeCodes.QLTR_BID_GEO,
-                                AttributeCodes.QLTR_PROJECT,
                                 AttributeCodes.END_CUSTOMER_RETAIL
                             }
                         }

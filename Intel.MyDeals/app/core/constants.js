@@ -284,9 +284,6 @@
                     "QLTR_BID_GEO": {
                         "Groups": ["Deal Info"]
                     },
-                    "QLTR_PROJECT": {
-                        "Groups": ["Deal Info"]
-                    },
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
@@ -342,6 +339,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
+                        "Groups": ["Consumption"]
+                    },
+                    "QLTR_PROJECT": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
@@ -469,9 +469,6 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
-                    "QLTR_PROJECT": {
-                        "Groups": ["Deal Info"]
-                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -521,6 +518,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
+                        "Groups": ["Consumption"]
+                    },
+                    "QLTR_PROJECT": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
@@ -956,9 +956,6 @@
                     "QLTR_BID_GEO": {
                         "Groups": ["Deal Info"]
                     },
-                    "QLTR_PROJECT": {
-                        "Groups": ["Deal Info"]
-                    },
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
@@ -1011,6 +1008,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
+                        "Groups": ["Consumption"]
+                    },
+                    "QLTR_PROJECT": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
