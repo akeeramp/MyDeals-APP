@@ -11,7 +11,10 @@
 
     function RuleController($uibModal, ruleService, $scope, logger) {
         var vm = this;
-        
+         //Added By Bhuvaneswari for US932213
+            if (window.usrRole != 'GA' && window.usrRole != 'DA' && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Functions
         //vm.addItem = addItem;
         //vm.updateItem = updateItem;

@@ -12,7 +12,11 @@
 
     function ConstantsController($scope, dataService, constantsService, logger, gridConstants, confirmationModal, $rootScope) {
         var vm = this;
-
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if ( !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // declare dataSource bound to backend
         vm.dataSource = new kendo.data.DataSource({
             transport: {

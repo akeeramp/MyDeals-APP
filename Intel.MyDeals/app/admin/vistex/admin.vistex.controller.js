@@ -11,6 +11,11 @@
 
     function VistexController($scope, logger, $timeout, dsaService) {
         var vm = this;
+        //Developer can see the Screen..
+        //Added By Bhuvaneswari for US932213
+        if (!window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.spinnerMessageHeader = "Vistex Logs";
         vm.spinnerMessageDescription = "Please wait while we loading vistex logs..";
         vm.isBusyShowFunFact = true;

@@ -12,7 +12,10 @@
 
     function manageEmployeeController(manageEmployeeService, $scope, logger, gridConstants, $uibModal, $location, $timeout) {
         $scope.isDropdownsLoaded = false;
-
+        //Added By Bhuvaneswari for US932213
+        if (!isCustomerAdmin && window.usrRole != 'DA' && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         $scope.openEmployeeCustomers = function (dataItem) {
             $scope.context = dataItem;
 

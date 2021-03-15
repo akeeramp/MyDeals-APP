@@ -11,7 +11,9 @@
 
     function ProductController(productService, $scope, logger, gridConstants) {
         var vm = this;
-
+        if (window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;

@@ -11,7 +11,10 @@
 
     function DropdownsController(dropdownsService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
-
+        //Added By Bhuvaneswari for US932213
+        if (!isCustomerAdmin && window.usrRole != 'SA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.dealtypeDataSource = [];
         vm.dealtypes = [];
         vm.onlyAllDeal = [];

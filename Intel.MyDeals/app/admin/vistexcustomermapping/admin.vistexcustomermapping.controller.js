@@ -12,7 +12,7 @@
     function VistexcustomermappingController(vistexcustomermappingService, dropdownsService, $scope, logger, gridConstants, $uibModal) {
 
         $scope.accessAllowed = true;
-        if (!(window.usrRole === 'SA' || window.isDeveloper)) {
+        if (!(window.usrRole === 'SA' || window.isDeveloper) || !isCustomerAdmin) {
             // Kick not valid users out of the page
             $scope.accessAllowed = false;
             document.location.href = "/Dashboard#/portal";
