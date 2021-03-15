@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/11/2021 6:08:20 PM
+File Updated: 3/15/2021 2:33:22 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -946,15 +946,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string EMP_VRTCL_ASGN = "EMP_VRTCL_ASGN";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 3349
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string END_CUSTOMER_COUNTRY = "END_CUSTOMER_COUNTRY";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2089,6 +2080,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string PRICE_SEGMENT = "PRICE_SEGMENT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3349
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRIMED_CUST_CNTRY = "PRIMED_CUST_CNTRY";
 
 		///<summary>
 		/// DIM_SID: 3
