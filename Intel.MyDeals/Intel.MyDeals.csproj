@@ -254,6 +254,7 @@
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
+    <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -408,6 +409,11 @@
     <Content Include="app\admin\legalExceptions\admin.legalException.controller.js" />
     <Content Include="app\admin\legalExceptions\legalExceptions.html" />
     <Content Include="app\admin\legalExceptions\legalExceptions.service.js" />
+    <Content Include="app\admin\PrimeCustomers\admin.primecustomers.controller.js" />
+    <Content Include="app\admin\PrimeCustomers\admin.unprimedeals.controller.js" />
+    <Content Include="app\admin\PrimeCustomers\primecustomers.html" />
+    <Content Include="app\admin\PrimeCustomers\primecustomers.service.js" />
+    <Content Include="app\admin\PrimeCustomers\unprimedeals.html" />
     <Content Include="app\admin\pushDealstoVistex\admin.pushDealstoVistex.controller.js" />
     <Content Include="app\admin\pushDealstoVistex\pushDealstoVistex.html" />
     <Content Include="app\admin\pushDealstoVistex\pushDealstoVistex.service.js" />
