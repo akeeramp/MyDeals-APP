@@ -504,6 +504,10 @@
     border-radius: 10px 0 0 10px;
 }
 
+.buttongroup-btn-first-only {
+    border-radius: 10px 10px 10px 10px;
+}
+
 .buttongroup-btn-last {
     border-radius: 0 10px 10px 0;
 }
