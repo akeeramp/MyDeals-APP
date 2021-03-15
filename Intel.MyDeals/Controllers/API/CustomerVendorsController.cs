@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
-
+using System.Linq;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -23,6 +22,7 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <param name="custId"></param>
         /// <returns></returns>
+        [HttpPost]
         [Route("GetCustomerVendors")]
         public List<CustomerVendors> GetCustomerVendors()
         {
