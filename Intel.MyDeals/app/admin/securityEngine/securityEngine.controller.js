@@ -14,7 +14,7 @@
         //Added By Bhuvaneswari for US932213
         if (!window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
-        
+        }
     	// Functions
     	vm.clickHelpButton = clickHelpButton;
     	vm.getGridData = getGridData;
