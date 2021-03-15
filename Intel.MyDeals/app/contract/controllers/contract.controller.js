@@ -182,7 +182,7 @@
 
         $scope.removeBlanks = function (val) {
 
-            return val.replace(/_/g, ' ');
+            return val.replace(/_/g, '');
 
         }
         //Business Purpose: For Hybrid Pricing Strategy only Deal type is ECAP
@@ -5757,10 +5757,10 @@
             item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
             if (hybCond == '1') {
-                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy";
             }
             else {
-                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For non-hybrid deal vendors must not be empty if settlement level is cash";
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required if settlement level is cash";
             }
 
         }
