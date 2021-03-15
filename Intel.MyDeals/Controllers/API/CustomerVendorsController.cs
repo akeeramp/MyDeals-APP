@@ -8,7 +8,7 @@ using Intel.MyDeals.Helpers;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    [RoutePrefix("api/CustomerVendors")]
+    [RoutePrefix("api/CustomerVendor")]
     public class CustomerVendorsController : BaseApiController
     {
         private readonly ICustomerVendorsLib _customerVendorsLib;
@@ -23,18 +23,16 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <param name="custId"></param>
         /// <returns></returns>
-        [Authorize]
-        [Route("GetCustomerVendors/{custId}")]
-        public List<CustomerVendors> GetCustomerVendors(int custId)
+        [Route("GetCustomerVendors")]
+        public List<CustomerVendors> GetCustomerVendors()
         {
-            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(custId), $"Unable to Get Customer Vendors Info");
+            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(0), $"Unable to Get Customer Vendors Info");
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        [Authorize]
         [Route("GetVendorsData")]
         public List<VendorsInfo> GetVendorsData()
         {
