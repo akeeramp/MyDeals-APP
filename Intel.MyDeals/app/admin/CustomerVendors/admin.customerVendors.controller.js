@@ -12,6 +12,11 @@
     function CustomerVendorsController(customerVendorsService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
 
+
+        if (!isCustomerAdmin && window.usrRole != 'SA' && window.usrRole != 'RA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
+
         vm.custsDataSource = [];
         vm.vendorsNamesinfo = [];
         vm.vendorsNamesId = [];
@@ -232,6 +237,16 @@
                     title: "Customer",
                     editor: vm.CustomersEditor,
                     template: "#= CUST_NM #",
+                    filterable: {
+                        ui: custFilter,
+                        extra: false,
+                        operators: {
+                            string: {
+                                eq: "Is equal to",
+                                neq: "Not equal to",
+                                isempty: "Is empty"
+                            }
+                        } }
                 },
                 {
                     field: "DROP_DOWN",
@@ -286,6 +301,14 @@
                 }
             }
             return true;
+        }
+
+        function custFilter(element) {
+            element.kendoDropDownList({
+                dataTextField: "dropdownName",
+                dataValueField: "dropdownID",
+                dataSource: vm.getCustomersData
+            });
         }
 
 
