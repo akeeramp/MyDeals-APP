@@ -662,6 +662,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
+                IsDefaultable = true,
                 IsRequired = true
             });
             items.Add(new UiTemplateContainerItem

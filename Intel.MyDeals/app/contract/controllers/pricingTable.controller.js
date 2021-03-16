@@ -1865,6 +1865,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["ECAP_PRICE"] = 0;
                         }
 
+                        if (data[r]["RESET_VOLS_ON_PERIOD"] === "") {
+                            data[r]["RESET_VOLS_ON_PERIOD"] = "No";
+                        }
+
                         if (!root.curPricingTable || root.isPivotable()) {
                             if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
                                 // must be a new row... use the autofilter tier number info
