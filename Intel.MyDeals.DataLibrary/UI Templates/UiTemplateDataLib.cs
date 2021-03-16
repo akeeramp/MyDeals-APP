@@ -894,7 +894,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "string",
                 Width = 180,
-                Label = "Project Name *",
+                Label = "Project Name",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
                 IsFilterable = true,
                 IsSortable = true,
@@ -2178,8 +2178,9 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
+                UiType = "EMBEDDEDMULTISELECT",  
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_SYS_CONFIG')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_SYS_CONFIG",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_SYS_CONFIG/", // using customer specific pull so that I can use multiselect controller
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
