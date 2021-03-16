@@ -74,7 +74,7 @@
                         PRIME_MBR_SID: { editable: true },
                         PRIME_CUST_NM: { editable: true },
                         PRIME_CUST_COUNTRY: { editable: true },
-                        RPL_STATUS: { editable: true },
+                        RPL_STATUS: { editable: false },
                         IS_ACTIVE: { editable: true },
                         PRIME_LVL_SID: { editable: true },
                         PRIME_LVL_NM: { editable: false },
@@ -91,6 +91,8 @@
                 validationMessages.push("Please provide Valid ID");
             if (model.PRIME_CUST_NM == null || model.PRIME_CUST_NM == '')
                 validationMessages.push("Please Provide Valid Prime Customer Name");
+            if (model.PRIME_LVL_SID == null || model.PRIME_LVL_SID == '')
+                validationMessages.push("Please Provide Valid Level 2 ID");
             if (isPrimeexist.length > 1)
                 validationMessages.push("This Combination of Prime Custmer ID and Leve 2 ID is already exists")
             if (model.PRIME_CUST_COUNTRY == null || model.PRIME_CUST_COUNTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIME_CUST_COUNTRY).length == 0)
@@ -221,7 +223,7 @@
                 {
                     field: "IS_ACTIVE",
                     title: "Is Active",
-                    width: "7%",
+                    width: "10%",
                     filterable: { multi: true, search: false },
                     template: gridUtils.boolViewer('IS_ACTIVE'),
                     editor: gridUtils.boolEditor,
@@ -232,7 +234,8 @@
                     field: "PRIME_MBR_SID",
                     title: "Prime ID",
                     width: "200px",
-                    editor: vm.PrimeIDEditor
+                    editor: vm.PrimeIDEditor,
+                    filterable: { multi: true, search: true }
 
                 },
                 {
@@ -241,14 +244,16 @@
                     width: "230px",
                     //filterable: { multi: true, search: true },
                     //editor: cusNameDropDownEditor
-                    editor: vm.PrimeCustNamesEditor
+                    editor: vm.PrimeCustNamesEditor,
+                    filterable: { multi: true, search: true }
                 },
 
                 {
                     field: "PRIME_LVL_SID",
                     title: "Prime L2 ID",
                     width: "200px",
-                    editor: vm.PrimeIDL2Editor
+                    editor: vm.PrimeIDL2Editor,
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRIME_LVL_NM",
@@ -259,7 +264,8 @@
                     field: "PRIME_CUST_COUNTRY",
                     title: "Prime Country",
                     width: "200px",
-                    editor: vm.PrimeCustCountryEditor
+                    editor: vm.PrimeCustCountryEditor,
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "RPL_STATUS",
