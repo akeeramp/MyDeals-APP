@@ -13,7 +13,7 @@
         var vm = this;
         vm.validationMessage = "";
            //Added By Bhuvaneswari for US932213
-        if (!window.isDeveloper) {
+        if (!window.isDeveloper && window.usrRole != 'SA') {
             document.location.href = "/Dashboard#/portal";
         }
         vm.dataSource = new kendo.data.DataSource({
