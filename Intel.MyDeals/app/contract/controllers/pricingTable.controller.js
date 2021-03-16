@@ -850,6 +850,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (isProductColumnIncludedInChanges && window.usrRole === "DA") {
             return;
         }
+
+        var stlmntLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
+        var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
+        var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
+        if (stlmentValue == "Cash") {
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background(null);
+        }
+        if (stlmentValue != "Cash") {
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(false);
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background('#f5f5f5');
+        }
+        
+
         // KIT
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             var dealGrpColIndex = (root.colToLetter["DEAL_GRP_NM"].charCodeAt(0) - intA);
@@ -2107,6 +2121,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             prdRange.enable(true);
                             prdRange.background(null);
                         }
+                    }
+
+                    //disable settlmenet partner if not cash
+                    //var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
+                    var stlmntPtrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
+                    if ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL !== "Cash") {
+                        range = sheet.range(stlmntPtrIndex + topLeftRowIndex);
+                        range.enable(false);
+                        range.background("#f5f5f5");
                     }
 
                     // Re-disable cols that are disabled by template
