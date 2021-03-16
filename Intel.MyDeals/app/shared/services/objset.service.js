@@ -87,7 +87,8 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateOverlappingDeals: updateOverlappingDeals,
         //getDealQuoteLetter: getDealQuoteLetter,
 
-        getDefaultValuesForTenderKit: getDefaultValuesForTenderKit
+        getDefaultValuesForTenderKit: getDefaultValuesForTenderKit,
+        getVendorDropDown: getVendorDropDown
     }
 
     return service;
@@ -322,6 +323,10 @@ function objsetService($http, dataService, logger, $q, $location) {
     // #### Get Default Values for KIT - TENDER
     function getDefaultValuesForTenderKit() {
         return dataService.get(dropDownApiUrl + 'GetTenderDefaultDropDown/');
+    }
+
+    function getVendorDropDown(atrbcd) {
+        return dataService.get(dropDownApiUrl + 'GetDropdowns/' + atrbcd);
     }
 
 }
