@@ -54,6 +54,14 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         tmplt += '</div>';
         return tmplt;
     }
+
+    //if (field == 'SETTLEMENT_PARTNER' && passedData['AR_SETTLEMENT_LVL'] != 'Cash') {
+    //    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    //    tmplt += '<div class="uiControlDiv"';
+    //    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+    //    tmplt += '</div>';
+    //    return tmplt
+    //}
     else
     {
         // MUCH FASTER

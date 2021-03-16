@@ -918,6 +918,28 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfSettlementIsNotCash(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (deArSettlementLvl == null || deArSettlementLvl.AtrbValue.ToString() == "Cash")
+            {
+                return; 
+            }
+
+            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            {
+                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                if (de != null) // This is AR_SETTLEMENT_LVL value
+                {
+                    de.IsReadOnly = true;
+                }
+            }
+        }
+
         public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
         {
             // This rule should only allow changes for AR_SETTLEMENT_LVL after has tracker for one issue type to another, but not to cash
