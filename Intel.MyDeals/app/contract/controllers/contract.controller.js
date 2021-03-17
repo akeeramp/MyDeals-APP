@@ -3879,7 +3879,7 @@
 
             if (!$scope.curPricingTable) return false;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
                 var pivotFieldName = "NUM_OF_TIERS";
                 return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
             }
@@ -3891,7 +3891,7 @@
         $scope.numOfPivot = function (dataItem) {
             if ($scope.curPricingTable === undefined) return 1;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX"|| $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
 
                 var pivotFieldName = "NUM_OF_TIERS";
                 // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
