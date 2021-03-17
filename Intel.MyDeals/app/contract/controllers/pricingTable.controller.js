@@ -1174,7 +1174,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var shenaniganObj = null;
 
         // VOL-TIER
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
@@ -1747,7 +1747,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
             var rowSizeHeight = 150;
-            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                 rowSizeHeight = 51;
             }
             sheet.rowHeight(sheetRowIndex, rowSizeHeight);
@@ -1889,7 +1889,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["TIER_NBR"] = pivotDim;
                                 data[r]["NUM_OF_TIERS"] = numPivotRows;
 
-                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                                     // Default to 0
                                     data[r]["RATE"] = 0;
 
@@ -2044,7 +2044,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Enable other cells
-                    if (!!ptTemplate.model.fields["TIER_NBR"] && $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                    if (!!ptTemplate.model.fields["TIER_NBR"] && ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
                         // Find tier nbr col
                         var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
                         var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
@@ -2203,7 +2203,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
-        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER") {
+        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             $timeout(function () {
                 $scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
             });
