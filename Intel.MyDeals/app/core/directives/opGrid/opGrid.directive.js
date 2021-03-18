@@ -1289,8 +1289,31 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                             });
                     } else {
-
-                        $('<input name="' + options.field + '"/>')
+                        var custId = 0;
+                        var colData = $(container).closest("[data-role=grid]").data("kendoGrid")._data;
+                        if (colData != null && colData != undefined && colData.length > 0
+                            && colData[0].CUST_MBR_SID != null &&
+                            colData[0].CUST_MBR_SID != undefined)
+                        {
+                            custId = colData[0].CUST_MBR_SID;
+                        }
+                        if (options.field.toUpperCase() == "SETTLEMENT_PARTNER") {
+                            $('<input name="' + options.field + '"/>')
+                                .appendTo(container)
+                                .kendoComboBox({
+                                    autoBind: false,
+                                    valuePrimitive: col.field !== "Customer",
+                                    dataTextField: field.opLookupText,
+                                    dataValueField: field.opLookupValue,
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: field.opLookupUrl + "/" + custId
+                                        }
+                                    }
+                                });
+                        } else {
+                            $('<input name="' + options.field + '"/>')
                             .appendTo(container)
                             .kendoComboBox({
                                 autoBind: false,
@@ -1303,7 +1326,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                         read: field.opLookupUrl
                                     }
                                 }
-                            });
+                            });}
+                        
                     }
                 }
 

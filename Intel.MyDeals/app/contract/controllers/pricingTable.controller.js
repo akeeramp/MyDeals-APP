@@ -3913,7 +3913,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
             var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
-
+            $scope.custID = 0;
+            if (root.contractData != null) {
+                $scope.custID = root.getCustId();
+            }
+            colData.custId = $scope.custID;
             var modalInstance = $uibModal.open({
                 //animation: $ctrl.animationsEnabled,
                 ariaLabelledBy: 'modal-title',

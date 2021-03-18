@@ -785,7 +785,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 160,
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/SETTLEMENT_PARTNER",
+                LookupUrl = "/api/Dropdown/GetVendorDropdownsForCustId/SETTLEMENT_PARTNER",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -1658,7 +1658,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PARTNER')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/SETTLEMENT_PARTNER",
+                LookupUrl = "/api/Dropdown/GetVendorDropdownsForCustId/SETTLEMENT_PARTNER",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });

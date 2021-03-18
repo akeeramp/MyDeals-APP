@@ -131,23 +131,23 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule // Set to read only if AR_SETTLEMENT_LVL is not Cash
-                {
-                    Title="Readonly if Value is not Cash",
-                    ActionRule = MyDcActions.ReadOnlyIfSettlementIsNotCash,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {
-                                AttributeCodes.SETTLEMENT_PARTNER
-                            }
-                        }
-                    }
-                },
+                //new MyOpRule // Set to read only if AR_SETTLEMENT_LVL is not Cash
+                //{
+                //    Title="Readonly if Value is not Cash",
+                //    ActionRule = MyDcActions.ReadOnlyIfSettlementIsNotCash,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = BusinessLogicDeActions.SetReadOnly,
+                //            Target = new[] {
+                //                AttributeCodes.SETTLEMENT_PARTNER
+                //            }
+                //        }
+                //    }
+                //},
 
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
@@ -187,22 +187,22 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                //new MyOpRule
-                //{
-                //    Title="Settlement Partner is Readonly",
-                //    ActionRule = MyDcActions.ReadOnlyIfSettlementLevelIsNotCash,
-                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Target = new[] {
-                //                AttributeCodes.SETTLEMENT_PARTNER
-                //            }
-                //        }
-                //    }
-                //},
+                new MyOpRule
+                {
+                    Title="Settlement Partner is Readonly",
+                    ActionRule = MyDcActions.MakeSettlementPartnerReadonly,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.SETTLEMENT_PARTNER
+                            }
+                        }
+                    }
+                },
 
                 new MyOpRule // Allow edits only in re-deal cases
                 {

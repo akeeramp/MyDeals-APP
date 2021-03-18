@@ -5855,7 +5855,7 @@
                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                 }
-                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
                     if (item._behaviors && item._behaviors.isReadOnly)
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
@@ -5870,10 +5870,10 @@
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
             if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
             if (item.HAS_TRACKER == 0) {
-                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash' && item.HAS_TRACKER === "0") {
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
                     item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
                 }
-                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
                 if ((item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
