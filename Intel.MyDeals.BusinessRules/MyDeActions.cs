@@ -106,6 +106,27 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckAtrbLength(this IOpDataElement de, params object[] args)
+        {
+            if (de == null || args == null || args.Length != 1) return;
+
+            Dictionary<string, int> AtrbLenDictionary = (Dictionary<string, int>)args[0];
+            int chkLen = AtrbLenDictionary[de.AtrbCd];
+
+            if (de.ExceedsMaxLength(chkLen))
+            {
+                string cd = de.AtrbCd;
+
+                FieldInfo fieldInfo = typeof(Attributes).GetField(de.AtrbCd);
+                if (fieldInfo != null)
+                {
+                    cd = ((MyDealsAttribute)fieldInfo.GetValue(null)).ATRB_LBL;
+                }
+
+                if (!de.IsReadOnly) de.AddMessage(cd + " must be no more than " + chkLen + " characters");
+            }
+        }
+
         public static void CheckConsumptionReasonCmnt(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
