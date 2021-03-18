@@ -855,10 +855,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
         var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
         if (stlmentValue == "Cash") {
+            if (sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == '' || sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == null) {
+                sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
+            }
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background(null);
         }
         if (stlmentValue != "Cash") {
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value('');
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(false);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background('#f5f5f5');
         }
@@ -1832,6 +1836,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 sheet.batch(function () {
                     for (var r = 0; r < data.length; r++) {
+                   
                         if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
                             // Calcuate the KIT Rebate in case the number of products/tiers changes
                             if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -1884,6 +1889,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
 
                         if (!root.curPricingTable || root.isPivotable()) {
+                           
                             if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
                                 // must be a new row... use the autofilter tier number info
                                 data[r]["TIER_NBR"] = pivotDim;
@@ -1996,6 +2002,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             if (data[r]["AR_SETTLEMENT_LVL"] !== undefined) {
                                 data[r]["AR_SETTLEMENT_LVL"] = "";
                             }
+                        }
+                        //set default value for settlement partner is settlement level is cash
+                        if (data[r]["AR_SETTLEMENT_LVL"] !== null && data[r]["AR_SETTLEMENT_LVL"].toLowerCase() === 'cash') {
+                            data[r]["SETTLEMENT_PARTNER"] = $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER;
                         }
 
                         // increment pivot dim (example tier 1 to tier 2)
@@ -2124,7 +2134,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     //disable settlmenet partner if not cash
-                    //var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
+                    var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
                     var stlmntPtrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
                     if ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL !== "Cash") {
                         range = sheet.range(stlmntPtrIndex + topLeftRowIndex);
