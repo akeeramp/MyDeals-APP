@@ -497,6 +497,11 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 
+	ds = dbobjects.ExecuteDataSet("declare @in_acr_inc_prd_lst dbo.type_int_pair; insert into @in_acr_inc_prd_lst values(100,56000);  declare @in_acr_exc_prd_lst dbo.type_int_list; insert into @in_acr_exc_prd_lst values(56000) ; declare @in_drn_inc_prd_lst dbo.type_int_pair; insert into @in_drn_inc_prd_lst values(100,56000); declare @in_drn_exc_prd_lst dbo.type_int_list;  insert into @in_drn_exc_prd_lst values(56000); EXEC dbo.PR_MYDL_PRD_OVLP_VLD @in_acr_inc_prd_lst, @in_acr_exc_prd_lst, @in_drn_inc_prd_lst, @in_drn_exc_prd_lst");
+	ds.Tables[0].TableName = "FlexProdOvlp";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
