@@ -352,6 +352,29 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Validate Field String Length",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckAtrbLength,
+                            Args = new object[] { new Dictionary<string, int> { 
+                                { AttributeCodes.QLTR_PROJECT, 65 }, 
+                                { AttributeCodes.END_CUSTOMER_RETAIL, 100 } 
+                            } },
+                            Target = new[] {
+                                AttributeCodes.QLTR_PROJECT,
+                                AttributeCodes.END_CUSTOMER_RETAIL
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
                     Title="On Ad Validation Set Default",
                     ActionRule = MyDcActions.ExecuteOnAd,

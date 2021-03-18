@@ -3871,7 +3871,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "QLTR_PROJECT",
 			ATRB_DESC = "Tender Project",
 			ATRB_LBL = "Project",
-			ATRB_MAX_LEN = 0,
+			ATRB_MAX_LEN = 65,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
