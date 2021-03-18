@@ -2678,6 +2678,10 @@
                 if (curPricingTableData.length > 0 && sData != undefined) {
                     //validate settlement partner for PTE
                     sData = $scope.validateSettlementPartner(sData);
+                    //validate OAV&OAD partner for PTE
+                    sData = $scope.validateOverArching(sData);
+                    //validate settlement level for PTE
+                    sData = $scope.validateSettlementLevel(sData);
 
                     // Only save if a product has been filled out
                     //sData = sData.filter(function (obj) {
@@ -2707,8 +2711,7 @@
                     var dictPayoutBasedon = {};
                     var dictGeoCombined = {};
                     var dictPeriodProfile = {};
-                    var dictArSettlement = {};
-                    //var dictSettlementPartner = {};
+                    //var dictArSettlement = {};
                     var dictProgramPayment = {};
                     var dictOverarchingVolume = {};
                     var dictOverarchingDollar = {};
@@ -2744,9 +2747,8 @@
                                     if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
                                         dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                                     }
-                                    dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
+                                    //dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                     dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
-                                    //dictSettlementPartner[sData[s]["SETTLEMENT_PARTNER"]] = s;
 
                                     // The next two values if left blank can come in as either null or "", make them one pattern.
                                     if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
@@ -2799,17 +2801,11 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
                                 }
-                                if (Object.keys(dictArSettlement).length > 1) {
-                                    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                                }
-                                //if (Object.keys(dictSettlementPartner).length > 1) {
-                                //    el._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                                //    el._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                                //if (Object.keys(dictArSettlement).length > 1) {
+                                //    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                //    el._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
                                 //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                                 //}
                                 if (Object.keys(dictProgramPayment).length > 1) {
                                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
@@ -2817,18 +2813,18 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
                                 }
-                                if (Object.keys(dictOverarchingVolume).length > 1) {
-                                    el._behaviors.isError["REBATE_OA_MAX_VOL"] = true;
-                                    el._behaviors.validMsg["REBATE_OA_MAX_VOL"] = "All Overarching Max Volume values must be same within a Hybrid Pricing Strategy.";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
-                                }
-                                if (Object.keys(dictOverarchingDollar).length > 1) {
-                                    el._behaviors.isError["REBATE_OA_MAX_AMT"] = true;
-                                    el._behaviors.validMsg["REBATE_OA_MAX_AMT"] = "All Overarching Max Dollar values must be same within a Hybrid Pricing Strategy.";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
-                                }
+                                //if (Object.keys(dictOverarchingVolume).length > 1) {
+                                //    el._behaviors.isError["REBATE_OA_MAX_VOL"] = true;
+                                //    el._behaviors.validMsg["REBATE_OA_MAX_VOL"] = "All Overarching Max Volume values must be same within a Hybrid Pricing Strategy.";
+                                //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                                //}
+                                //if (Object.keys(dictOverarchingDollar).length > 1) {
+                                //    el._behaviors.isError["REBATE_OA_MAX_AMT"] = true;
+                                //    el._behaviors.validMsg["REBATE_OA_MAX_AMT"] = "All Overarching Max Dollar values must be same within a Hybrid Pricing Strategy.";
+                                //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                //    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
+                                //}
                                 if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).contains("Backend"))) {
                                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
                                     el._behaviors.validMsg["PROGRAM_PAYMENT"] = "Hybrid Pricing Strategy Deals must be Backend only.";
@@ -2854,6 +2850,20 @@
                         if (sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
+                        //Adding Over arching  error into err object in PTE
+                        if (sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
+                        }
+                        if (sData[s]._behaviors.isError['REBATE_OA_MAX_VOL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                        }
+                        //Adding settlment level error into err object in PTE
+                        if (sData[s]._behaviors.isError['AR_SETTLEMENT_LVL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
@@ -2993,7 +3003,8 @@
 
                             // PTR Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
                             // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
-                            var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(sData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                            var dataHyb = sData.filter(obj => obj.AR_SETTLEMENT_LVL != null);
+                            var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(dataHyb.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                             if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
                                 && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
                                 sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
@@ -3062,6 +3073,10 @@
                 if (gData !== undefined && gData !== null) {
                     //validate settlement parter for DE
                     gData = $scope.validateSettlementPartner(gData);
+                    //validate OAV & OAD parter for DE
+                    gData = $scope.validateOverArching(gData);
+                    //validate settlement level for DE
+                    gData = $scope.validateSettlementLevel(gData);
 
                     var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                     //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
@@ -3071,6 +3086,21 @@
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
                         }
+                        // Adding Over Arching error into err object in DE
+                        if (gData[i]._behaviors.isError['REBATE_OA_MAX_VOL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                        }
+                        if (gData[i]._behaviors.isError['REBATE_OA_MAX_AMT']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
+                        }
+                        // Adding settlment level error into err object in DE
+                        if (gData[i]._behaviors.isError['AR_SETTLEMENT_LVL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
 
@@ -3185,38 +3215,14 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
                             }
-                            dictWipOverMaxVol[gData[i]["REBATE_OA_MAX_VOL"]] = i;
-                            if (Object.keys(dictWipOverMaxVol).length > 1) {
-                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                gData[i]._behaviors.isError['REBATE_OA_MAX_VOL'] = true;
-                                gData[i]._behaviors.validMsg['REBATE_OA_MAX_VOL'] = "All deals within a PS should have the same 'Over Arching Max Volume' value";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_VOL']);
-                            }
-                            dictWipOverMaxAmt[gData[i]["REBATE_OA_MAX_AMT"]] = i;
-                            if (Object.keys(dictWipOverMaxAmt).length > 1) {
-                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                gData[i]._behaviors.isError['REBATE_OA_MAX_AMT'] = true;
-                                gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT'] = "All deals within a PS should have the same 'Over Arching Max Dollar' value";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['REBATE_OA_MAX_AMT']);
-                            }
+                            
                         }
 
-                        if (hasInvalidArSettlementForHybirdDeals) {
-                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                        }
-
-                        //if (hasInvalidSettlementPartnerForHybirdDeals) {
-                        //    gData[i]._behaviors.isError["SETTLEMENT_PARTNER"] = true;
-                        //    gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"] = "All Settlement Partners must be same within a Hybrid Pricing Strategy.";
+                        //if (hasInvalidArSettlementForHybirdDeals) {
+                        //    gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                        //    gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "All Settlement Levels must be same within a Hybrid Pricing Strategy.";
                         //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                        //    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        //    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         //}
 
                         // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
@@ -5700,11 +5706,98 @@
                 $scope.setBusy("", "");
             });
         }
-        //validate settlement partner
+        //validate settlement level for hybrid 
+        $scope.validateSettlementLevel = function (data) {
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond=false ;
+            //calling clear all validation
+            $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
+            if (hybCond == '1') {
+                retCond = data.every((val) => val.AR_SETTLEMENT_LVL != null && val.AR_SETTLEMENT_LVL != '' && val.AR_SETTLEMENT_LVL ==
+                    data[0].AR_SETTLEMENT_LVL);
+                if (!retCond) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'AR_SETTLEMENT_LVL', 'mustequal');
+                    });
+                }
+            }
+            return data;
+        }
+        // validate OverArching conditions
+        $scope.validateOverArching = function (data) {
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
+            //calling clear overarching in the begening
+            $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
+            $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
+            //check if settlement is cash and pgm type is backend
+            if (hybCond == '1') {
+                //condition to check values are zero
+                retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL == 0);
+                retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT == 0);
+                //condition to check all OAV is same 
+                retOAVCond = data.every((val) => val.REBATE_OA_MAX_VOL != null && val.REBATE_OA_MAX_VOL != ''  &&
+                    val.REBATE_OA_MAX_VOL == data[0].REBATE_OA_MAX_VOL);
+
+                //condition to check all OAD is same 
+                retOADCond = data.every((val) => val.REBATE_OA_MAX_AMT != null && val.REBATE_OA_MAX_AMT != ''  &&
+                    val.REBATE_OA_MAX_AMT == data[0].REBATE_OA_MAX_AMT);
+                //condition to check all OAV is empty 
+                retOAVEmptCond = data.every((val) => (val.REBATE_OA_MAX_VOL == null || val.REBATE_OA_MAX_VOL == '') &&
+                    (val.REBATE_OA_MAX_VOL == data[0].REBATE_OA_MAX_VOL));
+
+                //condition to check all OAD is empty 
+                retOADEmptCond = data.every((val) => (val.REBATE_OA_MAX_AMT == null || val.REBATE_OA_MAX_AMT == '')
+                    && (val.REBATE_OA_MAX_AMT == data[0].REBATE_OA_MAX_AMT));
+                if (retZeroOAV) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
+                    });
+                }
+                else if (retZeroOAD) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
+                    });
+                }
+
+                else if (retOAVEmptCond && retOADEmptCond) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth');
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth');
+                    });
+                }
+                else if (retOAVCond && retOADCond) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
+                    });
+                }
+                else {
+                    if (!retOAVCond) {
+                        angular.forEach(data, (item) => {
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal');
+                        });
+                    }
+                    if (!retOADCond) {
+                        angular.forEach(data, (item) => {
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal');
+                        });
+                    }
+                    if (retOAVEmptCond && !retOADEmptCond) {
+                        $scope.clearValidation(data, 'REBATE_OA_MAX_VOL');
+                    }
+                    if (retOADEmptCond && !retOAVEmptCond) {
+                        $scope.clearValidation(data, 'REBATE_OA_MAX_AMT');
+                    }
+                    
+                }
+                
+             }
+            return data;
+        }
+          //validate settlement partner
         $scope.validateSettlementPartner = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
             //check if settlement is cash and pgm type is backend
-            var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+            var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
             if (cashObj && cashObj.length > 0) {
                 if ($scope.getVendorDropDownResult.data.length == 0) {
                     angular.forEach(data, (item) => {
@@ -5726,12 +5819,12 @@
                     retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                     if (!retCond) {
                         angular.forEach(data, (item) => {
-                            if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '')) {
+                            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '')) {
                                 $scope.setSettlementPartner(item, '0');
                             }
                             else {
                                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                                    if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                         item.SETTLEMENT_PARTNER = null;
                                     }
                                     delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
@@ -5755,14 +5848,14 @@
         $scope.clearSettlementPartner = function (data) {
             angular.forEach(data, (item) => {
                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                    if (item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                    if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                         item.SETTLEMENT_PARTNER = null;
                     }
                     delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                 }
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
                     if (item._behaviors && item._behaviors.isReadOnly)
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
@@ -5777,10 +5870,10 @@
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
             if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
             if (item.HAS_TRACKER == 0) {
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash' && item.HAS_TRACKER === "0") {
+                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash' && item.HAS_TRACKER === "0") {
                     item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
                 }
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
+                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' || item.HAS_TRACKER != "0") {
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
                 if ((item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
@@ -5800,6 +5893,45 @@
             }
 
         }
-
+        //helper function for clear and set behaviors
+        $scope.clearValidation = function (data, elem) {
+            angular.forEach(data, (item) => {
+                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                    delete item._behaviors.isRequired[elem];
+                    delete item._behaviors.isError[elem];
+                    delete item._behaviors.validMsg[elem];
+                }
+            });
+        }
+        $scope.setBehaviors = function (item, elem, cond) {
+            if (!item._behaviors) item._behaviors = {};
+            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+            if (!item._behaviors.isError) item._behaviors.isError = {};
+            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+            if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+            item._behaviors.isRequired[elem] = true;
+            item._behaviors.isError[elem] = true;
+            if (cond == 'notequal' && elem == 'REBATE_OA_MAX_VOL') {
+                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Volume' value.";
+            }
+            else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_AMT') {
+                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Doller' value.";
+            }
+            else if (cond == 'equalemptyboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
+                item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be empty. Pick one";
+            }
+            else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_VOL') {
+                item._behaviors.validMsg[elem] = "Overarching Maximum Volume must be blank or >0";
+            }
+            else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_AMT') {
+                item._behaviors.validMsg[elem] = "Overarching Maximum Doller must be blank or >0";
+            }
+            else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
+                item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be entered out. Pick one ";
+            }
+            else {
+                item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
+            }
+        }
     }
 })();
