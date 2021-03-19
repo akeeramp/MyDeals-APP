@@ -861,12 +861,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background(null);
         }
-        if (stlmentValue != "Cash") {
+        if (stlmentValue != null && stlmentValue != '' && stlmentValue != "Cash") {
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value('');
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(false);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background('#f5f5f5');
         }
-        
 
         // KIT
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -2003,7 +2002,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["AR_SETTLEMENT_LVL"] = "";
                             }
                         }
-                        //set default value for settlement partner is settlement level is cash
+                        //set default value for settlement partner if settlement level is cash
                         if (data[r]["AR_SETTLEMENT_LVL"] !== null && data[r]["AR_SETTLEMENT_LVL"].toLowerCase() === 'cash') {
                             data[r]["SETTLEMENT_PARTNER"] = $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER;
                         }
