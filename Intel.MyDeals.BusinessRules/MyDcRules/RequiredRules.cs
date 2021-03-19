@@ -18,55 +18,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SyncRequiredItems,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
-                //new MyOpRule
-                //{
-                //    Title="Required if Consumption",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetRequired,
-                //            Target = new[] {AttributeCodes.CONSUMPTION_REASON }
-                //        }
-                //    }
-                //},
-                //new MyOpRule
-                //{
-                //    Title="Required if Market Segment",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && (de.AtrbValue.ToString().ToUpper().Contains("All Direct Market Segments") || de.AtrbValue.ToString().ToUpper().Contains("RETAIL"))).Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetRequired,
-                //            Target = new[] {AttributeCodes.RETAIL_CYCLE }
-                //        }
-                //    }
-                //},
-                //new MyOpRule
-                //{
-                //    Title="Req if Meet Comp is Price Performance",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && de.AtrbValue.ToString() == "Price / Performance").Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetRequired,
-                //            Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
-                //        }
-                //    }
-                //},
-
+                
                 new MyOpRule
                 {
                     Title="Required if MCP or PullIn and CPU ior CS",
@@ -96,7 +48,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     // If deal type is Vol Tier and Type is MDF ACTIVITY, then ensure that user fills in VOLUME values
                     Title="Forecast Volume Required if Program Type is MDF ACTIVITY",
-                    ActionRule = MyDcActions.VolTierMdfVolumeRequired,
+                    ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
@@ -115,6 +67,26 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Send to Vistex Flag Required if Program Type is NRE",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.SEND_TO_VISTEX
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
                     Title="Tender Projects Required",
                     ActionRule = MyDcActions.TendersProjectRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
@@ -125,6 +97,7 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
+                    // Stays complex rule as extra checks are needed to carry out
                     ActionRule = MyDcActions.VistexRequiredFields,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},

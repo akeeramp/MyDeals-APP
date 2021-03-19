@@ -439,24 +439,43 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Read Only and Blank value if Rebate Type is...",
-                    ActionRule = MyDcActions.DisableForActivityOrAccrual,
+                    ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && (de.HasValue("MDF ACTIVITY") ||
-                                                                                                                 de.HasValue("MDF ACCRUAL") ||
-                                                                                                                 de.HasValue("NRE ACCRUAL")) ).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValueIn(new[] { "MDF ACTIVITY", "MDF ACCRUAL", "NRE ACCRUAL" })).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Action = BusinessLogicDeActions.SetReadOnlyAndClearValue,
                             Target = new[] {
                                 AttributeCodes.PERIOD_PROFILE
                             }
                         }
                     }
                 },
+
+                new MyOpRule
+                {
+                    Title="Read Only and Blank value if Rebate Type is NOT...",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && !de.HasValue("NRE")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnlyAndClearValue,
+                            Target = new[] {
+                                AttributeCodes.SEND_TO_VISTEX
+                            }
+                        }
+                    }
+                },
+
 
                 new MyOpRule
                 {
