@@ -1154,14 +1154,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void DisableForActivityOrAccrual(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
-        }
-
         public static void DisableForVistexHybrid(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2389,14 +2381,6 @@ namespace Intel.MyDeals.BusinessRules
                     de.IsReadOnly = true;
                 //}
             }
-        }
-
-        public static void VolTierMdfVolumeRequired(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
         #region Tiered Validations
