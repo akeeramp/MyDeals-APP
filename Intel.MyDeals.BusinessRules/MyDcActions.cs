@@ -915,30 +915,32 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     de.IsReadOnly = true;
                 }
+                else
+                    de.IsReadOnly = false;
             }
         }
 
-        public static void ReadOnlyIfSettlementIsNotCash(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+        //public static void ReadOnlyIfSettlementIsNotCash(params object[] args)
+        //{
+        //    MyOpRuleCore r = new MyOpRuleCore(args);
+        //    if (!r.IsValid) return;
 
-            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+        //    IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
 
-            if (deArSettlementLvl == null || deArSettlementLvl.AtrbValue.ToString() == "Cash")
-            {
-                return; 
-            }
+        //    if (deArSettlementLvl == null || deArSettlementLvl.AtrbValue.ToString() == "Cash")
+        //    {
+        //        return; 
+        //    }
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
-            {
-                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null) // This is AR_SETTLEMENT_LVL value
-                {
-                    de.IsReadOnly = true;
-                }
-            }
-        }
+        //    foreach (var s in r.Rule.OpRuleActions[0].Target)
+        //    {
+        //        OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+        //        if (de != null) // This is AR_SETTLEMENT_LVL value
+        //        {
+        //            de.IsReadOnly = true;
+        //        }
+        //    }
+        //}
 
         public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
         {
@@ -1180,7 +1182,7 @@ namespace Intel.MyDeals.BusinessRules
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
-        public static void ReadOnlyIfSettlementLevelIsNotCash(params object[] args)
+        public static void MakeSettlementPartnerReadonly(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1198,13 +1200,13 @@ namespace Intel.MyDeals.BusinessRules
                     settlementPartner.AtrbValue = string.Empty;
                     settlementPartner.IsReadOnly = true;
                 }
+                else if (deTrackerValue != "")
+                {
+                    settlementPartner.IsReadOnly = true;
+                }
                 else
                 {
                     settlementPartner.IsReadOnly = false;
-                }
-                if(deTrackerValue != "")
-                {
-                    settlementPartner.IsReadOnly = true;
                 }
             }
         }
