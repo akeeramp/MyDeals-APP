@@ -16,7 +16,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Sync Required",
                     ActionRule = MyDcActions.SyncRequiredItems,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
                 },
                 
                 new MyOpRule
@@ -24,7 +24,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Required if MCP or PullIn and CPU ior CS",
                     ActionRule = MyDcActions.MeetCompMandatoryCheck,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnRequired }
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}
                 },
 
                 new MyOpRule
@@ -41,7 +41,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ForecastVolumeRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString() }
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString()}
                 },
 
                 new MyOpRule
@@ -70,8 +70,8 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Send to Vistex Flag Required if Program Type is NRE",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString() },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -87,21 +87,12 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Tender Projects Required",
-                    ActionRule = MyDcActions.TendersProjectRequired,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString() }
-                },
-
-                new MyOpRule
-                {
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
                     // Stays complex rule as extra checks are needed to carry out
                     ActionRule = MyDcActions.VistexRequiredFields,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
@@ -138,7 +129,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Required if Program Type is NRE",
                     ActionRule = MyDcActions.ProgramNreDateChecks,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
@@ -167,7 +158,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Required if ECAP Adjustment",
                     ActionRule = MyDcActions.EcapAdjRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}
                 },
 
@@ -175,17 +166,39 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Server Deal Type Required if Product is SvrWS and Tender Deal",
                     ActionRule = MyDcActions.RequiredServerDealType,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
                 },
 
                 new MyOpRule
                 {
-                    Title="End customer Required if Tender Deal",
-                    ActionRule = MyDcActions.RequiredEndCustomer,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString()},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                    Title="Tender Projects Required",
+                    ActionRule = MyDcActions.TendersProjectRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()}
+                },
+
+                new MyOpRule
+                {
+                    Title="Required Fields at WIP for Tender Deals",
+                    ActionRule = MyDcActions.ExecuteActions, //ActionRule = MyDcActions.RequiredEndCustomer,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, // Also had PTR before
+                    //InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}, // Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
+                                AttributeCodes.END_CUSTOMER_RETAIL,
+                                AttributeCodes.PRIMED_CUST_CNTRY,
+                                AttributeCodes.QLTR_PROJECT
+                            }
+                        }
+                    }
                 },
 
                 new MyOpRule
