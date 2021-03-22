@@ -5731,8 +5731,8 @@
             //check if settlement is cash and pgm type is backend
             if (hybCond == '1') {
                 //condition to check values are zero
-                retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL == 0);
-                retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT == 0);
+                retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
+                retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
                 //condition to check all OAV is same 
                 retOAVCond = data.every((val) => val.REBATE_OA_MAX_VOL != null && val.REBATE_OA_MAX_VOL != ''  &&
                     val.REBATE_OA_MAX_VOL == data[0].REBATE_OA_MAX_VOL);
