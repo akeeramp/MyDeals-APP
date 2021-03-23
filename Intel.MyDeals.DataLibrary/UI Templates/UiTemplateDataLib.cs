@@ -2156,6 +2156,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3454,
                 AtrbCd = AttributeCodes.SEND_TO_VISTEX,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 Width = 80,
                 IsFilterable = true,
                 IsSortable = true,
