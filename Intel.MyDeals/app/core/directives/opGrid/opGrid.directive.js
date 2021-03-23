@@ -1851,7 +1851,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 model.dirty = true;
                 $scope._dirty = true;
                 $scope.root._dirty = true;
-
+                if (!model._behaviors.isReadOnly) model._behaviors.isReadOnly = {};
+                if (col == "AR_SETTLEMENT_LVL" && newVal == "Cash") {
+                    if (model._behaviors && model._behaviors.isReadOnly)
+                        delete model._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+                    var data = $scope.contractDs.data();
+                    if (data != null && data != undefined) {
+                        model.SETTLEMENT_PARTNER = data[0].Customer.DFLT_SETTLEMENT_PARTNER;
+                    }
+                }
+                else if (col == "AR_SETTLEMENT_LVL" && newVal !== "Cash") {
+                    if (model.SETTLEMENT_PARTNER != null && model.SETTLEMENT_PARTNER != undefined) {
+                        model.SETTLEMENT_PARTNER = "";
+                    }
+                    model._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                }
                 $scope.root.saveCell(model, col, $scope, newVal);
 
                 if (model.isLinked !== undefined && model.isLinked) {
