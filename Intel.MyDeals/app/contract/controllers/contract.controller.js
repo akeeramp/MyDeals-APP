@@ -2847,21 +2847,21 @@
 
                     for (var s = 0; s < sData.length; s++) {
                         //Adding settlment partner error into err object in PTE
-                        if (sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                        if (sData[s]._behaviors.isError != undefined && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
                         }
                         //Adding Over arching  error into err object in PTE
-                        if (sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
+                        if (sData[s]._behaviors.isError != undefined && sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
                         }
-                        if (sData[s]._behaviors.isError['REBATE_OA_MAX_VOL']) {
+                        if (sData[s]._behaviors.isError != undefined && sData[s]._behaviors.isError['REBATE_OA_MAX_VOL']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
                         }
                         //Adding settlment level error into err object in PTE
-                        if (sData[s]._behaviors.isError['AR_SETTLEMENT_LVL']) {
+                        if (sData[s]._behaviors.isError != undefined && sData[s]._behaviors.isError['AR_SETTLEMENT_LVL']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
@@ -4052,7 +4052,7 @@
             var dimAtrbs;
             var isKit = 0;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
                 dimKey = tierDimKey;
                 dimAtrbs = tierAtrbs;
             }
