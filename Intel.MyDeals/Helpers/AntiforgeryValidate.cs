@@ -20,7 +20,7 @@ namespace Intel.MyDeals.Helpers
             string formToken = "";
 
             IEnumerable<string> tokenHeaders;
-            if ((envs != "local" || envs != "itt") && actionContext.Request.Headers.TryGetValues("__RequestVerificationToken", out tokenHeaders))
+            if ((envs != "local" || envs != "itt" || envs != "utt" || envs != "cons") && actionContext.Request.Headers.TryGetValues("__RequestVerificationToken", out tokenHeaders))
             {
                 string[] tokens = tokenHeaders.First().Split(':');
                 if (tokens.Length == 2)
