@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/15/2021 2:34:03 PM
+File Updated: 3/19/2021 3:35:33 PM
 On: MHTIPPIN-MOBL
 From: HF2RDMDB.amr.corp.intel.com\RDMITT1,3181, MYDEALS
 */
@@ -3870,8 +3870,8 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
 			ATRB_DESC = "Tender Project",
-			ATRB_LBL = "Project",
-			ATRB_MAX_LEN = 0,
+			ATRB_LBL = "Project Name",
+			ATRB_MAX_LEN = 65,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",

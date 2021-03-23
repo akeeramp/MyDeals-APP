@@ -131,23 +131,23 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule // Set to read only if AR_SETTLEMENT_LVL is not Cash
-                {
-                    Title="Readonly if Value is not Cash",
-                    ActionRule = MyDcActions.ReadOnlyIfSettlementIsNotCash,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {
-                                AttributeCodes.SETTLEMENT_PARTNER
-                            }
-                        }
-                    }
-                },
+                //new MyOpRule // Set to read only if AR_SETTLEMENT_LVL is not Cash
+                //{
+                //    Title="Readonly if Value is not Cash",
+                //    ActionRule = MyDcActions.ReadOnlyIfSettlementIsNotCash,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = BusinessLogicDeActions.SetReadOnly,
+                //            Target = new[] {
+                //                AttributeCodes.SETTLEMENT_PARTNER
+                //            }
+                //        }
+                //    }
+                //},
 
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
@@ -187,22 +187,22 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                //new MyOpRule
-                //{
-                //    Title="Settlement Partner is Readonly",
-                //    ActionRule = MyDcActions.ReadOnlyIfSettlementLevelIsNotCash,
-                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Target = new[] {
-                //                AttributeCodes.SETTLEMENT_PARTNER
-                //            }
-                //        }
-                //    }
-                //},
+                new MyOpRule
+                {
+                    Title="Settlement Partner is Readonly",
+                    ActionRule = MyDcActions.MakeSettlementPartnerReadonly,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.SETTLEMENT_PARTNER
+                            }
+                        }
+                    }
+                },
 
                 new MyOpRule // Allow edits only in re-deal cases
                 {
@@ -439,24 +439,43 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Read Only and Blank value if Rebate Type is...",
-                    ActionRule = MyDcActions.DisableForActivityOrAccrual,
+                    ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && (de.HasValue("MDF ACTIVITY") ||
-                                                                                                                 de.HasValue("MDF ACCRUAL") ||
-                                                                                                                 de.HasValue("NRE ACCRUAL")) ).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValueIn(new[] { "MDF ACTIVITY", "MDF ACCRUAL", "NRE ACCRUAL" })).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Action = BusinessLogicDeActions.SetReadOnlyAndClearValue,
                             Target = new[] {
                                 AttributeCodes.PERIOD_PROFILE
                             }
                         }
                     }
                 },
+
+                new MyOpRule
+                {
+                    Title="Read Only and Blank value if Rebate Type is NOT...",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && !de.HasValue("NRE")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnlyAndClearValue,
+                            Target = new[] {
+                                AttributeCodes.SEND_TO_VISTEX
+                            }
+                        }
+                    }
+                },
+
 
                 new MyOpRule
                 {

@@ -20,8 +20,6 @@ namespace Intel.MyDeals.Controllers.API
     {
         private readonly IContractsLib _contractsLib;
 
-        public static Dictionary<string, int> _getCustomerId;
-
         public ContractsController(IContractsLib contractsLib)
         {
             this._contractsLib = contractsLib;
@@ -34,17 +32,6 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _contractsLib.GetContract(id)
                 , $"Unable to get Contract {id}"
             );
-        }
-
-        [Authorize]
-        private void setCustomerId(int custId)
-        {
-            string authenticatedName = System.Threading.Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\", "");
-            if (_getCustomerId == null || !_getCustomerId.Any())
-            {
-                _getCustomerId = new Dictionary<string, int>();
-            }
-            _getCustomerId[authenticatedName] = custId;
         }
 
         [Authorize]
@@ -77,7 +64,6 @@ namespace Intel.MyDeals.Controllers.API
             {
                 return new OpDataCollectorFlattenedList();
             }
-            setCustomerId(custId);
             return rtn;
         }
 

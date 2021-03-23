@@ -287,6 +287,9 @@
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -295,9 +298,6 @@
                     },
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
-                    },
-                    "SEND_TO_VISTEX": {
-                        "Groups": ["Deal Info"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
@@ -469,6 +469,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -477,9 +483,6 @@
                     },
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
-                    },
-                    "SEND_TO_VISTEX": {
-                        "Groups": ["Deal Info"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
@@ -666,6 +669,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -715,6 +724,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
+                        "Groups": ["Consumption"]
+                    },
+                    "QLTR_PROJECT": {
                         "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
@@ -959,6 +971,9 @@
                     "END_CUSTOMER_RETAIL": {
                         "Groups": ["Deal Info"]
                     },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -967,9 +982,6 @@
                     },
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
-                    },
-                    "SEND_TO_VISTEX": {
-                        "Groups": ["Deal Info"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
@@ -1141,6 +1153,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"]
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -1149,9 +1167,6 @@
                     },
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
-                    },
-                    "SEND_TO_VISTEX": {
-                        "Groups": ["Deal Info"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]

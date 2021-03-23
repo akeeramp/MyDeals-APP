@@ -99,16 +99,37 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         var serviceData = []; // data from the service will be pushed into this.
         if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
             if ((scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
+                var custId = 0;
+                var colName = "";
+                if (scope.$parent.$parent.$ctrl != null && scope.$parent.$parent.$ctrl != undefined
+                    && scope.$parent.$parent.$ctrl.colData != null
+                    && scope.$parent.$parent.$ctrl.colData != undefined) {
+                    custId = parseInt(scope.$parent.$parent.$ctrl.colData.custId);
+                    colName = scope.$parent.$parent.$ctrl.colName;
+                    if (custId == null || custId == undefined || custId == '') {
+                        custId = 0;
+                    }
+                }
                 scope.values = {
                     transport: {
                         read: function (e) {
                             // Use dataService to take advantage of ng caching
-                            dataService.get(scope.opLookupUrl, null, null, true)
-                                .then(function (response) {
-                                    e.success(response.data);
-                                }, function (response) {
-                                    logger.error("Unable to get data for dropdowns.", response, response.statusText);
-                                });
+                            if (colName == "SETTLEMENT_PARTNER") {
+                                dataService.get(scope.opLookupUrl + "/" + custId, null, null, true)
+                                    .then(function (response) {
+                                        e.success(response.data);
+                                    }, function (response) {
+                                        logger.error("Unable to get data for dropdowns.", response, response.statusText);
+                                    });
+                            }
+                            else {
+                                dataService.get(scope.opLookupUrl, null, null, true)
+                                    .then(function (response) {
+                                        e.success(response.data);
+                                    }, function (response) {
+                                        logger.error("Unable to get data for dropdowns.", response, response.statusText);
+                                    });
+                            }
                         }
                     },
                     schema: {
