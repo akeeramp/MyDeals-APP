@@ -56,8 +56,8 @@
         vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
-            suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'PROGRAM') : false;
-        vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'PROGRAM';
+            suggestedProduct.isExcludeProduct && (dealType == 'VOL_TIER' || dealType == 'FLEX' || dealType == 'PROGRAM') : false;
+        vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'FLEX' || dealType == 'PROGRAM';
         vm.isDeveloper = isDeveloper;
         vm.isTester = isTester;
         vm.ToggleShowTree = toggleShowTree;
