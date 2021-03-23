@@ -7,6 +7,7 @@ using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -1258,5 +1259,58 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
+
+        public List<FlexProdOvlp> GetProductOVLPValidation(ProductOVLPValidation objProductOVLPValidation)
+        {
+            var ret = new List<FlexProdOvlp>();
+            OpLog.Log("GetProductOVLPValidation");
+
+            type_int_pair opPairAcr = new type_int_pair();
+            type_int_pair opPairDrn = new type_int_pair();
+           
+            foreach(var acr in objProductOVLPValidation.AcrInc)
+            {
+                opPairAcr.Rows.Add(acr.RowId, acr.PRDMemberSid);
+            }
+
+            foreach (var drn in objProductOVLPValidation.DrnInc)
+            {
+                opPairDrn.Rows.Add(drn.RowId, drn.PRDMemberSid);
+            }
+
+            var cmd = new Procs.dbo.PR_MYDL_PRD_OVLP_VLD {
+                in_acr_inc_prd_lst = opPairAcr,
+                in_acr_exc_prd_lst = new type_int_list(objProductOVLPValidation.AcrExc.ToArray()),
+                in_drn_inc_prd_lst = opPairDrn,
+                in_drn_exc_prd_lst = new type_int_list(objProductOVLPValidation.DrnExc.ToArray())
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_ACR_DRN_TYPE = DB.GetReaderOrdinal(rdr, "ACR_DRN_TYPE");
+                    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_ROW_ID = DB.GetReaderOrdinal(rdr, "ROW_ID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new FlexProdOvlp
+                        {
+                            ACR_DRN_TYPE = (IDX_ACR_DRN_TYPE < 0 || rdr.IsDBNull(IDX_ACR_DRN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACR_DRN_TYPE),
+                            PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            ROW_ID = (IDX_ROW_ID < 0 || rdr.IsDBNull(IDX_ROW_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_ID)
+                        });
+                    } 
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
     }
 }

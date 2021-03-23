@@ -688,5 +688,12 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Product details"
             );
         }
+        [Route("validateOverlapProduct")]
+        [HttpPost]
+        public List<FlexProdOvlp> GetProductOVLPValidation([FromBody] ProductOVLPValidation objProductOVLPValidation)
+        {
+            return SafeExecutor(() => _productsLib.GetProductOVLPValidation(objProductOVLPValidation)
+            , $"Unable to check product overlap validation");
+        }
     }
 }
