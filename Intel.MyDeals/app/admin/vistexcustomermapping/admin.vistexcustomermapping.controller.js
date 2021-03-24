@@ -39,7 +39,7 @@
                 logger.error("Unable to get Settlement Levels.", response, response.statusText);
             });
 
-            dropdownsService.getDropdown('GetDropdowns/SETTLEMENT_PARTNER').then(function (response) {
+            dropdownsService.getVendorDropDown('GetCustomerVendors/0').then(function (response) {
                 vm.SettlementPartner = response.data;
             }, function (response) {
                 logger.error("Unable to get Settlement Partner list.", response, response.statusText);
@@ -94,7 +94,7 @@
                 validationMessages.push("Please select a valid <b>Non-Tenders Settlement Level</b>");
             if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevel.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0)
                 validationMessages.push("Please select a valid <b>Tenders Settlement Level</b>");
-            if (model.DFLT_SETTLEMENT_PARTNER != null && model.DFLT_SETTLEMENT_PARTNER != '' && vm.Partner.filter(x => x.DROP_DOWN === model.DFLT_SETTLEMENT_PARTNER).length == 0)
+            if (model.DFLT_SETTLEMENT_PARTNER != null && model.DFLT_SETTLEMENT_PARTNER != '' && vm.Partner.filter(x => x.BUSNS_ORG_NM === model.DFLT_SETTLEMENT_PARTNER).length == 0)
                 validationMessages.push("Please select a valid <b>Settlement Partner</b>")
 
             if (isShowPopup && validationMessages.length > 0)
@@ -171,8 +171,8 @@
 
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "DROP_DOWN",
-            dataValueField: "DROP_DOWN",
+            dataTextField: "BUSNS_ORG_NM",
+            dataValueField: "BUSNS_ORG_NM",
             valuePrimitive: true
         };
 

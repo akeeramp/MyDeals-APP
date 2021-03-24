@@ -1239,8 +1239,23 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
-                    List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
-                    string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    List<string> dropDowns = null;
+                    string matchedValue = string.Empty;
+                    if (de.AtrbCd == AttributeCodes.SETTLEMENT_PARTNER)
+                    {
+                        dropDowns = DataCollections.GetCustomerVendors().Select(d => d.BUSNS_ORG_NM).ToList();
+                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                        if(string.IsNullOrEmpty(matchedValue))
+                        {
+                            dropDowns = DataCollections.GetCustomerVendors().Select(d => d.DROP_DOWN).ToList();
+                            matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();                            
+                        }
+                    }
+                    else
+                    {
+                        dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    }
                     if (string.IsNullOrEmpty(matchedValue))
                     {
                         de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));

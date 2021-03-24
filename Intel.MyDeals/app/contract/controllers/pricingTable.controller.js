@@ -2510,7 +2510,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //// NOTE: We may need to revisit the ECAP Tracker Number dropdwon list in the future, when if we do uncomment the below lines to make the dropdwon re-appear.
                         //sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
                     }
-                    else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
+                    else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "BUSNS_ORG_NM" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
                         // Add validation dropdowns/multiselects onto the cells
                         applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 

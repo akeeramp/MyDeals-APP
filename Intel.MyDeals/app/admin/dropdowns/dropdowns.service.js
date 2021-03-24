@@ -10,6 +10,7 @@
 
     function dropdownsService($http, dataService, logger, $q) {
         var apiBaseUrl = "api/Dropdown/";
+        var customerVendorApiBaseUrl = "api/CustomerVendor/";
 
         return {
             getBasicDropdowns: getBasicDropdowns,
@@ -20,7 +21,8 @@
             deleteBasicDropdowns: deleteBasicDropdowns,
             insertBasicDropdowns: insertBasicDropdowns,
             getDropdown: getDropdown,
-            getOpDataElements: getOpDataElements
+            getOpDataElements: getOpDataElements,
+            getVendorDropDown: getVendorDropDown
         }
 
         function getOpDataElements() {
@@ -29,6 +31,10 @@
 
         function getDropdown(strDropDownType) {
             return dataService.get(apiBaseUrl + strDropDownType);
+        }
+
+        function getVendorDropDown(getVendorDropDowntypeUrl) {
+            return dataService.get(customerVendorApiBaseUrl + getVendorDropDowntypeUrl);
         }
 
         function getBasicDropdowns(isForceReGet) {
