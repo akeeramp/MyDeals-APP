@@ -2826,6 +2826,22 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ValidatePrimeCust(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.IS_PRIMED_CUST);
+            IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+
+            if (de == null || deEndCust == null) return;
+
+            if (de.AtrbValue.ToString() == "0" || de.AtrbValue.ToString() == "")
+            {
+                deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
+            }
+        }
+
         public static void CheckTenderSettings(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
