@@ -954,6 +954,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="End Customer has been primed",
+                    ActionRule = MyDcActions.ValidatePrimeCust,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Pull Values From Save Stack",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
