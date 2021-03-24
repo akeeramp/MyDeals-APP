@@ -182,10 +182,9 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Required Fields at WIP for Tender Deals",
-                    ActionRule = MyDcActions.ExecuteActions, //ActionRule = MyDcActions.RequiredEndCustomer,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, // Also had PTR before
-                    //InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}, // Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, 
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}, 
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -195,6 +194,25 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {
                                 AttributeCodes.END_CUSTOMER_RETAIL,
                                 AttributeCodes.PRIMED_CUST_CNTRY,
+                                AttributeCodes.QLTR_PROJECT
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Required Fields at PTR for Tender Deals", // Merge with above if two other fields are removed from PTR
+                    ActionRule = MyDcActions.ExecuteActions, 
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}, 
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}, 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {
                                 AttributeCodes.QLTR_PROJECT
                             }
                         }
