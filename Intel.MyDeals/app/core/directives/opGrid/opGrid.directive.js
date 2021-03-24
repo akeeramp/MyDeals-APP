@@ -1337,7 +1337,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //Note: this was second approach - this appending approach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
                     var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
+                }
 
+                else if (col.uiType.toUpperCase() === "SPP") {
+                    var lookupText = field.opLookupText;
+                    var id = "";
+                    //Note: this was second approach - this appending approach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
+                    //var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                    //$(container).append(multiCompiled);
+
+                    openSPPModal(container, col);
                 }
 
                 else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
@@ -3197,6 +3206,63 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
+            function openSPPModal(container, col) {
+                var containerDataItem = angular.element(container).scope().dataItem;
+                console.log(col);
+
+                var mrktSegModal = $uibModal.open({
+                    backdrop: 'static',
+                    //templateUrl: 'app/contract/partials/ptModals/systemPricePointModal.html',
+                    templateUrl: 'systemPricePointModal',
+                    controller: 'SystemPricePointModalCtrl',
+                    controllerAs: '$ctrl',
+                    windowClass: 'multiselect-modal-window',
+                    size: 'md',
+
+                    resolve: {
+                        items: function () {
+                            return {
+                                'label': col.title,
+                                'uiType': col.uiType,
+                                'opLookupUrl': col.lookupUrl,
+                                'opLookupText': col.lookupText,
+                                'opLookupValue': col.lookupValue
+                            };
+                        },
+                        cellCurrValues: function () {
+                            if (typeof containerDataItem.SYS_PRICE_POINT == "string") {
+                                return containerDataItem.SYS_PRICE_POINT.split(",").map(function (item) {
+                                    return item.trim();
+                                });
+                            } else {
+                                return containerDataItem.SYS_PRICE_POINT.map(function (item) {
+                                    return item.trim();
+                                });
+                            }
+                        },
+                        colName: function () {
+                            return "SYS_PRICE_POINT";
+                        },
+                        isBlendedGeo: function () {
+                            return false;
+                        }
+                    }
+                });
+
+                mrktSegModal.result.then(
+                    function (marketSegments) { //returns as an array
+                        containerDataItem.SYS_PRICE_POINT = marketSegments;
+                        //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
+                        //containerDataItem.dirty = true;
+                        //$scope._dirty = true;
+                        //$scope.root._dirty = true;
+                        //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(containerDataItem, "MRKT_SEG");
+
+                        $scope.saveFunctions(containerDataItem, "SYS_PRICE_POINT", containerDataItem.SYS_PRICE_POINT);
+                    },
+                    function () {
+                    });
+            }
 
 
             // ===================================================================================

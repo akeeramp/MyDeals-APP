@@ -2137,9 +2137,13 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#",
+                UiType = "SPP",
+                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#"
+                IsSortable = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
