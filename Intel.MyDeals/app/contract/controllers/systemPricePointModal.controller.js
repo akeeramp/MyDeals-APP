@@ -13,8 +13,8 @@ function SystemPricePointModalCtrl($scope, $uibModalInstance, items, cellCurrVal
     var $ctrl = this;
 
     var operators = [
-        { id: 1, name: '<=' },
-        { id: 2, name: '>=' }
+        { id: 1, name: '<=' }
+        //{ id: 2, name: '>=' }
     ];
     $ctrl.operator = { id: 1, name: '<=' };
     $ctrl.price = "";
