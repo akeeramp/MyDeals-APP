@@ -1,0 +1,36 @@
+﻿<script type="text/ng-template" id="systemPricePointModal">
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Select {{$ctrl.label}}</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="col-sm-4">
+                    <label for="inputControl">Operator</label>
+                    <select id="inputControl" kendo-drop-down-list k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.operator"></select>
+                </div>
+                <div class="col-sm-8">
+                    <label for="inputPrice">Price Point</label>
+                    <input class="form-control" kendo-numeric-text-box id="inputPrice" format="'c2'" min="0.01" max="1000000"k-ng-model="$ctrl.price">
+                </div>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+<!--<div class="modal-footer">	</div>-->
+</script>

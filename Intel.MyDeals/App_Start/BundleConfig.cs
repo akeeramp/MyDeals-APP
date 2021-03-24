@@ -242,6 +242,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/managerTimeline.controller.js"
                 , "~/app/contract/controllers/mrktSegMultiSelect.service.js"
                 , "~/app/contract/controllers/multiSelectModal.controller.js"
+                , "~/app/contract/controllers/systemPricePointModal.controller.js"
                 , "~/app/contract/controllers/pctGroupModal.controller.js"
                 , "~/app/contract/controllers/pctOverrideReasonModal.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
