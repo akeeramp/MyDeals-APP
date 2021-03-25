@@ -448,9 +448,9 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
-                    "NUM_OF_TIERS": {
-                        "Groups": ["All"]
-                    },
+                    //"NUM_OF_TIERS": {
+                    //    "Groups": ["All"]
+                    //},
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -1132,9 +1132,9 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
-                    "NUM_OF_TIERS": {
-                        "Groups": ["All"]
-                    },
+                    //"NUM_OF_TIERS": {
+                    //    "Groups": ["All"]
+                    //},
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
