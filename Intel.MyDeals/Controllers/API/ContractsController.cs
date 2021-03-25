@@ -272,6 +272,25 @@ namespace Intel.MyDeals.Controllers.API
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(contractToken, contractAndPricingTable, forceValidation: true, forcePublish: true)
                 , "Unable to save the Contract"
             );
+            var customerVendorData = DataCollections.GetCustomerVendors();
+
+            if (result.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            {
+                foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.PRC_TBL_ROW])
+                {
+                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                    item["SETTLEMENT_PARTNER"] = supplierName;
+                }
+            }
+
+            if (result.ContainsKey(OpDataElementType.WIP_DEAL))
+            {
+                foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.WIP_DEAL])
+                {
+                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                    item["SETTLEMENT_PARTNER"] = supplierName;
+                }
+            }
 
             return new OpDataCollectorFlattenedDictListPacket
             {
