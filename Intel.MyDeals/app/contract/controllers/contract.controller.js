@@ -5876,7 +5876,7 @@
             item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
             if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-            if (item.HAS_TRACKER == 0) {
+            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
                 if (item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
                     item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
                 }

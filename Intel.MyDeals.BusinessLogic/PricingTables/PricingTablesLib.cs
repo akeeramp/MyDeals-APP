@@ -43,6 +43,7 @@ namespace Intel.MyDeals.BusinessLogic
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
             var myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
+            var customerVendorData = DataCollections.GetCustomerVendors();
             myDealsData.ApplyRules(MyRulesTrigger.OnValidate);
             myDealsData.ApplyRules(MyRulesTrigger.OnPostValidate);
 
@@ -52,6 +53,24 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
                     opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested, true);
+            }
+
+            if (data.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            {
+                foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.PRC_TBL_ROW])
+                {
+                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                    item["SETTLEMENT_PARTNER"] = supplierName;
+                }
+            }
+
+            if (data.ContainsKey(OpDataElementType.WIP_DEAL))
+            {
+                foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+                {
+                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                    item["SETTLEMENT_PARTNER"] = supplierName;
+                }
             }
 
             if (data.ContainsKey(OpDataElementType.PRC_ST) && data[OpDataElementType.PRC_ST].Count > 0 && data[OpDataElementType.PRC_ST][0].ContainsKey("_actions"))
