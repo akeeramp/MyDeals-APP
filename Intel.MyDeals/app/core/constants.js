@@ -326,9 +326,6 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -337,7 +334,10 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },    
+                    },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -508,9 +508,6 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -519,7 +516,10 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },                  
+                    },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -711,9 +711,6 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -722,7 +719,10 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },                    
+                    },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -1007,9 +1007,6 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -1018,7 +1015,10 @@
                     },
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
-                    },      
+                    }, 
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },

@@ -107,7 +107,8 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Target = new[] {
-                                AttributeCodes.QLTR_PROJECT
+                                AttributeCodes.QLTR_PROJECT,
+                                AttributeCodes.SYS_PRICE_POINT
                             }
                         }
                     }
