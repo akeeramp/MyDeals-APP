@@ -236,7 +236,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         // For non hybrid deals make Overarching max volume and amount readonly in PTR, they are still editable in WIP if they got values
-        if (root.curPricingTable["IS_HYBRID_PRC_STRAT"] != "1") {
+        if (root.curPricingTable["IS_HYBRID_PRC_STRAT"] != "1" && root.curPricingTable["OBJ_SET_TYPE_CD"] != "FLEX") {
             if (ptTemplate.model.fields["REBATE_OA_MAX_VOL"] !== undefined) ptTemplate.model.fields.REBATE_OA_MAX_VOL.editable = false;
             if (ptTemplate.model.fields["REBATE_OA_MAX_AMT"] !== undefined) ptTemplate.model.fields.REBATE_OA_MAX_AMT.editable = false;
         }

@@ -2524,6 +2524,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ValidateFlexIsBillings(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayout = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+
+            if (dePayout == null) return;
+
+            if (dePayout.AtrbValue.ToString() == "Consumption")
+            {
+                dePayout.ValidationMessage = "FLEX deals only allow Billings based Payouts.";
+            }
+        }
+
         public static void ValidateTierRate(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2846,12 +2861,12 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.IS_PRIMED_CUST);
+            bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
-            if (de == null || deEndCust == null) return;
+            if (deEndCust == null) return;
 
-            if (de.AtrbValue.ToString() == "0" || de.AtrbValue.ToString() == "")
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "") // If not primed and End customer has a value
             {
                 deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
             }
