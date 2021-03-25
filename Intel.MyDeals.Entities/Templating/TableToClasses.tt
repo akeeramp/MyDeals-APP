@@ -462,7 +462,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//To get Customer Vendor Mapped data 
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VNDR_CUST_MAP]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_VNDR_CUST_DTL]");
 	ds.Tables[0].TableName = "CustomerVendors";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -472,7 +472,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//To get Prime Customers data
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRIM_CUST_DATA]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRIM_CUST_DTL]");
 	ds.Tables[0].TableName = "PrimeCustomers";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -489,11 +489,6 @@ using System.Collections.Generic;
 	//To get countries
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRIM_CUST]");
 	ds.Tables[0].TableName = "PrimeCustDropdown";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-
-	ds = dbobjects.ExecuteDataSet("declare @in_acr_inc_prd_lst dbo.type_int_pair; insert into @in_acr_inc_prd_lst values(100,56000);  declare @in_acr_exc_prd_lst dbo.type_int_list; insert into @in_acr_exc_prd_lst values(56000) ; declare @in_drn_inc_prd_lst dbo.type_int_pair; insert into @in_drn_inc_prd_lst values(100,56000); declare @in_drn_exc_prd_lst dbo.type_int_list;  insert into @in_drn_exc_prd_lst values(56000); EXEC dbo.PR_MYDL_PRD_OVLP_VLD @in_acr_inc_prd_lst, @in_acr_exc_prd_lst, @in_drn_inc_prd_lst, @in_drn_exc_prd_lst");
-	ds.Tables[0].TableName = "FlexProdOvlp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 

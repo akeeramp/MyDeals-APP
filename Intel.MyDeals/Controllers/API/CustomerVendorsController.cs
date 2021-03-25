@@ -23,10 +23,10 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="custId"></param>
         /// <returns></returns>
         [Authorize]
-        [Route("GetCustomerVendors/{custId}")]
-        public List<CustomerVendors> GetCustomerVendors(int custId)
+        [Route("GetCustomerVendors")]
+        public List<CustomerVendors> GetCustomerVendors()
         {
-            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(custId), $"Unable to Get Customer Vendors Info");
+            return SafeExecutor(() => _customerVendorsLib.GetCustomerVendors(0), $"Unable to Get Customer Vendors Info");
         }
 
         /// <summary>
