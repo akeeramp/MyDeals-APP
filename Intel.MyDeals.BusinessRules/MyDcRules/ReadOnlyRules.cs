@@ -47,6 +47,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PRD_EXCLDS,
                                 AttributeCodes.MRKT_SEG,
                                 AttributeCodes.PAYOUT_BASED_ON,
+                                AttributeCodes.SEND_TO_VISTEX,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD
                             }
                         }
@@ -272,7 +273,29 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly for Overarching Max Volume and Dollar for Non Hybrid Deals if they don't contain any value",
                     ActionRule = MyDcActions.ReadOnlyNonHybridOverarchingFields,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad }
+                },
+
+                new MyOpRule
+                {
+                    Title="Readonly for Overarching fields for FLEX deal rows",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.FLEX_ROW_TYPE) && de.HasValue("Draining")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.REBATE_OA_MAX_AMT,
+                                AttributeCodes.REBATE_OA_MAX_VOL
+                            }
+                        }
+                    }
                 },
 
                 new MyOpRule
@@ -431,6 +454,26 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {
                                 AttributeCodes.QLTR_BID_GEO,
                                 AttributeCodes.END_CUSTOMER_RETAIL
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Flex Row Type Read Only",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.NUM_OF_TIERS) && !de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.FLEX_ROW_TYPE
                             }
                         }
                     }

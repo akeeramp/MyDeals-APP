@@ -236,7 +236,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         // For non hybrid deals make Overarching max volume and amount readonly in PTR, they are still editable in WIP if they got values
-        if (root.curPricingTable["IS_HYBRID_PRC_STRAT"] != "1") {
+        if (root.curPricingTable["IS_HYBRID_PRC_STRAT"] != "1" && root.curPricingTable["OBJ_SET_TYPE_CD"] != "FLEX") {
             if (ptTemplate.model.fields["REBATE_OA_MAX_VOL"] !== undefined) ptTemplate.model.fields.REBATE_OA_MAX_VOL.editable = false;
             if (ptTemplate.model.fields["REBATE_OA_MAX_AMT"] !== undefined) ptTemplate.model.fields.REBATE_OA_MAX_AMT.editable = false;
         }
@@ -2510,7 +2510,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //// NOTE: We may need to revisit the ECAP Tracker Number dropdwon list in the future, when if we do uncomment the below lines to make the dropdwon re-appear.
                         //sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
                     }
-                    else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
+                    else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "BUSNS_ORG_NM" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
                         // Add validation dropdowns/multiselects onto the cells
                         applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 

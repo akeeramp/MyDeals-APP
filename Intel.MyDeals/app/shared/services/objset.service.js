@@ -16,7 +16,8 @@ function objsetService($http, dataService, logger, $q, $location) {
     var apiBaseTenderUrl = "/api/Tenders/v1/";
     var apiBaseEmailUrl = "/api/Email/";
     var dropDownApiUrl = "/api/Dropdown/";
-    var apiBaseSearchUrl = "/api/Search/"
+    var apiBaseSearchUrl = "/api/Search/";
+    var customerVendorApiBaseUrl = "api/CustomerVendor/";
 
     var service = {
         createTenderContract: createTenderContract,
@@ -88,12 +89,16 @@ function objsetService($http, dataService, logger, $q, $location) {
         //getDealQuoteLetter: getDealQuoteLetter,
 
         getDefaultValuesForTenderKit: getDefaultValuesForTenderKit,
-        getVendorDropDown: getVendorDropDown
+        getCustomerVendorDropDown: getCustomerVendorDropDown
     }
 
     return service;
 
     // #### CONTRACT CRUD ####
+    function getCustomerVendorDropDown(getVendorDropDowntypeUrl) {
+        return dataService.get(customerVendorApiBaseUrl + getVendorDropDowntypeUrl);
+    }
+
     function createTenderContract(custId, contractId, data) {        
         return dataService.post(apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId, data);
     }

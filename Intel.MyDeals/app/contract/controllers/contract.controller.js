@@ -21,13 +21,11 @@
         }
 
         if (contractData != null) {
-            objsetService.getVendorDropDown("SETTLEMENT_PARTNER").then(
-                function (results) {
-                    $scope.getVendorDropDownResult = results;
-                },
-                function (response) {
-                }
-            );
+            objsetService.getCustomerVendorDropDown('GetCustomerVendors/' + contractData.data[0].Customer.CUST_SID).then(function (response) {
+                $scope.getVendorDropDownResult = response.data;
+            },function (response) {
+                logger.error("Unable to get Settlement Partner list.", response, response.statusText);
+            });
         }
 
         $scope.selectedTAB = 'PTR'; // Tender Deals
@@ -2722,11 +2720,11 @@
 
                     var errDeals = [];
                     if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
-                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
                         for (var s = 0; s < sData.length; s++) {
                             if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
                             if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
-                            if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER") || sData[s].TIER_NBR === 1) {
+                            if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "FLEX") || sData[s].TIER_NBR === 1) {
                                 if (sData[s]["REBATE_TYPE"] === "TENDER") {
                                     hasTender = true;
                                 } else {
@@ -3969,7 +3967,7 @@
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
                         // Vol-tier specific cols with tiers
                         for (var i = 0; i < tierAtrbs.length; i++) {
                             var tieredItem = tierAtrbs[i];
@@ -5794,12 +5792,21 @@
             return data;
         }
           //validate settlement partner
-        $scope.validateSettlementPartner = function (data) {
+        $scope.validateSettlementPartner = function (data) {            
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
             //check if settlement is cash and pgm type is backend
             var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
             if (cashObj && cashObj.length > 0) {
-                if ($scope.getVendorDropDownResult.data.length == 0) {
+                if ($scope.getVendorDropDownResult != null && $scope.getVendorDropDownResult != undefined && $scope.getVendorDropDownResult.length > 0) {
+                    var customerVendor = $scope.getVendorDropDownResult;
+                    angular.forEach(data, (item) => {
+                        var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                        if (partnerID && partnerID.length == 1) {
+                            item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                        }
+                    });
+                }
+                if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
                     angular.forEach(data, (item) => {
                         $scope.setSettlementPartner(item, '2');
                     });

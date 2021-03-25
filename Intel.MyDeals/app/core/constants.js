@@ -254,9 +254,6 @@
                     "YCS2_OVERLAP_OVERRIDE": {
                         "Groups": ["All"]
                     },
-                    "RESET_VOLS_ON_PERIOD": {
-                        "Groups": ["Deal Info"]
-                    },
                     "VOLUME": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -299,6 +296,9 @@
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
                     },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
+                    },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -326,6 +326,9 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -335,9 +338,6 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },    
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -448,12 +448,9 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
-                    "RESET_VOLS_ON_PERIOD": {
-                        "Groups": ["Deal Info"]
-                    },
-                    "NUM_OF_TIERS": {
-                        "Groups": ["All"]
-                    },
+                    //"NUM_OF_TIERS": {
+                    //    "Groups": ["All"]
+                    //},
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -484,6 +481,9 @@
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
                     },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
+                    },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -508,6 +508,9 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -517,9 +520,6 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },                  
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -711,6 +711,9 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -720,9 +723,6 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },                    
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -941,9 +941,6 @@
                     "DEAL_DESC": {
                         "Groups": ["Deal Info"]
                     },
-                    "RESET_VOLS_ON_PERIOD": {
-                        "Groups": ["Deal Info"]
-                    },
                     "VOLUME": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -983,6 +980,9 @@
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
                     },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
+                    },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
                     },
@@ -1007,6 +1007,9 @@
                     "CONSUMPTION_REASON_CMNT": {
                         "Groups": ["Consumption"]
                     },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_CUST_PLATFORM": {
                         "Groups": ["Consumption"]
                     },
@@ -1016,9 +1019,6 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },      
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
                     "CONSUMPTION_SYS_CONFIG": {
                         "Groups": ["Consumption"]
                     },
@@ -1132,12 +1132,9 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
-                    "RESET_VOLS_ON_PERIOD": {
-                        "Groups": ["Deal Info"]
-                    },
-                    "NUM_OF_TIERS": {
-                        "Groups": ["All"]
-                    },
+                    //"NUM_OF_TIERS": {
+                    //    "Groups": ["All"]
+                    //},
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -1160,13 +1157,16 @@
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info", "Consumption"]
+                        "Groups": ["Deal Info"]
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },
                     "PERIOD_PROFILE": {
                         "Groups": ["Deal Info", "Payment"]
+                    },
+                    "RESET_VOLS_ON_PERIOD": {
+                        "Groups": ["Deal Info"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
@@ -1176,36 +1176,6 @@
                     },
                     "TERMS": {
                         "Groups": ["Deal Info"]
-                    },
-                    "REBATE_BILLING_START": {
-                        "Groups": ["Consumption"]
-                    },
-                    "REBATE_BILLING_END": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_LOOKBACK_PERIOD": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_REASON": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_REASON_CMNT": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_CUST_PLATFORM": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_CUST_SEGMENT": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_CUST_RPT_GEO": {
-                        "Groups": ["Consumption"]
-                    },
-                    "SYS_PRICE_POINT": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_SYS_CONFIG": {
-                        "Groups": ["Consumption"]
                     },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]

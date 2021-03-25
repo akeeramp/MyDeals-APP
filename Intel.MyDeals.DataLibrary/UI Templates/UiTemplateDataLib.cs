@@ -402,10 +402,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
                 IsHidden = true,
-                Width = 220,
-                //// This is how it should be set once the product selector is in place:
-                //IsReadOnly = true,
-                //IsHidden = true,
+                Width = 220  // This is how it should be set once the product selector is in place:
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -416,7 +413,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 IsReadOnly = false, // need to set to true after product selector is in place
                 IsHidden = true,
-                Width = 220,
+                Width = 220
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -428,7 +425,7 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "MULTISELECT",
                 LookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/",
                 LookupText = "CUST_DIV_NM",
-                LookupValue = "CUST_DIV_NM",
+                LookupValue = "CUST_DIV_NM"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -467,6 +464,33 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 200,
                 Label = "Deal Description",
                 DataType = "string"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 19,
+                AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                IsDefaultable = true,
+                Label = "Row Type *",
+                Width = 80,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 21,
+                AtrbCd = AttributeCodes.TIER_NBR,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                IsDimKey = true,
+                IsReadOnly = false,
+                Label = "Tier",
+                IsHidden = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -579,7 +603,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3603,
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 100,
                 Label = "Forecast Volume",
                 DataType = "number"
@@ -647,23 +671,6 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "YCS2",
                 IsDimKey = true,
                 IsReadOnly = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 57,
-                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
-                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
-                DataType = "string",
-                Label = "Reset Per Period",
-                Width = 140,
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsDefaultable = true,
-                IsRequired = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -751,6 +758,23 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 57,
+                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
+                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
+                DataType = "string",
+                Label = "Reset Per Period",
+                Width = 140,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsDefaultable = true,
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3458,
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -785,8 +809,8 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 160,
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetVendorDropdownsForCustId/SETTLEMENT_PARTNER",
-                LookupText = "DROP_DOWN",
+                LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
+                LookupText = "BUSNS_ORG_NM",
                 LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
@@ -954,7 +978,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3495,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 130,
                 IsDefaultable = true,
                 Label = "Program Payment *",
@@ -1032,34 +1056,6 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 19,
-                AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
-                IsDefaultable = true,
-                Label = "Row Type *",
-                Width = 80,
-                DataType = "string",
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 21,
-                AtrbCd = AttributeCodes.TIER_NBR,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
-                IsDimKey = true,
-                IsReadOnly = false,
-                Label = "Tier",
-                IsHidden = true
-            });
-
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 3474,
                 AtrbCd = AttributeCodes.MRKT_SEG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -1114,7 +1110,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3490,
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER },
                 IsHidden = true
             });
 
@@ -1129,7 +1125,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.DC_ID,
                 IsKey = true,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 IsFilterable = true,
                 IsSortable = true,
                 DataType = "number",
@@ -1146,7 +1142,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10002,
                 AtrbCd = "details",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 DataType = "number",
                 Label = "Deal Details",
                 Width = 260,
@@ -1161,7 +1157,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10003,
                 AtrbCd = "tools",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 DataType = "object",
                 Label = "Deal Tools",
                 Width = 230,
@@ -1179,7 +1175,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10004,
                 AtrbCd = "tender_actions",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 DataType = "object",
                 Label = "Actions",
                 Width = 110,
@@ -1197,7 +1193,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10005, //Note: placeholder ID, granted these IDs don't do anything right now but 10004 is not this attribute's id.
                 AtrbCd = "CNTRCT_OBJ_SID",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 DataType = "number",
                 Label = "Folio Id",
                 Width = 80,
@@ -1242,7 +1238,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 10004,
                 AtrbCd = AttributeCodes.DC_PARENT_ID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 90,
                 Label = "Prc Table Row ID",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
@@ -1280,6 +1276,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 24,
                 AtrbCd = AttributeCodes.AUTO_APPROVE_RULE_INFO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Label = "Auto-approved By",
                 Width = 320,
                 Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'AUTO_APPROVE_RULE_INFO')#",
@@ -1347,7 +1344,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3676,
                 AtrbCd = AttributeCodes.EXPIRE_FLG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                //ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Label = "Deal Expired?",
                 DataType = "string",
                 IsFilterable = true,
@@ -1424,7 +1421,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRD_EXCLDS,
                 Label = "Excluded Products",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRD_EXCLDS')#",
                 DataType = "object",
                 IsFilterable = true,
@@ -1437,7 +1434,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PRODUCT_CATEGORIES,
                 Label = "Product Vertical",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_CATEGORIES')#",
                 IsFilterable = true,
                 IsSortable = true,
@@ -1630,8 +1627,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PARTNER')#",
-                LookupUrl = "/api/Dropdown/GetVendorDropdownsForCustId/SETTLEMENT_PARTNER",
-                LookupText = "DROP_DOWN",
+                LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
+                LookupText = "BUSNS_ORG_NM",
                 LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem  // WIP KIT types
@@ -2026,6 +2023,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3570,
                 AtrbCd = AttributeCodes.REBATE_BILLING_START,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2037,6 +2035,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3571,
                 AtrbCd = AttributeCodes.REBATE_BILLING_END,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2048,6 +2047,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3459,
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2061,6 +2061,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3460,
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2071,6 +2072,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3456,
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Label = "Customer Platform",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_PLATFORM')#",
@@ -2086,6 +2088,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3457,
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Label = "Customer Segment",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_SEGMENT')#",
@@ -2101,8 +2104,8 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3458,
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Customer Reported Region</span>",
-                //Label = "Customer Reported Region",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
                 UiType = "EMBEDDEDMULTISELECT",
@@ -2117,8 +2120,8 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3461,
                 AtrbCd = AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 HeaderTemplate = "Billing Rolling Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
-                //Label = "Consumption Cust Reported Geo",
                 Width = 170, // 110
                 Format = "{0:d}",
                 IsFilterable = true,
@@ -2132,16 +2135,22 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3453,
                 AtrbCd = AttributeCodes.SYS_PRICE_POINT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#",
+                UiType = "SPP",
+                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#"
+                IsSortable = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3454,
                 AtrbCd = AttributeCodes.CONSUMPTION_SYS_CONFIG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2310,6 +2319,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3568,
                 AtrbCd = AttributeCodes.QLTR_PROJECT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 180,
                 Label = "Project Name",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
@@ -2446,24 +2456,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'QUOTE_LN_ID')#"
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 57,
-                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.FLEX },
-                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
-                DataType = "string",
-                Label = "Reset Per Period",
-                Width = 140,
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsFilterable = true,
-                IsSortable = true,
-                IsRequired = true
-            });
             items.Add(new UiTemplateContainerItem  // WIP VT types
             {
                 Id = 3490,
@@ -2484,7 +2476,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 Label = "Forecast Volume",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL', 'number')#",
                 IsFilterable = true,
@@ -2496,7 +2488,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.MAX_RPU,
                 Label = "Max RPU",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'MAX_RPU', 'currency')#",
@@ -2509,7 +2501,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.USER_MAX_RPU,
                 Label = "User Defined Max RPU",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'USER_MAX_RPU', 'currency')#",
@@ -2522,7 +2514,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.AVG_RPU,
                 Label = "Average RPU",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'AVG_RPU', 'currency')#",
@@ -2535,7 +2527,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.USER_AVG_RPU,
                 Label = "User Defined Average RPU",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'USER_AVG_RPU', 'currency')#",
@@ -2548,7 +2540,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.RPU_OVERRIDE_CMNT,
                 Label = "User Defined RPU Override Comment",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'RPU_OVERRIDE_CMNT')#",
                 IsFilterable = true,
@@ -2712,7 +2704,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3651,
                 AtrbCd = AttributeCodes.MEETCOMP_TEST_RESULT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
                 Width = 150,
                 IsFilterable = true,
                 IsReadOnly = true,
@@ -2725,7 +2717,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 90012,
                 AtrbCd = AttributeCodes.EXCLUDE_AUTOMATION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP }, // not sure that KIT should be here...
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT }, // not sure that KIT should be here...
                 DataType = "object",
                 Label = "<div title='Exclude from Price Approval Rules'>Exclude from Price Rules</div>",
                 Width = 120,
@@ -2743,7 +2735,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3651,
                 AtrbCd = "MISSING_CAP_COST_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM, OpDataElementSetType.FLEX },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 150,
                 Label = "<div title='Deals missing Cost and/or CAP cannot be approved by Division Approvers until the missing data has been added. For urgent issues, contact TAC.'>Missing Cost/CAP</div>",
                 IsFilterable = true,
@@ -2806,6 +2798,24 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 ExcelTemplate = "#=PERIOD_PROFILE#",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 57,
+                AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
+                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
+                DataType = "string",
+                Label = "Reset Per Period",
+                Width = 140,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
                 IsRequired = true
             });
             items.Add(new UiTemplateContainerItem

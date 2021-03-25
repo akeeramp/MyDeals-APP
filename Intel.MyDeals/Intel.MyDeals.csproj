@@ -520,6 +520,7 @@
     <Content Include="app\contract\controllers\selectPricingTableModal.controller.js" />
     <Content Include="app\contract\controllers\renameTitleModal.controller.js" />
     <Content Include="app\contract\controllers\pctOverrideReasonModal.controller.js" />
+    <Content Include="app\contract\controllers\systemPricePointModal.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
     <Content Include="app\contract\partials\contractExport.html" />
@@ -533,6 +534,7 @@
     <Content Include="app\contract\partials\ptModals\managerPctModal.html" />
     <Content Include="app\contract\partials\ptModals\groupExclusionModal.html" />
     <Content Include="app\contract\partials\ptModals\meetCompModal.html" />
+    <Content Include="app\contract\partials\ptModals\systemPricePointModal.html" />
     <Content Include="app\contract\partials\publishTender.html" />
     <Content Include="app\contract\partials\tenderWidget.html" />
     <Content Include="app\contract\partials\lnavFlowMini.html" />

@@ -36,7 +36,7 @@
         }
 
         function getCustomerVendors() {
-            return dataService.post(apiBaseUrl + 'GetCustomerVendors');
+            return dataService.get(apiBaseUrl + 'GetCustomerVendors');
         }
 
         function getVendorsData() {

@@ -22,7 +22,7 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <param name="custId"></param>
         /// <returns></returns>
-        [HttpPost]
+        [Authorize]
         [Route("GetCustomerVendors")]
         public List<CustomerVendors> GetCustomerVendors()
         {

@@ -1239,8 +1239,23 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
-                    List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
-                    string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    List<string> dropDowns = null;
+                    string matchedValue = string.Empty;
+                    if (de.AtrbCd == AttributeCodes.SETTLEMENT_PARTNER)
+                    {
+                        dropDowns = DataCollections.GetCustomerVendors().Select(d => d.BUSNS_ORG_NM).ToList();
+                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                        if(string.IsNullOrEmpty(matchedValue))
+                        {
+                            dropDowns = DataCollections.GetCustomerVendors().Select(d => d.DROP_DOWN).ToList();
+                            matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();                            
+                        }
+                    }
+                    else
+                    {
+                        dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    }
                     if (string.IsNullOrEmpty(matchedValue))
                     {
                         de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
@@ -2509,6 +2524,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ValidateFlexIsBillings(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement dePayout = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+
+            if (dePayout == null) return;
+
+            if (dePayout.AtrbValue.ToString() == "Consumption")
+            {
+                dePayout.ValidationMessage = "FLEX deals only allow Billings based Payouts.";
+            }
+        }
+
         public static void ValidateTierRate(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2823,6 +2853,22 @@ namespace Intel.MyDeals.BusinessRules
             {
                 AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 0);     //Assumption: Subkit Consists of Primary and Secondary1 Products
                 AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 1);     //Assumption: Subkit Consists of Primary and Secondary1 Products
+            }
+        }
+
+        public static void ValidatePrimeCust(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
+            IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+
+            if (deEndCust == null) return;
+
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "") // If not primed and End customer has a value
+            {
+                deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
             }
         }
 

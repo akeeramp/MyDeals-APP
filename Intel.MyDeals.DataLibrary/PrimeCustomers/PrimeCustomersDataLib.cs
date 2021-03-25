@@ -12,38 +12,38 @@ using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class PrimeCustomersDataLib :IPrimeCustomersDataLib
+    public class PrimeCustomersDataLib : IPrimeCustomersDataLib
     {
         public List<PrimeCustomers> GetPrimeCustomerDetails()
         {
             var ret = new List<PrimeCustomers>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DATA { };
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL{ };
 
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    int IDX_IS_ACTIVE = DB.GetReaderOrdinal(rdr, "IS_ACTIVE");
-                    int IDX_PRIME_CUST_COUNTRY = DB.GetReaderOrdinal(rdr, "PRIME_CUST_COUNTRY");
-                    int IDX_PRIME_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIME_CUST_NM");
-                    int IDX_PRIME_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIME_LVL_NM");
-                    int IDX_PRIME_LVL_SID = DB.GetReaderOrdinal(rdr, "PRIME_LVL_SID");
-                    int IDX_PRIME_MBR_SID = DB.GetReaderOrdinal(rdr, "PRIME_MBR_SID");
-                    int IDX_RPL_STATUS = DB.GetReaderOrdinal(rdr, "RPL_STATUS");
-                    int IDX_PRIME_SID = DB.GetReaderOrdinal(rdr, "PRIME_SID");
+                    int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+                    int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
+                    int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                    int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+                    int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
+                    int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
+                    int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
+                    int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
 
                     while (rdr.Read())
                     {
                         ret.Add(new PrimeCustomers
                         {
-                            IS_ACTIVE = (IDX_IS_ACTIVE < 0 || rdr.IsDBNull(IDX_IS_ACTIVE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTIVE),
-                            PRIME_CUST_COUNTRY = (IDX_PRIME_CUST_COUNTRY < 0 || rdr.IsDBNull(IDX_PRIME_CUST_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_COUNTRY),
-                            PRIME_CUST_NM = (IDX_PRIME_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIME_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_NM),
-                            PRIME_LVL_NM = (IDX_PRIME_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIME_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_LVL_NM),
-                            PRIME_LVL_SID = (IDX_PRIME_LVL_SID < 0 || rdr.IsDBNull(IDX_PRIME_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_LVL_SID),
-                            PRIME_MBR_SID = (IDX_PRIME_MBR_SID < 0 || rdr.IsDBNull(IDX_PRIME_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_MBR_SID),
-                            PRIME_SID = (IDX_PRIME_SID < 0 || rdr.IsDBNull(IDX_PRIME_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_SID),
-                            RPL_STATUS = (IDX_RPL_STATUS < 0 || rdr.IsDBNull(IDX_RPL_STATUS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STATUS)
+                            IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+                            PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
+                            PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+                            PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
+                            PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
+                            PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
+                            PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
+                            RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STS)
 
                         });
                     }
@@ -77,46 +77,44 @@ namespace Intel.MyDeals.DataLibrary
         {
             var retPrimeCustomers = new List<PrimeCustomers>();
 
-            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRIM_CUST_DATA
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRIM_CUST
             {
-
-                IN_MODE = mode.ToString().ToUpper(),
-                IN_PRIME_CUST_COUNTRY = data.PRIME_CUST_COUNTRY,
-                IN_PRIME_CUST_NM = data.PRIME_CUST_NM,
-                IN_PRIME_MBR_SID = data.PRIME_MBR_SID,
-                IN_RPL_STATUS = data.RPL_STATUS,
-                IN_IS_ACTIVE = data.IS_ACTIVE,
-                IN_PRIME_LVL_SID = data.PRIME_LVL_SID,
-                IN_PRIME_LVL_NM = data.PRIME_CUST_NM,
-                IN_CRE_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                IN_CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                IN_PRIME_SID = data.PRIME_SID
+                in_prim_sid = data.PRIM_SID,
+                in_prim_cust_id = data.PRIM_CUST_ID,
+                in_prim_cust_nm = data.PRIM_CUST_NM,
+                in_prim_cust_ctry = data.PRIM_CUST_CTRY,
+                in_prim_lvl_id = data.PRIM_LVL_ID,
+                in_prim_lvl_nm = data.PRIM_CUST_NM,
+                in_rpl_sts = data.RPL_STS,
+                in_is_actv = data.IS_ACTV,
+                in_mode = mode.ToString().ToUpper(),
+                in_cre_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                in_chg_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
 
 
             }))
             {
-                int IDX_IS_ACTIVE = DB.GetReaderOrdinal(rdr, "IS_ACTIVE");
-                int IDX_PRIME_CUST_COUNTRY = DB.GetReaderOrdinal(rdr, "PRIME_CUST_COUNTRY");
-                int IDX_PRIME_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIME_CUST_NM");
-                int IDX_PRIME_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIME_LVL_NM");
-                int IDX_PRIME_LVL_SID = DB.GetReaderOrdinal(rdr, "PRIME_LVL_SID");
-                int IDX_PRIME_MBR_SID = DB.GetReaderOrdinal(rdr, "PRIME_MBR_SID");
-                int IDX_RPL_STATUS = DB.GetReaderOrdinal(rdr, "RPL_STATUS");
-                int IDX_PRIME_SID = DB.GetReaderOrdinal(rdr, "PRIME_SID");
+                int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+                int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
+                int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+                int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
+                int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
+                int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
+                int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
 
                 while (rdr.Read())
                 {
                     retPrimeCustomers.Add(new PrimeCustomers
                     {
-                        IS_ACTIVE = (IDX_IS_ACTIVE < 0 || rdr.IsDBNull(IDX_IS_ACTIVE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTIVE),
-                        PRIME_CUST_COUNTRY = (IDX_PRIME_CUST_COUNTRY < 0 || rdr.IsDBNull(IDX_PRIME_CUST_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_COUNTRY),
-                        PRIME_CUST_NM = (IDX_PRIME_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIME_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_NM),
-                        PRIME_LVL_NM = (IDX_PRIME_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIME_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_LVL_NM),
-                        PRIME_LVL_SID = (IDX_PRIME_LVL_SID < 0 || rdr.IsDBNull(IDX_PRIME_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_LVL_SID),
-                        PRIME_MBR_SID = (IDX_PRIME_MBR_SID < 0 || rdr.IsDBNull(IDX_PRIME_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_MBR_SID),
-                        PRIME_SID = (IDX_PRIME_SID < 0 || rdr.IsDBNull(IDX_PRIME_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_SID),
-                        RPL_STATUS = (IDX_RPL_STATUS < 0 || rdr.IsDBNull(IDX_RPL_STATUS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STATUS)
-
+                        IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+                        PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
+                        PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+                        PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
+                        PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
+                        PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
+                        PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
+                        RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STS)
                     });
                 } // while
             }
@@ -190,17 +188,15 @@ namespace Intel.MyDeals.DataLibrary
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_PRIME_CUST_COUNTRY = DB.GetReaderOrdinal(rdr, "PRIME_CUST_COUNTRY");
-                int IDX_PRIME_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIME_CUST_NM");
-                int IDX_PRIME_MBR_SID = DB.GetReaderOrdinal(rdr, "PRIME_MBR_SID");
+                int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
 
                 while (rdr.Read())
                 {
                     ret.Add(new PrimeCustDropdown
                     {
-                        PRIME_CUST_COUNTRY = (IDX_PRIME_CUST_COUNTRY < 0 || rdr.IsDBNull(IDX_PRIME_CUST_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_COUNTRY),
-                        PRIME_CUST_NM = (IDX_PRIME_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIME_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIME_CUST_NM),
-                        PRIME_MBR_SID = (IDX_PRIME_MBR_SID < 0 || rdr.IsDBNull(IDX_PRIME_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIME_MBR_SID)
+                        PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+                        PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM)
                     });
                 }
             }

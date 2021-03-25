@@ -30,8 +30,8 @@
                 read: function (e) {
                     customerVendorsService.getCustomerVendors()
                         .then(function (response) {
-                            e.success(response.data);
                             vm.CustvendorsData = response.data;
+                            e.success(response.data);
                         }, function (response) {
                             logger.error("Unable to get Customer Vendors.", response, response.statusText);
                         });
@@ -70,13 +70,10 @@
                     id: "ATRB_LKUP_SID",
                     fields: {
                         ATRB_LKUP_SID: { editable: false },
-                        OBJ_SET_TYPE_SID: { editable: false },
-                        OBJ_SET_TYPE_CD: { editable: false },
-                        CUST_MBR_SID: { editable: true },
-                        CUST_NM: { editable: true },
                         ATRB_SID: { editable: false },
-                        ATRB_CD: { editable: false },
-                        ORD: { editable: false },
+                        OBJ_SET_TYPE_SID: { editable: false },
+                        CUST_MBR_SID: { editable: true },                        
+                        CUST_NM: { editable: true },
                         DROP_DOWN: {
                             validation: {
                                 required: true,
@@ -91,8 +88,9 @@
                         },
                         ATRB_LKUP_DESC: { editable: true },
                         ACTV_IND: { type: "boolean" },
+                        VNDR_ID: { editable: true },
+                        BUSNS_ORG_NM: { editable : true },
                         CTRY_CD: { editable: true },
-                        SUPL_ID: { editable: true },
                         CTRY_NM: { editable: true }
                     }
                 }
@@ -151,8 +149,8 @@
             },
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "SUPL_NM",
-            dataValueField: "SUPL_NM",
+            dataTextField: "BUSNS_ORG_NM",
+            dataValueField: "BUSNS_ORG_NM",
             valuePrimitive: true,
             select: onVendorCahnge
         }
@@ -170,8 +168,8 @@
             },
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "SUPL_ID",
-            dataValueField: "SUPL_ID",
+            dataTextField: "VNDR_ID",
+            dataValueField: "VNDR_ID",
             valuePrimitive: true,
             select: onVendorCahnge
 
@@ -189,6 +187,9 @@
 
             var editor = $('<select kendo-combo-box k-options="vm.customers" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
 
+        }
+        vm.CountryEditor = function (container, options) {
+            var editor = $('<input type="text" class="k-input k-textbox" name="' + options.field + '" data-bind="value:CTRY_CD" disabled/>').appendTo(container);
         }
 
         vm.gridOptions = {
@@ -249,23 +250,25 @@
                         } }
                 },
                 {
-                    field: "DROP_DOWN",
+                    field: "BUSNS_ORG_NM",
                     title: "Settlement Partner Name",
                     editor: vm.VendorNamesEditor,
                     filterable: { multi: true, search: true }
 
                 },
                 {
-                    field: "SUPL_ID",
+                    field: "DROP_DOWN",
                     title: "Settlement Partner ID",
                     editor: vm.VendorIdEditor,
                     filterable: { multi: true, search: true }
                 },
                 {
-                    field: "CTRY_NM",
+                    field: "CTRY_CD",
                     title: "Country",
+                    editor: vm.CountryEditor,
                     filterable: { multi: true, search: true }
                 }]
+
         }
 
         vm.IsValidCustomerVendorMapping = function (model) {
@@ -273,12 +276,13 @@
             var validationMessages = [];
             if (model.CUST_MBR_SID == null || model.CUST_MBR_SID == '' || vm.getCustomersData.filter(x => x.dropdownID === model.CUST_MBR_SID).length == 0)
                 validationMessages.push("Please Select Valid <b>Customer</b>.");
-            if (model.DROP_DOWN == null || model.DROP_DOWN == '' || vm.vendorsNamesinfo.filter(x => x.SUPL_NM === model.DROP_DOWN).length == 0)
+            if (model.BUSNS_ORG_NM == null || model.BUSNS_ORG_NM == '' || vm.vendorsNamesinfo.filter(x => x.BUSNS_ORG_NM === model.BUSNS_ORG_NM).length == 0)
                 validationMessages.push("Please Select Valid <b>Settlement Partner</b>.");
-            if (model.SUPL_ID == null || model.SUPL_ID == '' || vm.vendorsNamesinfo.filter(x => x.SUPL_ID === model.SUPL_ID).length == 0)
+            if (model.DROP_DOWN == null || model.DROP_DOWN == '' || vm.vendorsNamesinfo.filter(x => x.VNDR_ID === parseInt(model.DROP_DOWN)).length == 0)
                 validationMessages.push("Please Select Valid <b>Settlement Partner ID</b>.");
-            if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN).length > 0)
-                validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
+            if (vm.CustvendorsData != undefined)
+                if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN).length = 1 && model.ATRB_LKUP_SID == '')
+                    validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
             if (validationMessages.length > 0)
                 kendo.alert(validationMessages.join("</br>"));
 
@@ -314,16 +318,16 @@
 
         function onVendorCahnge(e) {
             if (e.dataItem != undefined && e.dataItem != null) {
-                var selectedVendName = e.dataItem.SUPL_NM;
-                var selectedVendId = e.dataItem.SUPL_ID;
-                var Country = e.dataItem.CTRY_NM;
+                var selectedVendName = e.dataItem.BUSNS_ORG_NM;
+                var selectedVendId = e.dataItem.VNDR_ID;
+                var Country = e.dataItem.CTRY_CD;
                 var Idscombo = $("#Vndr_Ids").data("kendo-combo-box");
                 Idscombo.value(selectedVendId);
                 Idscombo.trigger("change");
                 var Namecombo = $("#Vndr_Names").data("kendo-combo-box");
                 Namecombo.value(selectedVendName);
                 Namecombo.trigger("change");
-                var Country = $("input[name=CTRY_NM]").val(Country);
+                var Country = $("input[name=CTRY_CD]").val(Country);
                 Country.trigger("change");
             }
         }

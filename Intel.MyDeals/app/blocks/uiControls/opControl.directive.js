@@ -64,8 +64,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
                 //for now the change is only for hybrid Voltier 
                 if ((hybCond == '1' || rowType == 'Draining') && label.trim() == 'Number of Tiers') {
-                    if (name == 1)
+                    if (name == 1) {
+                        if (scope.$parent.$parent.vm.autofillData.DEFAULT.NUM_OF_TIERS.value != "1") {
+                            scope.$parent.$parent.vm.autofillData.DEFAULT.NUM_OF_TIERS.value = "1";
+                        }
                         return scope.opIsReadOnly;
+                    }
                     else
                         return true;
                 }
