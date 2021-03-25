@@ -54,22 +54,31 @@ namespace Intel.MyDeals.BusinessLogic
                 data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
                     opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested, true);
             }
-
-            if (data.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            if (customerVendorData != null && customerVendorData.Count > 0)
             {
-                foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.PRC_TBL_ROW])
+
+                if (data.ContainsKey(OpDataElementType.PRC_TBL_ROW))
                 {
-                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                    item["SETTLEMENT_PARTNER"] = supplierName;
+                    foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.PRC_TBL_ROW])
+                    {
+                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        {
+                            var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            item["SETTLEMENT_PARTNER"] = supplierName;
+                        }
+                    }
                 }
-            }
 
-            if (data.ContainsKey(OpDataElementType.WIP_DEAL))
-            {
-                foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+                if (data.ContainsKey(OpDataElementType.WIP_DEAL))
                 {
-                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                    item["SETTLEMENT_PARTNER"] = supplierName;
+                    foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+                    {
+                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        {
+                            var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            item["SETTLEMENT_PARTNER"] = supplierName;
+                        }
+                    }
                 }
             }
 
