@@ -274,21 +274,30 @@ namespace Intel.MyDeals.Controllers.API
             );
             var customerVendorData = DataCollections.GetCustomerVendors();
 
-            if (result.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            if (customerVendorData != null && customerVendorData.Count > 0)
             {
-                foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.PRC_TBL_ROW])
+                if (result.ContainsKey(OpDataElementType.PRC_TBL_ROW))
                 {
-                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                    item["SETTLEMENT_PARTNER"] = supplierName;
+                    foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.PRC_TBL_ROW])
+                    {
+                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        {
+                            var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            item["SETTLEMENT_PARTNER"] = supplierName;
+                        }
+                    }
                 }
-            }
 
-            if (result.ContainsKey(OpDataElementType.WIP_DEAL))
-            {
-                foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.WIP_DEAL])
+                if (result.ContainsKey(OpDataElementType.WIP_DEAL))
                 {
-                    var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
-                    item["SETTLEMENT_PARTNER"] = supplierName;
+                    foreach (OpDataCollectorFlattenedItem item in result[OpDataElementType.WIP_DEAL])
+                    {
+                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        {
+                            var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            item["SETTLEMENT_PARTNER"] = supplierName;
+                        }
+                    }
                 }
             }
 
