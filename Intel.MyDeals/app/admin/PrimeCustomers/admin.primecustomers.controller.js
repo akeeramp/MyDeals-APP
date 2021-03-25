@@ -68,17 +68,17 @@
             pageSize: 25,
             schema: {
                 model: {
-                    id: "PRIME_SID",
+                    id: "PRIM_SID",
                     fields: {
 
-                        PRIME_MBR_SID: { editable: true },
-                        PRIME_CUST_NM: { editable: true },
-                        PRIME_CUST_COUNTRY: { editable: true },
-                        RPL_STATUS: { editable: false },
-                        IS_ACTIVE: { editable: true },
-                        PRIME_LVL_SID: { editable: true },
-                        PRIME_LVL_NM: { editable: false },
-                        PRIME_SID: { editable: false }
+                        PRIM_CUST_ID: { editable: true },
+                        PRIM_CUST_NM: { editable: true },
+                        PRIM_CUST_CTRY: { editable: true },
+                        RPL_STS: { editable: false },
+                        IS_ACTV: { editable: true },
+                        PRIM_LVL_ID: { editable: true },
+                        PRIM_LVL_NM: { editable: false },
+                        PRIM_SID: { editable: false }
                     }
                 }
             }
@@ -86,16 +86,16 @@
 
         vm.IsvalidPrimeCustomer = function (model) {
             var validationMessages = [];
-            var isPrimeexist = vm.PrimeCustomersData.filter(x => x.PRIME_MBR_SID === parseInt(model.PRIME_MBR_SID) && x.PRIME_LVL_SID === parseInt(model.PRIME_LVL_SID));
-            if (model.PRIME_MBR_SID == null || model.PRIME_MBR_SID == '')
+            var isPrimeexist = vm.PrimeCustomersData.filter(x => x.PRIME_MBR_SID === parseInt(model.PRIM_CUST_ID) && x.PRIME_LVL_SID === parseInt(model.PRIM_LVL_ID));
+            if (model.PRIM_CUST_ID == null || model.PRIM_CUST_ID == '')
                 validationMessages.push("Please provide Valid ID");
-            if (model.PRIME_CUST_NM == null || model.PRIME_CUST_NM == '')
+            if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '')
                 validationMessages.push("Please Provide Valid Prime Customer Name");
-            if (model.PRIME_LVL_SID == null || model.PRIME_LVL_SID == '')
+            if (model.PRIM_LVL_ID == null || model.PRIM_LVL_ID == '')
                 validationMessages.push("Please Provide Valid Level 2 ID");
             if (isPrimeexist.length > 1)
                 validationMessages.push("This Combination of Prime Custmer ID and Leve 2 ID is already exists")
-            if (model.PRIME_CUST_COUNTRY == null || model.PRIME_CUST_COUNTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIME_CUST_COUNTRY).length == 0)
+            if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
                 validationMessages.push("Please Select Valid Country.")
             if (validationMessages.length > 0)
                 kendo.alert(validationMessages.join("</br>"));
@@ -117,8 +117,8 @@
             },
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "PRIME_CUST_NM",
-            dataValueField: "PRIME_CUST_NM",
+            dataTextField: "PRIM_CUST_NM",
+            dataValueField: "PRIM_CUST_NM",
             valuePrimitive: true
 
         }
@@ -208,20 +208,20 @@
                 {
                     command: [
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" }
-                       
+
 
                     ],
                     title: "Commands",
                     width: "100px"
                 },
                 {
-                    field: "PRIME_SID",
+                    field: "PRIM_SID",
                     title: "Customer ID",
                     hidden: true
                 },
 
                 {
-                    field: "IS_ACTIVE",
+                    field: "IS_ACTV",
                     title: "Is Active",
                     width: "10%",
                     filterable: { multi: true, search: false },
@@ -231,7 +231,7 @@
                 },
 
                 {
-                    field: "PRIME_MBR_SID",
+                    field: "PRIM_CUST_ID",
                     title: "Prime ID",
                     width: "200px",
                     editor: vm.PrimeIDEditor,
@@ -239,7 +239,7 @@
 
                 },
                 {
-                    field: "PRIME_CUST_NM",
+                    field: "PRIM_CUST_NM",
                     title: "Prime Customer Name",
                     width: "230px",
                     //filterable: { multi: true, search: true },
@@ -249,26 +249,26 @@
                 },
 
                 {
-                    field: "PRIME_LVL_SID",
+                    field: "PRIM_LVL_ID",
                     title: "Prime L2 ID",
                     width: "200px",
                     editor: vm.PrimeIDL2Editor,
                     filterable: { multi: true, search: true }
                 },
                 {
-                    field: "PRIME_LVL_NM",
+                    field: "PRIM_LVL_NM",
                     title: "Prime L2 Customer Name",
                     width: "230px"
                 },
                 {
-                    field: "PRIME_CUST_COUNTRY",
+                    field: "PRIM_CUST_CTRY",
                     title: "Prime Country",
                     width: "200px",
                     editor: vm.PrimeCustCountryEditor,
                     filterable: { multi: true, search: true }
                 },
                 {
-                    field: "RPL_STATUS",
+                    field: "RPL_STS",
                     title: "RPL STATUS",
                     width: "200px"
                 }
