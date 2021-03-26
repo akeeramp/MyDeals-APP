@@ -915,32 +915,8 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     de.IsReadOnly = true;
                 }
-                else
-                    de.IsReadOnly = false;
             }
         }
-
-        //public static void ReadOnlyIfSettlementIsNotCash(params object[] args)
-        //{
-        //    MyOpRuleCore r = new MyOpRuleCore(args);
-        //    if (!r.IsValid) return;
-
-        //    IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
-
-        //    if (deArSettlementLvl == null || deArSettlementLvl.AtrbValue.ToString() == "Cash")
-        //    {
-        //        return; 
-        //    }
-
-        //    foreach (var s in r.Rule.OpRuleActions[0].Target)
-        //    {
-        //        OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-        //        if (de != null) // This is AR_SETTLEMENT_LVL value
-        //        {
-        //            de.IsReadOnly = true;
-        //        }
-        //    }
-        //}
 
         public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
         {
@@ -1203,10 +1179,6 @@ namespace Intel.MyDeals.BusinessRules
                 else if (deTrackerValue != "")
                 {
                     settlementPartner.IsReadOnly = true;
-                }
-                else
-                {
-                    settlementPartner.IsReadOnly = false;
                 }
             }
         }
@@ -1575,7 +1547,9 @@ namespace Intel.MyDeals.BusinessRules
             foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
             {
                 de.ValidationMessage = string.Empty;
+                // WARNING:  This is a special case of putting a domino back up to prevent hold items from being required and locking the entire object for approval.  Do not do this elsewhere.
                 if (de.IsRequired) de.IsRequired = false;
+                // END WARNING
             }
         }
 
@@ -2212,16 +2186,6 @@ namespace Intel.MyDeals.BusinessRules
             OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
             bool testObject = false;
             List<string> parentStagesCheckToBypass = new List<string> { WorkFlowStages.Pending, WorkFlowStages.Approved };
-
-            //switch (deType)
-            //{
-            //    case OpDataElementType.PRC_TBL_ROW:
-            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_PTR").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            //        break;
-            //    case OpDataElementType.WIP_DEAL:
-            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            //        break;
-            //}
 
             IOpDataElement deParentStage = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
 

@@ -133,24 +133,6 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                //new MyOpRule // Set to read only if AR_SETTLEMENT_LVL is not Cash
-                //{
-                //    Title="Readonly if Value is not Cash",
-                //    ActionRule = MyDcActions.ReadOnlyIfSettlementIsNotCash,
-                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetReadOnly,
-                //            Target = new[] {
-                //                AttributeCodes.SETTLEMENT_PARTNER
-                //            }
-                //        }
-                //    }
-                //},
-
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
                     Title="Readonly Start Date if Tracker Exists and Is In Past",

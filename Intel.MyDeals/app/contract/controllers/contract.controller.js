@@ -86,7 +86,7 @@
 
         //Tender only columns for PRC_TBL_ROW
         $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_BID_GEO"];
-        $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
+        $scope.tenderRequiredColumns = ["VOLUME"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
         var editableArSettlementLevelAfterApproval = ["Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region"];
@@ -2868,27 +2868,6 @@
                             // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
                             if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                 sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
-                            }
-                        }
-
-                        if (sData[s]["END_CUSTOMER_RETAIL"] != undefined && sData[s]["END_CUSTOMER_RETAIL"] != null) {
-                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 60) {
-                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 60 Characters");
-                                
-                            }
-                            else {
-
-                                if (sData[s]._behaviors.isError['END_CUSTOMER_RETAIL']) {
-                                    delete sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'];
-                                    delete sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
-                                }
-                                sData[s]["END_CUSTOMER_RETAIL"] = sData[s]["END_CUSTOMER_RETAIL"].toString().toUpperCase();                              
                             }
                         }
 
