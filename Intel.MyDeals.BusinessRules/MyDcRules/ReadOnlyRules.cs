@@ -119,18 +119,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if Tracker Exists and Value is Cash",
                     ActionRule = MyDcActions.ReadOnlyIfHasTrackerAndSettlementIsCash,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {
-                                AttributeCodes.AR_SETTLEMENT_LVL
-                            }
-                        }
-                    }
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
                 },
 
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
@@ -173,19 +162,10 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Settlement Partner is Readonly",
+                    Title="Settlement Partner is Readonly if Deal is Front End or Settlement Level is Cash",
                     ActionRule = MyDcActions.MakeSettlementPartnerReadonly,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Target = new[] {
-                                AttributeCodes.SETTLEMENT_PARTNER
-                            }
-                        }
-                    }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW }
                 },
                 
                 new MyOpRule // Allow edits only in re-deal cases
