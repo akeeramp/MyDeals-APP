@@ -908,14 +908,15 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (deArSettlementLvl == null) return;
+
+            if (deArSettlementLvl.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) 
             {
-                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
-                {
-                    de.IsReadOnly = true;
-                }
+                deArSettlementLvl.IsReadOnly = true;
             }
+
         }
 
         public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
@@ -1163,24 +1164,23 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
+
+            if (settlementPartner == null) return;
+
+            string settlementLevelValue = r.Dc.GetDataElementValue(AttributeCodes.AR_SETTLEMENT_LVL);
+            string programPaymentValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (programPaymentValue == "Frontend" || settlementLevelValue != "Cash")
             {
-                IOpDataElement settlementLevel = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
-                IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
-                IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
-                string deTrackerValue = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
-                if (settlementLevel == null || settlementPartner == null || programPayment == null) return;
-                string settlementLevelValue = settlementLevel.AtrbValue.ToString();
-                if (programPayment.AtrbValue.ToString().Contains("Frontend") || settlementLevelValue != "Cash")
-                {
-                    settlementPartner.AtrbValue = string.Empty;
-                    settlementPartner.IsReadOnly = true;
-                }
-                else if (deTrackerValue != "")
-                {
-                    settlementPartner.IsReadOnly = true;
-                }
+                settlementPartner.AtrbValue = string.Empty;
+                settlementPartner.IsReadOnly = true;
             }
+            else if (r.Dc.HasTracker())
+            {
+                settlementPartner.IsReadOnly = true;
+            }
+
         }
 
 
