@@ -929,6 +929,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -937,6 +938,22 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 35,
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                Width = 120,
+                IsDefaultable = true,
+                Label = "Payout Based On *",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true,
+                IsReadOnly = true
             });
             /// PROGRAM_PAYMENT column behaviours in various deal types
             ///  ECAP - Editable
