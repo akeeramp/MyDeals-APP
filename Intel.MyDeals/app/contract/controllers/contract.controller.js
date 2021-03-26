@@ -5705,7 +5705,10 @@
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
             $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
-            //check if settlement is cash and pgm type is backend
+            //to fix a defect, setting the property value to same
+            $scope.setToSame(data, 'REBATE_OA_MAX_AMT');
+            $scope.setToSame(data, 'REBATE_OA_MAX_VOL');
+
             if (hybCond == '1') {
                 //condition to check values are zero
                 retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
@@ -5918,6 +5921,13 @@
             else {
                 item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
             }
+        }
+        $scope.setToSame = function (data, elem) {
+            angular.forEach(data, (item) => {
+                if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
+                    item[elem] = null;
+                }
+            });
         }
     }
 })();
