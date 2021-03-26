@@ -824,7 +824,7 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "DROPDOWN",
                 LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
                 LookupText = "BUSNS_ORG_NM",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "BUSNS_ORG_NM"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1667,7 +1667,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PARTNER')#",
                 LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
                 LookupText = "BUSNS_ORG_NM",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "BUSNS_ORG_NM"
             });
             items.Add(new UiTemplateContainerItem  // WIP KIT types
             {
