@@ -2909,9 +2909,13 @@
                                     var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
                                     var isTenderFlag = "0";
                                     if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
+                                    //Delete if there is any previous Error  messages
+                                    if (sData[s]._behaviors.isError['START_DT']) {
+                                        delete sData[s]._behaviors.isError['START_DT'];
+                                        delete sData[s]._behaviors.validMsg['START_DT'];
+                                    }
                                     // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2919,6 +2923,24 @@
                                         sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                    }
+
+                                    //Validating Votier deal Dates
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["START_DT"]).isSame(tblStartDate))) {
+                                            sData[FirstTire]["START_DT"] = tblStartDate;
+                                        }
+
+                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[s]._behaviors.isError['START_DT'] = true;
+                                            sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                        }
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
@@ -2928,8 +2950,13 @@
                                     var isTenderFlag = "0";
                                     if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
-                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
+                                    if (sData[s]._behaviors.isError['END_DT']) {
+                                        delete sData[s]._behaviors.isError['END_DT'];
+                                        delete sData[s]._behaviors.validMsg['END_DT'];
+                                    }
+
+
+                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2949,19 +2976,39 @@
                                         errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
                                     }
 
-                                    //Restrict multi-tier Vol Tier for 12 months or 1 year
-                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] > 1) {
-                                        if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
+
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
+                                        
+
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["END_DT"]).isSame(tblEndDate))) {
+                                            sData[FirstTire]["END_DT"] = tblEndDate;
+                                        }
+
+
+                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
                                             if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                             sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                        }
+
+                                        //Restrict multi-tier Vol Tier for 12 months or 1 year
+                                        if ( sData[s]["NUM_OF_TIERS"] > 1) {
+                                            if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
+                                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                                sData[s]._behaviors.isError['END_DT'] = true;
+                                                sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                            }
                                         }
                                     }
-
                                 }
                                 //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                 //{
@@ -3129,6 +3176,17 @@
                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
                             }
                         }
+
+                        // check Deal dates 
+                        if (moment(gData[i]["START_DT"]).isAfter(moment(gData[i]["END_DT"])) && isTenderFlag !== "1") {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['START_DT'] = true;
+                            gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
+                        }
+
 
                         //Restrict multi-tier Vol Tier for 12 months or 1 year
                         if (gData[i]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && gData[i]["NUM_OF_TIERS"] > 1) {
