@@ -2826,11 +2826,17 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
+            bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
+            var custSID = r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
+
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID.ToString() == custSID);
+
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
             if (deEndCust == null) return;
 
-            if (!primedCheck && deEndCust.AtrbValue.ToString() != "") // If not primed and End customer has a value
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && cust.VISTEX_CUST_FLAG) // If not primed and End customer has a value
             {
                 deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
             }
