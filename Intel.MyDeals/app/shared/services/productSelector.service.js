@@ -24,7 +24,8 @@
             GetSuggestions: GetSuggestions,
             GetProductAttributes: GetProductAttributes,
             IsProductExistsInMydeals: IsProductExistsInMydeals,
-            GetLegalExceptionProducts: GetLegalExceptionProducts
+            GetLegalExceptionProducts: GetLegalExceptionProducts,
+            GetProductOVLPValidation: GetProductOVLPValidation
         }
 
         return service;
@@ -91,6 +92,9 @@
         function IsProductExistsInMydeals(dto) {
             var postObject = { filter: dto }
             return dataService.post(apiBaseUrl + 'IsProductExistsInMydeals', postObject);
+        }
+        function GetProductOVLPValidation(data) {
+            return dataService.post(apiBaseUrl + 'validateOverlapProduct', data);
         }
     }
 })();

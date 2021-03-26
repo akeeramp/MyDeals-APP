@@ -36,5 +36,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductEngName> GetEngProducts(List<int> prds);
 
         List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
+
+        List<FlexProdOvlp> GetProductOVLPValidation(ProductOVLPValidation objProductOVLPValidation);
     }
 }

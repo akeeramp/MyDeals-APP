@@ -1364,6 +1364,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _productDataLib.GetDealProducts(objSid, objTypeSid, custId, isMissingFlag);
         }
+
+        public List<FlexProdOvlp> GetProductOVLPValidation(ProductOVLPValidation objProductOVLPValidation)
+        {
+            return _productDataLib.GetProductOVLPValidation(objProductOVLPValidation);
+        }
     }
 
     public class NodeMatch

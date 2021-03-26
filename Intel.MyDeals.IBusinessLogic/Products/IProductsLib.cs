@@ -82,5 +82,7 @@ namespace Intel.MyDeals.IBusinessLogic
         IList<SearchString> GetLegalExceptionProducts(string filter);
 
         List<DealProducts> GetDealProducts(int objSid, OpDataElementType objTypeSid, int custId, bool isMissingFlag);
+
+        List<FlexProdOvlp> GetProductOVLPValidation(ProductOVLPValidation objProductOVLPValidation);
     }
 }

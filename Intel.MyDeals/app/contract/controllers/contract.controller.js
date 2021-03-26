@@ -2863,6 +2863,11 @@
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
+                        //Adding Overlap FLEX product error into err object in PTE
+                        if (sData[s]._behaviors.isError['PTR_USER_PRD']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
+                        }
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                             // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
@@ -3076,6 +3081,11 @@
                         if (gData[i]._behaviors.isError['AR_SETTLEMENT_LVL']) {
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+                        // Adding Product overlap FLEX error into err object in DE
+                        if (gData[i]._behaviors.isError['PTR_USER_PRD']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
                         }
 
                         // TODO... this should probably mimic Pricing Table Rows
@@ -5917,6 +5927,9 @@
             }
             else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
                 item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be entered out. Pick one ";
+            }
+            else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
+                item._behaviors.validMsg[elem] = "Duplicate FLEX overlap products identified, please fix the error.";
             }
             else {
                 item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';

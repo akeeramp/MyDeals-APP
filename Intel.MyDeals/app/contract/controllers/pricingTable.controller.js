@@ -3238,11 +3238,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             data = buildTranslatorOutputObject(invalidProductJSONRows, data);
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
-            if (!publishWipDeals) {
-                root.validatePricingTable();
-            } else {
-                root.publishWipDealsBase();
-            }
+            //calling the product validation for Flex deal if there is no product translation required
+            $scope.validateOVLPProduct(currentPricingTableRowData, function (err, result) {
+                if (!err) {
+                    if (!publishWipDeals) {
+                        root.validatePricingTable(); 
+                    } else {
+                        root.publishWipDealsBase();
+                    }
+                }
+                else {
+                    root.setBusy("Validating FLEX products overlap...", result.err);
+                    $timeout(function () {
+                        root.setBusy("", "");
+                    }, 300);
+                }
+            });
+           
         } else {
             if ($scope.$root.pc !== null) {
                 $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
@@ -3420,11 +3432,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $scope.$root.pc.add($scope.pcCookUI.stop());
 
                 if (saveOnContinue) {
-                    if (!publishWipDeals) {
-                        root.validatePricingTable();
-                    } else {
-                        root.publishWipDealsBase();
-                    } // Call Save and Validate API from Contract Manager
+                    //calling the product validation for Flex deal if there is product translation required
+                    $scope.validateOVLPProduct(currentPricingTableRowData, function (err, result) {
+                        if (!err) {
+                            if (!publishWipDeals) {
+                                root.validatePricingTable();
+                            } else {
+                                root.publishWipDealsBase();
+                            }
+                        }
+                        else {
+                            root.setBusy("Validating FLEX products overlap...", result.err);
+                            $timeout(function () {
+                                root.setBusy("", "");
+                            }, 300);
+                        }
+                    });
+                    // Call Save and Validate API from Contract Manager
                 } else {
                     if ($scope.$root.pc !== null) {
                         $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
@@ -4377,6 +4401,111 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.undoCounter += 1;
             isFirstUndo = false;
         }
+    }
+
+    $scope.validateOVLPProduct = function (data, callback) {
+        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            var AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
+            var DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
+            var AcrInc = [], AcrExc = [], DrnInc = [], DrnExc=[];
+
+            //getting Accrual include and exclude product
+            angular.forEach(AcrObjs, (item) => {
+                var objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                angular.forEach(objAcr, (itm) => {
+                    var objItm = {};
+                    if (itm[0].EXCLUDE) {
+                        AcrExc.push(itm[0].PRD_MBR_SID);
+                    }
+                    else {
+                        objItm['RowId'] = item.DC_ID;
+                        objItm['PRDMemberSid'] = itm[0].PRD_MBR_SID;
+                        AcrInc.push(objItm);
+                    }
+                });
+                
+            });
+            //getting Darining include and exclude product
+            angular.forEach(DrnObjs, (item) => {
+                var objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                angular.forEach(objDrn, (itm) => {
+                    var objItm = {};
+                    if (itm[0].EXCLUDE) {
+                        DrnExc.push(itm[0].PRD_MBR_SID);
+                    }
+                    else {
+                        objItm['RowId'] = item.DC_ID;
+                        objItm['PRDMemberSid'] = itm[0].PRD_MBR_SID;
+                        DrnInc.push(objItm);
+                    }
+                });
+
+            });
+
+            var reqBody = {
+                AcrInc: AcrInc,
+                AcrExc: AcrExc,
+                DrnInc: DrnInc,
+                DrnExc: DrnExc
+            };
+
+            productSelectorService.GetProductOVLPValidation(reqBody) 
+                .then(function (response) {
+                    if (response.data && response.data.length && response.data.length > 0) {
+                        //clearing the behaviors calling the contract.controller.js
+                        root.clearValidation(data, "PTR_USER_PRD");
+                        //setting the behaviors calling the contract.controller.js
+                        var finalResult = $scope.checkOVLPDate(data,response.data);
+                        angular.forEach(data, (item) => {
+                            angular.forEach(finalResult, (itm) => {
+                                if (item.DC_ID == itm.ROW_ID && itm.dup) {
+                                    root.setBehaviors(item, "PTR_USER_PRD", "duplicate");
+                                }
+                            });
+                        });
+                       root.pricingTableData.PRC_TBL_ROW = data;
+                    }
+
+                    callback(false, {});
+
+                }, function (err) {
+                        callback(true, { err: ' inertnal server error in product overlap validation fail.'});
+                });
+        }
+        else {
+            callback(false, {});
+        }
+        
+    }
+
+    $scope.checkOVLPDate = function (data, resp) {
+        window['moment-range'].extendMoment(moment);
+        //get uniq duplicate product
+        var uniqDupProd = _.uniq(_.map(resp, (ob) => { return ob.PRD_MBR_SID }));
+        //iterate through unique product
+        _.each(uniqDupProd, (dup) => {
+            //filtering the uniq prod from response 
+            var dupProd = _.filter(resp, (ob) => { return ob['PRD_MBR_SID'] == dup });
+            _.each(dupProd, (dupPro) => {
+                _.each(dupProd, (dupPr) => {
+                    //checking the product date overlaps or not
+                    if (dupPro.ROW_ID != dupPr.ROW_ID) {
+                        var firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
+                        var secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
+                        var firstRange = moment.range(moment(firstObj.START_DT), moment(firstObj.END_DT));
+                        var secRange = moment.range(moment(secObj.START_DT), moment(secObj.END_DT));
+                        //if the dates overlap add key dup as true
+                        if (firstRange.overlaps(secRange)) {
+                            _.findWhere(resp, { 'ROW_ID': firstObj.DC_ID })['dup'] = true
+                            _.findWhere(resp, { 'ROW_ID': secObj.DC_ID })['dup'] = true
+                        }
+                    }
+                });
+             });
+
+        });
+
+        return resp;
     }
 
     init();
