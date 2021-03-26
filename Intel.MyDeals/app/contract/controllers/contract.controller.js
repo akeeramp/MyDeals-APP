@@ -3459,7 +3459,22 @@
                 function (results) {
 
                     var data = results.data.Data;
-                                     
+                    if ($scope.getVendorDropDownResult != null && $scope.getVendorDropDownResult != undefined
+                        && $scope.getVendorDropDownResult.length > 0) {
+                        var customerVendor = $scope.getVendorDropDownResult;
+                        angular.forEach($scope.pricingTableData.PRC_TBL_ROW, (item) => {
+                            var partnerID = customerVendor.filter(x => x.DROP_DOWN == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].BUSNS_ORG_NM;
+                            }
+                        });
+                        angular.forEach($scope.pricingTableData.WIP_DEAL, (item) => {
+                            var partnerID = customerVendor.filter(x => x.DROP_DOWN == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].BUSNS_ORG_NM;
+                            }
+                        });
+                    }                  
 
                     $scope.$broadcast('updateDealAtrb', data);
 

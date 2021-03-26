@@ -187,7 +187,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-
+                
                 new MyOpRule // Allow edits only in re-deal cases
                 {
                     Title="Readonly if NO Tracker Exists and Is in Re-Deal",

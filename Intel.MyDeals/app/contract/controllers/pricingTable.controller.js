@@ -856,9 +856,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
         if (stlmentValue == "Cash") {
             if (sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == '' || sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == null) {
-                sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
+                sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
+                if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
+                    sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
             }
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background(null);
         }
         if (stlmentValue != null && stlmentValue != '' && stlmentValue != "Cash") {
