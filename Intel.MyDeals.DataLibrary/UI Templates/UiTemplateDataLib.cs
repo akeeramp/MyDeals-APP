@@ -159,11 +159,24 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
                 DataType = "string",
                 UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                IsDefaultable = true,
+                DataType = "string",
+                UiType = "BUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/KIT",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -811,7 +824,7 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "DROPDOWN",
                 LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
                 LookupText = "BUSNS_ORG_NM",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "BUSNS_ORG_NM"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -834,14 +847,6 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Overarching Maximum Dollar",
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_OA_MAX_AMT', 'currency')#"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 3348,
-                AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
-                Width = 180
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -929,6 +934,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -937,6 +943,22 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 35,
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
+                Width = 120,
+                IsDefaultable = true,
+                Label = "Payout Based On *",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true,
+                IsReadOnly = true
             });
             /// PROGRAM_PAYMENT column behaviours in various deal types
             ///  ECAP - Editable
@@ -995,13 +1017,29 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
                 Label = "Rebate Type *",
                 Width = 100,
                 DataType = "string",
                 UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                IsDefaultable = true,
+                Label = "Rebate Type *",
+                Width = 100,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/KIT",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
@@ -1629,7 +1667,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'SETTLEMENT_PARTNER')#",
                 LookupUrl = "/api/CustomerVendor/GetCustomerVendors",
                 LookupText = "BUSNS_ORG_NM",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "BUSNS_ORG_NM"
             });
             items.Add(new UiTemplateContainerItem  // WIP KIT types
             {
@@ -2383,10 +2421,24 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 18,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 18,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/KIT",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,

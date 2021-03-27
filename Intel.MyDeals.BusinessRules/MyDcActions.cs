@@ -908,39 +908,16 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (deArSettlementLvl == null) return;
+
+            if (deArSettlementLvl.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) 
             {
-                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue.ToString() == "Cash" && r.Dc.HasTracker()) // This is AR_SETTLEMENT_LVL value
-                {
-                    de.IsReadOnly = true;
-                }
-                else
-                    de.IsReadOnly = false;
+                deArSettlementLvl.IsReadOnly = true;
             }
+
         }
-
-        //public static void ReadOnlyIfSettlementIsNotCash(params object[] args)
-        //{
-        //    MyOpRuleCore r = new MyOpRuleCore(args);
-        //    if (!r.IsValid) return;
-
-        //    IOpDataElement deArSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
-
-        //    if (deArSettlementLvl == null || deArSettlementLvl.AtrbValue.ToString() == "Cash")
-        //    {
-        //        return; 
-        //    }
-
-        //    foreach (var s in r.Rule.OpRuleActions[0].Target)
-        //    {
-        //        OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-        //        if (de != null) // This is AR_SETTLEMENT_LVL value
-        //        {
-        //            de.IsReadOnly = true;
-        //        }
-        //    }
-        //}
 
         public static void ValidateArSettlementLevelForActiveDeal(params object[] args)
         {
@@ -1187,28 +1164,23 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
+
+            if (settlementPartner == null) return;
+
+            string settlementLevelValue = r.Dc.GetDataElementValue(AttributeCodes.AR_SETTLEMENT_LVL);
+            string programPaymentValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (programPaymentValue == "Frontend" || settlementLevelValue != "Cash")
             {
-                IOpDataElement settlementLevel = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
-                IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
-                IOpDataElement programPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
-                string deTrackerValue = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
-                if (settlementLevel == null || settlementPartner == null || programPayment == null) return;
-                string settlementLevelValue = settlementLevel.AtrbValue.ToString();
-                if (programPayment.AtrbValue.ToString().Contains("Frontend") || settlementLevelValue != "Cash")
-                {
-                    settlementPartner.AtrbValue = string.Empty;
-                    settlementPartner.IsReadOnly = true;
-                }
-                else if (deTrackerValue != "")
-                {
-                    settlementPartner.IsReadOnly = true;
-                }
-                else
-                {
-                    settlementPartner.IsReadOnly = false;
-                }
+                settlementPartner.AtrbValue = string.Empty;
+                settlementPartner.IsReadOnly = true;
             }
+            else if (r.Dc.HasTracker())
+            {
+                settlementPartner.IsReadOnly = true;
+            }
+
         }
 
 
@@ -1575,7 +1547,9 @@ namespace Intel.MyDeals.BusinessRules
             foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
             {
                 de.ValidationMessage = string.Empty;
+                // WARNING:  This is a special case of putting a domino back up to prevent hold items from being required and locking the entire object for approval.  Do not do this elsewhere.
                 if (de.IsRequired) de.IsRequired = false;
+                // END WARNING
             }
         }
 
@@ -2212,16 +2186,6 @@ namespace Intel.MyDeals.BusinessRules
             OpDataElementType deType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
             bool testObject = false;
             List<string> parentStagesCheckToBypass = new List<string> { WorkFlowStages.Pending, WorkFlowStages.Approved };
-
-            //switch (deType)
-            //{
-            //    case OpDataElementType.PRC_TBL_ROW:
-            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_PTR").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            //        break;
-            //    case OpDataElementType.WIP_DEAL:
-            //        strMinDealId = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "PGM_NRE_OEM_START_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            //        break;
-            //}
 
             IOpDataElement deParentStage = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
 
@@ -2862,11 +2826,17 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
+            bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
+            var custSID = r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
+
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID.ToString() == custSID);
+
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
             if (deEndCust == null) return;
 
-            if (!primedCheck && deEndCust.AtrbValue.ToString() != "") // If not primed and End customer has a value
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && cust.VISTEX_CUST_FLAG) // If not primed and End customer has a value
             {
                 deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
             }

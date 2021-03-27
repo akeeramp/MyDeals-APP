@@ -1865,7 +1865,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (model._behaviors && model._behaviors.isReadOnly)
                         delete model._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                     var data = $scope.contractDs.data();
-                    if (data != null && data != undefined) {
+                    if (data != null && data != undefined && data[0].Customer != null && data[0].Customer != undefined
+                        && data[0].Customer.DFLT_SETTLEMENT_PARTNER != null
+                        && data[0].Customer.DFLT_SETTLEMENT_PARTNER != undefined
+                        && data[0].Customer.DFLT_SETTLEMENT_PARTNER != "") {
                         model.SETTLEMENT_PARTNER = data[0].Customer.DFLT_SETTLEMENT_PARTNER;
                     }
                 }

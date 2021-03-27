@@ -5,13 +5,13 @@
     <div class="modal-body" id="modal-body">
 
         <div class="row">
-            <div class="col-sm-10">
+            <div class="col-md-12">
                 <div class="col-sm-4">
-                    <label for="inputControl">Operator</label>
+                    <label class="control-label" for="inputControl">Operator</label>
                     <select id="inputControl" kendo-drop-down-list k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.operator"></select>
                 </div>
                 <div class="col-sm-8">
-                    <label for="inputPrice">Price Point</label>
+                    <label class="control-label" for="inputPrice">Price Point</label>
                     <input class="form-control" kendo-numeric-text-box id="inputPrice" format="'c2'" min="0.01" max="1000000"k-ng-model="$ctrl.price">
                     <p><small>Valid Range: 0.01 - 1,000,000</small></p>
                 </div>
@@ -35,3 +35,9 @@
     </div>
 <!--<div class="modal-footer">	</div>-->
 </script>
+
+<style>
+    .k-list-scroller {
+        overflow: hidden !important;
+    }
+</style>

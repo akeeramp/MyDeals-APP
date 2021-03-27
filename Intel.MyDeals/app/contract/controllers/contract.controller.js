@@ -86,7 +86,7 @@
 
         //Tender only columns for PRC_TBL_ROW
         $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_BID_GEO"];
-        $scope.tenderRequiredColumns = ["VOLUME", "END_CUSTOMER_RETAIL"];
+        $scope.tenderRequiredColumns = ["VOLUME"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
 
         var editableArSettlementLevelAfterApproval = ["Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region"];
@@ -2863,32 +2863,16 @@
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
+                        //Adding Overlap FLEX product error into err object in PTE
+                        if (sData[s]._behaviors.isError['PTR_USER_PRD']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
+                        }
 
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                             // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
                             if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                 sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
-                            }
-                        }
-
-                        if (sData[s]["END_CUSTOMER_RETAIL"] != undefined && sData[s]["END_CUSTOMER_RETAIL"] != null) {
-                            if (sData[s]["END_CUSTOMER_RETAIL"].length > 60) {
-                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                                sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("End Customer text can not be longer than 60 Characters");
-                                
-                            }
-                            else {
-
-                                if (sData[s]._behaviors.isError['END_CUSTOMER_RETAIL']) {
-                                    delete sData[s]._behaviors.isError['END_CUSTOMER_RETAIL'];
-                                    delete sData[s]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
-                                }
-                                sData[s]["END_CUSTOMER_RETAIL"] = sData[s]["END_CUSTOMER_RETAIL"].toString().toUpperCase();                              
                             }
                         }
 
@@ -2925,9 +2909,13 @@
                                     var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
                                     var isTenderFlag = "0";
                                     if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-
+                                    //Delete if there is any previous Error  messages
+                                    if (sData[s]._behaviors.isError['START_DT']) {
+                                        delete sData[s]._behaviors.isError['START_DT'];
+                                        delete sData[s]._behaviors.validMsg['START_DT'];
+                                    }
                                     // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2935,6 +2923,24 @@
                                         sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                    }
+
+                                    //Validating Votier deal Dates
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["START_DT"]).isSame(tblStartDate))) {
+                                            sData[FirstTire]["START_DT"] = tblStartDate;
+                                        }
+
+                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[s]._behaviors.isError['START_DT'] = true;
+                                            sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                        }
                                     }
                                 }
                                 if (dateFields[d] === "END_DT") {
@@ -2944,8 +2950,13 @@
                                     var isTenderFlag = "0";
                                     if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
-                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
+                                    if (sData[s]._behaviors.isError['END_DT']) {
+                                        delete sData[s]._behaviors.isError['END_DT'];
+                                        delete sData[s]._behaviors.validMsg['END_DT'];
+                                    }
+
+
+                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -2965,19 +2976,39 @@
                                         errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
                                     }
 
-                                    //Restrict multi-tier Vol Tier for 12 months or 1 year
-                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] > 1) {
-                                        if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
+
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
+                                        
+
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["END_DT"]).isSame(tblEndDate))) {
+                                            sData[FirstTire]["END_DT"] = tblEndDate;
+                                        }
+
+
+                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
                                             if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                             sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                        }
+
+                                        //Restrict multi-tier Vol Tier for 12 months or 1 year
+                                        if ( sData[s]["NUM_OF_TIERS"] > 1) {
+                                            if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
+                                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                                sData[s]._behaviors.isError['END_DT'] = true;
+                                                sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
+                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
+                                            }
                                         }
                                     }
-
                                 }
                                 //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                 //{
@@ -3098,6 +3129,11 @@
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                             errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                         }
+                        // Adding Product overlap FLEX error into err object in DE
+                        if (gData[i]._behaviors.isError['PTR_USER_PRD']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
+                        }
 
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
@@ -3140,6 +3176,17 @@
                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
                             }
                         }
+
+                        // check Deal dates 
+                        if (moment(gData[i]["START_DT"]).isAfter(moment(gData[i]["END_DT"])) && isTenderFlag !== "1") {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['START_DT'] = true;
+                            gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
+                        }
+
 
                         //Restrict multi-tier Vol Tier for 12 months or 1 year
                         if (gData[i]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && gData[i]["NUM_OF_TIERS"] > 1) {
@@ -3470,7 +3517,22 @@
                 function (results) {
 
                     var data = results.data.Data;
-                                     
+                    if ($scope.getVendorDropDownResult != null && $scope.getVendorDropDownResult != undefined
+                        && $scope.getVendorDropDownResult.length > 0) {
+                        var customerVendor = $scope.getVendorDropDownResult;
+                        angular.forEach($scope.pricingTableData.PRC_TBL_ROW, (item) => {
+                            var partnerID = customerVendor.filter(x => x.DROP_DOWN == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].BUSNS_ORG_NM;
+                            }
+                        });
+                        angular.forEach($scope.pricingTableData.WIP_DEAL, (item) => {
+                            var partnerID = customerVendor.filter(x => x.DROP_DOWN == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].BUSNS_ORG_NM;
+                            }
+                        });
+                    }                  
 
                     $scope.$broadcast('updateDealAtrb', data);
 
@@ -5726,7 +5788,10 @@
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
             $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
-            //check if settlement is cash and pgm type is backend
+            //to fix a defect, setting the property value to same
+            $scope.setToSame(data, 'REBATE_OA_MAX_AMT');
+            $scope.setToSame(data, 'REBATE_OA_MAX_VOL');
+
             if (hybCond == '1') {
                 //condition to check values are zero
                 retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
@@ -5862,7 +5927,7 @@
                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                 }
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
+                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
                     if (item._behaviors && item._behaviors.isReadOnly)
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
@@ -5876,14 +5941,14 @@
             item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
             item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
             if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-            if (item.HAS_TRACKER == 0) {
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
                     item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
                 }
-                if (item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
-                if ((item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
+                if ((item.SETTLEMENT_PARTNER != undefined && item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
                     item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner mandatory for Cash Settlement level.";
                 }
                 else {
@@ -5936,9 +6001,19 @@
             else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
                 item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be entered out. Pick one ";
             }
+            else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
+                item._behaviors.validMsg[elem] = "Duplicate FLEX overlap products identified, please fix the error.";
+            }
             else {
                 item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
             }
+        }
+        $scope.setToSame = function (data, elem) {
+            angular.forEach(data, (item) => {
+                if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
+                    item[elem] = null;
+                }
+            });
         }
     }
 })();
