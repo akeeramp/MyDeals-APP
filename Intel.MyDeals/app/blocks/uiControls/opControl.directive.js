@@ -59,6 +59,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         //enable/disable UI control
         scope.isUIDisable = function (name, label) {
             var dealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
+            var rebateType = scope.$parent.$parent.vm.autofillData.DEFAULT.REBATE_TYPE.value;
             var rowType = dealType == 'FLEX' ? scope.$parent.$parent.vm.autofillData.DEFAULT.FLEX_ROW_TYPE.value : true;
             if (label.trim() == 'Number of Tiers' ) {
                 var hybCond = scope.$parent.$parent.vm.autofillData.isVistexHybrid;
@@ -84,6 +85,10 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 }
                 else if (dealType == 'FLEX' && name == 'Consumption') {
                     return true;
+                }
+                else if (dealType == 'VOL_TIER' && rebateType == 'TENDER') {
+                    scope.$parent.$parent.vm.autofillData.DEFAULT.PAYOUT_BASED_ON.value = "Consumption";
+                   // return true;
                 }
                 else {
                     return scope.opIsReadOnly;
