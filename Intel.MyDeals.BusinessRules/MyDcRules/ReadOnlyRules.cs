@@ -48,6 +48,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.MRKT_SEG,
                                 AttributeCodes.PAYOUT_BASED_ON,
                                 AttributeCodes.SEND_TO_VISTEX,
+                                AttributeCodes.END_CUSTOMER_RETAIL,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD
                             }
                         }
