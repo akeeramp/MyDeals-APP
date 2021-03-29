@@ -1260,6 +1260,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 if (col.uiType === "ComboBox" || col.uiType === "DROPDOWN") {
 
+                    if (col.field === "END_CUSTOMER_RETAIL") {
+                        openEndCustomerRetailModal(container, col);
+                    }
+
                     // Note: we shouldn't put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
                     if (col.field === "RETAIL_CYCLE") {
 
@@ -3147,6 +3151,67 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.root.saveCell(containerDataItem, "TRGT_RGN", $scope);
                         //Note: we do not call the below because we do not want target region to update all linked rows.  If we did, uncomment the below line and comment out the one above
                         //$scope.saveFunctions(containerDataItem, "TRGT_RGN", containerDataItem.TRGT_RGN)
+                    },
+                    function () {
+                    });
+            }
+
+
+            function openEndCustomerRetailModal(container, col) {
+                var containerDataItem = angular.element(container).scope().dataItem;
+                console.log(col);
+
+                var endCustomerRetailModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'endCustomerRetailModal',
+                    controller: 'EndCustomerRetailCtrl',
+                    controllerAs: '$ctrl',
+                    windowClass: 'multiselect-modal-window',
+                    size: 'md',
+
+                    resolve: {
+                        items: function () {
+                            return {
+                                'label': col.title,
+                                'uiType': col.uiType,
+                                'opLookupUrl': col.lookupUrl,
+                                'opLookupText': col.lookupText,
+                                'opLookupValue': col.lookupValue
+                            };
+                        },
+                        cellCurrValues: function () {
+                            return {
+                                END_CUSTOMER_RETAIL: containerDataItem.END_CUSTOMER_RETAIL,
+                                IS_PRIME : containerDataItem.IS_PRIMED_CUST,
+                                PRIMED_CUST_CNTRY : containerDataItem.PRIMED_CUST_CNTRY,
+                                PRIMED_CUST_NM : containerDataItem.PRIMED_CUST_NM,
+                                PRIMED_CUST_ID : containerDataItem.PRIMED_CUST_ID
+
+                            }
+                        },
+                        colName: function () {
+                            return "END_CUSTOMER_RETAIL";
+                        },
+                        country: function () {
+                            return containerDataItem.PRIMED_CUST_CNTRY;
+                        }
+                    }
+                });
+
+                endCustomerRetailModal.result.then(
+                    function (endCustomerData) { //returns as an array
+
+                        containerDataItem.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
+                        containerDataItem.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
+                        containerDataItem.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
+                        containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
+                        containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
+
+                        $scope.saveFunctions(containerDataItem, "END_CUSTOMER_RETAIL", containerDataItem.END_CUSTOMER_RETAIL);
+                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_CNTRY", containerDataItem.PRIMED_CUST_CNTRY);
+                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_NM", containerDataItem.PRIMED_CUST_NM);
+                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_ID", containerDataItem.PRIMED_CUST_ID);
+                        $scope.saveFunctions(containerDataItem, "IS_PRIMED_CUST", containerDataItem.IS_PRIMED_CUST);
                     },
                     function () {
                     });

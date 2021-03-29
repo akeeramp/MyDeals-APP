@@ -380,7 +380,8 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {
                                 AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.AR_SETTLEMENT_LVL
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.PRIMED_CUST_CNTRY
                             }
                         }
                     }
@@ -416,7 +417,8 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
                                 AttributeCodes.QLTR_BID_GEO,
-                                AttributeCodes.END_CUSTOMER_RETAIL
+                                AttributeCodes.END_CUSTOMER_RETAIL,
+                                AttributeCodes.PRIMED_CUST_CNTRY
                             }
                         }
                     }
@@ -646,7 +648,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.WF_STG_CD,
                                 AttributeCodes.YCS2_END_DT,
                                 AttributeCodes.YCS2_PRC_IRBT,
-                                AttributeCodes.YCS2_START_DT
+                                AttributeCodes.YCS2_START_DT,
+                                AttributeCodes.PRIMED_CUST_CNTRY
                             }
                         }
                     }

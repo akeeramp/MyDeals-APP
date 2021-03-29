@@ -2371,6 +2371,11 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 //ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 180,
+                DataType = "string",
+                UiType = "ComboBox",
+                LookupUrl = "/api/PrimeCustomers/GetPrimeCustomers",
+                LookupText = "PRIM_CUST_NM",
+                LookupValue = "PRIM_CUST_NM",
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
                 IsFilterable = true,
                 IsSortable = true

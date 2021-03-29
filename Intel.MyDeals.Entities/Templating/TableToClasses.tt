@@ -496,6 +496,12 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "FlexProdOvlp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Validated prime customer  
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_PRIM_VAL] @in_end_cust_nm = 'test' , @in_end_cust_ctry = 'testcountry' ");
+	ds.Tables[0].TableName = "PrimeCustomerDetails";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

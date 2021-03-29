@@ -28,12 +28,13 @@
             pageSize: 25,
             schema: {
                 model: {
-                    id: "WIP_DEAL_OBJ_SID",
+                    id: "OBJ_SID",
                     fields: {
                         CNTRCT_OBJ_SID: { editable: false },
                         OBJ_SID: { editable: false },
                         END_CUSTOMER_RETAIL: { editable: false },
                         END_CUSTOMER_COUNTRY: { editable: false },
+                        IS_PRIMED_CUST: { editable: false},
                         PRIMED_CUST_CNTRY: { editable: true },
                         PRIMED_CUST_ID: { editable: true },
                         PRIMED_CUST_NM: { editable: true }
@@ -50,27 +51,63 @@
             })
         }
 
-        vm.PrimeCustNames = {
-            placeholder: "Select Customer Name..",
-            dataSource: {
-                type: "json",
-                serverFiltering: true,
-                transport: {
-                    read: function (e) {
-                        e.success(vm.PrimeCustomersData);
-                    }
-                }
-            },
-            maxSelectedItems: 1,
-            autoBind: true,
-            dataTextField: "PRIME_CUST_NM",
-            dataValueField: "PRIME_CUST_NM",
-            valuePrimitive: true,
-            select: onCustomerChange
-        }
-
         vm.PrimeCustNamesEditor = function (container, options) {
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustNames" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.lookupEditorEndCustomerRetailModal = function (model) {
+            var endCustomerRetailModal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: 'endCustomerRetailModal',
+                controller: 'EndCustomerRetailCtrl',
+                controllerAs: '$ctrl',
+                size: 'md',
+                resolve: {
+                    items: function () {
+                        return {
+                            'label': "End customer/Retail",
+                            'uiType': "ComboBox",
+                            'opLookupUrl': "/api/PrimeCustomers/GetPrimeCustomers",
+                            'opLookupText': "PRIM_CUST_NM",
+                            'opLookupValue': "PRIM_CUST_NM"
+                        };
+                    },
+                    cellCurrValues: function () {
+                        return {
+                            END_CUSTOMER_RETAIL: model.END_CUSTOMER_RETAIL,
+                            IS_PRIME: model.IS_PRIMED_CUST,
+                            PRIMED_CUST_CNTRY: model.END_CUSTOMER_COUNTRY,
+                            PRIMED_CUST_NM: model.PRIMED_CUST_NM,
+                            PRIMED_CUST_ID: model.PRIMED_CUST_ID 
+                        }
+                    },
+                    colName: function () {
+                        return "END_CUSTOMER_RETAIL";
+                    },
+                    country: function () {
+                        return model.END_CUSTOMER_COUNTRY;
+                    }
+                }
+            });
+
+            endCustomerRetailModal.result.then(
+                function (endCustomerData) { //returns as an array
+
+                    model.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
+                    model.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
+                    model.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
+                    model.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
+                    model.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
+
+                    $scope.saveFunctions(model, "END_CUSTOMER_RETAIL", model.END_CUSTOMER_RETAIL);
+                    $scope.saveFunctions(model, "PRIMED_CUST_CNTRY", model.PRIMED_CUST_CNTRY);
+                    $scope.saveFunctions(model, "PRIMED_CUST_NM", model.PRIMED_CUST_NM);
+                    $scope.saveFunctions(model, "PRIMED_CUST_ID", model.PRIMED_CUST_ID);
+                    $scope.saveFunctions(model, "IS_PRIMED_CUST", model.IS_PRIMED_CUST);
+                },
+                function () {
+                });
+
         }
 
         vm.gridOptions = {
@@ -89,6 +126,7 @@
             },
             toolbar: gridUtils.clearAllFiltersToolbar(),
             edit: function (e) {
+                vm.lookupEditorEndCustomerRetailModal(e.model);
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
             },
@@ -119,39 +157,9 @@
                     field: "END_CUSTOMER_COUNTRY",
                     title: "End Customer Country",
                     width: "230px"
-                },
-                {
-                    field: "PRIMED_CUST_NM",
-                    title: "Prime Customer",
-                    width: "230px",
-                    filterable: { multi: true, search: true },
-                    editor: vm.PrimeCustNamesEditor
-                },
-                {
-                    field: "PRIMED_CUST_ID",
-                    title: "Prime Customer ID",
-                    width: "230px"
-                },
-                {
-                    field: "PRIMED_CUST_CNTRY",
-                    title: "Prime Country",
-                    width: "230px"
                 }
             ]
         }
-
-        function onCustomerChange(e) {
-            if (e.dataItem != undefined && e.dataItem != null) {
-                var PRIMEDCUSTID = e.dataItem.PRIME_MBR_SID;
-                var CUSTCNTRY = e.dataItem.PRIME_CUST_COUNTRY;
-                var CustID = $("input[name=PRIMED_CUST_ID]").val(PRIMEDCUSTID);
-                CustID.trigger("change");
-                var Country = $("input[name=PRIMED_CUST_CNTRY]").val(CUSTCNTRY);
-                Country.trigger("change");
-            }
-        }
-
-
     }
 
 })();
