@@ -3434,7 +3434,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 if (saveOnContinue) {
                     //calling the product validation for Flex deal if there is product translation required
-                    $scope.validateOVLPProduct(currentPricingTableRowData, function (err, result) {
+                    $scope.validateOVLPProduct(data, function (err, result) {
                         if (!err) {
                             if (!publishWipDeals) {
                                 root.validatePricingTable();
@@ -4452,15 +4452,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             productSelectorService.GetProductOVLPValidation(reqBody) 
                 .then(function (response) {
+                    //clearing the behaviors calling the contract.controller.js
+                    root.clearValidation(data, "PTR_USER_PRD");
                     if (response.data && response.data.length && response.data.length > 0) {
-                        //clearing the behaviors calling the contract.controller.js
-                        root.clearValidation(data, "PTR_USER_PRD");
                         //setting the behaviors calling the contract.controller.js
                         var finalResult = $scope.checkOVLPDate(data,response.data);
                         angular.forEach(data, (item) => {
                             angular.forEach(finalResult, (itm) => {
                                 if (item.DC_ID == itm.ROW_ID && itm.dup) {
                                     root.setBehaviors(item, "PTR_USER_PRD", "duplicate");
+                                }
+                                else {
+                                    root.setBehaviors(item, "FLEX", "emptyobject");
                                 }
                             });
                         });

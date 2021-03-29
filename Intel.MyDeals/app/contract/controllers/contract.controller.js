@@ -6004,6 +6004,10 @@
             else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
                 item._behaviors.validMsg[elem] = "Duplicate FLEX overlap products identified, please fix the error.";
             }
+            else if (cond = 'emptyobject' && elem == 'FLEX') {
+                delete item._behaviors.isRequired[elem];
+                delete item._behaviors.isError[elem];
+            }
             else {
                 item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
             }
