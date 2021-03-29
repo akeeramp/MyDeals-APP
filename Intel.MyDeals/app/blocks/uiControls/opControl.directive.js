@@ -86,7 +86,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 else if (dealType == 'FLEX' && name == 'Consumption') {
                     return true;
                 }
-                else if (dealType == 'VOL_TIER' && rebateType == 'TENDER') {
+                else if ((dealType == 'VOL_TIER' || dealType == 'PROGRAM') && rebateType == 'TENDER') {
                     scope.$parent.$parent.vm.autofillData.DEFAULT.PAYOUT_BASED_ON.value = "Consumption";
                    // return true;
                 }
