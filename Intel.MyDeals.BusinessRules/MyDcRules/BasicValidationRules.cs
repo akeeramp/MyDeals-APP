@@ -561,6 +561,16 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Tender rebate must be consumption",
+                    ActionRule = MyDcActions.CheckTenderConsumption,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue()).Any(),
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.PROGRAM.ToString() },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+                
+                new MyOpRule
+                {
                     Title="Deal End Date can't be greater than twenty years from Start Date",
                     ActionRule = MyDcActions.CheckMaxDealEndDate,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW,OpDataElementType.WIP_DEAL},

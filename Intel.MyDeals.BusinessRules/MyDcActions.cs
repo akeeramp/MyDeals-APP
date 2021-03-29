@@ -1397,6 +1397,22 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckTenderConsumption(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string rebate = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
+
+            if(de == null) return;
+
+            if (de.AtrbValue.ToString() != "Consumption" && rebate == "TENDER")
+            {
+                de.AddMessage("Tender deals only allow payout based on Consumption.");
+            }
+        }
+
         public static void CheckCeilingVolume(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2106,23 +2122,23 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void TendersProjectRequired(params object[] args)
-        {
-            // Note that this will trigger on already published deals as well, but since they show up in Search screen, UI doesn't intercept the required messages.
-            // This is also a PTR only level rule, so it doesn't enforce 
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+        //public static void TendersProjectRequired(params object[] args)
+        //{
+        //    // Note that this will trigger on already published deals as well, but since they show up in Search screen, UI doesn't intercept the required messages.
+        //    // This is also a PTR only level rule, so it doesn't enforce 
+        //    MyOpRuleCore r = new MyOpRuleCore(args);
+        //    if (!r.IsValid) return;
 
-            string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
-            string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
-            IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
-            string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
+        //    string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+        //    string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
+        //    IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
+        //    string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
 
-            if (rebateType == "TENDER" && payoutBasedOn == "Consumption" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
-            {
-                deProject.IsRequired = true;
-            }
-        }
+        //    if (rebateType == "TENDER" && payoutBasedOn == "Consumption" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
+        //    {
+        //        deProject.IsRequired = true;
+        //    }
+        //}
 
         public static void ForecastVolumeRequired(params object[] args)
         {
