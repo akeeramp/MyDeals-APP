@@ -15,5 +15,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<UnPrimeDeals> GetUnPrimeDeals();
 
+        List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
+
     }
 }

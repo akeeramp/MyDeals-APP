@@ -14,5 +14,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<PrimeCustDropdown> GetPrimeCustomers();
 
         List<UnPrimeDeals> GetUnPrimeDeals();
+
+        List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
     }
 }

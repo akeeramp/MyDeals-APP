@@ -50,6 +50,12 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetUnPrimeDeals();
         }
 
+        public List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry)
+        {
+            return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
+        }
+
+
 
     }
 }

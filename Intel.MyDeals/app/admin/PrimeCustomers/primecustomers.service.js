@@ -18,7 +18,8 @@
             SetPrimeCustomers: SetPrimeCustomers,
             getCountries: getCountries,
             getPrimeCustomers: getPrimeCustomers,
-            getUnmappedPrimeCustomerDeals: getUnmappedPrimeCustomerDeals
+            getUnmappedPrimeCustomerDeals: getUnmappedPrimeCustomerDeals,
+            getEndCustomerData: getEndCustomerData
         }
 
         return service;
@@ -50,6 +51,11 @@
         function getUnmappedPrimeCustomerDeals() {
             return dataService.get(apiBaseUrl + 'GetUnPrimeDeals');
         }
+
+        function getEndCustomerData(endCustomerName, endCustomerCountry) {
+            return dataService.get(apiBaseUrl + 'GetEndCustomerData/' + endCustomerName + '/' + endCustomerCountry);
+        }
+
 
     }
 

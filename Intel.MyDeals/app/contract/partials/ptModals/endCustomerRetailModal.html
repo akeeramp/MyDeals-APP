@@ -1,0 +1,78 @@
+﻿<script type="text/ng-template" id="endCustomerRetailModal">
+    <div>
+        <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Select {{$ctrl.endCustomerRetailPopUpModal.label}}</h3>
+            </div>
+
+    <div class="modal-body" id="modal-body">
+        <p>
+            <div ng-if="$ctrl.IsError">
+                <span ng-if="$ctrl.IsError" style="color:red;">
+                    {{$ctrl.msg}}
+                </span>
+            </div>
+        </p>
+
+
+        <div op-control-flat
+             ng-model="$ctrl.popupResult"
+             id = "ENDCUSTCOMBO"
+             ng-keypress="$ctrl.EnterPressed($event)"
+             op-cd="'ComboBoxSelect'"
+             op-type="'COMBOBOX'"
+             op-label="''"
+             op-lookup-url="$ctrl.endCustomerRetailPopUpModal.opLookupUrl"
+             op-lookup-text="$ctrl.endCustomerRetailPopUpModal.opLookupText"
+             op-lookup-value="$ctrl.endCustomerRetailPopUpModal.opLookupValue"
+             op-placeholder="'Select Customer'"
+             op-is-form="true"
+             op-expanded="true"
+             op-extra="true"
+             op-ui-mode="'VERTICAL'"
+             op-filterable="$ctrl.isFilterEnabled">
+        </div>
+    <br />
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Select End Customer Country</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+
+            <div op-control-flat
+             ng-model="$ctrl.popupResult"
+             ng-keypress="$ctrl.EnterPressed($event)"
+             op-cd="'DropdownSelections'"
+             op-type="'COMBOBOX'"
+             op-label="''"
+             op-lookup-url="'/api/PrimeCustomers/GetCountries'"
+             op-lookup-text="'CTRY_NM'"
+             op-lookup-value="'CTRY_NM'"
+             op-placeholder="$ctrl.placeholderText"
+             op-is-form="true"
+             op-expanded="true"
+             op-extra="true"
+             op-ui-mode="'VERTICAL'"
+             op-filterable="$ctrl.isFilterEnabled">
+           </div>
+
+    </div>
+    </br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-7">
+                    <!--<button style="width:35%" class="btn btn-primary" ng-click="$ctrl.unPrime()">Un Prime</button>&nbsp;-->
+                    <button  class="btn btn-primary" ng-click="$ctrl.remove()">Clear End Customer</button>&nbsp;
+                </div>
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+    .modal-body .opUiElement{
+          width: 100%;
+    }
+    </style>
+
+</script>

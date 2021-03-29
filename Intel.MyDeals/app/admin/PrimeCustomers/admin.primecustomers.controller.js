@@ -225,7 +225,7 @@
                     title: "Is Active",
                     width: "10%",
                     filterable: { multi: true, search: false },
-                    template: gridUtils.boolViewer('IS_ACTIVE'),
+                    template: gridUtils.boolViewer('IS_ACTV'),
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
                 },
