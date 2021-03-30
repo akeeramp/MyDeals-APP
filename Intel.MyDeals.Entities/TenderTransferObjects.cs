@@ -205,6 +205,9 @@ namespace Intel.MyDeals.Entities
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
                 public string EndCustomerCountry { get; set; }
+                public string VerifiedEndCustomer { get; set; }
+                public string VerifiedEndCustomerId { get; set; }
+                public string IsVerifiedCustomer { get; set; }
                 [JsonProperty("Account")]
                 public Account account { get; set; }
                 public string ShipmentStartDate { get; set; }
@@ -345,5 +348,16 @@ namespace Intel.MyDeals.Entities
         public string MydlPcsrNbr { get; set; }
     }
     #endregion Tenders Common Message Classes
+
+    #region End Customer Support Classes
+    public class EndCustomerObject
+    {
+        public string VerifiedEndCustomer { get; set; }
+        public int VerifiedEndCustomerId { get; set; }
+        public int IsVerifiedCustomer { get; set; }
+
+    }
+    #endregion End Customer Support Classes
+
 
 }

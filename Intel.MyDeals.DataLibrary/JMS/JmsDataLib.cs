@@ -829,6 +829,51 @@ namespace Intel.MyDeals.DataLibrary
             return retObj;
         }
 
+
+        public EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry)
+        {
+            EndCustomerObject retObj = new EndCustomerObject();
+
+            var cmd = new Procs.dbo.PR_MYDL_PRIM_VAL()
+            {
+                in_end_cust_nm = endCustName,
+                in_end_cust_ctry = endCustCountry
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+                    int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                    int IDX_IS_PRIME = DB.GetReaderOrdinal(rdr, "IS_PRIME ");
+
+
+                    while (rdr.Read())
+                    {
+
+                        retObj.VerifiedEndCustomer = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM);
+                        retObj.VerifiedEndCustomerId = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID))
+                           ? default(System.Int32)
+                           : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID);
+                        retObj.IsVerifiedCustomer = (IDX_IS_PRIME < 0 || rdr.IsDBNull(IDX_IS_PRIME))
+                            ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_PRIME);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retObj;
+        }
+
+
         #endregion Tenders Integration Items for IQR
 
     }
