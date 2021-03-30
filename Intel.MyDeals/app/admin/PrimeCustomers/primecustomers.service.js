@@ -52,8 +52,8 @@
             return dataService.get(apiBaseUrl + 'GetUnPrimeDeals');
         }
 
-        function getEndCustomerData(endCustomerName, endCustomerCountry) {
-            return dataService.get(apiBaseUrl + 'GetEndCustomerData/' + endCustomerName + '/' + endCustomerCountry);
+        function getEndCustomerData(endCustomerData) {
+            return dataService.post(apiBaseUrl + 'GetEndCustomerData', endCustomerData);
         }
 
 
