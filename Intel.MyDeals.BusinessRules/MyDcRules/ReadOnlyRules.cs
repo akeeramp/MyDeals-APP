@@ -49,6 +49,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PAYOUT_BASED_ON,
                                 AttributeCodes.SEND_TO_VISTEX,
                                 AttributeCodes.END_CUSTOMER_RETAIL,
+                                AttributeCodes.FLEX_ROW_TYPE,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD
                             }
                         }
