@@ -67,11 +67,13 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.GetUnPrimeDeals(), "Unable to get deals");
         }
 
-        [Route("GetEndCustomerData/{endCustomerName}/{endCustomerCountry}")]
-        public IEnumerable<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry)
+        [Authorize]
+        [HttpPost]
+        [Route("GetEndCustomerData")]
+        public IEnumerable<PrimeCustomerDetails> GetEndCustomerData(string[] endCustomerData)
         {
-            return SafeExecutor(() => _primeCustomersLib.GetEndCustomerData(endCustomerName, endCustomerCountry),
-                $"Unable to Get Prime Customers");
+            return SafeExecutor(() => _primeCustomersLib.GetEndCustomerData(endCustomerData[0], endCustomerData[1]),
+                    $"Unable to Get Prime Customers");
         }
 
 

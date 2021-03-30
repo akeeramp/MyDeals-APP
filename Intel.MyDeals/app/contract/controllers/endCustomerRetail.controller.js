@@ -56,8 +56,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
         else if (endCustVal !== "ANY" && isEndCustomerSelected && isPrimeCountrySelected) {
             if (isEndCustomerSelected && isPrimeCountrySelected) {
-
-                PrimeCustomersService.getEndCustomerData(endCustVal, countryVal).then(
+                var temp = new Array(endCustVal, countryVal);
+                PrimeCustomersService.getEndCustomerData(temp).then(
                     function (res) {
                         var response = res.data[0];
                         validate(response);
@@ -100,7 +100,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
             $ctrl.IsError = true;
 
-            $ctrl.msg = "Please select End customer and End customer country";
+            $ctrl.msg = "Please select End customer/Retail and End customer country";
         }
         else if (!isEndCustomerSelected) {
             $ctrl.IsError = true;
@@ -109,8 +109,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
         else {
             $ctrl.IsError = false;
-            if (endCustVal == "ANY" || isEndCustomerSelected) {
-                data.IS_PRIME = 0;
+            if (endCustVal == "ANY") {
+                data.IS_PRIME = 1;
                 data.PRIM_CUST_NM = "";
                 data.PRIM_CUST_ID = null;
                 data.PRIMED_CUST_CNTRY = countryVal;
@@ -118,16 +118,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $uibModalInstance.close(data);
             }
 
-            //else {
-            //    $ctrl.IsError = true;
-            //    if (isEndCustomerSelected && !isPrimeCountrySelected && endCustVal !== "Any/All")
-            //        $ctrl.msg = "Please select End Customer country";
-            //    else if (endCustVal !== "Any/All") {
-            //        $ctrl.msg = "";
-            //        $ctrl.IsError = true;
-            //    }
-
-            //}
         }
 
     };

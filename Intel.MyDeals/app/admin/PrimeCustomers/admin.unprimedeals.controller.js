@@ -31,6 +31,7 @@
                     id: "OBJ_SID",
                     fields: {
                         CNTRCT_OBJ_SID: { editable: false },
+                        TITLE: {editable : false },
                         OBJ_SID: { editable: false },
                         END_CUSTOMER_RETAIL: { editable: false },
                         END_CUSTOMER_COUNTRY: { editable: false },
@@ -141,12 +142,19 @@
                 {
                     field: "CNTRCT_OBJ_SID",
                     title: "Contract Id",
+                    width: "230px",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "TITLE",
+                    title: "Contract/Tender Folio Name",
                     width: "230px"
                 },
                 {
                     field: "OBJ_SID",
                     title: "Deal ID",
-                    width: "230px"
+                    width: "230px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "END_CUSTOMER_RETAIL",
