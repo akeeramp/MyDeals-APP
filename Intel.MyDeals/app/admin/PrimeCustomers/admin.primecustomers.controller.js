@@ -105,7 +105,7 @@
         }
 
         vm.PrimeCustNames = {
-            placeholder: "Select Customer Name..",
+            placeholder: "Enter Customer Name..",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
