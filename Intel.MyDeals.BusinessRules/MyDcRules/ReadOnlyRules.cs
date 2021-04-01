@@ -48,6 +48,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.MRKT_SEG,
                                 AttributeCodes.PAYOUT_BASED_ON,
                                 AttributeCodes.SEND_TO_VISTEX,
+                                AttributeCodes.END_CUSTOMER_RETAIL,
+                                AttributeCodes.FLEX_ROW_TYPE,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD
                             }
                         }
@@ -415,8 +417,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.QLTR_BID_GEO,
-                                AttributeCodes.END_CUSTOMER_RETAIL
+                                AttributeCodes.QLTR_BID_GEO
                             }
                         }
                     }
@@ -646,7 +647,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.WF_STG_CD,
                                 AttributeCodes.YCS2_END_DT,
                                 AttributeCodes.YCS2_PRC_IRBT,
-                                AttributeCodes.YCS2_START_DT
+                                AttributeCodes.YCS2_START_DT,
+                                AttributeCodes.PRIMED_CUST_CNTRY
                             }
                         }
                     }

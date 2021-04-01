@@ -497,6 +497,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
     <Content Include="app\contract\controllers\dealProducts.controller.js" />
+    <Content Include="app\contract\controllers\endCustomerRetail.controller.js" />
     <Content Include="app\contract\controllers\meetComp.controller.js" />
     <Content Include="app\contract\controllers\dealTimelineModal.controller.js" />
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
@@ -531,6 +532,7 @@
     <Content Include="app\contract\partials\contractSummaryExcludeGroups.html" />
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\meetCompTab.html" />
+    <Content Include="app\contract\partials\ptModals\endCustomerRetailModal.html" />
     <Content Include="app\contract\partials\ptModals\managerPctModal.html" />
     <Content Include="app\contract\partials\ptModals\groupExclusionModal.html" />
     <Content Include="app\contract\partials\ptModals\meetCompModal.html" />

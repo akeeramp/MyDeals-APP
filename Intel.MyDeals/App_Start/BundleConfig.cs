@@ -234,6 +234,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/ecapTrackerAutoFillModal.controller.js"
                 , "~/app/contract/controllers/ecapTrackerModal.controller.js"
                 , "~/app/contract/controllers/emailModal.controller.js"
+                , "~/app/contract/controllers/endCustomerRetail.controller.js"
                 , "~/app/contract/controllers/excludeDealGroupMultiSelect.controller.js"
                 , "~/app/contract/controllers/export.controller.js"
                 , "~/app/contract/controllers/manager.controller.js"

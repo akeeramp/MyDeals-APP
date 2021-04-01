@@ -172,15 +172,6 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Tender Projects Required",
-                    ActionRule = MyDcActions.TendersProjectRequired,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString(), OpDataElementSetType.VOL_TIER.ToString()}
-                },
-
-                new MyOpRule
-                {
                     Title="Required Fields at WIP for Tender Deals",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, 
@@ -213,6 +204,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetRequired,
                             Target = new[] {
+                                AttributeCodes.END_CUSTOMER_RETAIL,
+                                AttributeCodes.PRIMED_CUST_CNTRY,
                                 AttributeCodes.QLTR_PROJECT
                             }
                         }

@@ -105,7 +105,7 @@
         }
 
         vm.PrimeCustNames = {
-            placeholder: "Select Customer Name..",
+            placeholder: "Enter Customer Name..",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -225,7 +225,7 @@
                     title: "Is Active",
                     width: "10%",
                     filterable: { multi: true, search: false },
-                    template: gridUtils.boolViewer('IS_ACTIVE'),
+                    template: gridUtils.boolViewer('IS_ACTV'),
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
                 },

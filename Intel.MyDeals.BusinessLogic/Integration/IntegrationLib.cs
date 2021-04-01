@@ -372,6 +372,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             string gaWwid = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid;
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
+            string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;          
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
             string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ"? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region: "APAC,IJKK";
@@ -429,7 +430,7 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Product Check
 
             #region Deal Stability Check
-            if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null || 
+            if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null ||
                 dealType == "" || groupType == "" || marketSegment == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error: failed to create the Tender Deal due to missing expected fields {Fields}", "Missing expected fields"));
@@ -580,7 +581,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             };
             myDealsData.FillInHolesFromAtrbTemplate(OpDataElementType.WIP_DEAL, OpDataElementSetType.ECAP);
-
+                    
             // Add WIP Data
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.dc_type), OpDataElementType.WIP_DEAL.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DC_ID), initWipId.ToString());
@@ -635,6 +636,12 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
+            //Prime Customer Information 
+            EndCustomerObject endCustObj = _jmsDataLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
 
             // Object Validation Checks - This is a new item creation, so just save validation needed
             SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
@@ -702,6 +709,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (wipDealId <= 0) return initWipId; // If creation failed, bail out, else PCT/MCT
 
             workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealRFQStatus = WorkFlowStages.Submitted; // Set by init setting rule
+
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString(); ;
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = endCustObj.VerifiedEndCustomer;
 
             // Update the Meet Comp data now.
             EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, custId,
@@ -873,7 +884,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
+            string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
+            EndCustomerObject endCustObj = _jmsDataLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
+
+
 
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
@@ -1077,10 +1096,24 @@ namespace Intel.MyDeals.BusinessLogic
                 string wipWfStage = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
                     saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
                     myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
+                string primCustId = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
+                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID) :
+                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
+
+                string primCustnm = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
+                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM) :
+                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
+                string isPrimCust = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
+                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) :
+                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
 
                 string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
 
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
+                workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = primCustnm;
+                workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = primCustId;
+                workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = isPrimCust;
+
 
                 executionResponse += "Deal " + dealId + " - Save completed<br>";
 

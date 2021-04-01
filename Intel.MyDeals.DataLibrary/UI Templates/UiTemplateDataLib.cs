@@ -191,7 +191,8 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -493,7 +494,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true,
-                IsReadOnly = true
+                IsReadOnly =true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1655,7 +1656,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'FLEX_ROW_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -2359,6 +2361,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.QLTR_PROJECT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Project </span>",
                 Width = 180,
                 Label = "Project Name",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
@@ -2371,7 +2374,13 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 //ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > End Customer/Retail </span>",
                 Width = 180,
+                DataType = "string",
+                UiType = "ComboBox",
+                LookupUrl = "/api/PrimeCustomers/GetPrimeCustomers",
+                LookupText = "PRIM_CUST_NM",
+                LookupValue = "PRIM_CUST_NM",
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
                 IsFilterable = true,
                 IsSortable = true

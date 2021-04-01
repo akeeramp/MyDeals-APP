@@ -136,6 +136,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_END_CUSTOMER_COUNTRY = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_COUNTRY");
                     int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+                    int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
 
                     while (rdr.Read())
                     {
@@ -144,7 +145,8 @@ namespace Intel.MyDeals.DataLibrary
                             CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
                             END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
                             END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
-                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID)
+                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+                            TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE)
                         });
                     }
                 }
@@ -203,6 +205,39 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
+
+        public List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry)
+        {
+
+            var cmd = new Procs.dbo.PR_MYDL_PRIM_VAL { @in_end_cust_nm = endCustomerName, @in_end_cust_ctry = endCustomerCountry };
+            var ret = new List<PrimeCustomerDetails>();
+
+            //    private static List<PrimeCustomerDetails> PrimeCustomerDetailsFromReader(SqlDataReader rdr)
+            //{
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
+
+            //var ret = new List<PrimeCustomerDetails>();
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+
+                int IDX_IS_PRIME = DB.GetReaderOrdinal(rdr, "IS_PRIME");
+                int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+
+                while (rdr.Read())
+                {
+                    ret.Add(new PrimeCustomerDetails
+                    {
+                        IS_PRIME = (IDX_IS_PRIME < 0 || rdr.IsDBNull(IDX_IS_PRIME)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_PRIME),
+                        PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+                        PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM)
+                    });
+                } // while
+            }
+            return ret;
+        }
+
 
     }
 }
