@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 4/1/2021 2:07:04 PM
-On: SAURAVKU-MOBL1
+File Updated: 4/1/2021 12:21:37 PM
+On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 
@@ -3870,7 +3870,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
 			ATRB_DESC = "Tender Project",
-			ATRB_LBL = "Project Name",
+			ATRB_LBL = "Project",
 			ATRB_MAX_LEN = 65,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
