@@ -1195,6 +1195,8 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, "Period Profile");
             eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "Settlement Level");
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, "Settlement Partner");
+            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, "Send to Vistex");
+            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, "Reset Per Period");
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
