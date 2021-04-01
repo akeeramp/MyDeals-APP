@@ -22,7 +22,7 @@
 	
 
 	var dbobjects = new DBObjects(
-			string.Format(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=FM7DFROAPP01.amr.corp.intel.com;integrated security=SSPI;")
 		);
 
 	var atrb_table = dbobjects.TablesAndViewsWhere("[dbo].[VW_ATRB_MSTR]").First();

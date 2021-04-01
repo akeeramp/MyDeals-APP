@@ -22,7 +22,7 @@
 	SqlConnection conn;
 	
 	// NOTE: DB Connection is defined in 2 places for this file - Make sure they are in sync.
-	conn = new SqlConnection(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;");
+	conn = new SqlConnection(@"Database=MYDEALS;Server=FM7DFROAPP01.amr.corp.intel.com;integrated security=SSPI;");
 
 	conn.Open();
 

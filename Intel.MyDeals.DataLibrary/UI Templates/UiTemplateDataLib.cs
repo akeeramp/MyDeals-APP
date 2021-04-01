@@ -492,7 +492,8 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                IsRequired = true
+                IsRequired = true,
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
             {

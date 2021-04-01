@@ -20,7 +20,7 @@
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
 
-	var dbobjects = new DBObjects(@"Database=MyDeals;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;");
+	var dbobjects = new DBObjects(@"Database=MyDeals;Server=FM7DFROAPP01.amr.corp.intel.com;integrated security=SSPI;");
 
 	WriteLine(dbobjects.BoilerPlateDetails);
 
