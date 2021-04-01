@@ -32,7 +32,7 @@
 	// identity insert sequencing issues).
 	var dbobjects = new DBObjects(
 			//string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;")
-			string.Format(@"Database=MYDEALS;Server=HF2RDMDB.amr.corp.intel.com\RDMITT1,3181;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=FM7DFROAPP01.amr.corp.intel.com;integrated security=SSPI;")
 		);
 
 	//-- Write File Header Here --------------------------------------------------------------------------
