@@ -2208,13 +2208,13 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
                 Width = 80,
-                IsFilterable = true,
-                IsSortable = true,
-                IsDefaultable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SEND_TO_VISTEX')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/SEND_TO_VISTEX",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
+                IsDefaultable = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
@@ -2868,11 +2868,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.RESET_VOLS_ON_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
-                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
-                DataType = "string",
-                Label = "Reset Per Period",
                 Width = 140,
-                UiType = "DROPDOWN",
+                Label = "Reset Per Period",
+                Template = "#=gridUtils.uiControlWrapper(data, 'RESET_VOLS_ON_PERIOD')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/RESET_VOLS_ON_PERIOD",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
