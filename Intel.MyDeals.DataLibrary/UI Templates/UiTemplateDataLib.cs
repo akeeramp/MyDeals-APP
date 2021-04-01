@@ -191,7 +191,8 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -492,7 +493,8 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                IsRequired = true
+                IsRequired = true,
+                IsReadOnly =true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1654,7 +1656,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'FLEX_ROW_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/FLEX_ROW_TYPE",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
