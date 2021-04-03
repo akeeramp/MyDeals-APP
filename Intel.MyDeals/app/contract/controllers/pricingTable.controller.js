@@ -3943,6 +3943,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $scope.custID = root.getCustId();
             }
             colData.custId = $scope.custID;
+
+            if ($scope.$parent.$parent.isTenderContract === "1") {
+                if (colName === "PAYOUT_BASED_ON") {
+                    colData.opLookupUrl = "/api/Dropdown/GetConsumptionPayoutDropdowns/PAYOUT_BASED_ON";
+                }
+            }
+
             var modalInstance = $uibModal.open({
                 //animation: $ctrl.animationsEnabled,
                 ariaLabelledBy: 'modal-title',

@@ -22,6 +22,7 @@
 
         // If tender... change dropdown url to remove frontend YCS2, if vistex, remove all front ends.
         if (vm.autofillData.ISTENDER) {
+            vm.autofillData.DEFAULT.PAYOUT_BASED_ON.opLookupUrl = "/api/Dropdown/GetConsumptionPayoutDropdowns/PAYOUT_BASED_ON";
             vm.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
         }
         // Add back in some day if we decide to make a button bar that can contain only one button.  :)
