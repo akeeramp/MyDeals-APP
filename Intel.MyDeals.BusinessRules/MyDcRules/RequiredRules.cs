@@ -204,8 +204,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetRequired,
                             Target = new[] {
-                                AttributeCodes.END_CUSTOMER_RETAIL,
-                                AttributeCodes.PRIMED_CUST_CNTRY,
+                                //AttributeCodes.END_CUSTOMER_RETAIL,
+                                //AttributeCodes.PRIMED_CUST_CNTRY,
                                 AttributeCodes.QLTR_PROJECT
                             }
                         }
