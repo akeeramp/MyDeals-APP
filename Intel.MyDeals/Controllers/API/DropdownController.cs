@@ -315,5 +315,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetConsumptionPayoutDropdowns/{atrbCd}")]
+        public IEnumerable<BasicDropdown> GetConsumptionPayoutDropdowns(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd).Where(d => d.DROP_DOWN != "Billings")
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
     }
 }

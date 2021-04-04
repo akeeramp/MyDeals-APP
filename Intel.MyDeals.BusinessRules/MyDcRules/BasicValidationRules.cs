@@ -125,7 +125,7 @@ namespace Intel.MyDeals.BusinessRules
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
                 },
@@ -135,7 +135,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Must be greater than 0 Start Vol",
                     ActionRule = MyDcActions.ValidateTierStartVol,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
                 },
@@ -145,7 +145,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Must be greater than 0 End Vol",
                     ActionRule = MyDcActions.ValidateTierEndVol,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
                 },
@@ -193,7 +193,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="End Vol must be greater than start vol",
                     ActionRule = MyDcActions.CompareStartEndVol,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
@@ -202,7 +202,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Tier Numbers must match Tier Level",
                     ActionRule = MyDcActions.ValidateTierNumber,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
@@ -546,7 +546,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Tier Volume Validations",
                     ActionRule = MyDcActions.CheckTierVolumes,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
