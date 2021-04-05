@@ -126,13 +126,18 @@ namespace Intel.MyDeals.DataLibrary
         public List<UnPrimeDeals> GetUnPrimeDeals()
         {
             var ret = new List<UnPrimeDeals>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_UNPRIM_DEALS { };
+            var cmd = new Procs.dbo.PR_MYDL_GET_UNPRIM_DEALS
+            {
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+            };
 
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
                     int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
+                    int IDX_Emp_WWID = DB.GetReaderOrdinal(rdr, "Emp_WWID");
                     int IDX_END_CUSTOMER_COUNTRY = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_COUNTRY");
                     int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
@@ -142,7 +147,9 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new UnPrimeDeals
                         {
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
                             CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
+                            Emp_WWID = (IDX_Emp_WWID < 0 || rdr.IsDBNull(IDX_Emp_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Emp_WWID),
                             END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
                             END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
@@ -238,6 +245,46 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry)
+        {
+            var result = false;
+            var cmd = new Procs.dbo.PR_MYDL_UPD_DEAL_UNPRIM_ATRBS
+            {
+                in_deal_id = dealId,
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                in_prim_nm = primeCustomerName,
+                in_prim_ctry = primeCustomerCountry
+            };
 
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    var ret = new List<UnPrimedDealDetails>();
+                    int IDX_Prime_ID = DB.GetReaderOrdinal(rdr, "Prime_ID");
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UnPrimedDealDetails
+                        {
+                            Prime_ID = (IDX_Prime_ID < 0 || rdr.IsDBNull(IDX_Prime_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Prime_ID)
+                        });
+                    }
+                    if (ret != null)
+                    {
+                        if (ret.Where(x => x.Prime_ID != 0).ToList().Count() == 1)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return result;
+        }
     }
 }
