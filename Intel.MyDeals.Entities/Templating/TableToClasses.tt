@@ -477,8 +477,13 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//To get unprime deals
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_UNPRIM_DEALS]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_UNPRIM_DEALS] @in_emp_wwid = 12002785");
 	ds.Tables[0].TableName = "UnPrimeDeals";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To Update UnPrimed Deals
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_DEAL_UNPRIM_ATRBS] @in_deal_id = 22276 , @in_emp_wwid = 10505693 , @in_prim_nm = 'testname', @in_prim_ctry = 'testcountry' ");
+	ds.Tables[0].TableName = "UnPrimedDealDetails";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//To get countries
