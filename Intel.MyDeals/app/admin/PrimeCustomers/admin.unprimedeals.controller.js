@@ -64,13 +64,14 @@
                 controllerAs: '$ctrl',
                 size: 'md',
                 resolve: {
-                    items: function () {
+                    items: function () {                        
                         return {
                             'label': "End customer/Retail",
                             'uiType': "ComboBox",
                             'opLookupUrl': "/api/PrimeCustomers/GetPrimeCustomers",
                             'opLookupText': "PRIM_CUST_NM",
-                            'opLookupValue': "PRIM_CUST_NM"
+                            'opLookupValue': "PRIM_CUST_NM",
+                            'clearEndCustomerDisabled': true
                         };
                     },
                     cellCurrValues: function () {
@@ -94,7 +95,6 @@
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array
 
-                    model.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
                     model.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
                     model.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
                     model.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
