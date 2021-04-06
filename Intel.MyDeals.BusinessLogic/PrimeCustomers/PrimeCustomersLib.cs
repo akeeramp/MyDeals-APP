@@ -55,7 +55,10 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-
+        public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry)
+        {
+            return _primeCustomersDataLib.UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustomerCountry);
+        }
 
     }
 }

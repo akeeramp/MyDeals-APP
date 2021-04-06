@@ -17,5 +17,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 
+        bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry);
+
     }
 }

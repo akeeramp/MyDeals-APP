@@ -16,5 +16,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<UnPrimeDeals> GetUnPrimeDeals();
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
+
+        bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry);
     }
 }
