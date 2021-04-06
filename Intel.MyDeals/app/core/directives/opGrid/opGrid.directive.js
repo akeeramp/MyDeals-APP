@@ -1024,7 +1024,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         for (var j = 0; j < data.length; j++) {
                             data[j]["_parentCnt"] = childParent[data[j].DC_PARENT_ID];
                         }
-
+                        //Set behaviors
+                        for (var k = 0; k < data.length; k++) {
+                            if ($scope.contractDs.data() != undefined || $scope.contractDs.data() != null) {
+                                var contractData = $scope.contractDs.data();
+                                if (contractData.length > 0) {
+                                    if (data[k].DC_ID == contractData[k].DC_ID) {
+                                        data[k].PASSED_VALIDATION = contractData[k].PASSED_VALIDATION;
+                                        data[k]._behaviors = contractData[k]._behaviors;
+                                    }
+                                }
+                            }
+                        }
+                        //End
                         var source = data;
 
                         // on success

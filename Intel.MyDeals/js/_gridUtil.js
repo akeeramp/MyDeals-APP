@@ -1042,7 +1042,7 @@ gridUtils.uiValidationErrorDetail = function (passedData) {
     values.forEach((msg) => {
         formattedMessage += msg.replace(/'/g, "");
     });
-    var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-alert-solid\" }}' title='Validation: {{ ((dataItem.PASSED_VALIDATION === \"Dirty\" || dataItem.PASSED_VALIDATION === \"0\") ?\"" + formattedMessage + "\" : dataItem.PASSED_VALIDATION || \"Not validated yet\" )}}'></i></div></div>";
+    var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-alert-solid\" }}' title='Validation: {{ dataItem.PASSED_VALIDATION === \"Dirty\" ?\"" + formattedMessage + "\" : dataItem.PASSED_VALIDATION || \"Not validated yet\" }}'></i></div></div>";
     return tmplt;
 }
 
