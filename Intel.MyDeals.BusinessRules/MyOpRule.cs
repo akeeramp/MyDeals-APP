@@ -20,6 +20,6 @@ namespace Intel.MyDeals.BusinessRules
     public class DropdownObjCheck
     {
         public string NAME { set; get; }
-        public bool ALLOW_EMPTY { set; get; }
+        public bool DO_NOT_ALLOW_BLANK { set; get; }
     }
 }
