@@ -190,26 +190,10 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<PrimeCustDropdown> GetPrimeCustomers()
+        public List<PrimeCustomers> GetPrimeCustomers()
         {
-            var ret = new List<PrimeCustDropdown>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST { };
-
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
-                int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
-
-                while (rdr.Read())
-                {
-                    ret.Add(new PrimeCustDropdown
-                    {
-                        PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
-                        PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM)
-                    });
-                }
-            }
-
+            var ret = new List<PrimeCustomers>();
+            ret = GetPrimeCustomerDetails().Where(dd => dd.IS_ACTV == true).ToList();
             return ret;
         }
 

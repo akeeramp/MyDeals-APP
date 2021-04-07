@@ -11,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Countires> GetCountries();
 
-        List<PrimeCustDropdown> GetPrimeCustomers();
+        List<PrimeCustomers> GetPrimeCustomers();
 
         List<UnPrimeDeals> GetUnPrimeDeals();
 

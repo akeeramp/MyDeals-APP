@@ -40,7 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetCountries();
         }
 
-        public List<PrimeCustDropdown> GetPrimeCustomers()
+        public List<PrimeCustomers> GetPrimeCustomers()
         {
             return _primeCustomersDataLib.GetPrimeCustomers();
         }

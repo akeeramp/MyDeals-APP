@@ -55,7 +55,7 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Route("GetPrimeCustomers")]
-        public IEnumerable<PrimeCustDropdown> GetPrimeCustomers()
+        public IEnumerable<PrimeCustomers> GetPrimeCustomers()
         {
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
                 $"Unable to Get Prime Customers");
