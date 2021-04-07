@@ -231,7 +231,7 @@ namespace Intel.MyDeals.BusinessLogic
                     //Batch ID
                     responseObj.BatchId = BatchId;
                     //VistexDFResponse visResponse = JsonConvert.DeserializeObject<VistexDFResponse>(sendResponse);
-                    responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : "CUSTOMER_BRD";
+                    responseObj.BatchName = runMode == "P" ? "PRODUCT_BRD" : runMode == "V" ? "PRODUCT_VERTICAL" : runMode == "D" || runMode == "E" ? "VISTEX_DEAL" : "CUSTOMER_BRD";
                     responseObj.BatchMessage = sendResponse["Message"];
                     responseObj.BatchStatus = "ERROR";
 
