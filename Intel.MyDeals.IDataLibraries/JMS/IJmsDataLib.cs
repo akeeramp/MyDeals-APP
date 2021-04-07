@@ -48,7 +48,5 @@ namespace Intel.MyDeals.IDataLibrary
 
         ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
 
-        EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry);
-
     }
 }

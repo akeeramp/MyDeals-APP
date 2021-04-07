@@ -19,5 +19,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry);
 
+        EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry);
+
     }
 }
