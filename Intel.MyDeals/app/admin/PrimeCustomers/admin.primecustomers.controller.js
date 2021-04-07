@@ -96,12 +96,16 @@
                          if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM !== model.PRIM_CUST_NM && isPrimeIdexist) {
                                 validationMessages.push("Prime ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Prime Customer");
                         }
-                        else if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
+                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
                              validationMessages.push("For this combination of Prime Id \"" + model.PRIM_CUST_ID + "\" and Prime Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
                         }
-                        else if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY && x.PRIM_LVL_ID !== model.PRIM_LVL_ID) {
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
                             validationMessages.push("This combination of Prime Id \"" + model.PRIM_CUST_ID + "\" , Prime Customer Name \"" + model.PRIM_CUST_NM + "\" and Prime Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         }
+                         if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
+                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
+
+                         }
                     }
                     else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1) {
                         validationMessages.push("\""+x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
@@ -127,17 +131,8 @@
             if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
                 validationMessages.push("Please Select Valid Country.")
             if (validationMessages.length > 0) {
-                var RemoveDuplicate = [];
-                RemoveDuplicate = validationMessages.filter(function (el) {
-                    // If it is not a duplicate, return true
-                    if (RemoveDuplicate.indexOf(el) == -1) {
-                        RemoveDuplicate.push(el);
-                        return true;
-                    }
-
-                    return false;
-
-                });
+                
+                var RemoveDuplicate = [...new Set(validationMessages)];
                 validationMessages = RemoveDuplicate;
                 kendo.alert(validationMessages.join("</br>"));
             }
