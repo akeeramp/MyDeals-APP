@@ -1186,21 +1186,22 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void CheckDropDownValues(params object[] args)
         {
+            // Note: "DO_NOT_ALLOW_BLANK = True" forces a value to be required/populated, same as REQUIRED = TRUE
             Dictionary<string, DropdownObjCheck> eligibleDropDowns = new Dictionary<string, DropdownObjCheck>();
-            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, new DropdownObjCheck { NAME = "Payout Based On", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, new DropdownObjCheck { NAME = "Program Payment", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, new DropdownObjCheck { NAME = "Rebate Type", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, new DropdownObjCheck { NAME = "Media", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, new DropdownObjCheck { NAME = "Server Deal Type", ALLOW_EMPTY = true });
-            eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", ALLOW_EMPTY = true });
-            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", ALLOW_EMPTY = false });
-            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, new DropdownObjCheck { NAME = "Payout Based On", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, new DropdownObjCheck { NAME = "Program Payment", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, new DropdownObjCheck { NAME = "Rebate Type", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, new DropdownObjCheck { NAME = "Media", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, new DropdownObjCheck { NAME = "Server Deal Type", DO_NOT_ALLOW_BLANK = false });
+            eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", DO_NOT_ALLOW_BLANK = false });
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
+            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
-            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, new DropdownObjCheck { NAME = "Bid Geo", ALLOW_EMPTY = true });
+            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, new DropdownObjCheck { NAME = "Bid Geo", DO_NOT_ALLOW_BLANK = false });
             CheckDropDownMultiValues(eligibleDropDowns, args);
         }
 
@@ -1219,10 +1220,10 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         dropDowns = DataCollections.GetCustomerVendors().Select(d => d.BUSNS_ORG_NM).ToList();
                         matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-                        if(string.IsNullOrEmpty(matchedValue))
+                        if (string.IsNullOrEmpty(matchedValue))
                         {
                             dropDowns = DataCollections.GetCustomerVendors().Select(d => d.DROP_DOWN).ToList();
-                            matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();                            
+                            matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
                         }
                     }
                     else
@@ -1245,7 +1246,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else
                 {
-                    if (!eligibleDropDowns[de.AtrbCd].ALLOW_EMPTY) 
+                    if (eligibleDropDowns[de.AtrbCd].DO_NOT_ALLOW_BLANK && de.IsReadOnly != true)
                     {
                         de.IsRequired = true;
                         de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
@@ -1272,7 +1273,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else
                 {
-                    if (!eligibleDropDowns[de.AtrbCd].ALLOW_EMPTY)
+                    if (eligibleDropDowns[de.AtrbCd].DO_NOT_ALLOW_BLANK && de.IsReadOnly != true)
                     {
                         de.IsRequired = true;
                         de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));

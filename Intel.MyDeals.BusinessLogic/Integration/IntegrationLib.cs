@@ -440,6 +440,12 @@ namespace Intel.MyDeals.BusinessLogic
             }
             #endregion Deal Stability Check
 
+            //Prime Customer Information 
+            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+            string isPrimedCustomer = endCustObj.IsVerifiedCustomer.ToString();
+            string primedCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
+            string primedCustName = endCustObj.VerifiedEndCustomer;
+
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
             string defArSettlementLvl =
                 requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == "User Select on Deal Creation" || requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == ""
@@ -604,6 +610,10 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.VOLUME), quantity);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), isPrimedCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerId);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), primedCustName);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPcsrNbr);
             UpdateProductDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRODUCT_FILTER), myPrdMbrSid.ToString(), myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId]);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
@@ -637,13 +647,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_DESC), dealDescription);
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
-
-            //Prime Customer Information 
-            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
 
             // Object Validation Checks - This is a new item creation, so just save validation needed
             SavePacket savePacket = new SavePacket(new ContractToken("IRQ ContractToken Created - SaveFullContract")
@@ -895,7 +898,6 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
 
 
-
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
@@ -1032,6 +1034,11 @@ namespace Intel.MyDeals.BusinessLogic
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
             }
 
+            // We have a record back, so let's update IQR with any potentially missing priming data they might need
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
+
             // Break out update records block so that it can be updated easier apart from the save and PCT/MCT calls
 
             int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
@@ -1098,24 +1105,10 @@ namespace Intel.MyDeals.BusinessLogic
                 string wipWfStage = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
                     saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) :
                     myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
-                string primCustId = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
-                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID) :
-                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
-
-                string primCustnm = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
-                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM) :
-                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
-                string isPrimCust = saveResponse.ContainsKey(OpDataElementType.WIP_DEAL) ?
-                    saveResponse[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) :
-                    myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
 
                 string stage = wipWfStage == WorkFlowStages.Draft ? psWfStage : wipWfStage;
 
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = stage;
-                workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = primCustnm;
-                workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = primCustId;
-                workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = isPrimCust;
-
 
                 executionResponse += "Deal " + dealId + " - Save completed<br>";
 
