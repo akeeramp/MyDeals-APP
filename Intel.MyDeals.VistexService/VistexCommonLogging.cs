@@ -392,7 +392,7 @@ namespace Intel.MyDeals.VistexService
             try
             {
                 to_email = Opaque.OpUtilities.ParseEmailList(GetAppSetting(
-                    Program.IsProd ? "SupportDevelopers" : "SupportDevelopers_NONPROD"
+                    Program.IsProd ? "SupportDevelopersTenders" : "SupportDevelopers_NONPROD_Tenders"
                     ), ",");
             }
             catch (Exception ex)

@@ -132,6 +132,16 @@ namespace Intel.MyDeals.DataLibrary
                 }
 
             }
+            catch (WebException we)
+            {
+                OpLogPerf.Log($"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {we.Message}|Innerexception: {we.InnerException} | Stack Trace{we.StackTrace}", LogCategory.Error);
+                responseObjectDictionary.Add("Status", we.Message);
+                if (((HttpWebResponse)we.Response).StatusCode.ToString() == "InternalServerError")
+                    responseObjectDictionary.Add("Message", we.Message + "\n[Hint: Validate JSON]");
+                else
+                    responseObjectDictionary.Add("Message", we.Message);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}- {2}", DateTime.Now, "Data Library Layer: SAP PO Connection Exception - Exception Received: ", $"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {we.Message}|Innerexception: {we.InnerException} | Stack Trace{we.StackTrace}") + Environment.NewLine);
+            }
             catch (Exception ex)
             {
                 OpLogPerf.Log($"Thrown from: VistexServiceDataLib - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
