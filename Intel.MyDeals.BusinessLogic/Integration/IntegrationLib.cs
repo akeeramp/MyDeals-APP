@@ -20,11 +20,13 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IJmsDataLib _jmsDataLib; // change out later to IntegrationDataLib
         private readonly IOpDataCollectorLib _dataCollectorLib;
+        private readonly IPrimeCustomersDataLib _primeCustomerLib;     
 
-        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib)
+        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib)
         {
             _jmsDataLib = jmsDataLib;
             _dataCollectorLib = dataCollectorLib;
+            _primeCustomerLib = primeCustomerLib;
         }
 
         public void TestAsyncProcess(Guid myGuid)
@@ -372,7 +374,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             string gaWwid = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid;
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
-            string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;          
+            string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
             string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ"? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region: "APAC,IJKK";
@@ -467,7 +469,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Consumption Lookback Period from Customer Data, Set to 0 if non defined
             MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
-            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1; 
+            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1;
             if (lookbackDefaultVal < 0) lookbackDefaultVal = 0;  // Normally set to -1 in no customer default, but for IQR, needs valid value.
 
             // Add PS Data
@@ -637,7 +639,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (dealStartDate < DateTime.Now) UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.BACK_DATE_RSN), backdateReason);
 
             //Prime Customer Information 
-            EndCustomerObject endCustObj = _jmsDataLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
@@ -710,7 +712,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealRFQStatus = WorkFlowStages.Submitted; // Set by init setting rule
 
-            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString(); ;
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString();
             workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
             workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = endCustObj.VerifiedEndCustomer;
 
@@ -885,7 +887,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
-            EndCustomerObject endCustObj = _jmsDataLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
@@ -1168,7 +1170,7 @@ namespace Intel.MyDeals.BusinessLogic
                 int strategyId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
                 var currentPsWfStg = myDealsData[OpDataElementType.PRC_ST].Data[strategyId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                 var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
-
+                bool isPrimedCust = workRecordDataFields.recordDetails.quote.IsVerifiedCustomer == "1" ? true : false;
                 switch (destinationStage)
                 {
                     case "Submitted": // Tenders Create New Deals request
@@ -1186,6 +1188,7 @@ namespace Intel.MyDeals.BusinessLogic
                     case "Won":
                     case "Lost":
                         if (currentWipWfStg == WorkFlowStages.Offer)
+                            //if (currentWipWfStg == WorkFlowStages.Offer && isPrimedCust) //Bring it in when Mahesh comes back
                         {
                             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD,
                                 destinationStage == WorkFlowStages.Won ? WorkFlowStages.Won : WorkFlowStages.Lost);
@@ -1195,6 +1198,13 @@ namespace Intel.MyDeals.BusinessLogic
                             // Case of re-deal from one stage autoapproving back to one, IQR doesn't do this and instead sends us a stage change to WON, 
                             // we are already there, so ignore, but don't toss an error.
                             runSaveStage = false;
+                        }
+                        else if (isPrimedCust == false)
+                        {                            
+                                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(722, "Deal Stage Error: End Customer is not primed.", "Deal Stage Error"));
+                                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                                continue;                            
+
                         }
                         else
                         {
