@@ -56,7 +56,7 @@
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustNames" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
-        vm.lookupEditorEndCustomerRetailModal = function (model) {
+        vm.lookupEditorEndCustomerRetailModal = function (gridrow, model) {
             var endCustomerRetailModal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'endCustomerRetailModal',
@@ -64,13 +64,14 @@
                 controllerAs: '$ctrl',
                 size: 'md',
                 resolve: {
-                    items: function () {
+                    items: function () {                        
                         return {
                             'label': "End customer/Retail",
                             'uiType': "ComboBox",
                             'opLookupUrl': "/api/PrimeCustomers/GetPrimeCustomers",
                             'opLookupText': "PRIM_CUST_NM",
-                            'opLookupValue': "PRIM_CUST_NM"
+                            'opLookupValue': "PRIM_CUST_NM",
+                            'clearEndCustomerDisabled': true
                         };
                     },
                     cellCurrValues: function () {
@@ -94,19 +95,42 @@
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array
 
-                    model.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
                     model.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
                     model.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
                     model.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
                     model.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
-
-                    $scope.saveFunctions(model, "END_CUSTOMER_RETAIL", model.END_CUSTOMER_RETAIL);
-                    $scope.saveFunctions(model, "PRIMED_CUST_CNTRY", model.PRIMED_CUST_CNTRY);
-                    $scope.saveFunctions(model, "PRIMED_CUST_NM", model.PRIMED_CUST_NM);
-                    $scope.saveFunctions(model, "PRIMED_CUST_ID", model.PRIMED_CUST_ID);
-                    $scope.saveFunctions(model, "IS_PRIMED_CUST", model.IS_PRIMED_CUST);
+                    var primeCustomerNm;
+                    var primeCustomerCtry;
+                    if (model.PRIMED_CUST_NM == "" || model.PRIMED_CUST_NM == undefined) {
+                        primeCustomerNm = null;
+                    }
+                    else {
+                        primeCustomerNm = model.PRIMED_CUST_NM;
+                    }
+                    if (model.PRIMED_CUST_CNTRY == "" || model.PRIMED_CUST_CNTRY == undefined) {
+                        primeCustomerCtry = null;
+                    }
+                    else {
+                        primeCustomerCtry = model.PRIMED_CUST_CNTRY;
+                    }
+                    PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, primeCustomerNm, primeCustomerCtry).then(function (response) {
+                        var commandCell = gridrow.container.find("td:first");
+                        commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
+                        if (response.data) {
+                            kendo.alert("Updated Successfully");
+                            vm.dataSource.read();
+                        }
+                        else {
+                            kendo.alert("Selected Customer is not a Prime Customer");
+                        }
+                        e.success(response.data);
+                    }, function (response) {
+                            logger.error("Unable to Update Unprime Deals.", response, response.statusText);
+                    });
                 },
                 function () {
+                    var commandCell = gridrow.container.find("td:first");
+                    commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
                 });
 
         }
@@ -127,7 +151,7 @@
             },
             toolbar: gridUtils.clearAllFiltersToolbar(),
             edit: function (e) {
-                vm.lookupEditorEndCustomerRetailModal(e.model);
+                vm.lookupEditorEndCustomerRetailModal(e, e.model);
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
             },

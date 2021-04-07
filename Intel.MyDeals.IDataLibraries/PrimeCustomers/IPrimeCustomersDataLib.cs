@@ -11,11 +11,13 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<Countires> GetCountries();
 
-        List<PrimeCustDropdown> GetPrimeCustomers();
+        List<PrimeCustomers> GetPrimeCustomers();
 
         List<UnPrimeDeals> GetUnPrimeDeals();
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
+
+        bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry);
 
     }
 }

@@ -55,7 +55,7 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Route("GetPrimeCustomers")]
-        public IEnumerable<PrimeCustDropdown> GetPrimeCustomers()
+        public IEnumerable<PrimeCustomers> GetPrimeCustomers()
         {
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
                 $"Unable to Get Prime Customers");
@@ -76,8 +76,13 @@ namespace Intel.MyDeals.Controllers.API
                     $"Unable to Get Prime Customers");
         }
 
-
-
-
+        [Authorize]
+        [HttpPost]
+        [Route("UpdateUnPrimeDeals/{dealId}/{primeCustomerName}/{primeCustomerCountry}")]
+        public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry)
+        {
+            return SafeExecutor(() => _primeCustomersLib.UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustomerCountry),
+                    $"Unable to Update Unprime Deals");
+        }
     }
 }

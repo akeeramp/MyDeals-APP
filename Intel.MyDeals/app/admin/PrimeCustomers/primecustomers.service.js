@@ -19,7 +19,8 @@
             getCountries: getCountries,
             getPrimeCustomers: getPrimeCustomers,
             getUnmappedPrimeCustomerDeals: getUnmappedPrimeCustomerDeals,
-            getEndCustomerData: getEndCustomerData
+            getEndCustomerData: getEndCustomerData,
+            UpdateUnPrimeDeals: UpdateUnPrimeDeals
         }
 
         return service;
@@ -56,7 +57,9 @@
             return dataService.post(apiBaseUrl + 'GetEndCustomerData', endCustomerData);
         }
 
-
+        function UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustomerCountry) {
+            return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustomerName + '/' + primeCustomerCountry);
+        }
     }
 
 })();

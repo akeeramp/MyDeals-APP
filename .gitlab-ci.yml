@@ -6,24 +6,44 @@ variables:
   NUGET_PATH: 'C:\NuGet\nuget.exe'
   MSBUILD_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe'
   NUNIT_PATH: 'C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe'
-  DEV_DEPLOY_PATH: '\\HF2DEVMYD2W01.amr.corp.intel.com\MyDeals'
-  ITT_DEPLOY_PATH: '\\HF2ITTMYD2W01.amr.corp.intel.com\MyDeals'
-  CONS1_DEPLOY_PATH: '\\FM7CONMYD2W01.amr.corp.intel.com\MyDeals'
-  CONS2_DEPLOY_PATH: '\\FM7CONMYD2W02.amr.corp.intel.com\MyDeals'
-  CIAR_DEPLOY_PATH: '\\FM7CIAMYD2W01.amr.corp.intel.com\MyDeals'
+
+
+  DEV_DEPLOY_PATH:      '\\HF2DEVMYD2W01.amr.corp.intel.com\MyDeals'
+  ITT_DEPLOY_PATH:      '\\HF2ITTMYD2W01.amr.corp.intel.com\MyDeals'
+  UTT1_DEPLOY_PATH:     '\\HF2UTTMYD2W01.amr.corp.intel.com\MyDeals'
+  UTT2_DEPLOY_PATH:     '\\HF2UTTMYD2W02.amr.corp.intel.com\MyDeals'
+  CONS1_DEPLOY_PATH:    '\\FM7CONMYD2W01.amr.corp.intel.com\MyDeals'
+  CONS2_DEPLOY_PATH:    '\\FM7CONMYD2W02.amr.corp.intel.com\MyDeals'
+  CIAR_DEPLOY_PATH:     '\\FM7CIAMYD2W01.amr.corp.intel.com\MyDeals'
+  PERF_DEPLOY_PATH:     '\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals'
+  CINR_DEPLOY_PATH:     '\\HF2CINMYD2W01.amr.corp.intel.com\MyDeals'
+  DR_DEPLOY_PATH:       '\\CH2DRMYD2W01.amr.corp.intel.com\MyDeals'
+  PROD1_DEPLOY_PATH:    '\\FM1PRDMYD2W01.amr.corp.intel.com\MyDeals'
+  PROD2_DEPLOY_PATH:    '\\FM1PRDMYD2W02.amr.corp.intel.com\MyDeals'
 
 stages:
-  - Restore
-  - Build
-  - Dev_Deploy
-  - ITT_Deploy
-  - CONS_Deploy
-  - CIAR_Deploy
+ - Restore
+ - Build
+ # - Dev_Deploy
+ # - ITT_Deploy
+ # - CONS_Deploy
+ # - CIAR_Deploy
+ # - UTT_Deploy
+ # - PERF_Deploy
+ # - CINR_Deploy
+ # - PROD_Deploy
+ # - DR_Deploy
+ - Level_1
+ - Level_2
+ - Level_3
+ - Level_4
+ - Level_5(PROD)
 
 restore_packages:
   stage: Restore
   script:
     - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
+    - '& echo $ReleaseUser'
   artifacts:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
@@ -41,13 +61,12 @@ build_job:
     - restore_packages
 
 dev_deploy:
-  stage: Dev_Deploy
+  stage: Level_1
   script:
     - '& robocopy output/_PublishedWebsites/Intel.MyDeals $env:DEV_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/Dev $env:DEV_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item output/_PublishedWebsites/Intel.MyDeals -Destination deployed/DEV -Recurse' 
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-DEV
-  #  - EXIT 0
   dependencies:
     - build_job
   when: manual
@@ -60,11 +79,12 @@ dev_deploy:
       - deployed/DEV/
 
 itt_deploy:
-  stage: ITT_Deploy
+  stage: Level_2
   script:
     - '& robocopy deployed/DEV/ $env:ITT_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/DEV/EnvConfig/itt $env:ITT_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& Copy-Item deployed/DEV -Destination deployed/ITT -Recurse' 
+    - '& Copy-Item deployed/DEV -Destination deployed/ITT -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-ITT
   when: manual
   allow_failure: true
   environment:
@@ -75,11 +95,12 @@ itt_deploy:
       - deployed/ITT/
 
 cons1_deploy:
-  stage: CONS_Deploy
+  stage: Level_3
   script:
     - '& robocopy deployed/ITT/ $env:CONS1_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/ITT/EnvConfig/cons $env:CONS1_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS1
   when: manual
   allow_failure: true
   environment:
@@ -90,11 +111,12 @@ cons1_deploy:
       - deployed/CONS/
 
 cons2_deploy:
-  stage: CONS_Deploy
+  stage: Level_3
   script:
     - '& robocopy deployed/ITT/ $env:CONS2_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/ITT/EnvConfig/cons $env:CONS2_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
+    - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS2
   when: manual
   allow_failure: true
   environment:
@@ -104,20 +126,146 @@ cons2_deploy:
     paths:
       - deployed/CONS/
 
-ciar_deploy:
-  stage: CIAR_Deploy
+utt1_deploy:
+  stage: Level_3
+  script:
+    - '& robocopy deployed/ITT/ $env:UTT1_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/ITT/EnvConfig/utt $env:UTT1_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/ITT -Destination deployed/UTT -Recurse' 
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-UTT2
+  when: manual
+  allow_failure: true
+  environment:
+      name: UTT
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/UTT/
+
+utt2_deploy:
+  stage: Level_3
+  script:
+    - '& robocopy deployed/ITT/ $env:UTT2_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/ITT/EnvConfig/utt $env:UTT2_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/ITT -Destination deployed/UTT -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-UTT2
+  when: manual
+  allow_failure: true
+  environment:
+      name: UTT
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/UTT/
+
+cinr_deploy:
+  stage: Level_3
+  script:
+    - '& robocopy deployed/ITT/ $env:CINR_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/ITT/EnvConfig/utt $env:CINR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/ITT -Destination deployed/CINR -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CINR
+  when: manual
+  allow_failure: true
+  environment:
+      name: CINR
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/CINR/
+
+ciar_deploy_from_cons:
+  stage: Level_4
   script:
     - '& robocopy deployed/CONS/ $env:CIAR_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& robocopy deployed/CONS/EnvConfig/cons $env:CIAR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& Copy-Item deployed/CONS -Destination deployed/CIAR -Recurse' 
+    - '& robocopy deployed/CONS/EnvConfig/ciar $env:CIAR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/CONS -Destination deployed/CIAR -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CIAR
   when: manual
   only: 
-    - /^RC_[0-9]+(?:.[0-9]+)+$/
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CIAR
   artifacts:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
-      - deployed/CIAR/      
-# 
+      - deployed/CIAR/
+      
+ciar_deploy_from_utt:
+  stage: Level_4
+  script:
+    - '& robocopy deployed/UTT/ $env:CIAR_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/UTT/EnvConfig/ciar $env:CIAR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/UTT -Destination deployed/CIAR -Recurse'  
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CIAR
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
+  environment:
+      name: CIAR
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/CIAR/  
+
+prod1_deploy:
+  stage: Level_5(PROD)
+  script:
+    - '& net use x: $env:PROD1_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
+    - '& net use * /delete /y'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-PROD1
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
+  environment:
+      name: PROD
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/PROD/  
+
+prod2_deploy:
+  stage: Level_5(PROD)
+  script:
+    - '& net use x: $env:PROD2_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
+    - '& net use * /delete /y'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-PROD2
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
+  environment:
+      name: PROD
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/PROD/  
+
+dr_deploy:
+  stage: Level_5(PROD)
+  script:
+    - '& net use x: $env:DR_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/CIAR -Destination deployed/DR -Recurse'
+    - '& net use * /delete /y'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-DR
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
+  environment:
+      name: DR
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/DR/  

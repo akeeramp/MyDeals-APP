@@ -16,4 +16,10 @@ namespace Intel.MyDeals.BusinessRules
     public class MyObjectRule : OpRule<object[], object, MyRulesTrigger, object>
     {
     }
+
+    public class DropdownObjCheck
+    {
+        public string NAME { set; get; }
+        public bool ALLOW_EMPTY { set; get; }
+    }
 }

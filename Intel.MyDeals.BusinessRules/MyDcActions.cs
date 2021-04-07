@@ -1186,25 +1186,25 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void CheckDropDownValues(params object[] args)
         {
-            Dictionary<string, string> eligibleDropDowns = new Dictionary<string, string>();
-            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, "Payout Based On");
-            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, "Program Payment");
-            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, "Rebate Type");
-            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, "Media");
-            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, "Server Deal Type");
-            eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, "Period Profile");
-            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, "Settlement Level");
-            eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, "Settlement Partner");
-            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, "Send to Vistex");
-            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, "Reset Per Period");
+            Dictionary<string, DropdownObjCheck> eligibleDropDowns = new Dictionary<string, DropdownObjCheck>();
+            eligibleDropDowns.Add(AttributeCodes.PAYOUT_BASED_ON, new DropdownObjCheck { NAME = "Payout Based On", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.PROGRAM_PAYMENT, new DropdownObjCheck { NAME = "Program Payment", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.REBATE_TYPE, new DropdownObjCheck { NAME = "Rebate Type", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, new DropdownObjCheck { NAME = "Media", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, new DropdownObjCheck { NAME = "Server Deal Type", ALLOW_EMPTY = true });
+            eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", ALLOW_EMPTY = true });
+            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", ALLOW_EMPTY = false });
+            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", ALLOW_EMPTY = false });
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
-            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, "Bid Geo");
+            eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, new DropdownObjCheck { NAME = "Bid Geo", ALLOW_EMPTY = true });
             CheckDropDownMultiValues(eligibleDropDowns, args);
         }
 
-        static void CheckDropDownValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
+        static void CheckDropDownValues(Dictionary<string, DropdownObjCheck> eligibleDropDowns, params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1232,7 +1232,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                     if (string.IsNullOrEmpty(matchedValue))
                     {
-                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
+                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
                     }
                     else
                     {
@@ -1243,10 +1243,18 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 }
+                else
+                {
+                    if (!eligibleDropDowns[de.AtrbCd].ALLOW_EMPTY) 
+                    {
+                        de.IsRequired = true;
+                        de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
+                    }
+                }
             }
         }
 
-        static void CheckDropDownMultiValues(Dictionary<string, string> eligibleDropDowns, params object[] args)
+        static void CheckDropDownMultiValues(Dictionary<string, DropdownObjCheck> eligibleDropDowns, params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1259,7 +1267,15 @@ namespace Intel.MyDeals.BusinessRules
                     List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.Trim().ToUpper()).Except(dropDowns.Select(d => d.Trim().ToUpper())).ToList();
                     if (unMatchedValues.Count > 0)
                     {
-                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd]));
+                        de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
+                    }
+                }
+                else
+                {
+                    if (!eligibleDropDowns[de.AtrbCd].ALLOW_EMPTY)
+                    {
+                        de.IsRequired = true;
+                        de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
                     }
                 }
             }
