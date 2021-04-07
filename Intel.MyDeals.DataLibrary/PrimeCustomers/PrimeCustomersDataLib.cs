@@ -245,17 +245,17 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     var ret = new List<UnPrimedDealDetails>();
-                    int IDX_Prime_ID = DB.GetReaderOrdinal(rdr, "Prime_ID");
+                    int IDX_IS_PRIMED_CUST = DB.GetReaderOrdinal(rdr, "IS_PRIMED_CUST");
                     while (rdr.Read())
                     {
                         ret.Add(new UnPrimedDealDetails
                         {
-                            Prime_ID = (IDX_Prime_ID < 0 || rdr.IsDBNull(IDX_Prime_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Prime_ID)
+                            IS_PRIMED_CUST = (IDX_IS_PRIMED_CUST < 0 || rdr.IsDBNull(IDX_IS_PRIMED_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_PRIMED_CUST)
                         });
                     }
                     if (ret != null)
                     {
-                        if (ret.Where(x => x.Prime_ID != 0).ToList().Count() == 1)
+                        if (ret.Where(x => x.IS_PRIMED_CUST == "1").ToList().Count() == 1)
                         {
                             result = true;
                         }

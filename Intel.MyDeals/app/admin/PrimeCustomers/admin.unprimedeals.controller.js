@@ -101,6 +101,9 @@
                     model.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
                     var primeCustomerNm;
                     var primeCustomerCtry;
+                    if (endCustomerData.END_CUSTOMER_RETAIL.toLowerCase() == "any") {
+                        model.PRIMED_CUST_NM = "Any";
+                    }
                     if (model.PRIMED_CUST_NM == "" || model.PRIMED_CUST_NM == undefined) {
                         primeCustomerNm = null;
                     }
