@@ -47,7 +47,6 @@
                             .then(function (response) {
                                 e.success(response.data);
                                 logger.success("Prime customer updated.");
-                                vm.dataSource.read();
                             }, function (response) {
                                 logger.error("Unable to update prime customer.", response, response.statusText);
                             });
@@ -60,7 +59,6 @@
                             .then(function (response) {
                                 e.success(response.data[0]);
                                 logger.success("New Prime customer added.");
-                                //vm.dataSource.read();
                             }, function (response) {
                                 logger.error("Unable to insert prime customer.", response, response.statusText);
                             });
