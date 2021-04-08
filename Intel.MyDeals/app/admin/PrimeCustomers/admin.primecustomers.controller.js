@@ -50,6 +50,7 @@
                             }, function (response) {
                                 logger.error("Unable to update prime customer.", response, response.statusText);
                             });
+                        
                     }
                 },
                 create: function (e) {
@@ -83,22 +84,57 @@
                 }
             }
         })
-
+        
         vm.IsvalidPrimeCustomer = function (model) {
             var validationMessages = [];
+            var isPrimeIdexist = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
+            vm.PrimeCustomersData.map(
+                function getDuplicate(x) {
+                    if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
+                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM !== model.PRIM_CUST_NM && isPrimeIdexist) {
+                                validationMessages.push("Prime ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Prime Customer");
+                        }
+                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
+                             validationMessages.push("For this combination of Prime Id \"" + model.PRIM_CUST_ID + "\" and Prime Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
+                        }
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
+                            validationMessages.push("This combination of Prime Id \"" + model.PRIM_CUST_ID + "\" , Prime Customer Name \"" + model.PRIM_CUST_NM + "\" and Prime Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
+                        }
+                         if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
+                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
+
+                         }
+                    }
+                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1) {
+                        validationMessages.push("\""+x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
+
+                    }
+                    
+                }
+            );
+
             var isPrimeexist = vm.PrimeCustomersData.filter(x => x.PRIME_MBR_SID === parseInt(model.PRIM_CUST_ID) && x.PRIME_LVL_SID === parseInt(model.PRIM_LVL_ID));
             if (model.PRIM_CUST_ID == null || model.PRIM_CUST_ID == '')
                 validationMessages.push("Please provide Valid ID");
-            if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '')
+            if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '') {
                 validationMessages.push("Please Provide Valid Prime Customer Name");
+            }
+            else if (model.PRIM_CUST_NM.length > 65)
+                validationMessages.push("Prime Customer Name Length should not be greater than 65 characters");
+
             if (model.PRIM_LVL_ID == null || model.PRIM_LVL_ID == '')
                 validationMessages.push("Please Provide Valid Level 2 ID");
             if (isPrimeexist.length > 1)
                 validationMessages.push("This Combination of Prime Custmer ID and Leve 2 ID is already exists")
             if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
                 validationMessages.push("Please Select Valid Country.")
-            if (validationMessages.length > 0)
+            if (validationMessages.length > 0) {
+                
+                var RemoveDuplicate = [...new Set(validationMessages)];
+                validationMessages = RemoveDuplicate;
                 kendo.alert(validationMessages.join("</br>"));
+            }
+                
 
             return validationMessages.length == 0;
 
@@ -127,7 +163,7 @@
 
 
         vm.PrimeCustCountry = {
-            placeholder: "Select Customer Country..",
+            optionLabel: "Select Customer Country..",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -150,7 +186,7 @@
         }
 
         vm.PrimeCustCountryEditor = function (container, options) {
-            var editor = $('<select kendo-combo-box k-options="vm.PrimeCustCountry" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+            var editor = $('<select kendo-drop-down-list k-options="vm.PrimeCustCountry"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.PrimeIDEditor = function (container, options) {
