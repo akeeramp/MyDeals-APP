@@ -1183,6 +1183,28 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        public static void SendToVistexReadOnlyAndSetValue(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
+            IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+
+            if (deSendToVistex == null || deRebateType == null) return;
+
+            string rebateType = deRebateType.AtrbValue.ToString();
+
+            if (rebateType != "NRE") // Default all non-NRE to NO for SEND_TO_VISTEX
+            {
+                deSendToVistex.AtrbValue = "No";
+                deSendToVistex.IsReadOnly = true;
+            }
+            if (rebateType == "NRE" && deRebateType.HasValueChanged) // If the user changes this back to NRE, remove the SEND_TO_VISTEX value so that they pick a valid one
+            {
+                deSendToVistex.AtrbValue = "";
+            }
+        }
 
         public static void CheckDropDownValues(params object[] args)
         {
@@ -1249,7 +1271,7 @@ namespace Intel.MyDeals.BusinessRules
                     if (eligibleDropDowns[de.AtrbCd].DO_NOT_ALLOW_BLANK && de.IsReadOnly != true)
                     {
                         de.IsRequired = true;
-                        de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
+                        //de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
                     }
                 }
             }
@@ -1276,7 +1298,7 @@ namespace Intel.MyDeals.BusinessRules
                     if (eligibleDropDowns[de.AtrbCd].DO_NOT_ALLOW_BLANK && de.IsReadOnly != true)
                     {
                         de.IsRequired = true;
-                        de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
+                        //de.AddMessage(string.Format("Required value for {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
                     }
                 }
             }

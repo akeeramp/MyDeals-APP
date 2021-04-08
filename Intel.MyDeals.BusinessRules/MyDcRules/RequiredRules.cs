@@ -67,26 +67,6 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Send to Vistex Flag Required if Program Type is NRE",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("NRE")).Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetRequired,
-                            Target = new[] {
-                                AttributeCodes.SEND_TO_VISTEX
-                            }
-                        }
-                    }
-                },
-
-                new MyOpRule
-                {
                     Title="Setting Vistex Required for certain Payment and Rebate Types",
                     // Stays complex rule as extra checks are needed to carry out
                     ActionRule = MyDcActions.VistexRequiredFields,
