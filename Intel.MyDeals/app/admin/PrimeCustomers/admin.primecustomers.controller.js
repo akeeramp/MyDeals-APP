@@ -60,7 +60,7 @@
                             .then(function (response) {
                                 e.success(response.data[0]);
                                 logger.success("New Prime customer added.");
-                                vm.dataSource.read();
+                                //vm.dataSource.read();
                             }, function (response) {
                                 logger.error("Unable to insert prime customer.", response, response.statusText);
                             });
