@@ -111,7 +111,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             $ctrl.IsError = false;
             if (endCustVal == "ANY") {
                 data.IS_PRIME = 1;
-                data.PRIM_CUST_NM = "";
+                data.PRIM_CUST_NM = "ANY";
                 data.PRIM_CUST_ID = null;
                 data.PRIMED_CUST_CNTRY = countryVal;
                 data.END_CUSTOMER_RETAIL = endCustVal;
