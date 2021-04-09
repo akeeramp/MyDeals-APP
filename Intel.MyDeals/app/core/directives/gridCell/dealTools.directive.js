@@ -61,7 +61,9 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.isSplitEnabled = $scope.assignVal("isSplitEnabled", true);
             //$scope.isDaUser = $scope.assignVal("isDaUser", true);
 
+            // Swap IF statement to prevent IQR from having access to quote letters
             if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
+            //if (($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') || $scope.dataItem.SALESFORCE_ID !== "") $scope.isQuoteLetterEnabled = false;
 
             //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
