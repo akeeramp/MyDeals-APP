@@ -1042,6 +1042,10 @@ gridUtils.uiValidationErrorDetail = function (passedData) {
     values.forEach((msg) => {
         formattedMessage += msg.replace(/'/g, "");
     });
+    //fixing for validation alert icon issue, while fixing the deal error through admin screen
+    if ((values == null || values == undefined || values.length == 0) && formattedMessage == '') {
+        passedData.PASSED_VALIDATION = "Complete";
+    }
     var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-alert-solid\" }}' title='Validation: {{ dataItem.PASSED_VALIDATION === \"Dirty\" || dataItem.PASSED_VALIDATION === \"0\" ?\"" + formattedMessage + "\" : dataItem.PASSED_VALIDATION || \"Not validated yet\" }}'></i></div></div>";
     return tmplt;
 }
