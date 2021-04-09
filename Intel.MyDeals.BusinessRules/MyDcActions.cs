@@ -1248,11 +1248,26 @@ namespace Intel.MyDeals.BusinessRules
                             matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
                         }
                     }
+                    else if (de.AtrbCd == AttributeCodes.PAYOUT_BASED_ON) // Restrict Billings out of true Tender Deals
+                    {
+                        string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+                        string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+                        if (rebateType == "TENDER" && (dealType == OpDataElementSetType.ECAP.ToString() || dealType == OpDataElementSetType.KIT.ToString()) )
+                        {
+                            dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd && d.DROP_DOWN != "Billings").Select(d => d.DROP_DOWN).ToList();
+                        }
+                        else
+                        {
+                            dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                        }
+                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                    }
                     else
                     {
                         dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
                         matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
                     }
+
                     if (string.IsNullOrEmpty(matchedValue))
                     {
                         de.AddMessage(string.Format("Invalid {0}. Please select from the drop-down list", eligibleDropDowns[de.AtrbCd].NAME));
