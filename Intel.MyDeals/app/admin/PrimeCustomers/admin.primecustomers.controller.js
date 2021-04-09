@@ -57,7 +57,7 @@
                     if (vm.IsvalidPrimeCustomer(e.data)) {
                         PrimeCustomersService.SetPrimeCustomers(e.data)
                             .then(function (response) {
-                                e.success(response.data[0]);
+                                e.success(response.data);
                                 logger.success("New Prime customer added.");
                             }, function (response) {
                                 logger.error("Unable to insert prime customer.", response, response.statusText);
