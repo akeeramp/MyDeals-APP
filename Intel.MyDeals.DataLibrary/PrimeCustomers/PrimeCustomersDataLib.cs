@@ -87,10 +87,7 @@ namespace Intel.MyDeals.DataLibrary
                 in_prim_lvl_nm = data.PRIM_CUST_NM,
                 in_rpl_sts = data.RPL_STS,
                 in_is_actv = data.IS_ACTV,
-                in_mode = mode.ToString().ToUpper(),
-                in_cre_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                in_chg_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
-
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
 
             }))
             {
