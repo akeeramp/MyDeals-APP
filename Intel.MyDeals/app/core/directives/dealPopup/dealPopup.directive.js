@@ -465,7 +465,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
 
                     // schedule
-                    if ($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER") {
+                    if ($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "FLEX") {
                         numTiers = parseInt($scope.data["NUM_OF_TIERS"]);
                         for (t = 1; t <= numTiers; t++) {
                             var r = $scope.data["RATE"]["10___" + t];
@@ -701,7 +701,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     var grid = $("#grid_sched_" + $scope.dealId).data("kendoGrid");
                     if (grid !== undefined && grid !== null) {
                         var cols = [];
-                        if (($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER")) cols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+                        if (($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "FLEX")) cols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
                         if (($scope.data["OBJ_SET_TYPE_CD"] === "KIT")) cols = ["PRODUCT", "PRD_TYPE", "ECAP_PRICE", "CAP", "YCS2_PRC_IRBT", "TRKR_NBR", "QTY", "DSCNT_PER_LN"];
                         for (var c = 0; c < cols.length; c++) {
                             grid.showColumn(cols[c]);

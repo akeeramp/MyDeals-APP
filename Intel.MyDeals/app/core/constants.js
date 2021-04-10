@@ -59,7 +59,7 @@
                 "ECAP": "#00AEEF",
                 "PROGRAM": "#FFA300",
                 "VOL_TIER": "#f3D54E",
-                "TENDER": "#C4D600",
+                "FLEX": "#C4D600",
                 "KIT": "#F32300"
             },
             "valid": {
