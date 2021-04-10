@@ -109,6 +109,9 @@
                             else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'VOL_TIER') {
                                 vm.masterData["ReportDealType"][cnt].COLOR = 'green';
                             }
+                            else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'FLEX') {
+                                vm.masterData["ReportDealType"][cnt].COLOR = 'blue';
+                            }
                             else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'KIT') {
                                 vm.masterData["ReportDealType"][cnt].COLOR = 'red';
                             }

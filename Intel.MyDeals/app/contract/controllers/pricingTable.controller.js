@@ -1293,7 +1293,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         );
 
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
-            if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER")) {
+            if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
                 // Revert value if not allowed to delete
                 cleanupData(data);
                 spreadDsSync();
@@ -2398,7 +2398,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         function (event, args) {
             if (!!$scope.root.spreadDs) {
                 $scope.setRowIdStyle($scope.root.spreadDs._data);
-                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
                     //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
                     $scope.applySpreadsheetMerge();
@@ -2415,7 +2415,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             if (!!$scope.root.spreadDs) {
                 $scope.setRowIdStyle($scope.root.spreadDs._data);
-                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"  || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
                     // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
                     //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
                     $scope.applySpreadsheetMerge();

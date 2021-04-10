@@ -2880,7 +2880,7 @@
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
                             }
 
-                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
                                 if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                     sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);

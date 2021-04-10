@@ -30,7 +30,8 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		$timeout(function () {
 		    var order = 0;
 		    var dealTypes = [
-                { dealType: "ECAP", name: "ECAP" },
+				{ dealType: "ECAP", name: "ECAP" },
+				{ dealType: "FLEX", name: "FLEX" },
                 { dealType: "VOL_TIER", name: "Volume Tier" },
                 { dealType: "KIT", name: "Kit" },
                 { dealType: "PROGRAM", name: "Program" }
