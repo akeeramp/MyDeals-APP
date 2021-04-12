@@ -25,6 +25,10 @@ namespace Intel.MyDeals.VistexService
             {
                 fileName = "Vertical";
             }
+            else if (mode == "/mode:cl")
+            {
+                fileName = "ConsumptionLoad";
+            }
             else if(mode == "/mode:sc")
             {
                 fileName = "Customer";
@@ -157,6 +161,12 @@ namespace Intel.MyDeals.VistexService
              // Set JobType Mode Flag
             switch (myArgs.jobMode)
             {
+                case JobMode.SendConsumptionLoad:
+                    Console.WriteLine("Sending Consumption Load Data to Vistex from My Deals...");
+                    VistexCommonLogging.WriteToLog("Initiated - Sending Consumption Load Data to Vistex from My Deals...");
+                    await SendConsumptionLoadDataToSapPo("M");
+                    VistexCommonLogging.WriteToLog("Completed - Sending Consumption Load Data to Vistex from My Deals...");
+                    break;
                 case JobMode.SendDealsVistex:
                     Console.WriteLine("Sending Deals Data to Vistex from My Deals...");
                     VistexCommonLogging.WriteToLog("Initiated - Sending Deals Data to Vistex from My Deals...");

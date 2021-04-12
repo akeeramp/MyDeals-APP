@@ -47,13 +47,14 @@ namespace Intel.MyDeals.BusinessLogic
                     jsonData = jsonData.Remove(0, 1);
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
                     responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords);
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
 
                     jsonData = "";
                 }
                 else
                 {
-                    responseObj.BatchName = "VISTEX_DEALS";
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEALS";
                     responseObj.BatchId = "0";
                     responseObj.BatchMessage = "No data to be Uploaded";
                     responseObj.BatchStatus = "PROCESSED";
@@ -63,7 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
             catch (Exception ex)
             {
-                responseObj.BatchName = "DEALS";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "DEALS";
                 responseObj.BatchId = "-1";
                 responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObj.BatchStatus = "Exception";

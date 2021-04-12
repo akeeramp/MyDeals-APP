@@ -146,5 +146,37 @@ namespace Intel.MyDeals.VistexService
                 VistexCommonLogging.HandleException(ex, true, "Deals");
             }
         }
+
+        private static async Task SendConsumptionLoadDataToSapPo(string runMode) //VTX_OBJ: DEALS
+        {
+            try
+            {
+                VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Initiated");
+                VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
+                dataRecord = await DataAccessLayer.GetVistexDataOutBound("CNSMPTN_LD", runMode);
+                VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
+                VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
+                if (dataRecord.BatchId == "0" || dataRecord.BatchId == null)
+                {
+                    Console.WriteLine("There is no outbound data to push..");
+                    VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
+                }
+                else if (dataRecord.BatchStatus.ToLower() == "processed")
+                {
+                    Console.WriteLine("Outbound data pushed to SAP successfully..");
+                    VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
+                }
+                VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                VistexCommonLogging.SendMail("CNSMPTN_LD", dataRecord, null);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                //Additionmal Logging
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendConsumptionLoadDataToSapPo - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Exception");
+                VistexCommonLogging.HandleException(ex, true, "ConsumptionLoad");
+            }
+        }
     }
 }
