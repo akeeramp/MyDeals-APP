@@ -244,6 +244,7 @@
                             dataSource: {
                                 data: [
                                     "ECAP",
+                                    "FLEX",
                                     "KIT",
                                     "PROGRAM",
                                     "VOL_TIER"
@@ -258,6 +259,7 @@
                 lookupValue: "OBJ_SET_TYPE_CD",
                 lookups: [
                     { OBJ_SET_TYPE_CD: "ECAP", OBJ_SET_TYPE_NM: "ECAP" },
+                    { OBJ_SET_TYPE_CD: "FLEX", OBJ_SET_TYPE_NM: "FLEX" },
                     { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
                     { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" },
                     { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }

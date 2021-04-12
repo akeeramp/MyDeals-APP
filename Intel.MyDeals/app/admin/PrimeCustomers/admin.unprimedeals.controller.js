@@ -117,7 +117,7 @@
                         var commandCell = gridrow.container.find("td:first");
                         commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
                         if (response.data) {
-                            kendo.alert("Updated Successfully");
+                            kendo.alert("Deal End Customer Primed successfully");
                             vm.dataSource.read();
                         }
                         else {

@@ -2683,6 +2683,9 @@
                         sData = $scope.validateSettlementLevel(sData);
                         //validate Flex product overlap for PTE
                         sData = $scope.validateOVLPFlexProduct(sData);
+                        //validate Flex row type for PTE
+                        sData = $scope.validateFlexRowType(sData);
+                        
 
                         // Only save if a product has been filled out
                         //sData = sData.filter(function (obj) {
@@ -2871,7 +2874,13 @@
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
                             }
 
-                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                            //Adding FLEX Row type error into err object in PTE
+                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['FLEX_ROW_TYPE']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
+                            }
+
+                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
                                 if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                     sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
@@ -2944,6 +2953,7 @@
                                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                             }
                                         }
+               
                                     }
                                     if (dateFields[d] === "END_DT") {
                                         var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
@@ -3110,6 +3120,8 @@
                         gData = $scope.validateSettlementLevel(gData);
                         //validate flex overlap products for DE
                         gData = $scope.validateOVLPFlexProduct(gData);
+                        //validate Flex Row Type for DE
+                        gData = $scope.validateFlexRowType(gData);
 
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                         //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
@@ -3139,6 +3151,12 @@
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
                             }
 
+                            // Adding FLEX Row Type Product error into err object in DE
+                            if (gData[i]._behaviors.isError['FLEX_ROW_TYPE']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["FLEX_ROW_TYPE"]);
+                            }
+                            
                             // TODO... this should probably mimic Pricing Table Rows
                             if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
 
@@ -5933,6 +5951,24 @@
 
             return resp;
         }
+
+        //validate Flex Row Type 
+        $scope.validateFlexRowType = function (data) {
+            if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                $scope.clearValidation(data, 'FLEX_ROW_TYPE');
+
+                var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+                var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+
+                if (accrualEntries.length == 0 || drainingEntries.length == 0) {
+                    angular.forEach(data, (item) => {
+                        $scope.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype');
+                    });
+                }
+            }
+            return data;
+        }
+
         //validate settlement level for hybrid 
         $scope.validateSettlementLevel = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond=false ;
@@ -6142,6 +6178,20 @@
                 }
             });
         }
+
+        $scope.setFlexBehaviors = function (item, elem, cond) {
+            if (!item._behaviors) item._behaviors = {};
+            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+            if (!item._behaviors.isError) item._behaviors.isError = {};
+            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+            if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+            item._behaviors.isRequired[elem] = true;
+            item._behaviors.isError[elem] = true;
+           
+            if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
+                item._behaviors.validMsg[elem] = "There should be atleast one accrual and one draining product.";
+            }
+        }
         $scope.setBehaviors = function (item, elem, cond) {
             if (!item._behaviors) item._behaviors = {};
             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -6178,6 +6228,7 @@
                 delete item._behaviors.isRequired[elem];
                 delete item._behaviors.isError[elem];
             }
+
             else {
                 item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
             }

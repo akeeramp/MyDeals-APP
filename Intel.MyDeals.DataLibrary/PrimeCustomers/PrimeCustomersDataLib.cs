@@ -87,10 +87,7 @@ namespace Intel.MyDeals.DataLibrary
                 in_prim_lvl_nm = data.PRIM_CUST_NM,
                 in_rpl_sts = data.RPL_STS,
                 in_is_actv = data.IS_ACTV,
-                in_mode = mode.ToString().ToUpper(),
-                in_cre_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                in_chg_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
-
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
 
             }))
             {
@@ -245,17 +242,17 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     var ret = new List<UnPrimedDealDetails>();
-                    int IDX_Prime_ID = DB.GetReaderOrdinal(rdr, "Prime_ID");
+                    int IDX_IS_PRIMED_CUST = DB.GetReaderOrdinal(rdr, "IS_PRIMED_CUST");
                     while (rdr.Read())
                     {
                         ret.Add(new UnPrimedDealDetails
                         {
-                            Prime_ID = (IDX_Prime_ID < 0 || rdr.IsDBNull(IDX_Prime_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Prime_ID)
+                            IS_PRIMED_CUST = (IDX_IS_PRIMED_CUST < 0 || rdr.IsDBNull(IDX_IS_PRIMED_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_PRIMED_CUST)
                         });
                     }
                     if (ret != null)
                     {
-                        if (ret.Where(x => x.Prime_ID != 0).ToList().Count() == 1)
+                        if (ret.Where(x => x.IS_PRIMED_CUST == "1").ToList().Count() == 1)
                         {
                             result = true;
                         }
@@ -270,5 +267,49 @@ namespace Intel.MyDeals.DataLibrary
 
             return result;
         }
+
+        public EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry)
+        {
+            EndCustomerObject retObj = new EndCustomerObject();
+
+            var cmd = new Procs.dbo.PR_MYDL_PRIM_VAL()
+            {
+                in_end_cust_nm = endCustName,
+                in_end_cust_ctry = endCustCountry
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+                    int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+                    int IDX_IS_PRIME = DB.GetReaderOrdinal(rdr, "IS_PRIME ");
+
+
+                    while (rdr.Read())
+                    {
+
+                        retObj.VerifiedEndCustomer = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM))
+                            ? String.Empty
+                            : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM);
+                        retObj.VerifiedEndCustomerId = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID))
+                           ? default(System.Int32)
+                           : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID);
+                        retObj.IsVerifiedCustomer = (IDX_IS_PRIME < 0 || rdr.IsDBNull(IDX_IS_PRIME))
+                            ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_PRIME);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return retObj;
+        }
+
     }
 }

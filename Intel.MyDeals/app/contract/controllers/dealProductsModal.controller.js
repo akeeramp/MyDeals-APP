@@ -12,7 +12,7 @@ function dealProductsModalCtrl($scope, $uibModalInstance, dataItem, objsetServic
 
     $scope.dataItem = dataItem;
 
-    $scope.showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM';
+    $scope.showDealProducts = $scope.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || $scope.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM' || $scope.dataItem.OBJ_SET_TYPE_CD == 'FLEX';
 
     var prdIds = [];
 
