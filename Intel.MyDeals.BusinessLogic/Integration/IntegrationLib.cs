@@ -896,6 +896,10 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
+            // We have a record back, so let's update IQR with priming data
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString();
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = endCustObj.VerifiedEndCustomer;
 
 
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
@@ -1033,11 +1037,6 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
             }
-
-            // We have a record back, so let's update IQR with any potentially missing priming data they might need
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
-            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
 
             // Break out update records block so that it can be updated easier apart from the save and PCT/MCT calls
 
