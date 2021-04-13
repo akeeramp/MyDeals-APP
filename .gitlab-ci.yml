@@ -43,7 +43,6 @@ restore_packages:
   stage: Restore
   script:
     - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
-    - '& echo $ReleaseUser'
   artifacts:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
@@ -208,12 +207,21 @@ ciar_deploy_from_utt:
   artifacts:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
-      - deployed/CIAR/  
+      - deployed/CIAR/
+
+app_Pool_Stop:
+  stage: Level_5(PROD)
+  script:
+    - '& \DeploymentScripts\ps_stopRemoteAppPool.ps1 ${AppPoolName} ${Server} ${ReleaseUser} ${ReleasePW}'
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
 
 prod1_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:PROD1_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& net use x: $env:PROD1_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
     - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
@@ -233,7 +241,7 @@ prod1_deploy:
 prod2_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:PROD2_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& net use x: $env:PROD2_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
     - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
@@ -248,12 +256,21 @@ prod2_deploy:
   artifacts:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
-      - deployed/PROD/  
+      - deployed/PROD/
+     
+app_Pool_Start:
+  stage: Level_5(PROD)
+  script:
+    - '& \DeploymentScripts\ps_startRemoteAppPool.ps1 ${AppPoolName} ${Server} ${ReleaseUser} ${ReleasePW}'
+  when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
+  allow_failure: true
 
 dr_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:DR_DEPLOY_PATH /user:$ReleaseUser $ReleasePW'
+    - '& net use x: $env:DR_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
     - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/DR -Recurse'
