@@ -3008,18 +3008,6 @@
                                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                             }
 
-                                            //Restrict multi-tier Vol Tier for 12 months or 1 year
-                                            if (sData[s]["NUM_OF_TIERS"] > 1) {
-                                                if (moment(tblEndDate).isAfter(moment(tblStartDate).add(365, 'days'))) {
-                                                    if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                                    if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                                    if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                    sData[s]._behaviors.isError['END_DT'] = true;
-                                                    sData[s]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
-                                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                    errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
-                                                }
-                                            }
                                         }
                                     }
                                     //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
@@ -3207,21 +3195,6 @@
                                 gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
-                            }
-
-
-                            //Restrict multi-tier Vol Tier for 12 months or 1 year
-                            if (gData[i]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && gData[i]["NUM_OF_TIERS"] > 1) {
-                                if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(365, 'days'))) {
-                                    if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
-                                        if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                        if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                        gData[i]._behaviors.isError['END_DT'] = true;
-                                        gData[i]._behaviors.validMsg['END_DT'] = "End Date can no longer be one year from the Deal Start Date";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("End Date can no longer be one year from the Deal Start Date");
-                                    }
-                                }
                             }
 
                             if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {

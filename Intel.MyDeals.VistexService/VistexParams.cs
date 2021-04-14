@@ -17,7 +17,8 @@ namespace Intel.MyDeals.VistexService
         TestPipelines,
         TenderReturn,
         SendErrorDealsVistex,
-        SendFailProductsVistex
+        SendFailProductsVistex,
+        SendConsumptionLoad
         
     }
 
@@ -32,6 +33,7 @@ namespace Intel.MyDeals.VistexService
         public const char TenderReturn = 'R';
         public const char SendErrorDealsVistex = 'E';
         public const char SendFailProductsVistex = 'F';
+        public const char SendConsumptionLoad = 'M';
     }
 
     public class VistexParams
@@ -215,6 +217,12 @@ namespace Intel.MyDeals.VistexService
                 {
                     switch (arr[1].Trim())
                     {
+                        case "SendConsumptionLoad":
+                        case "cl":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.SendConsumptionLoad;
+                            jobType = JobModeCode.SendConsumptionLoad;
+                            break;
                         case "senddealsvistex":
                         case "sd":
                             displayHelpOnly = false;

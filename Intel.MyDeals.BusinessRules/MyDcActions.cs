@@ -1438,6 +1438,32 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        public static void LongTermVolTierDates(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
+
+            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+
+            if (numTiers > 1)
+            {
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+
+                DateTime maxEndDt = startDate.AddYears(1);
+                if (endDate > maxEndDt)
+                {
+                    deEndDate.AddMessage("End Date can no longer be one year from the Deal Start Date");
+                }
+            }
+        }
+
         public static void CheckFrontendConsumption(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
