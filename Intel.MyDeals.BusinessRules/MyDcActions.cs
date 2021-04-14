@@ -205,6 +205,10 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
                     }
+                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2")) // Sub Kit ECAP wasn't part of initial flattened object, so add it for server kits.
+                    {
+                        item.Add(AttributeCodes.ECAP_PRICE + "_____20_____2", Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]));
+                    }
                 }
             }
 
@@ -3095,6 +3099,7 @@ namespace Intel.MyDeals.BusinessRules
                     // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
                     // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
                     IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString().ToUpper() == prdMapping.Key.ToUpper()).FirstOrDefault();
+                    if (deProd == null) continue; // Safety breakout for no products elements, normally caused by deletion
                     int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
                     deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
