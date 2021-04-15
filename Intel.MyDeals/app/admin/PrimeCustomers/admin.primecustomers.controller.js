@@ -186,7 +186,7 @@
         }
 
         vm.PrimeCustCountryEditor = function (container, options) {
-            var editor = $('<select kendo-drop-down-list k-options="vm.PrimeCustCountry"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+            var editor = $('<select kendo-combo-box k-options="vm.PrimeCustCountry"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.PrimeIDEditor = function (container, options) {
@@ -259,7 +259,7 @@
                 {
                     field: "IS_ACTV",
                     title: "Is Active",
-                    width: "10%",
+                    width: "200px",
                     filterable: { multi: true, search: false },
                     template: gridUtils.boolViewer('IS_ACTV'),
                     editor: gridUtils.boolEditor,
