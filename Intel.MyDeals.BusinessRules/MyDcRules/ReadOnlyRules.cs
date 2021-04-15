@@ -466,7 +466,7 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Program Rebate Type to Send To Vistex population and Read Only setting",
-                    ActionRule = MyDcActions.SendToVistexReadOnlyAndSetValue,
+                    ActionRule = MyDcActions.SendToVistexReadOnlyRequiredAndSetValue,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}

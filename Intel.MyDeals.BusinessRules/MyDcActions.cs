@@ -1187,7 +1187,7 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
-        public static void SendToVistexReadOnlyAndSetValue(params object[] args)
+        public static void SendToVistexReadOnlyRequiredAndSetValue(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1201,12 +1201,16 @@ namespace Intel.MyDeals.BusinessRules
 
             if (rebateType != "NRE") // Default all non-NRE to NO for SEND_TO_VISTEX
             {
-                deSendToVistex.AtrbValue = "No";
+                deSendToVistex.AtrbValue = "";
                 deSendToVistex.IsReadOnly = true;
             }
             if (rebateType == "NRE" && deRebateType.HasValueChanged) // If the user changes this back to NRE, remove the SEND_TO_VISTEX value so that they pick a valid one
             {
                 deSendToVistex.AtrbValue = "";
+            }
+            if (rebateType == "NRE" && deSendToVistex.AtrbValue == "")
+            {
+                deSendToVistex.IsRequired = true;
             }
         }
 
@@ -1222,7 +1226,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = true });
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
             CheckDropDownValues(eligibleDropDowns, args);
 
