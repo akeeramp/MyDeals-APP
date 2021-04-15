@@ -9,7 +9,8 @@
            k-options="opOptions"
            k-min="opMinValue"
            k-max="opMaxValue"
-           ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
+           ng-disabled="isUIDisable(item[opLookupValue],opLabel)"
+           ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty, 'flowBtn inactive disabled':isUIDisable(item[opLookupValue],opLabel)}" />
     <div class="clearboth"></div>
     <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
 </div>

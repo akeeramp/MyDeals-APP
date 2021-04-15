@@ -94,6 +94,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     return scope.opIsReadOnly;
                 }
             }
+            else if ((label.trim() == 'Overarching Maximum Volume' || label.trim() == 'Overarching Maximum Dollar($)') && rowType == 'Draining' && dealType == 'FLEX') {
+                return true;
+            }
             else {
                 return scope.opIsReadOnly;
             }

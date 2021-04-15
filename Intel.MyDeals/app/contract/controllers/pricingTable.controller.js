@@ -2142,6 +2142,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         range.background("#f5f5f5");
                     }
 
+                    //Disable overarching fields when FLEX row type is Draining
+                    var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
+                    var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
+                    var flexRowTypeValue = $scope.$parent.$parent.curPricingTable.FLEX_ROW_TYPE;
+
+                    if (flexRowTypeValue == "Draining") {
+                        sheet.range(oaMaxVolIndex + topLeftRowIndex).value('');
+                        sheet.range(oaMaxVolIndex + topLeftRowIndex).enable(false);
+                        sheet.range(oaMaxVolIndex + topLeftRowIndex).background('#f5f5f5');
+                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).value('');
+                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).enable(false);
+                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).background('#f5f5f5');
+                    }
+
                     // Re-disable cols that are disabled by template
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key) && !ptTemplate.model.fields[key].editable) {
