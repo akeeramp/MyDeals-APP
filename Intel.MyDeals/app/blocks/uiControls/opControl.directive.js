@@ -96,6 +96,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 }
             }
             else if ((label.trim() == 'Overarching Maximum Volume' || label.trim() == 'Overarching Maximum Dollar($)') && rowType == 'Draining' && dealType == 'FLEX') {
+                // Clear existing values for overarching fields
+                scope.$parent.$parent.vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value = "";
+                scope.$parent.$parent.vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value = "";
                 return true;
             }
             else {
