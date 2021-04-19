@@ -372,6 +372,9 @@ namespace Intel.MyDeals.BusinessLogic
             int initPtrId = -401 - currentRec;
             int initWipId = -1000 - currentRec;
 
+            string isPrimedCustomer = null;
+            string primedCustomerId = null;
+            string primedCustName = null;
             string gaWwid = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid;
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
@@ -441,10 +444,17 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Deal Stability Check
 
             //Prime Customer Information 
-            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
-            string isPrimedCustomer = endCustObj.IsVerifiedCustomer.ToString();
-            string primedCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
-            string primedCustName = endCustObj.VerifiedEndCustomer;
+            if (endCustomer.ToUpper() != "ANY")
+            {
+                EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+                isPrimedCustomer = endCustObj.IsVerifiedCustomer.ToString();
+                primedCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
+                primedCustName = endCustObj.VerifiedEndCustomer;
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(723, "End Customer Error: Any is not a valid End Customer selection for IQR Tenders", "End Customer is not allowed"));
+            }
 
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
             string defArSettlementLvl =
@@ -715,9 +725,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealRFQStatus = WorkFlowStages.Submitted; // Set by init setting rule
 
-            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString();
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = endCustObj.VerifiedEndCustomer;
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = isPrimedCustomer;
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = primedCustomerId;
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = primedCustName;
 
             // Update the Meet Comp data now.
             EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, custId,
@@ -878,6 +888,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
             int ptId = myDealsData[OpDataElementType.PRC_TBL].Data.Keys.FirstOrDefault();
+            string isPrimedCustomer = null;
+            string primedCustomerId = null;
+            string primedCustName = null;
+
 
             // TODO: Figure out what fields we will allow to change and place them here.  Let DEs drive the save and rules.  Bail on validation errors or empty required fields.
             // Update SalesForce IDs for new deal instance objects
@@ -890,17 +904,26 @@ namespace Intel.MyDeals.BusinessLogic
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
-            EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+            if (endCustomer.ToUpper() != "ANY")
+            {
+                EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(endCustomer, endCustomerCountry);
+                 isPrimedCustomer = endCustObj.IsVerifiedCustomer.ToString();
+                 primedCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
+                 primedCustName = endCustObj.VerifiedEndCustomer;
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(723, "End Customer Error: Any is not a valid End Customer selection for IQR Tenders", "End Customer is not allowed"));
+            }
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), endCustomer);
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), endCustObj.IsVerifiedCustomer.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), endCustObj.VerifiedEndCustomerId.ToString());
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), endCustObj.VerifiedEndCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), isPrimedCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerId);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), primedCustName);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
             // We have a record back, so let's update IQR with priming data
-            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = endCustObj.IsVerifiedCustomer.ToString();
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = endCustObj.VerifiedEndCustomerId.ToString();
-            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = endCustObj.VerifiedEndCustomer;
-
+            workRecordDataFields.recordDetails.quote.IsVerifiedCustomer = isPrimedCustomer;
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomerId = primedCustomerId;
+            workRecordDataFields.recordDetails.quote.VerifiedEndCustomer = primedCustName;
 
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
