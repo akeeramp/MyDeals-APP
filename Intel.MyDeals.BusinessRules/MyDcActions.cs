@@ -205,6 +205,10 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
                     }
+                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2")) // Sub Kit ECAP wasn't part of initial flattened object, so add it for server kits.
+                    {
+                        item.Add(AttributeCodes.ECAP_PRICE + "_____20_____2", Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]));
+                    }
                 }
             }
 
@@ -1183,7 +1187,7 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
-        public static void SendToVistexReadOnlyAndSetValue(params object[] args)
+        public static void SendToVistexReadOnlyRequiredAndSetValue(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -1197,12 +1201,16 @@ namespace Intel.MyDeals.BusinessRules
 
             if (rebateType != "NRE") // Default all non-NRE to NO for SEND_TO_VISTEX
             {
-                deSendToVistex.AtrbValue = "No";
+                deSendToVistex.AtrbValue = "";
                 deSendToVistex.IsReadOnly = true;
             }
             if (rebateType == "NRE" && deRebateType.HasValueChanged) // If the user changes this back to NRE, remove the SEND_TO_VISTEX value so that they pick a valid one
             {
                 deSendToVistex.AtrbValue = "";
+            }
+            if (rebateType == "NRE" && deSendToVistex.AtrbValue == "")
+            {
+                deSendToVistex.IsRequired = true;
             }
         }
 
@@ -1218,7 +1226,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = true });
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
             CheckDropDownValues(eligibleDropDowns, args);
 
@@ -3095,6 +3103,7 @@ namespace Intel.MyDeals.BusinessRules
                     // Previous code used an index value for walking throug the dimension keys, however, items is a direct pull from JSON data and contains no indexing or dimensioning,
                     // and can come in basically random order unrelated to the walking index, so update is to force a product bucket lookup to get dimension, then apply it to QTY lookup.
                     IOpDataElement deProd = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PRD_BCKT) && de.AtrbValue.ToString().ToUpper() == prdMapping.Key.ToUpper()).FirstOrDefault();
+                    if (deProd == null) continue; // Safety breakout for no products elements, normally caused by deletion
                     int deDimKey = deProd.DimKey.FirstOrDefault(d => d.AtrbID == 20).AtrbItemId;
                     deQty = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == deDimKey).FirstOrDefault();
                     Int32.TryParse(deQty.AtrbValue.ToString(), out parsedQty);
