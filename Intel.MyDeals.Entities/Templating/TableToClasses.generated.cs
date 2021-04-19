@@ -9345,17 +9345,17 @@ namespace Intel.MyDeals.Entities {
 	
 	
 	[DataMember]
-	public System.String PRIM_CUST_ID {set;get;}
-	
-	
+	public System.Int32 PRIM_CUST_ID { set; get; }
+
+
 	[DataMember]
 	public System.String PRIM_CUST_NM {set;get;}
 	
 	
 	[DataMember]
-	public System.String PRIM_LVL_ID {set;get;}
-	
-	
+	public System.Int32 PRIM_LVL_ID { set; get; }
+
+
 	[DataMember]
 	public System.String PRIM_LVL_NM {set;get;}
 	
@@ -9366,39 +9366,39 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.Int32 RPL_STS {set;get;}
-	
-	
-	/*
-	private static List<PrimeCustomers> PrimeCustomersFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<PrimeCustomers>();
-	int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
-	int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
-	int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
-	int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
-	int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
-	int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
-	int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
-	int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
-	
-	while (rdr.Read()){
-	ret.Add(new PrimeCustomers {
-	IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
-	PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
-	PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_ID),
-	PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
-	PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_ID),
-	PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
-	PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
-	RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STS)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
+
+
+		/*
+		private static List<PrimeCustomers> PrimeCustomersFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<PrimeCustomers>();
+		int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
+		int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
+		int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
+		int IDX_PRIM_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIM_CUST_NM");
+		int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
+		int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
+		int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
+		int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
+
+		while (rdr.Read()){
+		ret.Add(new PrimeCustomers {
+		IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
+		PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
+		PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
+		PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM),
+		PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
+		PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
+		PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
+		RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STS)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
 	} // End of class PrimeCustomers
 
 	///<summary>
@@ -9408,7 +9408,7 @@ namespace Intel.MyDeals.Entities {
 	/// by vdeenadx
 	/// at 4/19/2021 1:28:11 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UnPrimeDeals {
 	
@@ -9557,9 +9557,9 @@ namespace Intel.MyDeals.Entities {
 	public partial class PrimeCustDropdown {
 	
 	[DataMember]
-	public System.String PRIM_CUST_ID {set;get;}
-	
-	
+	public System.Int32 PRIM_CUST_ID {set;get;}
+
+
 	[DataMember]
 	public System.String PRIM_CUST_NM {set;get;}
 	
@@ -9575,7 +9575,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new PrimeCustDropdown {
-	PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_ID),
+	PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
 	PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM)
 	});
 	} // while
@@ -9647,7 +9647,7 @@ namespace Intel.MyDeals.Entities {
 	
 	
 	[DataMember]
-	public System.String PRIM_CUST_ID {set;get;}
+	public System.Int32 PRIM_CUST_ID {set;get;}
 	
 	
 	[DataMember]
@@ -9667,7 +9667,7 @@ namespace Intel.MyDeals.Entities {
 	while (rdr.Read()){
 	ret.Add(new PrimeCustomerDetails {
 	IS_PRIME = (IDX_IS_PRIME < 0 || rdr.IsDBNull(IDX_IS_PRIME)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_PRIME),
-	PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_ID),
+	PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
 	PRIM_CUST_NM = (IDX_PRIM_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIM_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_NM)
 	});
 	} // while
