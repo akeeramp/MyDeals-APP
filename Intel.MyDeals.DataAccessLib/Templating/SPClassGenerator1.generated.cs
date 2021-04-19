@@ -13274,14 +13274,13 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 
 			///<summary>
-			/// DataType: varchar(100)
+			/// DataType: int
 			/// Mode: IN
-			/// Max Length: 100
 			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
-			public String in_prim_cust_id {
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_prim_cust_id {
 				set { SetParmeter("in_prim_cust_id", value); }
-				get { return (String)GetParameter("in_prim_cust_id"); }
+				get { return (Int32)GetParameter("in_prim_cust_id"); }
 			}
 
 			///<summary>
@@ -13307,14 +13306,13 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 
 			///<summary>
-			/// DataType: varchar(100)
+			/// DataType: int
 			/// Mode: IN
-			/// Max Length: 100
 			///</summary>
-			[SQLParameterAttribute(5, "ParameterDirection.Input", 100, false)]
-			public String in_prim_lvl_id {
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_prim_lvl_id {
 				set { SetParmeter("in_prim_lvl_id", value); }
-				get { return (String)GetParameter("in_prim_lvl_id"); }
+				get { return (Int32)GetParameter("in_prim_lvl_id"); }
 			}
 
 			///<summary>
