@@ -1467,7 +1467,7 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime maxEndDt = startDate.AddYears(1);
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("End Date can no longer be one year from the Deal Start Date");
+                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
                 }
             }
         }

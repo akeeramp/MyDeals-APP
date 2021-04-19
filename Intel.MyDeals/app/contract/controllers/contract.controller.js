@@ -2947,8 +2947,8 @@
                                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[s]._behaviors.isError['START_DT'] = true;
-                                                sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.isError['START_DT'] = true;
+                                                sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                             }
@@ -3002,8 +3002,8 @@
                                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[s]._behaviors.isError['END_DT'] = true;
-                                                sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.isError['END_DT'] = true;
+                                                sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                             }
