@@ -979,22 +979,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
             
             //To refresh the modified row data after redeal without refresh the screen manually
-            $scope.$on('updateDealAtrb', function (event, args) {
-                
+            $scope.$on('updateDealAtrb', function (event, args) {                
                 for (var i = 0; i < args.WIP_DEAL.length; i++)
                 {
                     if (args.WIP_DEAL[i].DC_ID == $scope.opData[i]["DC_ID"] )
                     {
                         for (var j = 0; j < atrbList.length; j++)
-                        {                          
+                        {
                             $scope.opData[i][atrbList[j]] = args.WIP_DEAL[i][atrbList[j]];
-                        }                      
-                                               
+                        }
+
                         $scope.opData[i]["_actionsPS"] = args.WIP_DEAL[i]._actions;
-                        $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly; 
-                        $scope.opData[i]["_behaviors"]["isError"] = args.WIP_DEAL[i]._behaviors.isError; 
-                        $scope.opData[i]["_behaviors"]["isRequired"] = args.WIP_DEAL[i]._behaviors.isRequired;                                                
-                        
+                        $scope.opData[i]["_behaviors"]["isReadOnly"] = args.WIP_DEAL[i]._behaviors.isReadOnly;
+                        $scope.opData[i]["_behaviors"]["isError"] = args.WIP_DEAL[i]._behaviors.isError;
+                        $scope.opData[i]["_behaviors"]["isRequired"] = args.WIP_DEAL[i]._behaviors.isRequired;
+
                     }
                 }
                 $scope.contractDs.read();
@@ -1162,6 +1161,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.isGridDataLoaded = true;
 
                     if ($scope.curGroup === "") {
+                        var data = $scope.contractDs.data();
+                        data = $scope.$parent.$parent.ValidateEndCustomer(data);
                         $scope.selectFirstTab();
                         $scope.validateGrid();
                     }
@@ -1931,9 +1932,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.applySaveCell = function (dataItem, newField, newValue) {
                 if (dataItem._behaviors === undefined) dataItem._behaviors = {};
                 if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
-                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false) {
+                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
-                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
+                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false || newField == "PRIMED_CUST_CNTRY") {
                         if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
