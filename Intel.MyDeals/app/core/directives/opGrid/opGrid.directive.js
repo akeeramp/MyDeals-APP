@@ -1162,7 +1162,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     if ($scope.curGroup === "") {
                         var data = $scope.contractDs.data();
-                        data = $scope.$parent.$parent.ValidateEndCustomer(data);
+                        //data = $scope.$parent.$parent.ValidateEndCustomer(data);
                         $scope.selectFirstTab();
                         $scope.validateGrid();
                     }
