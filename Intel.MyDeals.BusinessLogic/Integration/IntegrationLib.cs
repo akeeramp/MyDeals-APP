@@ -457,6 +457,18 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
+            MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
+
+            if (requestedCustomerInfo == null)
+            {
+                string idsid = OpUserStack.MyOpUserToken != null?  OpUserStack.MyOpUserToken.Usr.Idsid : "";
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create Deal", "User missing customer access"));
+                return initWipId;
+            }
+
+            // Consumption Lookback Period from Customer Data, Set to 0 if non defined
+            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1;
+            if (lookbackDefaultVal < 0) lookbackDefaultVal = 0;  // Normally set to -1 in no customer default, but for IQR, needs valid value.
             string defArSettlementLvl =
                 requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == "User Select on Deal Creation" || requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL == ""
                     ? "Issue Credit to Billing Sold To"
@@ -482,11 +494,6 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             };
             myDealsData.FillInHolesFromAtrbTemplate(OpDataElementType.PRC_ST, OpDataElementSetType.ALL_TYPES);
-
-            // Consumption Lookback Period from Customer Data, Set to 0 if non defined
-            MyCustomersInformation singleCustomer = new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == custId);
-            int lookbackDefaultVal = singleCustomer != null ? Int32.Parse(singleCustomer.DFLT_LOOKBACK_PERD.ToString()) : -1;
-            if (lookbackDefaultVal < 0) lookbackDefaultVal = 0;  // Normally set to -1 in no customer default, but for IQR, needs valid value.
 
             // Add PS Data
             UpdateDeValue(myDealsData[OpDataElementType.PRC_ST].Data[initPsId].GetDataElement(AttributeCodes.dc_type), OpDataElementType.PRC_ST.ToString());
