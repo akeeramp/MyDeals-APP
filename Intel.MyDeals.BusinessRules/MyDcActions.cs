@@ -205,7 +205,8 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
                     }
-                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2")) // Sub Kit ECAP wasn't part of initial flattened object, so add it for server kits.
+                    // Sub Kit ECAP wasn't part of initial flattened object for PTE, so add it for server kits.  Wip level doesn't dimensionalize the same say, so just look for ECAP_PRICE object.
+                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2") && !item.ContainsKey(AttributeCodes.ECAP_PRICE)) 
                     {
                         item.Add(AttributeCodes.ECAP_PRICE + "_____20_____2", Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]));
                     }
