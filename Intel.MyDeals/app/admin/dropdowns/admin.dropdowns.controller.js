@@ -39,6 +39,7 @@
                     dropdownsService.getBasicDropdowns(true)
                         .then(function (response) {
                             setNonCorpInheritableValues(response.data);
+                            response.data = response.data.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
                             e.success(response.data.filter(checkRestrictions));
                         }, function (response) {
                             logger.error("Unable to get Dropdowns.", response, response.statusText);
@@ -188,6 +189,7 @@
         function getGroupsDataSource() {
             dropdownsService.getDropdownGroups(true)
                 .then(function (response) {
+                    response.data = response.data.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
                     vm.groupsDataSource = response.data.filter(checkRestrictions);
                         }, function (response) {
                             logger.error("Unable to get Dropdown Groups.", response, response.statusText);
