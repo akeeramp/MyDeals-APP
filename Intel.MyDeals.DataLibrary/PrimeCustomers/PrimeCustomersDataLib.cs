@@ -183,14 +183,17 @@ namespace Intel.MyDeals.DataLibrary
                     });
                 }
             }
-
+            if(ret != null)
+            {
+                ret = ret.OrderBy(x => x.CTRY_NM).ToList();
+            }
             return ret;
         }
 
         public List<PrimeCustomers> GetPrimeCustomers()
         {
             var ret = new List<PrimeCustomers>();
-            ret = GetPrimeCustomerDetails().Where(dd => dd.IS_ACTV == true).ToList();
+            ret = GetPrimeCustomerDetails().Where(dd => dd.IS_ACTV == true).OrderBy(x => x.PRIM_CUST_NM).ToList();
             return ret;
         }
 

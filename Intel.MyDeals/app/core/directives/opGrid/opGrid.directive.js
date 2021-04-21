@@ -1162,7 +1162,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     if ($scope.curGroup === "") {
                         var data = $scope.contractDs.data();
-                        //data = $scope.$parent.$parent.ValidateEndCustomer(data);
+                        if ($scope.$parent.$parent.ValidateEndCustomer != undefined
+                            && $scope.$parent.$parent.ValidateEndCustomer != null && $scope.$parent.$parent.ValidateEndCustomer != '') {
+                            data = $scope.$parent.$parent.ValidateEndCustomer(data, "OnLoad");
+                        }
                         $scope.selectFirstTab();
                         $scope.validateGrid();
                     }
@@ -1935,6 +1938,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false || newField == "PRIMED_CUST_CNTRY") {
+                        if (newField == "IS_PRIMED_CUST" && dataItem[newField] !== newValue) {
+                            dataItem.IS_PRIMED_CUST = newValue;
+                        }
                         if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
