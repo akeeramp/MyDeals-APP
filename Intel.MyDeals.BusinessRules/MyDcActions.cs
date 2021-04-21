@@ -1225,7 +1225,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, new DropdownObjCheck { NAME = "Media", DO_NOT_ALLOW_BLANK = true });
             eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, new DropdownObjCheck { NAME = "Server Deal Type", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
