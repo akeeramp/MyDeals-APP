@@ -3132,7 +3132,7 @@
 
                     // Wip Deal
                     if (gData !== undefined && gData !== null) {
-                        gData = $scope.ValidateEndCustomer(gData);
+                        gData = $scope.ValidateEndCustomer(gData, "SaveAndValidate");
                         //validate settlement parter for DE
                         gData = $scope.validateSettlementPartner(gData);
                         //validate OAV & OAD parter for DE
@@ -6306,13 +6306,28 @@
                 }
             });
         }
-        $scope.ValidateEndCustomer = function (data) {
-            $scope.clearEndCustomer(data);
+        $scope.ValidateEndCustomer = function (data, actionName) {
+            if (actionName !== "OnLoad") {
+                angular.forEach(data, (item) => {
+                    if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
+                        $scope.clearEndCustomer(item);
+                    }
+                });
+            }
             if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
                 var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
                 if (rebateType && rebateType.length > 0) {
                     var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
                     var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (!retRetail || !retCtry) {
+                        angular.forEach(data, (item) => {
+                            $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                        });
+                    }
+                }
+                else {
+                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
+                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
                     if (!retRetail || !retCtry) {
                         angular.forEach(data, (item) => {
                             $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
@@ -6334,24 +6349,28 @@
             }
             return data;
         }
-        $scope.clearEndCustomer = function (data) {
-            angular.forEach(data, (item) => {
-                if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
-                    if (item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined) {//To show required error message
-                        delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
-                        delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
-                    }
-                }                    
-            });
+        $scope.clearEndCustomer = function (item) {
+            if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
+                delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
+                delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
+            }
         }
         $scope.setEndCustomer = function (item, dealType){
             if (!item._behaviors) item._behaviors = {};
             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
             if (!item._behaviors.isError) item._behaviors.isError = {};
             if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-            if (item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined) {//To show required error message
+            if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+                || ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
+                $scope.clearEndCustomer(item);
                 item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
                 item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country must be same for " + dealType + ".";
+            }
+            else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+                && (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
+                $scope.clearEndCustomer(item);
+                item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
+                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
             }
         }
     }
