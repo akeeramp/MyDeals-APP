@@ -982,7 +982,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="End Customer has been primed",
+                    Title="End Customer has been Unified",
                     ActionRule = MyDcActions.ValidatePrimeCust,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }

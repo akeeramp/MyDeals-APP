@@ -63,7 +63,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                         validate(response);
                     },
                     function (res) {
-                        logger.error("Unable to get Prime Customers.", response, response.statusText);
+                        logger.error("Unable to get Unified Customers.", response, response.statusText);
                     }
                 );
 
