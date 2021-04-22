@@ -2715,6 +2715,7 @@
                         var dictPayoutBasedon = {};
                         var dictGeoCombined = {};
                         var dictPeriodProfile = {};
+                        var dictResetPerPeriod = {};
                         //var dictArSettlement = {};
                         var dictProgramPayment = {};
                         var dictOverarchingVolume = {};
@@ -2750,6 +2751,7 @@
                                         if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
                                             dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                                         }
+                                        dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
                                         //dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                         dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
 
@@ -2803,6 +2805,12 @@
                                         el._behaviors.validMsg["PERIOD_PROFILE"] = "All Period Profiles must be same within a Hybrid Pricing Strategy.";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
+                                    }
+                                    if (Object.keys(dictResetPerPeriod).length > 1) {
+                                        el._behaviors.isError["RESET_VOLS_ON_PERIOD"] = true;
+                                        el._behaviors.validMsg["RESET_VOLS_ON_PERIOD"] = "All Reset Per Periods must be same within a Hybrid Pricing Strategy.";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push(el._behaviors.validMsg["RESET_VOLS_ON_PERIOD"]);
                                     }
                                     //if (Object.keys(dictArSettlement).length > 1) {
                                     //    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
