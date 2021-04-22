@@ -2229,6 +2229,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             $timeout(function () {
+                //Note: This is to fix the Muiti-tier data Corrupt fix
+                if ($scope.pricingTableData.PRC_TBL_ROW != null && $scope.pricingTableData.PRC_TBL_ROW != undefined && $scope.pricingTableData.PRC_TBL_ROW != '') {
+                    for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
+                        if ($scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
+                            var r = i + 1 - $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
+                            if ($scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "KIT" && $scope.pricingTableData.PRC_TBL_ROW[r]['DEAL_GRP_NM'] !== root.spreadDs._data[r]['DEAL_GRP_NM']) {
+                                    root.spreadDs._data[r] = $scope.pricingTableData.PRC_TBL_ROW[r];
+                                    root.spreadDs.sync();
+                                }
+                                else if (root.spreadDs._data[r] && root.spreadDs._data[r]['NUM_OF_TIERS'] > 1 && root.spreadDs._data[r]['TIER_NBR'] != 1) {
+                                    root.spreadDs._data[r] = $scope.pricingTableData.PRC_TBL_ROW[r];
+                                    root.spreadDs.sync();
+                                }
+                            } 
+                        }
+                    }
+                }
                 $scope.applySpreadsheetMerge(); // NOTE: This MUST be after the sync or else DE36447 will happen
             });
         }

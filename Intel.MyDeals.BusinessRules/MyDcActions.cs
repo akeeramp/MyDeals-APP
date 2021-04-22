@@ -205,7 +205,8 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         item[AttributeCodes.ECAP_PRICE + "_____20_____2"] = Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]);
                     }
-                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2")) // Sub Kit ECAP wasn't part of initial flattened object, so add it for server kits.
+                    // Sub Kit ECAP wasn't part of initial flattened object for PTE, so add it for server kits.  Wip level doesn't dimensionalize the same say, so just look for ECAP_PRICE object.
+                    else if (!item.ContainsKey(AttributeCodes.ECAP_PRICE + "_____20_____2") && !item.ContainsKey(AttributeCodes.ECAP_PRICE)) 
                     {
                         item.Add(AttributeCodes.ECAP_PRICE + "_____20_____2", Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___0"]) + Convert.ToDecimal(item[AttributeCodes.ECAP_PRICE + "_____20___1"]));
                     }
@@ -1224,7 +1225,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.PROD_INCLDS, new DropdownObjCheck { NAME = "Media", DO_NOT_ALLOW_BLANK = true });
             eligibleDropDowns.Add(AttributeCodes.SERVER_DEAL_TYPE, new DropdownObjCheck { NAME = "Server Deal Type", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.PERIOD_PROFILE, new DropdownObjCheck { NAME = "Period Profile", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
@@ -1467,7 +1468,7 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime maxEndDt = startDate.AddYears(1);
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("End Date can no longer be one year from the Deal Start Date");
+                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
                 }
             }
         }

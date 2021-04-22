@@ -312,7 +312,7 @@
 .opUiContainer.md input[type="radio"], input[type="checkbox"] { margin-top: 0; }
 .opUiContainer.md .radio { margin-top: 0; margin-bottom: 0; }
 
-.opUiContainer.md .err-bit { margin: 0 0 0 0; }
+.opUiContainer.md .err-bit { margin: 5px 0 0 0; }
 
 .opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] { font-size: 14px !important; }
 .opUiContainer.md [class^="intelicon-"].valid-icon, .opUiContainer.md [class*=" intelicon-"].valid-icon { font-size: 20px !important; }

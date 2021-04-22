@@ -47,6 +47,8 @@
                             .then(function (response) {
                                 e.success(response.data);
                                 logger.success("Prime customer updated.");
+                                var primeCustIndex = vm.PrimeCustomersData.findIndex(x => (x.PRIM_SID === parseInt(response.data.PRIM_SID)));
+                                vm.PrimeCustomersData[primeCustIndex] = response.data;
                             }, function (response) {
                                 logger.error("Unable to update prime customer.", response, response.statusText);
                             });
@@ -59,6 +61,7 @@
                             .then(function (response) {
                                 e.success(response.data);
                                 logger.success("New Prime customer added.");
+                                vm.PrimeCustomersData[vm.PrimeCustomersData.length] = response.data;
                             }, function (response) {
                                 logger.error("Unable to insert prime customer.", response, response.statusText);
                             });
@@ -91,25 +94,25 @@
             vm.PrimeCustomersData.map(
                 function getDuplicate(x) {
                     if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
-                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM !== model.PRIM_CUST_NM && isPrimeIdexist) {
-                                validationMessages.push("Prime ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Prime Customer");
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM !== model.PRIM_CUST_NM && model.PRIM_CUST_NM != "" && model.PRIM_CUST_NM != null) {
+                            validationMessages.push("Prime ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Prime Customer");
                         }
-                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
-                             validationMessages.push("For this combination of Prime Id \"" + model.PRIM_CUST_ID + "\" and Prime Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
+                            validationMessages.push("For this combination of Prime Id \"" + model.PRIM_CUST_ID + "\" and Prime Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
                         }
                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
                             validationMessages.push("This combination of Prime Id \"" + model.PRIM_CUST_ID + "\" , Prime Customer Name \"" + model.PRIM_CUST_NM + "\" and Prime Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         }
-                         if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
-                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
+                        if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
+                            validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
 
-                         }
+                        }
                     }
-                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1) {
+                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "") {
                         validationMessages.push("\""+x.PRIM_CUST_NM + "\" Prime Customer Name is already associated with Prime ID \"" + x.PRIM_CUST_ID + "\"");
 
                     }
-                    
+
                 }
             );
 

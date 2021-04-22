@@ -2848,6 +2848,9 @@
 
                         var validated_DC_Id = [];
 
+                        var accrualStartDateStatus = $scope.validateFlexAccrualDate($scope.spreadDs.data(), 'START_DT');
+                        var accrualEndDateStatus = $scope.validateFlexAccrualDate($scope.spreadDs.data(), 'END_DT');
+
                         for (var s = 0; s < sData.length; s++) {
                             //Adding settlment partner error into err object in PTE
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
@@ -2947,10 +2950,24 @@
                                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[s]._behaviors.isError['START_DT'] = true;
-                                                sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.isError['START_DT'] = true;
+                                                sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                            }
+                                        }
+                                        //Validating Flex Accrual Start Dates
+                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                                            //Delete if there is any previous Error  messages
+                                            if (!accrualStartDateStatus && sData[s]._behaviors.isError && sData[s]._behaviors.isError['START_DT'] && sData[s]._behaviors.validMsg['START_DT'] == "Start date must be same across all Accrual products.") {
+                                                delete sData[s]._behaviors.isError['START_DT'];
+                                                delete sData[s]._behaviors.validMsg['START_DT'];
+                                            }
+
+                                            if (!accrualStartDateStatus && sData[s]["FLEX_ROW_TYPE"] == 'Accrual') {
+                                                $scope.setFlexBehaviors(sData[s], 'START_DT', 'inconsistentstartdaterange');
+                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
                                             }
                                         }
                
@@ -3002,12 +3019,27 @@
                                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[s]._behaviors.isError['END_DT'] = true;
-                                                sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.isError['END_DT'] = true;
+                                                sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                                 errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                             }
 
+                                        }
+                                        //Validating Flex Accrual End Dates
+                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
+
+                                            //Delete if there is any previous Error  messages
+                                            if (!accrualEndDateStatus && sData[s]._behaviors.isError && sData[s]._behaviors.isError['END_DT'] && sData[s]._behaviors.validMsg['END_DT'] == "End date must be same across all Accrual products.") {
+                                                delete sData[s]._behaviors.isError['END_DT'];
+                                                delete sData[s]._behaviors.validMsg['END_DT'];
+                                            }
+
+                                            if (!accrualEndDateStatus && sData[s]["FLEX_ROW_TYPE"] == 'Accrual') {
+                                                $scope.setFlexBehaviors(sData[s], 'END_DT', 'inconsistentenddaterange');
+                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['END_DT']);
+                                            }
                                         }
                                     }
                                     //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
@@ -3100,6 +3132,7 @@
 
                     // Wip Deal
                     if (gData !== undefined && gData !== null) {
+                        gData = $scope.ValidateEndCustomer(gData, "SaveAndValidate");
                         //validate settlement parter for DE
                         gData = $scope.validateSettlementPartner(gData);
                         //validate OAV & OAD parter for DE
@@ -3110,6 +3143,9 @@
                         gData = $scope.validateOVLPFlexProduct(gData);
                         //validate Flex Row Type for DE
                         gData = $scope.validateFlexRowType(gData);
+
+                        var accrualStartDateStatus = $scope.validateFlexAccrualDate(gData, 'START_DT');
+                        var accrualEndDateStatus = $scope.validateFlexAccrualDate(gData, 'END_DT');
 
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                         //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
@@ -3197,6 +3233,31 @@
                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
                             }
 
+                            if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
+
+                                if (!accrualStartDateStatus && gData[i]._behaviors.isError && gData[i]._behaviors.isError['START_DT'] && gData[i]._behaviors.validMsg['START_DT'] == "Start date must be same across all Accrual products.") {
+                                    delete gData[i]._behaviors.isError['START_DT'];
+                                    delete gData[i]._behaviors.validMsg['START_DT'];
+                                }
+
+                                if (!accrualStartDateStatus && gData[i]["FLEX_ROW_TYPE"] == 'Accrual') {
+                                    $scope.setFlexBehaviors(gData[i], 'START_DT', 'inconsistentstartdaterange');
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                }
+
+                                if (!accrualEndDateStatus && gData[i]._behaviors.isError && gData[i]._behaviors.isError['END_DT'] && gData[i]._behaviors.validMsg['END_DT'] == "End date must be same across all Accrual products.") {
+                                    delete gData[i]._behaviors.isError['END_DT'];
+                                    delete gData[i]._behaviors.validMsg['END_DT'];
+                                }
+
+                                if (!accrualEndDateStatus && gData[i]["FLEX_ROW_TYPE"] == 'Accrual') {
+                                    $scope.setFlexBehaviors(gData[i], 'END_DT', 'inconsistentenddaterange');
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['END_DT']);
+                                }
+                            }
+
                             if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
                                 if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
@@ -3208,8 +3269,12 @@
                                 }
                             }
 
-                            if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
-                                if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
+                            if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
+                                if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["END_CUSTOMER_RETAIL"]);
+                                }
+                                else if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
                                     if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
                                         if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                         if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
@@ -3536,9 +3601,10 @@
                                 item.SETTLEMENT_PARTNER = partnerID[0].BUSNS_ORG_NM;
                             }
                         });
-                    }                  
-
-                    $scope.$broadcast('updateDealAtrb', data);
+                    }
+                    if (data != null && data != undefined && data.WIP_DEAL != undefined && data.WIP_DEAL != null) {
+                        $scope.$broadcast('updateDealAtrb', data);
+                    }
 
                     pcService.addPerfTimes(results.data.PerformanceTimes);
                     pc.add(pcService.stop());
@@ -5848,8 +5914,10 @@
                 if ($scope.overlapFlexResult && $scope.overlapFlexResult.length && $scope.overlapFlexResult.length > 0) {
                     //Parent is different at PTE and DE level
                     var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                    //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+                    var spreadData = $scope.spreadDs.data();
                     //For multi tiers last record will have latest date, skipping duplicate DC_ID
-                    var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }).reverse(), function (obj) { return obj[objectId] });
+                    var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
                     //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                     var finalResult = $scope.checkOVLPDate(filterData, $scope.overlapFlexResult, objectId);
                     angular.forEach(data, (item) => {
@@ -6141,6 +6209,24 @@
             }
 
         }
+
+        $scope.validateFlexAccrualDate = function (pData, elem) {
+            var accrualEntries = pData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
+            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            var accrualDateStatus;
+            if (elem == 'START_DT') {
+                accrualDateStatus = filterData.every((val) => val.START_DT != null && val.START_DT != '' &&
+                    moment(val.START_DT).format('MM/DD/YYYY') == moment(filterData[0].START_DT).format('MM/DD/YYYY'));
+            }
+            else if (elem == 'END_DT') {
+                accrualDateStatus = filterData.every((val) => val.END_DT != null && val.END_DT != '' &&
+                    moment(val.END_DT).format('MM/DD/YYYY') == moment(filterData[0].END_DT).format('MM/DD/YYYY'));
+            }
+
+            return accrualDateStatus;
+        }
         //helper function for clear and set behaviors
         $scope.clearValidation = function (data, elem) {
             angular.forEach(data, (item) => {
@@ -6163,6 +6249,13 @@
            
             if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
                 item._behaviors.validMsg[elem] = "There should be atleast one accrual and one draining product.";
+            }
+
+            else if (cond == 'inconsistentstartdaterange' && elem == 'START_DT') {
+                item._behaviors.validMsg[elem] = "Start Date must be same across all Accrual Products.";
+            }
+            else if (cond == 'inconsistentenddaterange' && elem == 'END_DT') {
+                item._behaviors.validMsg[elem] = "End Date must be same across all Accrual Products.";
             }
         }
         $scope.setBehaviors = function (item, elem, cond) {
@@ -6212,6 +6305,73 @@
                     item[elem] = null;
                 }
             });
+        }
+        $scope.ValidateEndCustomer = function (data, actionName) {
+            if (actionName !== "OnLoad") {
+                angular.forEach(data, (item) => {
+                    if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
+                        $scope.clearEndCustomer(item);
+                    }
+                });
+            }
+            if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+                if (rebateType && rebateType.length > 0) {
+                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
+                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (!retRetail || !retCtry) {
+                        angular.forEach(data, (item) => {
+                            $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                        });
+                    }
+                }
+                else {
+                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
+                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (!retRetail || !retCtry) {
+                        angular.forEach(data, (item) => {
+                            $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                        });
+                    }
+                }
+            }
+            else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") {
+                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+                if (rebateType && rebateType.length > 0) {
+                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
+                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (!retRetail || !retCtry) {
+                        angular.forEach(data, (item) => {
+                            $scope.setEndCustomer(item, 'Program Deal');
+                        });
+                    }
+                }
+            }
+            return data;
+        }
+        $scope.clearEndCustomer = function (item) {
+            if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
+                delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
+                delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
+            }
+        }
+        $scope.setEndCustomer = function (item, dealType){
+            if (!item._behaviors) item._behaviors = {};
+            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+            if (!item._behaviors.isError) item._behaviors.isError = {};
+            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+            if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+                || ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
+                $scope.clearEndCustomer(item);
+                item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
+                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country must be same for " + dealType + ".";
+            }
+            else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+                && (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
+                $scope.clearEndCustomer(item);
+                item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
+                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
+            }
         }
     }
 })();

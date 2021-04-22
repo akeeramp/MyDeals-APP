@@ -278,6 +278,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
                     "QLTR_BID_GEO": {
                         "Groups": ["Deal Info"]
                     },
@@ -333,12 +339,6 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
-                        "Groups": ["Consumption"]
-                    },
-                    "END_CUSTOMER_RETAIL": {
-                        "Groups": ["Consumption"]
-                    },
-                    "PRIMED_CUST_CNTRY": {
                         "Groups": ["Consumption"]
                     },
                     "QLTR_PROJECT": {
@@ -466,6 +466,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -515,12 +521,6 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
-                        "Groups": ["Consumption"]
-                    },
-                    "END_CUSTOMER_RETAIL": {
-                        "Groups": ["Consumption"]
-                    },
-                    "PRIMED_CUST_CNTRY": {
                         "Groups": ["Consumption"]
                     },
                     "QLTR_PROJECT": {
@@ -669,6 +669,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
                     "PAYOUT_BASED_ON": {
                         "Groups": ["Deal Info", "Consumption"]
                     },
@@ -718,12 +724,6 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
-                        "Groups": ["Consumption"]
-                    },
-                    "END_CUSTOMER_RETAIL": {
-                        "Groups": ["Consumption"]
-                    },
-                    "PRIMED_CUST_CNTRY": {
                         "Groups": ["Consumption"]
                     },
                     "QLTR_PROJECT": {
@@ -962,6 +962,12 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
+                    "END_CUSTOMER_RETAIL": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
+                    "PRIMED_CUST_CNTRY": {
+                        "Groups": ["Deal Info"] //, "Consumption"
+                    },
                     "QLTR_BID_GEO": {
                         "Groups": ["Deal Info"]
                     },
@@ -1014,12 +1020,6 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_SYS_CONFIG": {
-                        "Groups": ["Consumption"]
-                    },
-                    "END_CUSTOMER_RETAIL": {
-                        "Groups": ["Consumption"]
-                    },
-                    "PRIMED_CUST_CNTRY": {
                         "Groups": ["Consumption"]
                     },
                     "QLTR_PROJECT": {
