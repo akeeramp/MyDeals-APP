@@ -1984,6 +1984,7 @@
 
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                $scope.reloadPage();
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
             }
@@ -1991,6 +1992,7 @@
                 // put on hold
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                $scope.$broadcast('onHold');
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
             }
