@@ -105,12 +105,11 @@
                         }
                         if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
-
                         }
                     }
                     else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "") {
                         validationMessages.push("\""+x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
-
+                        
                     }
 
                 }
