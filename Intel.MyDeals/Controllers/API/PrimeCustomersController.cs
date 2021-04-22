@@ -21,7 +21,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetPrimeCustomerDetails")]
         public List<PrimeCustomers> GetPrimeCustomerDetails()
         {
-            return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(), "Unable to Get Prime Customers");
+            return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomerDetails(), "Unable to Get Unified Customers");
         }
 
         [Route("SetPrimeCustomers")]
@@ -30,7 +30,7 @@ namespace Intel.MyDeals.Controllers.API
         public PrimeCustomers SetPrimeCustomers(PrimeCustomers data)
         {
             return SafeExecutor(() => _primeCustomersLib.ManagePrimeCustomers(CrudModes.Insert, data)
-                , $"Unable to get {"Prime Customers"}"
+                , $"Unable to get {"Unified Customers"}"
             );
         }
         
@@ -41,7 +41,7 @@ namespace Intel.MyDeals.Controllers.API
         public PrimeCustomers UpdatePrimeCustomer(PrimeCustomers data)
         {
             return SafeExecutor(() => _primeCustomersLib.ManagePrimeCustomers(CrudModes.Update, data)
-                , $"Unable to get {"Prime Customers"}"
+                , $"Unable to get {"Unified Customers"}"
             );
         }
 
@@ -58,7 +58,7 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<PrimeCustomers> GetPrimeCustomers()
         {
             return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
-                $"Unable to Get Prime Customers");
+                $"Unable to Get Unified Customers");
         }
 
         [Route("GetUnPrimeDeals")]
@@ -73,7 +73,7 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<PrimeCustomerDetails> GetEndCustomerData(string[] endCustomerData)
         {
             return SafeExecutor(() => _primeCustomersLib.GetEndCustomerData(endCustomerData[0], endCustomerData[1]),
-                    $"Unable to Get Prime Customers");
+                    $"Unable to Get Unified Customers");
         }
 
         [Authorize]
@@ -82,7 +82,7 @@ namespace Intel.MyDeals.Controllers.API
         public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustomerCountry)
         {
             return SafeExecutor(() => _primeCustomersLib.UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustomerCountry),
-                    $"Unable to Update Unprime Deals");
+                    $"Unable to Update UnUnified Deals");
         }
     }
 }
