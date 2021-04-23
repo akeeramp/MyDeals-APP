@@ -1992,7 +1992,7 @@
                 // put on hold
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
-                $scope.$broadcast('onHold');
+                $scope.$broadcast('onHold',dataItem);
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
             }
