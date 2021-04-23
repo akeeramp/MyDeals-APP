@@ -5917,7 +5917,7 @@
                 callback(false);
             }
         }
-        $scope.validateOVLPFlexProduct = function (data) {
+        $scope.validateOVLPFlexProduct = function (data,mode) {
         if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 //Clearing the behaviors for the first time if no error the result will be clean
                 $scope.clearValidation(data, "PTR_USER_PRD");
@@ -5930,6 +5930,9 @@
                     var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
                     //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                     var finalResult = $scope.checkOVLPDate(filterData, $scope.overlapFlexResult, objectId);
+                    if (mode) {
+                        return finalResult;
+                    }
                     angular.forEach(data, (item) => {
                         angular.forEach(finalResult, (itm) => {
                             //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
@@ -5967,14 +5970,14 @@
 
                             if (objectId == 'DC_PARENT_ID') {
                                 //findWhere will return the first object found 
-                                    firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
-                                    secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
+                                firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
+                                secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
                             }
                             else {
-                                    firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
-                                    secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
+                                firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
+                                secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
                             }
-              
+
                             var firstRange = moment.range(moment(firstObj.START_DT), moment(firstObj.END_DT));
                             var secRange = moment.range(moment(secObj.START_DT), moment(secObj.END_DT));
                             //identifying the dates are valid for overlap
@@ -5988,13 +5991,17 @@
                                 (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
                             }
                             //if the dates overlap add key dup as true
                             else if (firstRange.overlaps(secRange)) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
                             }
-                        }
+                        } 
                     });
                 });
 
