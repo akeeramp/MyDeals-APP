@@ -657,6 +657,8 @@
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
     <Content Include="app\core\directives\bindToHeight.directive.js" />
+    <Content Include="app\core\directives\flexOverlap\flexOverlappingDeals.directive.html" />
+    <Content Include="app\core\directives\flexOverlap\flexOverlappingDeals.directive.js" />
     <Content Include="app\core\directives\floatingActions\floatingActions.directive.html" />
     <Content Include="app\core\directives\floatingActions\floatingActions.directive.js" />
     <Content Include="app\core\directives\gridCell\dealToolsHelper.html" />
