@@ -1669,7 +1669,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         data = root.assignProductProprties(data);
 
         var copyOfData = angular.copy(data);
-        // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otheriwse red validation flags will show on the wrong rows from dynamic tiering.
+        // clear validations for KIT in case the user added or removed a product from the PTR_USER_PRD csv. Otherwise red validation flags will show on the wrong rows from dynamic tiering.
         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
             root.clearValidations();
             clearUndoHistory();
@@ -4355,7 +4355,46 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $(".k-button[title=Redo]").click();
         }
     }
+    //Flex Overlap Check
+    $scope.flexOverlappingDealCheck = function () {
+        sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+        var ovlpResult = $scope.root.validateOVLPFlexProduct(sData, true);
 
+        $scope.ptrRows = [];
+        for (var i = 0; i < sData.length; i++) {
+            for (var j = 0; j < ovlpResult.length; j++) {
+                if ((sData[i].DC_ID == ovlpResult[j].ROW_ID) && sData[i].TIER_NBR == '1') {
+                    var temp = angular.copy(sData[i]);
+                    temp["DUP_ID"] = ovlpResult[j].DUP_ID;
+                    $scope.ptrRows.push(temp);
+                    break;
+                }
+            }
+        }
+
+        //Call Modal
+        var html = "<flex-overlapping-deals ptr-data='ptrRows' style='height: 100%;'></overlapping-deals>";
+        var template = angular.element(html);
+        $compile(template)($scope);
+
+        $("#smbWindow").html(template);
+
+        $("#smbWindow").kendoWindow({
+            width: "800px",
+            height: "300px",
+            title: "Flex Product Overlapping Details",
+            visible: false,
+            actions: [
+                "Minimize",
+                "Maximize",
+                "Close"
+            ],
+            close: function () {
+                $("#smbWindow").html("");
+            }
+        }).data("kendoWindow").center().open();
+    }
+    //YCS2Overlap Check
     $scope.objSids = [];
     $scope.objType = "PricingTable";
     $scope.openOverlappingDealCheck = function () {

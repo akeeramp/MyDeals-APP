@@ -48,7 +48,7 @@
             PrimeCustomersService.getPrimeCustomers().then(function (response) {
                 vm.PrimeCustomersData = response.data;
             }, function (response) {
-                logger.error("Unable to get Prime Customers.", response, response.statusText);
+                    logger.error("Unable to get Unified Customers.", response, response.statusText);
             })
         }
 
@@ -117,15 +117,15 @@
                         var commandCell = gridrow.container.find("td:first");
                         commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
                         if (response.data) {
-                            kendo.alert("Deal End Customer Primed successfully");
+                            kendo.alert("Deal End Customer Unified successfully");
                             vm.dataSource.read();
                         }
                         else {
-                            kendo.alert("Selected Customer is not a Prime Customer");
+                            kendo.alert("Selected Customer is not a Unified Customer");
                         }
                         e.success(response.data);
                     }, function (response) {
-                            logger.error("Unable to Update Unprime Deals.", response, response.statusText);
+                            logger.error("Unable to Update UnUnified Deals.", response, response.statusText);
                     });
                 },
                 function () {

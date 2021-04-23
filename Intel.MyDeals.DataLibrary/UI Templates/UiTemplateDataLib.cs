@@ -2389,6 +2389,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 3350,
                 AtrbCd = AttributeCodes.PRIMED_CUST_NM,
+                Label = "Unified Customer Name",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_NM')#",
@@ -2409,6 +2410,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 3351,
                 AtrbCd = AttributeCodes.PRIMED_CUST_ID,
+                Label = "Unified Customer ID",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_ID')#",
@@ -2421,6 +2423,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.IS_PRIMED_CUST,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
+                Label = "Is Unified Cust",
                 Template = "#=gridUtils.uiControlWrapper(data, 'IS_PRIMED_CUST')#",
                 DataType = "object",
                 IsReadOnly = true,

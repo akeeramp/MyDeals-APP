@@ -1984,6 +1984,7 @@
 
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                $scope.reloadPage();
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = false;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = false;
             }
@@ -1991,6 +1992,7 @@
                 // put on hold
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
+                $scope.$broadcast('onHold');
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
             }
@@ -2715,6 +2717,7 @@
                         var dictPayoutBasedon = {};
                         var dictGeoCombined = {};
                         var dictPeriodProfile = {};
+                        var dictResetPerPeriod = {};
                         //var dictArSettlement = {};
                         var dictProgramPayment = {};
                         var dictOverarchingVolume = {};
@@ -2750,6 +2753,7 @@
                                         if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
                                             dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
                                         }
+                                        dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
                                         //dictArSettlement[sData[s]["AR_SETTLEMENT_LVL"]] = s;
                                         dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
 
@@ -2803,6 +2807,12 @@
                                         el._behaviors.validMsg["PERIOD_PROFILE"] = "All Period Profiles must be same within a Hybrid Pricing Strategy.";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PERIOD_PROFILE"]);
+                                    }
+                                    if (Object.keys(dictResetPerPeriod).length > 1) {
+                                        el._behaviors.isError["RESET_VOLS_ON_PERIOD"] = true;
+                                        el._behaviors.validMsg["RESET_VOLS_ON_PERIOD"] = "All Reset Per Periods must be same within a Hybrid Pricing Strategy.";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push(el._behaviors.validMsg["RESET_VOLS_ON_PERIOD"]);
                                     }
                                     //if (Object.keys(dictArSettlement).length > 1) {
                                     //    el._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
@@ -5907,7 +5917,7 @@
                 callback(false);
             }
         }
-        $scope.validateOVLPFlexProduct = function (data) {
+        $scope.validateOVLPFlexProduct = function (data,mode) {
         if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 //Clearing the behaviors for the first time if no error the result will be clean
                 $scope.clearValidation(data, "PTR_USER_PRD");
@@ -5920,6 +5930,9 @@
                     var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
                     //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                     var finalResult = $scope.checkOVLPDate(filterData, $scope.overlapFlexResult, objectId);
+                    if (mode) {
+                        return finalResult;
+                    }
                     angular.forEach(data, (item) => {
                         angular.forEach(finalResult, (itm) => {
                             //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
@@ -5957,14 +5970,14 @@
 
                             if (objectId == 'DC_PARENT_ID') {
                                 //findWhere will return the first object found 
-                                    firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
-                                    secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
+                                firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
+                                secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
                             }
                             else {
-                                    firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
-                                    secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
+                                firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
+                                secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
                             }
-              
+
                             var firstRange = moment.range(moment(firstObj.START_DT), moment(firstObj.END_DT));
                             var secRange = moment.range(moment(secObj.START_DT), moment(secObj.END_DT));
                             //identifying the dates are valid for overlap
@@ -5978,13 +5991,17 @@
                                 (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
                             }
                             //if the dates overlap add key dup as true
                             else if (firstRange.overlaps(secRange)) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
                             }
-                        }
+                        } 
                     });
                 });
 

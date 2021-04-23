@@ -2945,7 +2945,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && cust.VISTEX_CUST_FLAG) // If not primed and End customer has a value
             {
-                deEndCust.AddMessage("End Customers needs to be primed before it can be approved.");
+                deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
             }
         }
 

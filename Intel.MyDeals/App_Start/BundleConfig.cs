@@ -95,6 +95,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/overlappingDeals/overlappingDeals.directive.js"
+                , "~/app/core/directives/flexOverlap/flexOverlappingDeals.directive.js"
                 , "~/app/core/directives/ping/ping.directive.js"
                 , "~/app/core/directives/ruleAttributeBuilder/ruleAttributeBuilder.directive.js"
                 , "~/app/core/directives/datafixAttributeBuilder/datafixAttributeBuilder.directive.js"

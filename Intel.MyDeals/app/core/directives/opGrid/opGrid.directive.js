@@ -1998,6 +1998,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
+            $scope.$on('onHold', function (event, args) {
+                $scope.cleanFlags();
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {                    
+                    data[d].PASSED_VALIDATION = "Complete";
+                }
+            });
+
+
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
                 $scope.cleanFlags();

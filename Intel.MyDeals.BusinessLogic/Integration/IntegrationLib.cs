@@ -1223,7 +1223,7 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         else if (isPrimedCust == false)
                         {                            
-                                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(722, "Deal Stage Error: End Customer is not primed.", "Deal Stage Error"));
+                                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(722, "Deal Stage Error: End Customer is not Unified.", "Deal Stage Error"));
                                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                                 continue;                            
 
