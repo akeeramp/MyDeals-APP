@@ -115,7 +115,7 @@
                 }
             );
 
-            var isPrimeexist = vm.PrimeCustomersData.filter(x => x.PRIME_MBR_SID === parseInt(model.PRIM_CUST_ID) && x.PRIME_LVL_SID === parseInt(model.PRIM_LVL_ID));
+            //var isPrimeexist = vm.PrimeCustomersData.filter(x => x.PRIME_MBR_SID === parseInt(model.PRIM_CUST_ID) && x.PRIME_LVL_SID === parseInt(model.PRIM_LVL_ID));
             if (model.PRIM_CUST_ID == null || model.PRIM_CUST_ID == '')
                 validationMessages.push("Please provide Valid Unified ID");
             if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '') {
@@ -126,8 +126,8 @@
 
             if (model.PRIM_LVL_ID == null || model.PRIM_LVL_ID == '')
                 validationMessages.push("Please Provide Valid Level 2 ID");
-            if (isPrimeexist.length > 1)
-                validationMessages.push("This Combination of Unified Custmer ID and Leve 2 ID is already exists")
+            //if (isPrimeexist.length > 1)
+            //    validationMessages.push("This Combination of Unified Customer ID and Level 2 ID is already exists")
             if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
                 validationMessages.push("Please Select Valid Country.")
             if (validationMessages.length > 0) {
