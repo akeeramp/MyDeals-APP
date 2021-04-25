@@ -1998,14 +1998,29 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
-            $scope.$on('onHold', function (event, args) {
-                $scope.cleanFlags();
+            $scope.$on('onHold', function (event, args) {               
                 var data = $scope.contractDs.data();
-                for (var d = 0; d < data.length; d++) {                    
-                    data[d].PASSED_VALIDATION = "Complete";
+                for (var d = 0; d < data.length; d++) {
+                    if (args.DC_ID == data[d].DC_ID) {
+                        var beh = data[d]._behaviors;
+                        data[d].PASSED_VALIDATION = "Complete";
+
+                        Object.keys(beh.isError).forEach(function (key, index) {
+                            if ($scope.opOptions.groupColumns[key] === undefined) return;
+                            for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
+                                for (var g = 0; g < $scope.opOptions.groups.length; g++) {
+                                    if ($scope.opOptions.groups[g].name === $scope.opOptions.groupColumns[key].Groups[i] || $scope.opOptions.groups[g].name === "All") {
+                                        $scope.opOptions.groups[g].numErrors--;
+                                    }
+                                }
+                            }
+                        },
+                            beh.isError);                     
+                    }
                 }
             });
 
+         
 
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
