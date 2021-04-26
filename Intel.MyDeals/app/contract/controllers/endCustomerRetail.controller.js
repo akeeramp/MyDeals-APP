@@ -23,6 +23,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.isEndCustomer = (colName === endCustomer);
     $ctrl.isEmptyList = false;
 
+    //Get country details
+    $scope.countries = PrimeCustomersService.getCountries().then(function (response) {
+        $ctrl.countries = response.data;
+    }, function (response) {
+        logger.error("Unable to get Country details.", response, response.statusText);
+    });
+
     $ctrl.ok = function () {
         var endCustVal = "";
         var countryVal = "";
@@ -120,6 +127,10 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
         }
 
+        //If selected endcustomer country belongs to Embargo country, show alert popup.
+        var selCountry = ($ctrl.countries != null) ? $ctrl.countries.find(x => x.CTRY_NM == $ctrl.popupResult.DropdownSelections) : null;
+        if ($scope.ovlapObjType == "PricingTable" && selCountry != null && selCountry.CTRY_XPORT_CTRL_CD == 'EC')
+            kendo.alert('<p>Intel can not approve a Deal with the Selected Country. Please verify the agreement and change, if necessary.</br> Intel expects truthful and accurate information in compliance with Intel Terms and Conditions.</p>');
     };
 
     var primeddata = function (action) {
@@ -187,9 +198,20 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }, true);
     $scope.$watch('$ctrl.popupResult.DropdownSelections',
         function (newValue, oldValue, el) {
+            var selCountry;
+
             if (oldValue === newValue) return;
 
             if (oldValue === undefined || newValue === undefined) return;
+            //If selected endcustomer country belongs to Embargo country.
+            if ($scope.ovlapObjType == "PricingTable" && $ctrl.countries != null)
+                selCountry = $ctrl.countries.find(x => x.CTRY_NM == newValue);
+
+            if (selCountry != null && selCountry.CTRY_XPORT_CTRL_CD == 'EC') {
+                $ctrl.IsError = true;
+                $ctrl.msg = "Intel can not approve a deal with the selected country.";
+                return;
+            }
 
             if (newValue !== null) {
                 $ctrl.IsError = false;

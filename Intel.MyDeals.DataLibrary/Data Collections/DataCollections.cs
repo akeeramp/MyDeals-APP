@@ -751,5 +751,14 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Funfact> _getFunfactList;
 
+        public static List<Countires> GetCountries()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _countries ?? (_countries = new PrimeCustomersDataLib().GetCountries());
+            }
+        }
+
+        private static List<Countires> _countries;
     }
 }

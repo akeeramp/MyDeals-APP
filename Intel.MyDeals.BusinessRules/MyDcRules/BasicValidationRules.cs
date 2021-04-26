@@ -990,6 +990,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="End Customer country has been selected",
+                    ActionRule = MyDcActions.ValidatePrimeCountry,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Pull Values From Save Stack",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
