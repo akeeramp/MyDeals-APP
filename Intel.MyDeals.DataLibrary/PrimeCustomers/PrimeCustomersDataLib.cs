@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using Intel.MyDeals.DataAccessLib;
-using Intel.MyDeals.Entities;
-using Intel.MyDeals.IDataLibrary;
-using Intel.Opaque;
-using Intel.Opaque.DBAccess;
-using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using System.Data;
-using Intel.Opaque.Tools;
+using Intel.Opaque;
+using Intel.Opaque.DBAccess;
+using Intel.MyDeals.Entities;
+using System.Collections.Generic;
+using Intel.MyDeals.IDataLibrary;
+using Intel.MyDeals.DataAccessLib;
+using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -17,7 +16,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<PrimeCustomers> GetPrimeCustomerDetails()
         {
             var ret = new List<PrimeCustomers>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL{ };
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL { };
 
             try
             {
@@ -183,7 +182,7 @@ namespace Intel.MyDeals.DataLibrary
                     });
                 }
             }
-            if(ret != null)
+            if (ret != null)
             {
                 ret = ret.OrderBy(x => x.CTRY_NM).ToList();
             }
