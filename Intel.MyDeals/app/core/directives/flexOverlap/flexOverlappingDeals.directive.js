@@ -37,17 +37,21 @@
                     },
                     schema: {
                         model: {
-                            id: "CONTRACTNUMBER",
+                            id: "ROW_ID",
                             fields: {
-                                "DC_ID": {
+                                "ROW_ID": {
                                     type: "int",
                                     editable: false
                                 },
-                                "DUP_ID": {
+                                "PRD_HIER_SID": {
                                     type: "int",
                                     editable: false
                                 },
-                                "PTR_USER_PRD": {
+                                "ACR_DRN_TYPE": {
+                                    type: "string",
+                                    editable: false
+                                },
+                                "HIER_VAL_NM": {
                                     type: "string",
                                     editable: false
                                 },
@@ -63,7 +67,7 @@
                         }
                     },
                     pageSize: 25,
-                    group: [{ field: "DUP_ID" }]
+                    group: [{ field: "PRD_HIER_SID" }]
                 });
 
                 $scope.gridOptions = {
@@ -83,29 +87,48 @@
                         pageSizes: [25, 50, 100, 250, 500],
                         buttonCount: 5
                     },
-                    columns: [                        
+                    columns: [ 
                         {
-                            field: "DUP_ID",
-                            title: "ROW ID",
-                            hidden: true,
+                            field: "PRD_HIER_SID",
+                            title: "Row ID",
+                            width: "120px",
+                            filterable: { multi: true, search: true },
+                            groupHeaderTemplate: function (e) {
+                                var rowData = $linq.Enumerable().From($scope.flexOvlpDataSource._data)
+                                    .Where(function (x) {
+                                        return (x.PRD_HIER_SID == e.value);
+                                    }).ToArray();
+                                var rowIds = '';
+                                for (var i = 0; i < rowData.length; i++) {
+                                    rowIds = rowIds + (rowData[i].ROW_ID + (rowData.length == (i + 1) ? '' : ', '));
+                                }                                
+                                return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Overlap Row(s): " + rowIds + "</span>";
+
+                            },
+                            hidden:true
+                        },      
+                        {
+                            field: "ROW_ID",
+                            title: "ROW ID",                            
                             width: "80px",
-                            template: "<div class='ovlpCell' title='#= DUP_ID #'>#= DUP_ID #</div>",
+                            template: "<div class='ovlpCell' title='#= ROW_ID #'>#= ROW_ID #</div>",
                             filterable: { multi: true, search: true }
                         },
                         {
-                            field: "DC_ID",
-                            title: "Duplicate ROW ID",
-                            width: "80px",
-                            template: "<div class='ovlpCell' title='#= DC_ID #'>#= DC_ID #</div>",
-                            filterable: { multi: true, search: true }
-                        },
-                        {
-                            field: "PTR_USER_PRD",
+                            field: "HIER_VAL_NM",
                             title: "Contract Product*",
                             width: "80px",
-                            template: "<div class='ovlpCell' title='#= PTR_USER_PRD #'>#= PTR_USER_PRD #</div>",
+                            template: "<div class='ovlpCell' title='#= HIER_VAL_NM #'>#= HIER_VAL_NM #</div>",
                             filterable: { multi: true, search: true }
                         },
+                        {
+                            field: "ACR_DRN_TYPE",
+                            title: "Row_Type",
+                            width: "80px",
+                            template: "<div class='ovlpCell' title='#= ACR_DRN_TYPE #'>#= ACR_DRN_TYPE #</div>",
+                            filterable: { multi: true, search: true }
+                        },
+                        
                         {
                             field: "START_DT",
                             title: "Deal Start Date",
