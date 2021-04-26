@@ -4361,12 +4361,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var ovlpResult = $scope.root.validateOVLPFlexProduct(sData, true);
 
         $scope.ptrRows = [];
-        for (var i = 0; i < sData.length; i++) {
-            for (var j = 0; j < ovlpResult.length; j++) {
+        for (var j = 0; j < ovlpResult.length; j++) {
+            for (var i = 0; i < sData.length; i++) {
                 if ((sData[i].DC_ID == ovlpResult[j].ROW_ID) && sData[i].TIER_NBR == '1') {
                     var temp = angular.copy(sData[i]);
-                    temp["DUP_ID"] = ovlpResult[j].DUP_ID;
-                    $scope.ptrRows.push(temp);
+                    var tempOvlp = angular.copy(ovlpResult[j]);
+                    tempOvlp["START_DT"] = temp.START_DT;
+                    tempOvlp["END_DT"] = temp.END_DT;
+                    var prdJSON = JSON.parse(temp.PTR_SYS_PRD);
+                    for (var item in prdJSON) {
+                        for (var m = 0; m < prdJSON[item].length; m++) {
+                            if (prdJSON[item][m].PRD_MBR_SID == ovlpResult[j].PRD_MBR_SID) {
+                                tempOvlp["HIER_VAL_NM"] = prdJSON[item][m].HIER_VAL_NM;
+                            }
+                        }
+                    }                    
+                    $scope.ptrRows.push(tempOvlp);
                     break;
                 }
             }
