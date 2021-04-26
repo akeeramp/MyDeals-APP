@@ -1460,6 +1460,56 @@ namespace Intel.MyDeals.BusinessLogic
             return executionResponse;
         }
 
+        public string MuleSoftReturnTenderStatus(string xid, string retStatus) // This one is by XID from inside JSON
+        {
+            string executionResponse = "";
+
+            if (retStatus == "SUCCESS")
+            {
+                // PO_Send_Completed - all paths should stop here unless we decide to only report errors from Mule, then we end at PO_Processing_Complete
+                // and only do updates on errors to raise it to our attention..  If assumed pass/no change, this is an ignore step.
+                executionResponse += "Response object xid [" + xid + "] successfully returned<br>";
+            }
+            else // assume all others are fails
+            {
+                // Fetch the data we need to update by XID
+                TenderXidObject xidObj = _jmsDataLib.FetchTendersReturnByXid(xid);
+                executionResponse = MuleSoftReturnTenderStatusByGuid(xidObj.btchGuid, retStatus, xidObj.dealId);
+                // Place e-mail updates or Mule re-trigger calls here if needed
+            }
+
+            return executionResponse;
+        }
+
+        public string MuleSoftReturnTenderStatusByGuid(Guid btchId, string retStatus, int dealId) // This one is by GUID for Admin Direct calls against SQL lines
+        {
+            string executionResponse = "";
+
+            if (retStatus == "SUCCESS")
+            {
+                _jmsDataLib.UpdateTendersStage(btchId, "PO_Processing_Complete", new List<int>() { dealId });
+                executionResponse += "Response object batch id  [" + btchId + "] successfully returned<br>";
+            }
+            else // assume all others are fails
+            {
+                _jmsDataLib.UpdateTendersStage(btchId, "PO_Error_Resend", new List<int>() { dealId });
+                executionResponse += "Response object batch id [" + btchId + "] successfully returned<br>";
+            }
+
+            return executionResponse;
+        }
+
+        //ReTriggerMuleSoftByXid(xid)
+        public string ReTriggerMuleSoftByXid(string xid) // This is a request back to MuleSoft to re-try on an already send packet by XID
+        {
+            string executionResponse = "";
+
+            string eventTriggered = _jmsDataLib.ReTriggerMulePacket(xid) ? "SUCCESSFUL": "FAILED";
+            executionResponse += "MuleSoft re-trigger for [" + xid + "] results: " + eventTriggered;
+
+            return executionResponse;
+        }
+
         #endregion IQR CREATE TENDERS DEAL
 
     }

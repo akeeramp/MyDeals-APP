@@ -29,6 +29,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         bool PublishBackToSfTenders(string data);
 
+        bool ReTriggerMulePacket(string xid);
+
         void Publish(string brokerURI, string userName, string queueName, List<string> data);
 
         void OnException(Exception e);
@@ -45,6 +47,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<TendersSFIDCheck> FetchDealsFromSfiDs(string salesForceIdCntrct, string salesForceIdDeal, int custId);
 
         int FetchCustFromCimId(string custCimId);
+
+        TenderXidObject FetchTendersReturnByXid(string xid);
 
         ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
 

@@ -11,8 +11,13 @@ namespace Intel.MyDeals.IBusinessLogic
         Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket);
 
         string ExecuteSalesForceTenderData(Guid workId);
-
+        
         string ReturnSalesForceTenderResults();
 
+        string MuleSoftReturnTenderStatus(string xid, string retStatus);
+
+        string MuleSoftReturnTenderStatusByGuid(Guid btchId, string retStatus, int dealId);
+
+        string ReTriggerMuleSoftByXid(string xid);
     }
 }
