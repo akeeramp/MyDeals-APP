@@ -173,12 +173,15 @@ namespace Intel.MyDeals.DataLibrary
             {
                 int IDX_CTRY_CD = DB.GetReaderOrdinal(rdr, "CTRY_CD");
                 int IDX_CTRY_NM = DB.GetReaderOrdinal(rdr, "CTRY_NM");
+                int IDX_CTRY_XPORT_CTRL_CD = DB.GetReaderOrdinal(rdr, "CTRY_XPORT_CTRL_CD");
+
                 while (rdr.Read())
                 {
                     ret.Add(new Countires
                     {
                         CTRY_CD = (IDX_CTRY_CD < 0 || rdr.IsDBNull(IDX_CTRY_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_CD),
-                        CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM)
+                        CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM),
+                        CTRY_XPORT_CTRL_CD = (IDX_CTRY_XPORT_CTRL_CD < 0 || rdr.IsDBNull(IDX_CTRY_XPORT_CTRL_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_XPORT_CTRL_CD)
                     });
                 }
             }
