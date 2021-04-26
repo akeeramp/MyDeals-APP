@@ -5957,11 +5957,11 @@
         $scope.checkOVLPDate = function (data, resp, objectId) {
             window['moment-range'].extendMoment(moment);
             //get uniq duplicate product
-            var uniqDupProd = _.uniq(_.map(resp, (ob) => { return ob.PRD_MBR_SID }));
+            var uniqDupProd = _.uniq(_.map(resp, (ob) => { return ob.PRD_HIER_SID }));
             //iterate through unique product
             _.each(uniqDupProd, (dup) => {
                 //filtering the uniq prod from response and sort to get correct first and second object
-                var dupProd = _.filter(resp, (ob) => { return ob['PRD_MBR_SID'] == dup });
+                var dupProd = _.filter(resp, (ob) => { return ob['PRD_HIER_SID'] == dup });
                 _.each(dupProd, (dupPro) => {
                     _.each(dupProd, (dupPr) => {
                         //checking the product date overlaps or not
