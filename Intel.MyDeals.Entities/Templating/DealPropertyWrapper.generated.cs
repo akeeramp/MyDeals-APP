@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 4/1/2021 2:59:25 PM
+File Updated: 4/27/2021 1:47:52 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -2701,8 +2701,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute IS_PRIMED_CUST = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_PRIMED_CUST",
-			ATRB_DESC = "Is a Primed Customer",
-			ATRB_LBL = "Is Primed Cust",
+			ATRB_DESC = "Is a Unified Cust",
+			ATRB_LBL = "Is Unified Cust",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3352,
 			DATA_TYPE_CD = "BIT",
@@ -3677,8 +3677,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PRIMED_CUST_CNTRY = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRIMED_CUST_CNTRY",
-			ATRB_DESC = "Primed Customer Country",
-			ATRB_LBL = "End Customer Country",
+			ATRB_DESC = "Unified Customer Country",
+			ATRB_LBL = "Unified Customer Country",
 			ATRB_MAX_LEN = 70,
 			ATRB_SID = 3349,
 			DATA_TYPE_CD = "VARCHAR",
@@ -3693,8 +3693,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PRIMED_CUST_ID = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRIMED_CUST_ID",
-			ATRB_DESC = "Primed Customer ID",
-			ATRB_LBL = "Primed Customer ID",
+			ATRB_DESC = "Unified Customer ID",
+			ATRB_LBL = "Unified Customer ID",
 			ATRB_MAX_LEN = 10,
 			ATRB_SID = 3351,
 			DATA_TYPE_CD = "INT",
@@ -3709,8 +3709,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PRIMED_CUST_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRIMED_CUST_NM",
-			ATRB_DESC = "Primed Customer Name",
-			ATRB_LBL = "Primed Customer Name",
+			ATRB_DESC = "Unified Customer Name",
+			ATRB_LBL = "Unified Customer Name",
 			ATRB_MAX_LEN = 70,
 			ATRB_SID = 3350,
 			DATA_TYPE_CD = "VARCHAR",
