@@ -2962,7 +2962,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (endCustCountryVal != "" && custCountry.CTRY_XPORT_CTRL_CD == "EC")
             {
-                deEndCust.AddMessage("Intel can not approve a Deal with the Selected Country. Please verify the agreement and change, if necessary. Intel expects truthful and accurate information in compliance with Intel' Terms and Conditions.");
+                deEndCust.AddMessage("Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.");
             }
         }
 
