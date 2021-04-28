@@ -91,7 +91,10 @@
                     }
                 }
             });
-
+            //changing autocomplete to disabled for endcustomer country input to stop showing chrome autofill data
+            endCustomerRetailModal.rendered.then(function () {
+                $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
+            });
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array
 

@@ -736,7 +736,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
-                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
+                                AttributeCodes.SYS_PRICE_POINT,
+                                AttributeCodes.CONSUMPTION_SYS_CONFIG
                             }
                         }
                     }
