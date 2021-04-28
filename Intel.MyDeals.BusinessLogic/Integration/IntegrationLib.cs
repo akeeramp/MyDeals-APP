@@ -462,7 +462,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (requestedCustomerInfo == null)
             {
                 string idsid = OpUserStack.MyOpUserToken != null?  OpUserStack.MyOpUserToken.Usr.Idsid : "";
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create Deal", "User missing customer access"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
                 return initWipId;
             }
 
@@ -1078,6 +1078,17 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 // If you make it in here, they are attempting to do an update on a deal still at the Submitted stage, block them...
                 workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(740, "Update Error: Deal is at Submitted stage where editing is not allowed", "Submitted stage edits not allowed"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            // Check is user has access to update his customer
+            MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
+
+            if (requestedCustomerInfo == null)
+            {
+                string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
