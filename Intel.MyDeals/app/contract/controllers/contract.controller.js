@@ -2684,6 +2684,7 @@
                         //validate settlement level for PTE
                         sData = $scope.validateSettlementLevel(sData);
                         //validate Flex product overlap for PTE
+                        $scope.OVLPFlexPdtPTRUSRPRDError = false;
                         sData = $scope.validateOVLPFlexProduct(sData);
                         //validate Flex row type for PTE
                         sData = $scope.validateFlexRowType(sData);
@@ -2882,7 +2883,7 @@
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
                             //Adding FLEX overlap product error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PTR_USER_PRD']) {
+                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
                             }
@@ -3150,6 +3151,7 @@
                         //validate settlement level for DE
                         gData = $scope.validateSettlementLevel(gData);
                         //validate flex overlap products for DE
+                        $scope.OVLPFlexPdtPTRUSRPRDError = false;
                         gData = $scope.validateOVLPFlexProduct(gData);
                         //validate Flex Row Type for DE
                         gData = $scope.validateFlexRowType(gData);
@@ -3180,7 +3182,7 @@
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
                             // Adding FLEX overlap Product error into err object in DE
-                            if (gData[i]._behaviors.isError['PTR_USER_PRD']) {
+                            if (gData[i]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
                             }
@@ -5938,9 +5940,11 @@
                             //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
                             if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
                                 if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate') {
+                                    $scope.OVLPFlexPdtPTRUSRPRDError = true;
                                     $scope.setBehaviors(item, "PTR_USER_PRD", "duplicate");
                                 }
                                 else if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'dateissue') {
+                                    $scope.OVLPFlexPdtPTRUSRPRDError = true;
                                     $scope.setBehaviors(item, "PTR_USER_PRD", "dateissue");
                                 }
                                 else {
