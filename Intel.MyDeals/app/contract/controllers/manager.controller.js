@@ -537,6 +537,7 @@
                         if (e.response !== undefined) {
                             for (var i = 0; i < e.response.length; i++) {
                                 if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
+                                if (e.response[i].WF_STG_CD === "Hold") e.response[i].PASSED_VALIDATION = "Complete";
                             }
                         }
 
@@ -716,6 +717,7 @@
                         if (e.response !== undefined) {
                             for (var i = 0; i < e.response.length; i++) {
                                 if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
+                                if (e.response[i].WF_STG_CD === "Hold") e.response[i].PASSED_VALIDATION = "Complete";
                             }
                         }
 
@@ -894,6 +896,7 @@
                         if (e.response !== undefined) {
                             for (var i = 0; i < e.response.length; i++) {
                                 if (e.response[i].WF_STG_CD === "Draft") e.response[i].WF_STG_CD = e.response[i].PS_WF_STG_CD;
+                                if (e.response[i].WF_STG_CD === "Hold") e.response[i].PASSED_VALIDATION = "Complete";
                             }
                         }
 
