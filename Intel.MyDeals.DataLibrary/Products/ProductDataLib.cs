@@ -1290,7 +1290,7 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_ACR_DRN_TYPE = DB.GetReaderOrdinal(rdr, "ACR_DRN_TYPE");
-                    int IDX_PRD_HIER_SID = DB.GetReaderOrdinal(rdr, "PRD_HIER_SID");
+                    int IDX_OVLP_ROW_ID = DB.GetReaderOrdinal(rdr, "OVLP_ROW_ID");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                     int IDX_ROW_ID = DB.GetReaderOrdinal(rdr, "ROW_ID");
 
@@ -1299,7 +1299,7 @@ namespace Intel.MyDeals.DataLibrary
                         ret.Add(new FlexProdOvlp
                         {
                             ACR_DRN_TYPE = (IDX_ACR_DRN_TYPE < 0 || rdr.IsDBNull(IDX_ACR_DRN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACR_DRN_TYPE),
-                            PRD_HIER_SID = (IDX_PRD_HIER_SID < 0 || rdr.IsDBNull(IDX_PRD_HIER_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_HIER_SID),
+                            OVLP_ROW_ID = (IDX_OVLP_ROW_ID < 0 || rdr.IsDBNull(IDX_OVLP_ROW_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_ROW_ID),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
                             ROW_ID = (IDX_ROW_ID < 0 || rdr.IsDBNull(IDX_ROW_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_ID)
                         });
