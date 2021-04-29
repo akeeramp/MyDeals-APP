@@ -1228,7 +1228,7 @@ namespace Intel.MyDeals.BusinessRules
             eligibleDropDowns.Add(AttributeCodes.AR_SETTLEMENT_LVL, new DropdownObjCheck { NAME = "Settlement Level", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SETTLEMENT_PARTNER, new DropdownObjCheck { NAME = "Settlement Partner", DO_NOT_ALLOW_BLANK = false });
             eligibleDropDowns.Add(AttributeCodes.SEND_TO_VISTEX, new DropdownObjCheck { NAME = "Send to Vistex", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = true });
+            eligibleDropDowns.Add(AttributeCodes.RESET_VOLS_ON_PERIOD, new DropdownObjCheck { NAME = "Reset Per Period", DO_NOT_ALLOW_BLANK = false });
             CheckDropDownValues(eligibleDropDowns, args);
 
             eligibleDropDowns.Clear();
@@ -2364,6 +2364,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             IOpDataElement periodProfile = r.Dc.GetDataElement(AttributeCodes.PERIOD_PROFILE);
             IOpDataElement arSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
+            IOpDataElement resetPerPeriod = r.Dc.GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD);
 
             if (dealType == null || programPayment == null || rebateType == null || periodProfile == null || arSettlementLvl == null) return; // Safety check, if they are missing, skip!
 
@@ -2388,6 +2389,12 @@ namespace Intel.MyDeals.BusinessRules
                     arSettlementLvl.AtrbValue = "";
                     arSettlementLvl.State = OpDataElementState.Modified;
                     arSettlementLvl.AddMessage("Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
+                }
+                if (resetPerPeriod.AtrbValue != "")
+                {
+                    resetPerPeriod.AtrbValue = "";
+                    resetPerPeriod.State = OpDataElementState.Modified;
+                    resetPerPeriod.AddMessage("Reset Per Period value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
                 }
             }
         }

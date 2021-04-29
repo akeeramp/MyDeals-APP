@@ -97,7 +97,8 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetRequired,
                             Target = new[] {
-                                AttributeCodes.AR_SETTLEMENT_LVL
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.RESET_VOLS_ON_PERIOD // Not vistex field but rule applies for this item
                             }
                         }
                     }
