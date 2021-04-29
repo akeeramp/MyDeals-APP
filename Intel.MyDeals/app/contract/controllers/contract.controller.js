@@ -3117,6 +3117,10 @@
                             sData = $scope.deNormalizeData(util.deepClone(sData));
                         }
                     }
+                    if (errs.PRC_TBL_ROW != undefined && errs.PRC_TBL_ROW != null && errs.PRC_TBL_ROW.length > 0) {
+                        $scope.$broadcast('saveWithWarnings', $scope.spreadDs.data(sData));
+                    }
+
                 }
 
                 // WIP Deals
