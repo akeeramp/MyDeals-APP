@@ -3321,8 +3321,8 @@
                             //DE109856
                             if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
                             //END
-                            // Hybrid pricing strategy logic for DEAL_COMB_TYPE
-                            if (isHybridPricingStatergy) {
+                            // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
+                            if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
                                 dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
                                 if (Object.keys(dictGroupType).length > 1) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
