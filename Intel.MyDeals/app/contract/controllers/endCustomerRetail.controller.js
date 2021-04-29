@@ -209,7 +209,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
             if (selCountry != null && selCountry.CTRY_XPORT_CTRL_CD == 'EC') {
                 $ctrl.IsError = true;
-                $ctrl.msg = "Intel can not approve a deal with the selected country.";
+                $ctrl.msg = "Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.";
                 return;
             }
 
