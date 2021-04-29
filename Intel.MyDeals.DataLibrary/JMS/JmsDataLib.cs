@@ -423,10 +423,74 @@ namespace Intel.MyDeals.DataLibrary
             return sendSuccess;
         }
 
+        public bool ReTriggerMulePacket(string xid)
+        {
+            OpLog.Log("JMS - Retrigger Mule Packet by XID");
+
+            bool sendSuccess = false;
+
+            //// Default to Dev Response Environment, update connection if it falls to another environment.
+            //string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : "";
+
+            //if (url == "") return false; // If no URL is defined, bail out of the send
+
+            //HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+            ////request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
+            //request.Credentials = new System.Net.NetworkCredential("myDls2SF", "f@s_dlsYmz");
+
+            //request.Method = "POST"; // Set the Method property of the request to POST.  
+
+            //request.KeepAlive = false;
+
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            //// Create POST data and convert it to a byte array.  
+            //byte[] byteArray = Encoding.UTF8.GetBytes(xid);
+
+            //request.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+            //request.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+
+            //// Get the request stream, write data, then close the stream
+            //Stream dataStream = request.GetRequestStream();
+            //dataStream.Write(byteArray, 0, byteArray.Length);
+            //dataStream.Close();
+
+            //Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+
+            //try
+            //{
+            //    WebResponse response = request.GetResponse(); // Get the response.
+            //    responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+            //    // Get the stream containing content returned by the server.  
+            //    // The using block ensures the stream is automatically closed.
+            //    using (dataStream = response.GetResponseStream())
+            //    {
+            //        // Open the stream using a StreamReader for easy access.  
+            //        StreamReader reader = new StreamReader(dataStream);
+            //        // Read the content.  
+            //        string responseFromServer = reader.ReadToEnd();
+            //        // Display the content.  
+            //        responseObjectDictionary["Data"] = responseFromServer;
+            //        //Logging
+            //        if (responseObjectDictionary["Data"] == "Request captured successfully") sendSuccess = true;
+            //        OpLog.Log("JMS - Retrigger Mule Packet by XID Completed: " + responseObjectDictionary["Data"]);
+            //    }
+
+            //    response.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    OpLogPerf.Log("JMS - Retrigger Mule Packet by XID ERROR: " + ex);
+            //}
+
+            return sendSuccess;
+        }
+
         public void Publish(string brokerURI,
-                       string userName,
-                       string queueName,
-                       List<string> data)
+                            string userName,
+                            string queueName,
+                            List<string> data)
         {
             OpLog.Log("JMS - Publish");
             AcknowledgementMode ackMode = AcknowledgementMode.ClientAcknowledge;
@@ -783,6 +847,40 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             return retCustId;
+        }
+
+        public TenderXidObject FetchTendersReturnByXid(string xid) // Update the processing status of in/out bound tender data
+        {
+            // Add type_int_dictionary here later
+            OpLog.Log("Tenders - FetchTendersReturnByXid: " + xid);
+            in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();
+
+            var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_FIND_XID()
+            {
+                in_xid = xid
+            };
+            var ret = new TenderXidObject();
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                    int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
+
+                    while (rdr.Read())
+                    {
+                        ret.dealId = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID);
+                        ret.btchGuid = rdr.IsDBNull(IDX_BTCH_ID) ? Guid.Empty : rdr.GetFieldValue<System.Guid>(IDX_BTCH_ID);
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+
+            return ret;
         }
 
         public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)

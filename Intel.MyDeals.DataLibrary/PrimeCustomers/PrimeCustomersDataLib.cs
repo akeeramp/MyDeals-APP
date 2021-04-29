@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using Intel.MyDeals.DataAccessLib;
-using Intel.MyDeals.Entities;
-using Intel.MyDeals.IDataLibrary;
-using Intel.Opaque;
-using Intel.Opaque.DBAccess;
-using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using System.Linq;
 using System.Data;
-using Intel.Opaque.Tools;
+using Intel.Opaque;
+using Intel.Opaque.DBAccess;
+using Intel.MyDeals.Entities;
+using System.Collections.Generic;
+using Intel.MyDeals.IDataLibrary;
+using Intel.MyDeals.DataAccessLib;
+using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -17,7 +16,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<PrimeCustomers> GetPrimeCustomerDetails()
         {
             var ret = new List<PrimeCustomers>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL{ };
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRIM_CUST_DTL { };
 
             try
             {
@@ -174,16 +173,19 @@ namespace Intel.MyDeals.DataLibrary
             {
                 int IDX_CTRY_CD = DB.GetReaderOrdinal(rdr, "CTRY_CD");
                 int IDX_CTRY_NM = DB.GetReaderOrdinal(rdr, "CTRY_NM");
+                int IDX_CTRY_XPORT_CTRL_CD = DB.GetReaderOrdinal(rdr, "CTRY_XPORT_CTRL_CD");
+
                 while (rdr.Read())
                 {
                     ret.Add(new Countires
                     {
                         CTRY_CD = (IDX_CTRY_CD < 0 || rdr.IsDBNull(IDX_CTRY_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_CD),
-                        CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM)
+                        CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM),
+                        CTRY_XPORT_CTRL_CD = (IDX_CTRY_XPORT_CTRL_CD < 0 || rdr.IsDBNull(IDX_CTRY_XPORT_CTRL_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_XPORT_CTRL_CD)
                     });
                 }
             }
-            if(ret != null)
+            if (ret != null)
             {
                 ret = ret.OrderBy(x => x.CTRY_NM).ToList();
             }

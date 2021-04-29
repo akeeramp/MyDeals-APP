@@ -172,7 +172,7 @@ namespace Intel.MyDeals.VistexService
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                //Additionmal Logging
+                //Additional Logging
                 VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendConsumptionLoadDataToSapPo - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
                 VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Exception");
                 VistexCommonLogging.HandleException(ex, true, "ConsumptionLoad");

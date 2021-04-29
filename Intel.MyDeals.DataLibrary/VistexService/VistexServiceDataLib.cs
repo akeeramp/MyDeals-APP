@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataLibrary
         private string vistexCustApi;
         private string vistexProdApi;
         private string vistexVertApi;
+        private string vistexCNSPApi;
         private Dictionary<string, string> vistexEnvs;
 
         private IConnection connection;
@@ -51,6 +52,7 @@ namespace Intel.MyDeals.DataLibrary
             vistexCustApi = ConfigurationManager.AppSettings["vistexCustApi"];
             vistexProdApi = ConfigurationManager.AppSettings["vistexProdApi"];
             vistexVertApi = ConfigurationManager.AppSettings["vistexVertApi"];
+            vistexCNSPApi = ConfigurationManager.AppSettings["vistexCNSPApi"];
         }
         private string GetVistexUrlByMode(string mode)
         {
@@ -69,6 +71,10 @@ namespace Intel.MyDeals.DataLibrary
             else if ((mode == "V") || mode == "F")
             {
                 return vistexBaseURL + "/" + vistexVertApi;
+            }
+            else if (mode == "M")
+            {
+                return vistexBaseURL + "/" + vistexCNSPApi;
             }
             else
             {

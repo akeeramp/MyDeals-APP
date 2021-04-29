@@ -92,6 +92,39 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("MuleSoftReturnTenderStatus/{xid}/{retStatus}/")]
+        [HttpGet]
+        public string MuleSoftReturnTenderStatus(string xid, string retStatus)
+        {
+            // Path to catch all unprocessed items
+            return SafeExecutor(() => _integrationLib.MuleSoftReturnTenderStatus(xid, retStatus)
+                , "Unable to process MuleSoft Return Status"
+            );
+        }
+
+        [Authorize]
+        [Route("MuleSoftReturnTenderStatusByGuid/{btchId}/{retStatus}/{dealId}")]
+        [HttpGet]
+        public string MuleSoftReturnTenderStatusByGuid(Guid btchId, string retStatus, int dealId)
+        {
+            // Path to catch all unprocessed items
+            return SafeExecutor(() => _integrationLib.MuleSoftReturnTenderStatusByGuid(btchId, retStatus, dealId)
+                , "Unable to process MuleSoft Return Status by GUID"
+            );
+        }
+
+        [Authorize]
+        [Route("ReTriggerMuleSoftByXid/{xid}")]
+        [HttpGet]
+        public string ReTriggerMuleSoftByXid(string xid)
+        {
+            // Path to catch all unprocessed items
+            return SafeExecutor(() => _integrationLib.ReTriggerMuleSoftByXid(xid)
+                , "Unable to send MuleSoft ReTrigger reqiest"
+            );
+        }
+
         #endregion
 
     }

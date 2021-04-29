@@ -462,7 +462,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (requestedCustomerInfo == null)
             {
                 string idsid = OpUserStack.MyOpUserToken != null?  OpUserStack.MyOpUserToken.Usr.Idsid : "";
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create Deal", "User missing customer access"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
                 return initWipId;
             }
 
@@ -1082,6 +1082,17 @@ namespace Intel.MyDeals.BusinessLogic
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
 
+            // Check is user has access to update his customer
+            MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
+
+            if (requestedCustomerInfo == null)
+            {
+                string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update Deal", "User missing customer access"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
             // Break out update and validate checks, then come back and do the needed saves if everything is good.
             string validErrors = "";
             if (UpdateRecordsFromSfPackets(myDealsData, workRecordDataFields, recordId, custId, folioId, psId, dealId, reRunMode, ref validErrors)) // If validation errors, log and skip to next
@@ -1456,6 +1467,56 @@ namespace Intel.MyDeals.BusinessLogic
                     executionResponse += "Response object [" + workRecord.BtchId + "] successfully returned<br>";
                 }
             }
+
+            return executionResponse;
+        }
+
+        public string MuleSoftReturnTenderStatus(string xid, string retStatus) // This one is by XID from inside JSON
+        {
+            string executionResponse = "";
+
+            if (retStatus == "SUCCESS")
+            {
+                // PO_Send_Completed - all paths should stop here unless we decide to only report errors from Mule, then we end at PO_Processing_Complete
+                // and only do updates on errors to raise it to our attention..  If assumed pass/no change, this is an ignore step.
+                executionResponse += "Response object xid [" + xid + "] successfully returned<br>";
+            }
+            else // assume all others are fails
+            {
+                // Fetch the data we need to update by XID
+                TenderXidObject xidObj = _jmsDataLib.FetchTendersReturnByXid(xid);
+                executionResponse = MuleSoftReturnTenderStatusByGuid(xidObj.btchGuid, retStatus, xidObj.dealId);
+                // Place e-mail updates or Mule re-trigger calls here if needed
+            }
+
+            return executionResponse;
+        }
+
+        public string MuleSoftReturnTenderStatusByGuid(Guid btchId, string retStatus, int dealId) // This one is by GUID for Admin Direct calls against SQL lines
+        {
+            string executionResponse = "";
+
+            if (retStatus == "SUCCESS")
+            {
+                _jmsDataLib.UpdateTendersStage(btchId, "PO_Processing_Complete", new List<int>() { dealId });
+                executionResponse += "Response object batch id  [" + btchId + "] successfully returned<br>";
+            }
+            else // assume all others are fails
+            {
+                _jmsDataLib.UpdateTendersStage(btchId, "PO_Error_Resend", new List<int>() { dealId });
+                executionResponse += "Response object batch id [" + btchId + "] successfully returned<br>";
+            }
+
+            return executionResponse;
+        }
+
+        //ReTriggerMuleSoftByXid(xid)
+        public string ReTriggerMuleSoftByXid(string xid) // This is a request back to MuleSoft to re-try on an already send packet by XID
+        {
+            string executionResponse = "";
+
+            string eventTriggered = _jmsDataLib.ReTriggerMulePacket(xid) ? "SUCCESSFUL": "FAILED";
+            executionResponse += "MuleSoft re-trigger for [" + xid + "] results: " + eventTriggered;
 
             return executionResponse;
         }

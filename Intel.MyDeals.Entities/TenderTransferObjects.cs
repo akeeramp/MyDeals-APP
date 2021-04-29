@@ -337,6 +337,15 @@ namespace Intel.MyDeals.Entities
     }
     #endregion Tenders Deal Stage Update Objects
 
+    #region Tenders XID Search Object
+    public class TenderXidObject
+    {
+        public int dealId { get; set; }
+        public Guid btchGuid { get; set; }
+
+    }
+    #endregion Tenders XID Search Object
+
     // Support Objects
 
     #region Vistex/Tenders Support Classes

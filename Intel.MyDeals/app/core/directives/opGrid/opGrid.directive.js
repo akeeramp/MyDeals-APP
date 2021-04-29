@@ -2004,8 +2004,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (args.DC_ID == data[d].DC_ID) {
                         var beh = data[d]._behaviors;
                         data[d].PASSED_VALIDATION = "Complete";
-
-                        Object.keys(beh.isError).forEach(function (key, index) {
+                       
+                            Object.keys(beh.isError).forEach(function (key, index) {
                             if ($scope.opOptions.groupColumns[key] === undefined) return;
                             for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
                                 for (var g = 0; g < $scope.opOptions.groups.length; g++) {
@@ -2015,7 +2015,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                             }
                         },
-                            beh.isError);                     
+                                beh.isError);  
+
+                        beh.isError = {};
+                        beh.validMsg = {};
                     }
                 }
             });
@@ -3242,7 +3245,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 });
-
+                //changing autocomplete to disabled for endcustomer country input to stop showing chrome autofill data
+                endCustomerRetailModal.rendered.then(function () {
+                    $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
+                });
                 endCustomerRetailModal.result.then(
                     function (endCustomerData) { //returns as an array
 
