@@ -126,7 +126,7 @@
                             <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
                                 <div ng-class="{'input-group':p.allowMultiple}">
                                     <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
-                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
+                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p,$event)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
                                     <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p, true)" class="btn btn-default">
@@ -146,7 +146,7 @@
                             <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
                                 <div ng-class="{'input-group':p.allowMultiple}" class="drillDown">
                                     <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
-                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
+                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p,$event)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
                                     <p role="button" ng-click="vm.selectItem(p, true)">{{::vm.checkForBlank(p.name)}}</p>
