@@ -43,8 +43,8 @@
                                     type: "int",
                                     editable: false
                                 },
-                                "PRD_HIER_SID": {
-                                    type: "int",
+                                "OVLP_ROW_ID": {
+                                    type: "string",
                                     editable: false
                                 },
                                 "ACR_DRN_TYPE": {
@@ -67,7 +67,11 @@
                         }
                     },
                     pageSize: 25,
-                    group: [{ field: "PRD_HIER_SID" }]
+                    group: [{ field: "OVLP_ROW_ID" }],
+                    sort: [
+                        // sort by "ROW_ID" in descending order 
+                        { field: "ROW_ID", dir: "desc" }
+                    ]
                 });
 
                 $scope.gridOptions = {
@@ -89,20 +93,12 @@
                     },
                     columns: [ 
                         {
-                            field: "PRD_HIER_SID",
+                            field: "OVLP_ROW_ID",
                             title: "Row ID",
                             width: "120px",
                             filterable: { multi: true, search: true },
-                            groupHeaderTemplate: function (e) {
-                                var rowData = $linq.Enumerable().From($scope.flexOvlpDataSource._data)
-                                    .Where(function (x) {
-                                        return (x.PRD_HIER_SID == e.value);
-                                    }).ToArray();
-                                var rowIds = '';
-                                for (var i = 0; i < rowData.length; i++) {
-                                    rowIds = rowIds + (rowData[i].ROW_ID + (rowData.length == (i + 1) ? '' : ', '));
-                                }                                
-                                return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Overlap Row(s): " + rowIds + "</span>";
+                            groupHeaderTemplate: function (e) {                                                             
+                                return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Overlap Row(s): (" + e.value + ")</span>";
 
                             },
                             hidden:true

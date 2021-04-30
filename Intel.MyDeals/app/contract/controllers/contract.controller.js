@@ -3321,8 +3321,8 @@
                             //DE109856
                             if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
                             //END
-                            // Hybrid pricing strategy logic for DEAL_COMB_TYPE
-                            if (isHybridPricingStatergy) {
+                            // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
+                            if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
                                 dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
                                 if (Object.keys(dictGroupType).length > 1) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
@@ -5961,13 +5961,13 @@
         $scope.checkOVLPDate = function (data, resp, objectId) {
             window['moment-range'].extendMoment(moment);
             //get uniq duplicate product
-            var uniqDupProd = _.uniq(_.map(resp, (ob) => { return ob.PRD_HIER_SID }));
+            var uniqOvlpCombination = _.uniq(_.map(resp, (ob) => {return ob.OVLP_ROW_ID }));
             //iterate through unique product
-            _.each(uniqDupProd, (dup) => {
+            _.each(uniqOvlpCombination, (dup) => {
                 //filtering the uniq prod from response and sort to get correct first and second object
-                var dupProd = _.filter(resp, (ob) => { return ob['PRD_HIER_SID'] == dup });
-                _.each(dupProd, (dupPro) => {
-                    _.each(dupProd, (dupPr) => {
+                var rowID = _.filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
+                _.each(rowID, (dupPro) => {
+                    _.each(rowID, (dupPr) => {
                         //checking the product date overlaps or not
                         if (dupPro.ROW_ID != dupPr.ROW_ID) {
                             var firstObj = null, secObj = null;
@@ -5994,16 +5994,12 @@
                             else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) ||
                                 (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
-                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
                             }
                             //if the dates overlap add key dup as true
                             else if (firstRange.overlaps(secRange)) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
-                                _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['DUP_ID'] = dupPro.ROW_ID;
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
                             }
                         } 
                     });

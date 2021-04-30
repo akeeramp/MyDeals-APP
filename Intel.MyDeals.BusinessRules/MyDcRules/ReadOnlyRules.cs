@@ -537,7 +537,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.REBATE_BILLING_END,
                                 AttributeCodes.BACK_DATE_RSN,
                                 AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.AR_SETTLEMENT_LVL
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.RESET_VOLS_ON_PERIOD
                             } // Items to set readonly
                         }
                     }
