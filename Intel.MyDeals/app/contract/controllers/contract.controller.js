@@ -6138,7 +6138,9 @@
                 }
                 if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
                     angular.forEach(data, (item) => {
-                        $scope.setSettlementPartner(item, '2');
+                        if (item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+                            $scope.setSettlementPartner(item, '2');
+                        }
                     });
                 }
                 else if (hybCond == '1') {
