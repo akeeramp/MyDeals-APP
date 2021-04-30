@@ -908,7 +908,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // format numbers based on templating
                                 myRow[colName] = (parseFloat(value.value) || 0);
                             } else {
-                                myRow[colName] = value.value;
+                                myRow[colName] = value.value == undefined ? "" : value.value;
                             }
 
                             // Update Total Discount per line if DSCNT_PER_LN or QTY are changed
@@ -936,7 +936,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // If it's a merged cell (multiple tiers) then find out how many rows to skip for
                                 if (numOfTiers > 1) {
                                     skipUntilRow = rowIndex + numOfTiers;
-                                    dealGrpSkipVal = value.value;
+                                    dealGrpSkipVal = value.value == undefined ? "" : value.value;
                                 }
 
                                 if (colIndex == dealGrpColIndex) {	// DEAL_GRP functionality // Check for Deal Group Type merges and renames
