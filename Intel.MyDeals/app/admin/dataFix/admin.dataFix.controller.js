@@ -14,7 +14,9 @@
             $scope.accessAllowed = false;
             document.location.href = "/Dashboard#/portal";
         }
-        
+
+        $scope.expertMode = false;
+
         var vm = this;
         vm.disabled = false;
         vm.DataFixes = [];
@@ -27,6 +29,7 @@
         vm.isSuccess = false;
         vm.isAtrbSelected = true;
         vm.isActnSelected = true;
+        vm.JsonMessage = "";
 
         vm.Init = function () {
             dataFixService.getDataFixes().then(function (result) {
@@ -70,38 +73,67 @@
             });
         }
 
-        vm.SaveFix = function (isExecute) {
+        vm.SaveFix = function (isExecute, isExpert) {
             $rootScope.$broadcast("save-datafix-attribute");
             $rootScope.$broadcast("save-datafix-action");
             $timeout(function () {
-                var requiredFields = [];
-                if (vm.currentDataFix.INCDN_NBR === null || jQuery.trim(vm.currentDataFix.INCDN_NBR) === "")
-                    requiredFields.push("Incident Number");
-                if (vm.isAtrbSelected && isExecute && vm.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || jQuery.trim(x.ATRB_RVS_NBR) === "" || jQuery.trim(x.OBJ_SID) === "" || jQuery.trim(x.OBJ_SID) === "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "").length > 0)
-                    requiredFields.push("Mandatory data in attributes section cannot be empty");
-                if (vm.isActnSelected && isExecute && vm.currentDataFix.DataFixActions.filter(x => x.OBJ_TYPE_SID === "" || x.ACTN_NM === "").length > 0)
-                    requiredFields.push("Mandatory data in actions section cannot be empty");
-                var regExpForObjectIds = /[0-9,]+$/;
-                if (vm.currentDataFix.DataFixActions.filter(x => jQuery.trim(x.ACTN_VAL_LIST) !== "" && !regExpForObjectIds.exec(jQuery.trim(x.ACTN_VAL_LIST))).length > 0)
-                    requiredFields.push("Target object IDs in actions has illegal characters!");
-                if (requiredFields.length > 0) {
-                    kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
-                } else {
-                    vm.disabled = true;                    
-                    dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
-                        if (result.data.RESULT == "1") {                            
-                            vm.isSuccess = true;
-                            logger.success("Data fix has been updated successfully!");
-                            vm.Init();
-                        } else {
+                if (isExpert) {
+                    vm.disabled = true;
+                    if (IsValidJSONString(vm.JsonMessage)) {
+                        dataFixService.updateDataFix(vm.JsonMessage, isExecute).then(function (result) {
+                            if (result.data.RESULT == "1") {
+                                vm.isSuccess = true;
+                                logger.success("Data fix has been updated successfully!");
+                                vm.Init();
+                            } else {
+                                logger.error("Unable to update data fix");
+                            }
+                        }, function (response) {
                             logger.error("Unable to update data fix");
-                        }                        
+                        });
+                    } else {
+                        alert("String is not valid JSON");
+                    }
+                }
+                else {
+                    var requiredFields = [];
+                    if (vm.currentDataFix.INCDN_NBR === null || jQuery.trim(vm.currentDataFix.INCDN_NBR) === "")
+                        requiredFields.push("Incident Number");
+                    if (vm.isAtrbSelected && isExecute && vm.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || jQuery.trim(x.ATRB_RVS_NBR) === "" || jQuery.trim(x.OBJ_SID) === "" || jQuery.trim(x.OBJ_SID) === "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "").length > 0)
+                        requiredFields.push("Mandatory data in attributes section cannot be empty");
+                    if (vm.isActnSelected && isExecute && vm.currentDataFix.DataFixActions.filter(x => x.OBJ_TYPE_SID === "" || x.ACTN_NM === "").length > 0)
+                        requiredFields.push("Mandatory data in actions section cannot be empty");
+                    var regExpForObjectIds = /[0-9,]+$/;
+                    if (vm.currentDataFix.DataFixActions.filter(x => jQuery.trim(x.ACTN_VAL_LIST) !== "" && !regExpForObjectIds.exec(jQuery.trim(x.ACTN_VAL_LIST))).length > 0)
+                        requiredFields.push("Target object IDs in actions has illegal characters!");
+                    if (requiredFields.length > 0) {
+                        kendo.alert("<b>Please fill the following required fields!</b></br>" + requiredFields.join("</br>"));
+                    } else {
+                        vm.disabled = true;
+                        dataFixService.updateDataFix(vm.currentDataFix, isExecute).then(function (result) {
+                            if (result.data.RESULT == "1") {
+                                vm.isSuccess = true;
+                                logger.success("Data fix has been updated successfully!");
+                                vm.Init();
+                            } else {
+                                logger.error("Unable to update data fix");
+                            }
 
-                    }, function (response) {
-                        logger.error("Unable to update data fix");
-                    });
+                        }, function (response) {
+                            logger.error("Unable to update data fix");
+                        });
+                    }
                 }
             });
+        }
+
+        function IsValidJSONString(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
         }
 
         vm.EditDataFix = function (INCDN_NBR) {
@@ -112,6 +144,18 @@
         vm.addNewFix = function () {
             vm.currentDataFix = { DataFixAttributes: [], DataFixActions: [] };
             vm.IsEditMode = true;
+            $scope.expertMode = false;
+        }
+
+        vm.addNewFixExpert = function () {
+            vm.currentDataFix = { DataFixAttributes: [], DataFixActions: [] };
+            vm.IsEditMode = true;
+            $scope.expertMode = true;
+        }
+
+        vm.okExpert = function () {
+            vm.JsonMessage = "";
+            vm.ok();
         }
 
         vm.ok = function () {

@@ -12,60 +12,79 @@
         </div>
     </div>
     <div ng-if="vm.IsEditMode">
-        <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Required # :</label>            
-            <div class="col-md-6">
-                <div class='dealTools'>
-                    <div style="float:left; width:120px;">
-                        Attributes: <input style="height: 15px; width: 15px" type="checkbox" id="atrbMan" class='grid-link-checkbox with-font' name="Attributes" value="Attributes" ng-model="vm.isAtrbSelected" ng-checked="vm.isAtrbSelected">
-                    </div>
+        <div ng-show="!expertMode">
+            <div class="form-group row">
+                <label class="control-label isRequired col-md-1" autocomplete="off">Required # :</label>
+                <div class="col-md-6">
+                    <div class='dealTools'>
+                        <div style="float:left; width:120px;">
+                            Attributes: <input style="height: 15px; width: 15px" type="checkbox" id="atrbMan" class='grid-link-checkbox with-font' name="Attributes" value="Attributes" ng-model="vm.isAtrbSelected" ng-checked="vm.isAtrbSelected">
+                        </div>
 
-                    <div style="float:left; width:120px;">
-                        Actions: <input style="height: 15px; width: 15px" type="checkbox" id="actnMan" class='grid-link-checkbox with-font' name="Actions" value="Actions" ng-model="vm.isActnSelected" ng-checked="vm.isActnSelected">
+                        <div style="float:left; width:120px;">
+                            Actions: <input style="height: 15px; width: 15px" type="checkbox" id="actnMan" class='grid-link-checkbox with-font' name="Actions" value="Actions" ng-model="vm.isActnSelected" ng-checked="vm.isActnSelected">
+                        </div>
                     </div>
-            </div>
-        </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
-            <div class="col-md-3">
-                <input class="form-control md" type="text" ng-model="vm.currentDataFix.INCDN_NBR" style="width:100%">
-            </div>            
-        </div>
-        <div class="form-group row">
-            <label class="control-label isRequired col-md-1">Attributes : </label>
-            <div class="col-md-11">
-                <div ng-if="vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0"
-                     datafix-attribute-builder attribute-settings="vm.AttributeSettings" opdata-elements="vm.OpDataElements"
-                     my-customers-info="vm.MyCustomersInfo" selected-datafix-attributes="vm.currentDataFix.DataFixAttributes">
                 </div>
-                <span ng-if="!(vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0)">Loading attributes..</span>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label isRequired col-md-1">Actions : </label>
-            <div class="col-md-11">
-                <div ng-if="vm.OpDataElements.length > 0 && vm.Actions.length > 0" datafix-action-builder opdata-elements="vm.OpDataElements" actions="vm.Actions" selected-datafix-actions="vm.currentDataFix.DataFixActions">
+            <div class="form-group row">
+                <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
+                <div class="col-md-3">
+                    <input class="form-control md" type="text" ng-model="vm.currentDataFix.INCDN_NBR" style="width:100%">
                 </div>
-                <span ng-if="!(vm.OpDataElements.length > 0 && vm.Actions.length > 0)">Loading actions..</span>
             </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-md-1" autocomplete="off">Message : </label>
-            <div class="col-md-6">
-                <input class="form-control md" type="text" ng-model="vm.currentDataFix.Message" style="width:100%">
+            <div class="form-group row">
+                <label class="control-label isRequired col-md-1">Attributes : </label>
+                <div class="col-md-11">
+                    <div ng-if="vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0"
+                            datafix-attribute-builder attribute-settings="vm.AttributeSettings" opdata-elements="vm.OpDataElements"
+                            my-customers-info="vm.MyCustomersInfo" selected-datafix-attributes="vm.currentDataFix.DataFixAttributes">
+                    </div>
+                    <span ng-if="!(vm.AttributeSettings.length > 0 && vm.OpDataElements.length > 0 && vm.MyCustomersInfo.length > 0)">Loading attributes..</span>
+                </div>
             </div>
-            <div class="col-md-5">
-                <button ng-disabled="vm.disabled" ng-click="vm.SaveFix(true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
-                <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+            <div class="form-group row">
+                <label class="control-label isRequired col-md-1">Actions : </label>
+                <div class="col-md-11">
+                    <div ng-if="vm.OpDataElements.length > 0 && vm.Actions.length > 0" datafix-action-builder opdata-elements="vm.OpDataElements" actions="vm.Actions" selected-datafix-actions="vm.currentDataFix.DataFixActions">
+                    </div>
+                    <span ng-if="!(vm.OpDataElements.length > 0 && vm.Actions.length > 0)">Loading actions..</span>
+                </div>
             </div>
-        </div>
-        <!--<div class="form-group row" ng-if="{{vm.isSuccess == true}}">
+            <div class="form-group row">
+                <label class="control-label col-md-1" autocomplete="off">Message : </label>
+                <div class="col-md-6">
+                    <input class="form-control md" type="text" ng-model="vm.currentDataFix.Message" style="width:100%">
+                </div>
+                <div class="col-md-5">
+                    <button ng-disabled="vm.disabled" ng-click="vm.SaveFix(true, false)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                    <button ng-click="vm.ok()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                </div>
+            </div>
+            <!--<div class="form-group row" ng-if="{{vm.isSuccess == true}}">
         <label class="control-label col-md-1">Results : </label>
         <div class="col-md-4">
             <span ng-if="{{vm.isSuccess == true}}">Data fix has been updated successfully!</span>
         </div>
     </div>-->
+        </div>
+        <div ng-show="expertMode">
+            <div class="col-md-10" style="text-align: left;">
+                <p style="color: #FC4C02">Warning: You must know the correct structure to use for this screen.  Only use if you really know what you are doing.</p>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <label class="control-label col-md-2" style="text-align: left;">Enter JSON Packet : </label>
+                    <textarea ng-model="vm.JsonMessage" style="width:100%" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <button ng-disabled="vm.disabled" ng-click="vm.SaveFix(true, true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                    <button ng-click="vm.okExpert()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row col-md-12" ng-if="!vm.IsEditMode">
         <div kendo-grid="dataFixGrid" class="table vistex-grid" expand-k-grid options="vm.gridOptions">
@@ -73,27 +92,29 @@
                 <a role="button" class="k-button k-button-icontext k-grid-add ng-scope" ng-click="vm.addNewFix()">
                     <span class="k-icon k-i-plus" style="color: white !important"></span>Add New Data Fix
                 </a>
+                <a role="button" class="k-button k-button-icontext k-grid-add ng-scope" ng-click="vm.addNewFixExpert()">
+                    <span class="k-icon k-i-plus" style="color: white !important"></span>Expert Mode
+                </a>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    #data_fix {
-        margin-left: 20px;
-        margin-top: 10px;
-    }
-
-        #data_fix .incNbr {
-            cursor: pointer;
-            color: cornflowerblue;
+    <style>
+        #data_fix {
+            margin-left: 20px;
+            margin-top: 10px;
         }
-    
-    #data_fix .control-label {
-        text-align: right;
-    }
 
-        #data_fix .toggle.btn {
-            min-width: 100px;
-        }
-</style>
+            #data_fix .incNbr {
+                cursor: pointer;
+                color: cornflowerblue;
+            }
+
+            #data_fix .control-label {
+                text-align: right;
+            }
+
+            #data_fix .toggle.btn {
+                min-width: 100px;
+            }
+    </style>
