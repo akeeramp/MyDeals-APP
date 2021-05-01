@@ -3576,7 +3576,7 @@
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
                 $scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////
                 $scope.setBusy("", "");
-                if (data.PricingTableRow != undefined && data.PricingTableRow != null) {
+                if (data.PricingTableRow != undefined && data.PricingTableRow != null && data.PricingTableRow.length > 0) {
                     $scope.$broadcast('saveWithWarnings', data.PricingTableRow);
                 }
                 return;
