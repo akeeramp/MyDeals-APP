@@ -1884,8 +1884,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["ECAP_PRICE"] = 0;
                         }
 
-                        if (data[r]["RESET_VOLS_ON_PERIOD"] === "") {
-                            data[r]["RESET_VOLS_ON_PERIOD"] = "No";
+                        if ($scope.$parent.$parent.curPricingTable.PROGRAM_PAYMENT === "Backend") {
+                            if (data[r]["RESET_VOLS_ON_PERIOD"] === "") {
+                                data[r]["RESET_VOLS_ON_PERIOD"] = "No";
+                            }
                         }
 
                         if (!root.curPricingTable || root.isPivotable()) {
