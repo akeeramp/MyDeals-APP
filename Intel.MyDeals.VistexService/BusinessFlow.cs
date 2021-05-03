@@ -14,21 +14,26 @@ namespace Intel.MyDeals.VistexService
             {
                 VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Initiated");
                 VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
-                dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);
-                VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
-                VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
-                if (dataRecord.BatchId == "0")
+                while (true)
                 {
-                    Console.WriteLine("There is no outbound data to push..");
-                    VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Success");
+                    dataRecord = await DataAccessLayer.GetVistexDFStageData(runMode);
+                    VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
+                    VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
+                    if (dataRecord.BatchId == "0")
+                    {
+                        Console.WriteLine("There is no outbound data to push..");
+                        VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                        VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Success");
+                        VistexCommonLogging.SendMail(runMode == "P" ? "Product" : "Customer", dataRecord, null);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Data pushed to SAP Completed, Status: " + dataRecord.BatchStatus + " - " + dataRecord.BatchMessage);
+                        VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Success");
+                        VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                    }  
                 }
-                else
-                {
-                    Console.WriteLine("Data pushed to SAP Completed, Status: " + dataRecord.BatchStatus + " - " + dataRecord.BatchMessage);
-                    VistexCommonLogging.WriteToLog("Business Flow - SendDFDataToSapPo - Success");
-                }
-                VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
-                VistexCommonLogging.SendMail(runMode == "P" ? "Product" : "Customer", dataRecord, null);
             }
             catch (Exception ex)
             {
@@ -147,27 +152,34 @@ namespace Intel.MyDeals.VistexService
             }
         }
 
-        private static async Task SendConsumptionLoadDataToSapPo(string runMode) //VTX_OBJ: DEALS
+        private static async Task SendConsumptionLoadDataToSapPo(string runMode) //VTX_OBJ: Consumption Load
         {
             try
             {
                 VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Initiated");
                 VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
-                dataRecord = await DataAccessLayer.GetVistexDataOutBound("CNSMPTN_LD", runMode);
-                VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
-                VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
-                if (dataRecord.BatchId == "0" || dataRecord.BatchId == null)
+                while (true)
                 {
-                    Console.WriteLine("There is no outbound data to push..");
-                    VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
+                    dataRecord = await DataAccessLayer.GetVistexDataOutBound("CNSMPTN_LD", runMode);
+                    VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
+                    VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
+                    if (dataRecord.BatchId == "0" || dataRecord.BatchId == null)
+                    {
+                        Console.WriteLine("There is no outbound data to push..");
+                        VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                        VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
+                        VistexCommonLogging.SendMail("CNSMPTN_LD", dataRecord, null);
+                        break;
+                    }
+                    else if (dataRecord.BatchStatus.ToLower() == "processed")
+                    {
+                        Console.WriteLine("Outbound data pushed to SAP successfully..");
+                        VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
+                        VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                    }                   
+                    
                 }
-                else if (dataRecord.BatchStatus.ToLower() == "processed")
-                {
-                    Console.WriteLine("Outbound data pushed to SAP successfully..");
-                    VistexCommonLogging.WriteToLog("Business Flow - SendConsumptionLoadDataToSapPo - Success");
-                }
-                VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
-                VistexCommonLogging.SendMail("CNSMPTN_LD", dataRecord, null);
+                
             }
             catch (Exception ex)
             {

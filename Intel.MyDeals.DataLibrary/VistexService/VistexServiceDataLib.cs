@@ -255,6 +255,7 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
             }
         }
+
         public void SetVistexDealOutBoundStageD(Guid btchId, string rqstStatus, List<VistexQueueObject> dataRecords) //VTX_OBJ: Deals
         {
             in_dsa_rspn_log opDealMessages = new in_dsa_rspn_log();

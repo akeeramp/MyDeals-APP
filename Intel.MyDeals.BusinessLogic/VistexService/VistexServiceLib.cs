@@ -105,7 +105,14 @@ namespace Intel.MyDeals.BusinessLogic
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Success ") + Environment.NewLine);
 
                 //Update Status
-                SetVistexDealOutBoundStageD(BatchId, responseObj.BatchStatus == "PROCESSED" ? runMode == "M" ? "PO_Processing_Complete" : "PO_Send_Completed" : "PO_Error_Rollback", dataRecords);
+                if(runMode == "M")
+                {
+                    SetVistexDealOutBoundStageV(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback", responseObj.BatchMessage);
+                }
+                else
+                {
+                    SetVistexDealOutBoundStageD(BatchId, responseObj.BatchStatus == "PROCESSED" ? runMode == "M" ? "PO_Processing_Complete" : "PO_Send_Completed" : "PO_Error_Rollback", dataRecords);
+                }
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - SetVistexDealOutBoundStage - Status Update Successful") + Environment.NewLine);
 
             }
@@ -183,7 +190,7 @@ namespace Intel.MyDeals.BusinessLogic
                     VistexDFDataLoadObject dataRecord = new VistexDFDataLoadObject();
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData(" + runMode + ") - " + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Initiated ") + Environment.NewLine);
                     dataRecord = _vistexServiceDataLib.GetVistexDFStageData(runMode);
-                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData(" + runMode + ") -" + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Done ") + Environment.NewLine);
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexStageData: " + "_vistexServiceDataLib.GetVistexDFStageData(" + runMode + ") - " + runMode == "C" ? "CUSTOMER_BRD" : "PRODUCT_BRD" + ": Done ") + Environment.NewLine);
 
                     if (dataRecord.BatchId <= 0)
                     {
