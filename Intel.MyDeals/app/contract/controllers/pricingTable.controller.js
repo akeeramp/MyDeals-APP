@@ -853,7 +853,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var stlmntLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
         var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
+        var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
+        var paymentIndex = root.colToLetter["PROGRAM_PAYMENT"];
+        var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
         var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
+        var paymentValue = sheet.range(paymentIndex + topLeftRowIndex).value();
         if (stlmentValue == "Cash") {
             if (sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == '' || sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == null) {
                 sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
@@ -867,6 +871,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(false);
             sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background('#f5f5f5');
         }
+
+        if (paymentValue != null && paymentValue !== '' && paymentValue !== "Backend") {
+            // Disable RESET_VOLS_ON_PERIOD when PROGRAM_PAYMENT is frontend
+            sheet.range(resetPrdIndex + topLeftRowIndex).value('');
+            sheet.range(resetPrdIndex + topLeftRowIndex).enable(false);
+            sheet.range(resetPrdIndex + topLeftRowIndex).background('#f5f5f5');
+
+            // Disable AR_SETTLEMENT_LVL when PROGRAM_PAYMENT is frontend
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).value('');
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(false);
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).background('#f5f5f5');
+
+            // Disable PERIOD_PROFILE when PROGRAM_PAYMENT is frontend
+            sheet.range(prdProfileIndex + topLeftRowIndex).value('');
+            sheet.range(prdProfileIndex + topLeftRowIndex).enable(false);
+            sheet.range(prdProfileIndex + topLeftRowIndex).background('#f5f5f5');
+        }
+        else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend") {
+            // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
+            sheet.range(resetPrdIndex + topLeftRowIndex).enable(true);
+            sheet.range(resetPrdIndex + topLeftRowIndex).background(null)
+
+            // Re-enable AR_SETTLEMENT_LVL when Backend is selected
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(true);
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).background(null)
+
+            // Re-enable PERIOD_PROFILE when Backend is selected
+            sheet.range(prdProfileIndex + topLeftRowIndex).enable(true);
+            sheet.range(prdProfileIndex + topLeftRowIndex).background(null)
+        }
+        
 
         // KIT
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
@@ -2135,11 +2170,32 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
 
-                    //disable settlmenet partner if not cash
-                    var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
                     var stlmntPtrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
+                    var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
+                    var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
+                    var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
+
+                    // disable SETTLEMENT_PARTNER if not cash
                     if ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL !== "Cash") {
                         range = sheet.range(stlmntPtrIndex + topLeftRowIndex);
+                        range.enable(false);
+                        range.background("#f5f5f5");
+                    }
+
+                    // disable AR_SETTLEMENT_LVL, RESET_VOLS_ON_PERIOD, PERIOD_PROFILE when PROGRAM_PAYMENT not Backend
+                    if ($scope.$parent.$parent.curPricingTable.PROGRAM_PAYMENT !== "Backend") {
+                        // AR_SETTLEMENT_LVL
+                        range = sheet.range(stlmnLvlIndex + topLeftRowIndex);
+                        range.enable(false);
+                        range.background("#f5f5f5");
+
+                        // RESET_VOLS_ON_PERIOD
+                        range = sheet.range(resetPrdIndex + topLeftRowIndex);
+                        range.enable(false);
+                        range.background("#f5f5f5");
+
+                        // PERIOD_PROFILE
+                        range = sheet.range(prdProfileIndex + topLeftRowIndex);
                         range.enable(false);
                         range.background("#f5f5f5");
                     }
