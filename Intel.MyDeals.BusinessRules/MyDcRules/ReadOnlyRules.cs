@@ -544,6 +544,30 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+
+                new MyOpRule // Set to read only if Frontend
+                {
+                    Title="Readonly if Frontend Deal",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate, MyRulesTrigger.OnReadonly },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()
+                        && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.RESET_VOLS_ON_PERIOD
+                            } // Items to set readonly
+                        }
+                    }
+                },
+
+
                 new MyOpRule // Set to read only if Expire YCS2 flag is Yes
                 {
                     Title="Readonly if Expire YCS2 flag is Yes",

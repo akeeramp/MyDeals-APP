@@ -3576,6 +3576,9 @@
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
                 $scope.syncCellValidationsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]); /////////////
                 $scope.setBusy("", "");
+                if (data.PricingTableRow != undefined && data.PricingTableRow != null && data.PricingTableRow.length > 0) {
+                    $scope.$broadcast('saveWithWarnings', data.PricingTableRow);
+                }
                 return;
             }
 
@@ -5927,7 +5930,15 @@
                     //Parent is different at PTE and DE level
                     var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
                     //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
-                    var spreadData = $scope.spreadDs.data();
+                    //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+                    var spreadData;
+                    if ($scope.spreadDs != undefined) {
+                        spreadData = $scope.spreadDs.data();
+                    }
+                    else {
+                         spreadData = data
+                    }
+                    
                     //For multi tiers last record will have latest date, skipping duplicate DC_ID
                     var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
                     //Assigning  validation result to a variable and finally iterate between this result and bind the errors
@@ -6134,7 +6145,9 @@
                 }
                 if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
                     angular.forEach(data, (item) => {
-                        $scope.setSettlementPartner(item, '2');
+                        if (item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+                            $scope.setSettlementPartner(item, '2');
+                        }
                     });
                 }
                 else if (hybCond == '1') {

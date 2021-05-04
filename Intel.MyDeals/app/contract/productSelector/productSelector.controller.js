@@ -526,13 +526,14 @@
             });
             
         }
-        function selectProduct(product) {
+        function selectProduct(product,$event) {
             var item = angular.copy(product);            
             if (item.id !== undefined && item.id != "") {
                 var products = vm.productSelectionLevels.filter(function (x) {
                     return x.PRD_MBR_SID == item.id;
                 })[0];
-                item = $.extend({}, item, products);                
+                item = $.extend({}, item, products);   
+                item.selected = event.target.checked;
             }
             if (vm.excludeMode) {
                 manageSelectedProducts('exclude', item, true);
