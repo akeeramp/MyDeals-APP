@@ -503,6 +503,7 @@
 
                 $scope.$broadcast("refreshContractDataComplete");
 
+
                 $timeout(function () {
                     $scope.$apply();
                 });
@@ -529,7 +530,8 @@
                     }
 
                 }
-            });
+
+                });
         }
 
         $scope.gotoMCPage = function () {
