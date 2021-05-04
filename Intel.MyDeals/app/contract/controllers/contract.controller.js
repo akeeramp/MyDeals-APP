@@ -531,24 +531,7 @@
 
                 }
 
-                if ($scope.pricingTableData !== undefined && $scope.pricingTableData.PRC_TBL_ROW !== undefined) {
-                    var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
-                        function (x) {
-                            return (x.PASSED_VALIDATION === 'Dirty');
-                        }).ToArray();
-                    if (!(dirtyItems.length > 0)) {
-                        $scope.curPricingStrategy.PASSED_VALIDATION = "Complete";
-
-                        for (i = 0; i < $scope.pricingTableData.WIP_DEAL.length; i++) {
-                            $scope.pricingTableData.WIP_DEAL[i].PASSED_VALIDATION = "Complete";
-                        }
-                        for (i = 0; i < $scope.curPricingStrategy.PRC_TBL.length; i++) {
-                            $scope.curPricingStrategy.PRC_TBL[i].PASSED_VALIDATION = "Complete";
-                        }
-                    }
-                }
-
-            });
+                });
         }
 
         $scope.gotoMCPage = function () {
