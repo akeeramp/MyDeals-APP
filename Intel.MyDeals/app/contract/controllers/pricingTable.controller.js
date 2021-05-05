@@ -1236,6 +1236,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
+
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
@@ -4052,7 +4053,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
-                if (dealType == "VOL_TIER" && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
+                if ((dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
                     var pdtIndex = context.range._ref.row - 1;
                     if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
                         for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
