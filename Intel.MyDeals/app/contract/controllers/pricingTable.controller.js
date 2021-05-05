@@ -891,15 +891,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend") {
             // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
             sheet.range(resetPrdIndex + topLeftRowIndex).enable(true);
-            sheet.range(resetPrdIndex + topLeftRowIndex).background(null)
+            sheet.range(resetPrdIndex + topLeftRowIndex).background(null);
+            if (sheet.range(resetPrdIndex + topLeftRowIndex).value() === '') {
+                sheet.range(resetPrdIndex + topLeftRowIndex).value("No");
+            }
 
             // Re-enable AR_SETTLEMENT_LVL when Backend is selected
             sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(true);
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).background(null)
-
+            sheet.range(stlmntLvlIndex + topLeftRowIndex).background(null);
+            if (sheet.range(stlmntLvlIndex + topLeftRowIndex).value() === '') {
+                var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL== undefined
+                    || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
+                    "Issue Credit to Billing Sold To" : $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
+                sheet.range(stlmntLvlIndex + topLeftRowIndex).value(newArSettlementValue);
+            }
+            
             // Re-enable PERIOD_PROFILE when Backend is selected
             sheet.range(prdProfileIndex + topLeftRowIndex).enable(true);
-            sheet.range(prdProfileIndex + topLeftRowIndex).background(null)
+            sheet.range(prdProfileIndex + topLeftRowIndex).background(null);
+            if (sheet.range(prdProfileIndex + topLeftRowIndex).value() === '') {
+                var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
+                    || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                    "Bi-Weekly(2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                sheet.range(prdProfileIndex + topLeftRowIndex).value(newValue);
+            }
         }
         
 
