@@ -900,20 +900,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(true);
             sheet.range(stlmntLvlIndex + topLeftRowIndex).background(null);
             if (sheet.range(stlmntLvlIndex + topLeftRowIndex).value() === '') {
-                var newArSettlementValue = (root.contractData.Customer == undefined
-                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined
-                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === ""
-                    || root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "User Select on Deal Creation") ?
-                    "Issue Credit to Billing Sold To" : root.contractData.Customer.DFLT_TNDR_AR_SETL_LVL;
+                var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL== undefined
+                    || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
+                    "Issue Credit to Billing Sold To" : $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
                 sheet.range(stlmntLvlIndex + topLeftRowIndex).value(newArSettlementValue);
             }
             
-
             // Re-enable PERIOD_PROFILE when Backend is selected
             sheet.range(prdProfileIndex + topLeftRowIndex).enable(true);
             sheet.range(prdProfileIndex + topLeftRowIndex).background(null);
             if (sheet.range(prdProfileIndex + topLeftRowIndex).value() === '') {
-                sheet.range(prdProfileIndex + topLeftRowIndex).value("Bi-Weekly (2 weeks)");
+                var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
+                    || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                    "Bi-Weekly(2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                sheet.range(prdProfileIndex + topLeftRowIndex).value(newValue);
             }
         }
         
