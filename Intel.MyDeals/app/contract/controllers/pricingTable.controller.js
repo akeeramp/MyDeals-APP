@@ -1236,7 +1236,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
-            //isRateColChanged = true;
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
@@ -1504,7 +1503,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             $timeout(function () {
-                //spreadDsSync();
                 $scope.applySpreadsheetMerge();
             }, 10);
 
