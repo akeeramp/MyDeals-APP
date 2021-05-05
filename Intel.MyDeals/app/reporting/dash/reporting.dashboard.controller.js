@@ -73,6 +73,13 @@
                     vm.queryStudioTime = 0;
                     vm.dealSheetTime = 0;
                     vm.dealApprovedTime = 0;
+
+                    //Only RA will have access to Unified Customer Management Report
+                    if (window.usrRole != 'RA') {
+                        vm.masterData["ReportName"] = response.data.ReportName.filter(x => x.RPT_UNIQ_NM != "Unified Customer Management Report");
+                    }
+
+
                     //Report Name Group
                     vm.getReportCatagory = $linq.Enumerable().From(vm.masterData["ReportName"])
                         .GroupBy(function (x) {
