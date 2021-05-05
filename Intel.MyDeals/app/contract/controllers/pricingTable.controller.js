@@ -1236,7 +1236,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
-
+            //isRateColChanged = true;
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
@@ -1504,6 +1504,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             $timeout(function () {
+                //spreadDsSync();
                 $scope.applySpreadsheetMerge();
             }, 10);
 
@@ -4053,6 +4054,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
+                if (dealType == "VOL_TIER" && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
+                    var pdtIndex = context.range._ref.row - 1;
+                    if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
+                        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
+                            if ($scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
+                                $scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = selectedItem;
+                        }
+                    }
+                }
                 context.callback(selectedItem);
             }, function () { });
         }
