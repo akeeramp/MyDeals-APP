@@ -1148,7 +1148,8 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CUST_ACCNT_DIV,
                 AttributeCodes.GEO_COMBINED,
                 AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.PERIOD_PROFILE
+                AttributeCodes.PERIOD_PROFILE,
+                AttributeCodes.RESET_VOLS_ON_PERIOD
                 //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
             };
 
@@ -1161,7 +1162,6 @@ namespace Intel.MyDeals.BusinessRules
                     de.SetReadOnly();
                 }
             }
-            //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
         public static void MakeSettlementPartnerReadonly(params object[] args)
