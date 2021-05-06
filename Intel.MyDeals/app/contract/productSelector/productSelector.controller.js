@@ -572,6 +572,9 @@
 
         function isValidProductCombination(existingProdTypes, newProductType) {
             var isValid = true;
+            if (dealType == 'FLEX') {
+                return true;
+            }
             var selfCheck = newProductType == undefined;
             for (var i = 0; i < existingProdTypes.length; i++) {
                 if (i == existingProdTypes.length - 1 && selfCheck) break;
