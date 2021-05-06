@@ -6036,6 +6036,10 @@
                         $scope.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype');
                     });
                 }
+                //Validate overarching fields for FLEX Accrual rows
+                if (accrualEntries.length > 0) {
+                    $scope.validateOverArching(accrualEntries);
+                }
             }
             return data;
         }
@@ -6059,6 +6063,7 @@
         // validate OverArching conditions
         $scope.validateOverArching = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
+            var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual'); 
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
             $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
@@ -6066,7 +6071,7 @@
             $scope.setToSame(data, 'REBATE_OA_MAX_AMT');
             $scope.setToSame(data, 'REBATE_OA_MAX_VOL');
 
-            if (hybCond == '1') {
+            if (hybCond == '1' || isFlexAccrual) {
                 //condition to check values are zero
                 retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
                 retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
