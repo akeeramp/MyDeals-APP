@@ -2861,9 +2861,6 @@
 
                         var validated_DC_Id = [];
 
-                        var accrualStartDateStatus = $scope.validateFlexAccrualDate($scope.spreadDs.data(), 'START_DT');
-                        var accrualEndDateStatus = $scope.validateFlexAccrualDate($scope.spreadDs.data(), 'END_DT');
-
                         for (var s = 0; s < sData.length; s++) {
                             //Adding settlment partner error into err object in PTE
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
@@ -2969,21 +2966,7 @@
                                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                             }
                                         }
-                                        //Validating Flex Accrual Start Dates
-                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                                            //Delete if there is any previous Error  messages
-                                            if (!accrualStartDateStatus && sData[s]._behaviors.isError && sData[s]._behaviors.isError['START_DT'] && sData[s]._behaviors.validMsg['START_DT'] == "Start date must be same across all Accrual products.") {
-                                                delete sData[s]._behaviors.isError['START_DT'];
-                                                delete sData[s]._behaviors.validMsg['START_DT'];
-                                            }
-
-                                            if (!accrualStartDateStatus && sData[s]["FLEX_ROW_TYPE"] == 'Accrual') {
-                                                $scope.setFlexBehaviors(sData[s], 'START_DT', 'inconsistentstartdaterange');
-                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
-                                            }
-                                        }
-               
+                                        
                                     }
                                     if (dateFields[d] === "END_DT") {
                                         var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
@@ -3039,21 +3022,7 @@
                                             }
 
                                         }
-                                        //Validating Flex Accrual End Dates
-                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
-
-                                            //Delete if there is any previous Error  messages
-                                            if (!accrualEndDateStatus && sData[s]._behaviors.isError && sData[s]._behaviors.isError['END_DT'] && sData[s]._behaviors.validMsg['END_DT'] == "End date must be same across all Accrual products.") {
-                                                delete sData[s]._behaviors.isError['END_DT'];
-                                                delete sData[s]._behaviors.validMsg['END_DT'];
-                                            }
-
-                                            if (!accrualEndDateStatus && sData[s]["FLEX_ROW_TYPE"] == 'Accrual') {
-                                                $scope.setFlexBehaviors(sData[s], 'END_DT', 'inconsistentenddaterange');
-                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['END_DT']);
-                                            }
-                                        }
+                                      
                                     }
                                     //if (dateFields[d] === "OEM_PLTFRM_EOL_DT" && isProgramNRE === true) // Only do this check if is Program NRE
                                     //{
@@ -3158,9 +3127,6 @@
                         //validate Flex Row Type for DE
                         gData = $scope.validateFlexRowType(gData);
 
-                        var accrualStartDateStatus = $scope.validateFlexAccrualDate(gData, 'START_DT');
-                        var accrualEndDateStatus = $scope.validateFlexAccrualDate(gData, 'END_DT');
-
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                         //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
                         for (var i = 0; i < gData.length; i++) {
@@ -3245,31 +3211,6 @@
                                 gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
-                            }
-
-                            if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
-
-                                if (!accrualStartDateStatus && gData[i]._behaviors.isError && gData[i]._behaviors.isError['START_DT'] && gData[i]._behaviors.validMsg['START_DT'] == "Start date must be same across all Accrual products.") {
-                                    delete gData[i]._behaviors.isError['START_DT'];
-                                    delete gData[i]._behaviors.validMsg['START_DT'];
-                                }
-
-                                if (!accrualStartDateStatus && gData[i]["FLEX_ROW_TYPE"] == 'Accrual') {
-                                    $scope.setFlexBehaviors(gData[i], 'START_DT', 'inconsistentstartdaterange');
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
-                                }
-
-                                if (!accrualEndDateStatus && gData[i]._behaviors.isError && gData[i]._behaviors.isError['END_DT'] && gData[i]._behaviors.validMsg['END_DT'] == "End date must be same across all Accrual products.") {
-                                    delete gData[i]._behaviors.isError['END_DT'];
-                                    delete gData[i]._behaviors.validMsg['END_DT'];
-                                }
-
-                                if (!accrualEndDateStatus && gData[i]["FLEX_ROW_TYPE"] == 'Accrual') {
-                                    $scope.setFlexBehaviors(gData[i], 'END_DT', 'inconsistentenddaterange');
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['END_DT']);
-                                }
                             }
 
                             if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
@@ -6247,23 +6188,6 @@
 
         }
 
-        $scope.validateFlexAccrualDate = function (pData, elem) {
-            var accrualEntries = pData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-            //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-            var accrualDateStatus;
-            if (elem == 'START_DT') {
-                accrualDateStatus = filterData.every((val) => val.START_DT != null && val.START_DT != '' &&
-                    moment(val.START_DT).format('MM/DD/YYYY') == moment(filterData[0].START_DT).format('MM/DD/YYYY'));
-            }
-            else if (elem == 'END_DT') {
-                accrualDateStatus = filterData.every((val) => val.END_DT != null && val.END_DT != '' &&
-                    moment(val.END_DT).format('MM/DD/YYYY') == moment(filterData[0].END_DT).format('MM/DD/YYYY'));
-            }
-
-            return accrualDateStatus;
-        }
         //helper function for clear and set behaviors
         $scope.clearValidation = function (data, elem) {
             angular.forEach(data, (item) => {
@@ -6288,12 +6212,6 @@
                 item._behaviors.validMsg[elem] = "There should be atleast one accrual and one draining product.";
             }
 
-            else if (cond == 'inconsistentstartdaterange' && elem == 'START_DT') {
-                item._behaviors.validMsg[elem] = "Start Date must be same across all Accrual Products.";
-            }
-            else if (cond == 'inconsistentenddaterange' && elem == 'END_DT') {
-                item._behaviors.validMsg[elem] = "End Date must be same across all Accrual Products.";
-            }
         }
         $scope.setBehaviors = function (item, elem, cond) {
             if (!item._behaviors) item._behaviors = {};
