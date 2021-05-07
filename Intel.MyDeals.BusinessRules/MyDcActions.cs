@@ -614,6 +614,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
             IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
             IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
 
             if (deConsLookback.AtrbValue == "")
@@ -626,8 +627,8 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
             }
-
-            if (isTender && deConsReason.AtrbValue == "")
+            //Updated the condition as per Defect DE114898
+            if (isTender && deConsReason.AtrbValue == "" && (dealType == "ECAP" || dealType == "KIT"))
             {
                 deConsReason.AtrbValue = "End Customer";
             }
