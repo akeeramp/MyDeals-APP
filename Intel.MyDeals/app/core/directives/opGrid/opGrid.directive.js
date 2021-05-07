@@ -432,10 +432,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 } else {
                     $scope.grid.hideColumn(val.field);
-
-                    var index = colGrp.Groups.indexOf($scope.curGroup);
-                    if (index > -1) {
-                        colGrp.Groups.splice(index, 1);
+                    if (colGrp != undefined) {
+                        var index = colGrp.Groups.indexOf($scope.curGroup);
+                        if (index > -1) {
+                            colGrp.Groups.splice(index, 1);
+                        }
                     }
                 }
             }
