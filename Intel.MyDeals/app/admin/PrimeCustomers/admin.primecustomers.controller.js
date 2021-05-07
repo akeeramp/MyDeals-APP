@@ -270,7 +270,7 @@
 
                 {
                     field: "PRIM_CUST_ID",
-                    title: "Unified ID",
+                    title: "Unified Customer Id",
                     width: "200px",
                     editor: vm.PrimeIDEditor,
                     filterable: { multi: true, search: true }
@@ -288,14 +288,14 @@
 
                 {
                     field: "PRIM_LVL_ID",
-                    title: "Unified L2 ID",
+                    title: "Country Customer Id",
                     width: "200px",
                     editor: vm.PrimeIDL2Editor,
                     filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRIM_LVL_NM",
-                    title: "Unified L2 Customer Name",
+                    title: "Country Customer Name",
                     width: "230px"
                 },
                 {
@@ -307,7 +307,7 @@
                 },
                 {
                     field: "RPL_STS",
-                    title: "RPL STATUS",
+                    title: "RPL Status",
                     width: "200px"
                 }
 

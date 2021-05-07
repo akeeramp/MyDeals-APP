@@ -429,7 +429,7 @@
                 abstract: false,
                 config: {
                     templateUrl: 'app/admin/PrimeCustomers/primecustomers.html'
-                    , url: 'UnifiedCustomers'
+                    , url: 'UnifiedCustomerAdmin'
                     , controller: 'PrimeCustomersController as vm'
                 }
             },
@@ -438,7 +438,7 @@
                 abstract: false,
                 config: {
                     templateUrl: 'app/admin/PrimeCustomers/unprimedeals.html'
-                    , url: 'UnUnifiedDeals'
+                    , url: 'UnifiedDealRecon'
                     , controller: 'UnprimedealsController as vm'
                 }
             }
