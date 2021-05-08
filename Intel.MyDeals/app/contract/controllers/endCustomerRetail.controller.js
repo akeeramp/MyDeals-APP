@@ -19,6 +19,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.popupResult.DropdownSelections = (country === null) ? "" : country;
     $ctrl.colName = colName;
     $ctrl.placeholderText = "Click to Select...";
+    $ctrl.embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.';
 
     $ctrl.isEndCustomer = (colName === endCustomer);
     $ctrl.isEmptyList = false;
@@ -127,11 +128,26 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
         }
 
-        //If selected endcustomer country belongs to Embargo country, show alert popup.
-        var selCountry = ($ctrl.countries != null) ? $ctrl.countries.find(x => x.CTRY_NM == $ctrl.popupResult.DropdownSelections) : null;
-        if ($scope.ovlapObjType == "PricingTable" && selCountry != null && selCountry.CTRY_XPORT_CTRL_CD == 'EC')
-            kendo.alert('Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.');
+        //Embargo country validation alert.
+        $ctrl.showEmbAlert($ctrl.embValidationMsg, $ctrl.popupResult.DropdownSelections, 'ok');
     };
+
+
+    $ctrl.showEmbAlert = function (validationMsg, country, type) {
+        var countryVal = '';
+        if ($scope.ovlapObjType == "PricingTable" && $ctrl.countries != null)
+            countryVal = $ctrl.countries.find(x => x.CTRY_NM == country);
+
+        if (countryVal != null && countryVal.CTRY_XPORT_CTRL_CD == 'EC') {
+            if (type == 'ok') {
+                kendo.alert(validationMsg);
+            }
+            else {
+                $ctrl.IsError = true;
+                $ctrl.msg = validationMsg;
+            }
+        }
+    }
 
     var primeddata = function (action) {
         data.IS_PRIME = 0;
@@ -196,28 +212,20 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 return;
             }
         }, true);
+
     $scope.$watch('$ctrl.popupResult.DropdownSelections',
         function (newValue, oldValue, el) {
-            var selCountry;
-
             if (oldValue === newValue) return;
 
             if (oldValue === undefined || newValue === undefined) return;
-            //If selected endcustomer country belongs to Embargo country.
-            if ($scope.ovlapObjType == "PricingTable" && $ctrl.countries != null)
-                selCountry = $ctrl.countries.find(x => x.CTRY_NM == newValue);
-
-            if (selCountry != null && selCountry.CTRY_XPORT_CTRL_CD == 'EC') {
-                $ctrl.IsError = true;
-                $ctrl.msg = "Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.";
-                return;
-            }
 
             if (newValue !== null) {
                 $ctrl.IsError = false;
                 $ctrl.msg = "";
-                return;
             }
+            //Embargo country validation alert.
+            $ctrl.showEmbAlert($ctrl.embValidationMsg, newValue, 'selection');
+
         }, true);
 
 }
