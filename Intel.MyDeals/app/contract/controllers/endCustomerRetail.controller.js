@@ -129,22 +129,25 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
 
         //Embargo country validation alert.
-        $ctrl.showEmbAlert($ctrl.embValidationMsg, $ctrl.popupResult.DropdownSelections, 'ok');
+        if ($scope.ovlapObjType == "PricingTable") {
+            $ctrl.showEmbAlert($ctrl.embValidationMsg, $ctrl.popupResult.DropdownSelections, 'ok');
+            return;
+        }
     };
 
 
     $ctrl.showEmbAlert = function (validationMsg, country, type) {
         var countryVal = '';
-        if ($scope.ovlapObjType == "PricingTable" && $ctrl.countries != null)
+        if ($ctrl.countries != null) {
             countryVal = $ctrl.countries.find(x => x.CTRY_NM == country);
-
-        if (countryVal != null && countryVal.CTRY_XPORT_CTRL_CD == 'EC') {
-            if (type == 'ok') {
-                kendo.alert(validationMsg);
-            }
-            else {
-                $ctrl.IsError = true;
-                $ctrl.msg = validationMsg;
+            if (countryVal != null && countryVal.CTRY_XPORT_CTRL_CD == 'EC') {
+                if (type == 'ok') {
+                    kendo.alert(validationMsg);
+                }
+                else {
+                    $ctrl.IsError = true;
+                    $ctrl.msg = validationMsg;
+                }
             }
         }
     }
@@ -219,13 +222,17 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
             if (oldValue === undefined || newValue === undefined) return;
 
+            //Embargo country validation alert.
+            if ($scope.ovlapObjType == "PricingTable") {
+                $ctrl.showEmbAlert($ctrl.embValidationMsg, newValue, 'selection');
+                return;
+            }
+
             if (newValue !== null) {
                 $ctrl.IsError = false;
                 $ctrl.msg = "";
+                return;
             }
-            //Embargo country validation alert.
-            $ctrl.showEmbAlert($ctrl.embValidationMsg, newValue, 'selection');
-
         }, true);
 
 }
