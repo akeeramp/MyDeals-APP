@@ -75,9 +75,9 @@
                     vm.dealApprovedTime = 0;
 
                     //Only RA will have access to Unified Customer Management Report
-                    if (window.usrRole != 'RA') {
+                    if (window.usrRole != 'RA' && !(window.isSuper || window.isDeveloper)) {
                         vm.masterData["ReportName"] = response.data.ReportName.filter(x => x.RPT_UNIQ_NM != "Unified Customer Management Report");
-                    }
+                   }
 
 
                     //Report Name Group
