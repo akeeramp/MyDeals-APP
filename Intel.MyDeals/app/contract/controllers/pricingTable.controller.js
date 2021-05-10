@@ -3345,6 +3345,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
+                spreadDsSync();
                 root.validatePricingTable();
             } else {
                 root.publishWipDealsBase();
