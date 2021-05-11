@@ -1936,12 +1936,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.applySaveCell = function (dataItem, newField, newValue) {
                 if (dataItem._behaviors === undefined) dataItem._behaviors = {};
                 if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
-                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY") {
+                //Adding prime attributes in the if condition because they are readonly fields but still when deal tools is checked in DE, all the selected deal id's prime attributes needs to get updated based on updated values in the end customer/retail popup
+                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY" || newField == "PRIMED_CUST_ID" || newField == "PRIMED_CUST_NM" || newField == "IS_PRIMED_CUST") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
-                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false || newField == "PRIMED_CUST_CNTRY") {
-                        if (newField == "IS_PRIMED_CUST" && dataItem[newField] !== newValue) {
-                            dataItem.IS_PRIMED_CUST = newValue;
-                        }
+                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
                         if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }

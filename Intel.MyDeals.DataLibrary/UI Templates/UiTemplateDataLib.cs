@@ -2394,6 +2394,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_NM')#",
                 IsFilterable = true,
+                IsHidden = true,
                 IsSortable = true
             }); 
             items.Add(new UiTemplateContainerItem  // WIP All types
@@ -2415,6 +2416,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_ID')#",
                 IsFilterable = true,
+                IsHidden = true,
                 IsSortable = true
             });
             items.Add(new UiTemplateContainerItem   // We include this so that the subkit tab can filter against it, only appearing if any deals can have subkit or showing only the deals eligible for subkits
@@ -2426,7 +2428,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Is Unified Cust",
                 Template = "#=gridUtils.uiControlWrapper(data, 'IS_PRIMED_CUST')#",
                 DataType = "object",
-                IsReadOnly = true,
+                IsHidden = true,
                 IsFilterable = true
             });
             items.Add(new UiTemplateContainerItem  // WIP All types

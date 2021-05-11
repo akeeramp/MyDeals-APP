@@ -662,6 +662,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.YCS2_PRC_IRBT,
                                 AttributeCodes.YCS2_START_DT,
                                 AttributeCodes.PRIMED_CUST_CNTRY,
+                                AttributeCodes.IS_PRIMED_CUST,
+                                AttributeCodes.PRIMED_CUST_ID,
+                                AttributeCodes.PRIMED_CUST_NM,
                                 AttributeCodes.FLEX_ROW_TYPE
                             }
                         }
