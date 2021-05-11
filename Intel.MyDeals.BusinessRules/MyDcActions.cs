@@ -163,10 +163,11 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+                IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
                 // && dcPrevSt != dcItemSt  -- removed because it was causing validation issues.
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
-                    IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
+                    
                     string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
                     if (string.IsNullOrEmpty(strContractRsn))
                     {
@@ -179,10 +180,24 @@ namespace Intel.MyDeals.BusinessRules
                         deContractRsn.State = OpDataElementState.Modified;
                     }
                 }
-                else if (!string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt >= DateTime.Now.Date)
+               
+
+                else if (dcItemStDt >= DateTime.Now.Date)
                 {
-                    deContractRsn.AtrbValue = "";
-                    deContractRsn.State = OpDataElementState.Modified;
+                    if (!string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)))
+                    {
+
+                        deContractRsn.AtrbValue = "";
+                        deContractRsn.State = OpDataElementState.Modified;
+                        deContractRsnTxt.AtrbValue = "";
+                        deContractRsnTxt.State = OpDataElementState.Modified;
+                    }
+                    else if (deContractRsnTxt.AtrbValue.ToString() == "NEEDED")
+                    {
+                        deContractRsnTxt.AtrbValue = "";
+                        deContractRsnTxt.State = OpDataElementState.Modified;
+                    }
+
                 }
             }
             // Frontend -> PROGRAM_PAYMENT
