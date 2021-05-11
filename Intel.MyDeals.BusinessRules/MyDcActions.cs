@@ -1522,7 +1522,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else if (rebate == "TENDER ACCRUAL")
                 {
-                    de.AddMessage("Tender accrual deals only allow payout based on Consumption.");
+                    de.AddMessage("Tender Accrual deals only allow payout based on Consumption.");
                 }
             }
         }
