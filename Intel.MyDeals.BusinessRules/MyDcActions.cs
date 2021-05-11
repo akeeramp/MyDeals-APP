@@ -1514,9 +1514,16 @@ namespace Intel.MyDeals.BusinessRules
 
             if(de == null) return;
 
-            if (de.AtrbValue.ToString() != "Consumption" && rebate == "TENDER")
+            if (de.AtrbValue.ToString() != "Consumption")
             {
-                de.AddMessage("Tender deals only allow payout based on Consumption.");
+                if (rebate == "TENDER")
+                {
+                    de.AddMessage("Tender deals only allow payout based on Consumption.");
+                }
+                else if (rebate == "TENDER ACCRUAL")
+                {
+                    de.AddMessage("Tender accrual deals only allow payout based on Consumption.");
+                }
             }
         }
 
