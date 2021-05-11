@@ -337,14 +337,23 @@ namespace Intel.MyDeals.Entities
     }
     #endregion Tenders Deal Stage Update Objects
 
-    #region Tenders XID Search Object
+    #region Tenders XID and other Search Objects
     public class TenderXidObject
     {
         public int dealId { get; set; }
         public Guid btchGuid { get; set; }
 
     }
-    #endregion Tenders XID Search Object
+
+    public class TenderCapRequestObject
+    {
+        public string CustomerCIMId { get; set; }
+        public string ProductNameEPMID { get; set; }
+        public string RangeStartDate { get; set; }
+        public string RangeEndDate { get; set; }
+        public string Region { get; set; }
+    }
+    #endregion Tenders XID and other Search Objects
 
     // Support Objects
 

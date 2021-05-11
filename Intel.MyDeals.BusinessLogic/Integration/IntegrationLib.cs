@@ -431,6 +431,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             int myPrdMbrSid = singleProduct != null ? ToInt32(singleProduct.PRD_MBR_SID) : 0;
             string myPrdCat = singleProduct != null ? singleProduct.PRD_CAT_NM : "";
+            // Future MM_MEDIA_CD add from IQR here.  First check what they pass and apply it, but if empty, apply the below.  If they pass one, ensure that a chile below contains what they pass.
             string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD: ""; //singleProduct?.MM_MEDIA_CD
             #endregion Product Check
 
@@ -1520,6 +1521,55 @@ namespace Intel.MyDeals.BusinessLogic
 
             return executionResponse;
         }
+
+        public string IqrFetchCapData(TenderCapRequestObject jsonDataPacket) // Fetch CAP data for Customer/Product/Dates for IQR
+        {
+            string custCimId = jsonDataPacket.CustomerCIMId; // empty string still returns Dell ID
+            int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
+
+            if (custId == 0) // Need to have a working customer for this request and failed, skip!
+            {
+                return "ERROR: Failed on CIM ID Lookup"; // Bail out - no customers matched
+            }
+
+
+            string productEpmId = jsonDataPacket.ProductNameEPMID; // For lookup
+            int epmId = int.TryParse(productEpmId, out epmId) ? epmId : 0;
+
+            ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
+
+            if (productLookupObj?.MydlPcsrNbr == String.Empty || productLookupObj?.PcsrNbrSid == 0)
+            {
+                return "ERROR: Failed on EPM ID Lookup"; // Bail out - no products matched
+            }
+            int pcsrNbrSid = productLookupObj.PcsrNbrSid;
+
+            DateTime dealStartDate = DateTime.ParseExact(jsonDataPacket.RangeStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            DateTime dealEndDate = DateTime.ParseExact(jsonDataPacket.RangeEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+
+            ProductsLib pl = new ProductsLib();
+            string geoCombined = jsonDataPacket.Region != "APJ" ? jsonDataPacket.Region : "APAC,IJKK";
+
+            ProductCAPYCS2Calc pCap = new ProductCAPYCS2Calc();
+            pCap.PRD_MBR_SID = pcsrNbrSid;
+            pCap.CUST_MBR_SID = custId;
+            pCap.GEO_MBR_SID = geoCombined;
+            pCap.DEAL_STRT_DT = dealStartDate;
+            pCap.DEAL_END_DT = dealEndDate;
+
+            List<ProductCAPYCS2Calc> lpCap = new List<ProductCAPYCS2Calc>();
+            lpCap.Add(pCap);
+
+            //var opt = pl.GetCAPForProduct(pcsrNbrSid, custId, geoCombined, dealStartDate, dealEndDate);
+            List<ProductCAPYCS2> opt = pl.GetProductCAPYCS2Data(lpCap, "N", "CAP");
+
+            string returnData = JsonConvert.SerializeObject(opt, Formatting.None);
+            if (opt.Count < 1) return "ERROR: No Records Returned";
+
+            // Might have to remove /" and replace with "
+            return returnData;
+        }
+
 
         #endregion IQR CREATE TENDERS DEAL
 
