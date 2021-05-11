@@ -273,6 +273,28 @@ namespace Intel.MyDeals.DataLibrary
             return result;
         }
 
+        public void sendMail(string primeCustomerName, string primeCustomerCountry, int primeCustID, int dealId)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_PRIM_CUST_MAIL
+                {
+                    @in_cust_nm = primeCustomerName,
+                    @in_cust_ctry = primeCustomerCountry,
+                    @in_cust_id = primeCustID,
+                    @in_deal_id = dealId,
+                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                };
+                DataAccess.ExecuteNonQuery(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+        }
+
         public EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry)
         {
             EndCustomerObject retObj = new EndCustomerObject();
