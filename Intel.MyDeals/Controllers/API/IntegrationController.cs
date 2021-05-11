@@ -103,6 +103,7 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        // Possible Mule to My Deals re-trigger point and Mule re-fire point
         [Authorize]
         [Route("MuleSoftReturnTenderStatusByGuid/{btchId}/{retStatus}/{dealId}")]
         [HttpGet]
@@ -123,6 +124,28 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _integrationLib.ReTriggerMuleSoftByXid(xid)
                 , "Unable to send MuleSoft ReTrigger reqiest"
             );
+        }
+
+        // IQR CAP path request
+        [HttpPost]
+        [Route("IqrFetchCapData")]
+        public string IqrFetchCapData(JObject jsonDataPacket)
+        {
+            string returnData;
+            try
+            {
+                TenderCapRequestObject jsonData = JsonConvert.DeserializeObject<TenderCapRequestObject>(jsonDataPacket.ToString());
+                OpLogPerf.Log($"Tenders IqrFetchCapData JSON payload: {jsonDataPacket}", LogCategory.Information);
+                returnData = _integrationLib.IqrFetchCapData(jsonData);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log($"Tenders JSON payload: {jsonDataPacket} | Message: {ex.Message}| Inner Exception: {ex.InnerException}" +
+                    $" | Stack Trace{ex.StackTrace}", LogCategory.Error);
+                throw ex;
+            }
+
+            return returnData;
         }
 
         #endregion
