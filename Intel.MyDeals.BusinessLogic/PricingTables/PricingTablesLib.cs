@@ -411,6 +411,27 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData.UnGroupPricingTableRow(contractToken, _dataCollectorLib);
         }
 
+        public bool IsWipDealhavingErrors(int ids)
+        {
+            bool dataHasValidationErrors = false;
+            //Get Full AttrtiButes of the Deal
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(new List<int> { ids }, new List<OpDataElementType> { OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate();
+            OpDataCollector odc = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.FirstOrDefault();
+
+            //Hold Deals are always return "IsError" as 0,Change the stage to target stage and Apply the rules
+            //This setattrbute will not change any original object value.
+            odc.SetAtrb(AttributeCodes.WF_STG_CD, "Draft");
+            odc.ApplyRules(MyRulesTrigger.OnValidate);
+            odc.ApplyRules(MyRulesTrigger.OnPostValidate);
+            if (odc.GetDataElementsWithValidationIssues().Count() > 0)
+            {
+                dataHasValidationErrors = true;
+            }
+
+            return dataHasValidationErrors;
+        }
+
+
         public OpMsgQueue ActionWipDeals(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actns)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
@@ -473,6 +494,12 @@ namespace Intel.MyDeals.BusinessLogic
                 string costTestInDB = dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
                 string meetCompInDB = dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
 
+                string PassedValidtion = dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION);
+                if (actn == "Hold" && PassedValidtion != "Complete")
+                {
+                    dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Complete.ToString());
+                }
+
                 // concurency check
                 if (stageIn != stageInDb)
                 {
@@ -524,6 +551,13 @@ namespace Intel.MyDeals.BusinessLogic
                 if (stageIn == WorkFlowStages.Hold && actn == "Approve")
                 {
                     dealsOffHold.Add(dc.DcID);
+                    //Check If there is any errors in the deal while unholding and set the PASSED_VALIDATION value 
+                    //without this check, deal PASSED_VALIDATION value will be same until do "Save and validate" 
+                    if (IsWipDealhavingErrors(dc.DcID))
+                    {
+                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty.ToString());
+                    }
+
                 }
 
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Set the stage no matter which way, message is dependant upon direction of move
