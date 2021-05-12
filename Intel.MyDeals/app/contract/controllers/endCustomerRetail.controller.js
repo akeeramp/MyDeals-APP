@@ -80,6 +80,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     data.IS_PRIME = response.IS_PRIME;
                     data.PRIM_CUST_NM = response.PRIM_CUST_NM;
                     data.PRIM_CUST_ID = response.PRIM_CUST_ID;
+                    if (data.IS_PRIME == 0) {
+                        data.PRIM_CUST_ID = '';
+                    }
                     data.PRIMED_CUST_CNTRY = countryVal;
                     data.END_CUSTOMER_RETAIL = endCustVal;
                     //if (data.IS_PRIME == 1) {
