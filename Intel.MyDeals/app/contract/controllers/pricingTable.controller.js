@@ -912,7 +912,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (sheet.range(prdProfileIndex + topLeftRowIndex).value() === '') {
                 var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
                     || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                    "Bi-Weekly(2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                    "Bi-Weekly (2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                 sheet.range(prdProfileIndex + topLeftRowIndex).value(newValue);
             }
         }
