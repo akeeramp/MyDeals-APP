@@ -3130,6 +3130,11 @@
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                         //var hasInvalidSettlementPartnerForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["SETTLEMENT_PARTNER"] })).length > 1;
                         for (var i = 0; i < gData.length; i++) {
+                            if ((gData[i]["USER_AVG_RPU"] == null || gData[i]["USER_AVG_RPU"] == "")
+                                && (gData[i]["USER_MAX_RPU"] == null || gData[i]["USER_MAX_RPU"] == "")
+                                && gData[i]["RPU_OVERRIDE_CMNT"] != null && gData[i]["RPU_OVERRIDE_CMNT"] !== "") {
+                                gData[i]["RPU_OVERRIDE_CMNT"] = "";
+                            }
                             // Adding settlment partner error into err object in DE
                             if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
