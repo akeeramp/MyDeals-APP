@@ -193,6 +193,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] === true) {
                 item._behaviors.isReadOnly["ECAP_PRICE_____20_____1"] = true;
             }
+
+            //Enable Kit Name Field when Pricing Table Copied from Approved Pricing Table
+            if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["DEAL_GRP_NM"] != undefined) {
+                if (item["OBJ_SET_TYPE_CD"] == "KIT" && item["HAS_TRACKER"] == "0" && item["PS_WF_STG_CD"] == "Approved") {
+                    delete item._behaviors.isReadOnly["DEAL_GRP_NM"];
+                }
+            }                 
         }
     }
 
