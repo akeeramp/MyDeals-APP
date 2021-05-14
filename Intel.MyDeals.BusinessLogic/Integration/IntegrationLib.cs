@@ -841,6 +841,100 @@ namespace Intel.MyDeals.BusinessLogic
             return executionResponse;
         }
 
+        private string ProcessDeleteRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
+        {
+            // This was shelled out to support updating single lines from a create path as per Mahesh request.
+            string executionResponse = "";
+
+            for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
+            {
+                executionResponse += ProcessDeleteRequest(workRecordDataFields, batchId, i, ref dealId);
+            }
+
+            return executionResponse;
+        }
+
+        private string ProcessDeleteRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, ref int dealId)
+        {
+            string executionResponse = "";
+
+            string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
+            string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[recordId].Id;
+
+            executionResponse += "Processing update for [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
+            int folioId = Int32.Parse(workRecordDataFields.recordDetails.quote.FolioID);
+            dealId = Int32.Parse(workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQId);
+
+            List<int> passedFolioIds = new List<int>() { dealId };
+            MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedFolioIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+
+            if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(712, "Deal Error: Couldn't find deal for this request, contact L2 suport", "Couldn't find deal " + dealId + " to delete"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..  We had error on lookup, skip to next to process
+            }
+
+            // Break out update records block so that it can be updated easier apart from the save and PCT/MCT calls
+
+            int psId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
+            int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+
+            MyCustomersInformation requestedCustomerInfo = LookupCustomerInformation(custId);
+
+            // Does user have access to the customer?
+            if (requestedCustomerInfo == null)
+            {
+                string idsid = OpUserStack.MyOpUserToken != null ? OpUserStack.MyOpUserToken.Usr.Idsid : "";
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(706, "User ID [" + idsid + "] Does not have access to Customer Account [" + workRecordDataFields.recordDetails.quote.account.CIMId + "] to Create/Update/Delete Deal", "User missing customer access"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            // Is there a tracker involved?
+            bool hasTracker = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.HAS_TRACKER)) == 1 ? true : false;
+            if (hasTracker)
+            {
+                // There is a tracker involved, cannot delete the deal
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(750, "Delete Error: Deal has a Tracker and cannot be deleted", "Deal dealete is not allowed"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            // Start the save process - No errors, use MyDealsData Packets saving methods here as opposed to the flattened dictionary method used during create.
+            ContractToken saveContractToken = new ContractToken("ContractToken Created - Save IRQ Deal Updates")
+            {
+                CustId = custId,
+                ContractId = folioId
+            };
+
+            TagDeleteActionsAndBatches(myDealsData); // Add needed delete actions and batch IDs for the save
+            MyDealsData saveResponse = myDealsData.Save(saveContractToken);
+
+            if (myDealsData[OpDataElementType.WIP_DEAL].Actions.Any() && !saveResponse.Keys.Any())
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessDeleteRequest"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
+            }
+
+            var psActiojns = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ? saveResponse[OpDataElementType.PRC_ST].Actions : null;
+
+            // Only looking for PS level OBJ_DELETED call, assuming that only one branch existed and if the delete was successful, PS on down is gone.
+            if (psActiojns.Any(a => a.Action == "OBJ_DELETED"))
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(999, "Mydeals Deal " + dealId + " deleted.", "Deal Deleted"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(751, "Delete Error: Deal not deleted", "Deal not deleted"));
+                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+            }
+
+            return executionResponse;
+        }
+
         private void TagSaveActionsAndBatches(MyDealsData myDealsData)
         {
             foreach (OpDataElementType objKey in myDealsData.Keys)
@@ -858,6 +952,19 @@ namespace Intel.MyDeals.BusinessLogic
                         List<int> possibleIds = myDealsData[objKey].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
                         myDealsData[objKey].AddSyncActions(null, possibleIds, DataCollections.GetAttributeData());
                     }
+                }
+            }
+            myDealsData.EnsureBatchIDs();
+        }
+
+        private void TagDeleteActionsAndBatches(MyDealsData myDealsData)
+        {
+            foreach (OpDataElementType objKey in myDealsData.Keys)
+            {
+                if (objKey == OpDataElementType.PRC_ST)
+                {
+                    List<int> deleteIds = myDealsData[objKey].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
+                    if (deleteIds.Any()) myDealsData[objKey].AddDeleteActions(deleteIds);
                 }
             }
             myDealsData.EnsureBatchIDs();
@@ -1338,7 +1445,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExecuteSalesForceTenderData(Guid workId)
         {
-            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus"};
+            List<string> goodRequestTypes = new List<string> { "Create", "Update", "UpdateStatus", "Delete"};
             string executionResponse = "";
 
             List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
@@ -1418,6 +1525,9 @@ namespace Intel.MyDeals.BusinessLogic
                             break;
                         case "UpdateStatus":
                             executionResponse += ProcessStageUpdateRequest(workRecordDataFields, batchId, ref dealId);
+                            break;
+                        case "Delete":
+                            executionResponse += ProcessDeleteRequestShell(workRecordDataFields, batchId, ref dealId);
                             break;
                         default:
                             break;
