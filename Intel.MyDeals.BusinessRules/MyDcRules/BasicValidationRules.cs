@@ -596,6 +596,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Flex Draining Tier Must Start at 1",
+                    ActionRule = MyDcActions.FlexDrainingTierCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Frontend can't be created without Sold To and Price Grp Code",
                     ActionRule = MyDcActions.CheckFrontendSoldPrcGrpCd,
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),

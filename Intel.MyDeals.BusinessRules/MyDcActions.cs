@@ -1565,7 +1565,27 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckFrontendSoldPrcGrpCd(params object[] args)
+        public static void FlexDrainingTierCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string flexRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+
+            if (flexRowType != "Draining") return; // This is a draining side only rule
+
+            IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
+
+            decimal safeParse = 0;
+            bool isNumber = Decimal.TryParse(firstTierStartVol.AtrbValue.ToString(), out safeParse);
+
+            if (isNumber && safeParse > 1)
+            {
+                firstTierStartVol.AddMessage("Draining tiers Start Volume must start at 1.");
+            }
+        }
+
+            public static void CheckFrontendSoldPrcGrpCd(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
