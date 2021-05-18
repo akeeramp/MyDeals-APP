@@ -193,6 +193,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] === true) {
                 item._behaviors.isReadOnly["ECAP_PRICE_____20_____1"] = true;
             }
+
+            //Enable Kit Name Field when Pricing Table Copied from Approved Pricing Table
+            if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["DEAL_GRP_NM"] != undefined) {
+                if (item["OBJ_SET_TYPE_CD"] == "KIT" && item["HAS_TRACKER"] == "0" && item["PS_WF_STG_CD"] == "Approved") {
+                    delete item._behaviors.isReadOnly["DEAL_GRP_NM"];
+                }
+            }                 
         }
     }
 
@@ -912,7 +919,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (sheet.range(prdProfileIndex + topLeftRowIndex).value() === '') {
                 var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
                     || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                    "Bi-Weekly(2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                    "Bi-Weekly (2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                 sheet.range(prdProfileIndex + topLeftRowIndex).value(newValue);
             }
         }
@@ -3345,6 +3352,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
+                spreadDsSync();
                 root.validatePricingTable();
             } else {
                 root.publishWipDealsBase();
@@ -4053,6 +4061,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
+                if ((dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
+                    var pdtIndex = context.range._ref.row - 1;
+                    if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
+                        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
+                            if ($scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
+                                $scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = selectedItem;
+                        }
+                    }
+                }
                 context.callback(selectedItem);
             }, function () { });
         }

@@ -19,5 +19,7 @@ namespace Intel.MyDeals.IBusinessLogic
         string MuleSoftReturnTenderStatusByGuid(Guid btchId, string retStatus, int dealId);
 
         string ReTriggerMuleSoftByXid(string xid);
+
+        string IqrFetchCapData(TenderCapRequestObject jsonDataPacket);
     }
 }

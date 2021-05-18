@@ -87,7 +87,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 else if (dealType == 'FLEX' && name == 'Consumption') {
                     return true;
                 }
-                else if ((dealType == 'VOL_TIER' || dealType == 'PROGRAM') && rebateType == 'TENDER') {
+                else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL')) {
                     scope.$parent.$parent.vm.autofillData.DEFAULT.PAYOUT_BASED_ON.value = "Consumption";
                    // return true;
                 }
@@ -200,8 +200,20 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 blended: (scope.value !== undefined && scope.value.indexOf("[") > -1)
             };
 
-            scope.getWidth = function (length) {
-                ret = { 'width': 100.00 / length + '%' }
+            scope.getWidth = function (length, item) {
+                var DealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
+                if (item.ATRB_CD != undefined && item.ATRB_CD == 'REBATE_TYPE' && (DealType == 'PROGRAM' || DealType == 'VOL_TIER')) {
+                    var percentage = DealType == 'PROGRAM' ? 58.00 : 86.00;
+                    if (item.DROP_DOWN.length > 12) {
+                        ret = { 'width': 'auto' }
+                    }
+                    else {
+                        ret = { 'width': percentage / 6 + '%' }
+                    }
+                }
+                else {
+                    ret = { 'width': 100.00 / length + '%' }
+                }
                 return ret;
             }
 

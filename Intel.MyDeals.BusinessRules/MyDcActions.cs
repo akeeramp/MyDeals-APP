@@ -163,10 +163,11 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = deStr.PrevAtrbValue == null || string.IsNullOrEmpty(deStr.PrevAtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+                IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
                 // && dcPrevSt != dcItemSt  -- removed because it was causing validation issues.
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt) // Added above back in for DE33016.  If they complain, they need to get togeather and fully resolve what they want!
                 {
-                    IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
+                    
                     string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
                     if (string.IsNullOrEmpty(strContractRsn))
                     {
@@ -179,10 +180,24 @@ namespace Intel.MyDeals.BusinessRules
                         deContractRsn.State = OpDataElementState.Modified;
                     }
                 }
-                else if (!string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt >= DateTime.Now.Date)
+               
+
+                else if (dcItemStDt >= DateTime.Now.Date)
                 {
-                    deContractRsn.AtrbValue = "";
-                    deContractRsn.State = OpDataElementState.Modified;
+                    if (!string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)))
+                    {
+
+                        deContractRsn.AtrbValue = "";
+                        deContractRsn.State = OpDataElementState.Modified;
+                        deContractRsnTxt.AtrbValue = "";
+                        deContractRsnTxt.State = OpDataElementState.Modified;
+                    }
+                    else if (deContractRsnTxt.AtrbValue.ToString() == "NEEDED")
+                    {
+                        deContractRsnTxt.AtrbValue = "";
+                        deContractRsnTxt.State = OpDataElementState.Modified;
+                    }
+
                 }
             }
             // Frontend -> PROGRAM_PAYMENT
@@ -614,6 +629,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
             IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
             IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
 
             if (deConsLookback.AtrbValue == "")
@@ -626,8 +642,8 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
             }
-
-            if (isTender && deConsReason.AtrbValue == "")
+            //Updated the condition as per Defect DE114898
+            if (isTender && deConsReason.AtrbValue == "" && (dealType == "ECAP" || dealType == "KIT"))
             {
                 deConsReason.AtrbValue = "End Customer";
             }
@@ -1148,7 +1164,8 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CUST_ACCNT_DIV,
                 AttributeCodes.GEO_COMBINED,
                 AttributeCodes.PROGRAM_PAYMENT,
-                AttributeCodes.PERIOD_PROFILE
+                AttributeCodes.PERIOD_PROFILE,
+                AttributeCodes.RESET_VOLS_ON_PERIOD
                 //AttributeCodes.AR_SETTLEMENT_LVL // Not applicable as part of the User Story US680360, Should be editable at deal level (including active stage). Required validation has been handled in UI as PTE
             };
 
@@ -1161,7 +1178,6 @@ namespace Intel.MyDeals.BusinessRules
                     de.SetReadOnly();
                 }
             }
-            //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
         public static void MakeSettlementPartnerReadonly(params object[] args)
@@ -1498,9 +1514,16 @@ namespace Intel.MyDeals.BusinessRules
 
             if(de == null) return;
 
-            if (de.AtrbValue.ToString() != "Consumption" && rebate == "TENDER")
+            if (de.AtrbValue.ToString() != "Consumption")
             {
-                de.AddMessage("Tender deals only allow payout based on Consumption.");
+                if (rebate == "TENDER")
+                {
+                    de.AddMessage("Tender deals only allow payout based on Consumption.");
+                }
+                else if (rebate == "TENDER ACCRUAL")
+                {
+                    de.AddMessage("Tender Accrual deals only allow payout based on Consumption.");
+                }
             }
         }
 
@@ -1542,7 +1565,27 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckFrontendSoldPrcGrpCd(params object[] args)
+        public static void FlexDrainingTierCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string flexRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+
+            if (flexRowType != "Draining") return; // This is a draining side only rule
+
+            IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
+
+            decimal safeParse = 0;
+            bool isNumber = Decimal.TryParse(firstTierStartVol.AtrbValue.ToString(), out safeParse);
+
+            if (isNumber && safeParse > 1)
+            {
+                firstTierStartVol.AddMessage("Draining tiers Start Volume must start at 1.");
+            }
+        }
+
+            public static void CheckFrontendSoldPrcGrpCd(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;

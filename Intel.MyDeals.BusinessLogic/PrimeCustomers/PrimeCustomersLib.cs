@@ -109,6 +109,11 @@ namespace Intel.MyDeals.BusinessLogic
 
                 MyDealsData saveResponse = mydealsdata.Save(saveContractToken);
 
+                if (saveResponse != null)
+                {
+                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);
+                }
+
                 return true;
             }
             else

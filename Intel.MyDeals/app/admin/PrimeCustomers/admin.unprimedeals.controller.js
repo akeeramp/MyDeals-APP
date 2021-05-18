@@ -173,7 +173,7 @@
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" },
                     ],
                     title: " ",
-                    width: "100px"
+                    width: "60px"
                 },
                 {
                     field: "CNTRCT_OBJ_SID",
