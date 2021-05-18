@@ -193,6 +193,11 @@ namespace Intel.MyDeals.BusinessLogic
                 if (action.Action == "DEAL_ROLLBACK_TO_ACTIVE") // action.Value has the wrong info in it, use Action instead
                 {
                     rolledbackIds.AddRange(action.TargetDcIDs);
+                    if (mydealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && mydealsData[OpDataElementType.PRC_TBL_ROW].Data[dcId] != null
+                        && !string.IsNullOrEmpty(mydealsData[OpDataElementType.PRC_TBL_ROW].Data[dcId].DcParentID.ToString()))
+                    {
+                        UpdatePassedValidationOnRollback(mydealsData[OpDataElementType.PRC_TBL_ROW].Data[dcId].DcParentID, contractToken);
+                    }
                 }
             }
             if (responseData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
@@ -225,5 +230,108 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpMsg(OpMsg.MessageType.Info, retMsg);
         }
 
+        /// <summary>
+        /// This method is to check if hybrid deals rollback action generates any validation error and to update 'Passed_validation' value accordingly
+        /// </summary>
+        /// <param name="PRC_TBL_ID"></param>
+        /// <param name="contractToken"></param>
+        private static void UpdatePassedValidationOnRollback(int PRC_TBL_ID, ContractToken contractToken)
+        {
+            List<int> dealIdlist = new List<int>() { PRC_TBL_ID };
+            var isError = false;
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.WIP_DEAL,
+                 OpDataElementType.PRC_TBL
+            };
+
+            List<int> atrbs = new List<int>
+            {
+                Attributes.IS_HYBRID_PRC_STRAT.ATRB_SID,
+                Attributes.OBJ_PATH_HASH.ATRB_SID,
+                Attributes.REBATE_OA_MAX_AMT.ATRB_SID,
+                Attributes.REBATE_OA_MAX_VOL.ATRB_SID,
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.AR_SETTLEMENT_LVL.ATRB_SID
+            };
+
+            MyDealsData mydealsdata = OpDataElementType.PRC_TBL.GetByIDs(dealIdlist, opDataElementTypes, atrbs);
+
+            //variable 'ptidList' contains hybrid pricing strategy Pricing Table Ids
+            var ptidList = mydealsdata[OpDataElementType.PRC_TBL].AllDataCollectors
+                   .Where(x => x.DataElements.GetAtrb(AttributeCodes.IS_HYBRID_PRC_STRAT) != null
+                   && x.DataElements.GetAtrb(AttributeCodes.IS_HYBRID_PRC_STRAT).AtrbValue.ToString().Equals("1"))
+                   .Select(x => new { x.DcID }).ToList();
+            if (ptidList != null && ptidList.Count > 0)
+            {
+                foreach (var ptId in ptidList)
+                {
+                    //variable 'deals' contains deals of the corresponding Pricing table ID
+                    var deals = mydealsdata[OpDataElementType.WIP_DEAL].AllDataCollectors.
+                            Where(x => x.DataElementDict.Count > 1).ToList().
+                            Where(x => x.DataElements.GetAtrb(AttributeCodes.OBJ_PATH_HASH).AtrbValue.ToString().
+                            Contains(ptId.DcID.ToString())).ToList();
+
+                    if (deals != null && deals.Count > 1)
+                    {
+                        var oaMaxVol = new List<string>();
+                        var oaMaxAmt = new List<string>();
+
+                        //'oaDealsList' variable contains deals list whatever having 'REBATE_OA_MAX_VOL' column and 'oaMaxVol' contains deals REBATE_OA_MAX_VOL column values
+                        var oaDealsList = deals.Select(x => x.GetDataElement(AttributeCodes.REBATE_OA_MAX_VOL)).Where(x => x != null).ToList();
+                        if (oaDealsList.Count() > 0)
+                        {
+                            oaMaxVol = oaDealsList.Select(d => d.AtrbValue.ToString()).ToList(); 
+                        }
+                        //'oaDealsList' variable contains deals list whatever having 'REBATE_OA_MAX_AMT' column and 'oaMaxAmt' contains deals REBATE_OA_MAX_AMT column values
+                        oaDealsList = deals.Select(x => x.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT)).Where(x => x != null).ToList();
+                        if (oaDealsList.Count() > 0)
+                        {
+                            oaMaxAmt = oaDealsList.Select(d => d.AtrbValue.ToString()).ToList();
+                        }
+                        //'settlementLvl' contains all the deals 'Settlement_Level' column values
+                        var settlementLvl = deals.Where(d => d.DataElements.GetAtrb(AttributeCodes.AR_SETTLEMENT_LVL) != null
+                            && d.DataElements.GetAtrb(AttributeCodes.AR_SETTLEMENT_LVL).AtrbValue.ToString() != string.Empty)
+                               .Select(x => x.DataElements.GetAtrb(AttributeCodes.AR_SETTLEMENT_LVL).AtrbValue.ToString()).ToList();
+
+                        //Condition to check either value of OverArching Max volume is not same for deals or OverArching Max Dollar value is not same for all deals
+                        if (oaMaxAmt.Distinct().ToList().Count > 1 || oaMaxVol.Distinct().ToList().Count > 1)
+                        {
+                            isError = true;
+                        }
+                        //Condition to check whether all deals picked any one of the OverArching Max volume and OverArching Max Dollar column 
+                        else if (oaMaxAmt != null && oaMaxAmt.Count > 0 && oaMaxAmt.Count < deals.Count
+                            && oaMaxVol != null && oaMaxVol.Count > 0 && oaMaxVol.Count < deals.Count)
+                        {
+                            isError = true;
+                        }
+                        //Condition to check whether all deals having same Settlement Level value
+                        else if (settlementLvl != null && settlementLvl.Distinct().ToList().Count > 1)
+                        {
+                            isError = true;
+                        }
+                    }
+                }
+            }
+            foreach (OpDataCollector wip in mydealsdata[OpDataElementType.WIP_DEAL].AllDataCollectors)
+            {
+                //condition to set passed validation as 'Dirty' if any of the OverArching Max Volume/OverArching Max Dollar/Settlement Level column conditions sets error flag
+                if (isError)
+                {
+                    wip.DataElements.GetAtrb(AttributeCodes.PASSED_VALIDATION).AtrbValue = PassedValidation.Dirty.ToString();
+                }
+                //condition to set passed validation as 'Complete' if all of the OverArching Max Volumme/OverArching Max Dollar/Settlement Level column conditions failed to set error flag
+                else
+                {
+                    wip.DataElements.GetAtrb(AttributeCodes.PASSED_VALIDATION).AtrbValue = PassedValidation.Complete.ToString();
+                }
+            }
+            //Invoke the save method to save the updated 'PASSED_VALIDATION' column in the DB
+            mydealsdata[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            mydealsdata[OpDataElementType.WIP_DEAL].GroupID = -101;
+            mydealsdata[OpDataElementType.WIP_DEAL].AddSaveActions();
+            mydealsdata.EnsureBatchIDs();
+            MyDealsData responseData = mydealsdata.Save(contractToken);
+        }
     }
 }

@@ -1167,6 +1167,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             && $scope.$parent.$parent.ValidateEndCustomer != null && $scope.$parent.$parent.ValidateEndCustomer != '') {
                             data = $scope.$parent.$parent.ValidateEndCustomer(data, "OnLoad");
                         }
+                        //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading DE page
+                        if (data != undefined && data.length > 1 && data[0].IS_HYBRID_PRC_STRAT == '1'
+                            && $scope.$parent.$parent.validateSettlementLevel != undefined && $scope.$parent.$parent.validateSettlementLevel != null
+                            && $scope.$parent.$parent.validateSettlementLevel != "" && $scope.$parent.$parent.validateOverArching != undefined
+                            && $scope.$parent.$parent.validateOverArching != null && $scope.$parent.$parent.validateOverArching != ""
+                            && $scope.$parent.$parent.curPricingTable != undefined && $scope.$parent.$parent.curPricingTable != null
+                            && $scope.$parent.$parent.curPricingTable != ""
+                            && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != undefined
+                            && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != null) {
+                            var isValidationNeeded = data.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
+                            if (isValidationNeeded && data.length == isValidationNeeded.length && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
+                                data = $scope.$parent.$parent.validateSettlementLevel(data);
+                                data = $scope.$parent.$parent.validateOverArching(data);
+                            }
+                        }
                         $scope.selectFirstTab();
                         $scope.validateGrid();
                     }
