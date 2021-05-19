@@ -5848,8 +5848,16 @@
 
                 });
 
+                var uniqAcrInc = $linq.Enumerable().From(AcrInc)
+                    .GroupBy(function (x) {
+                        return (x.RowId, x.PRDMemberSid);
+                    }).Select(function (x) {
+                        return { 'RowId': x.source[0].RowId, 'PRDMemberSid': x.source[0].PRDMemberSid };
+                    })
+                    .ToArray();
+
                 var reqBody = {
-                    AcrInc: AcrInc,
+                    AcrInc: uniqAcrInc,
                     AcrExc: AcrExc,
                     DrnInc: DrnInc,
                     DrnExc: DrnExc
