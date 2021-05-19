@@ -211,6 +211,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function generateKendoSpreadSheetOptions() {
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
 
+        //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading PTE page
+        if (pricingTableData.data.PRC_TBL_ROW != undefined && pricingTableData.data.PRC_TBL_ROW.length > 1 && pricingTableData.data.PRC_TBL_ROW[0].IS_HYBRID_PRC_STRAT == '1'
+            && $scope.$parent.$parent.validateSettlementLevel != undefined
+            && $scope.$parent.$parent.validateSettlementLevel != null && $scope.$parent.$parent.validateSettlementLevel != ""
+            && $scope.$parent.$parent.validateOverArching != undefined && $scope.$parent.$parent.validateOverArching != null
+            && $scope.$parent.$parent.validateOverArching != "" && $scope.$parent.$parent.curPricingTable != undefined
+            && $scope.$parent.$parent.curPricingTable != null && $scope.$parent.$parent.curPricingTable != ""
+            && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != undefined
+            && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != null) {
+            var isValidationNeeded = pricingTableData.data.PRC_TBL_ROW.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
+            if (isValidationNeeded && isValidationNeeded.length == pricingTableData.data.PRC_TBL_ROW.length
+                && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
+                pricingTableData.data.PRC_TBL_ROW = $scope.$parent.$parent.validateSettlementLevel(pricingTableData.data.PRC_TBL_ROW);
+                pricingTableData.data.PRC_TBL_ROW = $scope.$parent.$parent.validateOverArching(pricingTableData.data.PRC_TBL_ROW);
+            }
+        }
+
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
 
         // Remove tender only columns when its a non tender deal
@@ -853,6 +870,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var data = root.spreadDs.data();
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
+        var hasTracker = false;
+        if (root.pricingTableData.WIP_DEAL != undefined && root.pricingTableData.WIP_DEAL != null && root.pricingTableData.WIP_DEAL.length > 0)
+            hasTracker = root.pricingTableData.WIP_DEAL[range._ref.topLeft.row - 1].HAS_TRACKER == '1' ? true : false;
+
         // Don't let DA edit product!!!
         if (isProductColumnIncludedInChanges && window.usrRole === "DA") {
             return;
@@ -895,7 +916,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheet.range(prdProfileIndex + topLeftRowIndex).enable(false);
             sheet.range(prdProfileIndex + topLeftRowIndex).background('#f5f5f5');
         }
-        else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend") {
+        else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && !hasTracker) {
             // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
             sheet.range(resetPrdIndex + topLeftRowIndex).enable(true);
             sheet.range(resetPrdIndex + topLeftRowIndex).background(null);
