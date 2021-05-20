@@ -6231,7 +6231,7 @@
                 item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Volume' value.";
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_AMT') {
-                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Doller' value.";
+                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Dollar' value.";
             }
             else if (cond == 'equalemptyboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
                 item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be empty. Pick one";
