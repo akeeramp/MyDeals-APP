@@ -871,8 +871,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
         var hasTracker = false;
-        if (root.pricingTableData.WIP_DEAL != undefined && root.pricingTableData.WIP_DEAL != null && root.pricingTableData.WIP_DEAL.length > 0)
+        if (root.pricingTableData.WIP_DEAL != undefined && root.pricingTableData.WIP_DEAL != null && root.pricingTableData.WIP_DEAL.length > 0
+            && root.pricingTableData.WIP_DEAL.length >= range._ref.topLeft.row) {
             hasTracker = root.pricingTableData.WIP_DEAL[range._ref.topLeft.row - 1].HAS_TRACKER == '1' ? true : false;
+        }
 
         // Don't let DA edit product!!!
         if (isProductColumnIncludedInChanges && window.usrRole === "DA") {
