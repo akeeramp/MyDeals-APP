@@ -3188,31 +3188,11 @@ namespace Intel.MyDeals.BusinessRules
                         if (prod.HAS_L1 >= 1)
                         {
                             // Rule: Each L1 can only have a Qty of 1
-                            if (parsedQty > 1)
+                            if (parsedQty > 10)
                             {
-                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", deDimKey);
+                                AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 10.", deDimKey);
                             }
-                            numOfL1s += parsedQty;
                         }
-                        else if (prod.HAS_L2 >= 1)
-                        {
-                            numOfL2s += parsedQty;
-                        }
-
-                        // Do valiation: maximum 2 L1s, or if 1 L1 then maximum one L2 allowed
-                        if (numOfL1s > 2)
-                        {
-                            dePrdUsr.AddMessage("You can only have up to two L1s. Please check that your products and their Qty meet this requirement.");
-                        }
-                        else if (numOfL1s == 1 && numOfL2s > 1)
-                        {
-                            dePrdUsr.AddMessage("You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.");
-                        }
-                        else if (numOfL1s == 2 && numOfL2s >= 1)
-                        {
-                            dePrdUsr.AddMessage("You have two L1s, so you may not have any L2s. Please check that your products and their Qty meet this requirement.");
-                        }
-
                     }
                 }
             }
@@ -3223,55 +3203,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateKITGridProducts(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            int hasL1 = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0"));
-            int hasL2 = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L2, "0"));
-
-            //We assume that all kit deals are properly enforced to have at least a primary and one secondary - it doesn't make sense to have a single item kit after all.
-            int qtyPrimary;
-            int qtySecondary1;
-
-            IOpDataElement deQty1 = null;
-            IOpDataElement deQty2 = null;
-
-            deQty1 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 0).FirstOrDefault();
-            deQty2 = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.QTY) && de.DimKey.FirstOrDefault().AtrbItemId == 1).FirstOrDefault();
-
-            IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-
-            if (deQty1 != null) Int32.TryParse(deQty1.AtrbValue.ToString(), out qtyPrimary); else qtyPrimary = 0;
-            if (deQty2 != null) Int32.TryParse(deQty2.AtrbValue.ToString(), out qtySecondary1); else qtySecondary1 = 0;
-
-            if (hasL1 >= 1 && hasL2 >= 1)
-            {
-                if (qtyPrimary != 1)
-                {
-                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 0);
-                }
-                if (qtySecondary1 != 1)
-                {
-                    AddTierValidationMessage(atrbWithValidation, "You have one L1, so you may only have up to one L2. Please check that your products and their Qty meet this requirement.", 1);
-                }
-            }
-
-            if (hasL1 >= 1 && hasL2 == 0)
-            {
-                if (qtyPrimary != 1)
-                {
-                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 0);
-                }
-                if (qtySecondary1 != 1 && hasL1 > 1)     //how do we check if second item is L1?  only want to run this if second product is also L1
-                {
-                    AddTierValidationMessage(atrbWithValidation, "L1 Products can only have a Qty of 1.", 1);
-                }
-            }
-        }
-
-        public static void ValidateVistexKITPayoutBasedOn(params object[] args)
+    public static void ValidateVistexKITPayoutBasedOn(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
