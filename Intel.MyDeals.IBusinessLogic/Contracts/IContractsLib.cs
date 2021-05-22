@@ -44,5 +44,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool PublishTenderDeals(int CONTRACT_SID, List<int> excludeList);
 
+        QuoteLetterFile HtmlToPdf(string htmlBody);
+
     }
 }

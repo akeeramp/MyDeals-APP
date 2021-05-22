@@ -32,6 +32,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         deleteContract: deleteContract,
         isDuplicateContractTitle: isDuplicateContractTitle,
         getExportContract: getExportContract,
+        HtmlToPdf: HtmlToPdf,
         
         createPricingStrategy: createPricingStrategy,
         copyPricingStrategy: copyPricingStrategy,
@@ -142,6 +143,9 @@ function objsetService($http, dataService, logger, $q, $location) {
     }
     function getExportContract(id) {
         return dataService.get(apiBaseContractUrl + 'GetExportContract/' + id);
+    }
+    function HtmlToPdf(htmlBody) {
+        return dataService.post(apiBaseContractUrl + 'HtmlToPdf/' + htmlBody);
     }
 
     // #### PRICING STRATEGY CRUD ####    

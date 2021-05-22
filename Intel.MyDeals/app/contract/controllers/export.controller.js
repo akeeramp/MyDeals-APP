@@ -69,6 +69,28 @@ function exportController($scope, $state, objsetService, logger, $timeout, dataS
         }
     });
 
+    $scope.export = function () {
+        var htmlBody = [];
+        var fname = $scope.root.contractData.displayTitle + ".pdf";
+        htmlBody.push(document.getElementById('pdfContent').innerHTML); 
+        //var htmlBody = ["<div><b>Jojoba</b> is the one two</div>"]; 
+        var blah = dataService.postArrayBufferResponseType('/api/Contracts/v1/HtmlToPdf', htmlBody)
+            .then(function (response) {
+                var file = new Blob([response.data], { type: 'application/pdf' });
+                var fileURL = URL.createObjectURL(file);
+                // Work around to avoid being blocked by chrome pop up blocker indicating this is untrusted location - VN
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.href = fileURL;
+                a.download = fname; //"TestMe.pdf";
+                a.click();
+                //window.open(fileURL, "Quote Letter Preview");
+                //logger.success("Successfully generated quote letter preview.");
+            }, function (response) {
+                logger.error("Unable to generate contract PDF.", response, response.statusText);
+            });
+    }
+
     $scope.exportDs = new kendo.data.DataSource({
         type: "json",
         transport: {
