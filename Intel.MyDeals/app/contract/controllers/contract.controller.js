@@ -2673,6 +2673,11 @@
                             if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
                                 sData.splice(n, 1);
                             }
+                            //For every save remove previous validation message
+                            if (sData[n]._behaviors) {
+                                if (sData[n]._behaviors.validMsg) sData[n]._behaviors.validMsg = {};
+                                if (sData[n]._behaviors.isError) sData[n]._behaviors.isError = {};
+                            }
                         }
                     }
                     $scope.$broadcast('syncDs');
@@ -5904,7 +5909,7 @@
                     data[0].AR_SETTLEMENT_LVL);
                 if (!retCond) {
                     angular.forEach(data, (item) => {
-                        $scope.setBehaviors(item, 'AR_SETTLEMENT_LVL', 'mustequal');
+                        $scope.setBehaviors(item, 'AR_SETTLEMENT_LVL', 'notequal');
                     });
                 }
             }
@@ -5987,7 +5992,7 @@
         }
         $scope.validateHybridFields = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
-            var isFlexDeal = data.every((val) => val.OBJ_SET_TYPE_CD === 'FLEX');
+            var isFlexDeal = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
             //calling clear overarching in the begening
 
             if (hybCond == '1' || isFlexDeal) {
@@ -6020,8 +6025,9 @@
         $scope.itemValidationBlock = function (data, key, mode) {
             var v1 = data.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
             if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list
-                if (v1.length > 1 && v1[0] !== "") {
+                if (v1.length > 1 && v1[0] !== "" && v1[0] != null) {
                     angular.forEach(data, (item) => {
+                        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                         if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
                             $scope.setBehaviors(item, key, 'notequal');
                         }
@@ -6032,6 +6038,7 @@
                 if (v1.contains(null) && v1[0] !== "") {
                     var v1List = data.filter((val) => val[key] === null);
                     angular.forEach(v1List, (item) => {
+                        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                         if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set blank error message
                             $scope.setBehaviors(item, key, 'equalblank');
                         }
