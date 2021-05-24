@@ -10,6 +10,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using System.IO;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -873,5 +874,24 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorDataLib opdc = new OpDataCollectorDataLib();
             return opdc.PublishTenderDeals(CONTRACT_SID, excludeList);
         }
+
+        public QuoteLetterFile HtmlToPdf(string htmlBody)
+        {
+            int j = 0;
+            Byte[] res = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(htmlBody, PdfSharp.PageSize.Elephant);
+                pdf.Save(ms);
+                res = ms.ToArray();
+            }
+            //return res;
+            return new QuoteLetterFile
+            {
+                Content = res,
+                Name = "TestMe.pdf"
+            };
+        }
+
     }
 }

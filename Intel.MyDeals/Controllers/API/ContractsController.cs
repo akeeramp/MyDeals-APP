@@ -11,6 +11,10 @@ using Intel.Opaque;
 using Intel.MyDeals.Helpers;
 using Intel.Opaque.Data;
 using Intel.MyDeals.BusinessLogic;
+using System.Net.Http;
+using System.Net;
+using System.IO;
+using System.Net.Http.Headers;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Controllers.API
@@ -398,6 +402,81 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to update attribute"
             );
         }
+
+        [Route("HtmlToPdf")]
+        [HttpPost]
+        public HttpResponseMessage HtmlToPdf(string[] htmlBody) //(string htmlBody)
+        {
+            //string htmlBody = "<div><b>Jojoba</b> is the one</div>";
+            //htmlBody[0] = "<div><b>Jojoba</b> is the one</div>";
+            byte[] quoteLetterFinalBytes = null;
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            var quoteLetterFile = SafeExecutor(() => _contractsLib.HtmlToPdf(htmlBody[0])
+                , $"Unable to create the Contract PDF"
+            );
+            quoteLetterFinalBytes = quoteLetterFile.Content;
+
+            if (quoteLetterFinalBytes != null)
+            {
+                Stream stream = new MemoryStream(quoteLetterFinalBytes);
+                result.Content = new StreamContent(stream);
+            }
+
+            string fName = "TestMe.pdf";
+            //string fName = quoteLetterFile.Name;
+            //fName = Regex.Replace(fName, @"[^0-9a-zA-Z _.]+", "");
+            //fName = fName.Replace(" ", "_");
+
+            if (!string.IsNullOrEmpty(fName))
+            {
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                //result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
+                result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
+            }
+            else
+                result = Request.CreateResponse(HttpStatusCode.NotFound);
+
+            return result;
+        }
+
+        // This is a get version only for testing.  Leave it in for troubleshooting.
+        [Route("HtmlToPdf2")]
+        [HttpGet]
+        public HttpResponseMessage HtmlToPdf2() //(string htmlBody)
+        {
+            string[] htmlBody = { "<div><b>Jojoba</b> is the one</div>" };
+            byte[] quoteLetterFinalBytes = null;
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+
+            var quoteLetterFile = SafeExecutor(() => _contractsLib.HtmlToPdf(htmlBody[0])
+                , $"Unable to create the Contract PDF"
+            );
+            quoteLetterFinalBytes = quoteLetterFile.Content;
+
+            if (quoteLetterFinalBytes != null)
+            {
+                Stream stream = new MemoryStream(quoteLetterFinalBytes);
+                result.Content = new StreamContent(stream);
+            }
+
+            string fName = "TestMe.pdf";
+            //string fName = quoteLetterFile.Name;
+            //fName = Regex.Replace(fName, @"[^0-9a-zA-Z _.]+", "");
+            //fName = fName.Replace(" ", "_");
+
+            if (!string.IsNullOrEmpty(fName))
+            {
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                //result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
+                result.Content.Headers.Add("Content-Disposition", $"attachment;filename={fName}");
+            }
+            else
+                result = Request.CreateResponse(HttpStatusCode.NotFound);
+
+            return result;
+        }
+
 
     }
 }

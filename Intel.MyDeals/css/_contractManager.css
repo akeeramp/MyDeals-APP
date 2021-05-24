@@ -254,6 +254,16 @@
             color: #0071C5;
         }
 
+    .exportBtn {
+        cursor: pointer;
+        background-color: transparent;
+        color: #898989;
+    }
+
+        .exportBtn:hover {
+            color: #171717;
+        }
+
     .navIconLghtLnk {
         font-size: 22px;
         cursor: pointer;

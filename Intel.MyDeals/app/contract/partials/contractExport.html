@@ -13,80 +13,82 @@
     </div>
 </div>
 
-
 <div ng-if="!loading" style="padding: 0 20px; height: 100%;" class="contract-export">
-    <div class="fr helpBtn" title="Help" onclick="showHelpTopic(HelpTopicEnum.ContractManager_ContractAndDealViews);">
-        <i class="intelicon-help" style="font-size:30px !important"></i>
+    <div class="fr">
+        <i class="intelicon-pdf exportBtn" style="font-size:30px !important" ng-click="export()" title="Export to PDF"></i>
+        <i class="intelicon-help helpBtn" style="font-size:30px !important" onclick="showHelpTopic(HelpTopicEnum.ContractManager_ContractAndDealViews);" title="Help"></i>
     </div>
 
-    <div class="titlePage">
-        <h1><span>{{contractType}} #{{data.DC_ID}}</span><br />{{data.TITLE}}</h1>
-        <h2>
-            {{data.Customer.CUST_NM}}
-            <span ng-if="data.Customer.CUST_DIV_NM"> / {{data.Customer.CUST_DIV_NM}}</span>
-        </h2>
+    <div id="pdfContent">
+        <div class="titlePage">
+            <h1><span>{{contractType}} #{{data.DC_ID}}</span><br />{{data.TITLE}}</h1>
+            <h2>
+                {{data.Customer.CUST_NM}}
+                <span ng-if="data.Customer.CUST_DIV_NM"> / {{data.Customer.CUST_DIV_NM}}</span>
+            </h2>
 
-        <div class="dates">{{data.START_DT}} - {{data.END_DT}}</div>
-        <div class="confidential">Intel Confidential <span ng-if="data.C2A_DATA_C2A_ID">- #{{data.C2A_DATA_C2A_ID}}</span></div>
-    </div>
-
-    <hr class="page-break" />
-
-    <div class="amendmentsPage">
-        <h1>Amendments</h1>
-        <div class="row" ng-repeat="tl in timelineData">
-            <div class="col-md-3 timeDesc">
-                <div class="content">
-                    <span style="color: #FFA300;">#{{tl.OBJ_SID}}</span> {{tl.OBJ_DESC}}
-                </div>
-            </div>
-            <div class="col-md-6 timeDesc">
-                <div class="content">
-                    <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
-                </div>
-            </div>
-            <div class="col-md-3 timeDate">
-                <div class="content">
-                    {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <hr class="page-break" />
-
-    <div class="psPage" ng-repeat="ps in data.PRC_ST">
-        <h1>{{ps.TITLE}}</h1>
-        <div class="subText">#{{ps.DC_ID}}</div>
-
-        <div class="ptPage" ng-repeat="pt in ps.PRC_TBL">
-            <h2>{{pt.TITLE}}</h2>
-            <div class="fl subText">#{{pt.DC_ID}}</div>
-            <div class="fl subObj">{{showObjType(pt.OBJ_SET_TYPE_CD)}}</div>
-            <div class="fr subStatus">
-                <span class="stat" ng-if="root.CAN_VIEW_COST_TEST">Price Cost Test: <span>{{pt.COST_TEST_RESULT}}</span></span>
-                <span class="stat" ng-if="root.CAN_VIEW_MEET_COMP">Meet Comp Test: <span>{{pt.MEETCOMP_TEST_RESULT}}</span></span>
-                <span class="stat">Status: <span>{{pt.PASSED_VALIDATION}}</span></span>
-            </div>
-            <div class="clearboth"></div>
-
-            <table class="extract">
-                <tr>
-                    <th ng-repeat="td in root.templates.ModelTemplates.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns | filter:{ hidden: false }">
-                        <span>{{showTitle(td.title)}}</span>
-                    </th>
-                </tr>
-                <tr class="ptrPage" ng-repeat="ptr in pt.PRC_TBL_ROW">
-                    <td ng-repeat="td in root.templates.ModelTemplates.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns | filter:{ hidden: false }">
-                        <span>{{showField(ptr, td.field, td, pt.OBJ_SET_TYPE_CD)}}</span>
-                    </td>
-                </tr>
-            </table>
-
+            <div class="dates">{{data.START_DT}} - {{data.END_DT}}</div>
+            <div class="confidential">Intel Confidential <span ng-if="data.C2A_DATA_C2A_ID">- #{{data.C2A_DATA_C2A_ID}}</span></div>
         </div>
 
-        <div class="terms" ng-bind-html="ps.TERMS"></div>
         <hr class="page-break" />
+
+        <div class="amendmentsPage">
+            <h1>Amendments</h1>
+            <div class="row" ng-repeat="tl in timelineData">
+                <div class="col-md-3 timeDesc">
+                    <div class="content">
+                        <span style="color: #FFA300;">#{{tl.OBJ_SID}}</span> {{tl.OBJ_DESC}}
+                    </div>
+                </div>
+                <div class="col-md-6 timeDesc">
+                    <div class="content">
+                        <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 timeDate">
+                    <div class="content">
+                        {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break" />
+
+        <div class="psPage" ng-repeat="ps in data.PRC_ST">
+            <h1>{{ps.TITLE}}</h1>
+            <div class="subText">#{{ps.DC_ID}}</div>
+
+            <div class="ptPage" ng-repeat="pt in ps.PRC_TBL">
+                <h2>{{pt.TITLE}}</h2>
+                <div class="fl subText">#{{pt.DC_ID}}</div>
+                <div class="fl subObj">{{showObjType(pt.OBJ_SET_TYPE_CD)}}</div>
+                <div class="fr subStatus">
+                    <span class="stat" ng-if="root.CAN_VIEW_COST_TEST">Price Cost Test: <span>{{pt.COST_TEST_RESULT}}</span></span>
+                    <span class="stat" ng-if="root.CAN_VIEW_MEET_COMP">Meet Comp Test: <span>{{pt.MEETCOMP_TEST_RESULT}}</span></span>
+                    <span class="stat">Status: <span>{{pt.PASSED_VALIDATION}}</span></span>
+                </div>
+                <div class="clearboth"></div>
+
+                <table class="extract">
+                    <tr>
+                        <th ng-repeat="td in root.templates.ModelTemplates.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns | filter:{ hidden: false }">
+                            <span>{{showTitle(td.title)}}</span>
+                        </th>
+                    </tr>
+                    <tr class="ptrPage" ng-repeat="ptr in pt.PRC_TBL_ROW">
+                        <td ng-repeat="td in root.templates.ModelTemplates.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns | filter:{ hidden: false }">
+                            <span>{{showField(ptr, td.field, td, pt.OBJ_SET_TYPE_CD)}}</span>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="terms" ng-bind-html="ps.TERMS"></div>
+            <hr class="page-break" />
+        </div>
     </div>
 
 </div>
@@ -98,58 +100,68 @@
         font-weight: 200;
         font-style: normal;
     }
-    .titlePage H1 {
-        text-align: center;
-        padding-top: 60px;
-        padding-bottom: 5px;
-        color: #0071C5;
-        font-size: 60px;
-    }
-    .titlePage H1 span {
-        color: #000000;
-        font-size: 24px;
-    }
-    .titlePage H2 {
-        text-align: center;
-        padding-top: 5px;
-        padding-bottom: 100px;
-        color: #aaaaaa;
-    }
-    .titlePage .dates {
-        font-size: 16px;
-        padding-top: 100px;
-    }
-    .titlePage .confidential {
-        font-size: 12px;
-        margin-top: 50px;
-        color: #666666;
-    }
+
+        .titlePage H1 {
+            text-align: center;
+            padding-top: 60px;
+            padding-bottom: 5px;
+            color: #0071C5;
+            font-size: 60px;
+        }
+
+            .titlePage H1 span {
+                color: #000000;
+                font-size: 24px;
+            }
+
+        .titlePage H2 {
+            text-align: center;
+            padding-top: 5px;
+            padding-bottom: 100px;
+            color: #aaaaaa;
+        }
+
+        .titlePage .dates {
+            font-size: 16px;
+            padding-top: 100px;
+        }
+
+        .titlePage .confidential {
+            font-size: 12px;
+            margin-top: 50px;
+            color: #666666;
+        }
+
     .amendmentsPage {
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
     .psPage .subText, .ptPage .subText {
         color: #aaaaaa;
         font-size: 12px;
     }
+
     .psPage .subObj, .ptPage .subObj {
         color: #FFA300;
         font-size: 12px;
         margin-left: 8px;
-    }    
+    }
+
     .psPage .subStatus, .ptPage .subStatus {
         font-size: 12px;
         margin-right: 4px;
-    }    
-    .psPage .subStatus .stat, .ptPage .subStatus .stat {
-        color: #cccccc;
-        margin-left: 15px;
-    }    
+    }
 
-    .psPage .subStatus .stat span, .ptPage .subStatus .stat span {
-        color: #0071C5;
-    }    
-    
+        .psPage .subStatus .stat, .ptPage .subStatus .stat {
+            color: #cccccc;
+            margin-left: 15px;
+        }
+
+            .psPage .subStatus .stat span, .ptPage .subStatus .stat span {
+                color: #0071C5;
+            }
+
     .ptPage {
         margin-left: 30px;
     }
@@ -158,18 +170,22 @@
         color: #000000;
         font-size: 24px;
     }
-    .psPage H1 span {
-        color: #cccccc;
-        font-size: 22px;
-    }
+
+        .psPage H1 span {
+            color: #cccccc;
+            font-size: 22px;
+        }
+
     .psPage H2 {
         color: #0071C5;
         font-size: 18px;
     }
-    .psPage H2 span {
-        color: #cccccc;
-        font-size: 16px;
-    }
+
+        .psPage H2 span {
+            color: #cccccc;
+            font-size: 16px;
+        }
+
     .psPage .terms {
         font-size: 16px;
         margin: 30px;
@@ -180,33 +196,38 @@
         border-top: 1px solid #FFA300;
         height: 2px;
     }
+
     table.extract {
         width: 100%;
         border: 1px solid #00AEEF;
     }
-    table.extract th {
-        font-family: "Intel Clear";
-        font-weight: 600;
-        font-style: normal;
-        padding: 0 4px;
-        background-color: #eeeeee;
-        color: #0071C5;
-    }
-    table.extract td {
-        font-family: "Intel Clear";
-        font-weight: 200;
-        font-style: normal;
-        padding: 0 4px;
-        border-top: 1px solid #eeeeee;
-    }
+
+        table.extract th {
+            font-family: "Intel Clear";
+            font-weight: 600;
+            font-style: normal;
+            padding: 0 4px;
+            background-color: #eeeeee;
+            color: #0071C5;
+        }
+
+        table.extract td {
+            font-family: "Intel Clear";
+            font-weight: 200;
+            font-style: normal;
+            padding: 0 4px;
+            border-top: 1px solid #eeeeee;
+        }
+
     .timeDate div.content {
         background-color: #f6f8f8;
         border: 1px solid #eeeeee;
         margin: 2px 1px;
         padding: 0 6px;
     }
+
     .timeDesc div.content {
-        background-color: #f6f8f8;        
+        background-color: #f6f8f8;
         border: 1px solid #eeeeee;
         margin: 2px 1px;
         padding: 0 6px;
