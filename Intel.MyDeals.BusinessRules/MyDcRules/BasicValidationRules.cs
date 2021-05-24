@@ -902,15 +902,6 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="KIT Product Grid validations",
-                    ActionRule = MyDcActions.ValidateKITGridProducts,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-                },
-
-                new MyOpRule
-                {
                     Title="Frontend XOA3 L1/L2 product validation",
                     ActionRule = MyDcActions.ValidateFrontendXOA3Products,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },

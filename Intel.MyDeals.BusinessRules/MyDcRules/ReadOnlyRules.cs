@@ -626,6 +626,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CAP,
                                 AttributeCodes.CAP_END_DT,
                                 AttributeCodes.CAP_STRT_DT,
+                                AttributeCodes.QTY,
                                 AttributeCodes.COST_TEST_RESULT,
                                 AttributeCodes.COST_TYPE_USED,
                                 AttributeCodes.CUST_DIV_NM,                               
