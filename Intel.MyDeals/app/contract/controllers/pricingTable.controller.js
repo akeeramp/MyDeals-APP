@@ -1479,8 +1479,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
         var paymentValue = sheet.range(paymentIndex + topLeftRowIndex).value();
         if (stlmentValue == "Cash") {
+            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
             if (sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == '' || sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == null) {
-                sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
                 if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
                     sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
             }
@@ -2217,46 +2217,47 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
                     var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
                     var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
-
-                    for (var i = 0; i < data.length; i++) {
+                    var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
+                    var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
+                    for (var i = topLeftRowIndex; i <= bottomRightRowIndex; i++) {
+                        var dataIndex = i - 2;
                         // disable SETTLEMENT_PARTNER if not cash
-                        if (data[i].AR_SETTLEMENT_LVL !== "Cash") {
-                            range = sheet.range(stlmntPtrIndex + (i + 2));
+                        if (data[dataIndex].AR_SETTLEMENT_LVL !== "Cash") {
+                            range = sheet.range(stlmntPtrIndex + i);
                             range.enable(false);
                             range.background("#f5f5f5");
                         }
                         // disable AR_SETTLEMENT_LVL, RESET_VOLS_ON_PERIOD, PERIOD_PROFILE when PROGRAM_PAYMENT not Backend
-                        if (data[i].PROGRAM_PAYMENT !== "Backend") {
+                        if (data[dataIndex].PROGRAM_PAYMENT !== "Backend") {
                             // AR_SETTLEMENT_LVL
-                            range = sheet.range(stlmnLvlIndex + (i + 2));
+                            range = sheet.range(stlmnLvlIndex + i);
                             range.enable(false);
                             range.background("#f5f5f5");
 
                             // RESET_VOLS_ON_PERIOD
-                            range = sheet.range(resetPrdIndex + (i + 2));
+                            range = sheet.range(resetPrdIndex + i);
                             range.enable(false);
                             range.background("#f5f5f5");
 
                             // PERIOD_PROFILE
-                            range = sheet.range(prdProfileIndex + (i + 2));
+                            range = sheet.range(prdProfileIndex + i);
                             range.enable(false);
                             range.background("#f5f5f5");
                         }
-                    }                    
-
-                    //Disable overarching fields when FLEX row type is Draining
-                    var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
-                    var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
-                    var flexRowTypeValue = $scope.$parent.$parent.curPricingTable.FLEX_ROW_TYPE;
-
-                    if (flexRowTypeValue == "Draining") {
-                        sheet.range(oaMaxVolIndex + topLeftRowIndex).value('');
-                        sheet.range(oaMaxVolIndex + topLeftRowIndex).enable(false);
-                        sheet.range(oaMaxVolIndex + topLeftRowIndex).background('#f5f5f5');
-                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).value('');
-                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).enable(false);
-                        sheet.range(oaMaxAmtIndex + topLeftRowIndex).background('#f5f5f5');
-                    }
+                        //Disable overarching fields when FLEX row type is Draining
+                        if (data[dataIndex].FLEX_ROW_TYPE == "Draining") {
+                            // REBATE_OA_MAX_VOL
+                            range = sheet.range(oaMaxVolIndex + i);
+                            range.value('');
+                            range.enable(false);
+                            range.background("#f5f5f5");
+                            //REBATE_OA_MAX_AMT
+                            range = sheet.range(oaMaxAmtIndex + i);
+                            range.value('');
+                            range.enable(false);
+                            range.background("#f5f5f5");
+                        }
+                    }                 
 
                     // Re-disable cols that are disabled by template
                     for (var key in ptTemplate.model.fields) {
