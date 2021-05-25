@@ -201,6 +201,12 @@
                     field: "END_CUSTOMER_COUNTRY",
                     title: "End Customer Country",
                     width: "230px"
+                },
+                {
+                    field: "EMP_WWID",
+                    title: "Creator WWID",
+                    width: "230px",
+                    filterable: { multi: true, search: true }
                 }
             ]
         }
