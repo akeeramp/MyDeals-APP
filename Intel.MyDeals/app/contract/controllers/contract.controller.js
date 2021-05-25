@@ -5087,7 +5087,7 @@
             if ($scope.curPricingTable != undefined && $scope.curPricingTable != null && $scope.curPricingTable != ""
                 && $scope.curPricingTable.OBJ_SET_TYPE_CD != undefined && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 $scope.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
-                $scope.saveEntireContractBase($state.current.name, true, true);
+                $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
             }
             else {
                 $scope.setBusy("Loading...", "Loading the Deal Editor", "Info", true);
