@@ -88,6 +88,7 @@
         $scope.tenderOnlyColumns = ["CAP", "YCS2", "SERVER_DEAL_TYPE", "QLTR_BID_GEO"];
         $scope.tenderRequiredColumns = ["VOLUME"];
         $scope.vistextHybridOnlyColumns = ["REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT"];
+        $scope.hybridSaveBlockingColumns = ['REBATE_TYPE', 'PAYOUT_BASED_ON', 'CUST_ACCNT_DIV', 'GEO_COMBINED', 'PERIOD_PROFILE', 'RESET_VOLS_ON_PERIOD', 'PROGRAM_PAYMENT', 'SETTLEMENT_PARTNER', 'AR_SETTLEMENT_LVL'];
 
         var editableArSettlementLevelAfterApproval = ["Issue Credit to Billing Sold To", "Issue Credit to Default Sold To by Region"];
 
@@ -955,7 +956,7 @@
                 getCurrentQuarterDetails();
             } else {
                 if (moment($scope.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
-                    $scope.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
+                    $scope.contractData.END_DT = moment('2099/12/31', ["MM-DD-YYYY"]); 
                 }
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
                 updateQuarterByDates('END_DT', $scope.contractData.END_DT);
@@ -2787,7 +2788,8 @@
                                     // See "$scope.validateHybridFields" for list of fields to add for this check
                                     for (var e = 0; e < Object.keys(el._behaviors.validMsg).length; e++) {
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        if (Object.keys(el._behaviors.validMsg)[e] !== "DC_ID") { // Remove this element since it is causing a line to say broke without an error
+                                        // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
+                                        if (Object.keys(el._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(el._behaviors.validMsg)[e]) >= 0) { 
                                             if (!errs.PRC_TBL_ROW.contains(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])) {
                                                 errs.PRC_TBL_ROW.push(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])
                                             }
@@ -2881,8 +2883,8 @@
                                 } else {
                                     // check dates against contract
                                     if (dateFields[d] === "START_DT") {
-                                        var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                        var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                        var tblStartDate = moment(sData[s][dateFields[d]], ["MM-DD-YYYY"]); 
+                                        var endDate = moment($scope.contractData.END_DT, ["MM-DD-YYYY"]); 
                                         var isTenderFlag = "0";
                                         if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
                                         //Delete if there is any previous Error  messages
@@ -2913,17 +2915,17 @@
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                                 sData[FirstTire]._behaviors.isError['START_DT'] = true;
-                                                sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate, ["MM-DD-YYYY"]) + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate, ["MM-DD-YYYY"]) + ")");
                                             }
                                         }
                                         
                                     }
                                     if (dateFields[d] === "END_DT") {
-                                        var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
-                                        var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                        var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
+                                        var tblStartDate = moment(sData[s][dateFields[d - 1]], ["MM-DD-YYYY"]); 
+                                        var tblEndDate = moment(sData[s][dateFields[d]], ["MM-DD-YYYY"]); 
+                                        var startDate = moment($scope.contractData.START_DT, ["MM-DD-YYYY"]); 
                                         var isTenderFlag = "0";
                                         if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
@@ -2938,9 +2940,9 @@
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                             sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate, ["MM-DD-YYYY"]) + ")"; 
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate, ["MM-DD-YYYY"]) + ")"); 
                                         }
 
                                         if (moment(tblEndDate).isAfter(moment(tblStartDate).add(20, 'years')) && sData[s]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
@@ -2968,9 +2970,9 @@
                                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                                 sData[FirstTire]._behaviors.isError['END_DT'] = true;
-                                                sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                                sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate, ["MM-DD-YYYY"]) + ")"; 
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                                                errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate, ["MM-DD-YYYY"]) + ")"); 
                                             }
 
                                         }
@@ -3067,14 +3069,15 @@
                             }
 
                             // This forces all items onto the save side errors checking.  Need to scale it to only the fields we care about.
-                            //for (var e = 0; e < Object.keys(gData[i]._behaviors.validMsg).length; e++) {
-                            //    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            //    if (Object.keys(gData[i]._behaviors.validMsg)[e] !== "DC_ID") { // Remove this element since it is causing a line to say broke without an error
-                            //        if (!errs.PRC_TBL_ROW.contains(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])) {
-                            //            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])
-                            //        }
-                            //    }
-                            //}
+                            for (var e = 0; e < Object.keys(gData[i]._behaviors.validMsg).length; e++) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
+                                if (Object.keys(gData[i]._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(gData[i]._behaviors.validMsg)[e]) >= 0) { 
+                                    if (!errs.PRC_TBL_ROW.contains(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])) {
+                                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])
+                                    }
+                                }
+                            }
 
                             // Adding Over Arching error into err object in DE
                             if (gData[i]._behaviors.isError['REBATE_OA_MAX_VOL']) {
@@ -3127,9 +3130,9 @@
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                 gData[i]._behaviors.isError['START_DT'] = true;
-                                gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")";
+                                gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT, ["MM-DD-YYYY"]) + ")"; 
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")");
+                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT, ["MM-DD-YYYY"]) + ")"); 
                             }
 
                             // check dates against contract - Tender contracts don't observe start/end date within contract.
@@ -3138,9 +3141,9 @@
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['END_DT'] = true;
-                                    gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")";
+                                    gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT, ["MM-DD-YYYY"]) + ")"; 
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
+                                    errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT, ["MM-DD-YYYY"]) + ")"); 
                                 }
                             }
 
@@ -3199,10 +3202,10 @@
                             }
 
                             // This is silly hard-coding because these are not in our template and they are used by DSA only - set them to proper dates.
-                            if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
-                            if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
-                            if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
-                            if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
+                            if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"], ["MM-DD-YYYY"]); 
+                            if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"], ["MM-DD-YYYY"]); 
+                            if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"], ["MM-DD-YYYY"]); 
+                            if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"], ["MM-DD-YYYY"]); 
 
                             // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
                             if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
@@ -5258,8 +5261,8 @@
                 if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                     data.splice(n, 1);
                 } else {
-                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
-                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
+                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"], ["MM-DD-YYYY"]); 
+                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"], ["MM-DD-YYYY"]); 
                 }
             }
 
@@ -5858,8 +5861,8 @@
                             else if (!moment(secObj.START_DT).isBefore(secObj.END_DT)) {
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
                             }
-                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) ||
-                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
+                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT, ["MM-DD-YYYY"])) || 
+                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT, ["MM-DD-YYYY"]))) { 
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
                             }
