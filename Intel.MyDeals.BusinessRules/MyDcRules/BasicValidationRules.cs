@@ -594,14 +594,15 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
-                new MyOpRule
-                {
-                    Title="Flex Draining Tier Must Start at 1",
-                    ActionRule = MyDcActions.FlexDrainingTierCheck,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-                },
+                // Removed due to Rohit/Navya request
+                //new MyOpRule
+                //{
+                //    Title="Flex Draining Tier Must Start at 1",
+                //    ActionRule = MyDcActions.FlexDrainingTierCheck,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                //    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                //},
 
                 new MyOpRule
                 {
