@@ -28,7 +28,14 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<CustomerVendors> GetCustomerVendors(int custId)
         {
-            return _customerVendorsDataLib.GetCustomerVendors(custId);
+            List<CustomerVendors> ret = _customerVendorsDataLib.GetCustomerVendors(custId);
+
+            if (custId > 0)
+            {
+                ret = ret.Where(c => c.ACTV_IND).ToList();
+            }
+            return ret;
+
         }
 
         public List<VendorsInfo> GetVendorsData()
