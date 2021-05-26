@@ -196,7 +196,7 @@
 
         vm.SettlementPartDropDownEditor = function (container, options) {
             vm.Partner = [];
-            vm.Partner = vm.SettlementPartner.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID);
+            vm.Partner = vm.SettlementPartner.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID && x.ACTV_IND == true);
             if (vm.Partner.length == 0) {
                 vm.SettlementPartnerOptions.placeholder = 'No Settlement Partners are mapped';   
             }
