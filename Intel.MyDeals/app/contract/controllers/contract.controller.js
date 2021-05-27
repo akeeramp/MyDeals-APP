@@ -6026,9 +6026,26 @@
         }
 
         $scope.itemValidationBlock = function (data, key, mode) {
-            var v1 = data.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
+            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+            //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+            var spreadData;
+            if ($scope.spreadDs != undefined) {
+                spreadData = $scope.spreadDs.data();
+            }
+            else {
+                spreadData = data
+            }
+
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
+            var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+            var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
+            var hasNotNull = v1.some(function (el) { return el !== null && el != ""; }); 
+
             if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list
-                if (v1.length > 1 && v1[0] !== "" && v1[0] != null) {
+                //if(v1.length > 1 && v1[0] !== "" && v1[0] != null) {  
+                if (v1.length > 1 && hasNotNull) {
                     angular.forEach(data, (item) => {
                         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                         if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
@@ -6047,6 +6064,15 @@
                         }
                     });
                 }
+            }
+            //Additional check for settlement partner if AR Settlement Level is 'CASH'
+            if (key == "SETTLEMENT_PARTNER" && !hasNotNull) {
+                angular.forEach(data, (item) => {
+                    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                    if (item._behaviors.isReadOnly[key] === undefined && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') { // If not read only, set error message
+                        $scope.setBehaviors(item, key, 'equalblank');
+                    }
+                });
             }
         }
 
@@ -6271,7 +6297,7 @@
             }
         }
         $scope.setBehaviorsValidMessage = function (item, elem, elemLabel, cond) {
-            var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX'); 
+           var isFlexDeal = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
             var dealTypeLabel = isFlexDeal === true ? "FLEX PT": "HYBRID PS";
 
             if (cond == 'notequal') {
