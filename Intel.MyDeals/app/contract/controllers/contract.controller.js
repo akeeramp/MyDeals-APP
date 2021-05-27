@@ -5702,8 +5702,18 @@
                 $scope.setBusy("", "");
             });
         }
-
-
+        //Unique Check Row and Product Combination
+        $scope.groupBy = function (list, f) {
+            var groups = {};
+            list.forEach(function (o) {
+                var group = JSON.stringify(f(o));
+                groups[group] = groups[group] || [];
+                groups[group].push(o);
+            });
+            return Object.keys(groups).map(function (group) {
+                return groups[group];
+            })
+        }
         //validate flex overlap product
         $scope.getOVLPProduct = function (callback) {
             $scope.overlapFlexResult = null;
@@ -5751,13 +5761,10 @@
 
                 });
 
-                var uniqAcrInc = $linq.Enumerable().From(AcrInc)
-                    .GroupBy(function (x) {
-                        return (x.RowId, x.PRDMemberSid);
-                    }).Select(function (x) {
-                        return { 'RowId': x.source[0].RowId, 'PRDMemberSid': x.source[0].PRDMemberSid };
-                    })
-                    .ToArray();
+                var uniqAcrInc = [];
+                var uniqAcrInc = $scope.groupBy(AcrInc, function (item) {
+                    return [item.RowId, item.PRDMemberSid];
+                });
 
                 var reqBody = {
                     AcrInc: uniqAcrInc,
