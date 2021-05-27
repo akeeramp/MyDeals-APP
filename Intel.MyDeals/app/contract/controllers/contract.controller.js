@@ -5762,8 +5762,8 @@
                 });
 
                 var uniqAcrInc = [];
-                var uniqAcrInc = $scope.groupBy(AcrInc, function (item) {
-                    return [item.RowId, item.PRDMemberSid];
+                $scope.groupBy(AcrInc, function (item) {
+                    uniqAcrInc.push({'RowId': item.RowId, 'PRDMemberSid':item.PRDMemberSid});
                 });
 
                 var reqBody = {
