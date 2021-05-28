@@ -47,21 +47,16 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         }
 
         // MUCH FASTER
+        // Altered  " style="line-height: 1em; font-family: arial; text-align: center;" due to changes on edit cell not looking correct
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;     
+        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + msg;     
         tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';      
         tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
         tmplt += '</div>';
         return tmplt;
     }
 
-    //if (field == 'SETTLEMENT_PARTNER' && passedData['AR_SETTLEMENT_LVL'] != 'Cash') {
-    //    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    //    tmplt += '<div class="uiControlDiv"';
-    //    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-    //    tmplt += '</div>';
-    //    return tmplt
-    //}
+
     else
     {
         // MUCH FASTER
