@@ -5760,11 +5760,14 @@
                     }
 
                 });
-
-                var uniqAcrInc = [];
-                $scope.groupBy(AcrInc, function (item) {
-                    uniqAcrInc.push({'RowId': item.RowId, 'PRDMemberSid':item.PRDMemberSid});
-                });
+                
+                var uniqAcrInc = AcrInc.filter(function (a) {
+                    var key = a.RowId + '|' + a.PRDMemberSid;
+                    if (!this[key]) {
+                        this[key] = true;
+                        return true;
+                    }
+                }, Object.create(null));
 
                 var reqBody = {
                     AcrInc: uniqAcrInc,
@@ -6075,6 +6078,7 @@
             //Additional check for settlement partner if AR Settlement Level is 'CASH'
             if (key == "SETTLEMENT_PARTNER" && !hasNotNull) {
                 angular.forEach(data, (item) => {
+                    if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                     if (item._behaviors.isReadOnly[key] === undefined && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') { // If not read only, set error message
                         $scope.setBehaviors(item, key, 'equalblank');
