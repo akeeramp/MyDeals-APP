@@ -4002,8 +4002,8 @@
                                 lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
                             }
                         }
-                        // Disable all Start vols except the first
-                        if (t !== 1 && !!data[d]._behaviors) {
+                        // Disable all Start vols except the first if there is no tracker, else disable them all
+                        if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
                             if (!data[d]._behaviors.isReadOnly) {
                                 data[d]._behaviors.isReadOnly = {};
                             }
