@@ -6057,6 +6057,7 @@
                 //if(v1.length > 1 && v1[0] !== "" && v1[0] != null) {  
                 if (v1.length > 1 && hasNotNull) {
                     angular.forEach(data, (item) => {
+                        if (!item._behaviors) item._behaviors = {};
                         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                         if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
                             $scope.setBehaviors(item, key, 'notequal');
@@ -6068,6 +6069,7 @@
                 if (v1.contains(null) && v1[0] !== "") {
                     var v1List = data.filter((val) => val[key] === null);
                     angular.forEach(v1List, (item) => {
+                        if (!item._behaviors) item._behaviors = {};
                         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                         if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set blank error message
                             $scope.setBehaviors(item, key, 'equalblank');
