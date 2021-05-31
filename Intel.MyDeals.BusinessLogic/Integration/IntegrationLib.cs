@@ -923,8 +923,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Only looking for PS level OBJ_DELETED call, assuming that only one branch existed and if the delete was successful, PS on down is gone.
             if (psActiojns.Any(a => a.Action == "OBJ_DELETED"))
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(999, "Mydeals Deal " + dealId + " deleted.", "Deal Deleted"));
-                executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                //workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(999, "Mydeals Deal " + dealId + " deleted.", "Deal Deleted"));
+                //executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
             }
             else
             {
