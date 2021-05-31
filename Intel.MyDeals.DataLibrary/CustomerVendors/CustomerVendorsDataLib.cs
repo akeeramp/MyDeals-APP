@@ -98,6 +98,8 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             DataCollections.RecycleCache("_getCustomerVendors");
+            DataCollections.RecycleCache("_getVistexCustomerMappings");
+            DataCollections.RecycleCache("_getMyCustomers");
 
             return CustVendor;
         }
