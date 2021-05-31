@@ -157,7 +157,8 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}, 
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired}, 
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("TENDER")).Any() &&
+                    dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.OBJ_SET_TYPE_CD) && !de.HasValue("ECAP") && !de.HasValue("KIT")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>

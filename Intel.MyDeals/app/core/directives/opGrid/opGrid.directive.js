@@ -885,6 +885,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     return x["isLinked"] === true
                 });
 
+                var isdealsUnified = data.filter(function (x) {
+                    return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
+                });
+
+                if (args["action"] == "Won" && isdealsUnified.length > 0) {
+                    kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
+                    return;
+                }
+
                 // if user has selected deals, go ahead and trigger actions. Else select the deals which matches the actions user is doing
                 if (checkedDeals.length > 0) {
                     actionsChecked = true;

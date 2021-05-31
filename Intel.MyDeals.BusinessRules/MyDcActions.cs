@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyDcActions
     {
-        public static Dictionary<string, bool> SecurityActionCache { get; set; }  
+        public static Dictionary<string, bool> SecurityActionCache { get; set; }
 
         /// <summary>
         /// Execute the appropiate action based on the condition statement
@@ -2986,7 +2986,14 @@ namespace Intel.MyDeals.BusinessRules
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
             var custSID = r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
-
+            string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string Rebatetype = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string dealtype = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            bool isTender = false;
+            if(Rebatetype == "TENDER" && (dealtype == "ECAP" || dealtype == "KIT"))
+            {
+                isTender = true;
+            }
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID.ToString() == custSID);
 
@@ -2996,7 +3003,14 @@ namespace Intel.MyDeals.BusinessRules
 
             if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && cust.VISTEX_CUST_FLAG) // If not primed and End customer has a value
             {
-                deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
+                {
+                    deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
+                }
+                else if (!isTender)
+                {
+                    deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                }
             }
         }
 
