@@ -230,7 +230,7 @@
                             </ul>
                         </li>
                     }
-                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA") // All SA users allowed
+                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA" || usrRole == "FSE") // All SA users allowed
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Customer</a>

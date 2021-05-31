@@ -200,6 +200,10 @@
             if (vm.Partner.length == 0) {
                 vm.SettlementPartnerOptions.placeholder = 'No Settlement Partners are mapped';   
             }
+            else {
+                vm.SettlementPartnerOptions.placeholder = 'Select default settlement partner';
+            }
+
             
             var editor = $('<select kendo-combo-box k-options="vm.SettlementPartnerOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
