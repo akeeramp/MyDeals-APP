@@ -3478,7 +3478,7 @@
             var pcService = new perfCacheBlock("Update Contract And CurPricing Table", "MT");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
-
+                    $scope.overlapFlexResult = null;
                     var data = results.data.Data;
                     if ($scope.getVendorDropDownResult != null && $scope.getVendorDropDownResult != undefined
                         && $scope.getVendorDropDownResult.length > 0) {
@@ -5871,8 +5871,8 @@
                             else if (!moment(secObj.START_DT).isBefore(secObj.END_DT)) {
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
                             }
-                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format("MM-DD-YYYY")) || 
-                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format("MM-DD-YYYY"))) { 
+                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) || 
+                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) { 
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
                             }
