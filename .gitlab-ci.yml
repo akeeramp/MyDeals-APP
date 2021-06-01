@@ -101,6 +101,8 @@ cons1_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS1
   when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CONS
@@ -117,6 +119,8 @@ cons2_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS2
   when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CONS
@@ -133,6 +137,8 @@ utt1_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/UTT -Recurse' 
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-UTT2
   when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: UTT
@@ -149,6 +155,8 @@ utt2_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/UTT -Recurse'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-UTT2
   when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: UTT
@@ -165,6 +173,8 @@ cinr_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/CINR -Recurse'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CINR
   when: manual
+  only: 
+    - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CINR
