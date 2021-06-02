@@ -475,6 +475,13 @@ namespace Intel.MyDeals.BusinessLogic
                     ? "Issue Credit to Billing Sold To"
                     : requestedCustomerInfo.DFLT_TNDR_AR_SETL_LVL;
 
+            // Add in pull from customer settings for SETTLEMENT_PARTNER if above is Cash
+            string defSettlementPartner = (defArSettlementLvl == "Cash") ? requestedCustomerInfo.DFLT_SETTLEMENT_PARTNER : "";
+            if (defArSettlementLvl == "Cash" && defSettlementPartner == "") // No Settlement Partner is set, exit gracefully...
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(707, "Cash Settlement Level requires Settlement Partner to be defined for " + requestedCustomerInfo.CUST_NM + ".  Contact Mydeals Support", "Invalid Customer Setup"));
+                return initWipId;
+            }
 
             // BEGIN REWRITE
             // Create and load the return objects now
@@ -923,8 +930,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Only looking for PS level OBJ_DELETED call, assuming that only one branch existed and if the delete was successful, PS on down is gone.
             if (psActiojns.Any(a => a.Action == "OBJ_DELETED"))
             {
-                //workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(999, "Mydeals Deal " + dealId + " deleted.", "Deal Deleted"));
-                //executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].DealRFQStatus = "Deleted";
+                executionResponse += "Deal deleted: [" + dealId + "] - [" + batchId + "]<br>";
             }
             else
             {
