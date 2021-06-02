@@ -5898,7 +5898,7 @@
                 var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
                 var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
 
-                if (accrualEntries.length == 0 || drainingEntries.length == 0) {
+                if (drainingEntries.length > 0 && accrualEntries.length==0) {
                     angular.forEach(data, (item) => {
                         $scope.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype');
                     });
@@ -6222,7 +6222,7 @@
             item._behaviors.isError[elem] = true;
            
             if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
-                item._behaviors.validMsg[elem] = "There should be atleast one accrual and one draining product.";
+                item._behaviors.validMsg[elem] = "There should be atleast one accrual product.";
             }
 
         }
