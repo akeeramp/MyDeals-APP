@@ -6184,7 +6184,7 @@
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
                 if ((item.SETTLEMENT_PARTNER != undefined && item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
-                    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner mandatory for Cash Settlement level.";
+                    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
                 }
                 else {
                     if (Cond == '1') {
@@ -6194,7 +6194,7 @@
                         item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Please work with your RA to get Vendor data mapped to this customer.";
                     }
                     else {
-                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For non-hybrid deal vendors must not be empty if settlement level is cash";
+                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
                     }
                 }
             }
