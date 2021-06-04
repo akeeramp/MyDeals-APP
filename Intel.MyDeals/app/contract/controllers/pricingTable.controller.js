@@ -3351,8 +3351,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
-            var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
-
+            var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");            
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType, $scope.contractData.DC_ID, $scope.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
@@ -4085,13 +4084,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             modalInstance.result.then(function (selectedItem) {
                 if ((dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
-                    var pdtIndex = context.range._ref.row - 1;
-                    if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
-                        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
-                            if ($scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
-                                $scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = selectedItem;
-                        }
-                    }
+                    $scope.updateSpreadsheet(colName, selectedItem, context);
                 }
                 context.callback(selectedItem);
             }, function () { });
@@ -4271,11 +4264,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
+                if (dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") {
+                    $scope.updateSpreadsheet(colName, selectedItem, context);
+                }
                 context.callback(new Date(selectedItem));
             }, function () { });
         }
     });
 
+    $scope.updateSpreadsheet = function (colName, value, context) {
+        //update spreadsheet for multi tier deal type.
+            var pdtIndex = context.range._ref.row - 1;
+            if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
+                for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
+                    if ($scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
+                        $scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = value;
+                }
+            }
+    }
 
     // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
     kendo.spreadsheet.registerEditor("ecapAdjTracker", function () {
