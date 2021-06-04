@@ -2361,7 +2361,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.QLTR_PROJECT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
-                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Project </span>",
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Project Name </span>",
                 Width = 180,
                 Label = "Project Name",
                 Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
