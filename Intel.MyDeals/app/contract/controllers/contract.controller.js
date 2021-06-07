@@ -5969,10 +5969,12 @@
                 }
 
                 else if (retOAVEmptCond && retOADEmptCond) {
-                    angular.forEach(data, (item) => {
-                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth');
-                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth');
-                    });
+                    if (isFlexAccrual != 1) { // Pulls Flex out of this test
+                        angular.forEach(data, (item) => {
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth');
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth');
+                        });
+                    }
                 }
                 else if (retOAVCond && retOADCond) {
                     angular.forEach(data, (item) => {
@@ -6277,28 +6279,28 @@
                 // no opeeration - taken in above case statement
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_VOL') {
-                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Volume' value.";
+                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Volume', cond);
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_AMT') {
-                item._behaviors.validMsg[elem] = "All deals within a PS should have the same 'Over Arching Max Dollar' value.";
+                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Dollar', cond);
             }
             else if (cond == 'equalemptyboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
-                item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be empty. Pick one";
+                item._behaviors.validMsg[elem] = "Both Over Arching Maximum Volume and Over Arching Maximum Dollars cannot be empty. Populate one";
             }
             else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_VOL') {
-                item._behaviors.validMsg[elem] = "Overarching Maximum Volume must be blank or >0";
+                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Volume', cond);
             }
             else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_AMT') {
-                item._behaviors.validMsg[elem] = "Overarching Maximum Doller must be blank or >0";
+                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Doller', cond);
             }
             else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
-                item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be entered out. Pick one ";
+                item._behaviors.validMsg[elem] = "Both Over Arching Maximum Volume and Over Arching Maximum Dollars cannot contain values. Remove values from one ";
             }
             else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
-                item._behaviors.validMsg[elem] = "Overlapping products identified ,please change the overlapping accrual and draining dates.";
+                item._behaviors.validMsg[elem] = "Overlapping products identified, please change the overlapping Accrual and Draining dates.";
             }
             else if (cond == 'dateissue' && elem == 'PTR_USER_PRD') {
-                item._behaviors.validMsg[elem] = "Deal end date must be greater that start date, please correct.";
+                item._behaviors.validMsg[elem] = "Deal End Date must be greater than Start Date, please correct.";
             }
             else if (cond == 'emptyobject' && elem == 'FLEX') {
                 delete item._behaviors.isRequired[elem];
@@ -6318,6 +6320,9 @@
             }
             else if (cond == 'equalblank') {
                 item._behaviors.validMsg[elem] = "Deals within a " + dealTypeLabel + " must have a '" + elemLabel + "' value.";
+            }
+            else if (cond == 'equalzero') {
+                item._behaviors.validMsg[elem] = elemLabel + " must be blank or > 0.";
             }
         }
         $scope.setToSame = function (data, elem) {

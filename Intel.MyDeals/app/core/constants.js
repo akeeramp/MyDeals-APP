@@ -1201,9 +1201,6 @@
                     "REBATE_DEAL_ID": {
                         "Groups": ["All"]
                     },
-                    "REBATE_OA_MAX_VOL": {
-                        "Groups": ["All"]
-                    },
                     "REBATE_OA_MAX_AMT": {
                         "Groups": ["All"]
                     },
