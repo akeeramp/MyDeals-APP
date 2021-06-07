@@ -2993,15 +2993,12 @@ namespace Intel.MyDeals.BusinessRules
             if(Rebatetype == "TENDER" && (dealtype == "ECAP" || dealtype == "KIT"))
             {
                 isTender = true;
-            }
-            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
-            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID.ToString() == custSID);
-
+            }     
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
             if (deEndCust == null) return;
 
-            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && cust.VISTEX_CUST_FLAG) // If not primed and End customer has a value
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck ) // If not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
