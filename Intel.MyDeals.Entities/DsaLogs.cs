@@ -80,6 +80,8 @@ namespace Intel.MyDeals.Entities
     {
         VISTEX_DEALS = 1,
         TENDER_DEALS = 2,
-        PROD_VERT_RULES = 3
+        PROD_VERT_RULES = 3,
+        CNSMPTN_LD = 4,
+        TENDER_DEALS_RESPONSE = 5
     }
 }

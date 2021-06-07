@@ -506,7 +506,10 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "PrimeCustomerDetails";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-
+	//Fetch Request type for integration log screen
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_RQST_TYPE]");
+	ds.Tables[0].TableName = "RequestDetails";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace
