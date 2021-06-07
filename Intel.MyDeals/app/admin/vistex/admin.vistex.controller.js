@@ -16,8 +16,10 @@
         if (!window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
-        vm.spinnerMessageHeader = "Vistex Logs";
-        vm.spinnerMessageDescription = "Please wait while we loading vistex logs..";
+        vm.RequestType = [];
+        vm.RequestType.Request_Type = "VISTEX_DEALS";
+        vm.spinnerMessageHeader = "Integraion Logs";
+        vm.spinnerMessageDescription = "Please wait while we loading integration logs..";
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
         vm.SelectedStatus = null;
@@ -30,17 +32,24 @@
         vm.endDate = moment().format("MM/DD/YYYY");
        
         vm.init = function () {            
+            gridUtils.clearAllFilters();
             vm.startDate = moment(vm.startDate).format("MM/DD/YYYY");
-            vm.endDate = moment(vm.endDate).format("MM/DD/YYYY");
-
+            vm.endDate = moment(vm.endDate).format("MM/DD/YYYY");            
+                        
             if (moment(vm.startDate, "MM/DD/YYYY", true).isValid() && moment(vm.endDate, "MM/DD/YYYY", true).isValid() && moment(vm.startDate).isBefore(vm.endDate)) {
+                if (vm.RequestType.Request_Type == undefined || vm.RequestType.Request_Type == "" || vm.RequestType.Request_Type == null) {
+                    kendo.alert("Please Select Request Type");
+                    return;
+                }
                 var postData = {
-                    "Dealmode": 'VISTEX_DEALS',
+                    "Dealmode": vm.RequestType.Request_Type,
                     "StartDate": vm.startDate,
                     "EndDate": vm.endDate
                 }
                 dsaService.getVistexLogs(postData).then(function (response) {
                     vm.Vistex = response.data;
+                    var grid = $("#gridVistex").data("kendoGrid");
+                    grid.setDataSource(grid.dataSource);
                     vm.vistexDataSource.read();
                 }, function (response) {
                     logger.error("Operation failed");
@@ -59,6 +68,13 @@
                 vm.endDate = moment().format("MM/DD/YYYY");
             }
         }
+
+        $scope.$watch('vm.RequestType.Request_Type',
+            function (newValue, oldValue, el) {
+                if (newValue == undefined || newValue == null || newValue == "" || newValue == oldValue)
+                    return;
+                vm.init();
+            }, true);
 
         vm.SendVistexData = function () {
             if (vm.DealIds != undefined)
@@ -90,13 +106,13 @@
             return false;
         }
 
-        vm.UpdateVistexStatus = function (strTransantionId, dealId) {
+        vm.UpdateVistexStatus = function (strTransantionId, dealId, rqstId) {
             if (vm.EnteredMessage == '')
                 vm.EnteredMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage).then(function (response) {
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, rqstId, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
-                    angular.forEach(vm.Vistex.filter((x => x.BTCH_ID === response.data) && (x => x.DEAL_ID === dealId)), function (dataItem) {
+                    angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data && x.DEAL_ID === dealId && x.RQST_SID === rqstId), function (dataItem) {
                         dataItem.RQST_STS = vm.SelectedStatus;
                         dataItem.ERR_MSG = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
                     });                  
@@ -162,7 +178,6 @@
             }
         };
 
-
         $scope.detailInit = function (parentDataItem) {
             var columns = [];
             
@@ -225,7 +240,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID);
+                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID, e.model.RQST_SID);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");

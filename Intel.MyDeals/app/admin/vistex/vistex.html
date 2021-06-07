@@ -1,24 +1,42 @@
-﻿<div class="col-md-12">
+﻿<div class="col-md-12" style="padding-left:0px;padding-right:0px;">
     <div class="col-md-5">
-        <h2>Vistex Logs</h2>
+        <h2>Integration Logs</h2>
         <p style="color: #FC4C02">This screen shows the data to be sent to the down stream application Vistex</p>
     </div>
-    <div class="col-md-7" style="float:right;margin-top:35px;">
+    <div class="col-md-7" style="float:right;margin-top:35px;width:56%;">
         <div class="col-md-10"><input class="form-control md" ng-pattern="vm.RegxDealIds" type="text" ng-model="vm.DealIds" placeholder="Deal IDs. Multiple deal IDs can be separated with comma." title="Deal IDs. Multiple deal IDs can be separated with comma." style="width:100%;"></div>        
         <div class="col-md-2"><button ng-click="vm.SendVistexData()" class="btn btn-primary" style="float: left;">Send Data</button></div>
         <br />
         <div ng-if="vm.IsDealIdsValid == false" style="color: #FC4C02;float:right;">Please enter valid Deal Ids</div>
     </div>
 </div>
-<div class="col-md-12">
-    <div class="col-md-7" style="float:right;">
+<div class="col-md-12" style="padding-left:0px;padding-right:0px;">
+    <div class="col-md-7" style="float:right;display:inline-block;width:56%;">        
         <div class="col-md-10">
             <div class="fr">
                 <input kendo-date-picker ng-model="vm.startDate" style="width: 110px;" class="opUiContainer md" /> - <input kendo-date-picker ng-model="vm.endDate" style="width: 110px;" class="opUiContainer md" />
             </div>
-            <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>
+            <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>            
         </div>
         <div class="col-md-2"><button ng-click="vm.init()" class="btn btn-primary" style="float: left;width:97px;">Get Data</button></div>
+    </div>
+    <div style="display:inline-block">
+        <div class="fr opUiContainer md" style="color: #aaaaaa;margin-bottom:10px;">
+            <div class="col-md-8 row"
+                 op-control-flat
+                 ng-model="vm.RequestType"
+                 op-cd="'Request_Type'"
+                 op-type="'COMBOBOX'"
+                 op-lookup-url="'api/DSA/GetRequestTypeList'"
+                 op-lookup-text="'RQST_NAME'"
+                 op-lookup-value="'RQST_TYPE'"
+                 op-is-stealth="true"
+                 op-is-form="true"
+                 op-ui-mode="'VERTICAL'"></div>
+        </div>
+        <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa;width: 100px;">
+            Request Type:
+        </div>
     </div>
 </div>
 
@@ -32,4 +50,10 @@
         margin-top: 6%;
         margin-left: 37%;
     }
+    .k-combobox{
+        width: 210px;
+    }
+    .k-dropdown-wrap k-state-default, .k-input{
+        height: 32px;
+    }    
 </style>

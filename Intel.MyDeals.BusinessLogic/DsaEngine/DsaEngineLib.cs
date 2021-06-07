@@ -29,6 +29,11 @@ namespace Intel.MyDeals.BusinessLogic
             return new VistexAdminDataLib().AddVistexData(lstDealIds);
         }
 
+        public List<RequestDetails> GetRequestTypeList()
+        {
+            return new VistexAdminDataLib().GetRequestTypeList();
+        }
+
         public List<VistexDealOutBound> GetVistexDealOutBoundData()
         {
             return new VistexAdminDataLib().GetVistexDealOutBoundData();
@@ -52,9 +57,9 @@ namespace Intel.MyDeals.BusinessLogic
             return lstRtn;
         }
 
-        public Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
+        public Guid UpdateVistexStatus(Guid batchId, VistexStage vistexStage, int rqstId, int? dealId, string strErrorMessage)
         {
-            return new VistexAdminDataLib().UpdateStatus(batchId, vistexStage, dealId, strErrorMessage);
+            return new VistexAdminDataLib().UpdateStatus(batchId, vistexStage, rqstId, dealId, strErrorMessage);
         }
 
         public List<VistexProductVerticalOutBound> GetVistexProductVeticalsOutBoundData()

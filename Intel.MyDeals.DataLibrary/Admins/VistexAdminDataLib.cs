@@ -180,8 +180,29 @@ namespace Intel.MyDeals.DataLibrary
             return lstVistex;
         }
 
+        public List<RequestDetails> GetRequestTypeList()
+        {
+            List<RequestDetails> lstReqType = new List<RequestDetails>();
+            var cmd = new Procs.dbo.PR_GET_RQST_TYPE();
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_RQST_NAME = DB.GetReaderOrdinal(rdr, "RQST_NAME");
+                int IDX_RQST_TYPE = DB.GetReaderOrdinal(rdr, "RQST_TYPE");
+                while (rdr.Read())
+                {
+                    lstReqType.Add(new RequestDetails
+                    {
+                        RQST_NAME = (IDX_RQST_NAME < 0 || rdr.IsDBNull(IDX_RQST_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_NAME),
+                        RQST_TYPE = (IDX_RQST_TYPE < 0 || rdr.IsDBNull(IDX_RQST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RQST_TYPE)
+                    });
+                }
+            }
+            return lstReqType;
+        }
+
         //Only for internal testing
-        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int rqstId, int? dealId, string strErrorMessage)
         {
             var myDict = new Dictionary<int, string>
             {
@@ -192,7 +213,7 @@ namespace Intel.MyDeals.DataLibrary
 
             DataRow dr = opDealMessages.NewRow();
             dr["OBJ_SID"] = dealId;
-            dr["RSPN_MSG"] = strErrorMessage.Trim();
+            dr["RSPN_MSG"] = string.IsNullOrEmpty(strErrorMessage)? strErrorMessage : strErrorMessage.Trim();
             dr["RQST_STS"] = vistexStage.ToString("g");
             opDealMessages.Rows.Add(dr);
             
@@ -201,7 +222,8 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
                 in_btch_id = batchId,
-                in_dsa_rspn_log = opDealMessages
+                in_dsa_rspn_log = opDealMessages,
+                in_rqst_sid = rqstId
             };
             try
             {
@@ -209,6 +231,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     //Just save the data and move on - only error will report back below
                 }
+                OpLogPerf.Log($"RQST_SID: { rqstId }  IDSID:  { OpUserStack.MyOpUserToken.Usr.WWID }  ", LogCategory.Warning);
             }
             catch (Exception ex)
             {
