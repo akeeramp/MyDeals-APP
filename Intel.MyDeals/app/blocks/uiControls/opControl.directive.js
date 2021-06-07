@@ -203,13 +203,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             scope.getWidth = function (length, item) {
                 var DealType = scope.$parent.$parent.vm.autofillData.DEALTYPE;
                 if (item.ATRB_CD != undefined && item.ATRB_CD == 'REBATE_TYPE' && (DealType == 'PROGRAM' || DealType == 'VOL_TIER')) {
-                    var percentage = DealType == 'PROGRAM' ? 58.00 : 86.00;
-                    if (item.DROP_DOWN.length > 12) {
-                        ret = { 'width': 'auto' }
-                    }
-                    else {
-                        ret = { 'width': percentage / 6 + '%' }
-                    }
+                    if (item.DROP_DOWN.length > 12)
+                        ret = { 'width': item.DROP_DOWN.length + '%' }
+                    else if (item.DROP_DOWN.length < 4)
+                        ret = { 'width': (item.DROP_DOWN.length * 2) + '%' }
+                    else 
+                        ret = { 'width': (item.DROP_DOWN.length * 1.6) + '%' }
                 }
                 else {
                     ret = { 'width': 100.00 / length + '%' }
