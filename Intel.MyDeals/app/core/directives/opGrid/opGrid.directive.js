@@ -884,12 +884,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var checkedDeals = data.filter(function (x) {
                     return x["isLinked"] === true
                 });
+                var isdealsUnified = undefined;
+                if (checkedDeals.length > 0) {
+                    isdealsUnified = checkedDeals.filter(function (x) {
+                        return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
+                    });
+                } else {
+                    isdealsUnified = data.filter(function (x) {
+                        return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
+                    });
+                }
 
-                var isdealsUnified = data.filter(function (x) {
-                    return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
-                });
-
-                if (args["action"] == "Won" && isdealsUnified.length > 0) {
+                if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
                 }
