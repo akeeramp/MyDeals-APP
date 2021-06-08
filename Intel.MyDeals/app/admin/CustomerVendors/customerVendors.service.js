@@ -10,7 +10,7 @@
 
     function customerVendorsService($http, dataService, logger, $q) {
         var apiBaseUrl = "api/CustomerVendor/";
-        var dropdownUrl = "api/Dropdown/";
+        var dropdownUrl = "api/Customers/";
 
         return {
             getCustomerDropdowns: getCustomerDropdowns,
@@ -22,9 +22,7 @@
 
 
         function getCustomerDropdowns(isForceReGet) {
-            var isGetViaAngularCache = true;
-            if (isForceReGet) { isGetViaAngularCache = false; }
-            return dataService.get(dropdownUrl + 'GetCustomersList', null, null, isGetViaAngularCache);
+            return dataService.get(dropdownUrl + 'GetMyCustomerNames');
         }
 
         function updateCustomerVendor(dropdown) {

@@ -131,8 +131,8 @@
             },
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "dropdownName",
-            dataValueField: "dropdownID",
+            dataTextField: "CUST_NM",
+            dataValueField: "CUST_SID",
             valuePrimitive: true
         }
 
@@ -274,7 +274,7 @@
         vm.IsValidCustomerVendorMapping = function (model) {
 
             var validationMessages = [];
-            if (model.CUST_MBR_SID == null || model.CUST_MBR_SID == '' || vm.getCustomersData.filter(x => x.dropdownID === model.CUST_MBR_SID).length == 0)
+            if (model.CUST_MBR_SID == null || model.CUST_MBR_SID == '' || vm.getCustomersData.filter(x => x.CUST_SID === model.CUST_MBR_SID).length == 0)
                 validationMessages.push("Please Select Valid <b>Customer</b>.");
             if (model.BUSNS_ORG_NM == null || model.BUSNS_ORG_NM == '' || vm.vendorsNamesinfo.filter(x => x.BUSNS_ORG_NM === model.BUSNS_ORG_NM).length == 0)
                 validationMessages.push("Please Select Valid <b>Settlement Partner</b>.");
@@ -309,8 +309,8 @@
 
         function custFilter(element) {
             element.kendoDropDownList({
-                dataTextField: "dropdownName",
-                dataValueField: "dropdownID",
+                dataTextField: "CUST_NM",
+                dataValueField: "CUST_SID",
                 dataSource: vm.getCustomersData
             });
         }
