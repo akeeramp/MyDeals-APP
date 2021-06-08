@@ -1459,7 +1459,9 @@
                                 CUST_MBR_SID: gridDS[d].CUST_MBR_SID,
                                 WF_STG_CD: gridDS[d].WF_STG_CD,
                                 PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
-                                PS_ID: gridDS[d]._parentIdPS
+                                PS_ID: gridDS[d]._parentIdPS,
+                                IS_PRIMED_CUST: gridDS[d].IS_PRIMED_CUST,
+                                END_CUSTOMER_RETAIL: gridDS[d].END_CUSTOMER_RETAIL
                             });
                         }
                     }
@@ -1482,8 +1484,28 @@
             }
 
             var plural = tenders.length > 1 ? "s" : "";
+            var isDealNotUnififed = false;
+            if (dataItem.isLinked) {
+                var unUnifiedDeals = tenders.filter(function (x) {
+                    return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
+                });
+                isDealNotUnififed = unUnifiedDeals.length > 0 ? true : false;
+            }
+            else {
+                isDealNotUnififed = dataItem["IS_PRIMED_CUST"] == 0 && dataItem["END_CUSTOMER_RETAIL"] !== "";
+            }
+
+            if (newVal === "Won" && isDealNotUnififed) {
+                kendo.alert("End Customers needs to be Unified before it can be set to " + newVal);
+                if ($scope.actionType == "BID") {
+                    dataItem["tender_actions"].BidActnName = dataItem["WF_STG_CD"];
+                    dataItem["tender_actions"].BidActnValue = dataItem["WF_STG_CD"];
+                }
+                $('#dealEditor_active_cell').blur();
+                return;
+            }
             var msg = "";
-            if (newVal === "Won") msg = "Would you like to mark the Tender Deal" + plural + " as 'Won'?  This will generate a Tracker Number.";
+            if (newVal === "Won" && !isDealNotUnififed) msg = "Would you like to mark the Tender Deal" + plural + " as 'Won'?  This will generate a Tracker Number.";
             if (newVal === "Lost") msg = "Would you like to mark the Tender Deal" + plural + " as 'Lost'?";
             if (newVal === "Offer") msg = "Would you like to re-open the Tender Deal" + plural + " and set to 'Offer'?";
 

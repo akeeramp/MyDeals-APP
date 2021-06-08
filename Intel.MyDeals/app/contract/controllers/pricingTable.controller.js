@@ -4322,10 +4322,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.updateSpreadsheet = function (colName, value, context) {
         //update spreadsheet for multi tier deal type.
             var pdtIndex = context.range._ref.row - 1;
-            if ($scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
-                for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
-                    if ($scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == $scope.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
-                        $scope.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = value;
+            if (root.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS > 1) {
+                for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW[pdtIndex].NUM_OF_TIERS; i++) {
+                    if (root.pricingTableData.PRC_TBL_ROW[i + pdtIndex].PTR_USER_PRD == root.pricingTableData.PRC_TBL_ROW[pdtIndex].PTR_USER_PRD)
+                        root.pricingTableData.PRC_TBL_ROW[i + pdtIndex][colName] = value;
                 }
             }
     }
