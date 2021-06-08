@@ -17,6 +17,7 @@
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
+        var arrField = ["DC_ID", "VOLUME", "STRT_VOL", "END_VOL", "TOTAL_DOLLAR_AMOUNT", "CREDIT_VOLUME", "DEBIT_VOLUME", "NET_VOL_PAID", "CREDIT_AMT", "DEBIT_AMT", "TOT_QTY_PAID", "CONSUMPTION_LOOKBACK_PERIOD", "CAP","RATE"];
 
         $scope.operatorSettings = {
             "operators": [
@@ -286,13 +287,13 @@
                 field: "OEM_PLTFRM_LNCH_DT",
                 title: "OEM Platform Launch Date",
                 type: "date",
-                template: "#if(OEM_PLTFRM_LNCH_DT==null){#  #}else{# #= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') # #}#",                
+                template: "#if(OEM_PLTFRM_LNCH_DT==null){#  #}else{# #= moment(OEM_PLTFRM_LNCH_DT).format('MM/DD/YYYY') # #}#",
                 width: 130
             }, {
                 field: "OEM_PLTFRM_EOL_DT",
                 title: "OEM Platform EOL Date",
                 type: "date",
-                template: "#if(OEM_PLTFRM_EOL_DT==null){#  #}else{# #= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') # #}#",                 
+                template: "#if(OEM_PLTFRM_EOL_DT==null){#  #}else{# #= moment(OEM_PLTFRM_EOL_DT).format('MM/DD/YYYY') # #}#",
                 width: 130
             }, {
                 field: "PRODUCT_CATEGORIES",
@@ -655,9 +656,25 @@
                 var st = $scope.startDt.replace(/\//g, '-');
                 var en = $scope.endDt.replace(/\//g, '-');
                 var searchText = $scope.customers.length === 0 ? "null" : $scope.customers.join(',');
-
-                var url = "/api/Search/GetDealList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;');
-                
+                var searchField = "";
+                var searchInput = "";
+                var searchOperator = "";
+                var res;
+                for (var i = 0; i <= $scope.ruleData.length - 1; i++) {
+                    searchInput = $scope.ruleData[i].value;
+                    searchField = $scope.ruleData[i].field;
+                    searchOperator = $scope.ruleData[i].operator;
+                    res = validateInput(searchInput, searchField,searchOperator);
+                    if (res == false) {
+                        break;
+                    }
+                }
+                if (res == false) {
+                    logger.warning("Please provide proper search key");
+                }
+                else {
+                    var url = "/api/Search/GetDealList/" + st + "/" + en + "/" + searchText.replace(/\./g, '&per;');
+                }
                 $scope.savingToExcel = false;
                 return url;
             }
@@ -669,6 +686,27 @@
             startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
             endDate: moment().add(6, 'months').format("MM/DD/YYYY")
         });
+
+        //Search Input key should be comma seperated for 'IN' operator and not null data for all field
+        function validateInput(searchInput, searchField, searchOperator) {
+            var chkRes;
+            var reg = /^(\d+(,\d+)*)?$/; //Regular expression to check the comma separted Input format
+            if (searchInput == null || searchInput == "")
+            {
+                chkRes = false;
+            }
+            else if (arrField.includes(searchField) == true && searchOperator == "IN")
+            {               
+                if (reg.test(searchInput)) {
+
+                    chkRes = true;
+                }
+                else {
+                    chkRes = false;
+                }
+            }
+            return chkRes;
+        }
 
         // init dashboard
         $scope.startDt = $scope.$storage.startDate;
@@ -730,7 +768,7 @@
         $scope.$on('search-rules-updated', function (event, args) {
             $scope.$broadcast('reload-search-rules', args);
         });
-        
+
 
         $scope.changeDt = function (st, en) {
             $scope.$storage.startDate = st;
