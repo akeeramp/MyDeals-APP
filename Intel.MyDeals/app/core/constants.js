@@ -347,9 +347,6 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "REBATE_DEAL_ID": {
-                        "Groups": ["All"]
-                    },
                     "REBATE_OA_MAX_VOL": {
                         "Groups": ["All"]
                     },
@@ -546,9 +543,6 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
-                    },
-                    "REBATE_DEAL_ID": {
-                        "Groups": ["All"]
                     },
                     "REBATE_OA_MAX_VOL": {
                         "Groups": ["All"]
@@ -749,9 +743,6 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
-                    },
-                    "REBATE_DEAL_ID": {
-                        "Groups": ["All"]
                     },
                     "REBATE_OA_MAX_VOL": {
                         "Groups": ["All"]
@@ -1028,9 +1019,6 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "REBATE_DEAL_ID": {
-                        "Groups": ["All"]
-                    },
                     "REBATE_OA_MAX_VOL": {
                         "Groups": ["All"]
                     },
@@ -1198,7 +1186,7 @@
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
                     },
-                    "REBATE_DEAL_ID": {
+                    "REBATE_OA_MAX_VOL": {
                         "Groups": ["All"]
                     },
                     "REBATE_OA_MAX_AMT": {
