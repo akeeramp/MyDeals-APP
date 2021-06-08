@@ -1304,7 +1304,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         );
-
+        var isDelete = false;
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
             if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
                 // Revert value if not allowed to delete
@@ -1319,7 +1319,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var delIds = hasDataOrPurge(data, rowStart, rowStop);
                 if (delIds.length > 0) {
                     stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
-
+                    isDelete = true;
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
                             $timeout(function () {
@@ -1343,6 +1343,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (n + numToDel + numToDel));
                                             prdRange.enable(true);
                                             prdRange.background(null);
+                                            colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete);
                                         });
                                     }, 5);
 
@@ -1360,6 +1361,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         });
                     stealthOnChangeMode = false;
                 } else { // delete row with a temp id (ex: -101)
+                    isDelete = true;
                     $timeout(function () {
                         var cnt = 0;
 
@@ -1382,7 +1384,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         clearUndoHistory();
 
                         $scope.applySpreadsheetMerge();
-
+                        colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete);
                     }, 10);
                 }
             }
@@ -1471,74 +1473,119 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }, 10);
 
         }
-        var stlmntLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
-        var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
-        var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
-        var paymentIndex = root.colToLetter["PROGRAM_PAYMENT"];
-        var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
-        var stlmentValue = sheet.range(stlmntLvlIndex + topLeftRowIndex).value();
-        var paymentValue = sheet.range(paymentIndex + topLeftRowIndex).value();
-        if (stlmentValue == "Cash") {
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(true);
-            if (sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == '' || sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value() == null) {
-                if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
-                    sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
-            }
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background(null);
-        }
-        if (stlmentValue != null && stlmentValue != '' && stlmentValue != "Cash") {
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).value('');
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).enable(false);
-            sheet.range(stlmntPrtnrIndex + topLeftRowIndex).background('#f5f5f5');
-        }
 
-        if (paymentValue != null && paymentValue !== '' && paymentValue !== "Backend") {
-            // Disable RESET_VOLS_ON_PERIOD when PROGRAM_PAYMENT is frontend
-            sheet.range(resetPrdIndex + topLeftRowIndex).value('');
-            sheet.range(resetPrdIndex + topLeftRowIndex).enable(false);
-            sheet.range(resetPrdIndex + topLeftRowIndex).background('#f5f5f5');
-
-            // Disable AR_SETTLEMENT_LVL when PROGRAM_PAYMENT is frontend
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).value('');
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(false);
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).background('#f5f5f5');
-
-            // Disable PERIOD_PROFILE when PROGRAM_PAYMENT is frontend
-            sheet.range(prdProfileIndex + topLeftRowIndex).value('');
-            sheet.range(prdProfileIndex + topLeftRowIndex).enable(false);
-            sheet.range(prdProfileIndex + topLeftRowIndex).background('#f5f5f5');
-        }
-        else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && !hasTracker) {
-            // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
-            sheet.range(resetPrdIndex + topLeftRowIndex).enable(true);
-            sheet.range(resetPrdIndex + topLeftRowIndex).background(null);
-            if (sheet.range(resetPrdIndex + topLeftRowIndex).value() === '') {
-                sheet.range(resetPrdIndex + topLeftRowIndex).value("No");
-            }
-
-            // Re-enable AR_SETTLEMENT_LVL when Backend is selected
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).enable(true);
-            sheet.range(stlmntLvlIndex + topLeftRowIndex).background(null);
-            if (sheet.range(stlmntLvlIndex + topLeftRowIndex).value() === '') {
-                var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined
-                    || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
-                    "Issue Credit to Billing Sold To" : $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
-                sheet.range(stlmntLvlIndex + topLeftRowIndex).value(newArSettlementValue);
-            }
-
-            // Re-enable PERIOD_PROFILE when Backend is selected
-            sheet.range(prdProfileIndex + topLeftRowIndex).enable(true);
-            sheet.range(prdProfileIndex + topLeftRowIndex).background(null);
-            if (sheet.range(prdProfileIndex + topLeftRowIndex).value() === '') {
-                var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
-                    || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                    "Bi-Weekly (2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
-                sheet.range(prdProfileIndex + topLeftRowIndex).value(newValue);
-            }
+        if (!isDelete) {
+            $timeout(function () {
+                colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete);
+            }, 10);
         }
 
         if (!root._dirty) {
             root._dirty = true;
+        }
+    }
+
+    function colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete) {
+        var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
+        var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
+        var stlmntLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
+        var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
+        var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
+        var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
+        //this is because 2 rows in the PTE header 
+        var pteHeaderIndex = 2;
+        //Adding for loop to make sure all the columns in PTE enable and disable properly when we perform different operations like delete a product,bulk delete,adding products etc.,
+        for (var i = topLeftRowIndex - pteHeaderIndex; i < data.length; i++) {
+            //Disable overarching fields when FLEX row type is Draining
+            if (data[i].FLEX_ROW_TYPE == "Draining") {
+                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+            }
+            if (data[i].FLEX_ROW_TYPE == "Accrual") {
+                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).enable(true);
+                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).background(null);
+                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(true);
+                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background(null);
+            }
+
+            var stlmentValue = data[i].AR_SETTLEMENT_LVL;
+            var paymentValue = data[i].PROGRAM_PAYMENT;
+            if (stlmentValue == "Cash") {
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(true);
+                if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '' || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null) {
+                    if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
+                        sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
+                }
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background(null);
+            }
+            if (stlmentValue != null && stlmentValue != '' && stlmentValue != "Cash") {
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+            }
+            if (paymentValue != null && paymentValue !== '' && paymentValue !== "Backend") {
+                // Disable RESET_VOLS_ON_PERIOD when PROGRAM_PAYMENT is frontend
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+
+
+
+                // Disable AR_SETTLEMENT_LVL when PROGRAM_PAYMENT is frontend
+                sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+
+
+
+                // Disable PERIOD_PROFILE when PROGRAM_PAYMENT is frontend
+                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+            }
+            else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && (!hasTracker || hasTracker.length == 0)) {
+                // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(true);
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background(null);
+                if (sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value() === '') {
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value("No");
+                }
+
+                // Re-enable AR_SETTLEMENT_LVL when Backend is selected
+                //Checking whether it is tender or not because for tender deals Period profile and AR settlement level should be always read only and set to the default values(DE116740)
+                if (root.isTenderContract !== "1") {
+                    sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).enable(true);
+                    sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).background(null);
+                }
+                if (sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === '') {
+                    var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined
+                        || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
+                        "Issue Credit to Billing Sold To" : $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
+                    sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value(newArSettlementValue);
+                }
+
+                // Re-enable PERIOD_PROFILE when Backend is selected
+                //Checking whether it is tender or not because for tender deals Period profile and AR settlement level should be always read only and set to the default values(DE116740)
+                if (root.isTenderContract !== "1") {
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(true);
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background(null);
+                }
+                if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
+                    var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
+                        || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                        "Bi-Weekly (2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
+                }
+            }
+            //this conditon added beacause it we make a change in single row this for loop breaks with one iteration or else complete the loop to make sure all columns enable and disable properly based on conditons
+            if (!isDelete) {
+                break;
+            }
+
         }
     }
 
