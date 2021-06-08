@@ -37,7 +37,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
         dataSource: {
             type: "json",
             transport: {
-                read: "/api/ProductCostTest/GetLegalExceptionsPct/" + moment(dataItem.DEAL_END_DT).format("MM-DD-YYYY")
+                read: "/api/ProductCostTest/GetLegalExceptionsPct/" + moment(dataItem.DEAL_END_DT).format("MM-DD-YYYY") // This formatting is due to being used as API parameter, doesn't allow slashes
             },
             requestEnd: function (e) {
                 if (!e.response) return;
