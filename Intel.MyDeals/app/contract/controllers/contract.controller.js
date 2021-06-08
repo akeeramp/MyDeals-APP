@@ -2822,7 +2822,7 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
                             }
-                            //Adding Over arching  error into err object in PTE
+                            //Adding Overarching  error into err object in PTE
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
@@ -3079,7 +3079,7 @@
                                 }
                             }
 
-                            // Adding Over Arching error into err object in DE
+                            // Adding Overarching error into err object in DE
                             if (gData[i]._behaviors.isError['REBATE_OA_MAX_VOL']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
@@ -5930,7 +5930,7 @@
         }
         // validate OverArching conditions
         $scope.validateOverArching = function (data) {
-            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
             var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual'); 
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
@@ -5943,20 +5943,7 @@
                 //condition to check values are zero
                 retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
                 retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
-                //condition to check all OAV is same 
-                retOAVCond = data.every((val) => val.REBATE_OA_MAX_VOL != null && val.REBATE_OA_MAX_VOL != ''  &&
-                    val.REBATE_OA_MAX_VOL == data[0].REBATE_OA_MAX_VOL);
-
-                //condition to check all OAD is same 
-                retOADCond = data.every((val) => val.REBATE_OA_MAX_AMT != null && val.REBATE_OA_MAX_AMT != ''  &&
-                    val.REBATE_OA_MAX_AMT == data[0].REBATE_OA_MAX_AMT);
-                //condition to check all OAV is empty 
-                retOAVEmptCond = data.every((val) => (val.REBATE_OA_MAX_VOL == null || val.REBATE_OA_MAX_VOL == '') &&
-                    (val.REBATE_OA_MAX_VOL == data[0].REBATE_OA_MAX_VOL));
-
-                //condition to check all OAD is empty 
-                retOADEmptCond = data.every((val) => (val.REBATE_OA_MAX_AMT == null || val.REBATE_OA_MAX_AMT == '')
-                    && (val.REBATE_OA_MAX_AMT == data[0].REBATE_OA_MAX_AMT));
+                
                 if (retZeroOAV) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
@@ -5968,38 +5955,60 @@
                     });
                 }
 
-                else if (retOAVEmptCond && retOADEmptCond) {
+                //else if (retOAVCond && retOADCond) { But on a line by line bases to capture both values filled out, not entire table both columns filled out.
+                var testMaxAmtValues = [];
+                var testMaxAmtCount = 0;
+                var testMaxVolValues = [];
+                var testMaxVolCount = 0;
+                angular.forEach(data, (item) => {
+                    // Are both values populated on this item?
+                    if ((item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") && (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL !== "")) {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
+                    }
+                    // Are both values empty for this item?
                     if (isFlexAccrual != 1) { // Pulls Flex out of this test
-                        angular.forEach(data, (item) => {
+                        if ((item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") && (item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
                             $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth');
                             $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth');
-                        });
+                        }
                     }
+                    // Check for 0 values
+                    if (item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT === "0") {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
+                    }
+                    if (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL === "0") {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
+                    }
+                    // Check for all values equal
+                    if (item.REBATE_OA_MAX_AMT !== null) {
+                        testMaxAmtCount++;
+                        if (testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT) < 0) {
+                            testMaxAmtValues.push(item.REBATE_OA_MAX_AMT);
+                        }
+                    }
+                    if (item.REBATE_OA_MAX_VOL !== null) {
+                        testMaxVolCount++;
+                        if (testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL) < 0) {
+                            testMaxVolValues.push(item.REBATE_OA_MAX_VOL);
+                        }
+                    }
+                });
+                if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != data.length)) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal');
+                    });
                 }
-                else if (retOAVCond && retOADCond) {
+                if (testMaxVolValues.length > 1 || (testMaxVolValues > 0 && testMaxVolCount != data.length)) {
+                    angular.forEach(data, (item) => {
+                        $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal');
+                    });
+                }
+                if (testMaxAmtValues.length > 0 && testMaxVolValues.length > 0) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
                     });
-                }
-                else {
-                    if (!retOAVCond) {
-                        angular.forEach(data, (item) => {
-                            $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal');
-                        });
-                    }
-                    if (!retOADCond) {
-                        angular.forEach(data, (item) => {
-                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal');
-                        });
-                    }
-                    if (retOAVEmptCond && !retOADEmptCond) {
-                        $scope.clearValidation(data, 'REBATE_OA_MAX_VOL');
-                    }
-                    if (retOADEmptCond && !retOAVEmptCond) {
-                        $scope.clearValidation(data, 'REBATE_OA_MAX_AMT');
-                    }
-                    
                 }
                 
             }
@@ -6279,22 +6288,22 @@
                 // no opeeration - taken in above case statement
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_VOL') {
-                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Volume', cond);
+                $scope.setBehaviorsValidMessage(item, elem, 'Overarching Max Volume', cond);
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_AMT') {
-                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Dollar', cond);
+                $scope.setBehaviorsValidMessage(item, elem, 'Overarching Max Dollar', cond);
             }
             else if (cond == 'equalemptyboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
-                item._behaviors.validMsg[elem] = "Both Over Arching Maximum Volume and Over Arching Maximum Dollars cannot be empty. Populate one";
+                item._behaviors.validMsg[elem] = "Entering both an Overarching Maximum Volume and Overarching Maximum Dollar value is not allowed.";
             }
             else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_VOL') {
-                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Volume', cond);
+                $scope.setBehaviorsValidMessage(item, elem, 'Overarching Max Volume', cond);
             }
             else if (cond == 'equalzero' && elem == 'REBATE_OA_MAX_AMT') {
-                $scope.setBehaviorsValidMessage(item, elem, 'Over Arching Max Doller', cond);
+                $scope.setBehaviorsValidMessage(item, elem, 'Overarching Max Doller', cond);
             }
             else if (cond == 'equalboth' && (elem == 'REBATE_OA_MAX_AMT' || elem == 'REBATE_OA_MAX_VOL')) {
-                item._behaviors.validMsg[elem] = "Both Over Arching Maximum Volume and Over Arching Maximum Dollars cannot contain values. Remove values from one ";
+                item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot contain values. Choose one or the other.";
             }
             else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
                 item._behaviors.validMsg[elem] = "Overlapping products identified, please change the overlapping Accrual and Draining dates.";
