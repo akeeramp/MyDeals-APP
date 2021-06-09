@@ -6351,9 +6351,16 @@
             }
             if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
                 var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+                var checkEndCustomerValue = data.filter(ob => ob.END_CUSTOMER_RETAIL.toLowerCase() == 'any' && (ob.PRIMED_CUST_CNTRY == null || ob.PRIMED_CUST_CNTRY == ''));
                 if (rebateType && rebateType.length > 0) {
                     var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    //for the end customer "any" it is okay not to select any country value adding this if condition to fix DE116869
+                    if (checkEndCustomerValue.length > 0) {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
+                    else {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
                     if (!retRetail || !retCtry) {
                         angular.forEach(data, (item) => {
                             $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
@@ -6362,7 +6369,12 @@
                 }
                 else {
                     var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (checkEndCustomerValue.length > 0) {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
+                    else {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
                     if (!retRetail || !retCtry) {
                         angular.forEach(data, (item) => {
                             $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
@@ -6372,9 +6384,15 @@
             }
             else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") {
                 var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+                var checkEndCustomerValue = data.filter(ob => ob.END_CUSTOMER_RETAIL.toLowerCase() == 'any' && (ob.PRIMED_CUST_CNTRY == null || ob.PRIMED_CUST_CNTRY == ''));
                 if (rebateType && rebateType.length > 0) {
                     var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    if (checkEndCustomerValue.length > 0) {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
+                    else {
+                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
+                    }
                     if (!retRetail || !retCtry) {
                         angular.forEach(data, (item) => {
                             $scope.setEndCustomer(item, 'Program Deal');
