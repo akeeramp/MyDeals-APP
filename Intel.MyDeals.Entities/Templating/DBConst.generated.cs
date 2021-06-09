@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 4/1/2021 2:05:32 PM
-On: SAURAVKU-MOBL1
+File Updated: 6/8/2021 11:58:47 PM
+On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 using System;
@@ -2931,6 +2931,7 @@ namespace Intel.MyDeals.Entities {
 		public const string BLLG_TENDER_CUTOVER_DEAL = "BLLG_TENDER_CUTOVER_DEAL";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
+		public const string CNSMPTN_LD = "CNSMPTN_LD";
 		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
 		public const string COST_TEST_PRD_MODE_2 = "COST_TEST_PRD_MODE_2";
 		public const string COST_TEST_ROLES = "COST_TEST_ROLES";
