@@ -1481,7 +1481,7 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
 
-                DateTime maxEndDt = startDate.AddYears(1);
+                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
                 if (endDate > maxEndDt)
                 {
                     deEndDate.AddMessage("End date is limited to 1 year from deal start date");
