@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 4/27/2021 1:47:52 PM
+File Updated: 6/8/2021 11:59:27 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -3869,8 +3869,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
-			ATRB_DESC = "Tender Project",
-			ATRB_LBL = "Project",
+			ATRB_DESC = "Project Name",
+			ATRB_LBL = "Project Name",
 			ATRB_MAX_LEN = 65,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
