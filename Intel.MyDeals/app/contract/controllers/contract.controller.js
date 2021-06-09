@@ -6328,7 +6328,12 @@
                 item._behaviors.validMsg[elem] = "All deals within a " + dealTypeLabel + " should have the same '" + elemLabel + "' value.";
             }
             else if (cond == 'equalblank') {
-                item._behaviors.validMsg[elem] = "Deals within a " + dealTypeLabel + " must have a '" + elemLabel + "' value.";
+                if (elem === 'SETTLEMENT_PARTNER') {
+                    item._behaviors.validMsg[elem] = "Settlement Partner is required when Settlement level is Cash";
+                }
+                else {
+                    item._behaviors.validMsg[elem] = "Deals within a " + dealTypeLabel + " must have a '" + elemLabel + "' value.";
+                }
             }
             else if (cond == 'equalzero') {
                 item._behaviors.validMsg[elem] = elemLabel + " must be blank or > 0.";
