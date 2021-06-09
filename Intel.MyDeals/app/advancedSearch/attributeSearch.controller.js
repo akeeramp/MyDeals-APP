@@ -17,7 +17,7 @@
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
-        var arrField = ["DC_ID", "VOLUME", "STRT_VOL", "END_VOL", "TOTAL_DOLLAR_AMOUNT", "CREDIT_VOLUME", "DEBIT_VOLUME", "NET_VOL_PAID", "CREDIT_AMT", "DEBIT_AMT", "TOT_QTY_PAID", "CONSUMPTION_LOOKBACK_PERIOD", "CAP","RATE"];
+        var arrField = ["DC_ID", "VOLUME", "STRT_VOL", "END_VOL", "TOTAL_DOLLAR_AMOUNT", "CREDIT_VOLUME", "DEBIT_VOLUME", "NET_VOL_PAID", "CREDIT_AMT", "DEBIT_AMT", "TOT_QTY_PAID", "CONSUMPTION_LOOKBACK_PERIOD", "CAP", "RATE", "ECAP_PRICE"];
 
         $scope.operatorSettings = {
             "operators": [
