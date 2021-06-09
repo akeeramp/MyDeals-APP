@@ -94,20 +94,20 @@
             vm.PrimeCustomersData.map(
                 function getDuplicate(x) {
                     if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM !== model.PRIM_CUST_NM && model.PRIM_CUST_NM != "" && model.PRIM_CUST_NM != null) {
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM.toUpperCase() !== model.PRIM_CUST_NM.toUpperCase() && model.PRIM_CUST_NM != "" && model.PRIM_CUST_NM != null) {
                             validationMessages.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Unified Customer");
                         }
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM.toUpperCase() === model.PRIM_CUST_NM.toUpperCase() && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
                             validationMessages.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
                         }
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x.PRIM_CUST_NM.toUpperCase() === model.PRIM_CUST_NM.toUpperCase() && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
                             validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         }
-                        if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
+                        if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM.toUpperCase() === model.PRIM_CUST_NM.toUpperCase() && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
                         }
                     }
-                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM === model.PRIM_CUST_NM && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "") {
+                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x.PRIM_CUST_NM.toUpperCase() === model.PRIM_CUST_NM.toUpperCase() && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "") {
                         validationMessages.push("\""+x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
                         
                     }
