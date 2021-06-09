@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal'];
+EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal', 'isAdmin'];
 
-function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal) {
+function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, isAdmin) {
     var $ctrl = this;
     $ctrl.IsError = false;
     var endCustomer = "END_CUSTOMER_RETAIL"
@@ -44,9 +44,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
 
 
-        var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val();
-        if (endCustomerOnly != '' && endCustomerOnly != null && endCustomerOnly != undefined && !isEndCustomerSelected) {
-            if (isPrimeCountrySelected) {
+        var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val().trim();
+        if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
+            $ctrl.IsError = false;
+            kendo.alert("Any can not be selected from Deal reconciliation screen.");
+        }
+        else if (endCustomerOnly != '' && endCustomerOnly != null && endCustomerOnly != undefined && !isEndCustomerSelected) {
+            if (isPrimeCountrySelected && endCustomerOnly.toUpperCase() !== "ANY") {
                 data.IS_PRIME = 0;
                 data.PRIM_CUST_NM = "";
                 data.PRIM_CUST_ID = null;
@@ -56,13 +60,21 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 //$ctrl.popupResult.DropdownSelections = "";
                 $uibModalInstance.close(data);
             }
+            else if (endCustomerOnly.toUpperCase() == "ANY") {
+                data.IS_PRIME = 1;
+                data.PRIM_CUST_NM = "ANY";
+                data.PRIM_CUST_ID = null;
+                data.PRIMED_CUST_CNTRY = countryVal;
+                data.END_CUSTOMER_RETAIL = endCustomerOnly;
+                $uibModalInstance.close(data);
+            }
             else {
                 $ctrl.IsError = true;
                 $ctrl.msg = "Please select End Customer Country";
             }
 
         }
-        else if (endCustVal !== "ANY" && isEndCustomerSelected && isPrimeCountrySelected) {
+        else if (endCustVal.toUpperCase() !== "ANY" && isEndCustomerSelected && isPrimeCountrySelected) {
             if (isEndCustomerSelected && isPrimeCountrySelected) {
                 var temp = new Array(endCustVal, countryVal);
                 PrimeCustomersService.getEndCustomerData(temp).then(
@@ -98,7 +110,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             }
 
         }
-        else if ((isEndCustomerSelected || endCustVal !== "") && !isPrimeCountrySelected && endCustVal !== "ANY") {
+        else if ((isEndCustomerSelected || endCustVal !== "") && !isPrimeCountrySelected && endCustVal.toUpperCase() !== "ANY") {
             $ctrl.IsError = true;
             //if (!isEndCustomerSelected && !isPrimeCountrySelected)
             //    $ctrl.msg = "Please select valid Prime customer and country";
@@ -120,7 +132,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
         else {
             $ctrl.IsError = false;
-            if (endCustVal == "ANY") {
+            if (endCustVal.toUpperCase() == "ANY") {
                 data.IS_PRIME = 1;
                 data.PRIM_CUST_NM = "ANY";
                 data.PRIM_CUST_ID = null;

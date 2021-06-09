@@ -3273,6 +3273,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         },
                         country: function () {
                             return containerDataItem.PRIMED_CUST_CNTRY;
+                        },
+                        isAdmin: function () {
+                            return false;
                         }
                     }
                 });

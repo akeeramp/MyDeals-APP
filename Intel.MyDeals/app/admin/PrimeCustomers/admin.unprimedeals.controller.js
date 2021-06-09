@@ -88,6 +88,9 @@
                     },
                     country: function () {
                         return model.END_CUSTOMER_COUNTRY;
+                    },
+                    isAdmin: function () {
+                        return true;
                     }
                 }
             });
