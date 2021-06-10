@@ -12,6 +12,11 @@
     function PrimeCustomersController(PrimeCustomersService, dataService, dropdownsService, $scope, logger, confirmationModal, gridConstants, $uibModal) {
         $scope.accessAllowed = true;
         var vm = this;
+        //RA/CA/SA/Developer can see the Screen..
+        //Added By Pulkit Gupta for DE117054
+        if (window.usrRole != 'CA' && window.usrRole != 'SA' && window.usrRole != 'RA' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.countries = [];
         vm.primeCustomers = [];
 

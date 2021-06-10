@@ -12,7 +12,11 @@
     function UnprimedealsController(PrimeCustomersService, dropdownsService, $scope, logger, gridConstants, $uibModal, objsetService) {
         $scope.accessAllowed = true;
         var vm = this;
-
+        //GA/SA/Developer can see the Screen..
+        //Added By Pulkit Gupta for DE117054
+        if (window.usrRole != 'GA' && window.usrRole != 'SA' && window.usrRole != 'FSE' && !window.isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
