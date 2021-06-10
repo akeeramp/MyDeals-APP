@@ -929,7 +929,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Transform negative numbers into positive
                                 if (colIndex == qtyIndex) {
                                     var intVal = parseInt(value.value);
-                                    myRow["QTY"] = (isNaN(intVal) ? 1 : Math.abs(intVal));
+                                    //DE117041: Fix for successful save on deleting the quantity
+                                    myRow["QTY"] = (isNaN(intVal) ? 0 : Math.abs(intVal));
                                 }
                                 if (colIndex == dscntPerLnIndex) {
                                     myRow["DSCNT_PER_LN"] = (Math.abs(parseFloat(value.value).toFixed(2) || 0) || 0);
