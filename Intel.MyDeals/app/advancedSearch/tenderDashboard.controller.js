@@ -12,7 +12,7 @@
     tenderDashboardController.$inject = ['$scope', '$state', '$filter', '$localStorage', '$compile', '$uibModal', '$uibModalStack', '$timeout', '$q', 'objsetService', 'templatesService', 'securityService', '$location', 'logger', '$window', 'opGridTemplate', '$linq', '$rootScope', 'colorDictionary', 'dataService', 'maxRecordCountConstant'];
 
     function tenderDashboardController($scope, $state, $filter, $localStorage, $compile, $uibModal, $uibModalStack, $timeout, $q, objsetService, templatesService, securityService, $location, logger, $window, opGridTemplate, $linq, $rootScope, colorDictionary, dataService, maxRecordCountConstant) {
-
+        $scope.rollBackData = [];
         kendo.culture().numberFormat.currency.pattern[0] = "-$n";
         document.title = "Tender Dashboard - My Deals";
         $scope.uid = -101;
@@ -1019,7 +1019,9 @@
                     }
                 }
             }
-
+            if ($scope.rollBackData.length > 0) {
+                $scope.rollBackData[0]._behaviors = wip_data[0]._behaviors;
+            }
             $("#dealEditor").data("kendoGrid").dataSource.read();
             $("#dealEditor").data("kendoGrid").refresh();
         }
@@ -1204,6 +1206,8 @@
                             return;
                         }
 
+                        $scope.rollBackData = [];
+                        $scope.rollBackData.push(wip);
                         $scope.refreshGridRows([wip.DC_ID], null);
                         $scope.setBusy("Rollback Successful", "Rollback of the Deal", "Success");
                         $timeout(function () {
