@@ -32,7 +32,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var depth = 5;
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
-            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION'];
+            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION', 'AVG_RPU'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
             if ($scope.opName === undefined) $scope.opName = "DealEditor";
@@ -998,11 +998,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.$on('updateDealAtrb', function (event, args) {                
                 for (var i = 0; i < args.WIP_DEAL.length; i++)
                 {
-                    if (args.WIP_DEAL[i].DC_ID == $scope.opData[i]["DC_ID"] )
+                    // DE117459 : added check to  reflect change in AVG_RPU without Refresh on FRCST_VOLUME change
+                    var index = $scope.opData.findIndex(ele => ele.DC_ID == args.WIP_DEAL[i].DC_ID)
+                    if (index != null && index != undefined && index >= 0)
                     {
                         for (var j = 0; j < atrbList.length; j++)
                         {
-                            $scope.opData[i][atrbList[j]] = args.WIP_DEAL[i][atrbList[j]];
+                            $scope.opData[index][atrbList[j]] = args.WIP_DEAL[i][atrbList[j]];
                         }
 
                         $scope.opData[i]["_actionsPS"] = args.WIP_DEAL[i]._actions;
