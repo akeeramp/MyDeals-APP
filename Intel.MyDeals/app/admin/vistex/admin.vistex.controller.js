@@ -106,13 +106,13 @@
             return false;
         }
 
-        vm.UpdateVistexStatus = function (strTransantionId, dealId, rqstId) {
+        vm.UpdateVistexStatus = function (strTransantionId, dealId) {
             if (vm.EnteredMessage == '')
                 vm.EnteredMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, rqstId, vm.EnteredMessage).then(function (response) {
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage).then(function (response) {
                 if (response.data == strTransantionId) {
-                    angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data && x.DEAL_ID === dealId && x.RQST_SID === rqstId), function (dataItem) {
+                    angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data && x.DEAL_ID === dealId), function (dataItem) {
                         dataItem.RQST_STS = vm.SelectedStatus;
                         dataItem.ERR_MSG = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
                     });                  
@@ -240,7 +240,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID, e.model.RQST_SID);
+                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
