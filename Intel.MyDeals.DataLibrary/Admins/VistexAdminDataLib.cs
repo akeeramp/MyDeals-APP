@@ -183,7 +183,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<RequestDetails> GetRequestTypeList()
         {
             List<RequestDetails> lstReqType = new List<RequestDetails>();
-            var cmd = new Procs.dbo.PR_GET_RQST_TYPE();
+            var cmd = new Procs.dbo.PR_MYDL_GET_DSA_RQST_TYPE();
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
@@ -202,7 +202,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //Only for internal testing
-        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int rqstId, int? dealId, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
         {
             var myDict = new Dictionary<int, string>
             {
@@ -222,8 +222,7 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
                 in_btch_id = batchId,
-                in_dsa_rspn_log = opDealMessages,
-                in_rqst_sid = rqstId
+                in_dsa_rspn_log = opDealMessages
             };
             try
             {
@@ -231,7 +230,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     //Just save the data and move on - only error will report back below
                 }
-                OpLogPerf.Log($"RQST_SID: { rqstId }  IDSID:  { OpUserStack.MyOpUserToken.Usr.WWID }  ", LogCategory.Warning);
+                OpLogPerf.Log($"BTCH_ID: { batchId } DEAL_ID: {dealId}  IDSID:  { OpUserStack.MyOpUserToken.Usr.WWID }  ", LogCategory.Warning);
             }
             catch (Exception ex)
             {

@@ -47,7 +47,7 @@
         }
 
         function updateVistexStatus(strTransantionId, strVistexStage, dealId, rqstId, strErrorMessage) {
-            return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + rqstId + "/" + dealId, JSON.stringify(strErrorMessage));
+            return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + dealId, JSON.stringify(strErrorMessage));
         }
 
         function callAPI(apiName, runMode) {
