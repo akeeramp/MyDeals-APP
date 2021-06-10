@@ -1517,7 +1517,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var paymentValue = data[i].PROGRAM_PAYMENT;
             if (stlmentValue == "Cash") {
                 sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(true);
-                if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '' || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null) {
+                if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '') {
                     if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
                         sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
                 }
@@ -1562,10 +1562,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).enable(true);
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).background(null);
                 }
-                if (sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === '') {
-                    var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined
-                        || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
-                        "Issue Credit to Billing Sold To" : $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
+                if (sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === null || sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === '') {
+                    // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
+                    var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
+                        ($scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined || $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "" ? "Issue Credit to Billing Sold To" : $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL) :
+                        $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value(newArSettlementValue);
                 }
 
@@ -1575,10 +1576,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(true);
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background(null);
                 }
-                if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
-                    var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined
-                        || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                        "Bi-Weekly (2 weeks)" : $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === null || sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
+                    // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
+                    var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                        ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
+                        $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
                 }
             }
