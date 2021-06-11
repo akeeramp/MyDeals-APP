@@ -85,10 +85,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
     // Hard-coded sadnesses, but are better than other hard-coded sadness solutions
+    //Added Rebate type to the list
     var productValidationDependencies = [
         "GEO_COMBINED",
         "PROGRAM_PAYMENT",
-        "PROD_INCLDS"
+        "PROD_INCLDS",
+        "REBATE_TYPE"
     ];
     var firstEditableColBeforeProduct = null; // used along with to properly disable/enable cols before PTR_USR_PRD. Is calucated using editableColsBeforeProduct. Defaults to PTR_USR_PRD when editableColsBeforeProduct is empty
     var editableColsBeforeProduct = [
@@ -97,7 +99,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     ];
 
     // Performance and UX... removed this.  We will need to handle these in the MT rules
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT","REBATE_TYPE"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     var initSearchValue = "";
@@ -4012,7 +4014,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }            
             //Checking GEO
-            if (data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
+            //Added a check to check for Geo_Combined only if it exists.
+            if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
                 var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
                 var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
                 var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
