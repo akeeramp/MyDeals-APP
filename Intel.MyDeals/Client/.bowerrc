@@ -1,0 +1,12 @@
+{
+  "directory": "src/libs",
+  "registry": {
+		"search": [
+			"http://bowerregistry.intel.com",
+		    "https://registry.bower.io",
+			"https://bower.herokuapp.com"
+		]
+	},
+	"proxy": "http://proxy-chain.intel.com:911",
+	"https-proxy": "http://proxy-chain.intel.com:911"
+}

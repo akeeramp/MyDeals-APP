@@ -1,5 +1,9 @@
 //angular changes
-import './app.main.js';
+import './app.main';
+import './app.routes';
+//importing reporting to app module
+import './reporting';
+import './directives';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';

@@ -17,7 +17,7 @@
                     url: '/',
                     abstract: true,
                     views: {
-                        'bodyView': {
+                        'dashboardView': {
                             templateUrl: '/app/dashboard/views/portal.html',
                             controller: 'DashboardController',
                             controllerAs: 'dashboard',

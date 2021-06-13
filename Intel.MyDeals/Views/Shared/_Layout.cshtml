@@ -31,6 +31,8 @@
     @Html.Partial("_Header")
     <div id="modals"></div>
     <div id="bodyContent" class="mainBodyStyle" style="">
+        <div ui-view="dashboardView"></div>
+        <div ui-view="reportingView"></div>
         @RenderBody()
     </div>
     @Html.Partial("_Footer")

@@ -19,6 +19,8 @@ object2Array.$inject = [];
 function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
+    //using to set spinner object
+    $scope.isLoading = true;
 
     // Get recent links from localstorage
     $scope.recents = $localStorage.recents;
@@ -275,6 +277,8 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
 
         userPreferencesService.getActions("Dashboard", "Widgets")
             .then(function (response) {
+                //stopping the load page
+                $scope.isLoading = false;
                 if (response.data && response.data.length > 0) {
                     // Get the saved widget settings for the specified key (user role).
                     var savedWidgetSettingsForSpecifiedRole = response.data.filter(function (obj) {

@@ -1,21 +1,37 @@
-﻿<div id="horizontal-dashboard" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
-    <div id="center-pane-dashboard" class="fr">
-        <div id="dashboardContainerWrapper">
-            <div id="dashboardHeader">
-                <div ui-view="dashboardHeaderView"></div>
-            </div>
-            <div id="dashboardContainer" class="fullHeight">
-                <div ui-view="dashboardWrapperView" class="fullHeight"></div>
+﻿<style>
+    /*this stop manege scrollbar input dashboard*/
+    div.overFlowDash {
+        width: auto;
+        height: 720px !important;
+        overflow: scroll !important;
+    }
+</style>
+    ﻿<!-- using for Angular spinner while page load -->
+    <cc-spinner is-loading="isLoading"
+                message="Dashboard Loading ...">
+    </cc-spinner>
+
+     
+    <div id="horizontal-dashboard" class="overFlowDash"  ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" ng-show="!isLoading">
+        <div id="center-pane-dashboard" class="fr">
+            <div id="dashboardContainerWrapper">
+                <div id="dashboardHeader">
+                    <div ui-view="dashboardHeaderView"></div>
+                </div>
+                <div id="dashboardContainer" class="fullHeight">
+                    <div ui-view="dashboardWrapperView" class="fullHeight"></div>
+                </div>
             </div>
         </div>
+
+        <div id="left-pane-dashboard" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+            <div ui-view="lnavView" class="fullHeight"></div>
+        </div>
+
+        <div class="clearboth"></div>
     </div>
 
-    <div id="left-pane-dashboard" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
-        <div ui-view="lnavView" class="fullHeight"></div>
-    </div>
 
-    <div class="clearboth"></div>
-</div>
 
 <style>
     .modal-dialog {
