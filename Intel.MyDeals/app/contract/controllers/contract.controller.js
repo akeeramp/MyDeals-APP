@@ -3579,6 +3579,9 @@
                                             mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);    //TODO: what happens in negative dim cases? this doesnt cover does it?
                                         }
                                     }
+                                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                                            delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
+                                    }
                                 }
                             }
                             $scope.updateResults(data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
