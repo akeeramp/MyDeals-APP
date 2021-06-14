@@ -1573,24 +1573,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var stlmentValue = data[i].AR_SETTLEMENT_LVL;
             var paymentValue = data[i].PROGRAM_PAYMENT;
-            if (stlmentValue == "Cash") {
-                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(true);
-                if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '') {
-                    if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
-                        sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
-                }
-                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background(null);
-            }
-            if (stlmentValue != null && stlmentValue != '' && stlmentValue != "Cash") {
-                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value('');
-                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(false);
-                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-            }
             if (paymentValue != null && paymentValue !== '' && paymentValue !== "Backend") {
                 // Disable RESET_VOLS_ON_PERIOD when PROGRAM_PAYMENT is frontend
                 sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value('');
                 sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(false);
                 sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
 
 
 
@@ -1598,13 +1586,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value('');
                 sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).enable(false);
                 sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-
-
+                sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
 
                 // Disable PERIOD_PROFILE when PROGRAM_PAYMENT is frontend
                 sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value('');
                 sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(false);
                 sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
             }
             else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && (!hasTracker || hasTracker.length == 0)) {
                 // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
@@ -1641,6 +1630,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
                 }
+            }
+            stlmentValue = data[i].AR_SETTLEMENT_LVL;
+            //As the above if conditions may change the value of ar settlement level based on the conditions, this if condition needs to be kept in the last with the updated ar settlement level value to make sure always settlement partner disabled if ar settlement level is not cash.
+            if (stlmentValue == "Cash") {
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(true);
+                if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '') {
+                    if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
+                        sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER);
+                }
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background(null);
+            }
+            //to make sure settlement partner is disabled even for empty Ar settlement level value because for all the frontend program payment deals settlement level is disabled and set to empty string
+            if ((stlmentValue != null && stlmentValue != "Cash")|| stlmentValue =="") {
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value('');
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(false);
+                sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background('#f5f5f5');
             }
             //this conditon added beacause it we make a change in single row this for loop breaks with one iteration or else complete the loop to make sure all columns enable and disable properly based on conditons
             if (!isDelete) {
