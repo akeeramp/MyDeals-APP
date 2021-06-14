@@ -48,6 +48,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
             var dataItem = pricingTableData.data.WIP_DEAL[i];
             if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOL_TIER") {
+                var anyWarnings = false;
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
                 var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
                 if (anyWarnings) {
@@ -1580,10 +1581,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var paymentValue = data[i].PROGRAM_PAYMENT;
             if (paymentValue != null && paymentValue !== '' && paymentValue !== "Backend") {
                 // Disable RESET_VOLS_ON_PERIOD when PROGRAM_PAYMENT is frontend
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value('');
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(false);
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
+                if (resetPrdIndex != undefined) {
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value('');
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(false);
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
+                }
 
 
 
@@ -1595,17 +1598,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
 
                 // Disable PERIOD_PROFILE when PROGRAM_PAYMENT is frontend
-                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value('');
-                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(false);
-                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-                sheet.range(prdProfileIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
+                if (prdProfileIndex != undefined) {
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value('');
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(false);
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
+                }
             }
             else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && (!hasTracker || hasTracker.length == 0)) {
                 // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(true);
-                sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background(null);
-                if (sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value() === '') {
-                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value("No");
+                if (resetPrdIndex != undefined) {
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(true);
+                    sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background(null);
+                    if (sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value() === '') {
+                        sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value("No");
+                    }
                 }
 
                 // Re-enable AR_SETTLEMENT_LVL when Backend is selected
@@ -1624,16 +1631,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // Re-enable PERIOD_PROFILE when Backend is selected
                 //Checking whether it is tender or not because for tender deals Period profile and AR settlement level should be always read only and set to the default values(DE116740)
-                if (root.isTenderContract !== "1") {
-                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(true);
-                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background(null);
-                }
-                if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === null || sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
-                    // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
-                    var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                        ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
-                        $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
-                    sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
+                if (prdProfileIndex != undefined) {
+                    if (root.isTenderContract !== "1") {
+                        sheet.range(prdProfileIndex + (i + pteHeaderIndex)).enable(true);
+                        sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background(null);
+                    }
+                    if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === null || sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
+                        // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
+                        var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                            ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
+                            $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                        sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
+                    }
                 }
             }
             stlmentValue = data[i].AR_SETTLEMENT_LVL;
@@ -2353,14 +2362,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             range.background("#f5f5f5");
 
                             // RESET_VOLS_ON_PERIOD
-                            range = sheet.range(resetPrdIndex + i);
-                            range.enable(false);
-                            range.background("#f5f5f5");
+                            if (resetPrdIndex != undefined) {
+                                range = sheet.range(resetPrdIndex + i);
+                                range.enable(false);
+                                range.background("#f5f5f5");
+                            }
 
                             // PERIOD_PROFILE
-                            range = sheet.range(prdProfileIndex + i);
-                            range.enable(false);
-                            range.background("#f5f5f5");
+                            if (prdProfileIndex != undefined) {
+                                range = sheet.range(prdProfileIndex + i);
+                                range.enable(false);
+                                range.background("#f5f5f5");
+                            }
                         }
                         //Disable overarching fields when FLEX row type is Draining
                         if (data[dataIndex].FLEX_ROW_TYPE == "Draining") {
