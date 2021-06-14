@@ -2853,6 +2853,9 @@
                                 if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                     sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
                                 }
+                                if (sData[s]["RATE"] === null) {
+                                    sData[s]["RATE"] = parseInt(0);
+                                }
                             }
 
                             if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
@@ -3591,6 +3594,9 @@
                     if (!anyWarnings || !forceValidation) {
                         $scope.stealthMode = true;
                         $scope.setBusy("Save Successful", "Saved the contract", "Success");
+                        if (stateName == "contract.manager.strategy") {
+                            $scope.reloadPage();
+                        }
                         $scope.$broadcast('saveComplete', data);
                         $scope.resetDirty();
 
