@@ -44,6 +44,64 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     $scope.saveDesc = "Save your " + $scope.root.ptTitle + ", validate the products, and stay in your " + $scope.root.ptTitle + " Editor";
 
+    if (!!pricingTableData.data.WIP_DEAL) {
+        for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
+            var dataItem = pricingTableData.data.WIP_DEAL[i];
+            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOLTIER") {
+                if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+                if (anyWarnings) {
+                    var dimStr = "_10___";
+                    var isKit = 0;
+                    var relevantAtrbs = tierAtrbs;
+                    var tierCount = dataItem.NUM_OF_TIERS;
+
+                    if (root.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        if (dataItem.PRODUCT_FILTER === undefined) { continue; }
+                        dimStr = "_20___";
+                        isKit = 1;
+                        relevantAtrbs = root.kitDimAtrbs;
+                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                    }
+
+                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
+                        }
+                    }
+                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                            delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
+                    }
+                }
+            }
+        }
+    }
+    function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
+        if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
+            if (dataItem._behaviors.validMsg[atrbName] != null) {
+                try {
+                    var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                        if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                            dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                            dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                        }
+                    }
+
+                    if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                    } else {
+                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                    }
+                } catch (e) {
+                    
+                }
+            }
+        }
+    }
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
     var cellStyle = {
