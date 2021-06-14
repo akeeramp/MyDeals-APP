@@ -47,7 +47,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     if (!!pricingTableData.data.WIP_DEAL) {
         for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
             var dataItem = pricingTableData.data.WIP_DEAL[i];
-            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOLTIER") {
+            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOL_TIER") {
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
                 var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
                 if (anyWarnings) {
