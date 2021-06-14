@@ -3765,7 +3765,12 @@
                     //    var myRange = sheet.range(row + 1, c++);
                     //    reapplyDropdowns(myRange, false, value.field);
                     //} else {
-                    sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    //To highlight error messages on correct rows [DE11710,DE117042]
+                    if (!dataItem.ROW_NUMBER) 
+                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    else
+                        sheet.range(dataItem.ROW_NUMBER, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+
                     //}
                 });
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
