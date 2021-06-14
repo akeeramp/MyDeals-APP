@@ -21,5 +21,6 @@ namespace Intel.MyDeals.IBusinessLogic
         string ReTriggerMuleSoftByXid(string xid);
 
         string IqrFetchCapData(TenderCapRequestObject jsonDataPacket);
+        void UpdateUnifiedEndCustomer(int CntrctId,string saleForceId, string primeCustomerName, string primeCustomerCountry);
     }
 }

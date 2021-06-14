@@ -205,9 +205,10 @@ namespace Intel.MyDeals.Entities
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
                 public string EndCustomerCountry { get; set; }
-                public string VerifiedEndCustomer { get; set; }
-                public string VerifiedEndCustomerId { get; set; }
-                public string IsVerifiedCustomer { get; set; }
+                public string UnifiedEndCustomer { get; set; }
+                public string UnifiedEndCustomerId { get; set; }
+                public string UnifiedCountryEndCustomerId { get; set; }
+                public string IsUnifiedEndCustomer { get; set; }
                 [JsonProperty("Account")]
                 public Account account { get; set; }
                 public string ShipmentStartDate { get; set; }
@@ -370,9 +371,10 @@ namespace Intel.MyDeals.Entities
     #region End Customer Support Classes
     public class EndCustomerObject
     {
-        public string VerifiedEndCustomer { get; set; }
-        public int VerifiedEndCustomerId { get; set; }
-        public int IsVerifiedCustomer { get; set; }
+        public string UnifiedEndCustomer { get; set; }
+        public int UnifiedEndCustomerId { get; set; }
+        public int UnifiedCountryEndCustomerId { get; set; }
+        public int IsUnifiedEndCustomer { get; set; }
 
     }
     #endregion End Customer Support Classes

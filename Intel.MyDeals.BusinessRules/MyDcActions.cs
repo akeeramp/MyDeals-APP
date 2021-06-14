@@ -3021,10 +3021,11 @@ namespace Intel.MyDeals.BusinessRules
             if (deEndCust == null) return;
             List<Countires> countries = DataCollections.GetCountries();
             Countires custCountry = countries.FirstOrDefault(x => x.CTRY_NM == endCustCountryVal);
-
-            if (endCustCountryVal != "" && custCountry.CTRY_XPORT_CTRL_CD == "EC")
-            {
-                deEndCust.AddMessage("Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.");
+            if (custCountry!=null ) {
+                if (endCustCountryVal != "" && custCountry.CTRY_XPORT_CTRL_CD == "EC")
+                {
+                    deEndCust.AddMessage("Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.");
+                }
             }
         }
 
