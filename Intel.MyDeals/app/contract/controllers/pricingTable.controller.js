@@ -29,7 +29,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
     $scope.pcCookUI = {};
-    
+    $scope.isUnmergedCellModifed = false;
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
 
@@ -1337,11 +1337,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             myRow._dirty = value.value;
                             sourceData[(rowIndex - 1)]._dirty = true;
+                            $scope.isUnmergedCellModifed = true;
                         }
                     }
                 );
                 cleanupData(data);
-                spreadDsSync();
+                if (!$scope.isUnmergedCellModifed) {
+                    spreadDsSync();
+                }
             }
         }
 
@@ -3489,7 +3492,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
-                spreadDsSync();
+                if (!$scope.isUnmergedCellModifed) {
+                    spreadDsSync();
+                }
                 root.validatePricingTable();
             } else {
                 root.publishWipDealsBase();
