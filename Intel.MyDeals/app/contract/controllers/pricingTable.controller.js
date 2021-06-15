@@ -57,7 +57,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var relevantAtrbs = tierAtrbs;
                     var tierCount = dataItem.NUM_OF_TIERS;
 
-                    if (root.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
                         if (dataItem.PRODUCT_FILTER === undefined) { continue; }
                         dimStr = "_20___";
                         isKit = 1;
@@ -83,7 +83,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 try {
                     var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
 
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
                         if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
                             dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
                             dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;

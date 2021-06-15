@@ -2129,6 +2129,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                                 },
                                     beh.isError);
+                                var tierAtbs = tierAtrbs;
+                                if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
+                                    var tierAtbs = $scope.$parent.$parent.kitDimAtrbs;
+                                }
+                                if (tierAtbs != undefined) {
+                                    for (var i = 0; i < tierAtbs.length; i++) {
+                                        if (dataItem._behaviors.validMsg[tierAtbs[i]] == undefined)
+                                        delete dataItem._behaviors.validMsg[tierAtbs[i]];
+                                    }
+                                }
                             }
                         }
                     }
