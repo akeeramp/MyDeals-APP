@@ -2135,7 +2135,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                                 if (tierAtbs != undefined) {
                                     for (var i = 0; i < tierAtbs.length; i++) {
-                                        if (dataItem._behaviors.validMsg[tierAtbs[i]] == undefined)
                                         delete dataItem._behaviors.validMsg[tierAtbs[i]];
                                     }
                                 }
