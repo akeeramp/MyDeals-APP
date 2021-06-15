@@ -1180,6 +1180,7 @@ gridUtils.kitCalculatedValues = function (items, kittype, column) {
                 qty = parseInt(items["QTY"][dimkey] || 0);
             }
             if (column == "rebateBundle" && items["ECAP_PRICE"] !== undefined) {
+                if (items["ECAP_PRICE"][dimkey] != undefined && items["ECAP_PRICE"][dimkey] != null)
                 total += qty * parseFloat(items["ECAP_PRICE"][dimkey].toString().replace(/,|$/g, ''));
             }
             if (column == "sumTD" && items["DSCNT_PER_LN"] !== undefined) {
