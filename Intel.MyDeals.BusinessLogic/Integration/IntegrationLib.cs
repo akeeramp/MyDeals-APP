@@ -454,8 +454,8 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
                 isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
-                primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString();
-                primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString();
+                primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedEndCustomerId.ToString();
+                primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
                 if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
                     primedCustName = unifiedEndCustomer;
                 else
@@ -749,7 +749,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             workRecordDataFields.recordDetails.quote.quoteLine[currentRec].DealRFQStatus = WorkFlowStages.Submitted; // Set by init setting rule
 
-            workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? "True" : "False"; ;
+            workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustomerL1Id;
             workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
@@ -1047,8 +1047,8 @@ namespace Intel.MyDeals.BusinessLogic
                 
                 EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
                  isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
-                 primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString();
-                 primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString();
+                primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedEndCustomerId.ToString();
+                primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
                 if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer!=null && unifiedEndCustomer!=""))
                     primedCustName = unifiedEndCustomer;
                 else
@@ -1064,7 +1064,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), primedCustName);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
             // We have a record back, so let's update IQR with priming data
-            workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? "True" : "False";
+            workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId= primedCustomerL1Id;
             workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
@@ -1340,7 +1340,7 @@ namespace Intel.MyDeals.BusinessLogic
                 int strategyId = myDealsData[OpDataElementType.PRC_ST].Data.Keys.FirstOrDefault();
                 var currentPsWfStg = myDealsData[OpDataElementType.PRC_ST].Data[strategyId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                 var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
-                bool isPrimedCust = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer.ToUpper() == "TRUE" ? true : false;
+                bool isPrimedCust = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
                 switch (destinationStage)
                 {
                     case "Submitted": // Tenders Create New Deals request
@@ -1734,7 +1734,7 @@ namespace Intel.MyDeals.BusinessLogic
             sendToIqr.recordDetails.quote.UnifiedEndCustomer = endCustObj.UnifiedEndCustomer;
             sendToIqr.recordDetails.quote.UnifiedEndCustomerId = endCustObj.UnifiedEndCustomerId.ToString();
             sendToIqr.recordDetails.quote.UnifiedCountryEndCustomerId = endCustObj.UnifiedCountryEndCustomerId.ToString();
-            sendToIqr.recordDetails.quote.IsUnifiedEndCustomer = endCustObj.IsUnifiedEndCustomer == 1 ? "True" : "False";
+            sendToIqr.recordDetails.quote.IsUnifiedEndCustomer = endCustObj.IsUnifiedEndCustomer == 1 ? true : false;
 
             string jsonData = JsonConvert.SerializeObject(sendToIqr);
 

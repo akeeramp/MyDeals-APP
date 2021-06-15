@@ -208,7 +208,7 @@ namespace Intel.MyDeals.Entities
                 public string UnifiedEndCustomer { get; set; }
                 public string UnifiedEndCustomerId { get; set; }
                 public string UnifiedCountryEndCustomerId { get; set; }
-                public string IsUnifiedEndCustomer { get; set; }
+                public bool IsUnifiedEndCustomer { get; set; }
                 [JsonProperty("Account")]
                 public Account account { get; set; }
                 public string ShipmentStartDate { get; set; }
