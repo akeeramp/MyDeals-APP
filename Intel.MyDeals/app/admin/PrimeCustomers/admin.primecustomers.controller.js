@@ -280,7 +280,8 @@
                     title: "Unified Customer Id",
                     width: "200px",
                     editor: vm.PrimeIDEditor,
-                    filterable: { multi: true, search: true }
+                    filterable: { multi: true, search: true },
+                    editable: isEditable
 
                 },
                 {
@@ -290,7 +291,8 @@
                     //filterable: { multi: true, search: true },
                     //editor: cusNameDropDownEditor
                     editor: vm.PrimeCustNamesEditor,
-                    filterable: { multi: true, search: true }
+                    filterable: { multi: true, search: true },
+                    editable: isEditable
                 },
 
                 {
@@ -298,7 +300,8 @@
                     title: "Country Customer Id",
                     width: "200px",
                     editor: vm.PrimeIDL2Editor,
-                    filterable: { multi: true, search: true }
+                    filterable: { multi: true, search: true },
+                    editable: isEditable
                 },
                 {
                     field: "PRIM_LVL_NM",
@@ -310,7 +313,8 @@
                     title: "Unified Country",
                     width: "200px",
                     editor: vm.PrimeCustCountryEditor,
-                    filterable: { multi: true, search: true }
+                    filterable: { multi: true, search: true },
+                    editable: isEditable
                 },
                 {
                     field: "RPL_STS",
@@ -343,7 +347,13 @@
         //        });
         //}
 
-
+        function isEditable(e) {
+            // If it is new record editable is set to true else false
+            if (e.PRIM_SID == "") {
+                return true;
+            }
+            return false;
+        }
     }
 
 })();
