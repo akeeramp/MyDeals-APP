@@ -114,11 +114,11 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveResponse != null)
                 {
-                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);
-                    bool salesForceCheck = mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
+                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);          
+                    bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
                     if (salesForceCheck)
                     {
-                        string saleForceId = mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+                        string saleForceId = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
                         _integrationLib.UpdateUnifiedEndCustomer(CntrctId, saleForceId, primeCustomerName, primeCustomerCountry);
 
                     }
