@@ -16,6 +16,9 @@ using System.Text;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Intel.Opaque.Utilities.Server;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -315,110 +318,132 @@ namespace Intel.MyDeals.DataLibrary
             public string access_token { get; set; }
         }
 
+        /// <summary>
+        /// APIGEE Toekn Generator
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public string GetApiGeeToken()
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            string consumerKey = jmsEnvs.ContainsKey("apiGeeConsumerKey") ? jmsEnvs["apiGeeConsumerKey"] : "";
+            string consumerSecret = jmsEnvs.ContainsKey("apiGeeconsumerSecret") ? jmsEnvs["apiGeeconsumerSecret"] : "";
+            string apiGeeTokenUrl = jmsEnvs.ContainsKey("apiGeeTokenUrl") ? jmsEnvs["apiGeeTokenUrl"] : "";
+            string accessToken = "";
+
+            byte[] byte1 = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" + consumerKey + "&client_secret=" + consumerSecret);
+
+            HttpWebRequest bearerReq = WebRequest.Create(apiGeeTokenUrl) as HttpWebRequest;
+            bearerReq.Accept = "application/json";
+            bearerReq.Method = "POST";
+            bearerReq.ContentType = "application/x-www-form-urlencoded";
+            bearerReq.ContentLength = byte1.Length;
+            bearerReq.KeepAlive = false;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            bearerReq.Proxy = new WebProxy("proxy-chain.intel.com", 911);
+            try
+            {
+                Stream newStream = bearerReq.GetRequestStream();
+                newStream.Write(byte1, 0, byte1.Length);
+                WebResponse bearerResp = bearerReq.GetResponse();
+
+                using (var reader = new StreamReader(bearerResp.GetResponseStream(), Encoding.UTF8))
+                {
+                    var response = reader.ReadToEnd();
+                    Bearer bearer = JsonConvert.DeserializeObject<Bearer>(response);
+                    accessToken = bearer.access_token;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("ApiGee Token Generation Failure: " + ex);
+            }
+
+            return accessToken;
+        }
+        //Need Garnishing for Future USE
+        public string getApiGeeToken(bool forceGenerate)
+        {
+            string AccessToken = "";
+            
+            Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.MyDeals.DataLibrary");
+            try
+            {
+                if(rootWebConfig.AppSettings.Settings["apiGeeToken"].Value != "" && forceGenerate != true)
+                {
+                    AccessToken = rootWebConfig.AppSettings.Settings["apiGeeToken"].Value;
+                }
+                else
+                {
+                    // Write APIGEE Token to Web.CONFIG file
+                    AccessToken = GetApiGeeToken();
+                    rootWebConfig.AppSettings.Settings["apiGeeToken"].Value = AccessToken;
+                    rootWebConfig.Save(ConfigurationSaveMode.Modified);
+                }               
+                
+                return AccessToken;
+            }
+            catch (Exception ex)
+            {
+                return AccessToken;
+            }                   
+            
+        }
+        
         public bool PublishBackToSfTenders(string data)
         {
             OpLog.Log("JMS - Publish to SF Tenders");
 
             bool sendSuccess = false;
-
-            // Default to Dev Response Environment, update connection if it falls to another environment.
-            string url = jmsEnvs.ContainsKey("tendersResponseURL") ? jmsEnvs["tendersResponseURL"] : ""; 
-
-            if (url == "") return false; // If no URL is defined, bail out of the send
-
-            // APOGEE
-            //string consumerKey = "client_id_value"; //"client_id_value";
-            //string consumerSecret = "client_secret_value"; //“client_secret_value";
-            //string accessToken;
-
-            //byte[] byte1 = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" + consumerKey + "&client_secret=" + consumerSecret);
-            ////Console.WriteLine(byte1);
-            //HttpWebRequest bearerReq = WebRequest.Create(url) as HttpWebRequest;
-            //bearerReq.Accept = "application/json";
-            //bearerReq.Method = "POST";
-            //bearerReq.ContentType = "application/x-www-form-urlencoded";
-            //bearerReq.ContentLength = byte1.Length;
-            //bearerReq.KeepAlive = false;
-            //Stream newStream = bearerReq.GetRequestStream();
-
-
-            //newStream.Write(byte1, 0, byte1.Length);
-
-            //WebResponse bearerResp = bearerReq.GetResponse();
-
-            ////Code dies in next block *FIX*
-            //using (var reader = new StreamReader(bearerResp.GetResponseStream(), Encoding.UTF8))
-            //{
-            //    var response = reader.ReadToEnd();
-            //    //Console.WriteLine(response);
-            //    Bearer bearer = JsonConvert.DeserializeObject<Bearer>(response);
-            //    accessToken = bearer.access_token;
-            //}
-
-            ////Console.WriteLine(accessToken);
-
-            //HttpWebRequest APIReq = WebRequest.Create("apigee_proxy_url") as HttpWebRequest;
-
-
-            //APIReq.Method = "GET";
-            //APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
-            ////Console.WriteLine();
-            //using (StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream()))
-            //{
-            //    string result = responseReader.ReadToEnd();
-            //    int j = 0;
-            //}
-            // END APOGEE
-
-            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-            //request.Credentials = new CredentialCache(); // No auth is needed, so load a blind credential
-            request.Credentials = new System.Net.NetworkCredential("myDls2SF", "f@s_dlsYmz");
-
-            request.Method = "POST"; // Set the Method property of the request to POST.  
-
-            request.KeepAlive = false;
-
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            // Create POST data and convert it to a byte array.  
-            byte[] byteArray = Encoding.UTF8.GetBytes(data);
-
-            request.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
-            request.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
-
-            // Get the request stream, write data, then close the stream
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-
-            Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-
-            try
+            //Get APIGEE Token to send Payload
+            string accessToken = GetApiGeeToken();
+            if(accessToken.Length > 0)
             {
-                WebResponse response = request.GetResponse(); // Get the response.
-                responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+                string apiGeeResponseURL = jmsEnvs.ContainsKey("apiGeeResponseURL") ? jmsEnvs["apiGeeResponseURL"] : "";
+                HttpWebRequest APIReq = WebRequest.Create(apiGeeResponseURL) as HttpWebRequest;
+                APIReq.Method = "POST";
+                APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
+                APIReq.Method = "POST"; // Set the Method property of the request to POST. 
+                APIReq.KeepAlive = false;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                byte[] byteArray = Encoding.UTF8.GetBytes(data);
+                APIReq.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+                APIReq.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+                APIReq.Proxy = new WebProxy("proxy-chain.intel.com", 911);
+                Stream dataStream = APIReq.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
 
-                // Get the stream containing content returned by the server.  
-                // The using block ensures the stream is automatically closed.
-                using (dataStream = response.GetResponseStream())
+                Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                try
                 {
-                    // Open the stream using a StreamReader for easy access.  
-                    StreamReader reader = new StreamReader(dataStream);
-                    // Read the content.  
-                    string responseFromServer = reader.ReadToEnd();
-                    // Display the content.  
-                    responseObjectDictionary["Data"] = responseFromServer;
-                    //Logging
-                    if (responseObjectDictionary["Data"] == "Request captured successfully") sendSuccess = true;
-                    OpLog.Log("JMS - Publish to SF Tenders Completed: " + responseObjectDictionary["Data"]);
-                }
+                    WebResponse response = APIReq.GetResponse(); // Get the response.
+                    responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
 
-                response.Close();
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log("JMS - Publish to SF Tenders ERROR: " + ex);
-            }
+                    // The using block ensures the stream is automatically closed.
+                    using (dataStream = response.GetResponseStream())
+                    {
+                        StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream());
+                        string result = responseReader.ReadToEnd();
+                        // Get the stream containing content returned by the server.  
+                        SfApiGeeResponseObj ApiGeeResponse = JsonConvert.DeserializeObject<SfApiGeeResponseObj>(result);
+                        // Open the stream using a StreamReader for easy access.
+                        responseObjectDictionary["Data"] = result;
+                        //Logging
+                        if (ApiGeeResponse.IsSuccess.ToLower() == "true") sendSuccess = true;
+                        OpLog.Log("JMS - Publish to SF Tenders Completed: " + result.ToString());
+                    }
+
+                    response.Close();
+                }
+                catch (Exception ex)
+                {
+                    OpLogPerf.Log("JMS - Publish to SF Tenders ERROR: " + ex);
+                }
+            }          
 
             return sendSuccess;
         }

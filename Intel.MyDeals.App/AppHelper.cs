@@ -127,7 +127,7 @@ namespace Intel.MyDeals.App
             {
                 "jmsServer", "jmsQueue", "jmsUID", "jmsPWD", "jmsResponseDir",
                 "vistexBaseURL", "vistexUID", "vistexPWD",
-                "tendersResponseURL"
+                "tendersResponseURL", "apiGeeResponseURL", "apiGeeConsumerKey", "apiGeeconsumerSecret", "apiGeeTokenUrl"
             };
 
             foreach (string jmsConfigItem in jmsConfigItems)
