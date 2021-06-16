@@ -171,6 +171,51 @@ namespace Intel.MyDeals.Entities
         public string RqstJsonData { get; set; }
         public string RqstSts { get; set; }
     }
+
+    public class SfApiGeeResponseObj
+    {
+        public string TotalRecords { get; set; }
+
+        [JsonConverter(typeof(SingleOrListConverter<SuccessContent>))]
+        public List<SuccessContent> successContent { get; set; }
+        public string IsSuccess { get; set; }
+        public string ErrorContent { get; set; }
+        public string Code { get; set; }
+
+        public class SuccessContent
+        {
+            public string Name { get; set; }
+        }
+
+        public class SingleOrListConverter<T> : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return (objectType == typeof(List<T>));
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                JToken token = JToken.Load(reader);
+                if (token.Type == JTokenType.Array)
+                {
+                    return token.ToObject<List<T>>();
+                }
+                return new List<T> { token.ToObject<T>() };
+            }
+
+            public override bool CanWrite
+            {
+                get { return false; }
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+    }
     #endregion Tenders Deal Create/Update Generic Stage Packet
 
     #region Tenders Deal Create/Update Objects
