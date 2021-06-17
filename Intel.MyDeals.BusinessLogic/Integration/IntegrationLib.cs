@@ -1726,7 +1726,7 @@ namespace Intel.MyDeals.BusinessLogic
             sendToIqr.header.xid = Guid.NewGuid().ToString();
             sendToIqr.header.source_system = "MyDeals";
             sendToIqr.header.target_system = "Tender";
-            sendToIqr.header.action = "UpdateUnifiedEndCustomer";
+            sendToIqr.header.action = "UnifiedEndCustomerUpdate";
             sendToIqr.recordDetails.quote.Id = saleForceId;
             sendToIqr.recordDetails.quote.FolioID = CntrctId.ToString();           
             sendToIqr.recordDetails.quote.EndCustomer = primeCustomerName;
