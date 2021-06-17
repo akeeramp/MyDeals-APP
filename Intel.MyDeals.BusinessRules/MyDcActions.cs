@@ -1582,8 +1582,9 @@ namespace Intel.MyDeals.BusinessRules
 
             if (isNumber && safeParse > 1)
             {
-                firstTierStartVol.AddMessage("Start Volume for Draining tiers must start at 1.");
+                AddTierValidationMessage(firstTierStartVol, "Start Volume for Draining tiers must start at 1", 1);
             }
+
         }
 
         public static void CheckFrontendSoldPrcGrpCd(params object[] args)
@@ -2777,7 +2778,6 @@ namespace Intel.MyDeals.BusinessRules
                             atrb.State = OpDataElementState.Modified; // Force it modified to save
                             continue; // Dispense with the QTY validation message filled in below.
                         }
-
                         if (!isNumber)
                         {
                             AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
