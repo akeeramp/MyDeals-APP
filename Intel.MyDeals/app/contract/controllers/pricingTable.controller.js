@@ -864,6 +864,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
             syncSpreadRows(sheet, initRow, row - 1);
+            root._dirty = true;
         }
     }
 
