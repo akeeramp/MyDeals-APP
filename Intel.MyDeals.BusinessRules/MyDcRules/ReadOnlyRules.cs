@@ -206,25 +206,6 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                //new MyOpRule
-                //{
-                //    Title="Readonly if contract # is positive",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT},
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                //    AtrbCondIf = dc => dc.DcID > 0,
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetReadOnly,
-                //            Target = new[] {
-                //                AttributeCodes.CUST_ACCPT
-                //            }
-                //        }
-                //    }
-                //},
-
                 new MyOpRule
                 {
                     Title="Readonly for Frontend With No Tracker (Expire YCS2 Flag)",
@@ -244,20 +225,17 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Readonly for Overarching fields for FLEX deal rows",
-                    ActionRule = MyDcActions.ExecuteActions,
+                    Title="Readonly for FLEX Deal Overarching fields",
+                    ActionRule = MyDcActions.FlexReadOnlyOverarching,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.FLEX_ROW_TYPE) && de.HasValue("Draining")).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
-                                AttributeCodes.REBATE_OA_MAX_AMT,
-                                AttributeCodes.REBATE_OA_MAX_VOL
+                                AttributeCodes.REBATE_OA_MAX_AMT
                             }
                         }
                     }
