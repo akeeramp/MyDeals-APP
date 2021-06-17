@@ -880,6 +880,26 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void FlexReadOnlyOverarching(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            List<string> excludeAtrbs = new List<string> { AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES };
+
+            string rowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deOaAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+
+            if (deNumTiers == null) return;
+
+            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+
+            if (rowType == "Draining" || numTiers > 1)
+            {
+                deOaAmt.IsReadOnly = true;
+            }
+        }
+
         public static void ReadOnlyFrontendWithTracker(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2257,24 +2277,6 @@ namespace Intel.MyDeals.BusinessRules
                 deBackDate.IsRequired = true;
             }
         }
-
-        //public static void TendersProjectRequired(params object[] args)
-        //{
-        //    // Note that this will trigger on already published deals as well, but since they show up in Search screen, UI doesn't intercept the required messages.
-        //    // This is also a PTR only level rule, so it doesn't enforce 
-        //    MyOpRuleCore r = new MyOpRuleCore(args);
-        //    if (!r.IsValid) return;
-
-        //    string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
-        //    string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
-        //    IOpDataElement deProject = r.Dc.GetDataElement(AttributeCodes.QLTR_PROJECT);
-        //    string wfStage = r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString()? r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD): "Draft";
-
-        //    if (rebateType == "TENDER" && payoutBasedOn == "Consumption" && deProject != null && string.IsNullOrEmpty(deProject.AtrbValue.ToString()))
-        //    {
-        //        deProject.IsRequired = true;
-        //    }
-        //}
 
         public static void ForecastVolumeRequired(params object[] args)
         {

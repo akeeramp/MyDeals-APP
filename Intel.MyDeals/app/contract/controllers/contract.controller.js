@@ -5910,6 +5910,7 @@
                 $scope.clearValidation(data, 'FLEX_ROW_TYPE');
 
                 var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+                var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
                 var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
 
                 if (drainingEntries.length > 0 && accrualEntries.length==0) {
@@ -5918,8 +5919,8 @@
                     });
                 }
                 //Validate overarching fields for FLEX Accrual rows
-                if (accrualEntries.length > 0) {
-                    $scope.validateOverArching(accrualEntries);
+                if (accrualSingleTierEntries.length > 0) {
+                    $scope.validateOverArching(accrualSingleTierEntries);
                 }
                 $scope.validateHybridFields(data);
             }
@@ -5946,6 +5947,7 @@
         $scope.validateOverArching = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
             var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual'); 
+            var isFlatRate = data.every((val) => val.OBJ_SET_TYPE_CD === 'VOL_TIER'); 
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
             $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
@@ -5976,15 +5978,22 @@
                 var testMaxVolCount = 0;
                 angular.forEach(data, (item) => {
                     // Are both values populated on this item?
-                    if ((item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") && (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL !== "")) {
+                    if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") &&
+                        (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL !== "")) {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
                     }
                     // Are both values empty for this item?
-                    if (isFlexAccrual != 1) { // Pulls Flex out of this test
-                        if ((item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") && (item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
+                    if (!(isFlexAccrual == 1 || isFlatRate == 1)) { // Pulls Flex/Vol Tier out of this test
+                        if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
+                            (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
                             $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth');
                             $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth');
+                        }
+                    }
+                    if (isFlatRate == 1) { // Check single column for Vol Tier - must have values
+                        if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
                         }
                     }
                     // Check for 0 values
@@ -5997,23 +6006,25 @@
                     // Check for all values equal
                     if (item.REBATE_OA_MAX_AMT !== null) {
                         testMaxAmtCount++;
-                        if (testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT) < 0) {
-                            testMaxAmtValues.push(item.REBATE_OA_MAX_AMT);
+                        if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
+                            testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
                         }
                     }
                     if (item.REBATE_OA_MAX_VOL !== null) {
                         testMaxVolCount++;
-                        if (testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL) < 0) {
-                            testMaxVolValues.push(item.REBATE_OA_MAX_VOL);
+                        if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
+                            testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
                         }
                     }
                 });
-                if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != data.length)) {
+                // Check if this is a flex, and if it is, only accrual single tier rows count..
+                var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
+                if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal');
                     });
                 }
-                if (testMaxVolValues.length > 1 || (testMaxVolValues > 0 && testMaxVolCount != data.length)) {
+                if (testMaxVolValues.length > 1 || (testMaxVolValues > 0 && testMaxVolCount != elementCount)) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal');
                     });
@@ -6349,8 +6360,11 @@
                     item._behaviors.validMsg[elem] = "Deals within a " + dealTypeLabel + " must have a '" + elemLabel + "' value.";
                 }
             }
-            else if (cond == 'equalzero') {
+            else if (cond == 'equalblankorzero') {
                 item._behaviors.validMsg[elem] = elemLabel + " must be blank or > 0.";
+            }
+            else if (cond == 'equalzero') {
+                item._behaviors.validMsg[elem] = elemLabel + " must be > 0.";
             }
         }
         $scope.setToSame = function (data, elem) {

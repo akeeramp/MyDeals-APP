@@ -445,9 +445,6 @@
                     "PROD_INCLDS": {
                         "Groups": ["Deal Info"]
                     },
-                    //"NUM_OF_TIERS": {
-                    //    "Groups": ["All"]
-                    //},
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -543,9 +540,6 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
-                    },
-                    "REBATE_OA_MAX_VOL": {
-                        "Groups": ["All"]
                     },
                     "REBATE_OA_MAX_AMT": {
                         "Groups": ["All"]
@@ -1185,9 +1179,6 @@
                     },
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
-                    },
-                    "REBATE_OA_MAX_VOL": {
-                        "Groups": ["All"]
                     },
                     "REBATE_OA_MAX_AMT": {
                         "Groups": ["All"]

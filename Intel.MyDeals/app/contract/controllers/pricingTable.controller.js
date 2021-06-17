@@ -911,7 +911,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var range = arg.range;
 
         // Don't do onchange events for any sheet other than the Main one
-        if (range._sheet._sheetName !== "Main" || range._ref.topLeft === undefined) {
+        if (range._sheet._sheetName !== "Main" || range._ref.topLeft === undefined || range._ref.topLeft.col === undefined) {
             return;
         }
         if (root.isBusy) { // HACK: to prevnt user from deleting via back button while loading, which might cause async problems
@@ -1552,7 +1552,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete) {
-        var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
         var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
         var stlmntLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
         var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
@@ -1564,18 +1563,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         for (var i = topLeftRowIndex - pteHeaderIndex; i < data.length; i++) {
             //Disable overarching fields when FLEX row type is Draining
             if (data[i].FLEX_ROW_TYPE == "Draining") {
-                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).value('');
-                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).enable(false);
-                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).background('#f5f5f5');
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
             }
             if (data[i].FLEX_ROW_TYPE == "Accrual") {
-                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).enable(true);
-                sheet.range(oaMaxVolIndex + (i + pteHeaderIndex)).background(null);
-                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(true);
-                sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background(null);
+                if (data[i].NUM_OF_TIERS > 1) {
+                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
+                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
+                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                }
+                else {
+                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(true);
+                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background(null);
+                }
             }
 
             var stlmentValue = data[i].AR_SETTLEMENT_LVL;
@@ -2345,7 +2346,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var stlmnLvlIndex = root.colToLetter["AR_SETTLEMENT_LVL"];
                     var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
                     var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
-                    var oaMaxVolIndex = root.colToLetter["REBATE_OA_MAX_VOL"];
                     var oaMaxAmtIndex = root.colToLetter["REBATE_OA_MAX_AMT"];
                     for (var i = topLeftRowIndex; i <= bottomRightRowIndex; i++) {
                         var dataIndex = i - 2;
@@ -2378,11 +2378,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                         //Disable overarching fields when FLEX row type is Draining
                         if (data[dataIndex].FLEX_ROW_TYPE == "Draining") {
-                            // REBATE_OA_MAX_VOL
-                            range = sheet.range(oaMaxVolIndex + i);
-                            range.value('');
-                            range.enable(false);
-                            range.background("#f5f5f5");
                             //REBATE_OA_MAX_AMT
                             range = sheet.range(oaMaxAmtIndex + i);
                             range.value('');
