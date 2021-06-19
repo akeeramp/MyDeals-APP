@@ -223,64 +223,6 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Check for Major Changes",
-                    ActionRule = MyDcActions.MajorChangeCheck,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
-                },
-
-                new MyOpRule
-                {
-                    Title="Check for Major Wrong Way Changes to Update Tracker",
-                    ActionRule = MyDcActions.MajorWrongWayChangeCheck,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
-                },
-
-                new MyOpRule
-                {
-                    Title="Add history message for changed fields",
-                    ActionRule = MyDcActions.AddHistoryMessagesForChanges,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Target = new[] {
-                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
-                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
-                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
-                                AttributeCodes.CONSUMPTION_REASON,
-                                AttributeCodes.CONSUMPTION_REASON_CMNT,
-                                AttributeCodes.START_DT,
-                                AttributeCodes.END_DT,
-                                AttributeCodes.REBATE_BILLING_START,
-                                AttributeCodes.REBATE_BILLING_END,
-                                AttributeCodes.AR_SETTLEMENT_LVL,
-                                AttributeCodes.CUST_ACCNT_DIV,
-                                AttributeCodes.GEO_COMBINED,
-                                AttributeCodes.PRD_EXCLDS,
-                                AttributeCodes.MRKT_SEG,
-                                AttributeCodes.PAYOUT_BASED_ON,
-                                AttributeCodes.PERIOD_PROFILE,
-                                AttributeCodes.PROGRAM_PAYMENT,
-                                AttributeCodes.REBATE_TYPE,
-                                AttributeCodes.QTY,
-                                AttributeCodes.SOLD_TO_ID,
-                                AttributeCodes.DEAL_SOLD_TO_ID,
-                                AttributeCodes.VOLUME,
-                                AttributeCodes.TOTAL_DOLLAR_AMOUNT,
-                                AttributeCodes.END_VOL,
-                                AttributeCodes.TITLE // Product Title at Deal Level
-                            }
-                        }
-                    }
-                },
-
-                new MyOpRule
-                {
                     Title="Check for Product changes in WIP",
                     ActionRule = MyDcActions.ModifiedProductCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -293,14 +235,6 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.CheckExpireFlag,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
-                },
-
-                new MyOpRule
-                {
-                    Title="Check for Major Change by adding Pricing Table",
-                    ActionRule = MyDcActions.MajorChangeAddPtCheck,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete }
                 },
 
                 new MyOpRule
@@ -594,7 +528,6 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
-                // Removed due to Rohit/Navya request, re-added as part of US1026287 
                 new MyOpRule
                 {
                     Title="Flex Draining Tier Must Start at 1",
@@ -602,6 +535,15 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
+                    Title="End Volume can only be raised if object has a tracker",
+                    ActionRule = MyDcActions.LastTierEndVolumeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
 
                 new MyOpRule
@@ -1030,8 +972,76 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                     InObjSetType = new List<string> { OpDataElementSetType.KIT.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
-                }
+                },
 
+                #region Must be last Validation rules
+
+                new MyOpRule
+                {
+                    Title="Check for Major Change by adding Pricing Table",
+                    ActionRule = MyDcActions.MajorChangeAddPtCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete }
+                },
+
+                new MyOpRule
+                {
+                    Title="Check for Major Changes",
+                    ActionRule = MyDcActions.MajorChangeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
+                },
+
+                new MyOpRule
+                {
+                    Title="Check for Major Wrong Way Changes to Update Tracker",
+                    ActionRule = MyDcActions.MajorWrongWayChangeCheck,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnFinalizeSave, MyRulesTrigger.OnMergeComplete }
+                },
+
+                new MyOpRule
+                {
+                    Title="Add history message for changed fields",
+                    ActionRule = MyDcActions.AddHistoryMessagesForChanges,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
+                                AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
+                                AttributeCodes.START_DT,
+                                AttributeCodes.END_DT,
+                                AttributeCodes.REBATE_BILLING_START,
+                                AttributeCodes.REBATE_BILLING_END,
+                                AttributeCodes.AR_SETTLEMENT_LVL,
+                                AttributeCodes.CUST_ACCNT_DIV,
+                                AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.PRD_EXCLDS,
+                                AttributeCodes.MRKT_SEG,
+                                AttributeCodes.PAYOUT_BASED_ON,
+                                AttributeCodes.PERIOD_PROFILE,
+                                AttributeCodes.PROGRAM_PAYMENT,
+                                AttributeCodes.REBATE_TYPE,
+                                AttributeCodes.QTY,
+                                AttributeCodes.SOLD_TO_ID,
+                                AttributeCodes.DEAL_SOLD_TO_ID,
+                                AttributeCodes.VOLUME,
+                                AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+                                AttributeCodes.END_VOL,
+                                AttributeCodes.TITLE // Product Title at Deal Level
+                            }
+                        }
+                    }
+                }
+                #endregion
 
             };
         }

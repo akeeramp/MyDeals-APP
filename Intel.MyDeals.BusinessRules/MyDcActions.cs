@@ -1113,6 +1113,36 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void LastTierEndVolumeCheck(params object[] args) // Lock down Tier Structures after tracker is generated (US1028743)
+        {
+            // Note, this doesn't effect the UI side code as much because they put special rules in place to handle cell by cell, but this does accurately
+            // place read only in cells to match for the day that UI decides to just trigger off of Mid tier objects instead.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            if (!r.Dc.HasTracker()) return; // If there is no tracker, stop and leave
+
+            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL };
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
+            string targetDim = "10:" + numTiers.ToString();
+
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+            {
+                if (de.HasValueChanged && de.DimKeyString.Contains(targetDim))
+                {
+                    if (!int.TryParse(de.OrigAtrbValue.ToString(), out int origVal)) origVal = 0;
+                    if (!int.TryParse(de.AtrbValue.ToString(), out int newVal)) newVal = 0;
+                    if (origVal == 0) origVal = 999999999;
+                    if (origVal > newVal)
+                    {
+                        de.AddMessage("The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.");
+                        de.AtrbValue = de.OrigAtrbValue;
+                        de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Set read only 
         /// </summary>
