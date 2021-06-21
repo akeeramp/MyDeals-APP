@@ -2815,6 +2815,7 @@
 
 
                         var validated_DC_Id = [];
+                        var invalidFlexDate = $scope.validateFlexDate(sData);
 
                         for (var s = 0; s < sData.length; s++) {
                             //Adding settlment partner error into err object in PTE
@@ -2921,6 +2922,18 @@
                                                 sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                                            }
+                                        }
+
+                                        //Validating Flex Accrual Start Dates
+                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                                            //Delete if there is any previous Error  messages
+                                            if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                                                angular.forEach(invalidFlexDate, (item) => {
+                                                    $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
+                                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                    errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
+                                                });
                                             }
                                         }
                                         
@@ -3058,6 +3071,7 @@
                         gData = $scope.validateFlexRowType(gData);
 
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                        var invalidFlexDate = $scope.validateFlexDate(gData);
 
                         for (var i = 0; i < gData.length; i++) {
                             if ((gData[i]["USER_AVG_RPU"] == null || gData[i]["USER_AVG_RPU"] == "")
@@ -3168,6 +3182,17 @@
                                     gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
+                                }
+                            }
+
+                            if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                                //Delete if there is any previous Error  messages
+                                if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                                    angular.forEach(invalidFlexDate, (item) => {
+                                        $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                    });
                                 }
                             }
 
@@ -3637,7 +3662,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                        }
+                        }    
                     }
 
                     if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {
@@ -5927,6 +5952,24 @@
             return data;
         }
 
+        //validate Flex dates
+        $scope.validateFlexDate = function (data) {
+            if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                $scope.clearValidation(data, 'START_DT');
+                var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+                var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+                var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                //For multi tiers last record will have latest date, skipping duplicate DC_ID
+                var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+                var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
+
+                var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
+            }
+
+            return drainingInvalidDates;
+        }
+
         //validate settlement level for hybrid 
         $scope.validateSettlementLevel = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond=false ;
@@ -6259,6 +6302,9 @@
            
             if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
                 item._behaviors.validMsg[elem] = "There should be atleast one accrual product.";
+            }
+            else if (cond == 'invalidDate' && elem == 'START_DT') {
+                item._behaviors.validMsg[elem] = "Draining products should have atleast 1 day delay from Accrual Start date";
             }
 
         }
