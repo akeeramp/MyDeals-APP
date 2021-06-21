@@ -4023,6 +4023,15 @@
                             }
                             lData._behaviors.isReadOnly["STRT_VOL"] = true;
                         }
+                        // Disable all End volumes except for the last tier if there is a tracker
+                        if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
+                            if (t !== numTiers) {
+                                if (!data[d]._behaviors.isReadOnly) {
+                                    data[d]._behaviors.isReadOnly = {};
+                                }
+                                lData._behaviors.isReadOnly["END_VOL"] = true;
+                            }
+                        }
                     } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                         // KIT specific cols with 'tiers'
                         for (var i = 0; i < $scope.kitDimAtrbs.length; i++) {

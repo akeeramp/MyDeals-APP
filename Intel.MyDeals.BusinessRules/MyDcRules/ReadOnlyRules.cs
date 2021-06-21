@@ -289,7 +289,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule // Set to read only if the deal has been cancelled (has a tracker + stage is cancelled)
+                new MyOpRule // Set to read only if the deal has been cancelled
                 {
                     Title="Readonly if Cancelled",
                     ActionRule = MyDcActions.ExecuteActions,
