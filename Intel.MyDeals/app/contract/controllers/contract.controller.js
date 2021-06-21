@@ -2691,7 +2691,7 @@
                         sData = $scope.validateOverArching(sData);
                         sData = $scope.validateHybridFields(sData);
                         //validate settlement level for PTE
-                        sData = $scope.validateSettlementLevel(sData);
+                        //sData = $scope.validateSettlementLevel(sData);
                         //validate Flex product overlap for PTE
                         $scope.OVLPFlexPdtPTRUSRPRDError = false;
                         sData = $scope.validateOVLPFlexProduct(sData);
