@@ -196,6 +196,16 @@ namespace Intel.MyDeals.DataLibrary
         {
             var ret = new List<PrimeCustomers>();
             ret = GetPrimeCustomerDetails().Where(dd => dd.IS_ACTV == true).OrderBy(x => x.PRIM_CUST_NM).ToList();
+            PrimeCustomers AnyData = new PrimeCustomers();
+            AnyData.IS_ACTV = true;
+            AnyData.PRIM_CUST_CTRY = "";
+            AnyData.PRIM_CUST_ID = 9999999;
+            AnyData.PRIM_CUST_NM = "Any";
+            AnyData.PRIM_LVL_ID = 8888888;
+            AnyData.PRIM_LVL_NM = "Any";
+            AnyData.PRIM_SID = 9999999;
+            AnyData.RPL_STS = 0;
+            ret.Insert(0, AnyData);
             return ret;
         }
 

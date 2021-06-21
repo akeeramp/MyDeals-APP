@@ -222,7 +222,16 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         function (newValue, oldValue, el) {
             if (oldValue === newValue) return;
 
-            if (oldValue === undefined || newValue === undefined) return;
+            if (oldValue === undefined || newValue === undefined || newValue === null) return;
+
+            if (newValue.toUpperCase() == "ANY") {
+                $ctrl.popupResult.DropdownSelections = "Any";
+                $('#DropdownSelections').attr('disabled', true);
+            }
+            else {
+                $ctrl.popupResult.DropdownSelections = "";
+                $('#DropdownSelections').attr('disabled', false);
+            }
 
             if (newValue !== null) {
                 $ctrl.IsError = false;
