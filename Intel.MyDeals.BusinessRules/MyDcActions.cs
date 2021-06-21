@@ -1539,6 +1539,39 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void FlexDateRange(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            string deRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+
+            if (deStartDate == null || deEndDate == null) return;
+
+            if (deRowType == "Accrual")
+            {
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
+                if (endDate > maxEndDt)
+                {
+                    deEndDate.AddMessage("For Accrual products, end date is limited to 12 months from deal start date");
+                }
+            }
+            else if (deRowType == "Draining")
+            {
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+                DateTime maxEndDt = startDate.AddYears(2).AddDays(-1);
+                if (endDate > maxEndDt)
+                {
+                    deEndDate.AddMessage("For Draining products, end date is limited to 24 months from deal start date");
+                }
+            }
+        }
+
         public static void CheckFrontendConsumption(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

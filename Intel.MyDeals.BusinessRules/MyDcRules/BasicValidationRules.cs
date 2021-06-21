@@ -522,6 +522,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Restrict FLEX deals dates based on row type",
+                    ActionRule = MyDcActions.FlexDateRange,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW},
+                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+
+                new MyOpRule
+                {
                     Title="Ceiling Volume Tender Validation",
                     ActionRule = MyDcActions.CheckCeilingVolume,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
