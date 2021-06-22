@@ -234,7 +234,7 @@ namespace Intel.MyDeals.VistexService
                         {
                             fi.Delete();
                         }
-                        catch (Exception ex)
+                        catch (Exception) // Removed ex since it is not used
                         {
                             ///JmsQCommon.Log(ex.Message);
                         }
@@ -245,7 +245,7 @@ namespace Intel.MyDeals.VistexService
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 ///JmsQCommon.Log(ex.ToString());
             }

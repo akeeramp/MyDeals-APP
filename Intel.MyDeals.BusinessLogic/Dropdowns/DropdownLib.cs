@@ -100,7 +100,6 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of dropdowns</returns>
         public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
         {
-            int custId = 1;  // All customers by default
             atrbCd = atrbCd.ToUpper();
             dealtypeCd = dealtypeCd.ToUpper();
             return _dataCollectionsDataLib.GetBasicDropdowns().

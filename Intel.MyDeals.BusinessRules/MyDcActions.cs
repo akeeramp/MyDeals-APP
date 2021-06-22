@@ -591,8 +591,7 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.CONSUMPTION_REASON_CMNT
             };
 
-            int custId;
-            bool deCustMbrSidValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
 
@@ -610,7 +609,6 @@ namespace Intel.MyDeals.BusinessRules
                     de.SetReadOnly();
                 }
             }
-            int j = 1;
         }
 
         public static void SetCustDefaultValues(params object[] args)
@@ -621,8 +619,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement dePayoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
             if (!(dePayoutBasedOn.HasValueChanged && dePayoutBasedOn.HasValue("Consumption"))) return;
 
-            int custId;
-            bool deCustMbrSidValue = int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId);
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
             MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
 
@@ -632,18 +629,18 @@ namespace Intel.MyDeals.BusinessRules
             var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
 
-            if (deConsLookback.AtrbValue == "")
+            if (deConsLookback.AtrbValue.ToString() == "")
             {
                 //Updated the condition as per the user story US695161
                 deConsLookback.AtrbValue = cust.DFLT_LOOKBACK_PERD < 0 ? (isTender ? "0" : "") : cust.DFLT_LOOKBACK_PERD.ToString();
             }
 
-            if (deConsRptGeo.AtrbValue == "")
+            if (deConsRptGeo.AtrbValue.ToString() == "")
             {
                 deConsRptGeo.AtrbValue = cust.DFLT_CUST_RPT_GEO;
             }
             //Updated the condition as per Defect DE114898
-            if (isTender && deConsReason.AtrbValue == "" && (dealType == "ECAP" || dealType == "KIT"))
+            if (isTender && deConsReason.AtrbValue.ToString() == "" && (dealType == "ECAP" || dealType == "KIT"))
             {
                 deConsReason.AtrbValue = "End Customer";
             }
@@ -1032,7 +1029,7 @@ namespace Intel.MyDeals.BusinessRules
             foreach (var s in r.Rule.OpRuleActions[0].Target)
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
-                if (de != null && de.AtrbValue != "" && de.IsDateInPast() && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && de.IsDateInPast() && r.Dc.HasTracker()) de.IsReadOnly = true;
             }
         }
 
@@ -1052,7 +1049,7 @@ namespace Intel.MyDeals.BusinessRules
                 // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
                 bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
 
-                if (de != null && de.AtrbValue != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
             }
         }
 
@@ -1275,7 +1272,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deSendToVistex.AtrbValue = "";
             }
-            if (rebateType == "NRE" && deSendToVistex.AtrbValue == "")
+            if (rebateType == "NRE" && deSendToVistex.AtrbValue.ToString() == "")
             {
                 deSendToVistex.IsRequired = true;
             }
@@ -1410,6 +1407,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; // Default to no cust if not found, which defaults to Intel anyhow
 
             if (paymentType.Contains("Frontend")) return;  // Bail out of this check for Front End deals since they might have overlap crush which doesn't reset billings end dates
 
@@ -1422,23 +1420,20 @@ namespace Intel.MyDeals.BusinessRules
             DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
             // US705342 get dates for previous quarter
-            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt, null, null);
+            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, dcSt, null, null);
             int qtr = currentQuarterDetails.QTR_NBR - 1;
             int yr = 0;
-            if (qtr >= 1) // Not the first quarter of this year, so stay in year
+            if (qtr > 0) // Didn't start in the first quarter of this year, so stay in the current year
             {
                 yr = currentQuarterDetails.YR_NBR;
-                qtr = 4;
-                yr = currentQuarterDetails.YR_NBR - 1;
             }
-            else // Currently in Q1 of the year, go back to Q4 of previous year
+            else // Started in Q1 of the current year, so must go back to Q4 of previous year
             {
                 qtr = 4;
                 yr = currentQuarterDetails.YR_NBR - 1;
             }
 
-            //var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, dcSt.AddMonths(-3), null, null); // US890081 - Change 3 month check to Qtr/Yr based check
-            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(2, null, (short)yr, (short)qtr);
+            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, null, (short)yr, (short)qtr);
 
             // changed billing start date to equal deal start date as part of US705342
             // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
@@ -1475,8 +1470,7 @@ namespace Intel.MyDeals.BusinessRules
 
             // Billing start date can only be backdated up until start of previous quarter US705342 - Set by constant value set at release time US815029
             string bllgTenderCutoverDealCnst = new DataCollectionsDataLib().GetToolConstants().Where(c => c.CNST_NM == "BLLG_TENDER_CUTOVER_DEAL").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
-            int bllgTenderCutoverDeal;
-            if (!int.TryParse(bllgTenderCutoverDealCnst, out bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
+            if (!int.TryParse(bllgTenderCutoverDealCnst, out int bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
             if (deBllgStart.DcID > bllgTenderCutoverDeal) // Apply new rules for tenders billing start dates
             {
                 if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
@@ -1712,8 +1706,7 @@ namespace Intel.MyDeals.BusinessRules
                 return;
             }
 
-            int vol;
-            if (!int.TryParse(de.AtrbValue.ToString(), out vol))
+            if (!int.TryParse(de.AtrbValue.ToString(), out _))
             {
                 de.AddMessage("Volume must be a valid non-decimal number.");
             }
@@ -2484,7 +2477,7 @@ namespace Intel.MyDeals.BusinessRules
             // Period Profile has different blanking rules then Settlement Level
             if (dealTypeValue == "PROGRAM" || programPaymentValue != "Backend" || rebateTypeValue == "MDF ACTIVITY" || rebateTypeValue == "MDF ACCRUAL" || rebateTypeValue == "NRE ACCRUAL")
             {
-                if (periodProfile.AtrbValue != "")
+                if (periodProfile.AtrbValue.ToString() != "")
                 {
                     periodProfile.AtrbValue = "";
                     periodProfile.State = OpDataElementState.Modified;
@@ -2494,13 +2487,13 @@ namespace Intel.MyDeals.BusinessRules
 
             if (programPaymentValue != "Backend")
             {
-                if (arSettlementLvl.AtrbValue != "")
+                if (arSettlementLvl.AtrbValue.ToString() != "")
                 {
                     arSettlementLvl.AtrbValue = "";
                     arSettlementLvl.State = OpDataElementState.Modified;
                     arSettlementLvl.AddMessage("Settlement Level value was reset to blank as it is not required for this deal. Please Re-Save and Validate to clear the warning.");
                 }
-                if (resetPerPeriod.AtrbValue != "")
+                if (resetPerPeriod.AtrbValue.ToString() != "")
                 {
                     resetPerPeriod.AtrbValue = "";
                     resetPerPeriod.State = OpDataElementState.Modified;
@@ -2662,9 +2655,8 @@ namespace Intel.MyDeals.BusinessRules
             int prevEndVal = 0;
             for (int tierKey = 1; tierKey <= 10; tierKey++)
             {
-                int currStartVol = 0;
+                if (!int.TryParse(startVolDict[tierKey], out int currStartVol)) currStartVol = 0;
                 int currEndVol = 0;
-                bool isStartVolANumber = int.TryParse(startVolDict[tierKey], out currStartVol);
                 bool isEndVolANumber = int.TryParse(endVolDict[tierKey], out currEndVol);
                 if (!isEndVolANumber && endVolDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {

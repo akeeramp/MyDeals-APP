@@ -75,7 +75,7 @@ namespace Intel.MyDeals.Entities
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 isReportingUser = true;
             }

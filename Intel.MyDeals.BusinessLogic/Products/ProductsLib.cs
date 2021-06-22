@@ -620,15 +620,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
         {
-            bool test;
             var searchStringData = GetSearchString();
             return isEPMserach
                 ? searchStringData.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()))
                 : searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).Select(k => k.Key).Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
-            //var searchString = isEPMserach == false ? searchStringData.Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
-            //test = searchString.Keys.Any(currentKey => currentKey.ToLower().Contains(searchText.ToLower()));
-
-            return test;
         }
 
         /// <summary>
