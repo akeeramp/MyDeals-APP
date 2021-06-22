@@ -1979,7 +1979,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY" || newField == "PRIMED_CUST_ID" || newField == "PRIMED_CUST_NM" || newField == "IS_PRIMED_CUST") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
-                        if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
+                        if (dataItem[newField] !== newValue) {
+                            dataItem[newField] = newValue;
+                            var readOnly = dataItem._behaviors.isReadOnly
+                            if (readOnly[newField] == undefined && !dataItem.dirty) {
+                                dataItem.dirty = true;
+                            }
+                        }
+                        //dataItem.set(newField, newValue);
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
                 }
