@@ -1539,7 +1539,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
                 // default DSCNT_PER_LN value
-                if (field == "DSCNT_PER_LN") {
+                if (field == "DSCNT_PER_LN" || field == "ECAP_PRICE") {
                     for (var i = 0; i < 10; i++) {
                         var key = "20___" + i;
                         if (!dataItem[field].hasOwnProperty(key)) {
@@ -1559,10 +1559,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.updateScheduleEditor = function (dataItem, field, row) {
                 //if empty or max value, set to "Unlimited"
-                if (field === "STRT_VOL" || field === "END_VOL") {
+                if (field === "END_VOL") {
                     if (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999") {
                         dataItem[field]["10___" + row] = "Unlimited";
                     }
+                }
+
+                if (field === "STRT_VOL" && dataItem[field]["10___" + row] === null) {
+                    dataItem[field]["10___" + row] = "0";
                 }
 
                 //save primary column and propogate changes if necessary
@@ -1572,8 +1576,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //if there is a next row/tier
                     if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
                         if (dataItem[field]["10___" + row] === "Unlimited") {
-                            //if end vol is "Unlimited", then also set next start vol to "Unlimited" as well
-                            dataItem["STRT_VOL"]["10___" + (row + 1)] = "Unlimited";
+                            dataItem["STRT_VOL"]["10___" + (row + 1)] = "0";
                         } else {
                             //if end vol is a number, then set next start vol to that number + 1
                             dataItem["STRT_VOL"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + 1;
