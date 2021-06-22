@@ -327,7 +327,7 @@ namespace Intel.MyDeals.JMSQueueApp
                     {
                         client.Send(myMail);
                     }
-                    catch(Exception EX)
+                    catch(Exception) // Removed ex since it is not used
                     {
 
                     }

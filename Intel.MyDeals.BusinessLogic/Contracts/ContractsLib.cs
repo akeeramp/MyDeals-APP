@@ -877,7 +877,6 @@ namespace Intel.MyDeals.BusinessLogic
 
         public QuoteLetterFile HtmlToPdf(string htmlBody)
         {
-            int j = 0;
             Byte[] res = null;
             using (MemoryStream ms = new MemoryStream())
             {

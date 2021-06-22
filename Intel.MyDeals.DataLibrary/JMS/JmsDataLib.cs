@@ -384,7 +384,7 @@ namespace Intel.MyDeals.DataLibrary
                 
                 return AccessToken;
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 return AccessToken;
             }                   

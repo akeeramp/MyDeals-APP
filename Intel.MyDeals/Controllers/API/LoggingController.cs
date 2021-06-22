@@ -112,7 +112,7 @@ namespace Intel.MyDeals.Controllers.API
                 _loggingLib.UploadUiPerfLogsSync(logPerformanceTimes);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 return false;
             }

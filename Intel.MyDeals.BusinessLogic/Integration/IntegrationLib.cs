@@ -34,8 +34,7 @@ namespace Intel.MyDeals.BusinessLogic
             var task = new Task(() =>
             {
                 Thread.Sleep(1000);
-                string blah = ExecuteSalesForceTenderData(myGuid);
-                int j = 1;
+                string dummyVal = ExecuteSalesForceTenderData(myGuid);
             });
 
             task.Start();

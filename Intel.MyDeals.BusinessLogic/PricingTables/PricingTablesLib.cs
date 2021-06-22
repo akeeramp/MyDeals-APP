@@ -680,103 +680,103 @@ namespace Intel.MyDeals.BusinessLogic
 
             return overlapps;
 
-            // With new approach, we don't need to update the deal to set opverlap status or passed validation... time saving here!!!
+            //// With new approach, we don't need to update the deal to set opverlap status or passed validation... time saving here!!!
 
-            // Need to update
-            List<int> wipIds = overlapps.Select(o => o.WIP_DEAL_OBJ_SID).Distinct().ToList();
+            //// Need to update
+            //List<int> wipIds = overlapps.Select(o => o.WIP_DEAL_OBJ_SID).Distinct().ToList();
 
-            MyDealsData myDealsData = opDataElementType.GetByIDs(
-                ids,
-                new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                new List<int>
-                {
-                    Attributes.PASSED_VALIDATION.ATRB_SID,
-                    Attributes.OVERLAP_RESULT.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
-                    Attributes.CUST_MBR_SID.ATRB_SID
-                });
+            //MyDealsData myDealsData = opDataElementType.GetByIDs(
+            //    ids,
+            //    new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    new List<int>
+            //    {
+            //        Attributes.PASSED_VALIDATION.ATRB_SID,
+            //        Attributes.OVERLAP_RESULT.ATRB_SID,
+            //        Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+            //        Attributes.CUST_MBR_SID.ATRB_SID
+            //    });
 
-            ContractToken contractToken = new ContractToken("ContractToken Created - GetOverlappingDeals")
-            {
-                ContractId = 1,
-                NeedToCheckForDelete = false
-            };
+            //ContractToken contractToken = new ContractToken("ContractToken Created - GetOverlappingDeals")
+            //{
+            //    ContractId = 1,
+            //    NeedToCheckForDelete = false
+            //};
 
-            List<OpDataCollector> allDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.ToList();
+            //List<OpDataCollector> allDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.ToList();
 
-            foreach (OpDataCollector dc in allDcs)
-            {
-                IOpDataElement de = dc.GetDataElement(AttributeCodes.OVERLAP_RESULT);
-                IOpDataElement deValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
-                IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
-                IOpDataElement deDefault = deCust ?? dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+            //foreach (OpDataCollector dc in allDcs)
+            //{
+            //    IOpDataElement de = dc.GetDataElement(AttributeCodes.OVERLAP_RESULT);
+            //    IOpDataElement deValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+            //    IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+            //    IOpDataElement deDefault = deCust ?? dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
 
-                contractToken.CustId = deCust == null ? 0 : int.Parse(deCust.AtrbValue.ToString());
+            //    contractToken.CustId = deCust == null ? 0 : int.Parse(deCust.AtrbValue.ToString());
 
-                string value = wipIds.Contains(deDefault.DcID) ? "Fail" : "Pass";
+            //    string value = wipIds.Contains(deDefault.DcID) ? "Fail" : "Pass";
 
-                if (de == null)
-                {
-                    dc.DataElements.Add(new OpDataElement
-                    {
-                        DcID = deDefault.DcID,
-                        DcType = deDefault.DcType,
-                        DcParentType = deDefault.DcParentType,
-                        DcParentID = deDefault.DcParentID,
-                        AtrbID = Attributes.OVERLAP_RESULT.ATRB_SID,
-                        AtrbCd = Attributes.OVERLAP_RESULT.ATRB_COL_NM,
-                        AtrbValue = value,
-                        State = OpDataElementState.Modified
-                    });
-                }
-                else
-                {
-                    de.SetAtrbValue(value);
-                    if (de.AtrbValue.ToString() != de.OrigAtrbValue.ToString()) de.State = OpDataElementState.Modified;
-                }
+            //    if (de == null)
+            //    {
+            //        dc.DataElements.Add(new OpDataElement
+            //        {
+            //            DcID = deDefault.DcID,
+            //            DcType = deDefault.DcType,
+            //            DcParentType = deDefault.DcParentType,
+            //            DcParentID = deDefault.DcParentID,
+            //            AtrbID = Attributes.OVERLAP_RESULT.ATRB_SID,
+            //            AtrbCd = Attributes.OVERLAP_RESULT.ATRB_COL_NM,
+            //            AtrbValue = value,
+            //            State = OpDataElementState.Modified
+            //        });
+            //    }
+            //    else
+            //    {
+            //        de.SetAtrbValue(value);
+            //        if (de.AtrbValue.ToString() != de.OrigAtrbValue.ToString()) de.State = OpDataElementState.Modified;
+            //    }
 
-                // Only update passed validation to FALSE... if value failed.  NEVER just blindly set it to PASS
-                if (value != "Fail") continue;
+            //    // Only update passed validation to FALSE... if value failed.  NEVER just blindly set it to PASS
+            //    if (value != "Fail") continue;
 
-                if (deValid == null)
-                {
-                    dc.DataElements.Add(new OpDataElement
-                    {
-                        DcID = deDefault.DcID,
-                        DcType = deDefault.DcType,
-                        DcParentType = deDefault.DcParentType,
-                        DcParentID = deDefault.DcParentID,
-                        AtrbID = Attributes.PASSED_VALIDATION.ATRB_SID,
-                        AtrbCd = Attributes.PASSED_VALIDATION.ATRB_COL_NM,
-                        AtrbValue = PassedValidation.Dirty,
-                        State = OpDataElementState.Modified
-                    });
-                }
-                else
-                {
-                    deValid.SetAtrbValue(PassedValidation.Dirty);
-                    deValid.State = OpDataElementState.Modified;
-                }
-            }
+            //    if (deValid == null)
+            //    {
+            //        dc.DataElements.Add(new OpDataElement
+            //        {
+            //            DcID = deDefault.DcID,
+            //            DcType = deDefault.DcType,
+            //            DcParentType = deDefault.DcParentType,
+            //            DcParentID = deDefault.DcParentID,
+            //            AtrbID = Attributes.PASSED_VALIDATION.ATRB_SID,
+            //            AtrbCd = Attributes.PASSED_VALIDATION.ATRB_COL_NM,
+            //            AtrbValue = PassedValidation.Dirty,
+            //            State = OpDataElementState.Modified
+            //        });
+            //    }
+            //    else
+            //    {
+            //        deValid.SetAtrbValue(PassedValidation.Dirty);
+            //        deValid.State = OpDataElementState.Modified;
+            //    }
+            //}
 
-            if (myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Any(d => d.State != OpDataElementState.Unchanged))
-            {
-                myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
-                myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
-                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-                myDealsData.EnsureBatchIDs();
+            //if (myDealsData[OpDataElementType.WIP_DEAL].AllDataElements.Any(d => d.State != OpDataElementState.Unchanged))
+            //{
+            //    myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            //    myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+            //    myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+            //    myDealsData.EnsureBatchIDs();
 
-                start = DateTime.Now;
-                MyDealsData retData = myDealsData.Save(contractToken);
-                timeFlows.Add(new TimeFlowItem
-                {
-                    StepTitle = "Save Overlapping Results",
-                    Media = TimeFlowMedia.DB,
-                    MsLapseTiming = 0,
-                    MsExecutionTiming = (DateTime.Now - start).TotalMilliseconds
-                });
-            }
-            return overlapps;
+            //    start = DateTime.Now;
+            //    MyDealsData retData = myDealsData.Save(contractToken);
+            //    timeFlows.Add(new TimeFlowItem
+            //    {
+            //        StepTitle = "Save Overlapping Results",
+            //        Media = TimeFlowMedia.DB,
+            //        MsLapseTiming = 0,
+            //        MsExecutionTiming = (DateTime.Now - start).TotalMilliseconds
+            //    });
+            //}
+            //return overlapps;
         }
 
         public List<Overlapping> UpdateOverlappingDeals(List<int> PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)

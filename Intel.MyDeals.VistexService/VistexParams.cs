@@ -340,7 +340,7 @@ namespace Intel.MyDeals.VistexService
                 if (!String.IsNullOrEmpty(sub_title)) { sub_title += ", "; }
                 //sub_title += String.Format("{0}", ver);
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 //LogPerf.Log(ex);
             }
@@ -352,7 +352,7 @@ namespace Intel.MyDeals.VistexService
                 if (!String.IsNullOrEmpty(sub_title)) { sub_title += ", "; }
                 //sub_title += String.Format("Compiled: {0}", dt);
             }
-            catch (Exception ex)
+            catch (Exception) // Removed ex since it is not used
             {
                 //LogPerf.Log(ex);
             }
