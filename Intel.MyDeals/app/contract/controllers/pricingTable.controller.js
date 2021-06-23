@@ -1606,6 +1606,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).background('#f5f5f5');
                     sheet.range(prdProfileIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
                 }
+
+                //As AR_SETTLEMENT_LVL and PERIOD_PROFILE set as non-editable fields in tender, these updated values are not getting cleared in data object when we change from backend to frontend so to fix this we have to assign it explicitly to data obj
+                if (root.isTenderContract == "1") {
+                    data[i].AR_SETTLEMENT_LVL = "";
+                    data[i].PERIOD_PROFILE = "";
+                }
             }
             else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && (!hasTracker || hasTracker.length == 0)) {
                 // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
@@ -1629,6 +1635,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         ($scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined || $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "" ? "Issue Credit to Billing Sold To" : $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL) :
                         $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value(newArSettlementValue);
+                    //As AR_SETTLEMENT_LVL and PERIOD_PROFILE set as non-editable fields in tender, these updated values are not getting saved in the data obj when we change from frontend to backend(DE118310) so to fix this issue we have to assign it explicitly to data obj
+                    if (root.isTenderContract == "1") {
+                        data[i].AR_SETTLEMENT_LVL = newArSettlementValue;
+                    }
                 }
 
                 // Re-enable PERIOD_PROFILE when Backend is selected
@@ -1644,6 +1654,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
                             $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                         sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
+                        if (root.isTenderContract == "1") {
+                            data[i].PERIOD_PROFILE = newValue;
+                        }
                     }
                 }
             }
