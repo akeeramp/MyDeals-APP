@@ -2685,12 +2685,9 @@
                             if (sData[n].GEO_COMBINED != undefined && sData[n].GEO_COMBINED != null && sData[n].GEO_COMBINED.toString().contains(' ')) {
                                 sData[n].GEO_COMBINED = sData[n].GEO_COMBINED.toString().split(',').map(function (value) { return value.trim(); }).join(',');
                             }
-
                             if (sData[n].QLTR_BID_GEO != undefined && sData[n].QLTR_BID_GEO != null && sData[n].QLTR_BID_GEO.toString().contains(' ')) {
                                 sData[n].QLTR_BID_GEO = sData[n].QLTR_BID_GEO.toString().split(',').map(function (value) { return value.trim(); }).join(',');
                             }
-
-
                         }
                     }
                     $scope.$broadcast('syncDs');
