@@ -3307,9 +3307,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //changing autocomplete to disabled for endcustomer country input to stop showing chrome autofill data
                 endCustomerRetailModal.rendered.then(function () {
                     $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
-                    if ($('#DropdownSelections').parent().find("input").val().toUpperCase() == "ANY") {
-                        $('#DropdownSelections').attr('disabled', true);
-                    }
+                    $timeout(function () {
+                        if ($('#DropdownSelections').parent().find("input").val().toUpperCase() == "ANY") {
+                            $('#DropdownSelections').attr('disabled', true);
+                        }
+                    }, 1500);
                 });
                 endCustomerRetailModal.result.then(
                     function (endCustomerData) { //returns as an array
