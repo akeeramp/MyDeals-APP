@@ -1132,7 +1132,8 @@ namespace Intel.MyDeals.BusinessRules
                     if (origVal == 0) origVal = 999999999;
                     if (origVal > newVal)
                     {
-                        de.AddMessage("The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.");
+                        AddTierValidationMessage(de, "The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.", numTiers);
+                        //de.AddMessage("The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.");
                         de.AtrbValue = de.OrigAtrbValue;
                         de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
                     }
@@ -1649,8 +1650,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string flexRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+            string hybridType = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
 
-            if (flexRowType != "Draining") return; // This is a draining side only rule
+            if (!(flexRowType == "Draining" || hybridType == "1")) return; // This is a draining side only rule
 
             IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
 
@@ -1659,7 +1661,14 @@ namespace Intel.MyDeals.BusinessRules
 
             if (isNumber && safeParse > 1)
             {
-                AddTierValidationMessage(firstTierStartVol, "Start Volume for Draining tiers must start at 1", 1);
+                if (flexRowType == "Draining")
+                {
+                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Draining tiers must start at 1", 1);
+                }
+                else
+                {
+                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Flat Rate tiers must start at 1", 1);
+                }
             }
 
         }
