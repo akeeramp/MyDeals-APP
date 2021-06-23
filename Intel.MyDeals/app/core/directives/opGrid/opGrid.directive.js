@@ -1979,7 +1979,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY" || newField == "PRIMED_CUST_ID" || newField == "PRIMED_CUST_NM" || newField == "IS_PRIMED_CUST") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
-                        if (dataItem[newField] !== newValue) dataItem.set(newField, newValue);
+                        if (dataItem[newField] !== newValue) {
+                            // To improve the performance, instead of using (kendo) set method to assign the new value, directly assigning the value to dataitem saves a lot of time if we have more deals in DE
+                            dataItem[newField] = newValue;
+                            if (dataItem.fields[newField].editable && !dataItem.dirty) {
+                                dataItem.dirty = true;
+                            }
+                        }
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
                 }
@@ -2139,8 +2145,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     var tierAtbs = $scope.$parent.$parent.kitDimAtrbs;
                                 }
                                 if (tierAtbs != undefined) {
-                                    for (var i = 0; i < tierAtbs.length; i++) {
-                                        delete dataItem._behaviors.validMsg[tierAtbs[i]];
+                                    for (var j = 0; j < tierAtbs.length; j++) {
+                                        delete dataItem._behaviors.validMsg[tierAtbs[j]];
                                     }
                                 }
                             }
