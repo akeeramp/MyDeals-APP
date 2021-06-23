@@ -542,7 +542,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Flex Draining Tier Must Start at 1",
                     ActionRule = MyDcActions.FlexDrainingTierCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
@@ -1045,6 +1045,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.VOLUME,
                                 AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                                 AttributeCodes.END_VOL,
+                                AttributeCodes.RATE,
                                 AttributeCodes.TITLE // Product Title at Deal Level
                             }
                         }
