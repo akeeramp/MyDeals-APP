@@ -2851,11 +2851,14 @@
 
                             if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                                if (sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
+                                if (sData[s]["END_VOL"] != null && sData[s]["END_VOL"] != undefined && sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
                                     sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
                                 }
                                 if (sData[s]["RATE"] === null) {
                                     sData[s]["RATE"] = parseInt(0);
+                                }
+                                if (sData[s]["STRT_VOL"] === null) {
+                                    sData[s]["STRT_VOL"] = parseInt(0);
                                 }
                             }
 
