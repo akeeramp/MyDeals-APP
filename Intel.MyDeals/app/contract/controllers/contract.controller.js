@@ -6217,7 +6217,16 @@
                     retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                     if (!retCond) {
                         angular.forEach(data, (item) => {
-                            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && (item._behaviors && item._behaviors.isReadOnly && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"])) {
+                            if (!item._behaviors) item._behaviors = {};
+                            if (!item._behaviors.isReadOnly) {
+                                item._behaviors.isReadOnly = {};
+                                if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+                                    if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+                                        item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                                    }
+                                }
+                            }
+                            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
                                 $scope.setSettlementPartner(item, '0');
                             }
                             else {
