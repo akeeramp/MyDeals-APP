@@ -5010,7 +5010,7 @@
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
                     if ($scope.isTenderContract) { // Tenders come in without a customer defined immediately
                         // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
-                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Bi-Weekly (2 weeks)";
+                        if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Yearly";
                         if (!!newValue["AR_SETTLEMENT_LVL"]) newValue["AR_SETTLEMENT_LVL"].value = ""; // Old value "Issue Credit to Billing Sold To"
                     } else {
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value =
