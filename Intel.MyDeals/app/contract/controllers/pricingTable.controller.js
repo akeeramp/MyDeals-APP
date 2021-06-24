@@ -1650,13 +1650,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === null || sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
                         // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
-                        var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
-                            ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
-                            $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
-                        sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
                         if (root.isTenderContract == "1") {
+                            var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                                ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Yearly" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
+                                $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
                             data[i].PERIOD_PROFILE = newValue;
                         }
+                        else {
+                            var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
+                                ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Bi-Weekly (2 weeks)" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
+                                $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                        }
+                        sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value(newValue);
                     }
                 }
             }
@@ -2169,7 +2174,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (root.isTenderContract && root.curPricingTable[key] == "") {
                                     switch (key) {
                                         case "PERIOD_PROFILE": {
-                                            root.curPricingTable[key] = "Bi-Weekly (2 weeks)";  //root.contractData.Customer.DFLT_PERD_PRFL;
+                                            root.curPricingTable[key] = "Yearly";  //root.contractData.Customer.DFLT_PERD_PRFL;
                                         } break;
                                         case "AR_SETTLEMENT_LVL": {
                                             // Default to customer tender value or system wide tender value, safety check for "User Select" value

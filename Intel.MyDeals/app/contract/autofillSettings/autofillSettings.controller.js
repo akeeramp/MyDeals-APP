@@ -59,8 +59,8 @@
                     if (vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") { 
                         vm.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "";
                     }
-                    if (vm.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Bi-Weekly (2 weeks)") { 
-                        vm.autofillData.DEFAULT.PERIOD_PROFILE.value = "Bi-Weekly (2 weeks)";
+                    if (vm.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") { 
+                        vm.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
                     }
                 }
                 var returnVal = vm.autofillData.DEFAULT;
