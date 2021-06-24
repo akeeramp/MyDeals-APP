@@ -40,7 +40,11 @@
             });
 
             dropdownsService.getVendorDropDown('GetCustomerVendors/0').then(function (response) {
-                vm.SettlementPartner = response.data;
+                var SettlementPartnerData = response.data;
+                vm.SettlementPartner = $.map(SettlementPartnerData, function (item) {
+                    item.BUSNS_ORG_NM = item.BUSNS_ORG_NM + " - " + item.VNDR_ID;
+                    return item;
+                });
             }, function (response) {
                 logger.error("Unable to get Settlement Partner list.", response, response.statusText);
             });
@@ -197,14 +201,7 @@
         vm.SettlementPartDropDownEditor = function (container, options) {
             vm.Partner = [];
             vm.Partner = vm.SettlementPartner.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID && x.ACTV_IND == true);
-            if (vm.Partner.length > 1) {
-                var partnerCopy = [];
-                partnerCopy = util.deepClone(vm.Partner);
-                vm.Partner = $.map(vm.Partner, function (item) {
-                    item.BUSNS_ORG_NM = partnerCopy.filter(x => x.BUSNS_ORG_NM == item.BUSNS_ORG_NM).length > 1 ? item.BUSNS_ORG_NM + " - " + item.VNDR_ID : item.BUSNS_ORG_NM;
-                    return item;
-                });
-            }
+
             if (vm.Partner.length == 0) {
                 vm.SettlementPartnerOptions.placeholder = 'No Settlement Partners are mapped';   
             }
