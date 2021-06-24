@@ -64,6 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
                         {
                             var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            supplierName = customerVendorData.Where(ob => ob.BUSNS_ORG_NM == supplierName).ToList().Count() > 1 ? supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString() : supplierName;
                             item["SETTLEMENT_PARTNER"] = supplierName;
                         }
                     }
@@ -76,6 +77,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
                         {
                             var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
+                            supplierName = customerVendorData.Where(ob => ob.BUSNS_ORG_NM == supplierName).ToList().Count() > 1 ? supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString() : supplierName;
                             item["SETTLEMENT_PARTNER"] = supplierName;
                         }
                     }
