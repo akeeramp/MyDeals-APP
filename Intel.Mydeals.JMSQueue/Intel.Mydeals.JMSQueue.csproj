@@ -58,6 +58,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'perf|AnyCPU'">
     <OutputPath>bin\perf\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'eut|AnyCPU'">
+    <OutputPath>bin\eut\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Intel.Opaque.Config">
       <HintPath>..\Shared Libraries\Intel.Opaque.Config.dll</HintPath>

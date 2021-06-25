@@ -54,6 +54,9 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'eut|AnyCPU'">
+    <OutputPath>bin\eut\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Intel.Opaque">
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>

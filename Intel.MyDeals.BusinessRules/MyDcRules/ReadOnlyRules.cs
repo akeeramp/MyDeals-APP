@@ -48,7 +48,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.MRKT_SEG,
                                 AttributeCodes.PAYOUT_BASED_ON,
                                 AttributeCodes.SEND_TO_VISTEX,
-                                AttributeCodes.END_CUSTOMER_RETAIL,
                                 AttributeCodes.FLEX_ROW_TYPE,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD
                             }
@@ -93,6 +92,25 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[] {
                                 AttributeCodes.PERIOD_PROFILE
+                            }
+                        }
+                    }
+                },
+
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER and the deal has been primed (unified)
+                {
+                    Title="Readonly if Tracker Exists and Customer is Unified",
+                    ActionRule = MyDcActions.ReadOnlyIfUnifiedAndHasTracker,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.END_CUSTOMER_RETAIL
                             }
                         }
                     }
