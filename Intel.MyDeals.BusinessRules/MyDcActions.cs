@@ -903,9 +903,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
             List<string> excludeAtrbs = new List<string> { AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES };
 
-            string deFrontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            string frontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
-            if (deFrontendValue == "Backend" || !r.Dc.HasTracker()) return;
+            if (frontendValue == "Backend" || !r.Dc.HasTracker()) return;
 
             foreach (OpDataElement de in r.Dc.DataElements.Where(d => !excludeAtrbs.Contains(d.AtrbCd)))
             {
@@ -922,6 +922,23 @@ namespace Intel.MyDeals.BusinessRules
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
                 if (de != null && de.AtrbValue.ToString() != "" && r.Dc.HasTracker()) de.IsReadOnly = true;
+            }
+        }
+
+        public static void ReadOnlyIfUnifiedAndHasTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            int primedCustValue = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1"? 1: 0;
+
+            if (primedCustValue == 1 && r.Dc.HasTracker())
+            {
+                foreach (var s in r.Rule.OpRuleActions[0].Target)
+                {
+                    OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                    de.IsReadOnly = true;
+                }
             }
         }
 
@@ -1049,7 +1066,14 @@ namespace Intel.MyDeals.BusinessRules
                 // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
                 bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
 
-                if (de != null && de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker()) de.IsReadOnly = true;
+                if (de != null && de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker())
+                {
+                    de.IsReadOnly = true;
+                    foreach (OpDataElement dx in r.Dc.DataElements) // Lock down the entire cell, it is 90 days old!!
+                    {
+                        dx.IsReadOnly = true;
+                    }
+                }
             }
         }
 
@@ -3051,20 +3075,24 @@ namespace Intel.MyDeals.BusinessRules
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
-            var custSID = r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string Rebatetype = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             string dealtype = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-            bool isTender = false;
-            if(Rebatetype == "TENDER" && (dealtype == "ECAP" || dealtype == "KIT"))
-            {
-                isTender = true;
-            }     
+            string programPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            bool isTender = (Rebatetype == "TENDER" && (dealtype == "ECAP" || dealtype == "KIT")) == true? true: false;
+            int numDaysInPastLimit = 90; // Set to 90 days, by constant if we can (Might want to break this out as a larger scale to pull out required)
+            //if (Rebatetype == "TENDER" && (dealtype == "ECAP" || dealtype == "KIT"))
+            //{
+            //    isTender = true;
+            //}     
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
             if (deEndCust == null) return;
 
-            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck ) // If not primed and End customer has a value
+            DateTime chkDate = OpConvertSafe.ToDateTime(r.Dc.GetDataElementValue(AttributeCodes.END_DT));
+            bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
+
+            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr ) // If not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
@@ -3072,7 +3100,10 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 else if (!isTender)
                 {
-                    deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                    if (!(programPayment.Contains("Frontend") && dealStage == WorkFlowStages.Active))
+                    {
+                        deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                    }
                 }
             }
         }
