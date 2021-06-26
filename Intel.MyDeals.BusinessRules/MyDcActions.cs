@@ -887,7 +887,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
             IOpDataElement deOaAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
 
-            if (deNumTiers == null) return;
+            if (deNumTiers == null || deOaAmt == null) return;
 
             if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
 
@@ -1425,12 +1425,12 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement payoutBasedOn = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
             IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
             IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
             IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
-            IOpDataElement deType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
+            string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; // Default to no cust if not found, which defaults to Intel anyhow
 
@@ -1441,11 +1441,13 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
             if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
 
-            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
-            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
+            if (!DateTime.TryParse(deStart.AtrbValue.ToString(), out DateTime dtSt)) dtSt = DateTime.MinValue;
+            if (!DateTime.TryParse(deEnd.AtrbValue.ToString(), out DateTime dtEn)) dtEn = DateTime.MinValue;
+
+            if (dtSt == DateTime.MinValue || dtEn == DateTime.MinValue) return;
 
             // US705342 get dates for previous quarter
-            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, dcSt, null, null);
+            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, dtSt, null, null);
             int qtr = currentQuarterDetails.QTR_NBR - 1;
             int yr = 0;
             if (qtr > 0) // Didn't start in the first quarter of this year, so stay in the current year
@@ -1465,30 +1467,31 @@ namespace Intel.MyDeals.BusinessRules
             // End date =  Billing End date
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-                if (payoutBasedOn.AtrbValue.ToString().Equals("Billings", StringComparison.InvariantCultureIgnoreCase) || deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                if (payoutBasedOn.Equals("Billings", StringComparison.InvariantCultureIgnoreCase) || rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
-                    deBllgStart.SetAtrbValue(dt);
+                    deBllgStart.SetAtrbValue(dtSt.ToString("MM/dd/yyyy"));
                 } 
                 else
                 {              
-                    // Consumption deal- billing start date set it same as Deal start date when deal start date is modified  
-                    var dt = DateTime.Parse(deStart.AtrbValue.ToString()).ToString("MM/dd/yyyy");
-                    deBllgStart.SetAtrbValue(dt);
+                    // Consumption deal- billing start date set it same as Deal start date when deal start date is modified  (Odd that it is this way, they are both the same)
+                    deBllgStart.SetAtrbValue(dtSt.ToString("MM/dd/yyyy"));
                 }
                 
             }
 
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
             {
-                deBllgEnd.SetAtrbValue(deEnd.AtrbValue.ToString());
+                deBllgEnd.SetAtrbValue(dtEn.ToString());
             }
 
-            if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date > dcSt)
+            if (!DateTime.TryParse(deBllgStart.AtrbValue.ToString(), out DateTime dtBllgStart)) dtBllgStart = DateTime.MinValue;
+            if (!DateTime.TryParse(deBllgEnd.AtrbValue.ToString(), out DateTime dtBllgEnd)) dtBllgEnd = DateTime.MinValue;
+
+            if (dtBllgStart == DateTime.MinValue || dtBllgStart > dtSt)
             {
                 deBllgStart.AddMessage("The Billing Start Date must be on or earlier than the Deal Start Date.");
             }
-            if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()).Date > dcEn)
+            if (dtBllgEnd == DateTime.MinValue || dtBllgEnd > dtEn)
             {
                 deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
@@ -1498,14 +1501,14 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(bllgTenderCutoverDealCnst, out int bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
             if (deBllgStart.DcID > bllgTenderCutoverDeal) // Apply new rules for tenders billing start dates
             {
-                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < quarterDetails.QTR_STRT && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                if (dtBllgStart < quarterDetails.QTR_STRT && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
                 {
                     deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
                 }
             }
             else // Apply old rules to old tenders before break off point
             {
-                if (DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date < dcSt.AddYears(-1) && deType.AtrbValue.ToString().Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1)
+                if (dtBllgStart < dtSt.AddYears(-1) && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1)
                 {
                     deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date.");
                 }
