@@ -10,8 +10,9 @@ angular
                 abstract: false,
                 views: {
                     reportingView: {
-                        templateUrl: "Client/src/app/reporting/ReportDashboard.html",
-                        controller: "ReportingDashboardController as vm"
+                       template:'<reporting-dashboard></reporting-dashboard>'
+                        // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
+                        // controller: "ReportingDashboardController as vm"
 
                     }
                 },
@@ -22,4 +23,5 @@ angular
                 }
 
             });
+
     });

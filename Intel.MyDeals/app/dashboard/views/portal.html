@@ -1,14 +1,14 @@
 ﻿<style>
-    /*this stop manege scrollbar input dashboard*/
+    /*this stop manage scrollbar input dashboard*/
     div.overFlowDash {
         width: auto;
         height: 720px !important;
-        overflow: scroll !important;
+        overflow: auto !important;
     }
 </style>
     ﻿<!-- using for Angular spinner while page load -->
     <cc-spinner is-loading="isLoading"
-                message="Dashboard Loading ...">
+                message="{{loadMessage}}">
     </cc-spinner>
 
      

@@ -1,11 +1,9 @@
 import './polyfills.ts'
-
+import './load-libs';
 
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {UpgradeModule} from '@angular/upgrade/static';
 import { AppModule } from './app/app.module';
-
-
 
 
 // Bootstrap using the UpgradeModule

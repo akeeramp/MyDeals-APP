@@ -1,60 +1,12 @@
-﻿<style>
-    .reportLink {
-        font-size:13px;
-    }
-    .filterInfo {
-        width: 450px;
-        background: rgba(0, 0, 0, 0.69);
-        border: 2px solid #8c8c8c;
-        position: fixed;
-        top: 100px;
-        height: 120px;
-        color: #fff;
-        padding: 5px;
-    }
-    .showMore {
-        padding: 3px;
-        background: #2196f3;
-        float: left;
-        margin-top: 10px;
-        cursor: pointer;
-        color: #FFF;
-    }
-    .tableHeader > thead:first-child > tr:first-child > th {
-        background: #FFFFFF;
-        border-right: 1px solid #f2f2f2;
-        border-bottom: 3px solid #2196F3;        
-    }
-    .tableHeader {
-        border: 1px solid #f2f2f2;
-    }
-    .ui-tooltip {
-        /* tooltip container box */
-        white-space: pre-line;
-    }
-
-    .ui-tooltip-content {
-        /* tooltip content */
-        white-space: pre-line;
-    }
-
-    .mainBodyStyle {
-        position: absolute;
-        top: 84px;
-        bottom: 15px;
-        left: 0;
-        right: 0;
-        overflow: scroll !important;
-    }
-  
-
-</style>
+﻿
   <!-- using for Angular spinner while page load -->
-  <cc-spinner is-loading="vm.isLoading"
-  message="Report Loading ...">
-</cc-spinner>
-<div class="container-fluid" ng-show="!vm.isLoading">
-    <div class="row">
+  <ccLoader [isLoading]="isLoading"
+  [message]="loadMessage">
+</ccLoader>
+
+<div class="container-fluid overFlowDash" [hidden] ="isLoading">
+  <div class="row">
+        <!-- <h1> HALO {{ promisObj | async}}</h1> -->
         <div class="col-md-12">
             <div class="hold-transition skin-blue sidebar-mini">
                 <div id="reportScopeID" class="wrapper" >
@@ -66,19 +18,27 @@
                             <div class="row">
                                 <div class="col-xs-12 col-md-11 col-md-offset-0" style="width: 94.66667%;">
                                     <!-- Begin sidenav -->
-                                    <div class="panel sidenav" ng-repeat="x in vm.getReportCatagory">                            
-                                        <div class="panel-heading">{{x.CTGR_NM}}</div>
-                                        <div class="panel-body">
-                                            <div ng-repeat="s in vm.getReportSubCatagory | filter : x.CTGR_NM">
-                                                <h3>{{s.SUB_CTGR_NM}} </h3>
-                                                <ul>
-                                                    <li class="reportLink" ng-repeat="d in vm.masterData['ReportName'] | filter : s.SUB_CTGR_NM">
-                                                        <a target="_blank" href="{{d.RPT_URL}}"><i class="fa fa-circle-o text-agreen" style=""></i> {{d.RPT_UNIQ_NM}} </a>
-                                                    </li>
-                                                </ul>
-                                            </div>                               
-                                        </div>                            
-                                    </div>
+                                    
+                                        <div class="panel sidenav" *ngFor="let x of getReportCatagory">
+                                            <div class="panel-heading">{{x.CTGR_NM}}</div>
+                                            <div class="panel-body">
+                                                
+                                                    <div *ngFor="let s of getReportSubCatagory | filter : x.CTGR_NM">
+                                                        <h3>{{s.SUB_CTGR_NM}} </h3>
+                                                        <ul>
+                                                            
+                                                                <li class="reportLink" *ngFor="let d of ReportName | filter : s.SUB_CTGR_NM ">
+                                                                    <a target="_blank" href="{{d.RPT_URL}}"><i class="fa fa-circle-o text-agreen"></i> {{d.RPT_UNIQ_NM}} </a>
+                                                                </li>
+                                                            
+                                                            
+                                                        </ul>
+                                                    </div>   
+                                                
+                                            </div>                            
+                                        </div>
+                                    
+                                    
                                     <!-- End sidenav -->
                                 </div>
                             </div>
@@ -113,7 +73,9 @@
                                         <div class="info-box-content">
                                             <span class="info-box-text">Total Deals</span>
                                             <br />
-                                            <span kendo-tooltip k-options="vm.toolTipOptions" class="info-box-number" title="{{::vm.dealCountTooltip}}">{{vm.totalDealCount | number : fractionSize}}</span>
+                                            <div>
+                                                <span class="info-box-number" class="info-box-number" title="{{dealCountTooltip}}">{{totalDealCount | number : fractionSize}}</span>
+                                            </div>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -127,7 +89,7 @@
                                         <div class="info-box-content">
                                             <span class="info-box-text">Total Product Used</span>
                                             <br />
-                                            <span class="info-box-number">{{::vm.productUsed}}</span>
+                                            <span class="info-box-number">{{productUsed}}</span>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -144,7 +106,7 @@
                                         <div class="info-box-content">
                                             <span class="info-box-text">Customer Serviced</span>
                                             <br />
-                                            <span class="info-box-number">{{::vm.cutomerServiced}}</span>
+                                            <span class="info-box-number">{{cutomerServiced}}</span>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -158,7 +120,7 @@
                                         <div class="info-box-content">
                                             <span class="info-box-text">Reporting Time </span>
                                             <small style="font-size: 10px;">Captured in Seconds</small>
-                                            <span class="info-box-number">{{::vm.masterData["ReportSummary"][0].SUM_AMOUNT}}</span>
+                                            <span class="info-box-number">{{SUM_AMOUNT}}</span>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>
@@ -168,7 +130,7 @@
                             </div>
                             <!-- /.row -->
 
-                            <div class="row" ng-show="vm.isRecordAvailable">
+                            <div class="row" [hidden]="!isRecordAvailable">
                                 <div class="col-md-12">
                                     <div class="box">
                                         <div class="box-header with-border">
@@ -186,20 +148,46 @@
                                                 <div class="col-md-8">                                        
                                                     <div class="chart">
                                                         <!-- Report Chart Canvas -->
-                                                        <div id="chart" style="height:300px" ></div>
+                                                        <div id="chart" class="kendocontainer">
+                                                            <kendo-chart #chartkendo [popupSettings]="{ appendTo: chartContainer }"
+                                                            [title]="chartObj.title"
+                                                            [chartArea]="chartObj.chartArea"
+                                                            [seriesDefaults]="chartObj.seriesDefaults"
+                                                            [valueAxis]="chartObj.valueAxis"
+                                                            [categoryAxis]="chartObj.categoryAxis"
+                                                            [legend]="chartObj.legend"
+                                                              >
+                                                            <kendo-chart-series>
+                                                                <kendo-chart-series-item 
+                                                                *ngFor="let series of chartSeriesObj"
+                                                                [name]="series.name"
+                                                                [data]="series.data">
+                                                                <kendo-chart-series-item-tooltip>
+                                                                    <ng-template let-value="value" let-category="category" let-series="series" >
+                                                                       {{series.name}}: {{ value }} (seconds)
+                                                                    </ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+
+                                                                </kendo-chart-series-item>
+                                                              </kendo-chart-series>
+                                                           </kendo-chart>
+                                                        </div>
                                                     </div>
                                                     <!-- /.chart-responsive -->
                                                 </div>
                                                 <!-- /.col -->
-                                                <div class="col-md-4">                                        
-                                                    <div class="progress-group" ng-repeat="x in vm.masterData['ReportDashboardData'] | limitTo : 5">
-                                                        <span class="progress-text">{{x.RPT_NM}}</span>
-                                                        <span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
-
-                                                        <div class="progress sm">
-                                                            <div class='progress-bar progress-bar {{x.COLOR_CD}}' style="width: {{x.TOTAL_TIME*100/x.TOTAL_REPORT_TIME | number : 2}}%"></div>
-                                                        </div>
-                                                    </div>                                        
+                                                <div class="col-md-4">     
+                                                   
+                                                        <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 1:5 " >
+                                                            <span class="progress-text">{{x.RPT_NM}}</span>
+                                                            <span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
+    
+                                                            <div class="progress sm">
+                                                                <div class="progress-bar progress-bar {{x.COLOR_CD}}" [ngStyle]="{'width':getWidthDB(x.TOTAL_TIME,x.TOTAL_REPORT_TIME)}"></div>
+                                                            </div>
+                                                        </div>  
+                                                                                 
+                                                              
                                                     <!-- /.progress-group -->
                                                 </div>
                                                 <!-- /.col -->
@@ -216,7 +204,7 @@
                             </div>
                             <!-- /.row -->
                             <!-- Main row -->
-                            <div class="row" ng-show="vm.isRecordAvailable">
+                            <div class="row" [hidden]="!isRecordAvailable">
                                 <!-- Left col -->
                                 <div class="col-md-8">
                                     <!-- MAP & BOX PANE -->
@@ -237,13 +225,61 @@
                                                 <div class="col-md-6 col-sm-8">
                                                     <div class="pad">
                                                         <!-- Report will be created here -->
-                                                        <div id="chartPie" style="height:342px"></div>
+                                                        <div id="chartPie" class="kendocontainer">
+                                                             <kendo-chart #piekendo [popupSettings]="{ appendTo: pieContainer }"
+                                                            [title]="chartPieObj.title"
+                                                            [legend]="chartPieObj.legend"
+                                                            [chartArea]="chartPieObj.chartArea"
+                                                            [seriesDefaults]="chartPieObj.seriesDefaults"
+                                                            >
+                                                            <kendo-chart-series>
+                                                                <kendo-chart-series-item
+                                                                  type="pie"
+                                                                  [data]="chartPieSeriesObj"
+                                                                  field="value"
+                                                                  categoryField="category"
+                                                                  [labels]="{ visible: true, content: labelContent }"
+                                                                >
+                                                                <kendo-chart-series-item-tooltip >
+                                                                    <ng-template let-value="value" let-category="category" let-series="series">
+                                                                       {{category}}: {{ value }}%
+                                                                    </ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                                </kendo-chart-series-item>
+                                                              </kendo-chart-series>
+                                                            </kendo-chart> 
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-8">
                                                     <div class="pad">
                                                         <!-- Map will be created here -->
-                                                        <div id="chartPiee" style="height:342px"></div>
+                                                        <div id="chartPiee" class="kendocontainer">
+                                                            <kendo-chart #pieekendo [popupSettings]="{ appendTo: pieeContainer }"  
+                                                            [title]="chartPieeObj.title"
+                                                            [legend]="chartPieeObj.legend"
+                                                            [chartArea]="chartPieeObj.chartArea"
+                                                            [seriesDefaults]="chartPieeObj.seriesDefaults"
+                                                            [tooltip]="chartPieeObj.tooltip"
+                                                           >
+                                                            <kendo-chart-series>
+                                                                <kendo-chart-series-item
+                                                                  type="pie"
+                                                                  [data]="chartPieeSeriesObj"
+                                                                  field="value"
+                                                                  categoryField="category"
+                                                                  [labels]="{ visible: true, content: labelContent }"
+                                                                >
+                                                                <kendo-chart-series-item-tooltip >
+                                                                    <ng-template let-value="value" let-category="category">
+                                                                       {{category}}: {{ value }} %
+                                                                    </ng-template>
+                                                                </kendo-chart-series-item-tooltip>
+                                                                </kendo-chart-series-item>
+                                                              </kendo-chart-series>
+
+                                                            </kendo-chart>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!-- /.col -->
@@ -262,35 +298,37 @@
                                 <!-- /.col -->
 
                                 <div class="col-md-4">
-                                    <div class="info-box bg-{{x.COLOR}}" ng-repeat="x in vm.masterData['ReportDealType'] | limitTo : 5">
-                                        <span class="info-box-icon"><i class="fa fa-circle-o text-white" style=""></i></span>
-
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">{{x.DEAL_TYPE}}</span>
-                                            <span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
-
-                                            <div class="progress">
-                                                <div class="progress-bar" style="width: {{(x.Deal_Count*100/vm.totalDealCount) | number : 2}}%"></div>
+                                   
+                                        <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :1:5 ">
+                                            <span class="info-box-icon"><i class="fa fa-circle-o text-white"></i></span>
+    
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">{{x.DEAL_TYPE}}</span>
+                                                <span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
+    
+                                                <div class="progress">
+                                                    <div class="progress-bar" [ngStyle]="{'width':getWidthDT(x.Deal_Count)}"></div>
+                                                </div>
+                                                <span class="progress-description">
+                                                    Total Number of Deals - {{totalDealCount | number : fractionSize}}
+                                                </span>
                                             </div>
-                                            <span class="progress-description">
-                                                Total Number of Deals - {{vm.totalDealCount | number : fractionSize}}
-                                            </span>
+                                            <!-- /.info-box-content -->
                                         </div>
-                                        <!-- /.info-box-content -->
                                     </div>
-                                </div>
+                               
                                 <!-- /.col -->
                             </div>
                             <!-- /.row -->
                             <!-- TABLE: LATEST ORDERS -->
-                            <div class="row" ng-show="vm.isRecordAvailable">
+                            <div class="row" [hidden]="!isRecordAvailable">
                                 <div class="col-md-12">
                                     <div class="box box">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">Report(s) Log</h3>
                                             <label class="switch" title='Excluded/Included by USER'>
-                                                <input type="checkbox" ng-click="vm.filterData(vm.reportLogView)" ng-model='vm.reportLogView' title='Click to see Summarized view' checked>
-                                                <span class="slider" title='Click to see Summarized view'><p class={{vm.reportLogView}}></p></span>
+                                                <input type="checkbox"  [(ngModel)]="reportLogView" title='Click to see Summarized view' checked>
+                                                <span class="slider" title='Click to see Summarized view'><p class={{reportLogView}}></p></span>
                                             </label>
                                             <div class="box-tools pull-right">
                                                 <!--<button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -302,7 +340,7 @@
                                         <!-- /.box-header -->
                                         <div class="box-body">
                                             <div class="table-responsive" style="height:430px">
-                                                <table class="table no-margin ReportAuditLog tableHeader" ng-if="vm.reportLogView == false">
+                                                <table class="table no-margin ReportAuditLog tableHeader" *ngIf="reportLogView == false">
                                                     <thead>
                                                         <tr>
                                                             <th>Report Name</th>
@@ -314,7 +352,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="x in vm.masterData['ReportDashboardData'] | limitTo : vm.numberOfRecrods ">
+                                                        <tr *ngFor="let x of ReportDashboardData | slice :1:numberOfRecrods ">
                                                             <td>{{x.RPT_NM}}</td>
                                                             <td>{{x.RPT_COUNT}}</td>
                                                             <td>{{x.TOTAL_TIME}}</td>
@@ -324,7 +362,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <table class="table no-margin ReportAuditLog tableHeader" ng-if="vm.reportLogView == true">
+                                                <table class="table no-margin ReportAuditLog tableHeader" *ngIf="reportLogView == true">
                                                     <thead>
                                                         <tr>
                                                             <th style="width:2px"> </th>
@@ -335,8 +373,8 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr ng-repeat="x in vm.masterData['ReportLogDeatils'] | limitTo : vm.numberOfRecrods ">
-                                                            <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before running the Report' : ''}}"><i ng-if="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" ng-class="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
+                                                        <tr *ngFor="let x of ReportLogDeatils | slice :1:numberOfRecrods ">
+                                                            <td title="{{x.TOTAL_REPORT_TIME_TAKEN > 60 ? 'Check Filter before running the Report' : ''}}"><i *ngIf="x.TOTAL_REPORT_TIME_TAKEN > 60" class="intelicon-information-outlined red" [ngClass]="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >= 60}"></i></td>
                                                             <td>Deal Management {{x.RPT_ALS_NM}}</td>
                                                             <td>{{x.START_TIME}}</td>
                                                             <td>{{x.END_TIME}}</td>
@@ -344,35 +382,12 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <a ng-if="vm.masterData['ReportLogDeatils'].length > 10 && vm.reportLogView == true" ng-click="showAll(vm.numberOfRecrods)" 
-                                                class="showMore" title={{vm.btnText}} >
-                                                    {{vm.btnText}} 
-                                                    <i ng-if="vm.btnText == 'Show more '" class="intelicon-down"></i> 
-                                                    <i ng-if="vm.btnText == 'Show less '" class="intelicon-up"></i>
+                                                <a (click)="showAll(numberOfRecrods)" 
+                                                class="showMore" title={{btnText}} >
+                                                    {{btnText}} 
+                                                    <i *ngIf="btnText == 'Show more '" class="intelicon-down"></i> 
+                                                    <i *ngIf="btnText == 'Show less '" class="intelicon-up"></i>
                                                 </a>  
-                                                <div class="filterInfo" style="display:none">
-                                                    <div class="row">
-                                                        <div class="col-md-11">
-                                                            <table class="table no-margin ReportAuditLog tableHeader">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Filter Name </th>
-                                                                        <th>Value</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr ng-repeat="x in vm.filterResult ">
-                                                                        <td>{{x}}</td>
-                                                                        <td>Deal Management {{x}}</td>                                                            
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <i class="intelicon-close-solid" style="cursor: pointer;float: right;font-size: 20px;"></i> 
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <!-- /.table-responsive -->
                                         </div>
@@ -406,6 +421,13 @@
         </div>
     </div>
 </div>
-  
+           
+
+
+
+
+
+
+
 
 

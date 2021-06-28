@@ -2,17 +2,45 @@
 import './app.main';
 import './app.routes';
 //importing reporting to app module
-import './reporting';
-import './directives';
+//import './reporting';
+import './shared';
 
-import { NgModule } from '@angular/core';
+import { NgModule,ElementRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from "@angular/common";
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+//added for kendo chart to support animation
+import { ChartsModule } from '@progress/kendo-angular-charts';
+import { TooltipModule } from '@progress/kendo-angular-tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// application component
+import { LoaderComponent } from './shared/loader/loader.component';
+import { ReportingComponent } from './reporting/reporting.component';
+
+
 
 @NgModule({
     imports: [
+        CommonModule,
+        FormsModule,
         BrowserModule,
-        UpgradeModule
+        UpgradeModule,
+        HttpClientModule,
+        Ng2SearchPipeModule,
+        BrowserAnimationsModule,
+        ChartsModule,
+        TooltipModule
+     ],
+    declarations: [
+        LoaderComponent,
+        ReportingComponent
+    ],
+    entryComponents: [
+        LoaderComponent,
+        ReportingComponent
     ]
 })
 
