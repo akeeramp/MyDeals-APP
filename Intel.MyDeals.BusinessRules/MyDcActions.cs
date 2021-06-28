@@ -1321,7 +1321,6 @@ namespace Intel.MyDeals.BusinessRules
 
             eligibleDropDowns.Clear();
             eligibleDropDowns.Add(AttributeCodes.QLTR_BID_GEO, new DropdownObjCheck { NAME = "Bid Geo", DO_NOT_ALLOW_BLANK = false });
-            eligibleDropDowns.Add(AttributeCodes.GEO_COMBINED, new DropdownObjCheck { NAME = "Geo", DO_NOT_ALLOW_BLANK = false });
             CheckDropDownMultiValues(eligibleDropDowns, args);
         }
 
@@ -1397,9 +1396,9 @@ namespace Intel.MyDeals.BusinessRules
 
             foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligibleDropDowns.Keys))
             {
-                if (de.AtrbCd == AttributeCodes.QLTR_BID_GEO || de.AtrbCd == AttributeCodes.GEO_COMBINED)
+                if (de.AtrbValue.ToString().Trim() != string.Empty)
                 {
-                    List<string> dropDowns = DataCollections.GetDropdowns().Where(d => (d.dropdownCategory == "Geo" & d.active == 1)).Select(d => d.dropdownName).ToList();
+                    List<string> dropDowns = DataCollections.GetDropdowns().Where(d => d.dropdownCategory == (de.AtrbCd == AttributeCodes.QLTR_BID_GEO ? "Geo" : de.AtrbCd) && d.active == 1).Select(d => d.dropdownName).ToList();
                     List<string> unMatchedValues = de.AtrbValue.ToString().Split(',').Select(x => x.Trim().ToUpper()).Except(dropDowns.Select(d => d.Trim().ToUpper())).ToList();
                     if (unMatchedValues.Count > 0)
                     {
