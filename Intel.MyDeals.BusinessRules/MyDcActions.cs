@@ -2380,7 +2380,10 @@ namespace Intel.MyDeals.BusinessRules
             {
                 "ECAP ADJ",
                 "DEBIT MEMO",
-                "MDF"
+                "MDF",
+                "MDF/NRE LUMP-SUM BUDGET",
+                "NRE LUMP-SUM BUDGET",
+                "TENDER ACCRUAL"
             };
             IOpDataElement rebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (notRequiredProgramTypes.Contains(rebateType.AtrbValue)) return;  // If this is one of the above program types, it cannot be required, so bail.
@@ -2389,9 +2392,11 @@ namespace Intel.MyDeals.BusinessRules
             if (forecastVolume == null) return;
 
             bool isL1Product = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L1, "0")) > 0;
+            bool isL2Product = Int32.Parse(r.Dc.GetDataElementValueNull(AttributeCodes.HAS_L2, "0")) > 0;
+            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
-            if (isL1Product)
-                forecastVolume.IsRequired = true;  // Required for L1, optional if L2 or Exempt.
+            if (isL1Product || (dealType == "FLEX" && isL2Product))
+                forecastVolume.IsRequired = true;  // Required for L1, optional if L2 or Exempt (except for Flex deals, L2 is required as well).
         }
 
         public static void UserDefinedRpuRequired(params object[] args)

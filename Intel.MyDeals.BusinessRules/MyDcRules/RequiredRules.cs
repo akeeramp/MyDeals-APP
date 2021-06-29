@@ -37,22 +37,23 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    // In the rule, this acts against the following rebate types: ECAP ADJ, DEBIT MEMO, MDF, MDF/NRE LUMP-SUM BUDGET, NRE LUMP-SUM BUDGET, TENDER ACCRUAL
                     Title="Forecast Volume required if L1",
                     ActionRule = MyDcActions.ForecastVolumeRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString()}
+                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() }
                 },
 
                 new MyOpRule
                 {
-                    // If deal type is Vol Tier and Type is MDF ACTIVITY, then ensure that user fills in VOLUME values
-                    Title="Forecast Volume Required if Program Type is MDF ACTIVITY",
+                    // If deal type is Vol Tier and Type is MDF SPIF/PER UNIT ACTIVITY, then ensure that user fills in VOLUME values - Used to be MDF ACTIVITY
+                    Title="Forecast Volume Required if Program Type is MDF SPIF/PER UNIT ACTIVITY", 
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("MDF ACTIVITY")).Any(), 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.HasValue("MDF SPIF/PER UNIT ACTIVITY")).Any(), 
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
