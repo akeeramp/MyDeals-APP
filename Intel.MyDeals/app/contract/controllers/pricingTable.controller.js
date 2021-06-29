@@ -1651,9 +1651,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === null || sheet.range(prdProfileIndex + (i + pteHeaderIndex)).value() === '') {
                         // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
                         if (root.isTenderContract == "1") {
+                            //if we add new products in existing Tender folio/new Tenders,  then PERIOD_PROFILE should set to Yearly for all the customers.
                             var newValue = ($scope.$parent.$parent.curPricingTable.PERIOD_PROFILE == undefined || $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE === "") ?
                                 ($scope.contractData.Customer.DFLT_PERD_PRFL == undefined || $scope.contractData.Customer.DFLT_PERD_PRFL === "" ? "Yearly" : $scope.contractData.Customer.DFLT_PERD_PRFL) :
-                                $scope.$parent.$parent.curPricingTable.PERIOD_PROFILE;
+                                "Yearly";
                             data[i].PERIOD_PROFILE = newValue;
                         }
                         else {
@@ -2171,7 +2172,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
 
                                 //Tender contracts ALWAYS force these values to be set and un-editable. (US604926)
-                                if (root.isTenderContract && root.curPricingTable[key] == "") {
+                                // As already existing tenders PERIOD_PROFILE is set to Bi-Weekly, OR condition is added To make sure if we add a new products in already existing tenders PERIOD_PROFILE should set to "Yearly".
+                                if (root.isTenderContract && (root.curPricingTable[key] == "" || root.curPricingTable[key] == "Bi-Weekly (2 weeks)")) {
                                     switch (key) {
                                         case "PERIOD_PROFILE": {
                                             root.curPricingTable[key] = "Yearly";  //root.contractData.Customer.DFLT_PERD_PRFL;
