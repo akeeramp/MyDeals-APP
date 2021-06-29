@@ -3308,8 +3308,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 endCustomerRetailModal.rendered.then(function () {
                     $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
                     $timeout(function () {
-                        if ($('#DropdownSelections').parent().find("input").val().toUpperCase() == "ANY") {
-                            $('#DropdownSelections').attr('disabled', true);
+                        if ($('#DropdownSelections').parent().find("input").val()) {
+                            if ($('#DropdownSelections').parent().find("input").val().toUpperCase() == "ANY") {
+                                $('#DropdownSelections').attr('disabled', true);
+                            }
                         }
                     }, 1500);
                 });

@@ -186,7 +186,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     }
 
     $ctrl.remove = function () {
-        if (cellCurrValues.END_CUSTOMER_RETAIL != null && cellCurrValues.END_CUSTOMER_RETAIL != '' && cellCurrValues.END_CUSTOMER_RETAIL != undefined) {
+        if ((cellCurrValues.END_CUSTOMER_RETAIL != null && cellCurrValues.END_CUSTOMER_RETAIL != '' && cellCurrValues.END_CUSTOMER_RETAIL != undefined) || ($ctrl.popupResult.ComboBoxSelect != null && $ctrl.popupResult.ComboBoxSelect != '' && $ctrl.popupResult.ComboBoxSelect != undefined))  {
             var PrimeData = primeddata("remove")
             $uibModalInstance.close(PrimeData);
         }
