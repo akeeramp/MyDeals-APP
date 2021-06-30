@@ -1523,12 +1523,12 @@ namespace Intel.MyDeals.BusinessRules
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
-
+            string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
             DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
             DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
 
             DateTime maxEndDt = startDate.AddYears(20);
-            if (endDate > maxEndDt && progPayment == "Backend")
+            if (endDate > maxEndDt && progPayment == "Backend" && isCancelled != "1")
             {
                 deEndDate.AddMessage("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
             }
