@@ -10,6 +10,8 @@ variables:
 
   DEV_DEPLOY_PATH:      '\\HF2DEVMYD2W01.amr.corp.intel.com\MyDeals'
   ITT_DEPLOY_PATH:      '\\HF2ITTMYD2W01.amr.corp.intel.com\MyDeals'
+  EUT_DEPLOY_PATH:      '\\hf2cinmyd2w01\MyDealsEUT'
+  DAY1_DEPLOY_PATH:     '\\hf2cinmyd2w01\MyDealsDay1'
   UTT1_DEPLOY_PATH:     '\\HF2UTTMYD2W01.amr.corp.intel.com\MyDeals'
   UTT2_DEPLOY_PATH:     '\\HF2UTTMYD2W02.amr.corp.intel.com\MyDeals'
   CONS1_DEPLOY_PATH:    '\\FM7CONMYD2W01.amr.corp.intel.com\MyDeals'
@@ -92,6 +94,38 @@ itt_deploy:
     expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
     paths:
       - deployed/ITT/
+
+eut_deploy:
+  stage: Level_2
+  script:
+    - '& robocopy deployed/DEV/ $env:EUT_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/DEV/EnvConfig/eut $env:EUT_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/DEV -Destination deployed/EUT -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-EUT
+  when: manual
+  allow_failure: true
+  environment:
+      name: EUT
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/EUT/
+
+day1_deploy:
+  stage: Level_2
+  script:
+    - '& robocopy deployed/DEV/ $env:DAY1_DEPLOY_PATH /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/DEV/EnvConfig/day1 $env:DAY1_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& Copy-Item deployed/DEV -Destination deployed/DAY1 -Recurse'
+    - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-DAY1
+  when: manual
+  allow_failure: true
+  environment:
+      name: DAY1
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - deployed/DAY1/
 
 cons1_deploy:
   stage: Level_3
