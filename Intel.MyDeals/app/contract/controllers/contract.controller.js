@@ -6206,7 +6206,16 @@
                 }
                 if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
                     angular.forEach(data, (item) => {
-                        if (item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+                        if (!item._behaviors) item._behaviors = {};
+                        if (!item._behaviors.isReadOnly) {
+                            item._behaviors.isReadOnly = {};
+                            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+                                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+                                    item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                                }
+                            }
+                        }
+                        if ((item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
                             $scope.setSettlementPartner(item, '2');
                         }
                     });
