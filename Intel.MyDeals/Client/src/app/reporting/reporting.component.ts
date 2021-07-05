@@ -209,8 +209,7 @@ export class ReportingComponent {
   }
   loadReportDashboard() {
     let vm = this;
-    this.reportingSvc.getReportData().then(
-      function (response) {
+    this.reportingSvc.getReportData().subscribe(response => {
         //loader stops
         vm.isLoading = false;
 
@@ -369,8 +368,7 @@ export class ReportingComponent {
         vm.chartPieeSeriesObj = vm.reportCounterTotal;
         vm.chartPieSeriesObj=vm.reportCounterPie;
         vm.chartSeriesObj=vm.chartDataBAR
-      },
-      function (err) {
+      }, err=> {
         logger.error("Unable to get Report Data.", err);
       }
     );

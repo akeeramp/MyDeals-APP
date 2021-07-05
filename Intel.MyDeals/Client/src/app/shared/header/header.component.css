@@ -68,6 +68,8 @@ nav .hdrIcon a div {
     cursor: pointer;
 }
 
+/* _search partial view css */
+
 #header-nav-search-results {
     position: fixed;
     top: 86px;
@@ -164,3 +166,6 @@ ul .searchresult-container button {
     padding: 2px;
     font-size: 12px;
 }
+
+
+

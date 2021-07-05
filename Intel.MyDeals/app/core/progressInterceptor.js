@@ -30,10 +30,10 @@
                 Note: Only html files which angular uses should be appended(files inside the folder app), do not append for other html files (which are part of third party packages).
                 */
 
-                if (config !== undefined && config.url !== undefined && appVer !== undefined
-                        && config.url.endsWith('.html') && (config.url.startsWith('/app/') || config.url.startsWith('app/'))) {
-                    config.url = config.url + '?v=' + appVer;
-                }
+                // if (config !== undefined && config.url !== undefined && appVer !== undefined
+                //         && config.url.endsWith('.html') && (config.url.startsWith('/app/') || config.url.startsWith('app/'))) {
+                //     config.url = config.url + '?v=' + appVer;
+                // }
 
                 updateStatus();
                 return config;

@@ -1,469 +1,337 @@
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <table style="display: table; width:100%">
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="navbar-header" style="margin-left: 5px;">
-                            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png"
-                                ondblclick="eggSmw()">
-                            <a class="navbar-brand" href="/Home" title="Back to the My Deals Dashboard">My Deals</a>
-                        </div>
-                    </td>
-                    <td style="vertical-align: top">
-                        <div style="text-align: left;" class="navbar-collapse collapse">
-                            <div
-                                style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
-                                Google Chrome Required <img src="/images/ChromeIcon.png"
-                                    style="width: 24px; height: 24px; margin-left: 10px">
-                                <br><span
-                                    style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production
-                                    Environment: LOCAL</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td width="auto">
-                        <!-- Collect the nav links, forms, and other content for toggling -->
-                        <div class="collapse navbar-collapse" id="myDeals-navbar-collapse">
-                            <ul class="nav navbar-nav navbar-right">
-
-                                <li style="text-align: center;">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                        aria-expanded="false" style="padding: 7px;min-height:50px">
-                                        <div class="fl" id="divUsrImg">
-                                            <img src="https://photos.intel.com/images/11715175.jpg"
-                                                style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;">
-                                        </div>
-                                        <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;" title="Super User
-System Tester
-System Developer">
-                                            <div style="font-size: 12px; color: #ffffff; line-height: 1em;"
-                                                id="divUsrName">Abhilash Keerampara</div>
-                                            <div style="font-size: 9px; color: #ffffff; line-height: 1em; margin-top: 3px;"
-                                                id="divUsrRole">Super GA <span style="color: Yellow;">- TD</span></div>
-                                        </div>
-                                        <div class="fl">
-                                            <notification-dock class="ng-isolate-scope">
-                                                <div>
-                                                    <div>
-                                                        <div class="dropdown notificationDock">
-                                                            <a id="dLabel" role="button"
-                                                                ng-click="getNotification('SELECT')"
-                                                                data-toggle="dropdown" class="btn btn-primary"
-                                                                data-target="#" href="">
-                                                                <span class="badge badge-docking ng-binding ng-hide"
-                                                                    ng-show="unreadMessages > 0">0</span>
-                                                                <i class="intelicon-notification"
-                                                                    style="font-size:20px"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu scaleTopAnim multi-level"
-                                                                role="menu"
-                                                                style="width: 500px;padding-top:0px;padding-bottom:0px;width: 500px;"
-                                                                aria-labelledby="dropdownMenu">
-                                                                <li
-                                                                    style="background-color: #0071C5;color: #fff;font-size:18px;padding:2px; padding-bottom:6px;">
-                                                                    &nbsp;Notifications
-                                                                    <span title="Settings"
-                                                                        ng-click="gotoNotificationSettings()"
-                                                                        style="padding-right:9px;font-size:18px"
-                                                                        class="fr">
-                                                                        <i class="intelicon-settings-solid"></i>
-                                                                    </span>
-                                                                </li>
-                                                                <!-- ngRepeat: msg in notifications -->
-                                                                <!-- ngIf: notifications.length === 0 -->
-                                                                <li class="read ng-scope"
-                                                                    ng-if="notifications.length === 0">
-                                                                    No messages
-                                                                </li><!-- end ngIf: notifications.length === 0 -->
-                                                                <li class="text-center" ng-click="seeAllNotifications()"
-                                                                    style="color: #0071C5;height:25px">
-                                                                    See All
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div style="position: absolute; top: 0; z-index: 1000; left: 0px;">
-                                                    </div>
-                                                </div>
-                                                <style>
-                                                    .notificationDock .unread {
-                                                        color: #00AEEF;
-                                                        padding: 2px;
-                                                        font-size: 12px;
-                                                        font-weight: bold;
-                                                    }
-
-                                                    .notificationDock .read {
-                                                        color: #000;
-                                                        padding: 2px;
-                                                        font-size: 12px;
-                                                    }
-                                                </style>
-                                            </notification-dock>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="fr">
-                                <admin-banner class="ng-isolate-scope">
-                                    <!-- ngIf: $root.adminBannerMessage != '' -->
-                                    <div ng-if="$root.adminBannerMessage != ''" class="col-md-6 ng-scope">
-                                        <!-- ngIf: userDismissed == 'false' -->
-                                        <div ng-if="userDismissed == 'false'"
-                                            class="alert alert-dismissible adminBanner ng-scope" role="alert"
-                                            style="position: absolute; right: 185px">
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                                                style="top: 3px; right: 5px; color: red;"><span aria-hidden="true"
-                                                    class="intelicon-close-solid"
-                                                    ng-click="close(true)"></span></button>
-                                            <p ng-bind-html="$root.adminBannerMessage"
-                                                style="line-height: 1.1em; padding-right: 8px;" class="ng-binding"><b>
-                                                    <font color="red">Dracarys... <i class="fa fa-fire"></i></font>
-                                                    <font color="black"> <i
-                                                            class="fa fa-fire-extinguisher fa-flip-horizontal">&nbsp;&nbsp;</i>
-                                                    </font>
-                                                </b></p>
-                                        </div><!-- end ngIf: userDismissed == 'false' -->
-                                        <!-- ngIf: userDismissed == 'true' -->
-                                    </div><!-- end ngIf: $root.adminBannerMessage != '' -->
-                                </admin-banner>
-                                <deal-popup-dock class="ng-isolate-scope">
-                                    <!-- ngIf: isEnabled -->
-                                    <div class="deal-popup-docking ng-scope" ng-if="isEnabled">
-                                        <div>
-                                            <div class="dropdown">
-                                                <a id="dLabel" role="button" data-toggle="dropdown"
-                                                    class="btn btn-primary" data-target="#" href="">
-                                                    <span class="badge badge-docking ng-binding ng-hide"
-                                                        ng-show="ids.length > 0">0</span>
-                                                    <span class="fa-stack">
-                                                        <i class="fa fa-circle-o-notch fa-rotate-90"
-                                                            style="font-size: 26px;"></i>
-                                                        <i class="fa fa-bars fa-stack-1x"
-                                                            style="font-size: 12px; margin-top: -1px;"></i>
-                                                    </span>
-                                                    <i class="intelicon-down"></i>
-                                                </a>
-                                                <ul class="dropdown-menu scaleTopAnim multi-level" role="menu"
-                                                    aria-labelledby="dropdownMenu" style="left: -300px;">
-                                                    <li style="width: 400px; color: #000000;">
-                                                        <div class="fl cn-dock-title">Quick Deals</div>
-                                                        <div class="fr cn-dock-btns" style="padding-right: 8px;">
-                                                            <a href="" type="button" ng-click="closeAll()"
-                                                                ng-show="ids.length" class="ng-hide"><i
-                                                                    class="fa fa-window-close-o"
-                                                                    title="Close all Quick Deals"></i></a>
-                                                            <a href="" type="button" ng-click="cascadeAll()"
-                                                                ng-show="ids.length" class="ng-hide"><i
-                                                                    class="fa fa-clone"
-                                                                    title="Cascade all Quick Deals"></i></a>
-                                                            <a href="" type="button" ng-click="tileAll()"
-                                                                ng-show="ids.length" class="ng-hide"><i
-                                                                    class="fa fa-th-large"
-                                                                    title="Tile all Quick Deals"></i></a>
-                                                            <a href="" type="button" ng-click="lowerAll()"
-                                                                ng-show="ids.length" class="ng-hide"><i
-                                                                    class="fa fa-ellipsis-h"
-                                                                    style="vertical-align: sub;"
-                                                                    title="Line all Quick Deals to the bottom of the screen"></i></a>
-                                                            &nbsp;
-                                                        </div>
-                                                        <div class="clearboth"></div>
-
-                                                        <hr>
-
-                                                        <div ng-show="ids.length === 0 &amp;&amp; recent.length === 0"
-                                                            style="padding: 7px 20px; font-size: 12px; color: #666666;">
-                                                            To use the Quick Deal feature, click on the
-                                                            <span class="cn-deal-popup-icon">
-                                                                <span class="fa-stack"
-                                                                    style="height: 16px; line-height: 18px; margin-bottom: 3px;">
-                                                                    <i class="fa fa-circle-o-notch fa-rotate-90"></i>
-                                                                    <i class="fa fa-bars fa-stack-1x"
-                                                                        style="font-size: 9px; color: #FFA300;"></i>
-                                                                </span>
-                                                            </span>
-                                                            icon next to deal numbers. All opened Quick Deal or recently
-                                                            selected Quick Deals will appear here.
-                                                        </div>
-
-                                                        <div class="cn-deal-label ng-hide" ng-show="ids.length > 0">
-                                                            Current Deals (click to close)</div>
-                                                        <!-- ngRepeat: item in ids -->
-                                                        <div class="clearboth"></div>
-
-                                                        <div class="cn-deal-label ng-hide" ng-show="recent.length > 0">
-                                                            Recent Deals</div>
-                                                        <!-- ngRepeat: item in recent -->
-                                                        <div class="clearboth"></div>
-
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- ngRepeat: item in ids -->
-                                    </div><!-- end ngIf: isEnabled -->
-                                </deal-popup-dock>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- /.navbar-collapse -->
-
+<link rel="stylesheet" href="Client/src/app/shared/header/header.component.css">
+<div id="smbWindow" style="padding: 0; overflow: hidden !important;"></div>
+<div ng-init="$ctrl.getUserDetails()">
+    <div ng-if="$ctrl.env=='PROD'">
+        <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
     </div>
-    <div class="menu-bar {}">
-        <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
-
-
-            <li><a href="/Home" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">
-                        Home</span></a></li>
-
-
-
-            <li class="dropdown">
-                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#"
-                    title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs">
-                        Docs </span><i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="/CodingPractices">Coding Practices</a></li>
-                </ul>
-            </li>
-
-            <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown"
-                    data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span
-                        class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">DSA</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/vistex/vistextestapi">Test API </a></li>
-                            <li><a href="Admin#/vistex">Integration Logs</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">TroubleShooting</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li class="menu-detailed">
-                                <a href="/error/ResetMyCache"
-                                    onclick="clearSessionData('/error/ResetMyCache');return false;">
-                                    <i class="fl fa fa-user-md"></i>
-                                    <div class="fl">
-                                        Clear <b>My</b> View Model
-                                        <div>Clear only your settings</div>
-                                    </div>
-                                    <div class="clearboth"></div>
-                                </a>
-                            </li>
-                            <li class="menu-detailed">
-                                <a href="/error/ResetAVM" onclick="clearSessionData('/error/ResetAVM'); return false;">
-                                    <i class="fl fa fa-medkit"></i>
-                                    <div class="fl">
-                                        Clear <b>App</b> View Model
-                                        <div>Clear only the Middle Tier Cache</div>
-                                    </div>
-                                    <div class="clearboth"></div>
-                                </a>
-                            </li>
-                            <li class="menu-detailed">
-                                <a href="/error/ResetMT" onclick="clearSessionData('/error/ResetMT'); return false;">
-                                    <i class="fl fa fa-heartbeat"></i>
-                                    <div class="fl">
-                                        Clear <b>All</b> View Models
-                                        <div>Clear Middle Tier and ALL Users</div>
-                                    </div>
-                                    <div class="clearboth"></div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>
-
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Monitoring</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/cache">Cache Manager</a></li>
-                            <li><a href="Admin#/oplog">Log Viewer</a></li>
-                            <li><a href="Admin#/constants">Constants</a></li>
-                            <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Customer</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/customers">Customer</a></li>
-                            <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
-                            <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
-                            <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
-                            <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>
-                        </ul>
-
-                    </li>
-
-                    <li><a href="Admin#/geo">Geo</a></li>
-                    <li><a href="Admin#/funfact">Fun Facts</a></li>
-
-                    <li><a href="Admin#/meetcomp">Meet Comp</a></li>
-
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Products</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/productAlias">Product Alias</a></li>
-
-                            <li><a href="Admin#/products">Product Hierarchy</a></li>
-                            <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Legal Configurations</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>
-                            <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
-                            <li><a href="Admin#/quoteLetter">Quote Letter</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>
-
-                    <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
-                    <li><a href="Admin#/dataFix">Data Fix</a></li>
-
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Security Attributes</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
-                            <li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">WorkFlow</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/workflow">WorkFlow</a></li>
-                            <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Admin Tools</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/AdminTools">Support Scripts</a></li>
-                            <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
-                            <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
-                            <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="Admin#/manageEmployee">User Accounts Administration</a></li>
-
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Approval Rules Management</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/rules/">Price Rules</a></li>
-                            <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </li>
-
-
-            <li>
-                <a href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i
-                        class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
-            </li>
-            <li>
-                <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i
-                        class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
-            </li>
-            <li>
-                <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i
-                        class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
-            </li>
-
-            <li class="dropdown">
-                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#"
-                    title="Reporting Dashboard">
-                    <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i
-                        class="intelicon-down"></i>
-                </a>
-                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    <li ui-sref-active="active"><a ui-sref="reportingdashboard" href="#/reportingdashboard">Report
-                            Dashboard</a></li>
-                </ul>
-            </li>
-
-            <!-- Search Start -->
-
-
-            <div global-search="" class="fr ng-isolate-scope" style="background-color:#f2f2f2; border-radius: 3px;">
-                <a class="search intelicon-search" style="margin-right: 5px; float: left; font-size: 14px;"></a>
-                <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
-                    class="globalSearchInpt ng-pristine ng-untouched ng-valid ng-empty"
-                    ng-model="$root.globalSearchResultsData.searchText" ng-keypress="enterPressed($event)">
-
-                <div class="btn-group" style="margin-right: 4px;">
-                    <button class="btn btn-xs btn-default" type="button" ng-click="executeOnly('ALL')">in
-                        <b>All</b></button>
-                    <button class="btn btn-xs btn-default dropdown-toggle" aria-expanded="false" type="button"
-                        data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-search" role="menu">
-                        <li><a ng-click="executeOnly('CNTRCT')">in <b>Contracts</b></a></li>
-                        <li><a ng-click="executeOnly('PRC_ST')">in <b>Pricing Strategies</b></a></li>
-                        <li><a ng-click="executeOnly('PRC_TBL')">in <b>Pricing Tables</b></a></li>
-                        <li><a ng-click="executeOnly('WIP_DEAL')">in <b>Deals</b></a></li>
-                        <li class="divider"></li>
-                        <li><a ng-click="executeOnly('ALL')">in <b>All</b></a></li>
-                    </ul>
+    <div ng-if="!$ctrl.env=='PROD'">
+        <script src="https://appusage.intel.com/Service/api/loguser/114464?environment={{$ctrl.env}}" async></script>
+    </div>
+    <div id="smbWindow" style="padding: 0; overflow: hidden !important;"></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="navbar-header" style="margin-left: 5px;">
+                        <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png"
+                             ng-dblclick="$ctrl.eggSmw()">
+                        <a class="navbar-brand" href="/Home" title="Back to the My Deals Dashboard">
+                            My
+                            Deals
+                        </a>
+                    </div>
                 </div>
+                <div class="col-md-4">
+                    <div style="text-align: left;" class="navbar-collapse collapse">
 
-                <style>
-                    .globalSearchInpt {
-                        width: 320px;
-                        font-size: 14px;
-                        line-height: .9em;
-                        padding: 4px 5px 5px 5px;
-                        border: 0 solid transparent;
-                        height: auto;
-                    }
+                        <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
+                            Google Chrome Required <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
+                            <div ng-if="$ctrl.env !='PROD'">
+                                <span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">
+                                    Pre-Production
+                                    Environment: {{$ctrl.env}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="collapse navbar-collapse" id="myDeals-navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
 
-                    @media (max-width: 970px) {
-                        .globalSearchInpt {
-                            width: 176px;
-                        }
-                    }
-
-                    @media (max-width: 810px) {
-                        .globalSearchInpt {
-                            width: 57px;
-                        }
-                    }
-
-                    .dropdown-search li {
-                        cursor: pointer;
-                    }
-                </style>
+                            <li style="text-align: center;">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-expanded="false" style="padding: 7px;">
+                                    <div class="fl" id="divUsrImg">
+                                        <img src="https://photos.intel.com/images/{{$ctrl.usrWwid}}.jpg"
+                                             style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;" />
+                                    </div>
+                                    <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;"
+                                         title="{{$ctrl.extraUserPrivsDetail.join('\n')}}">
+                                        <div style="font-size: 12px; color: #ffffff; line-height: 1em;"
+                                             id="divUsrName">{{$ctrl.usrName}}</div>
+                                        <div style="font-size: 9px; color: #ffffff; line-height: 1em; margin-top: 3px;"
+                                             id="divUsrRole">
+                                            {{$ctrl.superPrefix}} {{$ctrl.usrRoleExtension}}
+                                            {{$ctrl.usrRole}} <span style="color: Yellow;">{{$ctrl.extraUserPrivs}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="fl">
+                                        <notification-dock></notification-dock>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="fr">
+                            <admin-banner></admin-banner>
+                            <deal-popup-dock></deal-popup-dock>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="menu-bar">
+                        <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
+                            <li><a href="/Home" title="Home"><i class="intelicon-home-solid"></i><span
+                                        class="hidden-xs"> Home</span></a></li>
 
-            <link href="/css/_search.css" rel="stylesheet" type="text/css">
-            <script>
-    //$("#winGlobalSearchResults").hide();
-    //setTimeout(function () {
-    //    var winSearch = $("#winGlobalSearchResults").data("kendoWindow");
-    //    if (winSearch !== undefined) winSearch.close();
-    //}, 500);
-            </script>
-            <!-- Search End -->
+                                <li class="dropdown"  ng-if="$ctrl.isDeveloper">
+                                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown"
+                                        data-target="#" title="Developer Documents"><i
+                                            class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs
+                                        </span><i class="intelicon-down"></i></a>
+                                    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu"
+                                        aria-labelledby="dropdownMenu">
+                                        <li><a href="/CodingPractices">Coding Practices</a></li>
+                                    </ul>
+                                </li>
+
+                            <li class="dropdown">
+                                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html"
+                                    data-toggle="dropdown" data-target="#" title="Administrative Tools"><i
+                                        class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i
+                                        class="intelicon-down"></i></a>
+                                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu"
+                                    aria-labelledby="dropdownMenu">
+                                    <div ng-if="$ctrl.isDeveloper">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">DSA</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/vistex/vistextestapi">Test API </a></li>
+                                                <li><a href="Admin#/vistex">Integration Logs</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
+                                    <li class="dropdown-submenu">
+                                        <a tabindex="-1">TroubleShooting</a>
+                                        <ul class="dropdown-menu" style="width: 250px;">
+                                            <li class="menu-detailed">
+                                                <a href="/error/ResetMyCache"
+                                                    ng-click="$ctrl.clearSessionData('/error/ResetMyCache')">
+                                                    <i class="fl fa fa-user-md"></i>
+                                                    <div class="fl">
+                                                        Clear <b>My</b> View Model
+                                                        <div>Clear only your settings</div>
+                                                    </div>
+                                                    <div class="clearboth"></div>
+                                                </a>
+                                            </li>
+
+                                            <div ng-if="$ctrl.isRealSA || $ctrl.isDeveloper">
+
+                                                <li class="menu-detailed">
+                                                    <a href="/error/ResetAVM"
+                                                        ng-click="$ctrl.clearSessionData('/error/ResetAVM')">
+                                                        <i class="fl fa fa-medkit"></i>
+                                                        <div class="fl">
+                                                            Clear <b>App</b> View Model
+                                                            <div>Clear only the Middle Tier Cache</div>
+                                                        </div>
+                                                        <div class="clearboth"></div>
+                                                    </a>
+                                                </li>
+                                                <li class="menu-detailed">
+                                                    <a href="/error/ResetMT"
+                                                        ng-click="$ctrl.clearSessionData('/error/ResetMT')">
+                                                        <i class="fl fa fa-heartbeat"></i>
+                                                        <div class="fl">
+                                                            Clear <b>All</b> View Models
+                                                            <div>Clear Middle Tier and ALL Users</div>
+                                                        </div>
+                                                        <div class="clearboth"></div>
+                                                    </a>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                    <div ng-if="($ctrl.env != 'PROD' && $ctrl.env != 'UNKNOWN')">
+                                        <li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>
+
+                                    </div>
+                                    <div ng-if="$ctrl.isDeveloper">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Monitoring</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/cache">Cache Manager</a></li>
+                                                <li><a href="Admin#/oplog">Log Viewer</a></li>
+                                                <li><a href="Admin#/constants">Constants</a></li>
+                                                <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
+
+                                    <div
+                                        ng-if="($ctrl.isRealSA || $ctrl.isCustomerAdmin || $ctrl.isDeveloper || $ctrl.usrRole == 'GA' || $ctrl.usrRole == 'FSE')">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Customer</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <div
+                                                    ng-if="($ctrl.isRealSA || $ctrl.isCustomerAdmin || $ctrl.isDeveloper)">
+
+                                                    <li><a href="Admin#/customers">Customer</a></li>
+                                                    <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
+                                                    <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
+                                                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a>
+                                                    </li>
+
+                                                </div>
+                                                <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a>
+                                                </li>
+                                            </ul>
+
+                                        </li>
+                                    </div>
+                                    <div ng-if="($ctrl.isRealSA || $ctrl.isDeveloper)">
+
+                                        <li><a href="Admin#/geo">Geo</a></li>
+                                        <li><a href="Admin#/funfact">Fun Facts</a></li>
+
+                                    </div>
+                                    <div
+                                        ng-if="($ctrl.usrRole == 'DA' || $ctrl.usrRole == 'Legal' || ($ctrl.usrRole == 'GA' && $ctrl.isSuper) || $ctrl.isRealSA || $ctrl.isDeveloper)">
+
+                                        <li><a href="Admin#/meetcomp">Meet Comp</a></li>
+
+                                    </div>
+                                    <div ng-if="($ctrl.isRealSA || $ctrl.isDeveloper)">
+
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Products</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/productAlias">Product Alias</a></li>
+                                                <li><a href="Admin#/products">Product Hierarchy</a></li>
+                                                <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
+                                            </ul>
+                                        </li>
+
+                                    </div>
+                                    <div ng-if="($ctrl.usrRole == 'Legal' || $ctrl.isRealSA || $ctrl.isDeveloper)">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Legal Configurations</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a>
+                                                </li>
+                                                <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
+                                                <li><a href="Admin#/quoteLetter">Quote Letter</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
+
+                                    <div ng-if="($ctrl.isRealSA || $ctrl.isCustomerAdmin || $ctrl.isDeveloper)">
+                                        <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>
+                                    </div>
+
+                                    <div ng-if="($ctrl.isRealSA || $ctrl.isDeveloper)">
+                                        <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
+                                    </div>
+
+                                    <div ng-if="($ctrl.isDeveloper)">
+                                        <li><a href="Admin#/dataFix">Data Fix</a></li>
+                                    </div>
+
+                                    <div ng-if="($ctrl.isDeveloper)">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Security Attributes</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
+                                                <li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">WorkFlow</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/workflow">WorkFlow</a></li>
+                                                <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
+
+                                    <div ng-if="($ctrl.isDeveloper)">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Admin Tools</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <div ng-if="($ctrl.isDeveloper)">
+                                                    <li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                                                    <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                                    <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
+                                                    <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
+                                                </div>
+                                            </ul>
+                                        </li>
+
+                                    </div>
+
+                                    <!-- DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access. -->
+
+                                    <div
+                                        ng-if="($ctrl.usrRole == 'DA' || $ctrl.isRealSA || $ctrl.isDeveloper || $ctrl.isCustomerAdmin)">
+                                        <li><a href="Admin#/manageEmployee">User Accounts Administration</a></li>
+                                        <!-- User Customer Assignments -->
+                                    </div>
 
 
-        </ul>
-    </div>
-</nav>
+                                    <div
+                                        ng-if="($ctrl.usrRole == 'DA' || $ctrl.usrRole == 'GA' || $ctrl.isRealSA || $ctrl.isDeveloper)">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Approval Rules Management</a>
+                                            <ul class="dropdown-menu" style="width: 250px;">
+                                                <li><a href="Admin#/rules/">Price Rules</a></li>
+                                                <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
+                                            </ul>
+                                        </li>
+                                    </div>
+                                    <div ng-if="($ctrl.env == 'LOCAL' && $ctrl.usrWwid == 10548414)">
+
+                                        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>
+                                    </div>
+
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i
+                                        class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender
+                                        Dashboard</span></a>
+                            </li>
+                            <li>
+                                <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i
+                                        class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+                            </li>
+                            <li>
+                                <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i
+                                        class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
+                            </li>
+
+                                <li class="dropdown" ng-if="($ctrl.isReportingUser)">
+                                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown"
+                                        data-target="#" title="Reporting Dashboard">
+                                        <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i
+                                            class="intelicon-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu"
+                                        aria-labelledby="dropdownMenu">
+                                        <li ui-sref-active="active"><a ui-sref="reportingdashboard">Report Dashboard</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- partial voew of _search the css of this is already added to header.component.css-->
+                    <div kendo-window id="winGlobalSearchResults">
+                        <div>
+                            <global-search-results></global-search-results>
+                        </div>
+                    </div>
+                    <div class="fr" style="background-color:#f2f2f2; border-radius: 3px;">
+                     <global-search></global-search>
+                    </div>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+</div>

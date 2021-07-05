@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "setup": "bower install",
-    "build":"rimraf src/dist && webpack --bail --progress --profile --env mode=development",
+    "build": "rimraf src/dist && webpack --bail --progress --profile --env mode=development",
     "build_env": "rimraf src/dist && webpack --bail --progress --profile --env mode=process.args.mode"
   },
   "author": "abhilash.keerampara@intel.com",
@@ -31,6 +31,7 @@
     "@progress/kendo-drawing": "^1.10.1",
     "@progress/kendo-licensing": "^1.1.4",
     "@progress/kendo-ui": "^2021.2.511",
+    "@types/node": "^10.0.0",
     "angular": "1.8.0",
     "angular-animate": "1.8.0",
     "angular-auto-validate": "^1.19.0",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "bower": "^1.8.12",
+    "ngtemplate-loader": "^2.1.0",
     "rimraf": "^3.0.2",
     "ts-loader": "^9.2.2",
     "typescript": "^4.3.2",

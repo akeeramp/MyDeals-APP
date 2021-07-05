@@ -9,7 +9,7 @@ import { NgModule,ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 //added for kendo chart to support animation
@@ -19,7 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // application component
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
-
+//Authentication purpose for token
+import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 
 
 @NgModule({
@@ -34,6 +35,13 @@ import { ReportingComponent } from './reporting/reporting.component';
         ChartsModule,
         TooltipModule
      ],
+     providers: [
+        {
+          provide : HTTP_INTERCEPTORS,
+          useClass: AuthInterceptor,
+          multi   : true,
+        },
+    ],
     declarations: [
         LoaderComponent,
         ReportingComponent
