@@ -790,20 +790,6 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 3458,
-                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Customer Reported Region</span>",
-                Width = 160,
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
-                UiType = "EMBEDDEDMULTISELECT",
-                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsHidden = true
-            });
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 3719,
                 AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -1136,6 +1122,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 IsRequired = false
             });
+            // Ending hidden items that should be out of cut-n-paste range on PTR
             items.Add(new UiTemplateContainerItem
             {
                 Id = 3011,
@@ -1153,6 +1140,22 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER },
                 IsHidden = true
+            });
+            // Can't remove this at PT/PTR since there is customer level setting logic at play - review is that is still needed and remove if not.  Search DFLT_CUST_RPT_GEO
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3458,
+                AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Customer Reported Region</span>",
+                Width = 160,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsHidden = true,
+                IsReadOnly = true
             });
 
             #endregion PRICING TABLE ROW
