@@ -5,7 +5,6 @@ import {downgradeComponent} from "@angular/upgrade/static";
 import {reportingService} from "./reporting.service";
 import {List} from "linqts";
 
-
 @Component({
   selector: "reportingDashboard",
   templateUrl: "Client/src/app/reporting/ReportDashboard.html",

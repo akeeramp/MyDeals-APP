@@ -22,11 +22,11 @@ export class headerService {
     return promise;
   }
   public getUserDetails() {
-    let promise = new Promise((resolve, reject) => {
-      resolve("success");
-    });
-    return promise;
-  }
+    let apiUrl: string = this.apiBaseUrl + 'GetReportDashboard';
+    let param =new HttpParams();
+    param.set('cache','false');
+    return this.httpClient.get(apiUrl,{params:param}).toPromise();
+  } 
 }
 
 angular

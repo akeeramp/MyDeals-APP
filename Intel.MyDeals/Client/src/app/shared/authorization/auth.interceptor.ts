@@ -11,7 +11,6 @@ export class AuthInterceptor implements HttpInterceptor {
         'ReqVerToken': `${AuthService.getToken()}`
       },
     });
-
     return next.handle(req);
   }
 }
