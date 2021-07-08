@@ -1668,7 +1668,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             stlmentValue = data[i].AR_SETTLEMENT_LVL;
             //As the above if conditions may change the value of ar settlement level based on the conditions, this if condition needs to be kept in the last with the updated ar settlement level value to make sure always settlement partner disabled if ar settlement level is not cash.
-            if (stlmentValue == "Cash") {
+            if (stlmentValue == "Cash" && (!hasTracker || hasTracker.length == 0)) {
                 sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(true);
                 if (sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == null || sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).value() == '') {
                     if ($scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != null && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != "" && $scope.contractData.Customer.DFLT_SETTLEMENT_PARTNER != undefined)
