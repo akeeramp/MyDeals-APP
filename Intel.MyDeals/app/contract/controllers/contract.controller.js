@@ -6011,7 +6011,7 @@
         $scope.validateOverArching = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
             var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual'); 
-            var isFlatRate = data.every((val) => val.OBJ_SET_TYPE_CD === 'VOL_TIER'); 
+            var isFlatRate = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER'; 
             //calling clear overarching in the begening
             $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
             $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
@@ -6068,13 +6068,13 @@
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
                     }
                     // Check for all values equal
-                    if (item.REBATE_OA_MAX_AMT !== null) {
+                    if (item.REBATE_OA_MAX_AMT !== null && item.NUM_OF_TIERS.toString() === '1') {
                         testMaxAmtCount++;
                         if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
                             testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
                         }
                     }
-                    if (item.REBATE_OA_MAX_VOL !== null) {
+                    if (item.REBATE_OA_MAX_VOL !== null && item.NUM_OF_TIERS.toString() === '1') {
                         testMaxVolCount++;
                         if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
                             testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
