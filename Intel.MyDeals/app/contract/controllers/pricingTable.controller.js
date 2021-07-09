@@ -1344,9 +1344,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 );
                 cleanupData(data);
-                if (!$scope.isUnmergedCellModifed) {
+                //if (!$scope.isUnmergedCellModifed) {
                     spreadDsSync();
-                }
+                //}
             }
         }
 
