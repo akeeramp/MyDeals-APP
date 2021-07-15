@@ -6067,14 +6067,14 @@
                     if (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL === "0") {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
                     }
-                    // Check for all values equal
-                    if (item.REBATE_OA_MAX_AMT !== null && item.NUM_OF_TIERS.toString() === '1') {
+                    // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
+                    if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                         testMaxAmtCount++;
                         if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
                             testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
                         }
                     }
-                    if (item.REBATE_OA_MAX_VOL !== null && item.NUM_OF_TIERS.toString() === '1') {
+                    if (item.REBATE_OA_MAX_VOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                         testMaxVolCount++;
                         if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
                             testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
