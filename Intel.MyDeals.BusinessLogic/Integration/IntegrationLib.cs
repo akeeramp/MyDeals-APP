@@ -1122,6 +1122,9 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL].Data[ptId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.SYS_COMMENTS), "");
+            //Set any forced constant attributes brought in as part of R2/R3 to their defaults
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
 
             // Conduct staging push if needed - support only requested to submitted at this point - re-deal cycles will be rougher.
             // Offer and Lost/Won deals would need to verify a right way major change prior to re-setting the WF Stage.  Best to let re-deal take care.
