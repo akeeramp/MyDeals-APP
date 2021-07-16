@@ -281,7 +281,7 @@
             if (model.DROP_DOWN == null || model.DROP_DOWN == '' || vm.vendorsNamesinfo.filter(x => x.VNDR_ID === parseInt(model.DROP_DOWN)).length == 0)
                 validationMessages.push("Please Select Valid <b>Settlement Partner ID</b>.");
             if (vm.CustvendorsData != undefined)
-                if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN.toString()).length == 1 && model.ATRB_LKUP_SID == '')
+                if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN.toString()).length == 1)
                     validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
             if (validationMessages.length > 0)
                 kendo.alert(validationMessages.join("</br>"));
