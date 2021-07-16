@@ -10,7 +10,7 @@ angular
                 abstract: false,
                 views: {
                     reportingView: {
-                       template:'<reporting-dashboard></reporting-dashboard>'
+                        template: '<reporting-dashboard></reporting-dashboard>'
                         // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
                         // controller: "ReportingDashboardController as vm"
 
@@ -22,5 +22,22 @@ angular
                     }],
                 }
 
+            })
+            // Admin route of Admin/Employee
+            .state("adminemployeedashboard", {
+                url: "/adminemployeedashboard",
+                abstract: false,
+                views: {
+                    dashboardView: {
+                        template: '<employee-dashboard></employee-dashboard>'
+                        // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
+                        // controller: "ReportingDashboardController as vm"
+                    }
+                },
+                resolve: {
+                    securityLoaded: ['securityService', function (securityService) {
+                        return securityService.loadSecurityData();
+                    }],
+                }
             })
     });

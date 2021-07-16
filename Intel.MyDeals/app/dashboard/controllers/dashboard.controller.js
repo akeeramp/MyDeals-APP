@@ -22,6 +22,7 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
     //using to set spinner object
     $scope.isLoading = true;
     $scope.loadMessage = 'Dashboard is loading...';
+    $scope.moduleName = 'Dashboard.';
 
     // Get recent links from localstorage
     $scope.recents = $localStorage.recents;

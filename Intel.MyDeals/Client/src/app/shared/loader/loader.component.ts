@@ -9,8 +9,10 @@ import { downgradeComponent } from "@angular/upgrade/static";
 export class LoaderComponent implements OnInit  {
   constructor() { }
 
-  @Input() public isLoading: boolean;
-  @Input() public message: string;
+    @Input() public isLoading: boolean;
+    @Input() public message: string;
+    @Input() public module: string;
+    @Input() public isInitializing: boolean;
 
   ngOnInit() {
   }
@@ -20,5 +22,5 @@ angular
 .module('app')
 .directive("ccLoader", downgradeComponent({
   component: LoaderComponent,
-  inputs: ['isLoading', 'message']
+    inputs: ['isLoading', 'message', 'module', 'isInitializing']
 }));

@@ -19,8 +19,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // application component
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
+import { EmployeeComponent } from './admin/employee/admin.employee.component';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
+//Added angular material version 11.2.13 to support button toggle
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -33,7 +36,8 @@ import { AuthInterceptor } from './shared/authorization/auth.interceptor';
         Ng2SearchPipeModule,
         BrowserAnimationsModule,
         ChartsModule,
-        TooltipModule
+        TooltipModule,
+        MatButtonToggleModule
      ],
      providers: [
         {
@@ -44,11 +48,13 @@ import { AuthInterceptor } from './shared/authorization/auth.interceptor';
     ],
     declarations: [
         LoaderComponent,
-        ReportingComponent
+        ReportingComponent,
+        EmployeeComponent
     ],
     entryComponents: [
         LoaderComponent,
-        ReportingComponent
+        ReportingComponent,
+        EmployeeComponent
     ]
 })
 

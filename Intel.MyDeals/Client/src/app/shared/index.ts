@@ -1,10 +1,10 @@
 import "./directives/spinner.directive";
-import "./loader/loader.component";
-import "./header/header.component";
-import "./header/header.service";
+//import "./loader/loader.component";
+//import "./header/header.component";
+//import "./header/header.service";
 import "./core/notification/notificationDock.directive.js";
 import './core/adminBanner/adminBanner.directive.js';
 import './core/dealpopupdock/dealPopupDock.directive';
 import './core/ping/ping.directive.js';
 import './advanceSearch/globalSearch.directive.js';
-import './advanceSearch/globalSearchResults.directive';
+import './advanceSearch/globalSearchResults.directive.js';
