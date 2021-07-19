@@ -1748,20 +1748,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void CheckTierVolumes(params object[] args)
+        public static void CheckTierAndMaxVolumes(params object[] args)
         {
             // DE36947 - PRODUCTION: Large end volume broke DSU batch 
             // This check doesn't take into account that start vol might be set to same value as end vol and that check (happens earlier then this)
             // will be violated.  We allow the save and catch the match later so that the PTR tab doesn't propogate the last tier values into the 
             // first tier while offsetting the save completely nuking the save data later on (killing tier numbers that requires a data fix)
+
+            // Forecase Volumes added because Song decided that one deal might actually sell up to 999,999,999,999,999 units (Yes, that is almost 1 
+            // quardillion units, one unit for every ant currently alive on the planet!)
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> atrbs = new List<string> { AttributeCodes.STRT_VOL, AttributeCodes.END_VOL };
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
             {
-                decimal safeParse = 0;
-                bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out safeParse);
+                bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out decimal safeParse);
 
                 if (isNumber && safeParse > 999999999)
                 {
