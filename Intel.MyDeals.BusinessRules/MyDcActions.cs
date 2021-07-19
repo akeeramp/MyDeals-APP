@@ -1762,6 +1762,10 @@ namespace Intel.MyDeals.BusinessRules
 
             foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
             {
+                if (de.AtrbValue.ToString().Contains("1E+"))
+                {
+                    de.AtrbValue = 999999999;
+                }
                 bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out decimal safeParse);
 
                 if (isNumber && safeParse > 999999999)
