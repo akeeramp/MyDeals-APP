@@ -7,31 +7,37 @@
 			<!--Select which {{$ctrl.colData.label}}(s) to apply below: <br />-->
 		</p>
 
-		<div op-control-flat class="col-md-8"
-			 ng-model="$ctrl.popupResult"
-             ng-keypress="$ctrl.EnterPressed($event)"
-			 op-cd="'DropdownSelections'"
-			 op-type="$ctrl.colData.uiType"
-			 op-label="''"
-			 op-lookup-url="$ctrl.colData.opLookupUrl"
-			 op-lookup-text="$ctrl.colData.opLookupText"
-			 op-lookup-value="$ctrl.colData.opLookupValue"
-			 op-placeholder="$ctrl.placeholderText"
-			 op-is-form="true"
-			 op-expanded="true"
-			 op-ui-mode="'VERTICAL'">
+		<div ng-if="$ctrl.isEmptyList">
+			<span ng-if="!$ctrl.msg" style="color:red;">
+				There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.
+			</span>
 		</div>
 
-		<br />
+			<div op-control-flat class="col-md-8"
+				 ng-model="$ctrl.popupResult"
+				 ng-keypress="$ctrl.EnterPressed($event)"
+				 op-cd="'DropdownSelections'"
+				 op-type="$ctrl.colData.uiType"
+				 op-label="''"
+				 op-lookup-url="$ctrl.colData.opLookupUrl"
+				 op-lookup-text="$ctrl.colData.opLookupText"
+				 op-lookup-value="$ctrl.colData.opLookupValue"
+				 op-placeholder="$ctrl.placeholderText"
+				 op-is-form="true"
+				 op-expanded="true"
+				 op-ui-mode="'VERTICAL'">
+			</div>
 
-		<div class="row">
-			<div class="col-md-12">
-				<div class="fr">
-					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to grid</button>
+			<br />
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="fr">
+						<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+						<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to grid</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!--<div class="modal-footer">	</div>-->
+		<!--<div class="modal-footer">	</div>-->
 </script>

@@ -6204,22 +6204,22 @@
                         }
                     });
                 }
-                if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
-                    angular.forEach(data, (item) => {
-                        if (!item._behaviors) item._behaviors = {};
-                        if (!item._behaviors.isReadOnly) {
-                            item._behaviors.isReadOnly = {};
-                            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
-                                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
-                                    item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
-                                }
-                            }
-                        }
-                        if ((item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
-                            $scope.setSettlementPartner(item, '2');
-                        }
-                    });
-                }
+                //if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
+                //    angular.forEach(data, (item) => {
+                //        if (!item._behaviors) item._behaviors = {};
+                //        if (!item._behaviors.isReadOnly) {
+                //            item._behaviors.isReadOnly = {};
+                //            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+                //                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+                //                    item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                //                }
+                //            }
+                //        }
+                //        if ((item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
+                //            $scope.setSettlementPartner(item, '2');
+                //        }
+                //    });
+                //}
                 else if (hybCond == '1') {
                     retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                     if (!retCond) {
@@ -6235,19 +6235,19 @@
                     retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                     if (!retCond) {
                         angular.forEach(data, (item) => {
-                            if (!item._behaviors) item._behaviors = {};
-                            if (!item._behaviors.isReadOnly) {
-                                item._behaviors.isReadOnly = {};
-                                if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
-                                    if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
-                                        item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
-                                    }
-                                }
-                            }
-                            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
-                                $scope.setSettlementPartner(item, '0');
-                            }
-                            else {
+                            //if (!item._behaviors) item._behaviors = {};
+                            //if (!item._behaviors.isReadOnly) {
+                            //    item._behaviors.isReadOnly = {};
+                            //    if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+                            //        if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+                            //            item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+                            //        }
+                            //    }
+                            //}
+                            //if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
+                                //$scope.setSettlementPartner(item, '0');
+                            //}
+                            //else {
                                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                                     if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                         item.SETTLEMENT_PARTNER = null;
@@ -6256,7 +6256,7 @@
                                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                                 }
-                            }
+                            //}
                         });
                     }
                     else {
@@ -6301,19 +6301,19 @@
                 if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
-                if ((item.SETTLEMENT_PARTNER != undefined && item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
-                    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
-                }
+                //if ((item.SETTLEMENT_PARTNER != undefined && item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
+                //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
+                //}
                 else {
                     if (Cond == '1') {
                         item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
                     }
-                    else if (Cond == '2') {
-                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Please work with your RA to get Vendor data mapped to this customer.";
-                    }
-                    else {
-                        item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
-                    }
+                    //else if (Cond == '2') {
+                    //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Please work with your RA to get Vendor data mapped to this customer.";
+                    //}
+                    //else {
+                    //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
+                    //}
                 }
             }
 
