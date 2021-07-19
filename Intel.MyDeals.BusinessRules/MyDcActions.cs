@@ -1276,6 +1276,23 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        public static void MakeSettlementPartnerRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement settlementPartner = r.Dc.GetDataElement(AttributeCodes.SETTLEMENT_PARTNER);
+
+            if (settlementPartner == null) return;
+
+            string settlementLevelValue = r.Dc.GetDataElementValue(AttributeCodes.AR_SETTLEMENT_LVL);
+
+            if (settlementLevelValue == "Cash" && !r.Dc.HasTracker())
+            {
+                settlementPartner.IsRequired = true;
+            }
+        }
+
         public static void SendToVistexReadOnlyRequiredAndSetValue(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
