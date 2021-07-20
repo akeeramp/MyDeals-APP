@@ -2972,18 +2972,7 @@
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                             errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")"); 
                                         }
-
-                                        if (moment(tblEndDate).isAfter(moment(tblStartDate).add(20, 'years')) && sData[s]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
-                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                            sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
-                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
-                                        }
-
-
+                                        
                                         if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
 
 
@@ -3184,17 +3173,6 @@
                                 gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
-                            }
-
-                            if (moment(gData[i]["END_DT"]).isAfter(moment(gData[i]["START_DT"]).add(20, 'years')) && gData[i]["PROGRAM_PAYMENT"] == "Backend" && isTenderFlag !== "1") {
-                                if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
-                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                    gData[i]._behaviors.isError['END_DT'] = true;
-                                    gData[i]._behaviors.validMsg['END_DT'] = "Deal End Date cannot exceed 20 years beyond the Deal Start Date";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Deal End Date cannot exceed 20 years beyond the Deal Start Date");
-                                }
                             }
 
                             if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
