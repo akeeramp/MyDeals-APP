@@ -16,7 +16,7 @@ function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, c
 	$ctrl.popupResult = [];
 	$ctrl.popupResult.DropdownSelections = (cellCurrValues === null) ? "" : cellCurrValues;
 	$ctrl.placeholderText = "Click to Select...";
-	$ctrl.isEmptyList = colData.length > 0 ? false : true;
+	$ctrl.isEmptyList = false;
 
 	$ctrl.EnterPressed = function (event) {
 	        //KeyCode 13 is 'Enter'
@@ -33,5 +33,14 @@ function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, c
 	$ctrl.cancel = function () {
 		$uibModalInstance.dismiss();
 	};
+
+	$uibModalInstance.rendered.then(function () {
+		var dropdownlist = $("#DropdownSelections").data("kendoDropDownList");
+
+		if (dropdownlist !== undefined && dropdownlist.dataSource != undefined) {
+			$ctrl.isEmptyList = (dropdownlist.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
+		}
+	});
+
 
 }
