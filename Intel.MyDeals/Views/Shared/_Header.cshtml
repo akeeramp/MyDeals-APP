@@ -158,6 +158,8 @@
     </li> 
     } 
 
+            @*Instead of using href can use the ui-sref to translate routes,
+                however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
     @*Instead of using href can use the ui-sref to translate routes,
     however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
@@ -278,6 +280,17 @@
 
                     @if (isRealSA || isDeveloper)
                     {
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Products</a>
+                            <ul class="dropdown-menu" style="width: 250px;">
+                                <li><a href="Admin#/productAlias">Product Alias</a></li>
+                                @*<li><a href="Admin#/productSelector">Product Entry</a></li>
+                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                <li><a href="Admin#/products">Product Hierarchy</a></li>
+                                <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
+                            </ul>
+                        </li>
+                    }
         <li class="dropdown-submenu">
             <a tabindex="-1">Products</a>
             <ul class="dropdown-menu" style="width: 250px;">

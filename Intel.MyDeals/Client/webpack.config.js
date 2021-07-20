@@ -17,6 +17,7 @@ module.exports = env => {
             },
             resolve: {
                 // Add '.ts' and '.tsx' as a resolvable extension.
+                mainFields: ['es2015', 'browser', 'module', 'main'],
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
             module: {
@@ -45,11 +46,11 @@ module.exports = env => {
                 minimizer: [
                     new TerserPlugin({
                       terserOptions: {
-                        ecma: undefined,
-                        parse: {},
-                        compress: {},
-                        mangle: false, // Note `mangle.properties` is `false` by default.
-                        module: false,
+                        toplevel:true,
+                        sourceMap:false,
+                        compress: true,
+                        module: true,
+                        mangle:false,
                       },
                     }),
                   ],
@@ -61,6 +62,7 @@ module.exports = env => {
             },
             resolve: {
                 // Add '.ts' and '.tsx' as a resolvable extension.
+                mainFields: ['es2015', 'browser', 'module', 'main'],
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
             module: {
@@ -68,7 +70,6 @@ module.exports = env => {
                         test: /\.tsx?$/,
                         loader:"ts-loader"
                         },
-                        
                     ]
                 },
             }

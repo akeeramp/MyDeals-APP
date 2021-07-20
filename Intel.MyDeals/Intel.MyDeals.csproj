@@ -746,6 +746,8 @@
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
+    <Content Include="Client\src\app\admin\employee\employee.css" />
+    <Content Include="Client\src\app\admin\employee\employee.html" />
     <Content Include="Client\src\app\reporting\ReportDashboard.html" />
     <Content Include="Client\src\app\reporting\reporting.css" />
     <Content Include="Client\src\app\shared\advanceSearch\globalSearch.directive.js" />
@@ -764,6 +766,8 @@
     <Content Include="Client\src\app\shared\directives\spinner.html" />
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
+    <Content Include="Client\src\app\shared\kendo\kendo.component.html" />
+    <Content Include="Client\src\app\shared\kendo\kendo.style.css" />
     <Content Include="Client\src\app\shared\loader\loader.html" />
     <Content Include="Client\src\dist\bundle.js" />
     <Content Include="Client\webpack.config.js" />
@@ -2056,6 +2060,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\employee\employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\app.main.ts" />
     <TypeScriptCompile Include="Client\src\app\app.module.ts" />
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />
@@ -2068,6 +2074,10 @@
     <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\index.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\customer.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\kendo.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\kendo.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\products.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\loader\loader.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />

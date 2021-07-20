@@ -21,11 +21,11 @@ export class headerService {
     });
     return promise;
   }
-  public getUserDetails() {
-    let apiUrl: string = this.apiBaseUrl + 'GetReportDashboard';
+  public getUserDetails():Observable<any> {
+    let apiUrl: string = this.apiBaseUrl + 'getAvm';
     let param =new HttpParams();
     param.set('cache','false');
-    return this.httpClient.get(apiUrl,{params:param}).toPromise();
+    return this.httpClient.get(apiUrl,{params:param});
   } 
 }
 

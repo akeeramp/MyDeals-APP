@@ -17,6 +17,7 @@ export class ReportingComponent {
   //created for Angular loader
   public isLoading: boolean = true;
   public loadMessage: string = "Report is Loading ...";
+  public moduleName:string ="Report Dashboard";
 
 //*******************for chart purpose***************************//
  public chartPieeSeriesObj:any=null;

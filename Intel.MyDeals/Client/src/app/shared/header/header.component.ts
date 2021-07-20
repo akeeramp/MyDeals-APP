@@ -384,8 +384,13 @@ export let HeaderController = {
         console.log('***************************** Header Component second ************************');
        vm.headerSvc
         .getUserDetails()
-        .then(res => {
-          console.log('***************************** Header Component third ************************');
+        .subscrible(res => {
+          vm.usrName = res.usrName;
+          vm.usrWwid =  res.usrWwid;
+          vm.usrRole = res.usrRole;
+          vm.usrRoleId = res.usrRoleId;
+          vm.usrEmail = res.usrEmail
+          
           vm.usrName = res.usrName? res.usrName: "Abhilash Keerampara";
           vm.usrWwid =  res.usrWwid? res.usrWwid:11715175;
           vm.usrRole = res.usrRole? res.usrRole:"GA";
@@ -455,7 +460,7 @@ export let HeaderController = {
           (<any>window).env = vm.env;
           (<any>window).dataLayer = (<any>window).dataLayer || [];
           console.log('***************************** Header Component Success ************************');
-        }).catch(err => {
+        },err => {
           logger.error("Unable to get getUserDetails.", err);
         });
 

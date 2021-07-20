@@ -1,9 +1,9 @@
 //angular changes
 import './app.main';
 import './app.routes';
-//importing reporting to app module
-//import './reporting';
 import './shared';
+//importing reporting to app module
+
 
 import { NgModule,ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +19,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // application component
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
+//kendo component POC
+import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { GridModule } from '@progress/kendo-angular-grid';
+import {KendoComponent} from './shared/kendo/kendo.component';
 import { EmployeeComponent } from './admin/employee/admin.employee.component';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
@@ -37,7 +42,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         BrowserAnimationsModule,
         ChartsModule,
         TooltipModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        GridModule
      ],
      providers: [
         {
@@ -45,15 +51,24 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
           useClass: AuthInterceptor,
           multi   : true,
         },
+        {
+            provide: POPUP_CONTAINER,
+            useFactory: () => {
+               //return the container ElementRef, where the popup will be injected
+               return { nativeElement: document.body } as ElementRef;
+            }
+          }
     ],
     declarations: [
         LoaderComponent,
         ReportingComponent,
+        KendoComponent,
         EmployeeComponent
     ],
     entryComponents: [
         LoaderComponent,
         ReportingComponent,
+        KendoComponent,
         EmployeeComponent
     ]
 })

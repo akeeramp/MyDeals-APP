@@ -1,0 +1,104 @@
+
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet"/>
+<br/>
+<!-- <kendo-grid [data]="gridData" [height]="410" [loading]="isLoading">
+    <kendo-grid-column field="ProductID" title="ID" width="40">
+    </kendo-grid-column>
+    <kendo-grid-column field="ProductName" title="Name" width="250">
+    </kendo-grid-column>
+    <kendo-grid-column field="Category.CategoryName" title="Category">
+    </kendo-grid-column>
+    <kendo-grid-column field="UnitPrice" title="Price" width="80">
+    </kendo-grid-column>
+    <kendo-grid-column field="UnitsInStock" title="In stock" width="80">
+    </kendo-grid-column>
+    <kendo-grid-column field="Discontinued" title="Discontinued" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <input type="checkbox" [checked]="dataItem.Discontinued" disabled />
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid> -->
+
+  <!-- <kendo-grid 
+  [data]="gridView"
+  [pageSize]="pageSize"
+  [skip]="skip"
+  [pageable]="true"
+  [height]="500"
+  [loading] = "isLoading"
+  (pageChange)="pageChange($event)">
+    <kendo-grid-column
+      *ngFor="let col of columns"
+      [field]="col.field"
+      >
+
+  </kendo-grid-column>
+  </kendo-grid> -->
+
+  <!-- <kendo-grid
+  [kendoGridBinding]="gridData"
+  [pageSize]="10"
+  [pageable]="true"
+  [sortable]="true"
+  [filterable]="true"
+  [groupable]="true"
+  [height]="510"
+>
+  <kendo-grid-column field="CompanyName" [width]="140"></kendo-grid-column>
+  <kendo-grid-column field="ContactName" [width]="120"></kendo-grid-column>
+  <kendo-grid-column field="City" [width]="100"></kendo-grid-column>
+  <kendo-grid-column field="ContactTitle" [width]="130"></kendo-grid-column>
+</kendo-grid> -->
+
+
+<kendo-grid
+      [data]="gridData"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [pageable]="true"
+      [groupable]="true"
+      [group]="groups"
+      filterable="menu"  
+      (dataStateChange)="dataStateChange($event)"
+      (groupChange)="groupChange($event)"
+    >
+      <kendo-grid-column
+        field="ProductID"
+        title="ID"
+        width="40"
+        [filterable]="false"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column field="ProductName" title="Product Name"  width="150">
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="FirstOrderedOn"
+        title="First Ordered On"
+        width="240"
+        filter="date"
+        format="{0:d}"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        field="UnitPrice"
+        title="Unit Price"
+        width="180"
+        filter="numeric"
+        format="{0:c}"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column field="Category.CategoryName" title="Category">
+        <ng-template kendoGridGroupHeaderTemplate let-value="value">
+          {{ value }}
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column field="Discontinued" width="120" filter="boolean">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <input type="checkbox" [checked]="dataItem.Discontinued" disabled />
+        </ng-template>
+      </kendo-grid-column>
+    </kendo-grid>

@@ -665,8 +665,9 @@ namespace Intel.MyDeals
                 "~/css/font-awesome.min.css",
                 "~/css/jquery.rainbowJSON.css",
                 "~/css/jquery-ui.min.css",
-                "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
+                //*************AngularJS kendo purpose will relace with Angulr CSS*****************//
+                "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/kendo.intel.css",
                 "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",

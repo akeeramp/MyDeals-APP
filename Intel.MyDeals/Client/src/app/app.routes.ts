@@ -23,6 +23,15 @@ angular
                 }
 
             })
+            .state("mykendo", {
+                url: "/mykendo",
+                abstract: false,
+                views: {
+                    reportingView: {
+                       template:'<my-kendo></my-kendo>'
+                    }
+                }
+            })
             // Admin route of Admin/Employee
             .state("adminemployeedashboard", {
                 url: "/adminemployeedashboard",
