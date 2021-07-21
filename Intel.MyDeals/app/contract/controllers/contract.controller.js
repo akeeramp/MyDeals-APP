@@ -20,7 +20,7 @@
             $scope.COST_TEST_RESULT = "";
         }
 
-        if (contractData != null) {
+        if (contractData != null && contractData.data[0].Customer !== undefined) {
             objsetService.getCustomerVendorDropDown('GetCustomerVendors/' + contractData.data[0].Customer.CUST_SID).then(function (response) {
                 $scope.getVendorDropDownResult = response.data;
             },function (response) {

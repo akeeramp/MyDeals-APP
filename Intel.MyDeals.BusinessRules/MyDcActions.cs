@@ -1449,7 +1449,10 @@ namespace Intel.MyDeals.BusinessRules
             string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; // Default to no cust if not found, which defaults to Intel anyhow
+
+            // Take Intel Calendar only for the billing start date check (dexxxx).  Line for customer specific is left in if needed down the road.
+            //if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; // Default to no cust if not found, which defaults to Intel anyhow
+            int custMbrSid = 0;
 
             if (paymentType.Contains("Frontend")) return;  // Bail out of this check for Front End deals since they might have overlap crush which doesn't reset billings end dates
 
