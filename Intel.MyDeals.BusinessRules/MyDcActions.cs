@@ -1501,7 +1501,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
             {
-                deBllgEnd.SetAtrbValue(dtEn.ToString());
+                deBllgEnd.SetAtrbValue(dtEn.ToString("MM/dd/yyyy"));
             }
 
             if (!DateTime.TryParse(deBllgStart.AtrbValue.ToString(), out DateTime dtBllgStart)) dtBllgStart = DateTime.MinValue;
