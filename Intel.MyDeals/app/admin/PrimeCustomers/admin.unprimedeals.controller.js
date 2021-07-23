@@ -14,8 +14,12 @@
         var vm = this;
         //GA/SA/Developer can see the Screen..
         //Added By Pulkit Gupta for DE117054
-        if (window.usrRole != 'GA' && window.usrRole != 'SA' && window.usrRole != 'FSE' && !window.isDeveloper) {
+        if (window.usrRole != 'GA' && window.usrRole != 'SA' && window.usrRole != 'FSE' && !window.isCustomerAdmin && window.usrRole != 'RA' && !window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
+        }
+        vm.editAccess = true;
+        if ((window.usrRole == "SA" || window.isCustomerAdmin || window.usrRole == "RA") && !window.isDeveloper) {
+            vm.editAccess = false;
         }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
@@ -180,7 +184,8 @@
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>" },
                     ],
                     title: " ",
-                    width: "60px"
+                    width: "60px",
+                    hidden: !vm.editAccess
                 },
                 {
                     field: "CNTRCT_OBJ_SID",

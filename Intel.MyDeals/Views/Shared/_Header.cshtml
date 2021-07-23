@@ -227,7 +227,7 @@
                             </ul>
                         </li>
                     }
-                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA" || usrRole == "FSE") // All SA users allowed
+                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA" || usrRole == "FSE" || usrRole == "RA") // All SA users allowed
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Customer</a>
@@ -237,6 +237,10 @@
                                     <li><a href="Admin#/customers">Customer</a></li>
                                     <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
                                     <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
+                                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
+                                }
+                                @if (usrRole == "RA" && !isDeveloper)
+                                {
                                     <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>

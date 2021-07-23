@@ -14,8 +14,12 @@
         var vm = this;
         //RA/CA/SA/Developer can see the Screen..
         //Added By Pulkit Gupta for DE117054
-        if (window.usrRole != 'CA' && window.usrRole != 'SA' && window.usrRole != 'RA' && !window.isDeveloper) {
+        if (!window.isCustomerAdmin && window.usrRole != 'SA' && window.usrRole != 'RA' && !window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
+        }
+        vm.editAccess = true;
+        if (window.usrRole == 'RA' && !window.isDeveloper) {
+            vm.editAccess = false;
         }
         vm.countries = [];
         vm.primeCustomers = [];
@@ -239,7 +243,7 @@
             columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
-            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
+            toolbar: gridUtils.inLineClearAllFiltersToolbarRestricted(!(vm.editAccess)),
             editable: { mode: "inline", confirmation: false },
             pageable: {
                 refresh: true,
@@ -257,7 +261,8 @@
 
                     ],
                     title: "Commands",
-                    width: "100px"
+                    width: "100px",
+                    hidden: !vm.editAccess
                 },
                 {
                     field: "PRIM_SID",
