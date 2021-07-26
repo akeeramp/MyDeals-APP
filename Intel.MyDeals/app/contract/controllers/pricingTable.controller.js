@@ -1682,10 +1682,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).enable(false);
                 sheet.range(stlmntPrtnrIndex + (i + pteHeaderIndex)).background('#f5f5f5');
             }
-            //this conditon added beacause it we make a change in single row this for loop breaks with one iteration or else complete the loop to make sure all columns enable and disable properly based on conditons
-            if (!isDelete) {
-                break;
-            }
+            // DE120535 Removed below break statement because it was breaking the loop on drag and drop
+            // //this conditon added beacause it we make a change in single row this for loop breaks with one iteration or else complete the loop to make sure all columns enable and disable properly based on conditons
+            //if (!isDelete) {
+            //    break;
+            //}
 
         }
     }
