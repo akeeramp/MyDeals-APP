@@ -2313,8 +2313,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 var rowInfo = spreadData[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
                                 if (rowInfo != undefined) { // The row was pre-existing
                                     // DE121437 added special case for SETTLEMENT_PARTNER since drag and drop wasnt checking for enabling rows and was locking all fields down based on readonly
+                                    if (!rowInfo._behaviors) rowInfo._behaviors = {};
+                                    if (!rowInfo._behaviors.isReadOnly) rowInfo._behaviors.isReadOnly = {};
                                     if (value.enable && rowInfo._behaviors.isReadOnly["SETTLEMENT_PARTNER"] == true) {
-                                        rowInfo._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = false;
                                         delete rowInfo._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                                     }
                                     disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
