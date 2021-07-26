@@ -2706,6 +2706,8 @@
                         sData = $scope.validateOVLPFlexProduct(sData);
                         //validate Flex row type for PTE
                         sData = $scope.validateFlexRowType(sData);
+                        //validate Market Segment
+                        sData = $scope.validateMarketSegment(sData);
                         
 
                         // find all date fields
@@ -2831,6 +2833,12 @@
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                            }
+
+                            //Adding Market Segment error into err object in PTE
+                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['MRKT_SEG']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["MRKT_SEG"]);
                             }
                             //Adding Overarching  error into err object in PTE
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
@@ -3070,6 +3078,8 @@
                         gData = $scope.validateOVLPFlexProduct(gData);
                         //validate Flex Row Type for DE
                         gData = $scope.validateFlexRowType(gData);
+                        //validate Market Segment
+                        gData = $scope.validateMarketSegment(gData);
 
                         var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
                         var invalidFlexDate = $scope.validateFlexDate(gData);
@@ -3084,6 +3094,11 @@
                             if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                            }
+
+                            if (gData[i]._behaviors.isError['MRKT_SEG']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["MRKT_SEG"]);
                             }
 
                             // This forces all items onto the save side errors checking.  Need to scale it to only the fields we care about.
@@ -6182,22 +6197,6 @@
                         }
                     });
                 }
-                //if ($scope.getVendorDropDownResult == null || $scope.getVendorDropDownResult.length == undefined || $scope.getVendorDropDownResult.length == 0) {
-                //    angular.forEach(data, (item) => {
-                //        if (!item._behaviors) item._behaviors = {};
-                //        if (!item._behaviors.isReadOnly) {
-                //            item._behaviors.isReadOnly = {};
-                //            if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
-                //                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
-                //                    item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
-                //                }
-                //            }
-                //        }
-                //        if ((item.SETTLEMENT_PARTNER !== null && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
-                //            $scope.setSettlementPartner(item, '2');
-                //        }
-                //    });
-                //}
                 else if (hybCond == '1') {
                     retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                     if (!retCond) {
@@ -6213,19 +6212,6 @@
                     retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                     if (!retCond) {
                         angular.forEach(data, (item) => {
-                            //if (!item._behaviors) item._behaviors = {};
-                            //if (!item._behaviors.isReadOnly) {
-                            //    item._behaviors.isReadOnly = {};
-                            //    if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
-                            //        if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
-                            //            item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
-                            //        }
-                            //    }
-                            //}
-                            //if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && (item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && !item._behaviors.isReadOnly["SETTLEMENT_PARTNER"]) {
-                                //$scope.setSettlementPartner(item, '0');
-                            //}
-                            //else {
                                 if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                                     if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                         item.SETTLEMENT_PARTNER = null;
@@ -6234,7 +6220,6 @@
                                     delete item._behaviors.isError["SETTLEMENT_PARTNER"];
                                     delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
                                 }
-                            //}
                         });
                     }
                     else {
@@ -6279,19 +6264,10 @@
                 if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
                     delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
                 }
-                //if ((item.SETTLEMENT_PARTNER != undefined && item.SETTLEMENT_PARTNER == null || item.SETTLEMENT_PARTNER == '') && Cond != '2') {
-                //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
-                //}
                 else {
                     if (Cond == '1') {
                         item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
                     }
-                    //else if (Cond == '2') {
-                    //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Please work with your RA to get Vendor data mapped to this customer.";
-                    //}
-                    //else {
-                    //    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "Settlement Partner is required when Settlement level is Cash.";
-                    //}
                 }
             }
 
@@ -6521,6 +6497,40 @@
                 item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
                 item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
             }
+        }
+
+        $scope.validateMarketSegment = function (data) {
+            $scope.clearValidation(data, 'MRKT_SEG');
+            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+            //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+            var spreadData;
+            if ($scope.spreadDs != undefined) {
+                spreadData = $scope.spreadDs.data();
+            }
+            else {
+                spreadData = data
+            }
+
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
+            var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
+            if (isMarketSegment) {
+                angular.forEach(data, (item) => {
+                    if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
+                        if (!item._behaviors) item._behaviors = {};
+                        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+                        if (!item._behaviors.isError) item._behaviors.isError = {};
+                        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                        item._behaviors.isRequired["MRKT_SEG"] = true;
+                        item._behaviors.isError["MRKT_SEG"] = true; 
+                        item._behaviors.validMsg["MRKT_SEG"] = "Market Segment is required.";
+                       
+                    }
+                });
+
+            }
+            return data;
         }
     }
 })();
