@@ -28,6 +28,7 @@ import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-drop
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
 import {KendoComponent} from './shared/kendo/kendo.component';
 import { EmployeeComponent } from './admin/employee/admin.employee.component';
+import { CacheComponent } from './admin/cache/cache.component';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //Added angular material version 11.2.13 to support button toggle
@@ -71,13 +72,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         ReportingComponent,
         KendoComponent,
         EmployeeComponent,
+        CacheComponent,
         MultiCheckFilterComponent
     ],
     entryComponents: [
         LoaderComponent,
         ReportingComponent,
         KendoComponent,
-        EmployeeComponent
+        EmployeeComponent,
+        CacheComponent
     ]
 })
 

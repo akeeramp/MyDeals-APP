@@ -28,7 +28,7 @@ angular
                 abstract: false,
                 views: {
                     reportingView: {
-                       template:'<my-kendo></my-kendo>'
+                        template: '<my-kendo></my-kendo>'
                     }
                 }
             })
@@ -49,4 +49,21 @@ angular
                     }],
                 }
             })
+
+
+
+            .state("admincache", {
+                url: "/admincache",
+                abstract: false,
+                views: {
+                    reportingView: {
+                        template: '<cache></cache>'
+                        //templateUrl: "Client/src/app/admin/cache/cache.html",
+                        //controller: "CacheController as vm"
+
+                    }
+                }
+            })
+
+
     });

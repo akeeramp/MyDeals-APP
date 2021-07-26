@@ -746,6 +746,8 @@
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
+    <Content Include="Client\src\app\admin\cache\cache.css" />
+    <Content Include="Client\src\app\admin\cache\cache.html" />
     <Content Include="Client\src\app\admin\employee\employee.css" />
     <Content Include="Client\src\app\admin\employee\employee.html" />
     <Content Include="Client\src\app\reporting\ReportDashboard.html" />
@@ -2059,6 +2061,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Client\src\app\admin\cache\cache.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\cache\cache.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\app.main.ts" />
@@ -2079,6 +2083,7 @@
     <TypeScriptCompile Include="Client\src\app\shared\kendo\multichecker.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\loader\loader.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\util\util.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />
     <TypeScriptCompile Include="Client\src\main.ts" />
     <TypeScriptCompile Include="Client\src\polyfills.ts" />
