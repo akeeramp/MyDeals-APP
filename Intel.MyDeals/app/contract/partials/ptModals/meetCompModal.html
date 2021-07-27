@@ -39,6 +39,12 @@ function openDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
         });
 
     }
+    //DE120311
+    function gotoDealDetails(CNTRCT_OBJ_SID, PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID, DEAL_OBJ_SID) {
+        var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip?searchTxt=" + DEAL_OBJ_SID, '_blank');
+        win.focus();
+    }
+    //DE120311 END
 </script>
 <style>
 	.tenderFolio-modal-window{
