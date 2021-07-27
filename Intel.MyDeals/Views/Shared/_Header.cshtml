@@ -1,10 +1,10 @@
 ﻿﻿@using System
+﻿﻿@using System
 @using System.Collections.Generic
 @using Intel.MyDeals.Entities
 @using Intel.Opaque
 @using Intel.MyDeals.App
-@{ 
-    var usrName = "UNKNOWN";
+@{ var usrName = "UNKNOWN";
                 var usrWwid = 0;
                 var usrRole = "UNKNOWN";
                 var usrRoleExtension = "";
@@ -66,8 +66,7 @@
                 var env = ViewBag.AppToken == null || ViewBag.AppToken.OpEnvironment == null || ViewBag.AppToken.OpEnvironment.EnvLoc == null ? "UNKNOWN" : ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
                 //TODO: Fetch it from DB
                 var GAID = env == "CONS" ? "UA-47054404-40" : "UA-47054404-41";
-                if (env == "PROD") { GAID = "UA-47054404-42"; } 
-     }
+                if (env == "PROD") { GAID = "UA-47054404-42"; } }
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=@GAID"></script>
 <script>
@@ -97,8 +96,7 @@
                             Google Chrome Required <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
                             @if (env != "PROD")
                             {
-                                <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>
-                            }
+                <br /><span style="font-size: 12px; color: white; font-weight: bold; color: Yellow;">Pre-Production Environment: @env</span>}
                         </div>
                     </div>
                 </td>
@@ -150,18 +148,15 @@
 
             @if (isDeveloper)
             {
-    <li class="dropdown">
-        <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
-        <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-            <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
-        </ul>
-    </li> 
-    } 
-
-            @*Instead of using href can use the ui-sref to translate routes,
+<li class="dropdown">
+    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+    <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+        <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
+    </ul>
+</li>
+ } @*Instead of using href can use the ui-sref to translate routes,
+    however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@ @*Instead of using href can use the ui-sref to translate routes,
                 however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
-    @*Instead of using href can use the ui-sref to translate routes,
-    however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
@@ -211,15 +206,12 @@
                                         </div>
                                         <div class="clearboth"></div>
                                     </a>
-                                </li>
-                                }
+                                </li>}
                         </ul>
                     </li>
                     @if (env != "PROD" && env != "UNKNOWN") // Update this with ENV not prod
-                    {
-                            @*<li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>}*@
-                            <li ui-sref-active="active"><a ui-sref="adminemployeedashboard">Set Your Role (Pre-prod Only)</a></li>
-                    }
+                    {@*<li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>}*@
+                                    <li ui-sref-active="active"><a ui-sref="adminemployeedashboard">Set Your Role (Pre-prod Only)</a></li>}
 
                     @if (isDeveloper)
                     {
@@ -231,66 +223,34 @@
                 <li><a href="Admin#/constants">Constants</a></li>
                 <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
             </ul>
-        </li>
-        }
-                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA" || usrRole == "FSE" || usrRole == "RA") // All SA users allowed
+        </li>}
+                    @if (isRealSA || isCustomerAdmin || isDeveloper || usrRole == "GA" || usrRole == "FSE") // All SA users allowed
                     {
         <li class="dropdown-submenu">
             <a tabindex="-1">Customer</a>
             <ul class="dropdown-menu" style="width: 250px;">
                 @if (isRealSA || isCustomerAdmin || isDeveloper)
                 {
-                    <li><a href="Admin#/customers">Customer</a></li>
+<li><a href="Admin#/customers">Customer</a></li>
                     <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
-                    <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
-                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
-                }
+                                        <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
+                                                            <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>                }
                 <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>
             </ul>
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1">Customer</a>
-                            <ul class="dropdown-menu" style="width: 250px;">
-                                @if (isRealSA || isCustomerAdmin || isDeveloper)
-                                {
-                                    <li><a href="Admin#/customers">Customer</a></li>
-                                    <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
-                                    <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
-                                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
-                                }
-                                @if (usrRole == "RA" && !isDeveloper)
-                                {
-                                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
-                                }
-                                <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>
-                            </ul>
 
-        </li>
-        }
+        </li>}
 
                     @if (isRealSA || isDeveloper) // All SA users allowed
                     {
-                        <li><a href="Admin#/geo">Geo</a></li>
-                        <li><a href="Admin#/funfact">Fun Facts</a></li>
-                    }
+        <li><a href="Admin#/geo">Geo</a></li>
+                        <li><a href="Admin#/funfact">Fun Facts</a></li>}
 
                     @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/meetcomp">Meet Comp</a></li>
-                    }
+        <li><a href="Admin#/meetcomp">Meet Comp</a></li>}
 
                     @if (isRealSA || isDeveloper)
                     {
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1">Products</a>
-                            <ul class="dropdown-menu" style="width: 250px;">
-                                <li><a href="Admin#/productAlias">Product Alias</a></li>
-                                @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
-                                <li><a href="Admin#/products">Product Hierarchy</a></li>
-                                <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
-                            </ul>
-                        </li>
-                    }
         <li class="dropdown-submenu">
             <a tabindex="-1">Products</a>
             <ul class="dropdown-menu" style="width: 250px;">
@@ -301,7 +261,17 @@
                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
             </ul>
         </li>
-        }
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">Products</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="Admin#/productAlias">Product Alias</a></li>
+                            @*<li><a href="Admin#/productSelector">Product Entry</a></li>
+                                <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                            <li><a href="Admin#/products">Product Hierarchy</a></li>
+                            <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
+                        </ul>
+                    </li>
+                    }
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
                             <ul class="dropdown-menu" style="width: 250px;">
@@ -323,24 +293,19 @@
                 <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
                 <li><a href="Admin#/quoteLetter">Quote Letter</a></li>
             </ul>
-        </li>
-        }
+        </li>}
 
                     @if (isRealSA || isCustomerAdmin || isDeveloper) // All SA users allowed
                     {
-                        <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>
-                    }
+        <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>}
 
                     @if (isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>
-
-                    }
+        <li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>}
                     @if (isDeveloper)
                     {
 
-                        <li><a href="Admin#/dataFix">Data Fix</a></li>
-                    }
+        <li><a href="Admin#/dataFix">Data Fix</a></li>}
 
                     @if (isDeveloper)
                     {
@@ -358,8 +323,7 @@
                                 <li><a href="Admin#/workflow">WorkFlow</a></li>
                                 <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
                             </ul>
-                        </li>
-                        }
+                        </li>}
 
                     @if (isRealSA || isDeveloper || isCustomerAdmin) // Was isDeveloper
                     {
@@ -368,14 +332,12 @@
             <ul class="dropdown-menu" style="width: 250px;">
                 @if (isDeveloper)
                 {
-                     <li><a href="Admin#/AdminTools">Support Scripts</a></li>
-                     <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
-                     <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
-                     <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
-                }
+<li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                    <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                        <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
+                                                            <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>                }
             </ul>
-        </li>
-        }
+        </li>}
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Admin Tools</a>
                             <ul class="dropdown-menu" style="width: 250px;">
@@ -401,8 +363,7 @@
 
                     @if (usrRole == "DA" || isRealSA || isDeveloper || isCustomerAdmin) // DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access.
                     {
-                        <li><a href="Admin#/manageEmployee">User Accounts Administration</a></li>
-                        //User Customer Assignments
+        <li><a href="Admin#/manageEmployee">User Accounts Administration</a></li>//User Customer Assignments
                     }
 
                     @if (usrRole == "DA" || usrRole == "GA" || isRealSA || isDeveloper)
@@ -413,13 +374,11 @@
                 <li><a href="Admin#/rules/">Price Rules</a></li>
                 <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
             </ul>
-        </li>
-        }
+        </li>}
 
                     @if (env == "LOCAL" && usrWwid == 10548414)
                     {
-                        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>
-                        //User Customer Assignments
+        <li><a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a></li>//User Customer Assignments
                     }
                 </ul>
             </li>
@@ -443,7 +402,7 @@
     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
         <li ui-sref-active="active"><a ui-sref="reportingdashboard">Report Dashboard</a></li>
     </ul>
-</li>            
+</li>
             }
             @Html.Partial("_Search")
         </ul>
@@ -549,9 +508,8 @@
 
 @if (env == "PROD")
 {
-    <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script> 
-}
-else
-{
-    <script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
-}
+<script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
+ }
+            else
+            {
+<script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>}

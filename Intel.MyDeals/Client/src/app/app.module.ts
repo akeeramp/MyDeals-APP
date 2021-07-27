@@ -6,7 +6,7 @@ import './shared';
 
 
 import { NgModule,ElementRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';
@@ -23,6 +23,9 @@ import { ReportingComponent } from './reporting/reporting.component';
 import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { GridModule } from '@progress/kendo-angular-grid';
+import { DialogModule } from '@progress/kendo-angular-dialog';
+import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
 import {KendoComponent} from './shared/kendo/kendo.component';
 import { EmployeeComponent } from './admin/employee/admin.employee.component';
 //Authentication purpose for token
@@ -30,11 +33,11 @@ import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         BrowserModule,
         UpgradeModule,
         HttpClientModule,
@@ -43,7 +46,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         ChartsModule,
         TooltipModule,
         MatButtonToggleModule,
-        GridModule
+        DialogModule,
+        DropDownListModule,
+        DropDownsModule,
+        GridModule,
+        
      ],
      providers: [
         {
@@ -63,7 +70,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         LoaderComponent,
         ReportingComponent,
         KendoComponent,
-        EmployeeComponent
+        EmployeeComponent,
+        MultiCheckFilterComponent
     ],
     entryComponents: [
         LoaderComponent,

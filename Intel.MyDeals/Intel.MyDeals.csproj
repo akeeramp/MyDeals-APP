@@ -767,7 +767,6 @@
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
     <Content Include="Client\src\app\shared\kendo\kendo.component.html" />
-    <Content Include="Client\src\app\shared\kendo\kendo.style.css" />
     <Content Include="Client\src\app\shared\loader\loader.html" />
     <Content Include="Client\src\dist\bundle.js" />
     <Content Include="Client\webpack.config.js" />
@@ -2074,10 +2073,10 @@
     <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\index.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\kendo\customer.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\cust_map.model.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\kendo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\kendo.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\kendo\products.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\kendo\multichecker.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\loader\loader.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />
