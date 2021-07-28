@@ -2679,6 +2679,8 @@
                                 if (sData[n]._behaviors.validMsg) sData[n]._behaviors.validMsg = {};
                                 if (sData[n]._behaviors.isError) sData[n]._behaviors.isError = {};
                             }
+                            //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
+                            sData[n].QLTR_PROJECT = sData[n].QLTR_PROJECT.toUpperCase();
                             //Removes extra space from the value string.
                             sData[n].GEO_COMBINED = $scope.spreadDs._data[n].GEO_COMBINED;
                             sData[n].QLTR_BID_GEO = $scope.spreadDs._data[n].QLTR_BID_GEO;
@@ -3095,6 +3097,9 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
                             }
+
+                            //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
+                            gData[i].QLTR_PROJECT = gData[i].QLTR_PROJECT.toUpperCase();
 
                             if (gData[i]._behaviors.isError['MRKT_SEG']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
