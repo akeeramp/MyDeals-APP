@@ -5,7 +5,7 @@
         .controller('CustomerVendorsController', CustomerVendorsController)
         .run(SetRequestVerificationToken);
 
-    SetRequestVerificationToken.$inject = ['$http']; 
+    SetRequestVerificationToken.$inject = ['$http'];
 
     CustomerVendorsController.$inject = ['customerVendorsService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
 
@@ -21,7 +21,8 @@
         vm.vendorsNamesinfo = [];
         vm.vendorsNamesId = [];
         vm.selectedCUST_MBR_SID = 1;
-        vm.selectedVENDOR_SID = 0
+        vm.selectedVENDOR_SID = 0;
+        var OnlyActv_ind_chg = true;
 
 
         vm.dataSource = new kendo.data.DataSource({
@@ -72,7 +73,7 @@
                         ATRB_LKUP_SID: { editable: false },
                         ATRB_SID: { editable: false },
                         OBJ_SET_TYPE_SID: { editable: false },
-                        CUST_MBR_SID: { editable: true },                        
+                        CUST_MBR_SID: { editable: true },
                         CUST_NM: { editable: true },
                         DROP_DOWN: {
                             validation: {
@@ -133,7 +134,8 @@
             autoBind: true,
             dataTextField: "CUST_NM",
             dataValueField: "CUST_SID",
-            valuePrimitive: true
+            valuePrimitive: true,
+            select: onCustomerChange
         }
 
         vm.vendorsNamesOptions = {
@@ -204,6 +206,7 @@
             selectable: true,
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
+                OnlyActv_ind_chg = true;
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
@@ -284,8 +287,10 @@
                 if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN.toString()).length == 1 && model.ATRB_LKUP_SID == '') {
                     validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
                 }
-                else if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN.toString() && x.ACTV_IND == model.ACTV_IND).length == 1 && model.ATRB_LKUP_SID != '') {
-                    validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
+                else if (!OnlyActv_ind_chg) {
+                    if (vm.CustvendorsData.filter(x => x.CUST_MBR_SID === model.CUST_MBR_SID && x.DROP_DOWN === model.DROP_DOWN.toString()).length == 1 && model.ATRB_LKUP_SID != '') {
+                        validationMessages.push("<b>This Combination of Customer & Settlement Partner already exists</b>.");
+                    }
                 }
             }
             if (validationMessages.length > 0)
@@ -320,6 +325,12 @@
             });
         }
 
+        function onCustomerChange(e) {
+            if (e.dataItem != undefined && e.dataItem != null) {
+                OnlyActv_ind_chg = false;
+            }
+        }
+
 
         function onVendorCahnge(e) {
             if (e.dataItem != undefined && e.dataItem != null) {
@@ -334,6 +345,7 @@
                 Namecombo.trigger("change");
                 var Country = $("input[name=CTRY_CD]").val(Country);
                 Country.trigger("change");
+                OnlyActv_ind_chg = false;
             }
         }
 
@@ -342,5 +354,5 @@
         }
 
     }
-   
+
 }) ();
