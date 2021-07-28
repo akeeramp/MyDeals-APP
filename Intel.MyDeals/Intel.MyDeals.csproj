@@ -763,8 +763,6 @@
     <Content Include="Client\src\app\shared\core\dealpopupdock\dealPopupDock.directive.js" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.js" />
-    <Content Include="Client\src\app\shared\core\ping\ping.directive.html" />
-    <Content Include="Client\src\app\shared\core\ping\ping.directive.js" />
     <Content Include="Client\src\app\shared\directives\spinner.html" />
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
@@ -2073,6 +2071,8 @@
     <TypeScriptCompile Include="Client\src\app\reporting\reporting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.interceptor.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\core\ping\ping.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\core\core.shared.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\directives\spinner.directive.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />

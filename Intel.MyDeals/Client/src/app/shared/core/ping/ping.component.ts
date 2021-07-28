@@ -1,0 +1,94 @@
+﻿import * as angular from "angular";
+import { downgradeComponent } from "@angular/upgrade/static";
+import { Component } from "@angular/core";
+import { pingService } from '../core.shared.service';
+import { logger } from "../../logger/logger";
+
+
+@Component({
+    template: `<i class="fa fa-signal ping-net" role="button" [ngClass]="getClassName(pingTime)" (click)="pingHost()" title="Network Ping: {{pingTime}} ms" aria-hidden="true"></i>
+        <i class="batch-running" *ngIf="batchInProgress" title="There is a database batch job currently in progress&#013;This will effect performance a little" style="padding-left: 10px;"><b>BATCH IN PROGRESS</b></i> <!--intelicon-database-solid  Removed and replaced with text-->
+        
+        <style>
+            .ping-net.high {
+                color: #FC4C02;
+            }
+        
+            .ping-net.med {
+                color: #ffda24;
+            }
+        
+            .ping-net.low {
+                color: #76d600;
+            }
+        
+            .ping-net.none {
+                color: #cccccc;
+            }
+        
+            .batch-running {
+                color: #f3d54e;
+                margin-right: 20px;
+            }
+        </style>`,
+})
+
+export class PingComponent {
+    constructor(private pingSvc: pingService) { }
+
+    public pingTime: any = null;
+    public batchInProgress: boolean = false;
+    public pingCycle: number = 60000;
+    public pingValues: Array<number> = [];
+
+    ngOnInit() {
+        this.ping();
+    }
+
+    ping() {
+        
+        this.pingHost();
+
+        this.pingSvc.getBatchStatus()
+            .subscribe(output => {
+                this.batchInProgress = false;
+                if (output.CNST_VAL_TXT !== undefined && output.CNST_VAL_TXT.toUpperCase() !== "COMPLETED") {
+                    this.batchInProgress = true;
+                }
+            });
+
+    }
+
+    pingHost() {
+        var ping: Date = new Date();
+        this.pingSvc.pingHost()
+            .subscribe((response: any) => {
+                this.pingTime = <any>new Date() - <any>ping;
+                this.pingValues.push(this.pingTime);
+                if (this.pingValues.length > 10) this.pingValues.shift();
+                setTimeout(() => {
+                    this.pingHost();
+                }, this.pingCycle);
+            }, err => {
+                    logger.error("Ping Error", err);
+            });
+    }
+
+    getClassName(pingTime) {
+        if (pingTime === undefined || pingTime === null) {
+            return "none";
+        } else if (pingTime < 150) {
+            return "low";
+        } else if (pingTime < 400) {
+            return "med";
+        }
+        return "high";                   
+    }
+}
+
+angular.module("app").directive(
+    "ping",
+    downgradeComponent({
+        component: PingComponent,
+    })
+);

@@ -19,6 +19,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // application component
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
+import { EmployeeComponent } from './admin/employee/admin.employee.component';
+import { PingComponent } from './shared/core/ping/ping.component'
 //kendo component POC
 import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -27,7 +29,6 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
 import {KendoComponent} from './shared/kendo/kendo.component';
-import { EmployeeComponent } from './admin/employee/admin.employee.component';
 import { CacheComponent } from './admin/cache/cache.component';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
@@ -65,7 +66,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
                //return the container ElementRef, where the popup will be injected
                return { nativeElement: document.body } as ElementRef;
             }
-          }
+        }
     ],
     declarations: [
         LoaderComponent,
@@ -73,14 +74,16 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         KendoComponent,
         EmployeeComponent,
         CacheComponent,
-        MultiCheckFilterComponent
+        MultiCheckFilterComponent,
+        PingComponent
     ],
     entryComponents: [
         LoaderComponent,
         ReportingComponent,
         KendoComponent,
         EmployeeComponent,
-        CacheComponent
+        CacheComponent,
+        PingComponent
     ]
 })
 
