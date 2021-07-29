@@ -593,9 +593,9 @@ namespace Intel.MyDeals.BusinessRules
 
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
             MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
-            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+            MyCustomersInformation cust = custs != null? custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId): null; // If no customers found, safely get past and lock fields down
 
-            if (cust.VISTEX_CUST_FLAG) // Is a Vistex Customer, LOCK OUT NON-Vistex Consumption fields
+            if (cust != null && cust.VISTEX_CUST_FLAG) // Is a Vistex Customer, LOCK OUT NON-Vistex Consumption fields
             {
                 foreach (OpDataElement de in r.Dc.DataElements.Where(d => NonVistexConsumptionAtrbs.Contains(d.AtrbCd)))
                 {
@@ -2535,7 +2535,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement arSettlementLvl = r.Dc.GetDataElement(AttributeCodes.AR_SETTLEMENT_LVL);
             IOpDataElement resetPerPeriod = r.Dc.GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD);
 
-            if (dealType == null || programPayment == null || rebateType == null || periodProfile == null || arSettlementLvl == null) return; // Safety check, if they are missing, skip!
+            if (dealType == null || programPayment == null || rebateType == null || periodProfile == null || arSettlementLvl == null || resetPerPeriod == null) return; // Safety check, if they are missing, skip!
 
             string dealTypeValue = dealType.AtrbValue.ToString();
             string programPaymentValue = programPayment.AtrbValue.ToString();
