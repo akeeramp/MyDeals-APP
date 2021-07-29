@@ -265,9 +265,9 @@ app_Pool_Stop:
 prod1_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:PROD1_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
-    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& net use y: $env:PROD1_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW} /y'
+    - '& robocopy deployed/CIAR/ y: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod y: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
     - '& net use * /delete /y'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-PROD1
@@ -285,9 +285,9 @@ prod1_deploy:
 prod2_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:PROD2_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
-    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& net use y: $env:PROD2_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW} /y'
+    - '& robocopy deployed/CIAR/ y: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod y: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/PROD -Recurse'
     - '& net use * /delete /y'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-PROD2
@@ -314,9 +314,9 @@ app_Pool_Start:
 dr_deploy:
   stage: Level_5(PROD)
   script:
-    - '& net use x: $env:DR_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW}'
-    - '& robocopy deployed/CIAR/ x: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
-    - '& robocopy deployed/CIAR/EnvConfig/prod x: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& net use y: $env:DR_DEPLOY_PATH /user:${ReleaseUser} ${ReleasePW} /y'
+    - '& robocopy deployed/CIAR/ y: /MIR /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy deployed/CIAR/EnvConfig/prod y: Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
     - '& Copy-Item deployed/CIAR -Destination deployed/DR -Recurse'
     - '& net use * /delete /y'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-DR
