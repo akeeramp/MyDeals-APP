@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-DropdownModalCtrl.$inject = ['$scope', '$uibModalInstance', 'colData', 'cellCurrValues', 'colName'];
+DropdownModalCtrl.$inject = ['$scope', '$uibModalInstance', 'colData', 'cellCurrValues', 'colName','$timeout'];
 
-function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, colName) {
+function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, colName, $timeout) {
 	var $ctrl = this;
 
 	$ctrl.colData = colData;
@@ -35,11 +35,13 @@ function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, c
 	};
 
 	$uibModalInstance.rendered.then(function () {
-		var dropdownlist = $("#DropdownSelections").data("kendoDropDownList");
+		$timeout(function () {
+			var dropdownlist = $("#DropdownSelections").data("kendoDropDownList");
 
-		if (dropdownlist !== undefined && dropdownlist.dataSource != undefined) {
-			$ctrl.isEmptyList = (dropdownlist.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
-		}
+			if (dropdownlist !== undefined && dropdownlist.dataSource != undefined) {
+				$ctrl.isEmptyList = (dropdownlist.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
+			}
+		}, 500);
 	});
 
 
