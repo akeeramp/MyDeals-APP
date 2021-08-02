@@ -58,7 +58,7 @@
         }
 
         function UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry) {
-            return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustomerName + '/' + primeCustId + '/'+ primeCustomerCountry);
+            return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustId + '/' + primeCustomerCountry, JSON.stringify(primeCustomerName));
         }
     }
 
