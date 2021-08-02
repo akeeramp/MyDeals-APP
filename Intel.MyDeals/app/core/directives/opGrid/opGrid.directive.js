@@ -3139,7 +3139,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // check for errors
                 angular.forEach(beh.isError, function (value, key) {
                     //Removed:&& (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key] || window.usrRole == 'SA' ) to solve SA will have readonly field, wont fire this rule for SA
-                    if (!!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
+                    if (!!$scope.opOptions.model && !!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);
                         valid = false;
                         row["PASSED_VALIDATION"] = "Dirty";

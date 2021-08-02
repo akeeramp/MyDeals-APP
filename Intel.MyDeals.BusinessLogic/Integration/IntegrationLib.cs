@@ -380,7 +380,7 @@ namespace Intel.MyDeals.BusinessLogic
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomer;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
-            string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
+            string projectName = workRecordDataFields.recordDetails.quote.ProjectName.ToUpper();
             string serverDealType = workRecordDataFields.recordDetails.quote.ServerDealType;
             string geoCombined = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region != "APJ"? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Region: "APAC,IJKK";
             string qltrBidGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].EndCustomerRegion != "APJ" ? workRecordDataFields.recordDetails.quote.quoteLine[currentRec].EndCustomerRegion : "APAC,IJKK";
@@ -1068,7 +1068,7 @@ namespace Intel.MyDeals.BusinessLogic
             workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
 
-            string projectName = workRecordDataFields.recordDetails.quote.ProjectName;
+            string projectName = workRecordDataFields.recordDetails.quote.ProjectName.ToUpper();
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
 
