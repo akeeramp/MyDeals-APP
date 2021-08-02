@@ -45,11 +45,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
 
         var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val().trim();
-        var patt = new RegExp("^[\\w .,'\&-]*$");
+        var patt = new RegExp("^[\\w .,:'\&-]*$");
         var res = patt.test(endCustomerOnly);
         if (!res) {
             $ctrl.IsError = true;
-            $ctrl.msg = "Please Remove the special Characters other than .-'_,&";
+            $ctrl.msg = "Please Remove the special Characters other than .-'_,&:";
         }
         else if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
             $ctrl.IsError = false;
