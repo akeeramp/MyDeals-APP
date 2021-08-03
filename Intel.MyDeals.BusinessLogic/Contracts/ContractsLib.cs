@@ -235,7 +235,7 @@ namespace Intel.MyDeals.BusinessLogic
         public MyDealsData CreateTenderFolio(OpDataCollectorFlattenedList data, SavePacket savePacket)
         {
             List<int> dealIds = data[0]["dealIds"].ToString().Split(',').Select(Int32.Parse).ToList();
-            
+
             //string dealIdsWithPrefix = string.Join("#", data[0]["dealIds"]);
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(dealIds, new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW });
             string custAccountDivisionsFromContract = "";
@@ -403,6 +403,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ptr.SetDataElementsValue(AttributeCodes.HAS_TRACKER, ""); // copied items can't have a tracker
                 ptr.SetDataElementsValue(AttributeCodes.IN_REDEAL, ""); // copied items can't be in redeal
                 ptr.SetDataElementsValue(AttributeCodes.IS_CANCELLED, ""); // copied items can't be already cancelled
+                ptr.SetDataElementsValue(AttributeCodes.IS_PRIMED_CUST, ""); //DE121910 Do not want to copy IS_PRIMED_CUST 
                 IOpDataElement checkForSFID = ptr.GetDataElement(AttributeCodes.SALESFORCE_ID);
                 if (checkForSFID != null) // Reset Salesforce IDs to blank if user attempts to copy one
                 {
@@ -509,7 +510,7 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].PacketType = OpDataElementType.PRC_TBL_ROW;
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].GroupID = -401;
             myDealsDataNewObject[OpDataElementType.PRC_TBL_ROW].AddSaveActions();
-
+            
             return myDealsDataNewObject.Save(savePacket.MyContractToken);
         }
 
