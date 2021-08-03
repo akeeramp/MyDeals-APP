@@ -49,7 +49,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var res = patt.test(endCustomerOnly);
         if (!res) {
             $ctrl.IsError = true;
-            $ctrl.msg = "Please Remove the special Characters other than .-'_,&:";
+            $ctrl.msg = "Invalid entry in End Customer/Retail. Please fix it and Save";
         }
         else if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
             $ctrl.IsError = false;

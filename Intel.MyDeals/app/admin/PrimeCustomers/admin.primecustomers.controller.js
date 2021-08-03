@@ -107,7 +107,7 @@
                     var patt = new RegExp("^[\\w .,:'\&-]*$");
                     var res = patt.test(model_Cust_Nm);
                     if (!res) {
-                        validationMessages.push("Please Remove the special Characters other than .-'_,&:");
+                        validationMessages.push("Invalid entry in Unified Customer Name. Please fix it and Save");
                     }
                     else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null) {
