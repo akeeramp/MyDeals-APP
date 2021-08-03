@@ -49,7 +49,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var res = patt.test(endCustomerOnly);
         if (!res) {
             $ctrl.IsError = true;
-            $ctrl.msg = "Invalid Character identified in Unified Customer Name. Please remove it and Save.";
+            $ctrl.msg = "Invalid Character identified in End customer/Retail. Please remove it and Save.";
         }
         else if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
             $ctrl.IsError = false;
