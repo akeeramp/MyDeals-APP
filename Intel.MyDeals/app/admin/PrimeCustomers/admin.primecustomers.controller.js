@@ -104,7 +104,12 @@
                 function getDuplicate(x) {
                     var x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase() : '');
                     var model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase() : '');
-                    if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
+                    var patt = new RegExp("^[\\w .,:'\&-]*$");
+                    var res = patt.test(model_Cust_Nm);
+                    if (!res) {
+                        validationMessages.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
+                    }
+                    else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null) {
                             validationMessages.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Unified Customer");
                         }

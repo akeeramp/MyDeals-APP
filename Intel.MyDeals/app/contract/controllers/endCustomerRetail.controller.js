@@ -45,7 +45,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
 
         var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val().trim();
-        if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
+        var patt = new RegExp("^[\\w .,:'\&-]*$");
+        var res = patt.test(endCustomerOnly);
+        if (!res) {
+            $ctrl.IsError = true;
+            $ctrl.msg = "Invalid Character identified in End customer/Retail. Please remove it and Save.";
+        }
+        else if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
             $ctrl.IsError = false;
             kendo.alert("Any can not be selected from Deal reconciliation screen.");
         }
