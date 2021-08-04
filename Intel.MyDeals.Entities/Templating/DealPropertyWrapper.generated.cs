@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/8/2021 11:59:27 PM
+File Updated: 8/4/2021 10:30:51 AM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -116,6 +116,22 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "TIER",
 			DIM_SID = 10,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute ALL_USRDEF_NM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ALL_USRDEF_NM",
+			ATRB_DESC = "All User Defined Nodes",
+			ATRB_LBL = "All User Defined Nodes",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 8001,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "USRDEF",
+			DIM_SID = 8,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
@@ -458,6 +474,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
+		public static MyDealsAttribute CEILING_LIMIT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CEILING_LIMIT",
+			ATRB_DESC = "Ceiling Limit",
+			ATRB_LBL = "Ceiling Limit",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3322,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute CNSMPTN_LKBACK_PERD_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CNSMPTN_LKBACK_PERD_DT",
@@ -586,6 +618,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute CONSUMPTION_COUNTRY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_COUNTRY",
+			ATRB_DESC = "Consumption Country",
+			ATRB_LBL = "Consumption Country",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3464,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute CONSUMPTION_CUST_PLATFORM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CONSUMPTION_CUST_PLATFORM",
@@ -697,6 +745,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_TYPE",
+			ATRB_DESC = "Consumption Type",
+			ATRB_LBL = "Consumption Type",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3465,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute COST_MISSING_FLG = new MyDealsAttribute()
 		{
@@ -1338,6 +1402,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
+		public static MyDealsAttribute DENSITY_BAND = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DENSITY_BAND",
+			ATRB_DESC = "Density Band",
+			ATRB_LBL = "Density",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 17,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute DEVICE_TYPE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEVICE_TYPE",
@@ -1384,6 +1464,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute DFLT_DOUBLE_CONSUMPTION = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DFLT_DOUBLE_CONSUMPTION",
+			ATRB_DESC = "Double Consumption is used",
+			ATRB_LBL = "Double Consumption",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 2031,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "CUST",
+			DIM_SID = 2,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute DFLT_LOOKBACK_PERD = new MyDealsAttribute()
@@ -1658,6 +1754,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute END_CUST_OBJ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_CUST_OBJ",
+			ATRB_DESC = "End Customer Object",
+			ATRB_LBL = "End Customer Object",
+			ATRB_MAX_LEN = 9999,
+			ATRB_SID = 3346,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute END_CUSTOMER_RETAIL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_CUSTOMER_RETAIL",
@@ -1689,6 +1801,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute END_PB = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_PB",
+			ATRB_DESC = "End Petabyte",
+			ATRB_LBL = "End PB",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 13,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute END_REV = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_REV",
+			ATRB_DESC = "End Revenue",
+			ATRB_LBL = "End Revenue",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 8,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_VOL = new MyDealsAttribute()
 		{
@@ -2570,6 +2714,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "INVISIBLE"
 		};
+		public static MyDealsAttribute INCENTIVE_RATE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "INCENTIVE_RATE",
+			ATRB_DESC = "Incentive Rate",
+			ATRB_LBL = "Incentive Rate",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 9,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute INCL_COST_TST = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "INCL_COST_TST",
@@ -2663,6 +2823,22 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute IS_DOUBLE_CONSUMPTION = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_DOUBLE_CONSUMPTION",
+			ATRB_DESC = "Is Double Consumption",
+			ATRB_LBL = "Is Double Consumption",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3708,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -2839,6 +3015,22 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
 			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute MAX_PAYOUT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "MAX_PAYOUT",
+			ATRB_DESC = "Maximum Payout",
+			ATRB_LBL = "Max Payout",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 25,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3193,6 +3385,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute NUM_OF_DENSITY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "NUM_OF_DENSITY",
+			ATRB_DESC = "Number of Density Bands",
+			ATRB_LBL = "Select no of Density Bands",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3491,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute NUM_OF_TIERS = new MyDealsAttribute()
 		{
@@ -4394,6 +4602,38 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
+		public static MyDealsAttribute STRT_PB = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "STRT_PB",
+			ATRB_DESC = "Start Petabyte",
+			ATRB_LBL = "Start PB",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 12,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute STRT_REV = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "STRT_REV",
+			ATRB_DESC = "Start Revenue",
+			ATRB_LBL = "Start Revenue",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 7,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute STRT_VOL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "STRT_VOL",
@@ -4729,6 +4969,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute USRDEF_NM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "USRDEF_NM",
+			ATRB_DESC = "User Defined Node",
+			ATRB_LBL = "User Defined Node",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 8002,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "USRDEF",
+			DIM_SID = 8,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute VERTICAL_ROLLUP = new MyDealsAttribute()
 		{

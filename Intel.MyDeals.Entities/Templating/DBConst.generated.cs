@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 6/8/2021 11:58:47 PM
+File Updated: 8/4/2021 11:18:44 AM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -82,6 +82,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string ALL_TIER_NM = "ALL_TIER_NM";
+
+		///<summary>
+		/// DIM_SID: 8
+		/// DIM_CD: USRDEF
+		/// ATRB_SID: 8001
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string ALL_USRDEF_NM = "ALL_USRDEF_NM";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -275,6 +284,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3322
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string CEILING_LIMIT = "CEILING_LIMIT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3455
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -347,6 +365,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3464
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_COUNTRY = "CONSUMPTION_COUNTRY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3456
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -406,6 +433,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string CONSUMPTION_SYS_CONFIG = "CONSUMPTION_SYS_CONFIG";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3465
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONSUMPTION_TYPE = "CONSUMPTION_TYPE";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -768,6 +804,15 @@ namespace Intel.MyDeals.Entities {
 		public const string DEBIT_VOLUME = "DEBIT_VOLUME";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 17
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string DENSITY_BAND = "DENSITY_BAND";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7020
@@ -793,6 +838,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DFLT_CUST_RPT_GEO = "DFLT_CUST_RPT_GEO";
+
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2031
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string DFLT_DOUBLE_CONSUMPTION = "DFLT_DOUBLE_CONSUMPTION";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -950,6 +1004,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3346
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string END_CUST_OBJ = "END_CUST_OBJ";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3348
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -964,6 +1027,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string END_DT = "END_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 13
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string END_PB = "END_PB";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 8
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string END_REV = "END_REV";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1461,6 +1542,15 @@ namespace Intel.MyDeals.Entities {
 		public const string INACTV_REV = "INACTV_REV";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 9
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string INCENTIVE_RATE = "INCENTIVE_RATE";
+
+		///<summary>
 		/// DIM_SID: 30
 		/// DIM_CD: CSTST
 		/// ATRB_SID: 30005
@@ -1513,6 +1603,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string IS_DEV_USR = "IS_DEV_USR";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3708
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_DOUBLE_CONSUMPTION = "IS_DOUBLE_CONSUMPTION";
 
 		///<summary>
 		/// DIM_SID: 50
@@ -1612,6 +1711,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string LOWEST_NET_PRC = "LOWEST_NET_PRC";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 25
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string MAX_PAYOUT = "MAX_PAYOUT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1810,6 +1918,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string NOTES = "NOTES";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3491
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string NUM_OF_DENSITY = "NUM_OF_DENSITY";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2489,6 +2606,24 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 12
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string STRT_PB = "STRT_PB";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 7
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string STRT_REV = "STRT_REV";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 20
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Int32
@@ -2674,6 +2809,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string USER_MAX_RPU = "USER_MAX_RPU";
+
+		///<summary>
+		/// DIM_SID: 8
+		/// DIM_CD: USRDEF
+		/// ATRB_SID: 8002
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string USRDEF_NM = "USRDEF_NM";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -3001,6 +3145,7 @@ namespace Intel.MyDeals.Entities {
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 		public const string VERBOSE_LOG_TO_DB = "VERBOSE_LOG_TO_DB";
 		public const string VISTEX_SEND_PND_SBMT_DEAL = "VISTEX_SEND_PND_SBMT_DEAL";
+		public const string VNDR_REC_CNT_THRHLD = "VNDR_REC_CNT_THRHLD";
 		public const string VOL_TIER_MIGRATION = "VOL_TIER_MIGRATION";
 		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
 	}
@@ -3166,6 +3311,8 @@ namespace Intel.MyDeals.Entities {
 		PROGRAM = 4,
 		VOL_TIER = 5,
 		KIT = 6,
+		REV_TIER = 7,
+		DENSITY = 8,
 		ALL_TYPES = 9,
 		Unknown = 0
 	}
@@ -3180,6 +3327,8 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 6, OpDeSetType = OpDataElementSetType.KIT, Alias = "KIT", Description = "KIT Deal Type", TemplateDealNumber = -5, TrackerDtLetter = "K", Order = 6 },
+				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.REV_TIER, Alias = "REV_TIER", Description = "REV TIER Deal Type", TemplateDealNumber = -7, TrackerDtLetter = "R", Order = 7 },
+				new OpDataElementSetTypeItem {Id = 8, OpDeSetType = OpDataElementSetType.DENSITY, Alias = "DENSITY", Description = "Density Based Deal Type", TemplateDealNumber = -8, TrackerDtLetter = "D", Order = 8 },
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
@@ -3188,11 +3337,11 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
-				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
+				[OpDataElementType.PTR_SNAPSHT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES,OpDataElementSetType.DENSITY,OpDataElementSetType.ECAP,OpDataElementSetType.FLEX,OpDataElementSetType.KIT,OpDataElementSetType.PROGRAM,OpDataElementSetType.REV_TIER,OpDataElementSetType.VOL_TIER },
 				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.FLEX },
 			}
 		);

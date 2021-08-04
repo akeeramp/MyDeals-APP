@@ -5006,7 +5006,7 @@
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = [marketSegment];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];  
-                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
+                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["FLEX_ROW_TYPE"]) newValue["FLEX_ROW_TYPE"].value = "Accrual";
