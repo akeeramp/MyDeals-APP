@@ -28,7 +28,9 @@ namespace Intel.Opaque.Data
                     new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.PROGRAM, OpDataElementType.WIP_DEAL, OpDataElementSetType.PROGRAM, OpTranslationType.OneDealPerRow),
                     new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.VOL_TIER, OpDataElementType.WIP_DEAL, OpDataElementSetType.VOL_TIER, OpTranslationType.OneDealPerRow),
                     new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.KIT, OpDataElementType.WIP_DEAL, OpDataElementSetType.KIT, OpTranslationType.OneDealPerRow),
-                    new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.FLEX, OpDataElementType.WIP_DEAL, OpDataElementSetType.FLEX, OpTranslationType.OneDealPerRow)
+                    new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.FLEX, OpDataElementType.WIP_DEAL, OpDataElementSetType.FLEX, OpTranslationType.OneDealPerRow),
+                    new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.REV_TIER, OpDataElementType.WIP_DEAL, OpDataElementSetType.REV_TIER, OpTranslationType.OneDealPerRow),
+                    new OpDataElementTypeMapping(OpDataElementType.PRC_TBL_ROW, OpDataElementSetType.DENSITY, OpDataElementType.WIP_DEAL, OpDataElementSetType.DENSITY, OpTranslationType.OneDealPerRow)
                 };
             }
             set {}

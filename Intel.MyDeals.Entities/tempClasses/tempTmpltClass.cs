@@ -25,10 +25,6 @@ namespace Intel.MyDeals.Entities
             ///</summary>
             public const string FLEX = @"FLEX";
             ///<summary>
-            /// ID: 6
-            ///</summary>
-            public const string KIT = @"KIT";
-            ///<summary>
             /// ID: 3
             ///</summary>
             public const string ECAP = @"ECAP";
@@ -40,11 +36,23 @@ namespace Intel.MyDeals.Entities
             /// ID: 5
             ///</summary>
             public const string VOL_TIER = @"VOL TIER";
+            ///<summary>
+            /// ID: 6
+            ///</summary>
+            public const string KIT = @"KIT";
+            ///<summary>
+            /// ID: 7
+            ///</summary>
+            public const string REV_TIER = @"REV TIER";
+            ///<summary>
+            /// ID: 8
+            ///</summary>
+            public const string DENSITY = @"DENSITY";
 
             ///<summary>
             /// All values associated with this lookup
             ///</summary>
-            public static readonly string[] Values = { @"All Deals", @"FLEX", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER" };
+            public static readonly string[] Values = { @"All Deals", @"FLEX", @"KIT", @"ECAP", @"PROGRAM", @"VOL TIER", @"REV TIER", @"DENSITY" };
 
             ///<summary>
             /// Keyed values associated with the lookup
@@ -52,10 +60,12 @@ namespace Intel.MyDeals.Entities
             public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){
                 {1, @"All Deals"},
                 {2, @"FLEX"},
-                {6, @"KIT"},
                 {3, @"ECAP"},
                 {4, @"PROGRAM"},
-                {5, @"VOL TIER"}
+                {5, @"VOL TIER"},
+                {6, @"KIT"},
+                {7, @"REV TIER"},
+                {8, @"DENSITY"}
             };
 
             ///<summary>
