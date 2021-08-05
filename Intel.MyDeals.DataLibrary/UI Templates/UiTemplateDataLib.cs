@@ -163,6 +163,22 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
+                Id = 36,
+                AtrbCd = AttributeCodes.NUM_OF_DENSITY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                ObjSetType = new List<OpDataElementSetType> {OpDataElementSetType.DENSITY },
+                IsDefaultable = true,
+                Label = "Number of Density Bands",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "BUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetNumTiersDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownID"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 19,
                 AtrbCd = AttributeCodes.FLEX_ROW_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -577,6 +593,17 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
+                Id = 21,
+                AtrbCd = AttributeCodes.DENSITY_BAND,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                IsDimKey = true,
+                IsReadOnly = true,
+                Label = "Density Band",
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 20,
                 AtrbCd = AttributeCodes.STRT_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -595,6 +622,28 @@ namespace Intel.MyDeals.DataLibrary
                 IsDimKey = true,
                 Width = 100,
                 Label = "End Vol *"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.STRT_PB,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Start PB *"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 6,
+                AtrbCd = AttributeCodes.END_PB,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                IsDimKey = true,
+                Width = 100,
+                Label = "End PB *"
             });
 
             items.Add(new UiTemplateContainerItem
@@ -686,6 +735,16 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Label = "Total Dollar Amount *",
                 IsRequired = true
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 22,
+                AtrbCd = AttributeCodes.CEILING_LIMIT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                Width = 100,
+                Label = "Ceiling Limit"
             });
 
             items.Add(new UiTemplateContainerItem
@@ -1315,6 +1374,15 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.VOL_TIER, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                IsHidden = true
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3490,
+                AtrbCd = AttributeCodes.NUM_OF_DENSITY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsHidden = true
             });
 
@@ -2855,6 +2923,21 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true
             });
 
+            items.Add(new UiTemplateContainerItem  // WIP VT types
+            {
+                Id = 3490,
+                AtrbCd = AttributeCodes.NUM_OF_DENSITY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> {OpDataElementSetType.DENSITY },
+                Width = 140,
+                Label = "Number of Density Bands",
+                Template = "#=gridUtils.uiControlWrapper(data, 'NUM_OF_DENSITY')#",
+                IsHidden = true,
+                IsReadOnly = true,
+                IsFilterable = true,
+                IsSortable = true
+            });
+
             items.Add(new UiTemplateContainerItem  // WIP VT, Program types
             {
                 Id = 3603,
@@ -2964,6 +3047,20 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT', 'currency')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP Density types
+            {
+                Id = 22,
+                AtrbCd = AttributeCodes.CEILING_LIMIT,
+                Label = "Total Dollar Amount",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                Width = 100,
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CEILING_LIMIT', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
