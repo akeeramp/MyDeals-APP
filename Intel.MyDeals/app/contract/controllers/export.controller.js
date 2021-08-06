@@ -46,6 +46,8 @@ function exportController($scope, $state, objsetService, logger, $timeout, dataS
         if (objType === "ECAP") return "ECAP";
         if (objType === "PROGRAM") return "Program";
         if (objType === "VOL_TIER") return "Volume Tier";
+        if (objType === "REV_TIER") return "Rev Tier";
+        if (objType === "DENSITY") return "Density Based";
         if (objType === "FLEX") return "Flex Accruals";
         return "";
     }

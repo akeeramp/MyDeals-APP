@@ -32,7 +32,9 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		    var dealTypes = [
 				{ dealType: "ECAP", name: "ECAP" },
 				{ dealType: "FLEX", name: "FLEX" },
-                { dealType: "VOL_TIER", name: "Volume Tier" },
+				{ dealType: "VOL_TIER", name: "Volume Tier" },
+				{ dealType: "REV_TIER", name: "Rev Tier" },
+				{ dealType: "DENSITY", name: "Density Based" },
                 { dealType: "KIT", name: "Kit" },
                 { dealType: "PROGRAM", name: "Program" }
 		    ];
