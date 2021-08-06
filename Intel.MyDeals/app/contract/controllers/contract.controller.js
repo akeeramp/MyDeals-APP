@@ -81,7 +81,7 @@
         $scope.ptTitleLbl = "Enter " + $scope.ptTitle + " Name";
         $scope.pageTitle = $scope.ptTitle + " Editor";
 
-        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         //Tender only columns for PRC_TBL_ROW
@@ -2747,7 +2747,9 @@
 
                         var errDeals = [];
                         if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
-                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
+                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER"
+                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
+                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
                             for (var s = 0; s < sData.length; s++) {
                                 if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
                                 if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
@@ -2868,16 +2870,30 @@
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
                             }
 
-                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
+                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
+                                || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
+                                // Set attribute Keys for adding dimensions
+                                let rateKey;
+                                let endKey;
+                                let strtKey;
+                                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                                    rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL";
+                                }
+                                else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
+                                    rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV";
+                                }
+                                else { // DENSITY
+                                    rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
+                                }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                                if (sData[s]["END_VOL"] != null && sData[s]["END_VOL"] != undefined && sData[s]["END_VOL"].toString().toUpperCase() != "UNLIMITED") {
-                                    sData[s]["END_VOL"] = parseInt(sData[s]["END_VOL"].toString().replace(/,/g, "") || 0);
+                                if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
+                                    sData[s][endKey] = parseInt(sData[s][endKey].toString().replace(/,/g, "") || 0);
                                 }
-                                if (sData[s]["RATE"] === null) {
-                                    sData[s]["RATE"] = parseInt(0);
+                                if (sData[s][rateKey] === null) {
+                                    sData[s][rateKey] = parseInt(0);
                                 }
-                                if (sData[s]["STRT_VOL"] === null) {
-                                    sData[s]["STRT_VOL"] = parseInt(0);
+                                if (sData[s][strtKey] === null) {
+                                    sData[s][strtKey] = parseInt(0);
                                 }
                             }
 
@@ -3954,7 +3970,8 @@
 
             if (!$scope.curPricingTable) return false;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
+                $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
                 var pivotFieldName = "NUM_OF_TIERS";
                 return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
             }
@@ -3966,7 +3983,8 @@
         $scope.numOfPivot = function (dataItem) {
             if ($scope.curPricingTable === undefined) return 1;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX"|| $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
+                $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
 
                 var pivotFieldName = "NUM_OF_TIERS";
                 // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
@@ -4038,7 +4056,20 @@
                 var numTiers = $scope.numOfPivot(data[d]);
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
+                        $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+                        // Set attribute Keys for adding dimensions
+                        let endKey;
+                        let strtKey;
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                            endKey = "END_VOL"; strtKey = "STRT_VOL";
+                        }
+                        else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
+                            endKey = "END_REV"; strtKey = "STRT_REV";
+                        }
+                        else { // DENSITY
+                            endKey = "END_PB"; strtKey = "STRT_PB";
+                        }
                         // Vol-tier specific cols with tiers
                         for (var i = 0; i < tierAtrbs.length; i++) {
                             var tieredItem = tierAtrbs[i];
@@ -4047,8 +4078,8 @@
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
 
                             // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                            if (tieredItem === "END_VOL" && lData["END_VOL"] !== undefined && lData["END_VOL"].toString().toUpperCase() !== "UNLIMITED") {
-                                lData["END_VOL"] = kendo.toString(parseInt(lData["END_VOL"] || 0), "n0");
+                            if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                                lData[endKey] = kendo.toString(parseInt(lData[endKey] || 0), "n0");
                             }
                         }
                         // Disable all Start vols except the first if there is no tracker, else disable them all
@@ -4056,7 +4087,7 @@
                             if (!data[d]._behaviors.isReadOnly) {
                                 data[d]._behaviors.isReadOnly = {};
                             }
-                            lData._behaviors.isReadOnly["STRT_VOL"] = true;
+                            lData._behaviors.isReadOnly[strtKey] = true;
                         }
                         // Disable all End volumes except for the last tier if there is a tracker
                         if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
@@ -4064,7 +4095,7 @@
                                 if (!data[d]._behaviors.isReadOnly) {
                                     data[d]._behaviors.isReadOnly = {};
                                 }
-                                lData._behaviors.isReadOnly["END_VOL"] = true;
+                                lData._behaviors.isReadOnly[endKey] = true;
                             }
                         }
                     } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
@@ -4130,7 +4161,8 @@
             var dimAtrbs;
             var isKit = 0;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
+                $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
                 dimKey = tierDimKey;
                 dimAtrbs = tierAtrbs;
             }
@@ -5325,7 +5357,8 @@
             }
 
             // fix merge issues
-            if (data.length > 0 && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "KIT" && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "FLEX" && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "VOL_TIER")) {
+            if (data.length > 0 && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "KIT" && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "FLEX" && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "VOL_TIER"
+                && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "REV_TIER" && $scope.curPricingTable['OBJ_SET_TYPE_CD'] !== "DENSITY")) {
                 var lastItem = data[data.length - 1];
                 var numTier = $scope.numOfPivot(lastItem);
                 var offset = data.length % numTier;

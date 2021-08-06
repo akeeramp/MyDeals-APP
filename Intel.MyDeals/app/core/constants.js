@@ -59,7 +59,9 @@
                 "ECAP": "#00AEEF",
                 "PROGRAM": "#FFA300",
                 "VOL_TIER": "#f3D54E",
+                "REV_TIER": "#f3D66E",
                 "FLEX": "#C4D600",
+                "DENSITY": "#f3D99E",
                 "KIT": "#F32300"
             },
             "valid": {
@@ -109,6 +111,14 @@
                     { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ],
+                "REV_TIER": [
+                    { "name": "Deal Info", "order": 0 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
+                    { "name": "Backdate", "order": 2 },
+                    { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
+                    { "name": "Payment", "order": 10 },
+                    { "name": "All", "order": 99 }
+                ],
                 "PROGRAM": [
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
@@ -123,6 +133,14 @@
                     { "name": "Backdate", "order": 2 },
                     { "name": "SubKit", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_SUBKIT", "value": "0" }] },
                     { "name": "CAP Info", "order": 98 },
+                    { "name": "Payment", "order": 10 },
+                    { "name": "All", "order": 99 }
+                ],
+                "DENSITY": [
+                    { "name": "Deal Info", "order": 0 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
+                    { "name": "Backdate", "order": 2 },
+                    { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
                     { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ],

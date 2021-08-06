@@ -43,7 +43,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
-    if (vm.DEAL_TYPE == "VOL_TIER" || vm.DEAL_TYPE == "FLEX" || vm.DEAL_TYPE == "PROGRAM") {
+    if (vm.DEAL_TYPE == "VOL_TIER" || vm.DEAL_TYPE == "FLEX" || vm.DEAL_TYPE == "PROGRAM" || vm.DEAL_TYPE == "REV_TIER" || vm.DEAL_TYPE == "DENSITY") {
         vm.showIncludeExcludeLabel = true;
     }
 

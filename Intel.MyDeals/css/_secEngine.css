@@ -66,6 +66,22 @@
 	border-color: #ffda00;
 }
 
+.atrbbasecolorREV_TIER {
+	color: #ccda00;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #ccda00;
+	border-color: #ccda00;
+}
+
+.atrbbasecolorDENSITY {
+	color: #aada00;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #aada00;
+	border-color: #aada00;
+}
+
 .atrbbasecolorNotInDealType {
 	background-image: url(/images/disabledBack.png);
 	background-color: #eeeeee;

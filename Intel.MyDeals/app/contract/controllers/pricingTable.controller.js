@@ -47,10 +47,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     if (!!pricingTableData.data.WIP_DEAL) {
         for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
             var dataItem = pricingTableData.data.WIP_DEAL[i];
-            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOL_TIER") {
+            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOL_TIER"
+                || dataItem.OBJ_SET_TYPE_CD === "REV_TIER" || dataItem.OBJ_SET_TYPE_CD === "DENSITY") {
                 var anyWarnings = false;
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
-                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
                 if (anyWarnings) {
                     var dimStr = "_10___";
                     var isKit = 0;
@@ -1254,30 +1255,46 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var shenaniganObj = null;
 
         // VOL-TIER
-        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-            var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
-            var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
-            var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
+        if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"
+            || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
+            let endVolIndex;
+            let strtVolIndex;
+            let rateIndex;
+            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
+                strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
+                rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
+            }
+            else if (root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
+                endVolIndex = (root.colToLetter["END_REV"].charCodeAt(0) - intA);
+                strtVolIndex = (root.colToLetter["STRT_REV"].charCodeAt(0) - intA);
+                rateIndex = (root.colToLetter["INCENTIVE_RATE"].charCodeAt(0) - intA);
+            }
+            else {
+                endVolIndex = (root.colToLetter["END_PB"].charCodeAt(0) - intA);
+                strtVolIndex = (root.colToLetter["STRT_PB"].charCodeAt(0) - intA);
+                rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
+            }
 
-            var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
-            var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
-            var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
+            let isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
+            let isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
+            let isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
 
             // On End_vol col change
             if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged || isProductColumnIncludedInChanges) {
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
-                        var myRow = data[(rowIndex - 1)];
+                        let myRow = data[(rowIndex - 1)];
 
-                        var letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex);
+                        let letter = (colIndex > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + colIndex - 26) : String.fromCharCode(intA + colIndex);
                         // Get column name out of selected cell
-                        var colName = root.letterToCol[letter];
+                        let colName = root.letterToCol[letter];
 
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
-                            var isEndVolUnlimited = false;
-                            var numOfTiers = root.numOfPivot(myRow);
+                            let isEndVolUnlimited = false;
+                            let numOfTiers = root.numOfPivot(myRow);
 
                             if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
                                 isEndVolUnlimited = true;
@@ -1303,8 +1320,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                             }
 
-                            // End_Vol Col changed
-                            if (colIndex === endVolIndex) {
+                            // End_Vol Col changed - update next row start values (VOL_TIER and FLEX, Units + 1)
+                            if (colIndex === endVolIndex && (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
                                 // If this vol tier isn't the last of its vol tier rows
                                 if (myRow.TIER_NBR != numOfTiers) {
                                     var nextRow = data[(rowIndex)];
@@ -1319,6 +1336,40 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 myRow.END_VOL = value.value;
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
+                            }
+                            // End_Vol Col changed - update next row start values (REV_TIER, Units + .01 - Money)
+                            else if (colIndex === endVolIndex && root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
+                                // If this vol tier isn't the last of its vol tier rows
+                                if (myRow.TIER_NBR != numOfTiers) {
+                                    var nextRow = data[(rowIndex)];
+                                    // Calculate next start vol using end vol
+                                    if (nextRow !== undefined && !isEndVolUnlimited) {
+                                        nextRow.STRT_REV = (value.value + .01);
+                                        sourceData[(rowIndex)].STRT_REV = nextRow.STRT_REV;
+                                    }
+                                }
+                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                value.value = kendo.toString(value.value, "n0");
+
+                                myRow.END_REV = value.value;
+                                sourceData[(rowIndex - 1)].END_REV = myRow.END_REV;
+                            }
+                                // End_Vol Col changed - update next row start values (DENSITY, Units + .001 PB)
+                            else if (colIndex === endVolIndex && root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
+                                // If this vol tier isn't the last of its vol tier rows
+                                if (myRow.TIER_NBR != numOfTiers) {
+                                    var nextRow = data[(rowIndex)];
+                                    // Calculate next start vol using end vol
+                                    if (nextRow !== undefined && !isEndVolUnlimited) {
+                                        nextRow.STRT_PB = (value.value + .001);
+                                        sourceData[(rowIndex)].STRT_PB = nextRow.STRT_PB;
+                                    }
+                                }
+                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                value.value = kendo.toString(value.value, "n0");
+
+                                myRow.END_PB = value.value;
+                                sourceData[(rowIndex - 1)].END_PB = myRow.END_PB;
                             }
 
                             // This bypasses the delete full line for Program and *Vol Tier to prevent popup message.  Instead, mid tier returns a Please refresh message
@@ -1372,7 +1423,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         );
         var isDelete = false;
         if (isProductColumnIncludedInChanges && !hasValueInAtLeastOneCell) { // Delete row
-            if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
+            if (shenaniganObj !== null && shenaniganObj.isNonDelete && (root.curPricingTable.OBJ_SET_TYPE_CD === "PROGRAM" || root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER"
+                || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY")) {
                 // Revert value if not allowed to delete
                 cleanupData(data);
                 spreadDsSync();
@@ -1978,7 +2030,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
             var rowSizeHeight = 150;
-            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT"
+                || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
                 rowSizeHeight = 51;
             }
             sheet.rowHeight(sheetRowIndex, rowSizeHeight);
@@ -2124,16 +2177,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["TIER_NBR"] = pivotDim;
                                 data[r]["NUM_OF_TIERS"] = numPivotRows;
 
-                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"
+                                    || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
+                                    let rateKey;
+                                    let endKey;
+                                    let strtKey;
+                                    let firstDefault;
+                                    if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                                        rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; firstDefault = 1;
+                                    }
+                                    else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
+                                        rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0;
+                                    }
+                                    else { // DENSITY
+                                        rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.0;
+                                    }
                                     // Default to 0
-                                    data[r]["RATE"] = 0;
+                                    data[r][rateKey] = 0;
 
                                     if (pivotDim === parseInt(numPivotRows)) {
                                         // default last end vol to "unlimited"
-                                        data[r]["END_VOL"] = unlimitedVal;
+                                        data[r][endKey] = unlimitedVal;
                                     } else {
                                         // Default to 0
-                                        data[r]["END_VOL"] = 0;
+                                        data[r][endKey] = 0;
                                     }
                                     // disable non-first start vols
                                     if (pivotDim !== 1) {
@@ -2145,12 +2212,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         }
                                         // Flag start vol cols to disable
                                         var rowInfo = data[r];
-                                        data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                                        data[r]._behaviors.isReadOnly[strtKey] = true;
                                         // Default to 0
-                                        data[r]["STRT_VOL"] = 0;
+                                        data[r][strtKey] = 0;
                                     } else {
                                         // 1st tier row
-                                        data[r]["STRT_VOL"] = 1;
+                                        data[r][strtKey] = firstDefault;
                                     }
                                 }
                             }
@@ -2284,7 +2351,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Enable other cells
-                    if (!!ptTemplate.model.fields["TIER_NBR"] && ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
+                    if (!!ptTemplate.model.fields["TIER_NBR"] && ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"
+                        || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY")) {
                         // Find tier nbr col
                         var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
                         var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
@@ -2305,7 +2373,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         disableRange(range);
 
                         // Disable flagged Start Vol cols (Note that not all start voll cols get disabled)
-                        var startVolLetter = root.colToLetter["STRT_VOL"];
+                        var startVolLetter;
+                        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                            startVolLetter = root.colToLetter["STRT_VOL"];
+                        }
+                        else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
+                            startVolLetter = root.colToLetter["STRT_REV"];
+                        }
+                        else {
+                            startVolLetter = root.colToLetter["STRT_PB"];
+                        }
+
                         range = sheet.range(startVolLetter + topLeftRowIndex + ":" + startVolLetter + bottomRightRowIndex);
                         range.forEachCell(
                             function (rowIndex, colIndex, value) {
@@ -2484,7 +2562,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
-        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER"
+            || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER"
+            || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
             $timeout(function () {
                 //Note: This is to fix the Muiti-tier data Corrupt fix
                 if (root.spreadDs._data.length == $scope.pricingTableData.PRC_TBL_ROW.length) {
@@ -2689,7 +2769,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         function (event, args) {
             if (!!$scope.root.spreadDs) {
                 $scope.setRowIdStyle($scope.root.spreadDs._data);
-                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT"
+                    || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
                     // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
                     //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
                     $scope.applySpreadsheetMerge();
@@ -2706,7 +2787,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             if (!!$scope.root.spreadDs) {
                 $scope.setRowIdStyle($scope.root.spreadDs._data);
-                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"  || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || root.curPricingTable.OBJ_SET_TYPE_CD === "KIT"
+                    || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
                     // apply spreadsheet merges after save because if the user deleted a product and the next row doesn't have the same # of tiers as the deleted row
                     //		then the rows will all look like they have the wrong Num of tiers (though the data would be fine).
                     $scope.applySpreadsheetMerge();
@@ -4242,7 +4324,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
-                if ((dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
+                if ((dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT" || dealType == "REV_TIER" || dealType == "DENSITY") && (colName == "SETTLEMENT_PARTNER" || colName == "AR_SETTLEMENT_LVL")) {
                     $scope.updateSpreadsheet(colName, selectedItem, context);
                 }
                 context.callback(selectedItem);
@@ -4423,7 +4505,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
 
             modalInstance.result.then(function (selectedItem) {
-                if (dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT") {
+                if (dealType == "VOL_TIER" || dealType == "FLEX" || dealType == "KIT" || dealType == "REV_TIER" || dealType == "DENSITY") {
                     $scope.updateSpreadsheet(colName, selectedItem, context);
                 }
                 context.callback(new Date(selectedItem));

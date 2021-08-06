@@ -26,6 +26,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 CustomLayoutForKIT: undefined,
                 CustomLayoutForPROGRAM: undefined,
                 CustomLayoutForFLEX: undefined,
+                CustomLayoutForREV_TIER: undefined,
+                CustomLayoutForDENSITY: undefined,
                 CustomLayoutForVOL_TIER: undefined
             });
 
@@ -1737,7 +1739,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var dealTypes = [
                     { dealType: "ECAP", name: "ECAP" },
                     { dealType: "VOL_TIER", name: "Volume Tier" },
+                    { dealType: "REV_TIER", name: "Rev Tier" },
                     { dealType: "FLEX", name: "Flex Accrual" },
+                    { dealType: "DENSITY", name: "Density Based" },
                     { dealType: "KIT", name: "Kit" },
                     { dealType: "PROGRAM", name: "Program" }
                 ];

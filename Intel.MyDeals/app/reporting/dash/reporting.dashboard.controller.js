@@ -116,8 +116,14 @@
                             else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'VOL_TIER') {
                                 vm.masterData["ReportDealType"][cnt].COLOR = 'green';
                             }
+                            else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'REV_TIER') {
+                                vm.masterData["ReportDealType"][cnt].COLOR = 'purple';
+                            }
                             else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'FLEX') {
                                 vm.masterData["ReportDealType"][cnt].COLOR = 'blue';
+                            }
+                            else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'DENSITY') {
+                                vm.masterData["ReportDealType"][cnt].COLOR = 'pink';
                             }
                             else if (vm.masterData["ReportDealType"][cnt].DEAL_TYPE === 'KIT') {
                                 vm.masterData["ReportDealType"][cnt].COLOR = 'red';
