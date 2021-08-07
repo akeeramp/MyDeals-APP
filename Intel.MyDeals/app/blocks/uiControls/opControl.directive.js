@@ -87,7 +87,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 else if ((dealType == 'FLEX' || dealType == 'REV_TIER') && name == 'Consumption') { // Disable Autofill field
                     return true;
                 }
-                else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL')) {
+                else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL' || dealType === 'DENSITY')) {
                     scope.$parent.$parent.vm.autofillData.DEFAULT.PAYOUT_BASED_ON.value = "Consumption";
                    // return true;
                 }

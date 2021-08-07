@@ -67,19 +67,19 @@
 }
 
 .atrbbasecolorREV_TIER {
-	color: #ccda00;
+	color: #e100ff;
 	padding-left: 3px;
 	padding-right: 5px;
-	background-color: #ccda00;
-	border-color: #ccda00;
+	background-color: #e100ff;
+	border-color: #e100ff;
 }
 
 .atrbbasecolorDENSITY {
-	color: #aada00;
+	color: #aa00ff;
 	padding-left: 3px;
 	padding-right: 5px;
-	background-color: #aada00;
-	border-color: #aada00;
+	background-color: #aa00ff;
+	border-color: #aa00ff;
 }
 
 .atrbbasecolorNotInDealType {

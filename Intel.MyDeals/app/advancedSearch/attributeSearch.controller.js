@@ -244,10 +244,12 @@
                         element.kendoDropDownList({
                             dataSource: {
                                 data: [
+                                    "DENSITY",
                                     "ECAP",
                                     "FLEX",
                                     "KIT",
                                     "PROGRAM",
+                                    "REV_TIER",
                                     "VOL_TIER"
                                 ]
                             },
@@ -259,10 +261,12 @@
                 lookupText: "OBJ_SET_TYPE_NM",
                 lookupValue: "OBJ_SET_TYPE_CD",
                 lookups: [
+                    { OBJ_SET_TYPE_CD: "DENSITY", OBJ_SET_TYPE_NM: "DENSITY" },
                     { OBJ_SET_TYPE_CD: "ECAP", OBJ_SET_TYPE_NM: "ECAP" },
                     { OBJ_SET_TYPE_CD: "FLEX", OBJ_SET_TYPE_NM: "FLEX" },
-                    { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
                     { OBJ_SET_TYPE_CD: "KIT", OBJ_SET_TYPE_NM: "KIT" },
+                    { OBJ_SET_TYPE_CD: "PROGRAM", OBJ_SET_TYPE_NM: "PROGRAM" },
+                    { OBJ_SET_TYPE_CD: "REV_TIER", OBJ_SET_TYPE_NM: "REV TIER" },
                     { OBJ_SET_TYPE_CD: "VOL_TIER", OBJ_SET_TYPE_NM: "VOL TIER" }
                 ]
             }, {

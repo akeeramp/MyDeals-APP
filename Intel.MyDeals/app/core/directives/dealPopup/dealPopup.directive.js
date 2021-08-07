@@ -243,7 +243,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     }
                 ]
             };
-            $scope.propertiesInclude = ["RATE", "STRT_VOL", "END_VOL"];
+            $scope.propertiesInclude = ["RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB" ];
             $scope.propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
             $scope.$watch('propSearchFilter', function (newValue, oldValue, el) {
                 if (newValue !== oldValue) {
@@ -312,13 +312,13 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     },
                     {
                         field: "STRT_VOL",
-                        title: "Start Vol",
+                        title: "Start",
                         width: "60px",
                         hidden: true
                     },
                     {
                         field: "END_VOL",
-                        title: "End Vol",
+                        title: "End",
                         width: "60px",
                         hidden: true
                     },
@@ -409,7 +409,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
                 objsetService.getWipDealById($scope.dealId).then(function (response) {
 
-                    var numTiers, t;
+                    let numTiers, t;
 
                     $scope.data = response.data.Data;
                     if ($scope.data === null) {
@@ -465,19 +465,39 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
 
 
                     // schedule
-                    if ($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "FLEX"
-                        || $scope.data["OBJ_SET_TYPE_CD"] === "REV_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "DENSITY") {
+                    if ($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "FLEX" || $scope.data["OBJ_SET_TYPE_CD"] === "REV_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "DENSITY") {
                         numTiers = parseInt($scope.data["NUM_OF_TIERS"]);
+                        let rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; addedSymbol = "$"; fixedPoints = 2; // Defaults for VOL_TIER/FLEX
+
+                        if ($scope.data["OBJ_SET_TYPE_CD"] === "REV_TIER") { // Defaults for REV_TIER
+                            rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; addedSymbol = ""; fixedPoints = 2;
+                        }
+                        if ($scope.data["OBJ_SET_TYPE_CD"] === "DENSITY") { // Defaults for DENSITY
+                            rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; addedSymbol = ""; fixedPoints = 3;
+                        }
+
                         for (t = 1; t <= numTiers; t++) {
-                            var r = $scope.data["RATE"]["10___" + t];
-                            var rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(2);
+                            var r = $scope.data[rateKey]["10___" + t];
+                            var rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(fixedPoints);
                             $scope.scheduleData.push({
-                                STRT_VOL: $scope.data["STRT_VOL"]["10___" + t],
-                                END_VOL: $scope.data["END_VOL"]["10___" + t],
+                                STRT_VOL: $scope.data[strtKey]["10___" + t],
+                                END_VOL: $scope.data[endKey]["10___" + t],
                                 RATE: rate,
                                 TIER_NBR: t
                             });
                         }
+
+                        //for (t = 1; t <= numTiers; t++) {
+                        //    var r = $scope.data["RATE"]["10___" + t];
+                        //    var rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(2);
+                        //    $scope.scheduleData.push({
+                        //        STRT_VOL: $scope.data["STRT_VOL"]["10___" + t],
+                        //        END_VOL: $scope.data["END_VOL"]["10___" + t],
+                        //        RATE: rate,
+                        //        TIER_NBR: t
+                        //    });
+                        //}
+
                     } else if ($scope.data["OBJ_SET_TYPE_CD"] === "KIT") {
                         var prd = $scope.data["PRODUCT_NAME"];
                         prd["20_____1"] = ""; // add KIT
