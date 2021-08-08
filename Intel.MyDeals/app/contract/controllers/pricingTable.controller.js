@@ -2187,7 +2187,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; firstDefault = 1;
                                     }
                                     else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
-                                        rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0;
+                                        rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0.01;
                                     }
                                     else { // DENSITY
                                         rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.0;

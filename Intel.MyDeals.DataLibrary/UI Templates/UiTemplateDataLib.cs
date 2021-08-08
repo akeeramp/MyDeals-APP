@@ -632,6 +632,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsDimKey = true,
                 Width = 100,
+                DataType = "fixedpoint",
+                Template = "#=gridUtils.uiControlWrapper(data, 'STRT_PB', 'fixedpoint')#",
                 Label = "Start PB *"
             });
 
@@ -643,6 +645,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsDimKey = true,
                 Width = 100,
+                DataType = "fixedpoint",
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_PB', 'fixedpoint')#",
                 Label = "End PB *"
             });
 
@@ -687,6 +691,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 IsDimKey = true,
                 Width = 100,
+                DataType = "percent",
+                Template = "#=gridUtils.uiControlWrapper(data, 'INCENTIVE_RATE', 'percent')#",
                 Label = "Incentive Rate *"
             });
 
@@ -1891,13 +1897,27 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 21,
                 AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
                 Editor = "scheduleEditor",
                 DataType = "object",
                 Label = "Rate Breakout",
                 Width = 300,
                 ExcelTemplate = "#=gridUtils.exportControlScheduleWrapper(data)#"
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP VT types
+            {
+                Id = 21,
+                AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
+                Template = "#=gridUtils.uiControlScheduleWrapperRevTier(data)#",
+                Editor = "scheduleEditorRevTier",
+                DataType = "object",
+                Label = "Rate Breakout",
+                Width = 300,
+                ExcelTemplate = "#=gridUtils.exportControlScheduleWrapperRevTier(data)#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP ECAP types
