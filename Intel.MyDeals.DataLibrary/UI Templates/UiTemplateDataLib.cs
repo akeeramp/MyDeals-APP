@@ -1125,7 +1125,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -1135,12 +1135,13 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
+
             items.Add(new UiTemplateContainerItem
             {
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
