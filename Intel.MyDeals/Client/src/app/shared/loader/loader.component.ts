@@ -15,6 +15,7 @@ export class LoaderComponent implements OnInit  {
     @Input() public isInitializing: boolean;
 
   ngOnInit() {
+    console.log('loader***************',this.message,this.module,this.isLoading,this.isInitializing);
   }
 }
 

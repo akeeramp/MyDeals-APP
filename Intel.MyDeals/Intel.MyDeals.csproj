@@ -946,6 +946,7 @@
     <Content Include="Content\kendo\2018.R1\textures\transparency.png" />
     <Content Include="Content\kendo\2018.R1\textures\transtexture.png" />
     <Content Include="css\bootstrap-switch.min.css" />
+    <Content Include="css\pikaday.css" />
     <Content Include="css\simple-sidebar.css" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
@@ -1884,6 +1885,7 @@
     <Content Include="Scripts\moment-timezone.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\moment-range.min.js" />
+    <Content Include="Scripts\pikaday.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\polyfills.js" />

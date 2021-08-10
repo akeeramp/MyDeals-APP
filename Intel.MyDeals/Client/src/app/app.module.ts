@@ -34,6 +34,13 @@ import { CacheComponent } from './admin/cache/cache.component';
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+//spreadsheet component
+import { HotTableModule } from '@handsontable/angular';
+import {SpreadComponent} from './shared/kendo/spreadsheet.component';
+//Added angular material for popup toggle
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input'
 
 @NgModule({
     imports: [
@@ -48,10 +55,14 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         ChartsModule,
         TooltipModule,
         MatButtonToggleModule,
+        MatDialogModule,
         DialogModule,
         DropDownListModule,
         DropDownsModule,
         GridModule,
+        HotTableModule,
+        MatFormFieldModule,
+        MatInputModule
         
      ],
      providers: [
@@ -75,7 +86,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         EmployeeComponent,
         CacheComponent,
         MultiCheckFilterComponent,
-        PingComponent
+        SpreadComponent,
+        PingComponent,
     ],
     entryComponents: [
         LoaderComponent,
@@ -83,7 +95,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         KendoComponent,
         EmployeeComponent,
         CacheComponent,
-        PingComponent
+        CacheComponent,
+        SpreadComponent,
+        PingComponent,
     ]
 })
 

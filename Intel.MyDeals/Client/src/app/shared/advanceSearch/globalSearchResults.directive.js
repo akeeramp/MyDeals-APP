@@ -223,7 +223,10 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
                     $scope.$root.globalSearchResultsData.searchIn = ["CNTRCT", "PRC_ST", "PRC_TBL", "WIP_DEAL"];
                     $scope.$root.globalSearchResultsData.colCount = 3;
                     $scope.$root.$broadcast('refreshSearchByType');
-                    kenWindow.data("kendoWindow").wrapper.width("900px");
+                    if(kenWindow.data("kendoWindow").wrapper){
+                        kenWindow.data("kendoWindow").wrapper.width("900px");
+                    }
+                    //kenWindow.data("kendoWindow").wrapper.width("900px");
                 } else {
                     $scope.$root.globalSearchResultsData.searchIn = [$scope.$root.globalSearchResultsData.opTypeModel];
                     $scope.$root.globalSearchResultsData.colCount = 12;
@@ -276,7 +279,9 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
             }
 
             if ($scope.$root.globalSearchResultsData.searchText === "") {
-                kenWindow.data("kendoWindow").close();
+                if(kenWindow.data("kendoWindow")){
+                    kenWindow.data("kendoWindow").close()
+                };
             }
         }],
         link: function (scope, element, attr) {

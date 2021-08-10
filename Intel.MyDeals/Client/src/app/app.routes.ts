@@ -32,6 +32,15 @@ angular
                     }
                 }
             })
+            .state("myspread", {
+                url: "/myspread",
+                abstract: false,
+                views: {
+                    reportingView: {
+                        template: '<my-spread></my-spread>'
+                    }
+                }
+            })
             // Admin route of Admin/Employee
             .state("adminemployeedashboard", {
                 url: "/adminemployeedashboard",
