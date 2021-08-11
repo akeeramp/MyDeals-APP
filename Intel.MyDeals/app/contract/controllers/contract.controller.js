@@ -4179,7 +4179,7 @@
                 for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
                     if (t === 1 - isKit) { lData = data[d]; }
                     for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
-                        lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
+                            lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
 
                         if (t === numTiers - isKit) { // last tier
                             delete lData[dimAtrbs[a]];
@@ -5043,6 +5043,7 @@
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["FLEX_ROW_TYPE"]) newValue["FLEX_ROW_TYPE"].value = "Accrual";
+                    if (!!newValue["NUM_OF_DENSITY"]) newValue["NUM_OF_DENSITY"].value = "1";
                     if (!$scope.isTenderContract && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') {
                         //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
@@ -5088,6 +5089,7 @@
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
                     if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = $scope.currentPricingTable["NUM_OF_TIERS"] != "" ? $scope.currentPricingTable["NUM_OF_TIERS"] : "1";
+                    if (!!newValue["NUM_OF_DENSITY"]) newValue["NUM_OF_DENSITY"].value = $scope.currentPricingTable["NUM_OF_DENSITY"] != "" ? $scope.currentPricingTable["NUM_OF_DENSITY"] : "1";
                     if (!!newValue["SERVER_DEAL_TYPE"]) newValue["SERVER_DEAL_TYPE"].value = $scope.currentPricingTable["SERVER_DEAL_TYPE"];
                     if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = $scope.currentPricingTable["PERIOD_PROFILE"] != "" ? $scope.currentPricingTable["PERIOD_PROFILE"] : $scope.contractData.Customer.DFLT_PERD_PRFL;
                     if (!!newValue["AR_SETTLEMENT_LVL"]) {

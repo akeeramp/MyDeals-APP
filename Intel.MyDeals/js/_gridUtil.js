@@ -542,6 +542,76 @@ gridUtils.exportControlScheduleWrapper = function (passedData) {
     return tmplt;
 }
 
+gridUtils.uiControlScheduleWrapperDensity = function (passedData) {
+    var tmplt = '<table>';
+    var fields = [
+        { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
+        { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
+        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+    ];
+
+    tmplt += '<tr style="height: 15px;">';
+    for (var t = 0; t < fields.length; t++) {
+        var mjr = fields[t].title === "Tier" ? "" : "border-bottom: 2px solid #0071C5;";
+        tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center; ' + mjr + '">' + fields[t].title + '</th>';
+    }
+    tmplt += '</tr>';
+
+    var numTiers = 0;
+    var tiers = passedData.TIER_NBR;
+    for (var key in tiers) {
+        if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+            numTiers++;
+            var dim = "10___" + numTiers;
+            tmplt += '<tr style="height: 25px;">';
+            for (var f = 0; f < fields.length; f++) {
+                tmplt += '<td style="text-align: ' + fields[f].align + ';"';
+                tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
+                tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
+                tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
+                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
+                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                tmplt += '</td>';
+            }
+            tmplt += '</tr>';
+        }
+    }
+
+    tmplt += '</table>';
+
+    return tmplt;
+}
+gridUtils.exportControlScheduleWrapperDensity = function (passedData) {
+    var tmplt = 'Tier, Start PB, End PB, Rate\n';
+    var fields = [
+        { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
+        { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
+        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+    ];
+
+    var numTiers = 0;
+    var tiers = passedData.TIER_NBR;
+    for (var key in tiers) {
+        if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+            numTiers++;
+            var dim = "10___" + numTiers;
+            var vals = [];
+            for (var f = 0; f < fields.length; f++) {
+                var val = passedData[fields[f].field][dim];
+                if (val !== "Unlimited") {
+                    val = gridUtils.formatValue(val, fields[f].format);
+                }
+                vals.push(val);
+            }
+            tmplt += vals.join(", ").replace(/null/g, '').replace(/undefined/g, '') + '\n';
+        }
+    }
+
+    return tmplt;
+}
+
 gridUtils.uiControlScheduleWrapperRevTier = function (passedData) {
     var tmplt = '<table>';
     var fields = [
