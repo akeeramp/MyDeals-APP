@@ -1620,7 +1620,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
 
-                if (field === "STRT_VOL" && dataItem[field]["10___" + row] === null) {
+                if ((field === "STRT_VOL" || field === "RATE")  && dataItem[field]["10___" + row] === null) {
                     dataItem[field]["10___" + row] = "0";
                 }
 
