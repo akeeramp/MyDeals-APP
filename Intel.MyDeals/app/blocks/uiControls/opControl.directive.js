@@ -84,7 +84,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 if (isVistex && name == 'Billings' && dealType == 'KIT') {
                     return true;
                 }
-                else if ((dealType == 'FLEX' || dealType == 'REV_TIER') && name == 'Consumption') { // Disable Autofill field
+                else if ((dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY') && name == 'Consumption') { // Disable Autofill field
                     return true;
                 }
                 else if ((dealType === 'VOL_TIER' || dealType === 'PROGRAM') && (rebateType === 'TENDER' || rebateType === 'TENDER ACCRUAL' || dealType === 'DENSITY')) {

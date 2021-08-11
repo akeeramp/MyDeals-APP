@@ -1763,6 +1763,7 @@
             if (!!nptDefaults["PROGRAM_PAYMENT"]) nptDefaults["PROGRAM_PAYMENT"].value = pt["PROGRAM_PAYMENT"];
             if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
             if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
+            if (!!nptDefaults["NUM_OF_DENSITY"]) nptDefaults["NUM_OF_DENSITY"].value = pt["NUM_OF_DENSITY"];
             if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
             if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
             if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
@@ -5037,8 +5038,8 @@
                 if ($scope.currentPricingTable == null) {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = [marketSegment];
-                    if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];  
-                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
+                    if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
+                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType =='DENSITY' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["FLEX_ROW_TYPE"]) newValue["FLEX_ROW_TYPE"].value = "Accrual";
@@ -5046,7 +5047,8 @@
                         //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
                         if (!!newValue["SERVER_DEAL_TYPE"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["SERVER_DEAL_TYPE"].value = "";
                     }
-                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1"; // This is all cases, above kit is done here anyhow.
+                    if (!!newValue["NUM_OF_TIERS"]) newValue["NUM_OF_TIERS"].value = "1";
+                    if (!!newValue["NUM_OF_DENSITY"]) newValue["NUM_OF_DENSITY"].value = "1";// This is all cases, above kit is done here anyhow.
                     if ($scope.isTenderContract) { // Tenders come in without a customer defined immediately
                         // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
                         if (!!newValue["PERIOD_PROFILE"]) newValue["PERIOD_PROFILE"].value = "Yearly";
