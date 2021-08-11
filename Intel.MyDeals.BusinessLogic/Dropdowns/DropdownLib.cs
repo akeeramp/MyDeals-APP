@@ -153,6 +153,40 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Returns a country dropdown hierarchy object using the provided parent name.
+        /// <returns>country dropdown hierarchy</returns>
+        public DropdownHierarchy[] GetConsumptionCountryHierarchy(string prnt)
+        {
+            var ret = _dropdownDataLib.GetConsumptionCountryHierarchy();
+            List<DropdownHierarchy> geo_list = new List<DropdownHierarchy>();
+            var parentDropdown = ret.Select(o => o.GEO_NM).Distinct();
+            var childDropdown = ret.OrderBy(x => x.CNSMPTN_CTRY_NM).ToList();
+
+            foreach (var bd in parentDropdown)
+            {
+                var bd_geo = new BasicDropdown();
+                bd_geo.DROP_DOWN = bd;
+                bd_geo.ATRB_LKUP_DESC = "GEO";
+                DropdownHierarchy newDH = new DropdownHierarchy(bd_geo);
+                newDH.expanded = true;
+                List<DropdownHierarchy> country = new List<DropdownHierarchy>();
+                var countryList = ret.Where(x => x.GEO_NM == bd && x.CNSMPTN_CTRY_NM != null && x.CNSMPTN_CTRY_NM != "");
+                foreach (var i in countryList)
+                {
+                    BasicDropdown bd_country = new BasicDropdown();
+                    bd_country.DROP_DOWN = i.CNSMPTN_CTRY_NM;
+                    bd_country.ATRB_LKUP_DESC = "COUNTRY";
+                    DropdownHierarchy newDH_country = new DropdownHierarchy(bd_country);
+                    country.Add(newDH_country);
+                }
+                newDH.items = country.ToArray();
+                geo_list.Add(newDH);
+            }
+                
+            return geo_list.ToArray();
+        }
+
+        /// <summary>
         /// Returns a dropdown hierarchy object using the provided parent name.
         /// Using the simple dropdown set, it will find the first dropdown with subAtrbCd matching the prnt name.
         /// </summary>

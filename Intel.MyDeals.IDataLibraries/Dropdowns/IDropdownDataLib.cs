@@ -8,6 +8,8 @@ namespace Intel.MyDeals.IDataLibrary
 		List<BasicDropdown> GetBasicDropdowns();
         List<DropDowns> GetOpDataElements();
 
+        List<ConsumptionCountry> GetConsumptionCountryHierarchy();
+
         List<Dropdown> GetDropdowns();
         
         BasicDropdown ManageBasicDropdowns(BasicDropdown dropdown, CrudModes type);
