@@ -404,6 +404,23 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
+                Id = 3464,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country </span>",
+                Width = 180,
+                Label = "Consumption Country",
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                IsHidden = true
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3719,
                 AtrbCd = AttributeCodes.AR_SETTLEMENT_LVL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -1410,6 +1427,23 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true
             });
 
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3464,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country </span>",
+                Width = 180,
+                Label = "Consumption Country",
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                IsHidden = true,
+                IsReadOnly = true
+            });
             #endregion PRICING TABLE ROW
 
 
@@ -2520,6 +2554,24 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
                 IsSortable = true
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3464,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country </span>",
+                Width = 180,
+                Label = "Consumption Country",
+                DataType = "string",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                IsFilterable = true,
+                IsSortable = true,
             });
 
             items.Add(new UiTemplateContainerItem

@@ -31,6 +31,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt);
 
+        DropdownHierarchy[] GetConsumptionCountryHierarchy(string prnt);
+
         List<Dropdown> GetDealTypesDropdown();
 
         List<Dropdown> GetRoleTypesDropdown();

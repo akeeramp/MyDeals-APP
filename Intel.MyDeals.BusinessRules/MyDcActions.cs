@@ -583,6 +583,7 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.SYS_PRICE_POINT,
                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                AttributeCodes.CONSUMPTION_COUNTRY,
                 AttributeCodes.CONSUMPTION_SYS_CONFIG
             };
 
@@ -625,6 +626,7 @@ namespace Intel.MyDeals.BusinessRules
 
             IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
             IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
+            IOpDataElement deConsCountry = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY);
             IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
             var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";

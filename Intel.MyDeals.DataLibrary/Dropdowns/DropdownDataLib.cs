@@ -38,6 +38,36 @@ namespace Intel.MyDeals.DataLibrary
                     }).OrderBy(x => x.Text).ToList();
         }
 
+        public List<ConsumptionCountry> GetConsumptionCountryHierarchy()
+        {
+            var ret = new List<ConsumptionCountry>();
+            var cmd = new Procs.dbo.PR_MYDL_CNSMPTN_CTRY { };
+
+            try {
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            { 
+                    int IDX_CNSMPTN_CTRY_NM = DB.GetReaderOrdinal(rdr, "CNSMPTN_CTRY_NM");
+                    int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new ConsumptionCountry
+                        {
+                            CNSMPTN_CTRY_NM = (IDX_CNSMPTN_CTRY_NM < 0 || rdr.IsDBNull(IDX_CNSMPTN_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNSMPTN_CTRY_NM),
+                            GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
         public List<DictDropDown> GetDictDropDown(string atrbCd)
         {
             List<DictDropDown> lstRtn = new List<DictDropDown>();
