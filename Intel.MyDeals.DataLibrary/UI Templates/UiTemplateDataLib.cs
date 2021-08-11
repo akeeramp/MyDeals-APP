@@ -1125,7 +1125,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -1141,7 +1141,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
                 Width = 120,
                 IsDefaultable = true,
                 Label = "Payout Based On *",
@@ -2403,7 +2403,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.REBATE_BILLING_START,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2417,7 +2417,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.REBATE_BILLING_END,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2431,7 +2431,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2447,7 +2447,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 150,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2460,7 +2460,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Label = "Customer Platform",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_PLATFORM')#",
@@ -2478,7 +2478,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Label = "Customer Segment",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_SEGMENT')#",
@@ -2496,7 +2496,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 HeaderTemplate = "<span title='Consumption Customer Reported Geo'>Customer Reported Region</span>",
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_CUST_RPT_GEO')#",
@@ -2513,8 +2513,8 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3461,
                 AtrbCd = AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                // Not REV_TIER deals
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 HeaderTemplate = "Billing Rolling Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
                 Width = 170, // 110
                 Format = "{0:d}",
@@ -2531,7 +2531,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.SYS_PRICE_POINT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SYS_PRICE_POINT')#",
                 UiType = "SPP",
@@ -2548,7 +2548,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONSUMPTION_SYS_CONFIG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 160,
                 IsFilterable = true,
                 IsSortable = true,
@@ -2729,7 +2729,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.QLTR_PROJECT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX deal
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.REV_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Project Name </span>",
                 Width = 180,
                 Label = "Project Name",
