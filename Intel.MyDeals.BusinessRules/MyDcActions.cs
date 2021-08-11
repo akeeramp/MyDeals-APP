@@ -2770,21 +2770,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateFlexIsBillings(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement dePayout = r.Dc.GetDataElement(AttributeCodes.PAYOUT_BASED_ON);
-
-            if (dePayout == null) return;
-
-            if (dePayout.AtrbValue.ToString() == "Consumption")
-            {
-                dePayout.ValidationMessage = "FLEX deals only allow Billings based Payouts.";
-            }
-        }
-
         public static void ValidateTierRate(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

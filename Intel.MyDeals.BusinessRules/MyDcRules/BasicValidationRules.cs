@@ -307,15 +307,7 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule
-                {
-                    Title="Validate that FLEX deal is Billings Based",
-                    ActionRule = MyDcActions.ValidateFlexIsBillings,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.FLEX.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
-                },
-
+               
                 new MyOpRule
                 {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.

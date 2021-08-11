@@ -1518,7 +1518,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info","Consumption"]
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
@@ -1528,6 +1528,39 @@
                     },
                     "RESET_VOLS_ON_PERIOD": {
                         "Groups": ["Deal Info"]
+                    },
+                    "REBATE_BILLING_START": {
+                        "Groups": ["Consumption"]
+                    },
+                    "REBATE_BILLING_END": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_REASON": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_REASON_CMNT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_PLATFORM": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_SEGMENT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_CUST_RPT_GEO": {
+                        "Groups": ["Consumption"]
+                    },
+                    "SYS_PRICE_POINT": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_SYS_CONFIG": {
+                        "Groups": ["Consumption"]
+                    },
+                    "QLTR_PROJECT": {
+                        "Groups": ["Consumption"]
                     },
                     "AR_SETTLEMENT_LVL": {
                         "Groups": ["Deal Info", "Payment"]
