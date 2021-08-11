@@ -1898,13 +1898,27 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 21,
                 AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
                 Editor = "scheduleEditor",
                 DataType = "object",
                 Label = "Rate Breakout",
                 Width = 300,
                 ExcelTemplate = "#=gridUtils.exportControlScheduleWrapper(data)#"
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP VT types
+            {
+                Id = 21,
+                AtrbCd = AttributeCodes.TIER_NBR, //AtrbCd = AttributeCodes.TIER_NBR - Moved to a non-always-readonly field to allow for security to drive behaviors
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                Template = "#=gridUtils.uiControlScheduleWrapperDensity(data)#",
+                Editor = "scheduleEditorDensity",
+                DataType = "object",
+                Label = "Rate Breakout",
+                Width = 300,
+                ExcelTemplate = "#=gridUtils.exportControlScheduleWrapperDensity(data)#"
             });
 
             items.Add(new UiTemplateContainerItem  // WIP VT types
