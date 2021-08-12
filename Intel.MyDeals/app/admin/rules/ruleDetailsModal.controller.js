@@ -238,7 +238,7 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
     $scope.attributeSettings = [
         {
             field: "CRE_EMP_NAME",
-            title: "Created by name",
+            title: "Created/Modified By Name",
             type: "list",
             width: 150.0,
             lookupText: "NAME",
