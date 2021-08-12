@@ -1425,9 +1425,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         || options.field.toUpperCase() === "CONSUMPTION_SYS_CONFIG"
                         || options.field.toUpperCase() === "DEAL_SOLD_TO_ID") {
                         var cur_cust_mbr_sid = options.model["CUST_MBR_SID"];
-                        col.enableSelectAll = true;
-                        col.enableDeselectAll = true;
-                       
+                        if (options.field.toUpperCase() !== "CONSUMPTION_COUNTRY") {
+                            col.enableSelectAll = true;
+                            col.enableDeselectAll = true;
+                        }
                         if (options.field.toUpperCase() === "DEAL_SOLD_TO_ID")
                         {
                             cur_cust_mbr_sid = "/" + options.model["CUST_MBR_SID"];                           

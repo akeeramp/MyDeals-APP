@@ -271,11 +271,11 @@
 			return newValue;
 		}
 
-		function setConsumptionCtrySelect(treeViewDivId, newValue, oldValue) {
-			if (oldValue.toString() != newValue.toString() && newValue.toString() != '' && newValue != null && newValue != undefined) {
+		function setConsumptionCtrySelect(treeViewDivId, newValue) {
+			if (newValue != '' && newValue != null && newValue != undefined) {
 				var treeView = $("#" + treeViewDivId).data("kendoTreeView");
 				var list = treeView.dataSource._data.filter(x => x.ATRB_LKUP_DESC == "GEO");
-				var newValArray = newValue.toString().split(',');
+				var newValArray = newValue.split(',');
 				angular.forEach(newValArray, function (item) {
 					if (list.filter(x => x.DROP_DOWN == item).length > 0) {
 						newValArray = newValArray.filter(x => x != item);
@@ -284,7 +284,7 @@
 				newValue = newValArray.join();
 			}
 			return newValue;
-        }
+		}
 
 	}
 
