@@ -64,7 +64,38 @@
             $("#dealProducts").removeClass("active");
             $scope.$apply();
         }, 50);
+        //DE121587
+        $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
+            $timeout(function () {
+                var newState = msg != undefined && msg !== "";
+                if (isShowFunFact == null) { isShowFunFact = false; }
 
+                // if no change in state, simple update the text
+                if ($scope.isBusy === newState) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                    return;
+                }
+
+                $scope.isBusy = newState;
+                if ($scope.isBusy) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
+                    $scope.isBusyShowFunFact = isShowFunFact;
+                } else {
+                    $timeout(function () {
+                        $scope.isBusyMsgTitle = msg;
+                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
+                        $scope.isBusyShowFunFact = isShowFunFact;
+                    }, 500);
+                }
+            });
+        }
+        //DE121587 END
         $scope.selTab = function (tabName) {
             $scope.pctFilter = tabName === "All" ? "" : tabName;
 
