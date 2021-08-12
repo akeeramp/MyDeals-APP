@@ -3180,6 +3180,19 @@
                                 }
                             }
 
+                            if (gData[i].CONSUMPTION_COUNTRY != null && gData[i].CONSUMPTION_COUNTRY != undefined && gData[i].CONSUMPTION_COUNTRY != "") {
+                                if (gData[i].CONSUMPTION_CUST_RPT_GEO != null && gData[i].CONSUMPTION_CUST_RPT_GEO != undefined && gData[i].CONSUMPTION_CUST_RPT_GEO != "") {
+                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                    gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    gData[i]._behaviors.isError['CONSUMPTION_COUNTRY'] = true;
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Please enter value in either Customer Reported Geo or Consumption Country ,but not both");
+                                }
+                            }
+
                             // check dates against contract - Tender contracts don't observe start/end date within contract.
                             if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};

@@ -4,9 +4,9 @@
         .module('app.admin')
         .factory('MrktSegMultiSelectService', MrktSegMultiSelectService);
 
-	MrktSegMultiSelectService.$inject = ['logger', 'dataService'];
+	MrktSegMultiSelectService.$inject = ['logger', 'dataService','$filter'];
 
-	function MrktSegMultiSelectService(logger, dataService) {
+	function MrktSegMultiSelectService(logger, dataService,$filter) {
 		var vm = []; // fake scope because we can't actually inject a scope in a service
 
 		//setting a few constants for the strings that occur a lot
@@ -29,6 +29,7 @@
 			init: init
 			, setMkrtSegMultiSelect: setMkrtSegMultiSelect
 			, setGeoMultiSelect: setGeoMultiSelect
+			, setConsumptionCtrySelect: setConsumptionCtrySelect
 		}
 
 		function init() {
@@ -269,6 +270,21 @@
 			//}
 			return newValue;
 		}
+
+		function setConsumptionCtrySelect(treeViewDivId, newValue, oldValue) {
+			if (oldValue.toString() != newValue.toString() && newValue.toString() != '' && newValue != null && newValue != undefined) {
+				var treeView = $("#" + treeViewDivId).data("kendoTreeView");
+				var list = treeView.dataSource._data.filter(x => x.ATRB_LKUP_DESC == "GEO");
+				var newValArray = newValue.toString().split(',');
+				angular.forEach(newValArray, function (item) {
+					if (list.filter(x => x.DROP_DOWN == item).length > 0) {
+						newValArray = newValArray.filter(x => x != item);
+					}
+				});
+				newValue = newValArray.join();
+			}
+			return newValue;
+        }
 
 	}
 

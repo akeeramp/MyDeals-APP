@@ -81,10 +81,16 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
 
     $ctrl.SelecAllCustomerReportedGeos = function () {
         $('#MultiSelectSelections input[type="checkbox"]:not(:checked)').click();
+        if ($ctrl.colName == "CONSUMPTION_COUNTRY") {
+            $('#MultiSelectSelections').find('input:checkbox:not(:checked)').prop('checked', true)
+        }
     }
 
     $ctrl.DeSelecAllCustomerReportedGeos = function () {
         $('#MultiSelectSelections input[type="checkbox"]:checked').click();
+        if ($ctrl.colName == "CONSUMPTION_COUNTRY") {
+            $('#MultiSelectSelections').find('input:checkbox:not(:checked)').prop('checked', false)
+        }
     }
 
     $uibModalInstance.rendered.then(function ()
@@ -131,6 +137,9 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
                     $ctrl.popupResult.MultiSelectSelections = mrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
                 } else if (($ctrl.isGeo) && (!$ctrl.isGeoBlend)) {
                     $ctrl.popupResult.MultiSelectSelections = mrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);
+                }
+                else if ($ctrl.colName == "CONSUMPTION_COUNTRY") {
+                    $ctrl.popupResult.MultiSelectSelections = mrktSegMultiSelectService.setConsumptionCtrySelect("MultiSelectSelections", newValue, oldValue);
                 }
             }
 
