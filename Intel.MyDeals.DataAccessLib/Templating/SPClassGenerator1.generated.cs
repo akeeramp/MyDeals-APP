@@ -2580,6 +2580,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_MYDL_CNSMPTN_JSON]";
 			}
 
+
 			///<summary>
 			/// DataType: bit
 			/// Mode: IN
@@ -2591,11 +2592,22 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 
 			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_cnsmptn_sid
+			{
+				set { SetParmeter("in_cnsmptn_sid", value); }
+				get { return (Int32)GetParameter("in_cnsmptn_sid"); }
+			}
+
+			///<summary>
 			/// DataType: varchar(100)
 			/// Mode: IN
 			/// Max Length: 100
 			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
 			public String in_obj_set_type_cd {
 				set { SetParmeter("in_obj_set_type_cd", value); }
 				get { return (String)GetParameter("in_obj_set_type_cd"); }
