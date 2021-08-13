@@ -353,6 +353,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.AR_SETTLEMENT_LVL,
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.TERMS
@@ -760,6 +761,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.SYS_PRICE_POINT,

@@ -24,10 +24,11 @@
         vm.selectedInheritanceGroup = "";
         vm.selectedInheritanceCust = "";
         vm.COMP_ATRB_SIDS = [];
-        //Added CONSUMPTION_CUST_RPT_GEO, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT
+        //Added CONSUMPTION_CUST_RPT_GEO, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT, CONSUMPTION_COUNTRY
         vm.COMP_ATRB_SIDS.push(3456)
         vm.COMP_ATRB_SIDS.push(3457)
         vm.COMP_ATRB_SIDS.push(3458)
+        vm.COMP_ATRB_SIDS.push(3464)
         vm.selectedATRB_SID = 0;
         vm.selectedOBJ_SET_TYPE_SID = 0;
         vm.selectedCUST_MBR_SID = 1;

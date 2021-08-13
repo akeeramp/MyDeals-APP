@@ -3180,6 +3180,19 @@
                                 }
                             }
 
+                            if (gData[i].CONSUMPTION_COUNTRY != null && gData[i].CONSUMPTION_COUNTRY != undefined && gData[i].CONSUMPTION_COUNTRY != "") {
+                                if (gData[i].CONSUMPTION_CUST_RPT_GEO != null && gData[i].CONSUMPTION_CUST_RPT_GEO != undefined && gData[i].CONSUMPTION_CUST_RPT_GEO != "") {
+                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                    gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    gData[i]._behaviors.isError['CONSUMPTION_COUNTRY'] = true;
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Please enter value in either Customer Reported Geo or Consumption Country ,but not both");
+                                }
+                            }
+
                             // check dates against contract - Tender contracts don't observe start/end date within contract.
                             if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
                                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
@@ -5665,7 +5678,7 @@
                         "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
                         "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
                         "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "AR_SETTLEMENT_LVL", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON",
-                        "CONSUMPTION_REASON_CMNT", "CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
+                        "CONSUMPTION_REASON_CMNT", "CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY", "BACK_DATE_RSN", "REBATE_DEAL_ID", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
                     ];
                     var usedCols = [];
                     var excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions", "CNTRCT_OBJ_SID"];

@@ -680,7 +680,8 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> { 
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM, 
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT, 
-                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO, 
+                                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.CONSUMPTION_REASON,
                                 AttributeCodes.CONSUMPTION_REASON_CMNT
@@ -1026,6 +1027,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                                AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.CONSUMPTION_REASON,
                                 AttributeCodes.CONSUMPTION_REASON_CMNT,

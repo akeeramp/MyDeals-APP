@@ -197,6 +197,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetConsumptionCountryHierarchy/{prnt}")]
+        public DropdownHierarchy[] GetConsumptionCountryHierarchy(string prnt)
+        {
+            return SafeExecutor(() => _dropdownLib.GetConsumptionCountryHierarchy(prnt)
+                , $"Unable to get Dropdown Hierarchy for {prnt}"
+            );
+        }
+
+        [Authorize]
         [Route("GetGeoDropdownHierarchy/{prnt}")]
         public DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt)
         {
