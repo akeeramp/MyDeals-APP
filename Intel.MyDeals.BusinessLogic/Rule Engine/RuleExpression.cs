@@ -100,6 +100,10 @@ namespace Intel.MyDeals.BusinessLogic.Rule_Engine
                     x.@operator = x.@operator == "!=" ? "NOT IN" : "IN";
                     x.value = string.Concat("(", string.Join(",", x.values.Select(y => string.Concat("'", GetFromDictionary(y, x.field, dicCustomerName, dicEmployeeName).Replace("'", "''"), "'"))), ")");
                     lstSqlCriteria.Add(string.Format("{0} {1} {2}", x.field, x.@operator, x.value.Trim()));
+                    if (x.field == "CRE_EMP_NAME")
+                    {
+                        lstSqlCriteria.Add(string.Format("{0} {1} {2}", "CHG_EMP_NAME", x.@operator, x.value.Trim()));
+                    }
                     lstDescription.Add(string.Format("<span class=\"rule_attr_desc\">{0}</span><span class=\"rule_operator_desc\"> {1} </span><span class=\"rule_value_desc\">{2}</span>", dicAttributes.ContainsKey(x.field) ? dicAttributes[x.field] : "NA", x.@operator, x.value.Trim()));
                 });
 
