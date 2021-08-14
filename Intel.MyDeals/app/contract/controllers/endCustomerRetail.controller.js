@@ -28,11 +28,10 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             "IS_EXCLUDE": 0
         }];
     if (cellCurrValues.END_CUST_OBJ !== "") {
-
-        cellCurrValues.END_CUST_OBJ = JSON.parse(cellCurrValues.END_CUST_OBJ)
-
-        $ctrl.END_CUST_OBJ = (cellCurrValues.END_CUST_OBJ.length == 0) ? $ctrl.END_CUST_OBJ : cellCurrValues.END_CUST_OBJ
-
+        if (cellCurrValues.END_CUST_OBJ != undefined && cellCurrValues.END_CUST_OBJ != null) {
+            cellCurrValues.END_CUST_OBJ = JSON.parse(cellCurrValues.END_CUST_OBJ)
+            $ctrl.END_CUST_OBJ = (cellCurrValues.END_CUST_OBJ.length == 0) ? $ctrl.END_CUST_OBJ : cellCurrValues.END_CUST_OBJ
+        }
     }
 
     $ctrl.colName = colName;
