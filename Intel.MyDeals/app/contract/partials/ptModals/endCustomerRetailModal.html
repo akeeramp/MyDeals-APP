@@ -70,8 +70,7 @@
                         <div class="col-md-2" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
                             <label class="control-label" for="inputControl" ng-show="$first">Exclude</label>
                             <div ng-if="$index>0">
-                                <input type="checkbox" class="k-input fl opUiElement"
-                                       ng-model="e.IS_EXCLUDE" ng-disabled="true" ng-checked="true" />
+                                <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
                             </div>
                         </div>
                         <br />
@@ -148,11 +147,6 @@
             cursor: pointer;
             color: #00AEEF;
             margin-left: 8px;
-        }
-
-        input[type="checkbox"]:disabled {
-            height: 25px;
-            margin-top: 5px;
         }
     </style>
 
