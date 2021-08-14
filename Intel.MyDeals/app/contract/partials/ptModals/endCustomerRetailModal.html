@@ -1,77 +1,159 @@
 ﻿<script type="text/ng-template" id="endCustomerRetailModal">
     <div>
         <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Select {{$ctrl.endCustomerRetailPopUpModal.label}}</h3>
-            </div>
+            <h3 class="modal-title" id="modal-title">Select EndCustomer/Retail and Country</h3>
+        </div>
 
         <div class="modal-body" id="modal-body">
             <p>
                 <div ng-if="$ctrl.IsError">
                     <span ng-if="$ctrl.IsError" style="color:red;">
-                        {{$ctrl.msg}}
+                        <p>Please Fix the below Errors</p>
                     </span>
                 </div>
             </p>
-                <div op-control-flat
-                     ng-model="$ctrl.popupResult"
-                     id = "ENDCUSTCOMBO"
-                     ng-keypress="$ctrl.EnterPressed($event)"
-                     op-cd="'ComboBoxSelect'"
-                     op-type="'COMBOBOX'"
-                     op-label="''"
-                     op-lookup-url="$ctrl.endCustomerRetailPopUpModal.opLookupUrl"
-                     op-lookup-text="$ctrl.endCustomerRetailPopUpModal.opLookupText"
-                     op-lookup-value="$ctrl.endCustomerRetailPopUpModal.opLookupValue"
-                     op-placeholder="'Select Customer'"
-                     op-is-form="true"
-                     op-expanded="true"
-                     op-extra="true"
-                     op-ui-mode="'VERTICAL'"
-                     op-filterable="$ctrl.isFilterEnabled">
-                </div>
-        </div>
-    <br />
-            <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Select End Customer Country</h3>
-            </div>
-            <div class="modal-body" id="modal-body">
-                    <div op-control-flat
-                         ng-model="$ctrl.popupResult"
-                         ng-keypress="$ctrl.EnterPressed($event)"
-                         op-cd="'DropdownSelections'"
-                         op-type="'COMBOBOX'"
-                         op-label="''"
-                         op-lookup-url="'/api/PrimeCustomers/GetCountries'"
-                         op-lookup-text="'CTRY_NM'"
-                         op-lookup-value="'CTRY_NM'"
-                         op-placeholder="$ctrl.placeholderText"
-                         op-is-form="true"
-                         op-expanded="true"
-                         op-extra="true"
-                         op-ui-mode="'VERTICAL'"
-                         op-filterable="$ctrl.isFilterEnabled">
+            <div class="filterRow">
+                <div ng-repeat="e in $ctrl.END_CUST_OBJ">
+                    <div class="col-md-12" style="padding-bottom: 1em;">
+                        <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
+                        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+
+                        <div class="col-md-4">
+                            <label class="control-label" for="inputControl" ng-show="$first">EndCustomer</label>
+                            <span class="fl" ng-if="$index == 0">
+                                <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
+                                        k-placeholder="'Select End Customer'"
+                                        k-data-text-field="'PRIM_CUST_NM'"
+                                        k-data-value-field="'PRIM_CUST_NM'"
+                                        k-ng-model="e.END_CUSTOMER_RETAIL"
+                                        k-change="$ctrl.changeField"
+                                        k-value-primitive="true"
+                                        k-filter="'contains'"
+                                        k-auto-bind="true"
+                                        k-data-source="$ctrl.endCustOptions"
+                                        class="fl opUiElement"
+                                        style="width: 200px;">
+                                </select>
+                            </span>
+                            <span class="fl" ng-if="$index > 0">
+                                <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
+                                        k-placeholder="'Select End Customer'"
+                                        k-data-text-field="'PRIM_CUST_NM'"
+                                        k-data-value-field="'PRIM_CUST_NM'"
+                                        k-ng-model="e.END_CUSTOMER_RETAIL"
+                                        k-change="$ctrl.changeField"
+                                        k-value-primitive="true"
+                                        k-filter="'contains'"
+                                        k-auto-bind="true"
+                                        k-data-source="$ctrl.endCustOptionswithOutAny"
+                                        class="fl opUiElement"
+                                        style="width: 200px;">
+                                </select>
+                            </span>
+                        </div>&nbsp;
+                        <div class="col-md-4" style="column-gap:50px;">
+                            <label class="control-label" for="inputControl" ng-show="$first">Country</label>
+                            <select kendo-combo-box id="DropdownSelections_{{$index}}"
+                                    k-placeholder="'Select Country'"
+                                    k-data-text-field="'CTRY_NM'"
+                                    k-data-value-field="'CTRY_NM'"
+                                    k-ng-model="e.PRIMED_CUST_CNTRY"
+                                    k-change="$ctrl.changeCountryField"
+                                    k-value-primitive="true"
+                                    k-filter="'contains'"
+                                    k-auto-bind="true"
+                                    k-data-source="$ctrl.countries"
+                                    class="fl opUiElement"
+                                    style="width: 200px;">
+                            </select>
+                        </div>
+                        <div class="col-md-2" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                            <label class="control-label" for="inputControl" ng-show="$first">Exclude</label>
+                            <div ng-if="$index>0">
+                                <input type="checkbox" class="k-input fl opUiElement"
+                                       ng-model="e.IS_EXCLUDE" ng-disabled="true" ng-checked="true" />
+                            </div>
+                        </div>
+                        <br />
+
                     </div>
-    </div>
-    </br>
-    </br>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-7">
-                    <!--<button style="width:35%" class="btn btn-primary" ng-click="$ctrl.unPrime()">Un Prime</button>&nbsp;-->
-                    <button  class="btn btn-primary" id ="ClearEndCustomer" ng-disabled="$ctrl.endCustomerRetailPopUpModal.clearEndCustomerDisabled" ng-click="$ctrl.remove()">Clear End Customer</button>&nbsp;
+                    <button class="btn btn-primary" id="ClearEndCustomer" ng-disabled="$ctrl.endCustomerRetailPopUpModal.clearEndCustomerDisabled" ng-click="$ctrl.remove()">Clear End Customer</button>
+                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
                 </div>
                 <div class="fr">
-                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-                    <button style="width:60%" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Save And Close</button>
+
+                    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Validate</button>
+                    <button class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
                 </div>
             </div>
         </div>
-    <br />
+        <br />
     </div>
     <style type="text/css">
-    .modal-body .opUiElement{
-          width: 100%;
-    }
+        .modal-body .opUiElement {
+            width: 100%;
+        }
+
+        .modal-body {
+            max-height: 500px;
+            overflow: auto;
+        }
+
+        .modal-dialog {
+            width: 45% !important;
+        }
+
+        .filterRow {
+            margin-bottom: 7px;
+        }
+
+        .icnBtn {
+            border-radius: 4px;
+            width: 24px;
+            padding: 2px 5px;
+            margin: 2px 12px 2px 0;
+            cursor: pointer;
+        }
+
+            .icnBtn i {
+                color: #ffffff;
+            }
+
+        .icnSkyBtn {
+            background-color: #00AEEF;
+        }
+
+            .icnSkyBtn:hover {
+                background-color: #0071C5;
+            }
+
+        .icnGryBtn {
+            background-color: #bbbbbb;
+        }
+
+            .icnGryBtn:hover {
+                background-color: #cccccc;
+            }
+
+        .icnSky {
+            cursor: pointer;
+            color: #00AEEF;
+            margin-left: 8px;
+        }
+
+        input[type="checkbox"]:disabled {
+            height: 25px;
+            margin-top: 5px;
+        }
     </style>
 
 </script>

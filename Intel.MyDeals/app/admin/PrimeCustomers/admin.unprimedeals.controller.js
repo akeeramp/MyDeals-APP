@@ -84,6 +84,7 @@
                     },
                     cellCurrValues: function () {
                         return {
+                            END_CUST_OBJ: model.END_CUST_OBJ,
                             END_CUSTOMER_RETAIL: model.END_CUSTOMER_RETAIL,
                             IS_PRIME: model.IS_PRIMED_CUST,
                             PRIMED_CUST_CNTRY: model.END_CUSTOMER_COUNTRY,
@@ -108,7 +109,7 @@
             });
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array
-
+                    model.END_CUST_OBJ = endCustomerData.END_CUST_OBJ;
                     model.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
                     model.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
                     model.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;

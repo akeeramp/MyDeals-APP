@@ -999,10 +999,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             }
-            
+
             //To refresh the modified row data after redeal without refresh the screen manually
-            $scope.$on('updateDealAtrb', function (event, args) {                
-                for (var i = 0; i < args.WIP_DEAL.length; i++)
+            $scope.$on('updateDealAtrb', function (event, args) {
+                for (var i = 0; i < args.WIP_DEAL.length; i++) 
                 {
                     // DE117459 : added check to  reflect change in AVG_RPU without Refresh on FRCST_VOLUME change
                     var index = $scope.opData.findIndex(ele => ele.DC_ID == args.WIP_DEAL[i].DC_ID)
@@ -1374,26 +1374,26 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 });
                         } else {
                             $('<input name="' + options.field + '"/>')
-                            .appendTo(container)
-                            .kendoComboBox({
-                                autoBind: false,
-                                valuePrimitive: col.field !== "Customer",
-                                dataTextField: field.opLookupText,
-                                dataValueField: field.opLookupValue,
-                                dataSource: {
-                                    type: "json",
-                                    transport: {
-                                        read: field.opLookupUrl
+                                .appendTo(container)
+                                .kendoComboBox({
+                                    autoBind: false,
+                                    valuePrimitive: col.field !== "Customer",
+                                    dataTextField: field.opLookupText,
+                                    dataValueField: field.opLookupValue,
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: field.opLookupUrl
+                                        }
                                     }
-                                }
-                            });}
-                        
+                                });}
+
                     }
                 }
 
                 else if (col.uiType.toUpperCase() === "MULTISELECT") {
                     var lookupText = field.opLookupText;
-                    var id = "";                   
+                    var id = "";
                     //Note: this was second approach - this appending approach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
                     var multiCompiled = $compile('<div class="myDealsControl" style="margin: 0;" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + lookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
@@ -1431,7 +1431,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                         if (options.field.toUpperCase() === "DEAL_SOLD_TO_ID")
                         {
-                            cur_cust_mbr_sid = "/" + options.model["CUST_MBR_SID"];                           
+                            cur_cust_mbr_sid = "/" + options.model["CUST_MBR_SID"];
                             cur_cust_mbr_sid += "/" + options.model["GEO_COMBINED"].replace(/\//g, ',');
                             cur_cust_mbr_sid += "/" + options.model["CUST_ACCNT_DIV"].replace(/\//g, ',');
                             col.lookupText = "subAtrbCd";
@@ -1439,7 +1439,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
 
                         openConsumptionPlatformModal(container, col, options.field.toUpperCase(), cur_cust_mbr_sid);
-                        
+
                     }
 
                 } else {
@@ -1489,7 +1489,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                         } else {
                             //if end vol or if it is the very first tier, allow editable, f = field, d, = tier or row - Was just  (f === 2 || d === 1)
-                            if ((f === 1 && hasTracker === "0" && d === 1) || f === 2) { 
+                            if ((f === 1 && hasTracker === "0" && d === 1) || f === 2) {
                                 if (f === 2 && hasTracker === "1" && d !== numTiers) { // If End Vol and has tracker and is NOT last tier, read only
                                     tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                                 }
@@ -2187,14 +2187,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
-            $scope.$on('onHold', function (event, args) {               
+            $scope.$on('onHold', function (event, args) {
                 var data = $scope.contractDs.data();
                 for (var d = 0; d < data.length; d++) {
                     if (args.DC_ID == data[d].DC_ID) {
                         var beh = data[d]._behaviors;
                         data[d].PASSED_VALIDATION = "Complete";
-                       
-                            Object.keys(beh.isError).forEach(function (key, index) {
+
+                        Object.keys(beh.isError).forEach(function (key, index) {
                             if ($scope.opOptions.groupColumns[key] === undefined) return;
                             for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
                                 for (var g = 0; g < $scope.opOptions.groups.length; g++) {
@@ -2204,7 +2204,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                             }
                         },
-                                beh.isError);  
+                            beh.isError);
 
                         beh.isError = {};
                         beh.validMsg = {};
@@ -2212,7 +2212,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             });
 
-         
+
 
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
@@ -3195,10 +3195,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }, 2000);
 
                         },
-                        function (response) {
-                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
-                            $scope.$parent.$parent.setBusy("", "");
-                        });
+                            function (response) {
+                                //empty after moving sync and validate to happen before the getOverlappingDeals call is made
+                                $scope.$parent.$parent.setBusy("", "");
+                            });
                 } else {
                     if ($scope.$root.pc !== null) $scope.$root.pc.stop();
                     $timeout(function () {
@@ -3406,7 +3406,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             function openEndCustomerRetailModal(container, col) {
                 var containerDataItem = angular.element(container).scope().dataItem;
                 console.log(col);
-
                 var endCustomerRetailModal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'endCustomerRetailModal',
@@ -3427,11 +3426,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         },
                         cellCurrValues: function () {
                             return {
+                                END_CUST_OBJ: containerDataItem.END_CUST_OBJ,
                                 END_CUSTOMER_RETAIL: containerDataItem.END_CUSTOMER_RETAIL,
-                                IS_PRIME : containerDataItem.IS_PRIMED_CUST,
-                                PRIMED_CUST_CNTRY : containerDataItem.PRIMED_CUST_CNTRY,
-                                PRIMED_CUST_NM : containerDataItem.PRIMED_CUST_NM,
-                                PRIMED_CUST_ID : containerDataItem.PRIMED_CUST_ID
+                                IS_PRIME: containerDataItem.IS_PRIMED_CUST,
+                                PRIMED_CUST_CNTRY: containerDataItem.PRIMED_CUST_CNTRY,
+                                PRIMED_CUST_NM: containerDataItem.PRIMED_CUST_NM,
+                                PRIMED_CUST_ID: containerDataItem.PRIMED_CUST_ID
 
                             }
                         },
@@ -3446,26 +3446,40 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 });
-                //changing autocomplete to disabled for endcustomer country input to stop showing chrome autofill data
+
                 endCustomerRetailModal.rendered.then(function () {
-                    $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
                     $timeout(function () {
-                        if ($('#DropdownSelections').parent().find("input").val()) {
-                            if ($('#DropdownSelections').parent().find("input").val().toUpperCase() == "ANY") {
-                                $('#DropdownSelections').attr('disabled', true);
+                        if (containerDataItem.END_CUST_OBJ !== "") {
+                            var ecDataObj = JSON.parse(containerDataItem.END_CUST_OBJ)
+                            if (ecDataObj.length == undefined) {
+                                ecDataObj = [ecDataObj]
+                            }
+                            if (ecDataObj.length > 0) {
+                                var index = 0;
+                                angular.forEach(ecDataObj, (item) => {
+                                    //Embargo country validation alert.
+                                    if (item.END_CUSTOMER_RETAIL.toUpperCase() == "ANY") {
+                                        $('#DropdownSelections_0').attr('disabled', true);
+                                    }
+                                    $('#DropdownSelections_' + index++).parent().find("input").attr('autocomplete', 'disabled');
+                                });
                             }
                         }
+                        else {
+                            $('#DropdownSelections_0').parent().find("input").attr('autocomplete', 'disabled');
+                        }
+
                     }, 1500);
                 });
                 endCustomerRetailModal.result.then(
                     function (endCustomerData) { //returns as an array
-
+                        containerDataItem.END_CUST_OBJ = endCustomerData.END_CUST_OBJ;
                         containerDataItem.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
                         containerDataItem.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
                         containerDataItem.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
-                        containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
-                        containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
-
+                        containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIMED_CUST_NM;
+                        containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIMED_CUST_ID;
+                        $scope.saveFunctions(containerDataItem, "END_CUST_OBJ", containerDataItem.END_CUST_OBJ);
                         $scope.saveFunctions(containerDataItem, "END_CUSTOMER_RETAIL", containerDataItem.END_CUSTOMER_RETAIL);
                         $scope.saveFunctions(containerDataItem, "PRIMED_CUST_CNTRY", containerDataItem.PRIMED_CUST_CNTRY);
                         $scope.saveFunctions(containerDataItem, "PRIMED_CUST_NM", containerDataItem.PRIMED_CUST_NM);

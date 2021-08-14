@@ -20,7 +20,8 @@
             getPrimeCustomers: getPrimeCustomers,
             getUnmappedPrimeCustomerDeals: getUnmappedPrimeCustomerDeals,
             getEndCustomerData: getEndCustomerData,
-            UpdateUnPrimeDeals: UpdateUnPrimeDeals
+            UpdateUnPrimeDeals: UpdateUnPrimeDeals,
+            validateEndCustomer: validateEndCustomer
         }
 
         return service;
@@ -59,6 +60,10 @@
 
         function UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry) {
             return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustId + '/' + primeCustomerCountry, JSON.stringify(primeCustomerName));
+        }
+
+        function validateEndCustomer(endCustomerData) {
+            return dataService.post(apiBaseUrl + 'ValidateEndCustomer', JSON.stringify(endCustomerData));
         }
     }
 

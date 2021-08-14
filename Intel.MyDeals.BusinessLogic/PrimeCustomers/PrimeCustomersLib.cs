@@ -132,5 +132,10 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
+        public List<EndCustomer> ValidateEndCustomer(string endCustObj)
+        {
+            return _primeCustomersDataLib.ValidateEndCustomer(endCustObj);
+        }
+
     }
 }

@@ -2821,6 +2821,20 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true
             });
 
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3352,
+                AtrbCd = AttributeCodes.END_CUST_OBJ,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Label = "END_CUST_OBJ",
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_CUST_OBJ')#",
+                DataType = "string",
+                IsHidden = true,
+                IsFilterable = true,
+                IsReadOnly = true
+            });
+
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3350,

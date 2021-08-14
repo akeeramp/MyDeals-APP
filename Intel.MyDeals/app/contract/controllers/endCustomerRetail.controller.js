@@ -11,18 +11,44 @@ EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCu
 function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, isAdmin) {
     var $ctrl = this;
     $ctrl.IsError = false;
+    $ctrl.errMsgs = [];
+    $ctrl.endCustomerValues = []
+    $ctrl.countryValues = []
+    $ctrl.validateFlag = true;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
     $ctrl.endCustomerRetailPopUpModal = items;
-    $ctrl.popupResult = [];
-    $ctrl.popupResult.ComboBoxSelect = (cellCurrValues.END_CUSTOMER_RETAIL === null) ? "" : cellCurrValues.END_CUSTOMER_RETAIL;
-    $ctrl.popupResult.DropdownSelections = (country === null) ? "" : country;
+    $ctrl.END_CUST_OBJ = [
+        {
+            "END_CUSTOMER_RETAIL": "",
+            "PRIMED_CUST_ID": "",
+            "PRIMED_CUST_NM": "",
+            "PRIMED_CUST_CNTRY": "",
+            "IS_PRIMED_CUST": 0,
+            "IS_EXCLUDE": 0
+        }];
+    if (cellCurrValues.END_CUST_OBJ !== "") {
+
+        cellCurrValues.END_CUST_OBJ = JSON.parse(cellCurrValues.END_CUST_OBJ)
+
+        $ctrl.END_CUST_OBJ = (cellCurrValues.END_CUST_OBJ.length == 0) ? $ctrl.END_CUST_OBJ : cellCurrValues.END_CUST_OBJ
+
+    }
+
     $ctrl.colName = colName;
-    $ctrl.placeholderText = "Click to Select...";
     $ctrl.embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.';
 
     $ctrl.isEndCustomer = (colName === endCustomer);
     $ctrl.isEmptyList = false;
+    //call to get End customer details
+    $scope.endCustOptions = PrimeCustomersService.getPrimeCustomers().then(function (response) {
+        $ctrl.endCustOptions = response.data;
+        $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.PRIM_CUST_NM.toUpperCase() !== "ANY");
+
+
+    }, function (response) {
+        logger.error("Unable to get endCustomer details.", response, response.statusText);
+    });
 
     //Get country details
     $scope.countries = PrimeCustomersService.getCountries().then(function (response) {
@@ -31,131 +57,192 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         logger.error("Unable to get Country details.", response, response.statusText);
     });
 
-    $ctrl.ok = function () {
-        var endCustVal = "";
-        var countryVal = "";
-        var isEndCustomerSelected = ($ctrl.popupResult.ComboBoxSelect == "" || $ctrl.popupResult.ComboBoxSelect == null || $ctrl.popupResult.ComboBoxSelect == undefined) ? false : true;
-        var isPrimeCountrySelected = ($ctrl.popupResult.DropdownSelections == "" || $ctrl.popupResult.DropdownSelections == null || $ctrl.popupResult.DropdownSelections == undefined) ? false : true;
-        if (isEndCustomerSelected) {
-            endCustVal = $ctrl.popupResult.ComboBoxSelect
-        }
-        if (isPrimeCountrySelected) {
-            countryVal = $ctrl.popupResult.DropdownSelections;
-        }
 
+    $scope.addRow = function (e) {
+        $ctrl.validateFlag = true;
+        var index = $ctrl.END_CUST_OBJ.indexOf(e);
 
-        var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val().trim();
-        var patt = new RegExp("^[\\w .,:'\&-]*$");
-        var res = patt.test(endCustomerOnly);
-        if (!res) {
-            $ctrl.IsError = true;
-            $ctrl.msg = "Invalid Character identified in End customer/Retail. Please remove it and Save.";
+        if (index > -1) {
+            $ctrl.END_CUST_OBJ.splice(index + 1, 0,
+                {
+                    "END_CUSTOMER_RETAIL": "",
+                    "PRIMED_CUST_ID": "",
+                    "PRIMED_CUST_NM": "",
+                    "PRIMED_CUST_CNTRY": "",
+                    "IS_PRIMED_CUST": 0,
+                    "IS_EXCLUDE": 0
+                });
         }
-        else if (endCustomerOnly.toUpperCase() == "ANY" && isAdmin == true) {
-            $ctrl.IsError = false;
-            kendo.alert("Any can not be selected from Deal reconciliation screen.");
-        }
-        else if (endCustomerOnly != '' && endCustomerOnly != null && endCustomerOnly != undefined && !isEndCustomerSelected) {
-            if (isPrimeCountrySelected && endCustomerOnly.toUpperCase() !== "ANY") {
-                data.IS_PRIME = 0;
-                data.PRIM_CUST_NM = "";
-                data.PRIM_CUST_ID = null;
-                data.PRIMED_CUST_CNTRY = countryVal;
-                data.END_CUSTOMER_RETAIL = endCustomerOnly;
-                //$ctrl.popupResult.ComboBoxSelect = "";
-                //$ctrl.popupResult.DropdownSelections = "";
-                $uibModalInstance.close(data);
+    }
+
+    $scope.removeRow = function (e) {
+        $ctrl.validateFlag = true;
+        if ($ctrl.END_CUST_OBJ.length === 1) {
+            $ctrl.END_CUST_OBJ[0] = {
+                "END_CUSTOMER_RETAIL": "",
+                "PRIMED_CUST_ID": "",
+                "PRIMED_CUST_NM": "",
+                "PRIMED_CUST_CNTRY": "",
+                "IS_PRIMED_CUST": 0,
+                "IS_EXCLUDE": 0
             }
-            else if (endCustomerOnly.toUpperCase() == "ANY") {
-                data.IS_PRIME = 1;
-                data.PRIM_CUST_NM = "ANY";
-                data.PRIM_CUST_ID = null;
-                data.PRIMED_CUST_CNTRY = countryVal;
-                data.END_CUSTOMER_RETAIL = endCustomerOnly;
-                $uibModalInstance.close(data);
-            }
-            else {
-                $ctrl.IsError = true;
-                $ctrl.msg = "Please select End Customer Country";
-            }
-
-        }
-        else if (endCustVal.toUpperCase() !== "ANY" && isEndCustomerSelected && isPrimeCountrySelected) {
-            if (isEndCustomerSelected && isPrimeCountrySelected) {
-                var temp = new Array(endCustVal, countryVal);
-                PrimeCustomersService.getEndCustomerData(temp).then(
-                    function (res) {
-                        var response = res.data[0];
-                        validate(response);
-                    },
-                    function (res) {
-                        logger.error("Unable to get Unified Customers.", response, response.statusText);
-                    }
-                );
-
-                var validate = function (response) {
-
-                    data.IS_PRIME = response.IS_PRIME;
-                    data.PRIM_CUST_NM = response.PRIM_CUST_NM;
-                    data.PRIM_CUST_ID = response.PRIM_CUST_ID;
-                    if (data.IS_PRIME == 0) {
-                        data.PRIM_CUST_ID = '';
-                    }
-                    data.PRIMED_CUST_CNTRY = countryVal;
-                    data.END_CUSTOMER_RETAIL = endCustVal;
-                    //if (data.IS_PRIME == 1) {
-                    $uibModalInstance.close(data);
-                    //}
-                    //else {
-                    //    $ctrl.IsError = true;
-                    //    $ctrl.msg = "Please select valid Prime customer and country";
-                    //}
-
-                }
-
-            }
-
-        }
-        else if ((isEndCustomerSelected || endCustVal !== "") && !isPrimeCountrySelected && endCustVal.toUpperCase() !== "ANY") {
-            $ctrl.IsError = true;
-            //if (!isEndCustomerSelected && !isPrimeCountrySelected)
-            //    $ctrl.msg = "Please select valid Prime customer and country";
-            //else if (!isEndCustomerSelected)
-            //    $ctrl.msg = "Please select valid Prime customer";
-            //else
-            $ctrl.msg = "Please select End Customer Country";
-        }
-        else if (!isEndCustomerSelected && !isPrimeCountrySelected && (endCustomerOnly === null || endCustomerOnly === "")) {
-
-            $ctrl.IsError = true;
-
-            $ctrl.msg = "Please select End customer/Retail and End customer country";
-        }
-        else if (!isEndCustomerSelected) {
-            $ctrl.IsError = true;
-
-            $ctrl.msg = "Please select End customer/Retail";
-        }
-        else {
-            $ctrl.IsError = false;
-            if (endCustVal.toUpperCase() == "ANY") {
-                data.IS_PRIME = 1;
-                data.PRIM_CUST_NM = "ANY";
-                data.PRIM_CUST_ID = null;
-                data.PRIMED_CUST_CNTRY = countryVal;
-                data.END_CUSTOMER_RETAIL = endCustVal;
-                $uibModalInstance.close(data);
-            }
-
-        }
-
-        //Embargo country validation alert.
-        if ($scope.ovlapObjType == "PricingTable") {
-            $ctrl.showEmbAlert($ctrl.embValidationMsg, $ctrl.popupResult.DropdownSelections, 'ok');
             return;
         }
-    };
+        var index = $ctrl.END_CUST_OBJ.indexOf(e);
+        if (index > -1) {
+            $ctrl.END_CUST_OBJ.splice(index, 1);
+        }
+    }
 
+    //on click on validate in pop up-to check for the errors in the selected data
+    $ctrl.ok = function () {
+        $ctrl.IsError = false;
+        var ecValues = $ctrl.END_CUST_OBJ.map(getEndcustvalues)
+
+        function getEndcustvalues(item) {
+            return [item.END_CUSTOMER_RETAIL].join(",");
+        }
+        //endCustVal = ecValues;
+        var ctryValues = $ctrl.END_CUST_OBJ.map(getCtryvalues)
+        function getCtryvalues(item) {
+            return [item.PRIMED_CUST_CNTRY].join(",");
+        }
+        //countryVal = ctryValues
+        var patt = new RegExp("^[\\w .,:'\&-]*$");
+
+        $ctrl.endCustomerValues = ecValues
+        $ctrl.countryValues = ctryValues
+        $ctrl.errMsgs = []
+
+        for (var i = 0; i < ecValues.length; i++) {
+            var rowError = false;
+            if (ecValues[i] == "" && ctryValues[i] == "") {
+                $ctrl.IsError = true;
+                rowError = true;
+                $ctrl.errMsgs.push("Please select End customer/Retail and End customer country");
+                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail and End customer country")
+                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End customer/Retail and End customer country")
+            }
+            else if (ecValues[i] == "") {
+                rowError = true;
+                $ctrl.IsError = true;
+                $ctrl.errMsgs.push("Please select End customer/Retail");
+                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail")
+            }
+
+            else if (ctryValues[i] == "") {
+                $ctrl.IsError = true;
+                rowError = true;
+                $ctrl.errMsgs.push("Please select End customer country");
+                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End customer country")
+            }
+
+            else {
+                $scope.validateDuplicateEntry(i, ecValues[i], ctryValues[i])
+                if ($ctrl.IsError) {
+                    rowError = true;
+                }
+            }
+
+            //to check whether user entered End customer/retail value is valid or not
+            var res = patt.test(ecValues[i]);
+            if (!res) {
+                $ctrl.IsError = true;
+                rowError = true;
+                $ctrl.errMsgs.push("Invalid Character identified in End customer/Retail. Please remove it and Save.");
+                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+            }
+            if (ecValues[i].toUpperCase() == "ANY" && isAdmin == true) {
+                $ctrl.IsError = false;
+                rowError = false;
+                kendo.alert("Any can not be selected from Deal reconciliation screen.");
+            }
+            if (!rowError) {
+                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "white");
+                $("#ComboBoxSelect_" + i).parent().find("span").removeAttr("title")
+                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "white");
+                $("#DropdownSelections_" + i).parent().find("span").removeAttr("title")
+            }
+        }
+
+        angular.forEach(ctryValues, (item) => {
+            //Embargo country validation alert.
+            if ($scope.ovlapObjType == "PricingTable") {
+                $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
+            }
+        });
+        if ($ctrl.errMsgs.length > 0) {
+            $ctrl.errMsgs = $ctrl.errMsgs.filter(function (item, index, inputArray) {
+                return inputArray.indexOf(item) == index;
+            });
+        }
+
+        else {
+            $ctrl.IsError = false;
+
+        }
+        if (!$ctrl.IsError) {
+            PrimeCustomersService.validateEndCustomer(JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ))).then(
+                function (res) {
+                    $ctrl.END_CUST_OBJ = res.data;
+                    $ctrl.validateFlag = false;
+                },
+                function (res) {
+                    logger.error("Unable to get Unified Customers.", response, response.statusText);
+                }
+            );
+        }
+
+    }
+
+    $scope.validateDuplicateEntry = function (i, ecVal, ctryVal) {
+        var duplicateIndex = 0;
+        var duplicate = false;
+        angular.forEach($ctrl.END_CUST_OBJ, (item) => {
+            if (i != duplicateIndex && item.END_CUSTOMER_RETAIL == ecVal && item.PRIMED_CUST_CNTRY == ctryVal) {
+                $ctrl.IsError = true;
+                duplicate = true;
+                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").css("background-color", "red");
+                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#DropdownSelections_" + duplicateIndex).parent().find("span").css("background-color", "red");
+                $("#DropdownSelections_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+            }
+            duplicateIndex++;
+        });
+        if (duplicate) {
+            $ctrl.errMsgs.push("End Customer/Retail and End Customer Country Combination must be unique");
+        }
+    }
+
+    $ctrl.saveAndClose = function () {
+        if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0 && $ctrl.errMsgs.length == 0) {
+            var primedCustObj = $ctrl.END_CUST_OBJ.filter(x => (x.PRIMED_CUST_NM) && x.PRIMED_CUST_NM !== "")
+            data.PRIMED_CUST_NM = primedCustObj.map(getPrimeCustNames).join();
+            function getPrimeCustNames(item) {
+                return [item.PRIMED_CUST_NM].join(",")
+            }
+            data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
+            var ecIdList = primedCustObj.map(getPrimeCustIds);
+
+            function getPrimeCustIds(item) {
+                return [item.PRIMED_CUST_ID].join(",");
+            }
+            data.PRIMED_CUST_ID = ecIdList.join();
+            data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
+            data.END_CUSTOMER_RETAIL = $ctrl.endCustomerValues.join();
+            data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ)
+            $uibModalInstance.close(data);
+        }
+    }
 
     $ctrl.showEmbAlert = function (validationMsg, country, type) {
         var countryVal = '';
@@ -168,101 +255,170 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 else {
                     $ctrl.IsError = true;
                     $ctrl.msg = validationMsg;
+                    $ctrl.errMsgs.push(validationMsg);
                 }
             }
         }
     }
 
     var primeddata = function (action) {
-        data.IS_PRIME = 0;
-        data.PRIM_CUST_NM = "";
-        data.PRIM_CUST_ID = null;
-        data.PRIMED_CUST_CNTRY = "";
+        $ctrl.END_CUST_OBJ = [{
+            "END_CUSTOMER_RETAIL": "",
+            "PRIMED_CUST_ID": "",
+            "PRIMED_CUST_NM": "",
+            "PRIMED_CUST_CNTRY": "",
+            "IS_PRIMED_CUST": 0,
+            "IS_EXCLUDE": 0
+        }]
+
+        data.END_CUST_OBJ = JSON.stringify($ctrl.END_CUST_OBJ)
         if (action == "remove") {
             data.END_CUSTOMER_RETAIL = "";
-            $ctrl.popupResult.ComboBoxSelect = "";
         }
-        else if (action == "unprime") {
-            data.END_CUSTOMER_RETAIL = $ctrl.popupResult.ComboBoxSelect;
-        }
-
-        $ctrl.popupResult.DropdownSelections = "";
+        data.IS_PRIME = "";
+        data.PRIMED_CUST_NM = "";
+        data.PRIMED_CUST_ID = "";
+        data.PRIMED_CUST_CNTRY = "";
+        data.END_CUSTOMER_RETAIL = "";
         return data;
 
     }
 
     $ctrl.remove = function () {
-        if ((cellCurrValues.END_CUSTOMER_RETAIL != null && cellCurrValues.END_CUSTOMER_RETAIL != '' && cellCurrValues.END_CUSTOMER_RETAIL != undefined) || ($ctrl.popupResult.ComboBoxSelect != null && $ctrl.popupResult.ComboBoxSelect != '' && $ctrl.popupResult.ComboBoxSelect != undefined))  {
+        if (cellCurrValues.END_CUST_OBJ.length > 0) {
             var PrimeData = primeddata("remove")
             $uibModalInstance.close(PrimeData);
         }
         else {
             $ctrl.IsError = true;
-            $ctrl.msg = "There is no End customer to remove";
+            $ctrl.errMsgs.push("There is no End customer to remove")
         }
     };
-
-    //$ctrl.unPrime = function () {
-    //    if (cellCurrValues.IS_PRIME == 1) {
-    //        var PrimeData = primeddata("remove")
-    //        $uibModalInstance.close(PrimeData);
-    //    }
-    //    else {
-    //        $ctrl.IsError = true;
-    //        $ctrl.msg = "This Deal is Not a Primed Deal";
-    //    }
-    //}
-
 
     $ctrl.cancel = function () {
         $uibModalInstance.dismiss();
     };
 
-    $ctrl.EnterPressed = function (event) {
-        if (event.keyCode === 13) {
-            $ctrl.ok();
-        }
-    };
 
-    $scope.$watch('$ctrl.popupResult.ComboBoxSelect',
-        function (newValue, oldValue, el) {
-            if (oldValue === newValue) return;
 
-            if (oldValue === undefined || newValue === undefined || newValue === null) return;
+    //change event for end customer combo box
+    $ctrl.changeField = function (e) {
+        $ctrl.validateFlag = true;
+        var id = e.sender.element[0].id;
+        var index = id.substring(id.indexOf('_') + 1, id.length);
+        var dataElement = e.sender.$angular_scope.e;
+        var dataItem = dataElement.END_CUSTOMER_RETAIL;
+        var anyFlag = false;
+        var patt = new RegExp("^[\\w .,:'\&-]*$");
 
-            if (newValue.toUpperCase() == "ANY") {
-                $ctrl.popupResult.DropdownSelections = "Any";
-                $('#DropdownSelections').attr('disabled', true);
+        //to get the user entered free text end customer value
+        if (dataItem === undefined || dataItem === null) {
+            dataItem = $('#' + id).parent().find("input").val();
+            var isEndCustomerValid = patt.test(dataItem);
+            if (isEndCustomerValid) {
+                $ctrl.IsError = false;
+                $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;
             }
             else {
-                $ctrl.popupResult.DropdownSelections = "";
-                $('#DropdownSelections').attr('disabled', false);
+                $ctrl.IsError = true;
+                $ctrl.errMsgs.push("Invalid Character identified in End customer/Retail. Please remove it and Save.")
+                $ctrl.validateFlag = true;
+                $("#" + id).parent().find("span").css("background-color", "red");
+                $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
             }
+        };
 
-            if (newValue !== null) {
+        // Check to find whether first combination End customer is "any" , TO set IS_EXCLUDE to true 
+        if ($ctrl.END_CUST_OBJ.length > 1) {
+            var isAny = $('#ComboBoxSelect_0').parent().find("input").val();
+
+            var isFirstcombinationAny = isAny ? ((isAny.toUpperCase() == "ANY") ? true : false) : false;
+            if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != "") {
+                if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == "ANY" && isFirstcombinationAny) {
+                    dataElement.IS_EXCLUDE = 1;
+                    for (var i = 1; i < $ctrl.END_CUST_OBJ.length; i++) {
+                        $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = 1
+                    }
+                }
+            }
+            else {
+                dataElement.IS_EXCLUDE = 0;
+                for (var i = 1; i < $ctrl.END_CUST_OBJ.length; i++) {
+                    $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = 0
+                }
+            }
+        }
+        // var isFirstcombinationAny = (dataItem.toUpperCase() == "ANY" && id == "ComboBoxSelect_0") ? true : false;
+        if (dataItem.toUpperCase() == "ANY") {
+            if (isAdmin == true) {
                 $ctrl.IsError = false;
-                $ctrl.msg = "";
-                return;
+                kendo.alert("Any can not be selected from Deal reconciliation screen.");
             }
-        }, true);
+            else {
+                if (parseInt(index) > 0) {
+                    $("#" + id).parent().find("span").css("background-color", "red");
+                    $("#" + id).parent().find("span").attr("title", "Any can be selected only in the First combination")
+                    $ctrl.IsError = true
+                    $ctrl.errMsgs.push("Any can be selected only in the First combination")
+                    $ctrl.validateFlag = true;
+                }
+                else {
+                    dataElement.PRIMED_CUST_CNTRY = "Any";
+                    $('#DropdownSelections_' + index).attr('disabled', true);
 
-    $scope.$watch('$ctrl.popupResult.DropdownSelections',
-        function (newValue, oldValue, el) {
-            if (oldValue === newValue) return;
+                }
+            }
+        }
 
-            if (oldValue === undefined || newValue === undefined) return;
 
-            //Embargo country validation alert.
-            if ($scope.ovlapObjType == "PricingTable") {
-                $ctrl.showEmbAlert($ctrl.embValidationMsg, newValue, 'selection');
-                return;
+        else if (dataItem !== null) {
+            $("#" + id).parent().find("span").css("background-color", "white");
+            $("#" + id).parent().find("span").removeAttr("title");
+            if (parseInt(index) == 0) {
+                dataElement.PRIMED_CUST_CNTRY = "";
+                $('#DropdownSelections_' + index).attr('disabled', false);
+            }
+            if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != "") {
+                if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == "ANY" && $ctrl.END_CUST_OBJ.length > 1 && isFirstcombinationAny) {
+                    dataElement.IS_EXCLUDE = 1;
+                }
             }
 
-            if (newValue !== null) {
-                $ctrl.IsError = false;
-                $ctrl.msg = "";
-                return;
-            }
-        }, true);
+
+
+
+            angular.forEach($ctrl.END_CUST_OBJ, (item) => {
+                //Embargo country validation alert.
+                if (item.END_CUSTOMER_RETAIL === dataItem && item.PRIMED_CUST_CNTRY === dataElement.PRIMED_CUST_CNTRY) {
+                    $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
+                }
+            });
+
+        }
+
+        if ($ctrl.errMsgs.length > 0) {
+            $ctrl.errMsgs = $ctrl.errMsgs.filter(function (item, index, inputArray) {
+                return inputArray.indexOf(item) == index;
+            });
+        }
+
+    }
+
+    $ctrl.changeCountryField = function (e) {
+        var id = e.sender.element[0].id;
+        $ctrl.validateFlag = true;
+        var dataItem = e.sender.$angular_scope.e.PRIMED_CUST_CNTRY;
+        if (dataItem === undefined || dataItem === null && dataItem === "") {
+            $("#" + id).parent().find("span").css("background-color", "red");
+            $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
+        }
+        else {
+            $("#" + id).parent().find("span").css("background-color", "white");
+            $("#" + id).parent().find("span").removeAttr("title");
+        }
+    }
 
 }
+
+
+
