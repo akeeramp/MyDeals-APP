@@ -6,9 +6,9 @@
 
         <div class="modal-body" id="modal-body">
             <p>
-                <div ng-if="$ctrl.IsError">
-                    <span ng-if="$ctrl.IsError" style="color:red;">
-                        <p>Please Fix the below Errors</p>
+                <div ng-if="$ctrl.IsError || $ctrl.ChangeErrorFlag">
+                    <span style="color:red;">
+                        <label>Please Fix the below Errors</label>
                     </span>
                 </div>
             </p>

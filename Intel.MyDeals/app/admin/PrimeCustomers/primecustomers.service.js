@@ -63,7 +63,7 @@
         }
 
         function validateEndCustomer(endCustomerData) {
-            return dataService.post(apiBaseUrl + 'ValidateEndCustomer', JSON.stringify(endCustomerData));
+            return dataService.post(apiBaseUrl + 'ValidateEndCustomer', endCustomerData);
         }
     }
 

@@ -11,7 +11,7 @@ EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCu
 function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, isAdmin) {
     var $ctrl = this;
     $ctrl.IsError = false;
-    $ctrl.errMsgs = [];
+    $ctrl.ChangeErrorFlag = false;
     $ctrl.endCustomerValues = []
     $ctrl.countryValues = []
     $ctrl.validateFlag = true;
@@ -109,17 +109,26 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
         //countryVal = ctryValues
         var patt = new RegExp("^[\\w .,:'\&-]*$");
-
+        var isExclude = 0;
         $ctrl.endCustomerValues = ecValues
         $ctrl.countryValues = ctryValues
-        $ctrl.errMsgs = []
-
+        // Check to find whether first combination End customer is "any" , TO set IS_EXCLUDE to true 
+        if (ecValues.length > 1) {
+            if (ecValues[0].toUpperCase() == "ANY") {
+                isExclude = 1;                
+            }
+        }
         for (var i = 0; i < ecValues.length; i++) {
             var rowError = false;
+            if (i > 0) {
+                $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = isExclude;
+            }
+            else {
+                $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = 0;
+            }
             if (ecValues[i] == "" && ctryValues[i] == "") {
                 $ctrl.IsError = true;
                 rowError = true;
-                $ctrl.errMsgs.push("Please select End customer/Retail and End customer country");
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail and End customer country")
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
@@ -128,7 +137,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             else if (ecValues[i] == "") {
                 rowError = true;
                 $ctrl.IsError = true;
-                $ctrl.errMsgs.push("Please select End customer/Retail");
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail")
             }
@@ -136,16 +144,12 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             else if (ctryValues[i] == "") {
                 $ctrl.IsError = true;
                 rowError = true;
-                $ctrl.errMsgs.push("Please select End customer country");
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
                 $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End customer country")
             }
 
             else {
-                $scope.validateDuplicateEntry(i, ecValues[i], ctryValues[i])
-                if ($ctrl.IsError) {
-                    rowError = true;
-                }
+                rowError = $scope.validateDuplicateEntry(i, ecValues[i], ctryValues[i])
             }
 
             //to check whether user entered End customer/retail value is valid or not
@@ -153,7 +157,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             if (!res) {
                 $ctrl.IsError = true;
                 rowError = true;
-                $ctrl.errMsgs.push("Invalid Character identified in End customer/Retail. Please remove it and Save.");
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
             }
@@ -161,6 +164,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.IsError = false;
                 rowError = false;
                 kendo.alert("Any can not be selected from Deal reconciliation screen.");
+            }
+            else if (ecValues[i].toUpperCase() == "ANY") {
+               if (i > 0) {
+                  $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
+                  $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Any can be selected only in the First combination")
+                  $ctrl.IsError = true;
+               }
             }
             if (!rowError) {
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "white");
@@ -176,16 +186,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
             }
         });
-        if ($ctrl.errMsgs.length > 0) {
-            $ctrl.errMsgs = $ctrl.errMsgs.filter(function (item, index, inputArray) {
-                return inputArray.indexOf(item) == index;
-            });
-        }
-
-        else {
-            $ctrl.IsError = false;
-
-        }
+        
         if (!$ctrl.IsError) {
             PrimeCustomersService.validateEndCustomer(JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ))).then(
                 function (res) {
@@ -202,11 +203,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     $scope.validateDuplicateEntry = function (i, ecVal, ctryVal) {
         var duplicateIndex = 0;
-        var duplicate = false;
+        var rowError = false;
         angular.forEach($ctrl.END_CUST_OBJ, (item) => {
             if (i != duplicateIndex && item.END_CUSTOMER_RETAIL == ecVal && item.PRIMED_CUST_CNTRY == ctryVal) {
                 $ctrl.IsError = true;
-                duplicate = true;
+                rowError = true;
                 $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
                 $("#DropdownSelections_" + duplicateIndex).parent().find("span").css("background-color", "red");
@@ -218,13 +219,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             }
             duplicateIndex++;
         });
-        if (duplicate) {
-            $ctrl.errMsgs.push("End Customer/Retail and End Customer Country Combination must be unique");
-        }
+        return rowError;
     }
 
     $ctrl.saveAndClose = function () {
-        if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0 && $ctrl.errMsgs.length == 0) {
+        if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
             var primedCustObj = $ctrl.END_CUST_OBJ.filter(x => (x.PRIMED_CUST_NM) && x.PRIMED_CUST_NM !== "")
             data.PRIMED_CUST_NM = primedCustObj.map(getPrimeCustNames).join();
             function getPrimeCustNames(item) {
@@ -255,23 +254,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 else {
                     $ctrl.IsError = true;
                     $ctrl.msg = validationMsg;
-                    $ctrl.errMsgs.push(validationMsg);
                 }
             }
         }
     }
 
     var primeddata = function (action) {
-        $ctrl.END_CUST_OBJ = [{
-            "END_CUSTOMER_RETAIL": "",
-            "PRIMED_CUST_ID": "",
-            "PRIMED_CUST_NM": "",
-            "PRIMED_CUST_CNTRY": "",
-            "IS_PRIMED_CUST": 0,
-            "IS_EXCLUDE": 0
-        }]
-
-        data.END_CUST_OBJ = JSON.stringify($ctrl.END_CUST_OBJ)
+        data.END_CUST_OBJ = "";
         if (action == "remove") {
             data.END_CUSTOMER_RETAIL = "";
         }
@@ -290,8 +279,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             $uibModalInstance.close(PrimeData);
         }
         else {
-            $ctrl.IsError = true;
-            $ctrl.errMsgs.push("There is no End customer to remove")
+            kendo.alert("There is no end customer to remove");
         }
     };
 
@@ -308,58 +296,40 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var index = id.substring(id.indexOf('_') + 1, id.length);
         var dataElement = e.sender.$angular_scope.e;
         var dataItem = dataElement.END_CUSTOMER_RETAIL;
-        var anyFlag = false;
+        $ctrl.ChangeErrorFlag = false;
         var patt = new RegExp("^[\\w .,:'\&-]*$");
 
         //to get the user entered free text end customer value
         if (dataItem === undefined || dataItem === null) {
             dataItem = $('#' + id).parent().find("input").val();
-            var isEndCustomerValid = patt.test(dataItem);
-            if (isEndCustomerValid) {
-                $ctrl.IsError = false;
-                $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;
+            if (dataItem != null && dataItem != undefined && dataItem != "") {
+                dataItem = dataItem.trim();
             }
-            else {
-                $ctrl.IsError = true;
-                $ctrl.errMsgs.push("Invalid Character identified in End customer/Retail. Please remove it and Save.")
-                $ctrl.validateFlag = true;
-                $("#" + id).parent().find("span").css("background-color", "red");
-                $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
-            }
+            $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;            
         };
 
-        // Check to find whether first combination End customer is "any" , TO set IS_EXCLUDE to true 
-        if ($ctrl.END_CUST_OBJ.length > 1) {
-            var isAny = $('#ComboBoxSelect_0').parent().find("input").val();
-
-            var isFirstcombinationAny = isAny ? ((isAny.toUpperCase() == "ANY") ? true : false) : false;
-            if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != "") {
-                if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == "ANY" && isFirstcombinationAny) {
-                    dataElement.IS_EXCLUDE = 1;
-                    for (var i = 1; i < $ctrl.END_CUST_OBJ.length; i++) {
-                        $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = 1
-                    }
-                }
-            }
-            else {
-                dataElement.IS_EXCLUDE = 0;
-                for (var i = 1; i < $ctrl.END_CUST_OBJ.length; i++) {
-                    $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = 0
-                }
-            }
+        var isEndCustomerValid = patt.test(dataItem);
+        if (isEndCustomerValid) {
+            $ctrl.ChangeErrorFlag = false;
         }
+        else {
+            $ctrl.ChangeErrorFlag = true;
+            $ctrl.validateFlag = true;
+            $("#" + id).parent().find("span").css("background-color", "red");
+            $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+        }
+        
         // var isFirstcombinationAny = (dataItem.toUpperCase() == "ANY" && id == "ComboBoxSelect_0") ? true : false;
         if (dataItem.toUpperCase() == "ANY") {
             if (isAdmin == true) {
-                $ctrl.IsError = false;
+                $ctrl.ChangeErrorFlag = false;
                 kendo.alert("Any can not be selected from Deal reconciliation screen.");
             }
             else {
                 if (parseInt(index) > 0) {
                     $("#" + id).parent().find("span").css("background-color", "red");
                     $("#" + id).parent().find("span").attr("title", "Any can be selected only in the First combination")
-                    $ctrl.IsError = true
-                    $ctrl.errMsgs.push("Any can be selected only in the First combination")
+                    $ctrl.ChangeErrorFlag = true
                     $ctrl.validateFlag = true;
                 }
                 else {
@@ -371,22 +341,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
 
 
-        else if (dataItem !== null) {
+        else if (dataItem !== null && !$ctrl.ChangeErrorFlag) {
             $("#" + id).parent().find("span").css("background-color", "white");
             $("#" + id).parent().find("span").removeAttr("title");
             if (parseInt(index) == 0) {
                 dataElement.PRIMED_CUST_CNTRY = "";
                 $('#DropdownSelections_' + index).attr('disabled', false);
             }
-            if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != "") {
-                if ($ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == "ANY" && $ctrl.END_CUST_OBJ.length > 1 && isFirstcombinationAny) {
-                    dataElement.IS_EXCLUDE = 1;
-                }
-            }
-
-
-
-
             angular.forEach($ctrl.END_CUST_OBJ, (item) => {
                 //Embargo country validation alert.
                 if (item.END_CUSTOMER_RETAIL === dataItem && item.PRIMED_CUST_CNTRY === dataElement.PRIMED_CUST_CNTRY) {
@@ -395,13 +356,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             });
 
         }
-
-        if ($ctrl.errMsgs.length > 0) {
-            $ctrl.errMsgs = $ctrl.errMsgs.filter(function (item, index, inputArray) {
-                return inputArray.indexOf(item) == index;
-            });
-        }
-
     }
 
     $ctrl.changeCountryField = function (e) {
