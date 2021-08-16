@@ -6477,52 +6477,152 @@
                 });
             }
             if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
-                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
-                var checkEndCustomerValue = data.filter(ob => ob.END_CUSTOMER_RETAIL.toLowerCase() == 'any' && (ob.PRIMED_CUST_CNTRY == null || ob.PRIMED_CUST_CNTRY == ''));
+                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');                
                 if (rebateType && rebateType.length > 0) {
-                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    //for the end customer "any" it is okay not to select any country value adding this if condition to fix DE116869
-                    if (checkEndCustomerValue.length > 0) {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    else {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    if (!retRetail || !retCtry) {
+                    if (data.length > 1) {
+                        var endCustObj = ""
+                        if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                            endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                        }
                         angular.forEach(data, (item) => {
-                            $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                            var parsedEndCustObj = "";
+                            if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                                parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                                else {
+                                    for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                        var exists = false;
+                                        angular.forEach(endCustObj, (item) => {
+                                            if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                                item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                                exists = true;
+                                            }
+                                        });
+                                        if (!exists) {
+                                            angular.forEach(data, (item) => {
+                                                $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                            });
+                                            i = parsedEndCustObj.length;
+                                        }
+                                    }
+                                }
+                            }
+                            if (endCustObj == "" || parsedEndCustObj == "") {
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                            }
                         });
                     }
+                    
                 }
                 else {
-                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    if (checkEndCustomerValue.length > 0) {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    else {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    if (!retRetail || !retCtry) {
+                    if (data.length > 1) {
+                        var endCustObj = ""
+                        if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                            endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                        }
                         angular.forEach(data, (item) => {
-                            $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                            var parsedEndCustObj = "";
+                            if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                                parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                                else {
+                                    for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                        var exists = false;
+                                        angular.forEach(endCustObj, (item) => {
+                                            if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                                item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                                exists = true;
+                                            }
+                                        });
+                                        if (!exists) {
+                                            angular.forEach(data, (item) => {
+                                                $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                            });
+                                            i = parsedEndCustObj.length;
+                                        }
+                                    }
+                                }
+                            }
+                            if (endCustObj == "" || parsedEndCustObj == "") {
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                    });
+                                }
+                            }
                         });
                     }
                 }
             }
             else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") {
                 var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
-                var checkEndCustomerValue = data.filter(ob => ob.END_CUSTOMER_RETAIL.toLowerCase() == 'any' && (ob.PRIMED_CUST_CNTRY == null || ob.PRIMED_CUST_CNTRY == ''));
                 if (rebateType && rebateType.length > 0) {
-                    var retRetail = data.every((val) => val.END_CUSTOMER_RETAIL != null && val.END_CUSTOMER_RETAIL != '' && val.END_CUSTOMER_RETAIL.toLowerCase() == data[0].END_CUSTOMER_RETAIL.toLowerCase());
-                    if (checkEndCustomerValue.length > 0) {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    else {
-                        var retCtry = data.every((val) => val.PRIMED_CUST_CNTRY != null && val.PRIMED_CUST_CNTRY != '' && val.PRIMED_CUST_CNTRY.toLowerCase() == data[0].PRIMED_CUST_CNTRY.toLowerCase());
-                    }
-                    if (!retRetail || !retCtry) {
+                    if (data.length > 1) {
+                        var endCustObj = ""
+                        if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                            endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                        }
                         angular.forEach(data, (item) => {
-                            $scope.setEndCustomer(item, 'Program Deal');
+                            var parsedEndCustObj = "";
+                            if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                                parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Program Deal');
+                                    });
+                                }
+                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Program Deal');
+                                    });
+                                }
+                                else {
+                                    for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                        var exists = false;
+                                        angular.forEach(endCustObj, (item) => {
+                                            if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                                item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                                exists = true;
+                                            }
+                                        });
+                                        if (!exists) {
+                                            angular.forEach(data, (item) => {
+                                                $scope.setEndCustomer(item, 'Program Deal');
+                                            });
+                                            i = parsedEndCustObj.length;
+                                        }
+                                    }
+                                }
+                            }
+                            if (endCustObj == "" || parsedEndCustObj == "") {
+                                if (parsedEndCustObj.length != endCustObj.length) {
+                                    angular.forEach(data, (item) => {
+                                        $scope.setEndCustomer(item, 'Program Deal');
+                                    });
+                                }
+                            }
                         });
                     }
                 }

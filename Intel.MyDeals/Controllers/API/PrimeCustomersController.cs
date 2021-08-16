@@ -84,5 +84,13 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry),
                     $"Unable to Update UnUnified Deals");
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("ValidateEndCustomer")]
+        public IEnumerable<EndCustomer> ValidateEndCustomer([FromBody] string endCustObj)
+        {
+            return SafeExecutor(() => _primeCustomersLib.ValidateEndCustomer(endCustObj), "Unable to validate End Customer");
+        }
     }
 }

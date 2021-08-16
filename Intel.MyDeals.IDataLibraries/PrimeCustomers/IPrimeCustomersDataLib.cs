@@ -23,5 +23,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry);
 
+        List<EndCustomer> ValidateEndCustomer(string endCustObj);
+
     }
 }

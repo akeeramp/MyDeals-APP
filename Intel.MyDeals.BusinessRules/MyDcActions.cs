@@ -3133,15 +3133,18 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string endCustCountryVal = r.Dc.GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
+            string[] endCustCountryVal = r.Dc.GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY).Split(',');
             IOpDataElement deEndCust = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
             if (deEndCust == null) return;
+
             List<Countires> countries = DataCollections.GetCountries();
-            Countires custCountry = countries.FirstOrDefault(x => x.CTRY_NM == endCustCountryVal);
-            if (custCountry!=null ) {
-                if (endCustCountryVal != "" && custCountry.CTRY_XPORT_CTRL_CD == "EC")
-                {
-                    deEndCust.AddMessage("Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.");
+            foreach(var ctryVal in endCustCountryVal) {
+                Countires custCountry = countries.FirstOrDefault(x => x.CTRY_NM == ctryVal);
+                if(custCountry != null) {
+                    if (ctryVal != "" && custCountry.CTRY_XPORT_CTRL_CD == "EC")
+                    {
+                        deEndCust.AddMessage("Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.");
+                    }                    
                 }
             }
         }
