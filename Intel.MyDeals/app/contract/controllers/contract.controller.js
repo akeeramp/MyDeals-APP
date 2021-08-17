@@ -2886,16 +2886,33 @@
                                 else { // DENSITY
                                     rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
                                 }
-                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                                if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
-                                    sData[s][endKey] = parseInt(sData[s][endKey].toString().replace(/,/g, "") || 0);
+
+                                // If Vol Tier or Flex, take the schedule as Ints, otherwise, do a float convert
+                                if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
+                                    // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                                    if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
+                                        sData[s][endKey] = parseInt(sData[s][endKey].toString().replace(/,/g, "") || 0);
+                                    }
+                                    if (sData[s][rateKey] === null) {
+                                        sData[s][rateKey] = parseInt(0);
+                                    }
+                                    if (sData[s][strtKey] === null) {
+                                        sData[s][strtKey] = parseInt(0);
+                                    }
                                 }
-                                if (sData[s][rateKey] === null) {
-                                    sData[s][rateKey] = parseInt(0);
+                                else { // curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY"
+                                    // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                                    if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
+                                        sData[s][endKey] = parseFloat(sData[s][endKey].toString().replace(/,/g, "") || 0);
+                                    }
+                                    if (sData[s][rateKey] === null) {
+                                        sData[s][rateKey] = parseFloat(0);
+                                    }
+                                    if (sData[s][strtKey] === null) {
+                                        sData[s][strtKey] = parseFloat(0);
+                                    }
                                 }
-                                if (sData[s][strtKey] === null) {
-                                    sData[s][strtKey] = parseInt(0);
-                                }
+
                             }
 
                             if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
@@ -4091,10 +4108,19 @@
 
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
 
-                            // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                            if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                lData[endKey] = kendo.toString(parseInt(lData[endKey] || 0), "n0");
+                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                                // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                                    lData[endKey] = kendo.toString(parseInt(lData[endKey] || 0), "n0");
+                                }
                             }
+                            else {
+                                // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                                if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n2");
+                                }
+                            }
+
                         }
                         // Disable all Start vols except the first if there is no tracker, else disable them all
                         if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {

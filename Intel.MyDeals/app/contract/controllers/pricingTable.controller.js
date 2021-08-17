@@ -1305,7 +1305,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                 if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                                     if (value.value != null && value.value !== undefined) {
-                                        value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                        if (colIndex === endVolIndex && (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX")) {
+                                            value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                        }
+                                        else if (colIndex === endVolIndex && (root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || endVolIndex && root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY")) {
+                                            value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                        }
                                     } else {
                                         value.value = 0;
                                     }
@@ -1349,7 +1354,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                 }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                                value.value = kendo.toString(value.value, "n0");
+                                value.value = kendo.toString(value.value, "n2");
 
                                 myRow.END_REV = value.value;
                                 sourceData[(rowIndex - 1)].END_REV = myRow.END_REV;
@@ -1366,7 +1371,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                 }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
-                                value.value = kendo.toString(value.value, "n0");
+                                value.value = kendo.toString(value.value, "n3");
 
                                 myRow.END_PB = value.value;
                                 sourceData[(rowIndex - 1)].END_PB = myRow.END_PB;
@@ -2190,7 +2195,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0.01;
                                     }
                                     else { // DENSITY
-                                        rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.0;
+                                        rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.001;
                                     }
                                     // Default to 0
                                     data[r][rateKey] = 0;
