@@ -118,6 +118,10 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             }
         }
         for (var i = 0; i < ecValues.length; i++) {
+            //setting Unified Values(PRIMED_CUST_ID,IS_PRIMED_CUST and PRIMED_CUST_NM) to empty values before hitting the stored proc
+            $ctrl.END_CUST_OBJ[i].IS_PRIMED_CUST = 0;
+            $ctrl.END_CUST_OBJ[i].PRIMED_CUST_ID = "";
+            $ctrl.END_CUST_OBJ[i].PRIMED_CUST_NM = "";
             var rowError = false;
             if (i > 0) {
                 $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = isExclude;
@@ -160,7 +164,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
             }
             if (ecValues[i].toUpperCase() == "ANY" && isAdmin == true) {
-                $ctrl.IsError = false;
+                $ctrl.IsError = true;
                 rowError = false;
                 kendo.alert("Any can not be selected from Deal reconciliation screen.");
             }
@@ -168,7 +172,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                if (i > 0) {
                   $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
                   $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Any can be selected only in the First combination")
-                  $ctrl.IsError = true;
+                   $ctrl.IsError = true;
+                   rowError = true;
                }
             }
             if (!rowError) {
@@ -223,16 +228,28 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     $ctrl.saveAndClose = function () {
         if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
-            var primedCustObj = $ctrl.END_CUST_OBJ.filter(x => (x.PRIMED_CUST_NM) && x.PRIMED_CUST_NM !== "")
-            data.PRIMED_CUST_NM = primedCustObj.map(getPrimeCustNames).join();
+            // to set unprimed combinations as n/a(not applicable)
+            var primeNotApplicable = 'n/a';
+            data.PRIMED_CUST_NM = $ctrl.END_CUST_OBJ.map(getPrimeCustNames).join();
             function getPrimeCustNames(item) {
-                return [item.PRIMED_CUST_NM].join(",")
+                if (item.IS_PRIMED_CUST == "0") {
+                    return [primeNotApplicable].join(",");
+                }
+                else
+                    return [item.PRIMED_CUST_NM].join(",")
             }
             data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
-            var ecIdList = primedCustObj.map(getPrimeCustIds);
+
+            // setting PRIMED_CUST_ID to n/a to all the combinations except for any(as for End customer "any" PRIMED_CUST_ID is null)
+            var primeCustObjWithoutAny = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")
+            var ecIdList = primeCustObjWithoutAny.map(getPrimeCustIds);
 
             function getPrimeCustIds(item) {
-                return [item.PRIMED_CUST_ID].join(",");
+                if (item.IS_PRIMED_CUST == "0") {
+                    return [primeNotApplicable].join(",");
+                }
+                else
+                    return [item.PRIMED_CUST_ID].join(",");
             }
             data.PRIMED_CUST_ID = ecIdList.join();
             data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
