@@ -2869,7 +2869,8 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRIMED_CUST_ID')#",
                 IsFilterable = true,
                 IsHidden = true,
-                IsSortable = true
+                IsSortable = true,
+                DataType = "string"
             });
 
             items.Add(new UiTemplateContainerItem   // We include this so that the subkit tab can filter against it, only appearing if any deals can have subkit or showing only the deals eligible for subkits
