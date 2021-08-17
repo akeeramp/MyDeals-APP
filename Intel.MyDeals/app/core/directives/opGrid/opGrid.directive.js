@@ -1669,13 +1669,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.updateScheduleEditor = function (dataItem, field, row) {
                 //if empty or max value, set to "Unlimited"
-                if (field === "END_VOL") {
+                if (field === "END_VOL" || field === "END_REV") {
                     if (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999") {
                         dataItem[field]["10___" + row] = "Unlimited";
                     }
                 }
 
-                if ((field === "STRT_VOL" || field === "RATE")  && dataItem[field]["10___" + row] === null) {
+                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE")  && dataItem[field]["10___" + row] === null) {
                     dataItem[field]["10___" + row] = "0";
                 }
 
@@ -1695,23 +1695,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.saveFunctions(dataItem, "STRT_VOL", dataItem["STRT_VOL"])
                     }
                 }
-            }
 
-            $scope.updateScheduleEditorRevTier = function (dataItem, field, row) {
-                //if empty or max value, set to "Unlimited"
-                if (field === "END_REV") {
-                    if (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999") {
-                        dataItem[field]["10___" + row] = "Unlimited";
-                    }
-                }
-
-                if (field === "STRT_REV" && dataItem[field]["10___" + row] === null) {
-                    dataItem[field]["10___" + row] = "0";
-                }
-
-                //save primary column and propogate changes if necessary
-                $scope.saveFunctions(dataItem, field, dataItem[field])
-
+                // REV ITEMS
                 if (field === "END_REV") {
                     //if there is a next row/tier
                     if (!!dataItem["STRT_REV"]["10___" + (row + 1)]) {
@@ -1719,7 +1704,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["STRT_REV"]["10___" + (row + 1)] = "0";
                         } else {
                             //if end vol is a number, then set next start vol to that number + .01 (a penny)
-                            dataItem["STRT_REV"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + .01;
+                            dataItem["STRT_REV"]["10___" + (row + 1)] = parseFloat(dataItem[field]["10___" + row].replace(/,/g, ".")).toFixed(2) + .01;
                         }
 
                         $scope.saveFunctions(dataItem, "STRT_REV", dataItem["STRT_REV"])
