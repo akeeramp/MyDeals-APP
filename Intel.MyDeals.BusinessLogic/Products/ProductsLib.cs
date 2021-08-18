@@ -323,6 +323,7 @@ namespace Intel.MyDeals.BusinessLogic
                     pea.FILTER = userProduct.FILTER;
                     pea.GEO_COMBINED = userProduct.GEO_COMBINED;
                     pea.PROGRAM_PAYMENT = userProduct.PROGRAM_PAYMENT;
+                    pea.PAYOUT_BASED_ON = userProduct.PAYOUT_BASED_ON;
                     pea.COLUMN_TYPE = isEPMName; // unique combination checking
 
                     prodNamesList.Add(pea);
@@ -359,6 +360,19 @@ namespace Intel.MyDeals.BusinessLogic
 
             productLookup.ProdctTransformResults = concurrentProdctTransformResults.ToDictionary(kvp => kvp.Key,
                                                           kvp => kvp.Value);
+
+            //Remove Marketing KIT products for Consumption based KIT deals
+            if (DEAL_TYPE == "KIT")
+            {
+                var productMatchConsumptionData = productMatchResults;
+
+                productMatchConsumptionData = (from m in productMatchConsumptionData
+                                               join p in productsToDb on m.ROW_NM equals p.ROW_NUMBER
+                                               where p.PAYOUT_BASED_ON.ToUpper() is "CONSUMPTION"
+                                               select m).ToList();
+                productMatchResults = RemoveMarketingKITS(productMatchResults, productMatchConsumptionData);
+            }
+
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
             contractToken.AddMark("ExtractValidandDuplicateProducts", TimeFlowMedia.MT, (DateTime.Now - start).TotalMilliseconds);
@@ -611,6 +625,20 @@ namespace Intel.MyDeals.BusinessLogic
         public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE, bool IS_TENDER)
         {
             return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, DEAL_TYPE, IS_TENDER);
+        }
+
+        /// <summary>
+        /// This block is to remove Marketing KIT products for Consumption Based KIT deals
+        public List<PRD_TRANSLATION_RESULTS> RemoveMarketingKITS(List<PRD_TRANSLATION_RESULTS> productsToMatch, List<PRD_TRANSLATION_RESULTS> productMatchConsumptionData)
+        {
+            foreach (var item in productMatchConsumptionData)
+            {
+                if (item.MTRL_TYPE_CD == "KITS")
+                {
+                    item.EXACT_MATCH = false;
+                }
+            }
+            return productsToMatch;
         }
 
         /// <summary>
