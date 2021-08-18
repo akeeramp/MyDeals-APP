@@ -3547,6 +3547,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 END_DATE: moment(row.END_DT).format("l"),
                 GEO_COMBINED: getFormatedGeos(row.GEO_COMBINED),
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
+                PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
                 IS_HYBRID_PRC_STRAT: row.IS_HYBRID_PRC_STRAT,
                 SendToTranslation: !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")

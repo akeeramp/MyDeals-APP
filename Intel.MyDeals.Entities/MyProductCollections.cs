@@ -55,6 +55,9 @@ namespace Intel.MyDeals.Entities
         public System.String PROGRAM_PAYMENT { set; get; }
 
         [DataMember]
+        public System.String PAYOUT_BASED_ON { set; get; }
+
+        [DataMember]
         public System.Boolean COLUMN_TYPE { set; get; }
 
         [DataMember]

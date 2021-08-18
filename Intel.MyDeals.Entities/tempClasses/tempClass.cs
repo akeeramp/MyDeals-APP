@@ -2174,6 +2174,9 @@ public partial class DealTemplateDataGram
         public System.String MTRL_ID { set; get; }
 
         [DataMember]
+        public System.String MTRL_TYPE_CD { set; get; }
+        
+        [DataMember]
         public System.String NAND_Density { set; get; }
 
         [DataMember]
