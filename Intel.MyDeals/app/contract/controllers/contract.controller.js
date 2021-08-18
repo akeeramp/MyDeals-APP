@@ -1024,6 +1024,8 @@
 
         $scope.filterDealTypes = function (items) {
             var result = {};
+            var dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
+
             angular.forEach(items, function (value, key) {
                 if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {
                     if ($scope.isTenderContract) {
@@ -1033,6 +1035,7 @@
                     }
                 }
             });
+            result = dealDisplayOrder.map((object) => result[object]).filter(obj => obj !== undefined);
             return result;
         }
 
