@@ -118,10 +118,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             }
         }
         for (var i = 0; i < ecValues.length; i++) {
-            //setting Unified Values(PRIMED_CUST_ID,IS_PRIMED_CUST and PRIMED_CUST_NM) to empty values before hitting the stored proc
-            $ctrl.END_CUST_OBJ[i].IS_PRIMED_CUST = 0;
-            $ctrl.END_CUST_OBJ[i].PRIMED_CUST_ID = "";
-            $ctrl.END_CUST_OBJ[i].PRIMED_CUST_NM = "";
             var rowError = false;
             if (i > 0) {
                 $ctrl.END_CUST_OBJ[i].IS_EXCLUDE = isExclude;
@@ -312,6 +308,10 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var index = id.substring(id.indexOf('_') + 1, id.length);
         var dataElement = e.sender.$angular_scope.e;
         var dataItem = dataElement.END_CUSTOMER_RETAIL;
+        //on change event Re-setting Unified Values(PRIMED_CUST_ID,IS_PRIMED_CUST and PRIMED_CUST_NM) to empty(initial) values
+        dataElement.IS_PRIMED_CUST = 0;
+        dataElement.PRIMED_CUST_ID = "";
+        dataElement.PRIMED_CUST_NM = "";
         $ctrl.ChangeErrorFlag = false;
         var patt = new RegExp("^[\\w .,:'\&-]*$");
 
@@ -377,7 +377,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.changeCountryField = function (e) {
         var id = e.sender.element[0].id;
         $ctrl.validateFlag = true;
-        var dataItem = e.sender.$angular_scope.e.PRIMED_CUST_CNTRY;
+        var dataElement = e.sender.$angular_scope.e;
+        var dataItem = dataElement.PRIMED_CUST_CNTRY;
+        dataElement.IS_PRIMED_CUST = 0;
+        dataElement.PRIMED_CUST_ID = "";
+        dataElement.PRIMED_CUST_NM = "";
         if (dataItem === undefined || dataItem === null && dataItem === "") {
             $("#" + id).parent().find("span").css("background-color", "red");
             $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
