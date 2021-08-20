@@ -132,18 +132,6 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.CS_SHIP_AHEAD_END_DT] = 0;
             }
 
-            //NB / SB Split     //NOTE: this section of code will not work if uncommented, need to account for non-kit deals and for saving in WIP grid when TEMP_NB_SUM will not have been set...
-            //TODO: check if already set condition, test with non kit deal types and moving back and forth between wip/spreadsh
-            //if (r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Contains("CS"))
-            //{
-            //    item[AttributeCodes.NORTHBRIDGE_SPLIT] = item["TEMP_NB_SUM"];
-            //    item[AttributeCodes.SOUTHBRIDGE_SPLIT] = 0;
-            //} else
-            //{
-            //    item[AttributeCodes.NORTHBRIDGE_SPLIT] = null;
-            //    item[AttributeCodes.SOUTHBRIDGE_SPLIT] = null;
-            //}
-
             // Additive
             string dealCompType = r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE);
             if (string.IsNullOrEmpty(dealCompType))

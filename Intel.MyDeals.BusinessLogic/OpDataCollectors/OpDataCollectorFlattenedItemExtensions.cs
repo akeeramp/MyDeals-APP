@@ -363,11 +363,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             int numL1 = 0;
             int numL2 = 0;
 
-            ////below used for calculating NORTHBRIDGE_SPLIT in KIT deals
-            //string CHIPSET = "CS";
-            //List<string> chipsetEcapDims = new List<string>();
-            //decimal northbridgeSum = 0.00;
-
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             // make a copy so we don't cross-contaminate records
