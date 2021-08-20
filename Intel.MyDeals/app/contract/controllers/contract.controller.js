@@ -2714,6 +2714,8 @@
                         sData = $scope.validateFlexRowType(sData);
                         //validate Market Segment
                         sData = $scope.validateMarketSegment(sData);
+                        //validate Flex Rule Engine
+                        sData = $scope.validateFlexRules(sData);
                         
 
                         // find all date fields
@@ -2872,6 +2874,11 @@
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['FLEX_ROW_TYPE']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
+                            }
+
+                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PAYOUT_BASED_ON']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PAYOUT_BASED_ON"]);
                             }
 
                             if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
@@ -6198,7 +6205,9 @@
                 $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
 
                 $scope.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"]);
-                $scope.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"]);
+                if (hybCond) {
+                    $scope.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"]);
+                }
                 $scope.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"]);
                 $scope.itemValidationBlock(data, "GEO_COMBINED", ["notequal", "equalblank"]);
                 $scope.itemValidationBlock(data, "PERIOD_PROFILE", ["notequal", "equalblank"]);
@@ -6382,6 +6391,14 @@
             }
             else if (cond == 'invalidDate' && elem == 'START_DT') {
                 item._behaviors.validMsg[elem] = "Draining products should have atleast 1 day delay from Accrual Start date";
+            }
+
+            else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
+                item._behaviors.validMsg[elem] = "Products within same bucket should have same payout based on value";
+            }
+
+            else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
+                item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is invalid";
             }
 
         }
@@ -6713,6 +6730,40 @@
                     }
                 });
 
+            }
+            return data;
+        }
+
+        $scope.validateFlexRules = function (data) {
+            if ($scope.curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+                $scope.clearValidation(data, 'PAYOUT_BASED_ON');
+                var accrualRule = true, drainingRule = true;
+                var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+                var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+                var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+                accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
+                drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
+                if (!accrualRule) {
+                    angular.forEach(filterData, (item) => {
+                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout');
+                    });
+                }
+                if (!drainingRule) {
+                    angular.forEach(drainingEntries, (item) => {
+                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout');
+                    });
+                }
+                if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
+                    var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
+                    var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
+                    angular.forEach(restrictedAccrualData, (item) => {
+                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed');
+                    });
+                    angular.forEach(restrictedDraininngData, (item) => {
+                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed');
+                    });
+                }
             }
             return data;
         }
