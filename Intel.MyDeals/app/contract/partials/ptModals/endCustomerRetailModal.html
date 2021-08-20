@@ -12,14 +12,33 @@
                     </span>
                 </div>
             </p>
-            <div class="filterRow">
+        <div class="filterRow">
                 <div ng-repeat="e in $ctrl.END_CUST_OBJ">
-                    <div class="col-md-12" style="padding-bottom: 1em;">
-                        <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
-                        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
-
+                    <div class="col-md-12" ng-show="$first" style="padding-bottom: 1em;text-align:center;">
+                        <div class="col-md-2" style="text-align:left;padding-left:0px">
+                            <label>Is Unified</label>
+                        </div>
                         <div class="col-md-4">
-                            <label class="control-label" for="inputControl" ng-show="$first">EndCustomer</label>
+                            <label>EndCustomer</label>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Country</label>
+                        </div>
+                        <div class="col-md-2" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                            <label>Exclude</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-bottom: 1em;">
+                        <div class="col-md-1">
+                            <span title="Unified" ng-if="e.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                            <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                        </div>
+                        <div style="padding-left:6em">
+                            <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
+                            <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+                            <span class="fl icnBtn" ng-if="$first"></span>
+                        </div>
+                        <div class="col-md-4">
                             <span class="fl" ng-if="$index == 0">
                                 <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
                                         k-placeholder="'Select End Customer'"
@@ -50,9 +69,8 @@
                                         style="width: 200px;">
                                 </select>
                             </span>
-                        </div>&nbsp;
-                        <div class="col-md-4" style="column-gap:50px;">
-                            <label class="control-label" for="inputControl" ng-show="$first">Country</label>
+                        </div>
+                        <div class="col-md-4">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
                                     k-placeholder="'Select Country'"
                                     k-data-text-field="'CTRY_NM'"
@@ -67,8 +85,8 @@
                                     style="width: 200px;">
                             </select>
                         </div>
-                        <div class="col-md-2" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
-                            <label class="control-label" for="inputControl" ng-show="$first">Exclude</label>
+                        <div class="col-md-1" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left:23px">
+
                             <div ng-if="$index>0">
                                 <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
                             </div>
@@ -88,8 +106,7 @@
                     <button class="btn btn-primary" id="ClearEndCustomer" ng-disabled="$ctrl.endCustomerRetailPopUpModal.clearEndCustomerDisabled" ng-click="$ctrl.remove()">Clear End Customer</button>
                     <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
                 </div>
-                <div class="fr">
-
+                <div class="fr" style="padding-right:1em">
                     <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Validate</button>
                     <button class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
                 </div>
@@ -108,7 +125,7 @@
         }
 
         .modal-dialog {
-            width: 45% !important;
+            width: 53% !important;
         }
 
         .filterRow {
@@ -123,24 +140,31 @@
             cursor: pointer;
         }
 
-            .icnBtn i {
-                color: #ffffff;
-            }
+        .icnBtn i {
+            color: #ffffff;
+        }
 
         .icnSkyBtn {
             background-color: #00AEEF;
         }
 
-            .icnSkyBtn:hover {
-                background-color: #0071C5;
-            }
+        .icnSkyBtn:hover {
+            background-color: #0071C5;
+        }
 
         .icnGryBtn {
             background-color: #bbbbbb;
         }
 
-            .icnGryBtn:hover {
-                background-color: #cccccc;
+        .icnGryBtn:hover {
+            background-color: #cccccc;
+        }
+        .icnGreenBtn {
+                background-color: 	#008000;
+            }
+
+        .icnRedBtn {
+                background-color: 	#ff0000;
             }
 
         .icnSky {
