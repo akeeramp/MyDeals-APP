@@ -2823,10 +2823,10 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 3352,
+                Id = 3346,
                 AtrbCd = AttributeCodes.END_CUST_OBJ,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 130,
+                Width = 180,
                 Label = "END_CUST_OBJ",
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_CUST_OBJ')#",
                 DataType = "string",
