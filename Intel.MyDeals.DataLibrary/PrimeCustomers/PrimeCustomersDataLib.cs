@@ -381,7 +381,7 @@ namespace Intel.MyDeals.DataLibrary
                             IS_EXCLUDE = (IDX_IS_EXCLUDE < 0 || rdr.IsDBNull(IDX_IS_EXCLUDE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_EXCLUDE),
                             IS_PRIMED_CUST = (IDX_IS_PRIMED_CUST < 0 || rdr.IsDBNull(IDX_IS_PRIMED_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_PRIMED_CUST),
                             PRIMED_CUST_CNTRY = (IDX_PRIMED_CUST_CNTRY < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_CNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_CNTRY),
-                            PRIMED_CUST_ID = (IDX_PRIMED_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIMED_CUST_ID),
+                            PRIMED_CUST_ID = (IDX_PRIMED_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_ID),
                             PRIMED_CUST_NM = (IDX_PRIMED_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_NM)
                         });
                     }
