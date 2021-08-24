@@ -52,9 +52,18 @@
         <div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
         </div>
+        <!-- NPSG DISABLE QUOTES CODE  -->
+        <!--<div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
+        <i ng-if="showQuote(dataItem) && !isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+    </div>
+    <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
+        <i ng-if="showQuote(dataItem) && isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #ff0000;" title="Quote Letter not available due to Product Vertical Lockout [{{disableQuotesForVerticalsList}}]"></i>
+    </div>-->
         <div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
             <i ng-if="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
+
+
 
         <!-- SalesForce icon -->
         <div class='fl md-icon' ng-if="isSalesForceDeal">

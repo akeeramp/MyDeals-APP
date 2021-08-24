@@ -26,6 +26,7 @@ function securityService($http, dataService, cacheService, $rootScope) {
         getSecurityData: getSecurityData,
         chkDealRules: chkDealRules,
         chkAtrbRules: chkAtrbRules,
+        getQuoteRestrictions: getQuoteRestrictions,
         loadSecurityData: loadSecurityData
     }
 
@@ -43,6 +44,12 @@ function securityService($http, dataService, cacheService, $rootScope) {
     function chkDealRules(action, role, itemType, itemSetType, stage) {
         return chkAtrbRules(action, role, itemType, itemSetType, stage, null);
     }
+
+    // NPSG DISABLE QUOTES CODE (Remove below later)
+    function getQuoteRestrictions() {
+        return "ABC,DT";
+    }
+    // END NPSG DISABLE QUOTES CODE
 
     function chkAtrbRules(action, role, itemType, itemSetType, stage, attrb) {
         getSecurityDataFromSession();
