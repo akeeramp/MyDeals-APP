@@ -14,6 +14,8 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             isHistoryEnabled: '<?',
             isSalesForceDeal: '@isSalesForceDeal',
             isQuoteLetterEnabled: '<?',
+            // NPSG DISABLE QUOTES CODE
+            //isQuoteLetterVerticalRestricted: '<?',
             isDeleteEnabled: '<?',
             isSplitEnabled: '<?',
             isPublishable: '<?',
@@ -57,13 +59,11 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.isFileAttachmentEnabled = $scope.assignVal("isFileAttachmentEnabled", true);
             $scope.isHistoryEnabled = $scope.assignVal("isHistoryEnabled", true);
             $scope.isQuoteLetterEnabled = $scope.assignVal("isQuoteLetterEnabled", true);
+            // NPSG DISABLE QUOTES CODE
+            //$scope.isQuoteLetterVerticalRestricted = $scope.assignVal("isQuoteLetterVerticalRestricted", false);
             $scope.isDeleteEnabled = $scope.assignVal("isDeleteEnabled", true);
             $scope.isSplitEnabled = $scope.assignVal("isSplitEnabled", true);
             //$scope.isDaUser = $scope.assignVal("isDaUser", true);
-
-            // Swap IF statement to prevent IQR from having access to quote letters
-            if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
-            //if (($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') || $scope.dataItem.SALESFORCE_ID !== "") $scope.isQuoteLetterEnabled = false;
 
             //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
@@ -83,6 +83,15 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.rootScope = rootScope;
 
             $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false : rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
+            // NPSG DISABLE QUOTES CODE
+            //$scope.disableQuotesForVerticalsList = rootScope.disableQuotesForVerticalsList.split(",");
+
+            // Swap IF statement to prevent IQR from having access to quote letters
+            if ($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') $scope.isQuoteLetterEnabled = false;
+            //if (($scope.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && $scope.dataItem.OBJ_SET_TYPE_CD !== 'KIT') || $scope.dataItem.SALESFORCE_ID !== "") $scope.isQuoteLetterEnabled = false;
+            // NPSG DISABLE QUOTES CODE
+            //if ($scope.isQuoteLetterEnabled === true && $scope.disableQuotesForVerticalsList.some(item => $scope.dataItem.PRODUCT_CATEGORIES.split(",").includes(item))) $scope.isQuoteLetterVerticalRestricted = true;
+
             $scope.C_DEL_DEALS = ((window.usrRole === "FSE" || window.usrRole === "GA") && ($scope.dataItem.SALESFORCE_ID === undefined || $scope.dataItem.SALESFORCE_ID === "")); // This is taken from contract.controller.js line 105.  This definately is not coming in correctly from there...
             $scope.isDaUser = (window.usrRole === "DA");
 

@@ -125,6 +125,9 @@
         $scope.canDeleteAttachment = function (wfStage) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
         }
+        // NPSG DISABLE QUOTES CODE
+        // Left off NPSG changes here, need to move below line over to pull data from constants with objsetService.constantsService("CNST_TO_BE_USED") call, then comment in HTML usgaes of disableQuotesForVerticalsList
+        //$scope.disableQuotesForVerticalsList = securityService.getQuoteRestrictions();
 
         $scope.usrRole = window.usrRole;
 
