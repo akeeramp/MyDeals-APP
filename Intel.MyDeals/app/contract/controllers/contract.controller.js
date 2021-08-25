@@ -209,7 +209,7 @@
             DEAL_TYPE: "KIT",
             IS_HYBRID_PRC_STRAT: 'disabled',
             UI_ENABLED: false,
-            UI_VISIBLE: true
+            UI_VISIBLE: false
         });
         $scope.HybridDealType.push({
             DEAL_TYPE: "PROGRAM",
@@ -6740,11 +6740,11 @@
         }
 
         $scope.validateMarketingKIT = function (data) {
-            $scope.clearValidation(data, 'PTR_USER_PRD');
             var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
             let dealType = $scope.curPricingTable.OBJ_SET_TYPE_CD;
             var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             if (dealType == "KIT") {
+                $scope.clearValidation(data, 'PTR_USER_PRD');
                 angular.forEach(filterData, (item) => {
                     if (item.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' && item.PTR_SYS_PRD.toString().contains('"MTRL_TYPE_CD":"KITS"')) {
                         $scope.OVLPFlexPdtPTRUSRPRDError = true;    // added this to enable error binding to cell
