@@ -249,6 +249,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
     <Compile Include="Controllers\API\CustomerVendorsController.cs" />
     <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
@@ -343,6 +344,9 @@
     <Content Include="app\admin\constants\constants.html" />
     <Content Include="app\admin\cache\cache.service.js" />
     <Content Include="app\admin\constants\constants.service.js" />
+    <Content Include="app\admin\consumptionCountry\admin.consumptionCountry.controller.js" />
+    <Content Include="app\admin\consumptionCountry\consumptionCountry.html" />
+    <Content Include="app\admin\consumptionCountry\consumptionCountry.service.js" />
     <Content Include="app\admin\CustomerVendors\customerVendors.html" />
     <Content Include="app\admin\CustomerVendors\customerVendors.service.js" />
     <Content Include="app\admin\customer\admin.customer.controller.js" />

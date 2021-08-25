@@ -135,6 +135,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/customer/customer.service.js"
                 , "~/app/admin/vistexcustomermapping/admin.vistexcustomermapping.controller.js"
                 , "~/app/admin/vistexcustomermapping/vistexcustomermapping.service.js"
+                , "~/app/admin/consumptionCountry/admin.consumptionCountry.controller.js"
+                , "~/app/admin/consumptionCountry/consumptionCountry.service.js"
                 , "~/app/admin/dataquality/admin.dataquality.controller.js"
                 , "~/app/admin/dataquality/dataquality.service.js"
                 , "~/app/admin/dropdowns/admin.dropdowns.controller.js"

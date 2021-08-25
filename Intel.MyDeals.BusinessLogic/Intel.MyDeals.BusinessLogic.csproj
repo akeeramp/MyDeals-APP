@@ -112,6 +112,7 @@
     <Compile Include="Cache\CacheLib.cs" />
     <Compile Include="CapMsp\CapMspLib.cs" />
     <Compile Include="Constants Lookups\ConstantsLookupsLib.cs" />
+    <Compile Include="ConsumptionCountry\ConsumptionCountryLib.cs" />
     <Compile Include="Contracts\ContractsLib.cs" />
     <Compile Include="CostTest\CostTestDetailExtensionMethods.cs" />
     <Compile Include="CostTest\CostTestLib.cs" />

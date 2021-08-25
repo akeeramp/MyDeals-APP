@@ -397,6 +397,14 @@
                     , controller: 'TestTendersController as vm'
                 }
             },
+            {   state: 'admin.consumptionCountry',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/consumptionCountry/consumptionCountry.html'
+                    , url: 'consumptionCountry'
+                    , controller: 'ConsumptionCountryController as vm'
+                }
+            },
             {
                 state: 'admin.dealMassUpdate',
                 abstract: false,
