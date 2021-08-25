@@ -2719,7 +2719,9 @@
                         sData = $scope.validateMarketSegment(sData);
                         //validate Flex Rule Engine
                         sData = $scope.validateFlexRules(sData);
-                        
+                        //validate Marketing KIT products
+                        sData = $scope.validateMarketingKIT(sData);
+
 
                         // find all date fields
                         var dateFields = [];
@@ -6733,6 +6735,28 @@
                     }
                 });
 
+            }
+            return data;
+        }
+
+        $scope.validateMarketingKIT = function (data) {
+            $scope.clearValidation(data, 'PTR_USER_PRD');
+            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            let dealType = $scope.curPricingTable.OBJ_SET_TYPE_CD;
+            var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            if (dealType == "KIT") {
+                angular.forEach(filterData, (item) => {
+                    if (item.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' && item.PTR_SYS_PRD.toString().contains('"MTRL_TYPE_CD":"KITS"')) {
+                        $scope.OVLPFlexPdtPTRUSRPRDError = true;    // added this to enable error binding to cell
+                        if (!item._behaviors) item._behaviors = {};
+                        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+                        if (!item._behaviors.isError) item._behaviors.isError = {};
+                        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                        item._behaviors.isRequired["PTR_USER_PRD"] = true;
+                        item._behaviors.isError["PTR_USER_PRD"] = true;
+                        item._behaviors.validMsg["PTR_USER_PRD"] = "Marketing KIT products are not allowed for Consumption based KIT deals.";
+                    }
+                });
             }
             return data;
         }
