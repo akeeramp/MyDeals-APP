@@ -3529,13 +3529,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return;
         }
 
-        // Pricing table rows products to be translated
-        var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
-            return (x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
-                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true);
-        });
         //Getting deal type
         var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
+
+        // Pricing table rows products to be translated
+        var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
+            return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
+                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
+                || (x.dirty && dealType == "KIT");
+        });
+
         // Convert into format accepted by translator API
         var translationInput = pricingTableRowData.map(function (row, index) {
             return {
@@ -3550,7 +3553,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
                 IS_HYBRID_PRC_STRAT: row.IS_HYBRID_PRC_STRAT,
-                SendToTranslation: !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
+                SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
         //adding Exclude
@@ -4015,6 +4018,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     HIER_VAL_NM: x.HIER_VAL_NM,
                     MM_MEDIA_CD: x.MM_MEDIA_CD,
                     MTRL_ID: x.MTRL_ID,
+                    MTRL_TYPE_CD: x.MTRL_TYPE_CD == undefined ? "" : x.MTRL_TYPE_CD,
                     PCSR_NBR: x.PCSR_NBR,
                     PRD_ATRB_SID: x.PRD_ATRB_SID,
                     PRD_CAT_NM: x.PRD_CAT_NM,

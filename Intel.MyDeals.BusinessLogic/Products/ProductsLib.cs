@@ -361,18 +361,6 @@ namespace Intel.MyDeals.BusinessLogic
             productLookup.ProdctTransformResults = concurrentProdctTransformResults.ToDictionary(kvp => kvp.Key,
                                                           kvp => kvp.Value);
 
-            //Remove Marketing KIT products for Consumption based KIT deals
-            if (DEAL_TYPE == "KIT")
-            {
-                var productMatchConsumptionData = productMatchResults;
-
-                productMatchConsumptionData = (from m in productMatchConsumptionData
-                                               join p in productsToDb on m.ROW_NM equals p.ROW_NUMBER
-                                               where p.PAYOUT_BASED_ON.ToUpper() is "CONSUMPTION"
-                                               select m).ToList();
-                productMatchResults = RemoveMarketingKITS(productMatchResults, productMatchConsumptionData);
-            }
-
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
             contractToken.AddMark("ExtractValidandDuplicateProducts", TimeFlowMedia.MT, (DateTime.Now - start).TotalMilliseconds);
@@ -625,20 +613,6 @@ namespace Intel.MyDeals.BusinessLogic
         public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE, bool IS_TENDER)
         {
             return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, DEAL_TYPE, IS_TENDER);
-        }
-
-        /// <summary>
-        /// This block is to remove Marketing KIT products for Consumption Based KIT deals
-        public List<PRD_TRANSLATION_RESULTS> RemoveMarketingKITS(List<PRD_TRANSLATION_RESULTS> productsToMatch, List<PRD_TRANSLATION_RESULTS> productMatchConsumptionData)
-        {
-            foreach (var item in productMatchConsumptionData)
-            {
-                if (item.MTRL_TYPE_CD == "KITS")
-                {
-                    item.EXACT_MATCH = false;
-                }
-            }
-            return productsToMatch;
         }
 
         /// <summary>
@@ -1117,6 +1091,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                       HIER_VAL_NM = r.HIER_VAL_NM,
                                                       MM_CUST_CUSTOMER = r.MM_CUST_CUSTOMER,
                                                       MTRL_ID = r.MTRL_ID,
+                                                      MTRL_TYPE_CD = r.MTRL_TYPE_CD,
                                                       NAND_Density = r.NAND_Density,
                                                       NAND_FAMILY = r.NAND_FAMILY,
                                                       PCSR_NBR = r.PCSR_NBR,
