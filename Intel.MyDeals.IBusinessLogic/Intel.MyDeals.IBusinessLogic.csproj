@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants Lookups\IConstantsLookupsLib.cs" />
+    <Compile Include="ConsumptionCountry\IConsumptionCountryLib.cs" />
     <Compile Include="Contracts\IContractsLib.cs" />
     <Compile Include="CostTest\ICostTestLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarLib.cs" />

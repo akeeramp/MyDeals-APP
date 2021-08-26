@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants Lookups\IConstantLookupDataLib.cs" />
+    <Compile Include="ConsumptionCountry\IConsumptionCountryDataLib.cs" />
     <Compile Include="CostTest\ICostTestDataLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="CustomerVendors\ICustomerVendorsDataLib.cs" />
