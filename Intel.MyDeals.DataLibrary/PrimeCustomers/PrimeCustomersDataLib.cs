@@ -199,7 +199,7 @@ namespace Intel.MyDeals.DataLibrary
             PrimeCustomers AnyData = new PrimeCustomers();
             AnyData.IS_ACTV = true;
             AnyData.PRIM_CUST_CTRY = "";
-            AnyData.PRIM_CUST_ID = 0; 
+            AnyData.PRIM_CUST_ID = 0;
             AnyData.PRIM_CUST_NM = "Any";
             AnyData.PRIM_LVL_ID = 0;
             AnyData.PRIM_LVL_NM = "Any";
@@ -395,5 +395,42 @@ namespace Intel.MyDeals.DataLibrary
             return endCustomer;
         }
 
+        public List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals)
+        {
+            in_t_end_cust_unify dt = new in_t_end_cust_unify();
+            unifyDeals.ForEach(x =>
+            dt.AddRow(x)
+            );
+            var ret = new List<UnifiedDealsSummary>();
+            var cmd = new Procs.dbo.PR_MYDL_END_CUSTOMER_UNIFY()
+            {
+                @Unify_input_data = dt
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_COMMENTS = DB.GetReaderOrdinal(rdr, "COMMENTS");
+                    int IDX_Deal_No = DB.GetReaderOrdinal(rdr, "Deal_No");
+                    int IDX_No_Of_Deals = DB.GetReaderOrdinal(rdr, "No.Of.Deals");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UnifiedDealsSummary
+                        {
+                            COMMENTS = (IDX_COMMENTS < 0 || rdr.IsDBNull(IDX_COMMENTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMMENTS),
+                            Deal_No = (IDX_Deal_No < 0 || rdr.IsDBNull(IDX_Deal_No)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_No),
+                            No_Of_Deals = (IDX_No_Of_Deals < 0 || rdr.IsDBNull(IDX_No_Of_Deals)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_No_Of_Deals)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
     }
 }

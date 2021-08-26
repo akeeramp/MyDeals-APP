@@ -27,7 +27,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             _primeCustomersDataLib = primeCustomersDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
-            _integrationLib = integrationLib;           
+            _integrationLib = integrationLib;
         }
 
         public List<PrimeCustomers> GetPrimeCustomerDetails()
@@ -80,7 +80,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 int CntrctId = mydealsdata[OpDataElementType.CNTRCT].Data.Keys.FirstOrDefault();
                 int custId = Int32.Parse(mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-                             
+
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST).AtrbValue = "1";
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM).AtrbValue = primeCustomerName;
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID).AtrbValue = primeCustId;
@@ -114,7 +114,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveResponse != null)
                 {
-                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);          
+                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);
                     bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
                     if (salesForceCheck)
                     {
@@ -137,5 +137,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.ValidateEndCustomer(endCustObj);
         }
 
+        public List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals)
+        {
+            return _primeCustomersDataLib.UploadBulkUnifyDeals(unifyDeals);
+        }
     }
 }
