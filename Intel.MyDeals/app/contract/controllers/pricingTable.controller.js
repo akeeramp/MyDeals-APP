@@ -3536,7 +3536,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (x.dirty && dealType == "KIT");
+                || (dealType == "KIT");
         });
 
         // Convert into format accepted by translator API
