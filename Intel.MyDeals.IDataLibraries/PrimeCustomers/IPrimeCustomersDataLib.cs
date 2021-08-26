@@ -25,5 +25,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<EndCustomer> ValidateEndCustomer(string endCustObj);
 
+        List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
+
     }
 }

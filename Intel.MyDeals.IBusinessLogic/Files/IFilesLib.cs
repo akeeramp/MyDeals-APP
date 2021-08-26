@@ -27,5 +27,8 @@ namespace Intel.MyDeals.IBusinessLogic
         /// </summary>
         bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup);
 
+        FileAttachmentData GetBulkUnifyTemplateFile();
+
+        List<UnifyDeal> ExtractBulkUnifyFile(byte[] fileData);
     }
 }

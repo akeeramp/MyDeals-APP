@@ -189,6 +189,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/vistex/dsa.service.js"
                 , "~/app/admin/rules/rulesSimulationModal.controller.js"
                 , "~/app/admin/meetComp/bulkUploadMeetCompModal.controller.js"
+                , "~/app/admin/PrimeCustomers/bulkUnifyModal.controller.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
                 , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.service.js"
                 , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
