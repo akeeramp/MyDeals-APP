@@ -3270,6 +3270,32 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 224876018
+		/// Modified: 8/24/2021 1:14:20 AM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_END_CUSTOMER_UNIFY : SP
+		{
+			public PR_MYDL_END_CUSTOMER_UNIFY()
+			{
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_END_CUSTOMER_UNIFY]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase Unify_input_data
+			{
+				set { SetParmeter("Unify_input_data", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("Unify_input_data"); }
+			}
+		}
+
+
+		///<summary>
 		/// ID: 1401160137
 		/// Modified: 10/28/2020 7:31:12 PM
 		/// Parameters: 3

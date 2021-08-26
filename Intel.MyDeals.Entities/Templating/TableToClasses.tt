@@ -511,6 +511,16 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "RequestDetails";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//to fetch the multiple unified customer data
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_PRIM_VAL_MULTIPLE] @in_json='[{\"END_CUSTOMER_RETAIL\":\"LNCC\",\"PRIMED_CUST_ID\":\"\",\"PRIMED_CUST_NM\":\"\",\"PRIMED_CUST_CNTRY\":\"Brazil\",\"IS_PRIMED_CUST\":\"0\",\"IS_EXCLUDE\":\"0\",\"CTRY_NM\":\"\"}]'");
+    ds.Tables[0].TableName = "EndCustomer";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//For Bulk Update of Unify deals
+	ds = dbobjects.ExecuteDataSet("DECLARE @unifydata AS T_END_CUST_UNIFY; INSERT INTO @unifydata([DEAL ID],[UCD_GLOBAL_ID],[UCD_GLOBAL_NAME],[UCD_COUNTRY_CUST_ID],[UCD_COUNTRY]) VALUES (241813,1000005594,'China MIIT',1000008019,'CZECH rEPUBLICDRDR')   EXEC [dbo].[PR_MYDL_END_CUSTOMER_UNIFY] @unifydata");
+	ds.Tables[0].TableName = "UnifiedDealsSummary";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

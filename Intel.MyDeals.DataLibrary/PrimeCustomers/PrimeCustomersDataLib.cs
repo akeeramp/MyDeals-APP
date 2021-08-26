@@ -199,7 +199,7 @@ namespace Intel.MyDeals.DataLibrary
             PrimeCustomers AnyData = new PrimeCustomers();
             AnyData.IS_ACTV = true;
             AnyData.PRIM_CUST_CTRY = "";
-            AnyData.PRIM_CUST_ID = 0; 
+            AnyData.PRIM_CUST_ID = 0;
             AnyData.PRIM_CUST_NM = "Any";
             AnyData.PRIM_LVL_ID = 0;
             AnyData.PRIM_LVL_NM = "Any";
@@ -352,5 +352,85 @@ namespace Intel.MyDeals.DataLibrary
             return retObj;
         }
 
+        public List<EndCustomer> ValidateEndCustomer(string endCustObj)
+        {
+            List<EndCustomer> endCustomer = new List<EndCustomer>();
+            var cmd = new Procs.dbo.PR_MYDL_PRIM_VAL_MULTIPLE()
+            {
+                in_json = endCustObj
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
+                    int IDX_IS_EXCLUDE = DB.GetReaderOrdinal(rdr, "IS_EXCLUDE");
+                    int IDX_IS_PRIMED_CUST = DB.GetReaderOrdinal(rdr, "IS_PRIMED_CUST");
+                    int IDX_PRIMED_CUST_CNTRY = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_CNTRY");
+                    int IDX_PRIMED_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_ID");
+                    int IDX_PRIMED_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_NM");
+
+
+
+
+                    while (rdr.Read())
+                    {
+                        endCustomer.Add(new EndCustomer
+                        {
+                            END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+                            IS_EXCLUDE = (IDX_IS_EXCLUDE < 0 || rdr.IsDBNull(IDX_IS_EXCLUDE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_EXCLUDE),
+                            IS_PRIMED_CUST = (IDX_IS_PRIMED_CUST < 0 || rdr.IsDBNull(IDX_IS_PRIMED_CUST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_PRIMED_CUST),
+                            PRIMED_CUST_CNTRY = (IDX_PRIMED_CUST_CNTRY < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_CNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_CNTRY),
+                            PRIMED_CUST_ID = (IDX_PRIMED_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_ID),
+                            PRIMED_CUST_NM = (IDX_PRIMED_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_NM)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return endCustomer;
+        }
+
+        public List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals)
+        {
+            in_t_end_cust_unify dt = new in_t_end_cust_unify();
+            unifyDeals.ForEach(x =>
+            dt.AddRow(x)
+            );
+            var ret = new List<UnifiedDealsSummary>();
+            var cmd = new Procs.dbo.PR_MYDL_END_CUSTOMER_UNIFY()
+            {
+                @Unify_input_data = dt
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_COMMENTS = DB.GetReaderOrdinal(rdr, "COMMENTS");
+                    int IDX_Deal_No = DB.GetReaderOrdinal(rdr, "Deal_No");
+                    int IDX_No_Of_Deals = DB.GetReaderOrdinal(rdr, "No.Of.Deals");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UnifiedDealsSummary
+                        {
+                            COMMENTS = (IDX_COMMENTS < 0 || rdr.IsDBNull(IDX_COMMENTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMMENTS),
+                            Deal_No = (IDX_Deal_No < 0 || rdr.IsDBNull(IDX_Deal_No)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_No),
+                            No_Of_Deals = (IDX_No_Of_Deals < 0 || rdr.IsDBNull(IDX_No_Of_Deals)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_No_Of_Deals)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
     }
 }
