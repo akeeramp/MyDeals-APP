@@ -415,6 +415,8 @@
     <Content Include="app\admin\legalExceptions\legalExceptions.service.js" />
     <Content Include="app\admin\PrimeCustomers\admin.primecustomers.controller.js" />
     <Content Include="app\admin\PrimeCustomers\admin.unprimedeals.controller.js" />
+    <Content Include="app\admin\PrimeCustomers\bulkUnifyModal.controller.js" />
+    <Content Include="app\admin\PrimeCustomers\bulkUnifyModal.html" />
     <Content Include="app\admin\PrimeCustomers\primecustomers.html" />
     <Content Include="app\admin\PrimeCustomers\primecustomers.service.js" />
     <Content Include="app\admin\PrimeCustomers\unprimedeals.html" />

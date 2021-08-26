@@ -190,6 +190,9 @@
     <Compile Include="TableTypeParameters\in_t_lgl_excpt_dwnld.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TableTypeParameters\in_t_end_cust_unify.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_t_obj_atrb.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -286,6 +289,7 @@
     <Compile Include="UI Templates\UiTemplates.cs" />
     <Compile Include="UI Templates\UiTemplatesExtensionMethods.cs" />
     <Compile Include="UiTemplateContainerItem.cs" />
+    <Compile Include="UnifyDeal.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
     <Compile Include="VistexLogFilters.cs" />

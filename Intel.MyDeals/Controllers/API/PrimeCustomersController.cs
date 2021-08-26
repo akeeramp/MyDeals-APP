@@ -33,7 +33,7 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get {"Unified Customers"}"
             );
         }
-        
+
 
         [Route("UpdatePrimeCustomer")]
         [HttpPost]
@@ -92,5 +92,14 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _primeCustomersLib.ValidateEndCustomer(endCustObj), "Unable to validate End Customer");
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("UploadBulkUnifyDeals")]
+        public IEnumerable<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals)
+        {
+            return SafeExecutor(() => _primeCustomersLib.UploadBulkUnifyDeals(unifyDeals), "Unable to do bulk update");
+        }
+
     }
 }
