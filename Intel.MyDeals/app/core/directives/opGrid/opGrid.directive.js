@@ -1704,7 +1704,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["STRT_REV"]["10___" + (row + 1)] = "0";
                         } else {
                             //if end vol is a number, then set next start vol to that number + .01 (a penny)
-                            dataItem["STRT_REV"]["10___" + (row + 1)] = parseFloat(dataItem[field]["10___" + row].replace(/,/g, ".")).toFixed(2) + .01;
+                            dataItem["STRT_REV"]["10___" + (row + 1)] = dataItem[field]["10___" + row].toFixed(2) + .01;
+                            //dataItem["STRT_REV"]["10___" + (row + 1)] = parseFloat(dataItem[field]["10___" + row].replace(/,/g, ".")).toFixed(2) + .01;
                         }
 
                         $scope.saveFunctions(dataItem, "STRT_REV", dataItem["STRT_REV"])

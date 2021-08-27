@@ -1309,7 +1309,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             value.value = parseInt(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                         }
                                         else if (colIndex === endVolIndex && (root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || endVolIndex && root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY")) {
-                                            value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                            value.value = parseFloat(value.value.toString().replace(/,/g, '')) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                                         }
                                     } else {
                                         value.value = 0;
@@ -2918,6 +2918,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (key == "END_VOL") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("##,#");
                                 }
+                                if (key == "END_REV") {
+                                    myFieldModel.format = "{0:c}";
+                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
+                                }
+                                break;
+                            case "percent":
+                                sheet.range(myColumnName + ":" + myColumnName).format("#,0.00 \\\%");
                                 break;
                             default:
                                 break;

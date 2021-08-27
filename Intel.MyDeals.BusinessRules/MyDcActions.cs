@@ -2638,7 +2638,6 @@ namespace Intel.MyDeals.BusinessRules
         }
 
         #region Tiered Validations
-
         private static bool IsGreaterThanZero(decimal attrb)
         {
             return (attrb > 0);
@@ -2680,61 +2679,105 @@ namespace Intel.MyDeals.BusinessRules
             sysComment.State = OpDataElementState.Unchanged;
         }
 
-        public static void CompareStartEndVol(params object[] args)
+        public static void CompareStartEndVals(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-            IOpDataElement startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
-            IOpDataElement endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
+            // Figure out which object we are to pull corrected start/end values
+            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
-            // Make dictionary of <tier, start vol>
-            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
-            {
-                Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                Value = de.AtrbValue.ToString()
-            });
-            var endVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
-            {
-                Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                Value = de.AtrbValue.ToString()
-            });
+            IOpDataElement startAtrbWithValidation = null;
+            IOpDataElement endAtrbWithValidation = null;
+            Dictionary<int, string> startValDict = null;
+            Dictionary<int, string> endValDict = null;
+            string atrbMsgToken = "";
 
-            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
-            Dictionary<int, string> endVolDict = endVols.ToDictionary(pair => pair.Key, pair => pair.Value);
+            // We need to pick only one of the tiered attributes to set validation on (*AtrbWithValidation), else we'd keep overriding the message value per tier
+            // Then make dictionaries of <tier, values>
+            switch (objTypeCd)
+            {
+                case "VOL_TIER":
+                case "FLEX":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "volume";
+                    break;
+                case "REV_TIER":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "rev";
+                    break;
+                case "DENSITY":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "petabyte";
+                    break;
+                default:
+                    break;
+            }
 
             // Safety pullout since vol tier rules are also run on approvals screen where tiers information is not pulled.  Skip tiers data check if there is no tiers data.
-            if (startVolDict.Count == 0 || endVolDict.Count == 0) return;
+            if (startValDict.Count == 0 || endValDict.Count == 0) return;
 
-            int prevStartVal = 0;
-            int prevEndVal = 0;
+            double prevStartVal = 0;
+            double prevEndVal = 0;
             for (int tierKey = 1; tierKey <= 10; tierKey++)
             {
-                if (!int.TryParse(startVolDict[tierKey], out int currStartVol)) currStartVol = 0;
-                int currEndVol = 0;
-                bool isEndVolANumber = int.TryParse(endVolDict[tierKey], out currEndVol);
-                if (!isEndVolANumber && endVolDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                if (!double.TryParse(startValDict[tierKey], out double currStartVal)) currStartVal = 0;
+                double currEndVal = 0;
+                bool isEndVolANumber = double.TryParse(endValDict[tierKey], out currEndVal);
+                if (!isEndVolANumber && endValDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    currEndVol = int.MaxValue;
+                    currEndVal = int.MaxValue;
                 }
 
-                if (currStartVol == 0 && currEndVol == 0) continue; // Hit the end of populated values, skip these rows
+                if (currStartVal == 0 && currEndVal == 0) continue; // Hit the end of populated values, skip these rows
 
-                if (prevStartVal > currStartVol)
+                if (prevStartVal > currStartVal)
                 {
-                    AddTierValidationMessage(startAtrbWithValidation, "Start volume must be greater than previous tier start volume.", tierKey);
+                    AddTierValidationMessage(startAtrbWithValidation, "Start " + atrbMsgToken + " must be greater than previous tier start " + atrbMsgToken + ".", tierKey);
                 }
-                if (prevEndVal > currEndVol)
+                if (prevEndVal > currEndVal)
                 {
-                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than previous tier end volume.", tierKey);
+                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than previous tier end " + atrbMsgToken + ".", tierKey);
                 }
-                if (currStartVol >= currEndVol)
+                if (currStartVal >= currEndVal)
                 {
-                    AddTierValidationMessage(endAtrbWithValidation, "End volume must be greater than start volume.", tierKey);
+                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than start " + atrbMsgToken + ".", tierKey);
                 }
-                prevStartVal = currStartVol;
-                prevEndVal = currEndVol;
+                prevStartVal = currStartVal;
+                prevEndVal = currEndVal;
             }
         }
 
@@ -2789,11 +2832,63 @@ namespace Intel.MyDeals.BusinessRules
             ValidateVolTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
         }
 
+        public static void ValidateTierStartRev(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.STRT_REV.ToString(), "Start Rev must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidateTierEndRev(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.END_REV.ToString(), "End Rev must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
+        public static void ValidateTierStartPb(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.STRT_PB.ToString(), "Start Petabytes must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidateTierEndPb(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.END_PB.ToString(), "End Petabytes must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
         public static void ValidateTierQty(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
             ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidatePercentValues(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<IOpDataElement> percentDes = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd)).ToList();
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numOfTiers)) numOfTiers = 0;
+
+            if (numOfTiers == 0) return; // Safety breakout if there are not tiers to go through
+
+            foreach (IOpDataElement de in percentDes)
+            {
+                int currTier = de.DimKey.FirstOrDefault().AtrbItemId; // making assumption that percent is single keyed item at tier only
+                if (currTier <= numOfTiers)
+                {
+                    decimal currPercent;
+                    if (decimal.TryParse(de.AtrbValue.ToString(), out currPercent) && (currPercent >= 100 || currPercent <= 0))
+                    {
+                        AddTierValidationMessage(de, "Must be value between 0 and 100.", currTier);
+                    }
+                }
+            }
         }
 
         public static void ValidateTierEcap(params object[] args)

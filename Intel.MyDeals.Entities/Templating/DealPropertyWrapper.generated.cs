@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/4/2021 10:30:51 AM
+File Updated: 8/26/2021 2:44:22 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -1809,13 +1809,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End PB",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 13,
-			DATA_TYPE_CD = "MONEY",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Double",
-			FRMT_MSK = "{0:c}",
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "MONEY",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_REV = new MyDealsAttribute()
@@ -1825,13 +1825,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End Revenue",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 8,
-			DATA_TYPE_CD = "MONEY",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Double",
-			FRMT_MSK = "{0:c}",
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "MONEY",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_VOL = new MyDealsAttribute()
