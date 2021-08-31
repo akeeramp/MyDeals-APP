@@ -404,7 +404,8 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<UnifiedDealsSummary>();
             var cmd = new Procs.dbo.PR_MYDL_END_CUSTOMER_UNIFY()
             {
-                @Unify_input_data = dt
+                @Unify_input_data = dt,
+                @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
             };
             try
             {
