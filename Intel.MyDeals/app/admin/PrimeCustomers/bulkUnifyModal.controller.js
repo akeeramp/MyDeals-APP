@@ -48,6 +48,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
     vm.onFileSelect = function (e) {
         // Hide default kendo upload and clear buttons as contract is not generated at this point. Upload files after contract id is generated.
         // TODO: Do we want to show them in edit scenario ?
+        $(".k-upload-files.k-reset").find("li").remove();
         $timeout(function () {
             $(".k-clear-selected").hide();
             $(".k-upload-selected").hide();
@@ -75,25 +76,26 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             PrimeCustomersService.updateBulkUnifyDeals(vm.validUnifyDeals).then(function (response) {
                 var data = response.data;
                 if (data != null && data != undefined) {
-                    if (data.length == 1 && data[0].COMMENTS == "Bulk Unified Deals" && data[0].No_Of_Deals == vm.validUnifyDeals.length) {
-                        kendo.alert("<b>" + data[0].No_Of_Deals + " Deals are successfully unified");
+                    if (data.length == 1 && data[0].COMMENTS == "Bulk Unified Deal(s)" && data[0].No_Of_Deals == vm.validUnifyDeals.length) {
+                        kendo.alert("<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified");
                     }
                     else {
                         var failedDealsCount = 0;
-                        if (data[0].COMMENTS == "Deals Cannot be Unified") {
+                        if (data[0].COMMENTS == "Deal(s) Cannot be Unified") {
                             failedDealsCount = data[0].No_Of_Deals;
                         }
-                        else if (data[1].COMMENTS == "Deals Cannot be Unified") {
+                        else if (data[1].COMMENTS == "Deal(s) Cannot be Unified") {
                             failedDealsCount = data[1].No_Of_Deals;
                         }
-                        var msg = "<b>" + failedDealsCount + " deals are unable to unified</b>.<br/>Following are the validation messages<br/>";
+                        var msg = "<b>" + failedDealsCount + " deal(s) cannot be to unified</b>.<br/><br/>Following are the validation messages<br/><ul>";
                         for (var i = 0; i < data.length; i++) {
-                            if (data[i].COMMENTS != "Bulk Unified Deals")
-                                msg += "<br/><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div>";
+                            if (data[i].COMMENTS != "Bulk Unified Deal(s)")
+                                msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
                             else {
-                                msg = "<b>Successfully Unified" + data[i].No_Of_Deals + " deals</b><br/>" + msg;
+                                msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
                             }
                         }
+                        msg += "</ul>"
                         kendo.alert(msg);
                     }
                 }
@@ -133,10 +135,10 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
 
     vm.ValidateUnifyDeals = function () {
         vm.generateUnifyDeals();
+        if (vm.validUnifyDeals.length > 0)
+            vm.inValidUnifyDeals = $.merge(vm.inValidUnifyDeals, vm.validUnifyDeals);
         if (vm.inValidUnifyDeals.length > 0) {
             vm.spinnerMessageDescription = "Please wait while validating deal unification data..";
-            if (vm.validUnifyDeals.length > 0)
-                vm.inValidUnifyDeals = $.merge(vm.inValidUnifyDeals, vm.validUnifyDeals);
             PrimeCustomersService.ValidateUnifyDeals(vm.inValidUnifyDeals).then(function (e) {
                 vm.UnifyValidation = e.data;
                 vm.validUnifyDeals = e.data.ValidUnifyDeals;
@@ -298,25 +300,26 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 PrimeCustomersService.updateBulkUnifyDeals(vm.validUnifyDeals).then(function (response) {
                     var data = response.data;
                     if (data != null && data != undefined) {
-                        if (data.length == 1 && data[0].COMMENTS == "Bulk Unified Deals" && data[0].No_Of_Deals == vm.validUnifyDeals.length) {
-                            kendo.alert("<b>" + data[0].No_Of_Deals + " Deals are successfully unified");
+                        if (data.length == 1 && data[0].COMMENTS == "Bulk Unified Deal(s)" && data[0].No_Of_Deals == vm.validUnifyDeals.length) {
+                            kendo.alert("<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified");
                         }
                         else {
                             var failedDealsCount = 0;
-                            if (data[0].COMMENTS == "Deals Cannot be Unified") {
+                            if (data[0].COMMENTS == "Deal(s) Cannot be Unified") {
                                 failedDealsCount = data[0].No_Of_Deals;
                             }
-                            else if (data[1].COMMENTS == "Deals Cannot be Unified") {
+                            else if (data[1].COMMENTS == "Deal(s) Cannot be Unified") {
                                 failedDealsCount = data[1].No_Of_Deals;
                             }
-                            var msg = "<b>" + failedDealsCount + " deals are unable to unified</b>.<br/>Following are the validation messages<br/>";
+                            var msg = "<b>" + failedDealsCount + " deal(s) cannot be to unified</b>.<br/><br/>Following are the validation messages<br/><ul>";
                             for (var i = 0; i < data.length; i++) {
-                                if (data[i].COMMENTS != "Bulk Unified Deals")
-                                    msg += "<br/><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div>";
+                                if (data[i].COMMENTS != "Bulk Unified Deal(s)")
+                                    msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
                                 else {
-                                    msg = "<b>Successfully Unified" + data[i].No_Of_Deals + " deals</b><br/>" + msg;
+                                    msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
                                 }
                             }
+                            msg += "</ul>";
                             kendo.alert(msg);
                         }
                     }
