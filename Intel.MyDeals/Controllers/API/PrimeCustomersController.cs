@@ -78,10 +78,10 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
-        [Route("UpdateUnPrimeDeals/{dealId}/{primeCustId}/{primeCustomerCountry}")]
-        public bool UpdateUnPrimeDeals(int dealId, string primeCustId, string primeCustomerCountry,[FromBody] string primeCustomerName)
+        [Route("UpdateUnPrimeDeals/{dealId}")]
+        public bool UpdateUnPrimeDeals(int dealId , [FromBody] UnPrimeAtrbs endCustData)
         {
-            return SafeExecutor(() => _primeCustomersLib.UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry),
+            return SafeExecutor(() => _primeCustomersLib.UpdateUnPrimeDeals(dealId, endCustData),
                     $"Unable to Update UnUnified Deals");
         }
 

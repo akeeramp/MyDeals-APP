@@ -129,29 +129,10 @@
             });
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array
-                    model.END_CUST_OBJ = endCustomerData.END_CUST_OBJ;
-                    model.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
-                    model.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
-                    model.PRIMED_CUST_NM = endCustomerData.PRIM_CUST_NM;
-                    model.PRIMED_CUST_ID = endCustomerData.PRIM_CUST_ID;
-                    if (model.IS_PRIMED_CUST == "1") {
-                        var primeCustomerNm = model.PRIMED_CUST_NM;
-                        var primeCustomerCtry;
-                        var primeCustId;
-                        if (model.PRIMED_CUST_CNTRY == "" || model.PRIMED_CUST_CNTRY == undefined) {
-                            primeCustomerCtry = null;
-                        }
-                        else {
-                            primeCustomerCtry = model.PRIMED_CUST_CNTRY;
-                        }
-                        if (model.PRIMED_CUST_ID == "" || model.PRIMED_CUST_ID == undefined) {
-                            primeCustId = null;
-                        }
-                        else {
-                            primeCustId = model.PRIMED_CUST_ID;
-                        }
-
-                        PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, primeCustomerNm, primeCustId, primeCustomerCtry).then(function (response) {
+                    //if all the selected End customer Combinations are unified then update the unified values in the deal level
+                    if (endCustomerData.IS_PRIME) {
+                        var data = { "IS_PRIMED_CUST": endCustomerData.IS_PRIMED_CUST, "PRIMED_CUST_NM": endCustomerData.PRIMED_CUST_NM, "PRIMED_CUST_ID": endCustomerData.PRIMED_CUST_ID, "PRIMED_CUST_CNTRY": endCustomerData.PRIMED_CUST_CNTRY, "END_CUST_OBJ": endCustomerData.END_CUST_OBJ, "END_CUSTOMER_RETAIL": endCustomerData.END_CUSTOMER_RETAIL }
+                        PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, data).then(function (response) {
                             var commandCell = gridrow.container.find("td:first");
                             commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
                             if (response.data) {

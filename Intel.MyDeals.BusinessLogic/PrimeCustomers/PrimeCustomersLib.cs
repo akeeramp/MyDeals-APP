@@ -60,14 +60,10 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-        public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustId, string primeCustomerCountry)
+        public bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData)
         {
-            if (!string.IsNullOrEmpty(primeCustomerName) && !string.IsNullOrEmpty(primeCustomerCountry) )
+            if (!string.IsNullOrEmpty(endCustData.PRIMED_CUST_NM) && !string.IsNullOrEmpty(endCustData.PRIMED_CUST_CNTRY))
             {
-                if(primeCustomerName.ToLower()=="any" && primeCustomerCountry == "null")
-                {
-                    primeCustomerCountry = "";
-                }
                 List<int> dealIdlist = new List<int>() { dealId };
                 MyDealsData mydealsdata = OpDataElementType.WIP_DEAL.GetByIDs(dealIdlist,
                 new List<OpDataElementType>
@@ -82,9 +78,10 @@ namespace Intel.MyDeals.BusinessLogic
                 int custId = Int32.Parse(mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST).AtrbValue = "1";
-                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM).AtrbValue = primeCustomerName;
-                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID).AtrbValue = primeCustId;
-                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY).AtrbValue = primeCustomerCountry;
+                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM).AtrbValue = endCustData.PRIMED_CUST_NM;
+                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID).AtrbValue = endCustData.PRIMED_CUST_ID;
+                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY).AtrbValue = endCustData.PRIMED_CUST_CNTRY;
+                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUST_OBJ).AtrbValue = endCustData.END_CUST_OBJ;
 
                 ContractToken saveContractToken = new ContractToken("ContractToken Created - Save Deal Updates")
                 {
@@ -114,12 +111,12 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveResponse != null)
                 {
-                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);
+                    _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
                     bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
                     if (salesForceCheck)
                     {
                         string saleForceId = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
-                        _integrationLib.UpdateUnifiedEndCustomer(CntrctId, saleForceId, primeCustomerName, primeCustomerCountry);
+                        _integrationLib.UpdateUnifiedEndCustomer(CntrctId, saleForceId, endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY);
 
                     }
                 }
