@@ -2916,16 +2916,29 @@ namespace Intel.MyDeals.BusinessRules
 
             if (numOfTiers == 0) return; // Safety breakout if there are not tiers to go through
 
-            foreach (IOpDataElement de in percentDes)
+            List<int> badTiers = new List<int> { };
+
+            for (int x=0; x <= numOfTiers; x++)
             {
-                int currTier = de.DimKey.FirstOrDefault().AtrbItemId; // making assumption that percent is single keyed item at tier only
-                if (currTier <= numOfTiers)
+                IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == x).FirstOrDefault();
+                if (de != null)
                 {
                     decimal currPercent;
                     if (decimal.TryParse(de.AtrbValue.ToString(), out currPercent) && (currPercent >= 100 || currPercent <= 0))
                     {
-                        AddTierValidationMessage(de, "Must be value between 0 and 100.", currTier);
+                        // Stuff all bad rows into a list, process the list later and append all bad tier messages to every list member
+                        badTiers.Add(x);
+                        //AddTierValidationMessage(de, "Must be value between 0 and 100.", x);
                     }
+                }
+            }
+
+            if (badTiers.Count > 0)
+            {
+                foreach (int item in badTiers)
+                {
+                    IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == item).FirstOrDefault();
+                    AddMultiTierValidationMessage(de, "Must be value between 0 and 100.", badTiers.ToArray(), item);
                 }
             }
         }
@@ -3060,6 +3073,32 @@ namespace Intel.MyDeals.BusinessRules
             de.ValidationMessage = jsonMsg;
             //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
         }
+
+        private static void AddMultiTierValidationMessage(IOpDataElement de, string msg, int[] aryTiers, int tier = 1, params object[] args)
+        {
+            if (de == null) return;
+            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
+
+            // Previous tier validations exist, so we need to append them together
+            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
+            {
+                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
+            }
+
+            // Turn the new validation into an object
+            foreach (int currTier in aryTiers)
+            {
+                tieredValidationMsgs[currTier] = msg;
+            }
+            //tieredValidationMsgs[tier] = msg;
+
+            // Format into JSON
+            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
+
+            de.ValidationMessage = jsonMsg;
+            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
+        }
+
 
         #endregion Tiered Validations
 

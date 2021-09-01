@@ -675,7 +675,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsDimKey = true,
                 Width = 100,
-                Label = "Rate *"
+                Label = "Density Rate *"
             });
 
             items.Add(new UiTemplateContainerItem
@@ -783,7 +783,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 56,
+                Id = 25,
                 AtrbCd = AttributeCodes.MAX_PAYOUT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
@@ -3180,7 +3180,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 56,
+                Id = 25,
                 AtrbCd = AttributeCodes.MAX_PAYOUT,
                 Label = "Max Payout",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
