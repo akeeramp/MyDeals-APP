@@ -26,7 +26,7 @@
                         <a download target="_blank" href="/api/FileAttachments/GetBulkUnifyTemplateFile">Click here to download the template</a>
                     </div>
                     <div class="col-md-3">
-                        <button ng-click="vm.uploadFile()" class="btn btn-primary" style="margin-left: 15px">Upload Template</button>
+                        <button ng-click="vm.uploadFile()" class="btn btn-primary" style="margin-left: 15px">Upload Unified Data</button>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         <div class="modal-footer" ng-if="vm.inValidUnifyDeals.length > 0">
             <div class="form-group row action_btns">
                 <div class="col-md-12">
-                    <button ng-click="vm.ValidateUnifyDeals()" class="btn btn-primary" style="margin-left: 15px">Validate and Save Imported  Data</button>
+                    <button ng-click="vm.ValidateUnifyDeals()" class="btn btn-primary" style="margin-left: 15px">Save and Validate</button>
                     <button ng-click="vm.CloseWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
                 </div>
             </div>
