@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/4/2021 11:18:44 AM
+File Updated: 8/31/2021 3:23:21 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -813,6 +813,15 @@ namespace Intel.MyDeals.Entities {
 		public const string DENSITY_BAND = "DENSITY_BAND";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 14
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string DENSITY_RATE = "DENSITY_RATE";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7020
@@ -1032,8 +1041,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 13
-		/// TGT_COL_TYPE: MONEY
-		/// DOT_NET_DATA_TYPE: System.Double
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string END_PB = "END_PB";
 
@@ -1041,8 +1050,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 8
-		/// TGT_COL_TYPE: MONEY
-		/// DOT_NET_DATA_TYPE: System.Double
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string END_REV = "END_REV";
 

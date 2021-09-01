@@ -548,7 +548,7 @@ gridUtils.uiControlScheduleWrapperDensity = function (passedData) {
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
         { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
-        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+        { "title": "Density Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
 
     tmplt += '<tr style="height: 15px;">';

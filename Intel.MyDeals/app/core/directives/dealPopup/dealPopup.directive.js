@@ -243,7 +243,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     }
                 ]
             };
-            $scope.propertiesInclude = ["RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB" ];
+            $scope.propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB" ];
             $scope.propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
             $scope.$watch('propSearchFilter', function (newValue, oldValue, el) {
                 if (newValue !== oldValue) {
@@ -473,7 +473,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                             rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; addedSymbol = ""; fixedPoints = 2;
                         }
                         if ($scope.data["OBJ_SET_TYPE_CD"] === "DENSITY") { // Defaults for DENSITY
-                            rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; addedSymbol = ""; fixedPoints = 3;
+                            rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; addedSymbol = ""; fixedPoints = 3;
                         }
 
                         for (t = 1; t <= numTiers; t++) {
@@ -722,7 +722,7 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                     var grid = $("#grid_sched_" + $scope.dealId).data("kendoGrid");
                     if (grid !== undefined && grid !== null) {
                         var cols = [];
-                        // NEED TO CHANGE THIS FOR REV_TIER
+                        // NEED TO CHANGE THIS FOR REV_TIER/DENSITY
                         if (($scope.data["OBJ_SET_TYPE_CD"] === "VOL_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "FLEX"
                             || $scope.data["OBJ_SET_TYPE_CD"] === "REV_TIER" || $scope.data["OBJ_SET_TYPE_CD"] === "DENSITY")) cols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
                         if (($scope.data["OBJ_SET_TYPE_CD"] === "KIT")) cols = ["PRODUCT", "PRD_TYPE", "ECAP_PRICE", "CAP", "YCS2_PRC_IRBT", "TRKR_NBR", "QTY", "DSCNT_PER_LN"];

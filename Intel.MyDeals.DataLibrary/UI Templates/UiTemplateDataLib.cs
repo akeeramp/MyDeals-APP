@@ -670,9 +670,20 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 56,
+                AtrbCd = AttributeCodes.DENSITY_RATE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Rate *"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 56,
                 AtrbCd = AttributeCodes.RATE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX },
                 IsDimKey = true,
                 Width = 100,
                 Label = "Rate *"

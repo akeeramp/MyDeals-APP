@@ -51,7 +51,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 || dataItem.OBJ_SET_TYPE_CD === "REV_TIER" || dataItem.OBJ_SET_TYPE_CD === "DENSITY") {
                 var anyWarnings = false;
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
-                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
                 if (anyWarnings) {
                     var dimStr = "_10___";
                     var isKit = 0;
@@ -1273,7 +1273,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             else {
                 endVolIndex = (root.colToLetter["END_PB"].charCodeAt(0) - intA);
                 strtVolIndex = (root.colToLetter["STRT_PB"].charCodeAt(0) - intA);
-                rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
+                rateIndex = (root.colToLetter["DENSITY_RATE"].charCodeAt(0) - intA);
             }
 
             let isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
@@ -2195,7 +2195,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0.01;
                                     }
                                     else { // DENSITY
-                                        rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.001;
+                                        rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.001;
                                     }
                                     // Default to 0
                                     data[r][rateKey] = 0;

@@ -81,7 +81,7 @@
         $scope.ptTitleLbl = "Enter " + $scope.ptTitle + " Name";
         $scope.pageTitle = $scope.ptTitle + " Editor";
 
-        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         //Tender only columns for PRC_TBL_ROW
@@ -2899,7 +2899,7 @@
                                     rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV";
                                 }
                                 else { // DENSITY
-                                    rateKey = "RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
+                                    rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
                                 }
 
                                 // If Vol Tier or Flex, take the schedule as Ints, otherwise, do a float convert
