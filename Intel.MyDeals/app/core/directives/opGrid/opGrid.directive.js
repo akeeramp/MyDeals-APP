@@ -33,7 +33,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             var depth = 5;
             var d = 0;
-            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
             var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION', 'AVG_RPU'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
@@ -1520,7 +1520,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
                     { "title": "Start PB", "field": "STRT_PB", "format": "", "align": "right" },
                     { "title": "End PB", "field": "END_PB", "format": "", "align": "right" },
-                    { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+                    { "title": "Density Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
                 ];
 
                 tmplt += '<tr style="height: 15px;">';
@@ -1536,7 +1536,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     for (var f = 0; f < fields.length; f++) {
                         if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
-                        } else if (f === fields.length - 1) { //rate
+                        } else if (f === fields.length - 1) { //density rate
                             tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                         } else {
                             //if end vol or if it is the very first tier, allow editable, f = field, d, = tier or row - Was just  (f === 2 || d === 1)

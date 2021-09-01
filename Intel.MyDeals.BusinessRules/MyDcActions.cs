@@ -1133,7 +1133,8 @@ namespace Intel.MyDeals.BusinessRules
 
             if (!r.Dc.HasTracker()) return; // If there is no tracker, stop and leave
 
-            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL };
+            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV, AttributeCodes.END_PB };
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
             string targetDim = "10:" + numTiers.ToString();
 
@@ -1141,13 +1142,44 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (de.HasValueChanged && de.DimKeyString.Contains(targetDim))
                 {
-                    if (!int.TryParse(de.OrigAtrbValue.ToString(), out int origVal)) origVal = 0;
-                    if (!int.TryParse(de.AtrbValue.ToString(), out int newVal)) newVal = 0;
-                    if (origVal == 0) origVal = 999999999;
-                    if (origVal > newVal)
+                    string errMsg = "";
+                    switch (objTypeCd)
                     {
-                        AddTierValidationMessage(de, "The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.", numTiers);
-                        //de.AddMessage("The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.");
+                        case "VOL_TIER":
+                        case "FLEX":
+                            if (!int.TryParse(de.OrigAtrbValue.ToString(), out int origVol)) origVol = 0;
+                            if (!int.TryParse(de.AtrbValue.ToString(), out int newVol)) newVol = 0;
+                            if (origVol == 0) origVol = 999999999;
+                            if (origVol > newVol)
+                            {
+                                errMsg = "The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        case "REV_TIER":
+                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origRev)) origRev = 0;
+                            if (!double.TryParse(de.AtrbValue.ToString(), out double newRev)) newRev = 0;
+                            if (origRev == 0) origRev = 999999999;
+                            if (origRev > newRev)
+                            {
+                                errMsg = "The End Rev cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        case "DENSITY":
+                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origPb)) origPb = 0;
+                            if (!double.TryParse(de.AtrbValue.ToString(), out double newPb)) newPb = 0;
+                            if (origPb == 0) origPb = 999999999;
+                            if (origPb > newPb)
+                            {
+                                errMsg = "The End PB cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (errMsg != "")
+                    {
+                        AddTierValidationMessage(de, errMsg, numTiers);
                         de.AtrbValue = de.OrigAtrbValue;
                         de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
                     }
@@ -2808,6 +2840,13 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
             ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
+        }
+
+        public static void ValidateDensityRate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.DENSITY_RATE.ToString(), "Density Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one density rate must be greater than 0.");
         }
 
         public static void ValidateTieredQty(params object[] args)

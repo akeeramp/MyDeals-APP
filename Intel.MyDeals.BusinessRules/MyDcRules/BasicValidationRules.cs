@@ -122,12 +122,21 @@ namespace Intel.MyDeals.BusinessRules
                 new MyOpRule
                 {
                     Title="Rate must have a positive value",
-					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.DENSITY.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
+                },
+
+                new MyOpRule
+                {
+                    Title="Density Rate must have a positive value",
+                    ActionRule = MyDcActions.ValidateDensityRate,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.DENSITY_RATE)
                 },
 
                 #region Tiers Start/End/Level/Relatioship checks
@@ -614,7 +623,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="End Volume can only be raised if object has a tracker",
                     ActionRule = MyDcActions.LastTierEndVolumeCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
 
@@ -1111,6 +1120,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                                 AttributeCodes.END_VOL,
                                 AttributeCodes.RATE,
+                                AttributeCodes.DENSITY_RATE,
                                 AttributeCodes.TITLE // Product Title at Deal Level
                             }
                         }
