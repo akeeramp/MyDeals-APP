@@ -10,6 +10,7 @@
     function PrimeCustomersService($http, dataService, logger, $q) {
 
         var apiBaseUrl = "api/PrimeCustomers/";
+        var apiUnifyFileUrl = "/FileAttachments/";
 
         var service = {
             GetPrimeCustomerDetails: GetPrimeCustomerDetails,
@@ -20,7 +21,10 @@
             getPrimeCustomers: getPrimeCustomers,
             getUnmappedPrimeCustomerDeals: getUnmappedPrimeCustomerDeals,
             getEndCustomerData: getEndCustomerData,
-            UpdateUnPrimeDeals: UpdateUnPrimeDeals
+            UpdateUnPrimeDeals: UpdateUnPrimeDeals,
+            validateEndCustomer: validateEndCustomer,
+            ValidateUnifyDeals: ValidateUnifyDeals,
+            updateBulkUnifyDeals: updateBulkUnifyDeals
         }
 
         return service;
@@ -60,6 +64,19 @@
         function UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry) {
             return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustId + '/' + primeCustomerCountry, JSON.stringify(primeCustomerName));
         }
+
+        function validateEndCustomer(endCustomerData) {
+            return dataService.post(apiBaseUrl + 'ValidateEndCustomer', endCustomerData);
+        }
+
+        function ValidateUnifyDeals(lstUnifyDeals) {
+            return dataService.post(apiUnifyFileUrl + 'ValidateBulkUnifyDeals', lstUnifyDeals);
+        }
+
+        function updateBulkUnifyDeals(lstUnifyDeals) {
+            return dataService.post(apiBaseUrl + 'UploadBulkUnifyDeals', lstUnifyDeals);
+        }
+
     }
 
 })();

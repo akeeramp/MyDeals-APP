@@ -64,7 +64,7 @@ namespace Intel.MyDeals.Controllers.API
                 Stream stream = new MemoryStream(fileBodyFinalBytes);
                 result.Content = new StreamContent(stream);
             }
-            
+
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fileAttahment.FILE_NM));
 
@@ -129,6 +129,39 @@ namespace Intel.MyDeals.Controllers.API
         {
             if (!_filesLib.DeleteFileAttachment(custMbrSid, objTypeSid, objSid, fileDataSid, includeGroup))
                 throw new HttpException(500, "Failed to delete attachment.");
+        }
+
+        [HttpGet]
+        [Route("GetBulkUnifyTemplateFile")]
+        public HttpResponseMessage GetBulkUnifyTemplateFile()
+        {
+            byte[] fileBodyFinalBytes = null;
+
+            var fileAttahment = SafeExecutor(() => _filesLib.GetBulkUnifyTemplateFile(), $"Unable to get open template for Bulk Unify");
+
+            if (fileAttahment.FILE_DATA.Length > 0)
+            {
+                if (fileAttahment.IS_COMPRS) // Decompress file
+                {
+                    fileBodyFinalBytes = OpZipUtils.DecompressBytes(fileAttahment.FILE_DATA);
+                }
+                else
+                {
+                    fileBodyFinalBytes = fileAttahment.FILE_DATA;
+                }
+            }
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            if (fileBodyFinalBytes != null)
+            {
+                Stream stream = new MemoryStream(fileBodyFinalBytes);
+                result.Content = new StreamContent(stream);
+            }
+
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fileAttahment.FILE_NM));
+
+            return result;
         }
     }
 }

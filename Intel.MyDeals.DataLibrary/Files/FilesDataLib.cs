@@ -263,5 +263,78 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        /// <summary>
+        /// Get Unify excel template
+        /// </summary>
+        public FileAttachmentData GetBulkUnifyTemplateFile()
+        {
+            FileAttachmentData fileAttachmentData = new FileAttachmentData();
+            fileAttachmentData.FILE_NM = "BulkUnifyDeals.xlsx";
+            fileAttachmentData.IS_COMPRS = false;
+            string strTemplateContent = string.Join("\n", string.Join("\t", "DEAL ID", "UCD_GLOBAL_ID", "UCD_GLOBAL_NAME", "UCD_COUNTRY_CUST_ID", "UCD_COUNTRY"));
+            string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets.Add("UnifyDeals");
+                excelWorksheet.Cells["A1"].LoadFromArrays(arrTemplate);
+                double dblMaxWidthOfColumn = 300;
+                for (int iColumnCount = 1; iColumnCount <= arrTemplate[0].Length; iColumnCount++)
+                {
+                    excelWorksheet.Column(iColumnCount).AutoFit();
+                    if (excelWorksheet.Column(iColumnCount).Width > dblMaxWidthOfColumn)
+                        excelWorksheet.Column(iColumnCount).Width = dblMaxWidthOfColumn;
+                }
+                excelWorksheet.Row(1).Style.Font.Bold = true;
+                excelWorksheet.View.FreezePanes(2, 1);
+                fileAttachmentData.FILE_DATA = excelPackage.GetAsByteArray();
+            }
+            return fileAttachmentData;
+        }
+
+        public List<UnifyDeal> ExtractBulkUnifyFile(byte[] fileData)
+        {
+            List<UnifyDeal> lstRtn = new List<UnifyDeal>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
+
+                        if (iRows >= 2 && iColumns >= 5)
+                        {
+                            // loop through the worksheet rows and columns 
+                            for (int i = 2; i <= iRows; i++)
+                            {
+                                int dbDealId = 0;
+                                int dbPrimCustId = 0;
+                                int dbPrimLvlId = 0;
+
+                                int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
+                                int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
+
+                                lstRtn.Add(new UnifyDeal
+                                {
+                                    DEAL_ID = dbDealId,
+                                    UCD_GLOBAL_ID = dbPrimCustId,
+                                    UCD_GLOBAL_NAME = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().Trim() : string.Empty,
+                                    UCD_COUNTRY_CUST_ID = dbPrimLvlId,
+                                    UCD_COUNTRY = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().Trim() : string.Empty
+                                });
+                            }
+                        }
+
+                    }
+                }
+            }
+            return lstRtn;
+        }
     }
 }

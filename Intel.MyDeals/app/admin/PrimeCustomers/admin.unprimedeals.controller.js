@@ -18,6 +18,26 @@
             document.location.href = "/Dashboard#/portal";
         }
         vm.editAccess = true;
+
+        vm.HasBulkUploadAccess = (window.usrRole == "SA" || window.isDeveloper);
+
+        vm.OpenBulkUploadUnifyModal = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: 'static',
+                templateUrl: 'app/admin/PrimeCustomers/bulkUnifyModal.html',
+                controller: 'BulkUnifyModelController',
+                controllerAs: 'vm',
+                size: 'lg',
+                windowClass: 'prdSelector-modal-window'
+            });
+            modalInstance.rendered.then(function () {
+                $("#fileUploader").removeAttr("multiple");
+            });
+            modalInstance.result.then(function (returnData) {
+            }, function () { });
+        }
+
         if ((window.usrRole == "SA" || window.isCustomerAdmin || window.usrRole == "RA") && !window.isDeveloper) {
             vm.editAccess = false;
         }
@@ -56,7 +76,7 @@
             PrimeCustomersService.getPrimeCustomers().then(function (response) {
                 vm.PrimeCustomersData = response.data;
             }, function (response) {
-                    logger.error("Unable to get Unified Customers.", response, response.statusText);
+                logger.error("Unable to get Unified Customers.", response, response.statusText);
             })
         }
 
@@ -72,7 +92,7 @@
                 controllerAs: '$ctrl',
                 size: 'md',
                 resolve: {
-                    items: function () {                        
+                    items: function () {
                         return {
                             'label': "End customer/Retail",
                             'uiType': "ComboBox",
@@ -88,7 +108,7 @@
                             IS_PRIME: model.IS_PRIMED_CUST,
                             PRIMED_CUST_CNTRY: model.END_CUSTOMER_COUNTRY,
                             PRIMED_CUST_NM: model.PRIMED_CUST_NM,
-                            PRIMED_CUST_ID: model.PRIMED_CUST_ID 
+                            PRIMED_CUST_ID: model.PRIMED_CUST_ID
                         }
                     },
                     colName: function () {
