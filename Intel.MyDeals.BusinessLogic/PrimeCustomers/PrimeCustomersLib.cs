@@ -60,8 +60,10 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-        public bool UpdateUnPrimeDeals(int dealId, string primeCustomerName, string primeCustId, string primeCustomerCountry)
+        public bool UpdateUnPrimeDeals(int dealId , string primeCustId, string[] primeDetails)
         {
+            string primeCustomerName = primeDetails[0];
+            string primeCustomerCountry = primeDetails[1];
             if (!string.IsNullOrEmpty(primeCustomerName) && !string.IsNullOrEmpty(primeCustomerCountry) )
             {
                 if(primeCustomerName.ToLower()=="any" && primeCustomerCountry == "null")

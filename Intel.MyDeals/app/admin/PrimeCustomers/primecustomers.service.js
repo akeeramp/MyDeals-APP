@@ -61,8 +61,8 @@
             return dataService.post(apiBaseUrl + 'GetEndCustomerData', endCustomerData);
         }
 
-        function UpdateUnPrimeDeals(dealId, primeCustomerName, primeCustId, primeCustomerCountry) {
-            return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustId + '/' + primeCustomerCountry, JSON.stringify(primeCustomerName));
+        function UpdateUnPrimeDeals(dealId, primeCustId, primeDetails) {
+            return dataService.post(apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId + '/' + primeCustId , primeDetails);
         }
 
         function validateEndCustomer(endCustomerData) {
