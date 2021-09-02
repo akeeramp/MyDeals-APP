@@ -153,7 +153,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
             //to check whether user entered End customer/retail value is valid or not
             var res = patt.test(ecValues[i]);
-            if (!res) {
+            var IsECSelected = $ctrl.endCustOptions.find(x => x.PRIM_CUST_NM === ecValues[i]);
+
+            if (!res && IsECSelected === undefined) {
                 $ctrl.IsError = true;
                 rowError = true;
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
@@ -314,25 +316,28 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.PRIMED_CUST_NM = "";
         $ctrl.ChangeErrorFlag = false;
         var patt = new RegExp("^[\\w .,:'\&-]*$");
-
+        var isECUserText = false;
         //to get the user entered free text end customer value
         if (dataItem === undefined || dataItem === null) {
             dataItem = $('#' + id).parent().find("input").val();
             if (dataItem != null && dataItem != undefined && dataItem != "") {
                 dataItem = dataItem.trim();
             }
+            isECUserText = true;
             $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;            
         };
 
-        var isEndCustomerValid = patt.test(dataItem);
-        if (isEndCustomerValid) {
-            $ctrl.ChangeErrorFlag = false;
-        }
-        else {
-            $ctrl.ChangeErrorFlag = true;
-            $ctrl.validateFlag = true;
-            $("#" + id).parent().find("span").css("background-color", "red");
-            $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+        if (isECUserText) {
+            var isEndCustomerValid = patt.test(dataItem);
+            if (isEndCustomerValid) {
+                $ctrl.ChangeErrorFlag = false;
+            }
+            else {
+                $ctrl.ChangeErrorFlag = true;
+                $ctrl.validateFlag = true;
+                $("#" + id).parent().find("span").css("background-color", "red");
+                $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+            }
         }
         
         // var isFirstcombinationAny = (dataItem.toUpperCase() == "ANY" && id == "ComboBoxSelect_0") ? true : false;
