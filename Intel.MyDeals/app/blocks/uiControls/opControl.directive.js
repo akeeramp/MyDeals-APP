@@ -188,11 +188,29 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'RADIOBUTTONGROUP' || scope.opType === 'BUTTONGROUP') {
             if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
-                dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {                 
-                    scope.values = response.data;
-                }, function (response) {
-                    logger.error("Unable to get lookup values.", response, response.statusText);
-                });
+                if (scope.opCd === "PERIOD_PROFILE") {
+                    var custId = 0;
+                    if (scope.$parent.$parent.vm != null && scope.$parent.$parent.vm != undefined
+                        && scope.$parent.$parent.vm.autofillData != null
+                        && scope.$parent.$parent.vm.autofillData != undefined) {
+                        custId = parseInt(scope.$parent.$parent.vm.autofillData.CUSTSID);
+                        if (custId == null || custId == undefined || custId == '') {
+                            custId = 0;
+                        }
+                    }
+                    dataService.get(scope.opLookupUrl + "/" + custId, null, null, true).then(function (response) {
+                        scope.values = response.data;
+                    }, function (response) {
+                        logger.error("Unable to get lookup values.", response, response.statusText);
+                    });
+                }
+                else {
+                    dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {
+                        scope.values = response.data;
+                    }, function (response) {
+                        logger.error("Unable to get lookup values.", response, response.statusText);
+                    });
+                }
             }
 
             scope.blend = {
