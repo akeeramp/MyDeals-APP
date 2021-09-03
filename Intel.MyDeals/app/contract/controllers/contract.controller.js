@@ -1711,7 +1711,9 @@
                 && contractData.data[0].Customer.VISTEX_CUST_FLAG != null && contractData.data[0].Customer.VISTEX_CUST_FLAG != undefined
                 && contractData.data[0].Customer.VISTEX_CUST_FLAG != '') {
                 $scope.isVistex = contractData.data[0].Customer.VISTEX_CUST_FLAG;
-                $scope.custId = contractData.data[0].Customer.CUST_SID;
+            }
+            if (contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
+                $scope.custId = contractData.data[0].CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
             }
             var autofillData = {
                 'ISTENDER': $scope.isTenderContract,
