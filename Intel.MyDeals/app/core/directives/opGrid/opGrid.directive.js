@@ -1442,21 +1442,46 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     }
 
-                } else {
-                    $('<input required name="' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            autoBind: false,
-                            valuePrimitive: true,
-                            dataTextField: field.opLookupText,
-                            dataValueField: field.opLookupValue,
-                            dataSource: {
-                                type: "json",
-                                transport: {
-                                    read: field.opLookupUrl
+                } else { //DropDownList controls for general dropdowns from a list
+                    if (options.field.toUpperCase() == "PERIOD_PROFILE") {
+                        var custId = 0;
+                        var colData = $(container).closest("[data-role=grid]").data("kendoGrid")._data;
+                        if (colData != null && colData != undefined && colData.length > 0
+                            && colData[0].CUST_MBR_SID != null &&
+                            colData[0].CUST_MBR_SID != undefined) {
+                            custId = colData[0].CUST_MBR_SID;
+                        }
+
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                valuePrimitive: true,
+                                dataTextField: field.opLookupText,
+                                dataValueField: field.opLookupValue,
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: field.opLookupUrl + "/" + custId
+                                    }
                                 }
-                            }
-                        });
+                            });
+                    } else {
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoDropDownList({
+                                autoBind: false,
+                                valuePrimitive: true,
+                                dataTextField: field.opLookupText,
+                                dataValueField: field.opLookupValue,
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: field.opLookupUrl
+                                    }
+                                }
+                            });
+                    }
                 }
             }
 

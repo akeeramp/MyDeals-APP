@@ -1711,6 +1711,7 @@
                 && contractData.data[0].Customer.VISTEX_CUST_FLAG != null && contractData.data[0].Customer.VISTEX_CUST_FLAG != undefined
                 && contractData.data[0].Customer.VISTEX_CUST_FLAG != '') {
                 $scope.isVistex = contractData.data[0].Customer.VISTEX_CUST_FLAG;
+                $scope.custId = contractData.data[0].Customer.CUST_SID;
             }
             var autofillData = {
                 'ISTENDER': $scope.isTenderContract,
@@ -1718,7 +1719,8 @@
                 'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
                 'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
                 'DEFAULT': getTenderBasedDefaults(),
-                'ISVISTEX': $scope.isVistex
+                'ISVISTEX': $scope.isVistex,
+                'CUSTSID': $scope.custId
             }
 
             var autofillModal = $uibModal.open({

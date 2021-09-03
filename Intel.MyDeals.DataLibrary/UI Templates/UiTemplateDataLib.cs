@@ -382,7 +382,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Period Profile",
                 UiType = "BUTTONGROUP",
                 Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/PERIOD_PROFILE/", //GetDropdowns => GetDropdownsWithCustomerId for TWC3119-21
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -984,7 +984,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Period Profile",
                 UiType = "DROPDOWN",
                 Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/PERIOD_PROFILE/", //GetDropdowns => GetDropdownsWithCustomerId for TWC3119-21
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -3426,7 +3426,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT, OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
                 Width = 160,
                 Template = "#=gridUtils.uiControlWrapper(data, 'PERIOD_PROFILE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PERIOD_PROFILE",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/PERIOD_PROFILE/", //GetDropdowns => GetDropdownsWithCustomerId for TWC3119-21
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,

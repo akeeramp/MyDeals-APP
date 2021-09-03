@@ -11,6 +11,9 @@ DropdownModalCtrl.$inject = ['$scope', '$uibModalInstance', 'colData', 'cellCurr
 function DropdownModalCtrl($scope, $uibModalInstance, colData, cellCurrValues, colName, $timeout) {
 	var $ctrl = this;
 
+	if (colData.field === "PERIOD_PROFILE") { // Append Cust ID to get by ID call for TWC3119-21 for PTE dropdown call, Deal is under opGrid.directive.js
+		colData.opLookupUrl = colData.opLookupUrl + colData.custId;
+    }
 	$ctrl.colData = colData;
 	$ctrl.colName = colName;
 	$ctrl.popupResult = [];
