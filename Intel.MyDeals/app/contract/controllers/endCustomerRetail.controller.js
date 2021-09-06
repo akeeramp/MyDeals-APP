@@ -15,6 +15,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.endCustomerValues = []
     $ctrl.countryValues = []
     $ctrl.validateFlag = true;
+    $ctrl.ecOptionsFlag = true;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
     $ctrl.endCustomerRetailPopUpModal = items;
@@ -42,6 +43,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     //call to get End customer details
     $scope.endCustOptions = PrimeCustomersService.getPrimeCustomers().then(function (response) {
         $ctrl.endCustOptions = response.data;
+        $ctrl.ecOptionsFlag = false;
         $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.PRIM_CUST_NM.toUpperCase() !== "ANY");
 
 
@@ -153,12 +155,16 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
             //to check whether user entered End customer/retail value is valid or not
             var res = patt.test(ecValues[i]);
-            if (!res) {
+
+            var IsECSelected = ($ctrl.endCustOptions !== undefined && $ctrl.endCustOptions !== null) ? ($ctrl.endCustOptions.find(x => x.PRIM_CUST_NM === ecValues[i])) : undefined;
+
+            if (!res && IsECSelected === undefined) {
                 $ctrl.IsError = true;
                 rowError = true;
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
             }
+
             if (ecValues[i].toUpperCase() == "ANY" && isAdmin == true) {
                 $ctrl.IsError = true;
                 rowError = false;
@@ -303,6 +309,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     //change event for end customer combo box
     $ctrl.changeField = function (e) {
+        //to disable Save and close button immediately when change event is triggered(deal Recon screen)
+        $('#saveandclose').attr('disabled', true);
         $ctrl.validateFlag = true;
         var id = e.sender.element[0].id;
         var index = id.substring(id.indexOf('_') + 1, id.length);
@@ -314,25 +322,28 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.PRIMED_CUST_NM = "";
         $ctrl.ChangeErrorFlag = false;
         var patt = new RegExp("^[\\w .,:'\&-]*$");
-
+        var isECUserText = false;
         //to get the user entered free text end customer value
         if (dataItem === undefined || dataItem === null) {
             dataItem = $('#' + id).parent().find("input").val();
             if (dataItem != null && dataItem != undefined && dataItem != "") {
                 dataItem = dataItem.trim();
             }
+            isECUserText = true;
             $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;            
         };
 
-        var isEndCustomerValid = patt.test(dataItem);
-        if (isEndCustomerValid) {
-            $ctrl.ChangeErrorFlag = false;
-        }
-        else {
-            $ctrl.ChangeErrorFlag = true;
-            $ctrl.validateFlag = true;
-            $("#" + id).parent().find("span").css("background-color", "red");
-            $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+        if (isECUserText) {
+            var isEndCustomerValid = patt.test(dataItem);
+            if (isEndCustomerValid) {
+                $ctrl.ChangeErrorFlag = false;
+            }
+            else {
+                $ctrl.ChangeErrorFlag = true;
+                $ctrl.validateFlag = true;
+                $("#" + id).parent().find("span").css("background-color", "red");
+                $("#" + id).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+            }
         }
         
         // var isFirstcombinationAny = (dataItem.toUpperCase() == "ANY" && id == "ComboBoxSelect_0") ? true : false;
@@ -375,6 +386,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     }
 
     $ctrl.changeCountryField = function (e) {
+        $('#saveandclose').attr('disabled', true);
         var id = e.sender.element[0].id;
         $ctrl.validateFlag = true;
         var dataElement = e.sender.$angular_scope.e;
