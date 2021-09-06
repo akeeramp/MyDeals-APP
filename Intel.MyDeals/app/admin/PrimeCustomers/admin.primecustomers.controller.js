@@ -59,9 +59,9 @@
                                 var primeCustIndex = vm.PrimeCustomersData.findIndex(x => (x.PRIM_SID === parseInt(response.data.PRIM_SID)));
                                 vm.PrimeCustomersData[primeCustIndex] = response.data;
                             }, function (response) {
-                                    logger.error("Unable to update Unified customer.", response, response.statusText);
+                                logger.error("Unable to update Unified customer.", response, response.statusText);
                             });
-                        
+
                     }
                 },
                 create: function (e) {
@@ -171,8 +171,8 @@
             },
             maxSelectedItems: 1,
             autoBind: true,
-            dataTextField: "PRIM_CUST_NM",
-            dataValueField: "PRIM_CUST_NM",
+            dataTextField: "Text",
+            dataValueField: "Value",
             valuePrimitive: true
 
         }

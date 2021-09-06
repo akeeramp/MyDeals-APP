@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -55,10 +56,12 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Route("GetPrimeCustomers")]
-        public IEnumerable<PrimeCustomers> GetPrimeCustomers()
+        public IEnumerable<System.Web.Mvc.SelectListItem> GetPrimeCustomers()
         {
-            return SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
+            var result = SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
                 $"Unable to Get Unified Customers");
+            var distinctPrimcustNmList = result.Select(x => x.PRIM_CUST_NM).Distinct();
+            return distinctPrimcustNmList.Select(x => new System.Web.Mvc.SelectListItem { Value = x, Text = x });
         }
 
         [Route("GetUnPrimeDeals")]

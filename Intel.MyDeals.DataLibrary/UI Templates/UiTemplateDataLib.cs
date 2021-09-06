@@ -2825,8 +2825,8 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 UiType = "ComboBox",
                 LookupUrl = "/api/PrimeCustomers/GetPrimeCustomers",
-                LookupText = "PRIM_CUST_NM",
-                LookupValue = "PRIM_CUST_NM",
+                LookupText = "Text",
+                LookupValue = "Value",
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
                 IsFilterable = true,
                 IsSortable = true
