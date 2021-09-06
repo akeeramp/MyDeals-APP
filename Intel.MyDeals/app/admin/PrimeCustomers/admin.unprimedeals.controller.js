@@ -97,8 +97,8 @@
                             'label': "End customer/Retail",
                             'uiType': "ComboBox",
                             'opLookupUrl': "/api/PrimeCustomers/GetPrimeCustomers",
-                            'opLookupText': "PRIM_CUST_NM",
-                            'opLookupValue': "PRIM_CUST_NM",
+                            'opLookupText': "Text",
+                            'opLookupValue': "Value",
                             'clearEndCustomerDisabled': true
                         };
                     },
