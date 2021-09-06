@@ -15,6 +15,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.endCustomerValues = []
     $ctrl.countryValues = []
     $ctrl.validateFlag = true;
+    $ctrl.ecOptionsFlag = true;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
     $ctrl.endCustomerRetailPopUpModal = items;
@@ -42,6 +43,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     //call to get End customer details
     $scope.endCustOptions = PrimeCustomersService.getPrimeCustomers().then(function (response) {
         $ctrl.endCustOptions = response.data;
+        $ctrl.ecOptionsFlag = false;
         $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.PRIM_CUST_NM.toUpperCase() !== "ANY");
 
 
