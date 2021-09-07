@@ -45,7 +45,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $scope.endCustOptions = PrimeCustomersService.getPrimeCustomers().then(function (response) {
         $ctrl.endCustOptions = response.data;
         $ctrl.ecOptionsFlag = false;
-        $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.PRIM_CUST_NM.toUpperCase() !== "ANY");
+        $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.Value.toUpperCase() !== "ANY");
 
 
     }, function (response) {
