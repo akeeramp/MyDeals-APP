@@ -1124,69 +1124,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void LastTierEndVolumeCheck(params object[] args) // Lock down Tier Structures after tracker is generated (US1028743)
-        {
-            // Note, this doesn't effect the UI side code as much because they put special rules in place to handle cell by cell, but this does accurately
-            // place read only in cells to match for the day that UI decides to just trigger off of Mid tier objects instead.
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            if (!r.Dc.HasTracker()) return; // If there is no tracker, stop and leave
-
-            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV, AttributeCodes.END_PB };
-            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
-            string targetDim = "10:" + numTiers.ToString();
-
-            foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
-            {
-                if (de.HasValueChanged && de.DimKeyString.Contains(targetDim))
-                {
-                    string errMsg = "";
-                    switch (objTypeCd)
-                    {
-                        case "VOL_TIER":
-                        case "FLEX":
-                            if (!int.TryParse(de.OrigAtrbValue.ToString(), out int origVol)) origVol = 0;
-                            if (!int.TryParse(de.AtrbValue.ToString(), out int newVol)) newVol = 0;
-                            if (origVol == 0) origVol = 999999999;
-                            if (origVol > newVol)
-                            {
-                                errMsg = "The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
-                            }
-                            break;
-                        case "REV_TIER":
-                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origRev)) origRev = 0;
-                            if (!double.TryParse(de.AtrbValue.ToString(), out double newRev)) newRev = 0;
-                            if (origRev == 0) origRev = 999999999;
-                            if (origRev > newRev)
-                            {
-                                errMsg = "The End Rev cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
-                            }
-                            break;
-                        case "DENSITY":
-                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origPb)) origPb = 0;
-                            if (!double.TryParse(de.AtrbValue.ToString(), out double newPb)) newPb = 0;
-                            if (origPb == 0) origPb = 999999999;
-                            if (origPb > newPb)
-                            {
-                                errMsg = "The End PB cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (errMsg != "")
-                    {
-                        AddTierValidationMessage(de, errMsg, numTiers);
-                        de.AtrbValue = de.OrigAtrbValue;
-                        de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Set read only 
         /// </summary>
@@ -1577,32 +1514,6 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
-        public static void LongTermVolTierDates(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
-
-            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
-
-            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
-
-            if (numTiers > 1)
-            {
-                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
-                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-
-                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
-                if (endDate > maxEndDt)
-                {
-                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
-                }
-            }
-        }
-
         public static void FlexDateRange(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1712,36 +1623,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        // Removed due to Rohit/Navya request, re-added as part of US1026287 
-        public static void FlexDrainingTierCheck(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            string flexRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
-            string hybridType = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
-
-            if (!(flexRowType == "Draining" || hybridType == "1")) return; // This is a draining side only rule
-
-            IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
-
-            decimal safeParse = 0;
-            bool isNumber = Decimal.TryParse(firstTierStartVol.AtrbValue.ToString(), out safeParse);
-
-            if (isNumber && safeParse > 1)
-            {
-                if (flexRowType == "Draining")
-                {
-                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Draining tiers must start at 1", 1);
-                }
-                else
-                {
-                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Flat Rate tiers must start at 1", 1);
-                }
-            }
-
-        }
-
         public static void CheckFrontendSoldPrcGrpCd(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1787,34 +1668,6 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(de.AtrbValue.ToString(), out _))
             {
                 de.AddMessage("Volume must be a valid non-decimal number.");
-            }
-        }
-
-        public static void CheckTierAndMaxVolumes(params object[] args)
-        {
-            // DE36947 - PRODUCTION: Large end volume broke DSU batch 
-            // This check doesn't take into account that start vol might be set to same value as end vol and that check (happens earlier then this)
-            // will be violated.  We allow the save and catch the match later so that the PTR tab doesn't propogate the last tier values into the 
-            // first tier while offsetting the save completely nuking the save data later on (killing tier numbers that requires a data fix)
-
-            // Forecase Volumes added because Song decided that one deal might actually sell up to 999,999,999,999,999 units (Yes, that is almost 1 
-            // quardillion units, one unit for every ant currently alive on the planet!)
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
-            {
-                if (de.AtrbValue.ToString().Contains("1E+"))
-                {
-                    de.AtrbValue = 999999999;
-                }
-                bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out decimal safeParse);
-
-                if (isNumber && safeParse > 999999999)
-                {
-                    de.AtrbValue = 999999999;
-                    de.State = OpDataElementState.Modified;
-                }
             }
         }
 
@@ -2669,439 +2522,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        #region Tiered Validations
-        private static bool IsGreaterThanZero(decimal attrb)
-        {
-            return (attrb > 0);
-        }
-
-        private static bool IsGreaterOrEqualToZero(decimal attrb)
-        {
-            return (attrb >= 0);
-        }
-
-        private static bool IsWholeNumber(decimal attrb)
-        {
-            return (attrb % 1 == 0) && (attrb >= 0);
-        }
-
-        public static void RollUpErrorMessage(params object[] args)
-        {
-            var r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            var dealLevelErrorMessages = r.Dc.GetDataElementsWhere(de => de.ValidationMessage != string.Empty);
-            if (dealLevelErrorMessages.Any())
-            {
-                r.Dc.Message.WriteMessage(OpMsg.MessageType.Warning, "Validation Errors detected in deal");
-            }
-        }
-
-        public static void ClearSysComments(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement sysComment = r.Dc.GetDataElement(AttributeCodes.SYS_COMMENTS);
-            if (sysComment == null || sysComment.AtrbValue.ToString() == "") return;
-
-            sysComment.AtrbValue = "";
-            sysComment.PrevAtrbValue = "";
-            sysComment.OrigAtrbValue = "";
-            sysComment.State = OpDataElementState.Unchanged;
-        }
-
-        public static void CompareStartEndVals(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            // Figure out which object we are to pull corrected start/end values
-            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-
-            IOpDataElement startAtrbWithValidation = null;
-            IOpDataElement endAtrbWithValidation = null;
-            Dictionary<int, string> startValDict = null;
-            Dictionary<int, string> endValDict = null;
-            string atrbMsgToken = "";
-
-            // We need to pick only one of the tiered attributes to set validation on (*AtrbWithValidation), else we'd keep overriding the message value per tier
-            // Then make dictionaries of <tier, values>
-            switch (objTypeCd)
-            {
-                case "VOL_TIER":
-                case "FLEX":
-                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
-                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
-                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    atrbMsgToken = "volume";
-                    break;
-                case "REV_TIER":
-                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).FirstOrDefault();
-                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).FirstOrDefault();
-                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    atrbMsgToken = "rev";
-                    break;
-                case "DENSITY":
-                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).FirstOrDefault();
-                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).FirstOrDefault();
-                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).Select(de => new
-                    {
-                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
-                        Value = de.AtrbValue.ToString()
-                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
-                    atrbMsgToken = "petabyte";
-                    break;
-                default:
-                    break;
-            }
-
-            // Safety pullout since vol tier rules are also run on approvals screen where tiers information is not pulled.  Skip tiers data check if there is no tiers data.
-            if (startValDict.Count == 0 || endValDict.Count == 0) return;
-
-            double prevStartVal = 0;
-            double prevEndVal = 0;
-            for (int tierKey = 1; tierKey <= 10; tierKey++)
-            {
-                if (!double.TryParse(startValDict[tierKey], out double currStartVal)) currStartVal = 0;
-                double currEndVal = 0;
-                bool isEndVolANumber = double.TryParse(endValDict[tierKey], out currEndVal);
-                if (!isEndVolANumber && endValDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    currEndVal = int.MaxValue;
-                }
-
-                if (currStartVal == 0 && currEndVal == 0) continue; // Hit the end of populated values, skip these rows
-
-                if (prevStartVal > currStartVal)
-                {
-                    AddTierValidationMessage(startAtrbWithValidation, "Start " + atrbMsgToken + " must be greater than previous tier start " + atrbMsgToken + ".", tierKey);
-                }
-                if (prevEndVal > currEndVal)
-                {
-                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than previous tier end " + atrbMsgToken + ".", tierKey);
-                }
-                if (currStartVal >= currEndVal)
-                {
-                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than start " + atrbMsgToken + ".", tierKey);
-                }
-                prevStartVal = currStartVal;
-                prevEndVal = currEndVal;
-            }
-        }
-
-        public static void ValidateTierNumber(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IEnumerable<IOpDataElement> tierNbrAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.TIER_NBR);
-            int atrbMtxSid = Attributes.ALL_TIER_NM.DIM_SID;
-
-            foreach (IOpDataElement atrb in tierNbrAtrbs)
-            {
-                int tier = atrb.DimKey.FirstOrDefault(mtx => mtx.AtrbID == atrbMtxSid).AtrbItemId;  // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-
-                decimal myTierNbr = 0;
-                bool tierNumberValue = Decimal.TryParse(atrb.AtrbValue.ToString(), out myTierNbr); // Grab the expected dimensional value because TIER_NBR should match
-                if (tierNumberValue && tier != myTierNbr)
-                {
-                    // Note that we could just fix the value here.  If we want a message, go back to atrbwithvalidation to attach message there, but this is cleaner.
-                    atrb.AtrbValue = tier;
-                }
-            }
-        }
-
-        public static void ValidateTierRate(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
-        }
-
-        public static void ValidateDensityRate(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.DENSITY_RATE.ToString(), "Density Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one density rate must be greater than 0.");
-        }
-
-        public static void ValidateTieredQty(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Qty must be a whole number.", IsWholeNumber, r);
-        }
-
-
-        public static void ValidateTierStartVol(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
-        }
-
-        public static void ValidateTierEndVol(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
-        }
-
-        public static void ValidateTierStartRev(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.STRT_REV.ToString(), "Start Rev must be greater than 0.", IsGreaterThanZero, r);
-        }
-
-        public static void ValidateTierEndRev(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.END_REV.ToString(), "End Rev must be greater than 0.", IsGreaterThanZero, r, true);
-        }
-
-        public static void ValidateTierStartPb(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.STRT_PB.ToString(), "Start Petabytes must be greater than 0.", IsGreaterThanZero, r);
-        }
-
-        public static void ValidateTierEndPb(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.END_PB.ToString(), "End Petabytes must be greater than 0.", IsGreaterThanZero, r, true);
-        }
-
-        public static void ValidateTierQty(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-            ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
-        }
-
-        public static void ValidatePercentValues(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            List<IOpDataElement> percentDes = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd)).ToList();
-            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numOfTiers)) numOfTiers = 0;
-
-            if (numOfTiers == 0) return; // Safety breakout if there are not tiers to go through
-
-            List<int> badTiers = new List<int> { };
-
-            for (int x=0; x <= numOfTiers; x++)
-            {
-                IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == x).FirstOrDefault();
-                if (de != null)
-                {
-                    decimal currPercent;
-                    if (decimal.TryParse(de.AtrbValue.ToString(), out currPercent) && (currPercent >= 100 || currPercent <= 0))
-                    {
-                        // Stuff all bad rows into a list, process the list later and append all bad tier messages to every list member
-                        badTiers.Add(x);
-                        //AddTierValidationMessage(de, "Must be value between 0 and 100.", x);
-                    }
-                }
-            }
-
-            if (badTiers.Count > 0)
-            {
-                foreach (int item in badTiers)
-                {
-                    IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == item).FirstOrDefault();
-                    AddMultiTierValidationMessage(de, "Must be value between 0 and 100.", badTiers.ToArray(), item);
-                }
-            }
-        }
-
-        public static void ValidateTierEcap(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-            if (deNumTiers == null) return;
-
-            // Get number of "tiers" from product, since we don't save NUM_OF_TIERS
-            int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
-
-            // KIT ECAP specific changes (Note that KIT ECAP is ECAP of tier -1)
-            numOfTiers += 1;
-            int offset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
-
-            ValidateTieredDecimalAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
-        }
-
-        public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
-        {
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
-
-            int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
-
-            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
-        }
-
-        public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
-        {
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-            if (deNumTiers == null) return;
-
-            // Get number of "tiers" from product, since we don't save NUM_OF_TIERS
-            // TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
-            int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
-
-            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
-        }
-
-        public static void ValidateTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
-        {
-            IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-            IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-
-            decimal totalOfAtrb = 0;
-
-            // Validate and set validation message if applicable on each tier
-            foreach (IOpDataElement atrb in atrbs)
-            {
-                if (atrb.DimKey.FirstOrDefault() != null)
-                {
-                    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-
-                    if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
-                    {
-                        if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
-                        {
-                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
-                            continue;
-                        }
-
-                        // unlimited end vol
-                        if (isEndVol && (tier == numOfTiers) &&
-                            atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            continue;
-                        }
-
-                        decimal safeParse = 0;
-                        bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
-                        totalOfAtrb += safeParse;
-
-                        // added this to prevent user from saving 0 as QTY breaking DSAs, only triggers for QTY and 0/improper values.
-                        if (atrb.AtrbCd == AttributeCodes.QTY && safeParse == 0)
-                        {
-                            atrb.AtrbValue = 1;  // Just default it to 1 since QTY must be populated and at least 1 unit.
-                            atrb.State = OpDataElementState.Modified; // Force it modified to save
-                            continue; // Dispense with the QTY validation message filled in below.
-                        }
-                        if (!isNumber)
-                        {
-                            AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
-                        }
-                        else if (!validationCondition(safeParse))
-                        {
-                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
-                        }
-
-                    }
-                }
-            }
-
-            // Validation of totals
-            if (isValidateAtrbTotal)
-            {
-                if (!totalValidationCondition(totalOfAtrb))
-                {
-                    foreach (IOpDataElement tieredObj in atrbs)
-                    {
-                        int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-                        if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
-                        {
-                            AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
-        {
-            if (de == null) return;
-            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
-
-            // Previous tier validations exist, so we need to append them together
-            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
-            {
-                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
-            }
-
-            // Turn the new validation into an object
-            tieredValidationMsgs[tier] = msg;
-
-            // Format into JSON
-            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
-
-            de.ValidationMessage = jsonMsg;
-            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
-        }
-
-        private static void AddMultiTierValidationMessage(IOpDataElement de, string msg, int[] aryTiers, int tier = 1, params object[] args)
-        {
-            if (de == null) return;
-            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
-
-            // Previous tier validations exist, so we need to append them together
-            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
-            {
-                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
-            }
-
-            // Turn the new validation into an object
-            foreach (int currTier in aryTiers)
-            {
-                tieredValidationMsgs[currTier] = msg;
-            }
-            //tieredValidationMsgs[tier] = msg;
-
-            // Format into JSON
-            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
-
-            de.ValidationMessage = jsonMsg;
-            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
-        }
-
-
-        #endregion Tiered Validations
-
         public static void ValidateKitRebateBundleDiscount(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -3514,5 +2934,590 @@ namespace Intel.MyDeals.BusinessRules
                 dePayoutValue.AddMessage("Billings based KIT cannot be created for Vistex Customer");
             }
         }
+
+        #region Tier Based Checks
+
+        public static void CheckTierAndMaxVolumes(params object[] args)
+        {
+            // DE36947 - PRODUCTION: Large end volume broke DSU batch 
+            // This check doesn't take into account that start vol might be set to same value as end vol and that check (happens earlier then this)
+            // will be violated.  We allow the save and catch the match later so that the PTR tab doesn't propogate the last tier values into the 
+            // first tier while offsetting the save completely nuking the save data later on (killing tier numbers that requires a data fix)
+
+            // Forecase Volumes added because Song decided that one deal might actually sell up to 999,999,999,999,999 units (Yes, that is almost 1 
+            // quardillion units, one unit for every ant currently alive on the planet!)
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
+            {
+                if (de.AtrbValue.ToString().Contains("1E+"))
+                {
+                    de.AtrbValue = 999999999;
+                }
+                bool isNumber = Decimal.TryParse(de.AtrbValue.ToString(), out decimal safeParse);
+
+                if (isNumber && safeParse > 999999999)
+                {
+                    de.AtrbValue = 999999999;
+                    de.State = OpDataElementState.Modified;
+                }
+            }
+        }
+
+        public static void LongTermVolTierDates(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
+
+            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+
+            if ((dealType == "VOL_TIER" && numTiers > 1) || dealType != "VOL_TIER")
+            {
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+
+                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
+                if (endDate > maxEndDt)
+                {
+                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
+                }
+            }
+        }
+
+        public static void LastTierEndVolumeCheck(params object[] args) // Lock down Tier Structures after tracker is generated (US1028743)
+        {
+            // Note, this doesn't effect the UI side code as much because they put special rules in place to handle cell by cell, but this does accurately
+            // place read only in cells to match for the day that UI decides to just trigger off of Mid tier objects instead.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            if (!r.Dc.HasTracker()) return; // If there is no tracker, stop and leave
+
+            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV, AttributeCodes.END_PB };
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
+            string targetDim = "10:" + numTiers.ToString();
+
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
+            {
+                if (de.HasValueChanged && de.DimKeyString.Contains(targetDim))
+                {
+                    string errMsg = "";
+                    switch (objTypeCd)
+                    {
+                        case "VOL_TIER":
+                        case "FLEX":
+                            if (!int.TryParse(de.OrigAtrbValue.ToString(), out int origVol)) origVol = 0;
+                            if (!int.TryParse(de.AtrbValue.ToString(), out int newVol)) newVol = 0;
+                            if (origVol == 0) origVol = 999999999;
+                            if (origVol > newVol)
+                            {
+                                errMsg = "The End Volume cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        case "REV_TIER":
+                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origRev)) origRev = 0;
+                            if (!double.TryParse(de.AtrbValue.ToString(), out double newRev)) newRev = 0;
+                            if (origRev == 0) origRev = 999999999;
+                            if (origRev > newRev)
+                            {
+                                errMsg = "The End Rev cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        case "DENSITY":
+                            if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origPb)) origPb = 0;
+                            if (!double.TryParse(de.AtrbValue.ToString(), out double newPb)) newPb = 0;
+                            if (origPb == 0) origPb = 999999999;
+                            if (origPb > newPb)
+                            {
+                                errMsg = "The End PB cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (errMsg != "")
+                    {
+                        AddTierValidationMessage(de, errMsg, numTiers);
+                        de.AtrbValue = de.OrigAtrbValue;
+                        de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
+                    }
+                }
+            }
+        }
+
+        // Removed due to Rohit/Navya request, re-added as part of US1026287 
+        public static void FlexDrainingTierCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string flexRowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
+            string hybridType = r.Dc.GetDataElementValue(AttributeCodes.IS_HYBRID_PRC_STRAT);
+
+            if (!(flexRowType == "Draining" || hybridType == "1")) return; // This is a draining side only rule
+
+            IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
+
+            decimal safeParse = 0;
+            bool isNumber = Decimal.TryParse(firstTierStartVol.AtrbValue.ToString(), out safeParse);
+
+            if (isNumber && safeParse > 1)
+            {
+                if (flexRowType == "Draining")
+                {
+                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Draining tiers must start at 1", 1);
+                }
+                else
+                {
+                    AddTierValidationMessage(firstTierStartVol, "Start Volume for Flat Rate tiers must start at 1", 1);
+                }
+            }
+
+        }
+
+        public static void CompareStartEndVals(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            // Figure out which object we are to pull corrected start/end values
+            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            IOpDataElement startAtrbWithValidation = null;
+            IOpDataElement endAtrbWithValidation = null;
+            Dictionary<int, string> startValDict = null;
+            Dictionary<int, string> endValDict = null;
+            string atrbMsgToken = "";
+
+            // We need to pick only one of the tiered attributes to set validation on (*AtrbWithValidation), else we'd keep overriding the message value per tier
+            // Then make dictionaries of <tier, values>
+            switch (objTypeCd)
+            {
+                case "VOL_TIER":
+                case "FLEX":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "volume";
+                    break;
+                case "REV_TIER":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_REV).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_REV).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "rev";
+                    break;
+                case "DENSITY":
+                    startAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).FirstOrDefault();
+                    endAtrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).FirstOrDefault();
+                    startValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_PB).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    endValDict = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_PB).Select(de => new
+                    {
+                        Key = de.DimKey.FirstOrDefault().AtrbItemId,
+                        Value = de.AtrbValue.ToString()
+                    }).ToDictionary(pair => pair.Key, pair => pair.Value);
+                    atrbMsgToken = "petabyte";
+                    break;
+                default:
+                    break;
+            }
+
+            // Safety pullout since vol tier rules are also run on approvals screen where tiers information is not pulled.  Skip tiers data check if there is no tiers data.
+            if (startValDict.Count == 0 || endValDict.Count == 0) return;
+
+            double prevStartVal = 0;
+            double prevEndVal = 0;
+            for (int tierKey = 1; tierKey <= 10; tierKey++)
+            {
+                if (!double.TryParse(startValDict[tierKey], out double currStartVal)) currStartVal = 0;
+                double currEndVal = 0;
+                bool isEndVolANumber = double.TryParse(endValDict[tierKey], out currEndVal);
+                if (!isEndVolANumber && endValDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    currEndVal = int.MaxValue;
+                }
+
+                if (currStartVal == 0 && currEndVal == 0) continue; // Hit the end of populated values, skip these rows
+
+                if (prevStartVal > currStartVal)
+                {
+                    AddTierValidationMessage(startAtrbWithValidation, "Start " + atrbMsgToken + " must be greater than previous tier start " + atrbMsgToken + ".", tierKey);
+                }
+                if (prevEndVal > currEndVal)
+                {
+                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than previous tier end " + atrbMsgToken + ".", tierKey);
+                }
+                if (currStartVal >= currEndVal)
+                {
+                    AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than start " + atrbMsgToken + ".", tierKey);
+                }
+                prevStartVal = currStartVal;
+                prevEndVal = currEndVal;
+            }
+        }
+
+        public static void ValidateTierNumber(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IEnumerable<IOpDataElement> tierNbrAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.TIER_NBR);
+            int atrbMtxSid = Attributes.ALL_TIER_NM.DIM_SID;
+
+            foreach (IOpDataElement atrb in tierNbrAtrbs)
+            {
+                int tier = atrb.DimKey.FirstOrDefault(mtx => mtx.AtrbID == atrbMtxSid).AtrbItemId;  // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+
+                decimal myTierNbr = 0;
+                bool tierNumberValue = Decimal.TryParse(atrb.AtrbValue.ToString(), out myTierNbr); // Grab the expected dimensional value because TIER_NBR should match
+                if (tierNumberValue && tier != myTierNbr)
+                {
+                    // Note that we could just fix the value here.  If we want a message, go back to atrbwithvalidation to attach message there, but this is cleaner.
+                    atrb.AtrbValue = tier;
+                }
+            }
+        }
+
+        public static void ValidateTierRate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one rate must be greater than 0.");
+        }
+
+        public static void ValidateDensityRate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.DENSITY_RATE.ToString(), "Density Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one density rate must be greater than 0.");
+        }
+
+        public static void ValidateTieredQty(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Qty must be a whole number.", IsWholeNumber, r);
+        }
+
+
+        public static void ValidateTierStartVol(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidateTierEndVol(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
+        public static void ValidateTierStartRev(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.STRT_REV.ToString(), "Start Rev must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidateTierEndRev(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.END_REV.ToString(), "End Rev must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
+        public static void ValidateTierStartPb(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.STRT_PB.ToString(), "Start Petabytes must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidateTierEndPb(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateVolTieredAttribute(AttributeCodes.END_PB.ToString(), "End Petabytes must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
+        public static void ValidateTierQty(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateKitTieredDecimalAttribute(AttributeCodes.QTY.ToString(), "Quantity must be greater than 0.", IsGreaterThanZero, r);
+        }
+
+        public static void ValidatePercentValues(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<IOpDataElement> percentDes = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd)).ToList();
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numOfTiers)) numOfTiers = 0;
+
+            if (numOfTiers == 0) return; // Safety breakout if there are not tiers to go through
+
+            List<int> badTiers = new List<int> { };
+
+            for (int x = 0; x <= numOfTiers; x++)
+            {
+                IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == x).FirstOrDefault();
+                if (de != null)
+                {
+                    decimal currPercent;
+                    if (decimal.TryParse(de.AtrbValue.ToString(), out currPercent) && (currPercent >= 100 || currPercent <= 0))
+                    {
+                        // Stuff all bad rows into a list, process the list later and append all bad tier messages to every list member
+                        badTiers.Add(x);
+                        //AddTierValidationMessage(de, "Must be value between 0 and 100.", x);
+                    }
+                }
+            }
+
+            if (badTiers.Count > 0)
+            {
+                foreach (int item in badTiers)
+                {
+                    IOpDataElement de = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DimKey.FirstOrDefault().AtrbItemId == item).FirstOrDefault();
+                    AddMultiTierValidationMessage(de, "Must be value between 0 and 100.", badTiers.ToArray(), item);
+                }
+            }
+        }
+
+        public static void ValidateTierEcap(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            if (deNumTiers == null) return;
+
+            // Get number of "tiers" from product, since we don't save NUM_OF_TIERS
+            int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+
+            // KIT ECAP specific changes (Note that KIT ECAP is ECAP of tier -1)
+            numOfTiers += 1;
+            int offset = 2; // Note that the offset is now 2 to account for KIT ECAPs at tier -1
+
+            ValidateTieredDecimalAttribute(AttributeCodes.ECAP_PRICE.ToString(), "ECAP must be greater than 0.", IsGreaterThanZero, r, numOfTiers, offset, false);
+        }
+
+        public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+        {
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
+
+            int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+
+            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
+        }
+
+        public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+        {
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            if (deNumTiers == null) return;
+
+            // Get number of "tiers" from product, since we don't save NUM_OF_TIERS
+            // TODO: Ask Mahesh what logic is needed for separating products in PTR_USR_PRD... I think he said comma, +, /, &, "OR" but doublecheck
+            int numOfTiers = deNumTiers.AtrbValue.ToString().Count(f => f == ',') + 1;
+
+            ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 1, false, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
+        }
+
+        public static void ValidateTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+        {
+            IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+            IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
+            decimal totalOfAtrb = 0;
+
+            // Validate and set validation message if applicable on each tier
+            foreach (IOpDataElement atrb in atrbs)
+            {
+                if (atrb.DimKey.FirstOrDefault() != null)
+                {
+                    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+
+                    if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                    {
+                        if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                            continue;
+                        }
+
+                        // unlimited end vol
+                        if (isEndVol && (tier == numOfTiers) &&
+                            atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        decimal safeParse = 0;
+                        bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+                        totalOfAtrb += safeParse;
+
+                        // added this to prevent user from saving 0 as QTY breaking DSAs, only triggers for QTY and 0/improper values.
+                        if (atrb.AtrbCd == AttributeCodes.QTY && safeParse == 0)
+                        {
+                            atrb.AtrbValue = 1;  // Just default it to 1 since QTY must be populated and at least 1 unit.
+                            atrb.State = OpDataElementState.Modified; // Force it modified to save
+                            continue; // Dispense with the QTY validation message filled in below.
+                        }
+                        if (!isNumber)
+                        {
+                            AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
+                        }
+                        else if (!validationCondition(safeParse))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                        }
+
+                    }
+                }
+            }
+
+            // Validation of totals
+            if (isValidateAtrbTotal)
+            {
+                if (!totalValidationCondition(totalOfAtrb))
+                {
+                    foreach (IOpDataElement tieredObj in atrbs)
+                    {
+                        int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
+                        if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
+        {
+            if (de == null) return;
+            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
+
+            // Previous tier validations exist, so we need to append them together
+            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
+            {
+                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
+            }
+
+            // Turn the new validation into an object
+            tieredValidationMsgs[tier] = msg;
+
+            // Format into JSON
+            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
+
+            de.ValidationMessage = jsonMsg;
+            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
+        }
+
+        private static void AddMultiTierValidationMessage(IOpDataElement de, string msg, int[] aryTiers, int tier = 1, params object[] args)
+        {
+            if (de == null) return;
+            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
+
+            // Previous tier validations exist, so we need to append them together
+            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
+            {
+                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
+            }
+
+            // Turn the new validation into an object
+            foreach (int currTier in aryTiers)
+            {
+                tieredValidationMsgs[currTier] = msg;
+            }
+            //tieredValidationMsgs[tier] = msg;
+
+            // Format into JSON
+            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
+
+            de.ValidationMessage = jsonMsg;
+            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
+        }
+
+        #endregion Tier Based Checks
+
+        #region Generic Helpers
+        private static bool IsGreaterThanZero(decimal attrb)
+        {
+            return (attrb > 0);
+        }
+
+        private static bool IsGreaterOrEqualToZero(decimal attrb)
+        {
+            return (attrb >= 0);
+        }
+
+        private static bool IsWholeNumber(decimal attrb)
+        {
+            return (attrb % 1 == 0) && (attrb >= 0);
+        }
+
+        public static void RollUpErrorMessage(params object[] args)
+        {
+            var r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            var dealLevelErrorMessages = r.Dc.GetDataElementsWhere(de => de.ValidationMessage != string.Empty);
+            if (dealLevelErrorMessages.Any())
+            {
+                r.Dc.Message.WriteMessage(OpMsg.MessageType.Warning, "Validation Errors detected in deal");
+            }
+        }
+
+        public static void ClearSysComments(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement sysComment = r.Dc.GetDataElement(AttributeCodes.SYS_COMMENTS);
+            if (sysComment == null || sysComment.AtrbValue.ToString() == "") return;
+
+            sysComment.AtrbValue = "";
+            sysComment.PrevAtrbValue = "";
+            sysComment.OrigAtrbValue = "";
+            sysComment.State = OpDataElementState.Unchanged;
+        }
+
+        #endregion Generic Helpers
+
     }
 }

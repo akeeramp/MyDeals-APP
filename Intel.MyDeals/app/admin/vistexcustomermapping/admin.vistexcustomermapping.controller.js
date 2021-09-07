@@ -24,9 +24,11 @@
         vm.ARSettlementLevel = [];
         vm.TenderARSettlementLevel = [];
         vm.SettlementPartner = [];
+        vm.PeriodProfileData = [];
 
         vm.InitiateDropDowns = function () {
             dropdownsService.getDropdown('GetDropdowns/PERIOD_PROFILE').then(function (response) {
+                vm.PeriodProfileData = response.data;
                 vm.PeriodProfile = response.data;
             }, function (response) {
                 logger.error("Unable to get period profile.", response, response.statusText);
@@ -181,6 +183,9 @@
         };
 
         vm.PeriodProfileDropDownEditor = function (container, options) {
+            vm.PeriodProfile = []; // clear current dropdown item, fill from filtered full data set below
+            vm.PeriodProfile = vm.PeriodProfileData.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID || x.CUST_MBR_SID == 1); // customer specific OR all customers
+
             var editor = $('<select kendo-combo-box k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
