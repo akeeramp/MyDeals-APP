@@ -150,7 +150,10 @@
                             primeCustId = model.PRIMED_CUST_ID;
                         }
 
-                        PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, primeCustomerNm, primeCustId, primeCustomerCtry).then(function (response) {
+                        var primeDetails = [primeCustomerNm, primeCustomerCtry];
+
+                        //Passing prime customer name and country as an array to the middle tier to fix TWC3167-154 issue
+                        PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, primeCustId, primeDetails).then(function (response) {
                             var commandCell = gridrow.container.find("td:first");
                             commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");
                             if (response.data) {
