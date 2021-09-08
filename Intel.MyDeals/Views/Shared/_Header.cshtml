@@ -253,7 +253,6 @@
                     {
                         <li><a href="Admin#/geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
-                        <li><a href="Admin#/consumptionCountry">Consumption Country</a></li>
                     }
 
                     @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
@@ -321,7 +320,7 @@
                         </li>
                     }
 
-                    @if (isDeveloper) // Was isDeveloper || isRealSA
+                    @if (isRealSA || isDeveloper) // Was isDeveloper
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Admin Tools</a>
@@ -332,6 +331,10 @@
                                     <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
                                     <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
                                     <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
+                                }
+                                @if (isRealSA || isDeveloper)
+                                {
+                                    <li><a href="Admin#/consumptionCountry">Consumption Country</a></li>
                                 }
                             </ul>
                         </li>

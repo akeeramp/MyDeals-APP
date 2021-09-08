@@ -34,7 +34,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             $ctrl.END_CUST_OBJ = (cellCurrValues.END_CUST_OBJ.length == 0) ? $ctrl.END_CUST_OBJ : cellCurrValues.END_CUST_OBJ
         }
     }
-
+    $ctrl.IsAny = false;
+    $ctrl.IsAny = $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY';
     $ctrl.colName = colName;
     $ctrl.embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.';
 
@@ -44,7 +45,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $scope.endCustOptions = PrimeCustomersService.getPrimeCustomers().then(function (response) {
         $ctrl.endCustOptions = response.data;
         $ctrl.ecOptionsFlag = false;
-        $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.PRIM_CUST_NM.toUpperCase() !== "ANY");
+        $ctrl.endCustOptionswithOutAny = response.data.filter(x => x.Value.toUpperCase() !== "ANY");
 
 
     }, function (response) {
@@ -93,7 +94,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         if (index > -1) {
             $ctrl.END_CUST_OBJ.splice(index, 1);
         }
-    }
+    }      
 
     //on click on validate in pop up-to check for the errors in the selected data
     $ctrl.ok = function () {
@@ -309,6 +310,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     //change event for end customer combo box
     $ctrl.changeField = function (e) {
+        $ctrl.IsAny = $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY';
         //to disable Save and close button immediately when change event is triggered(deal Recon screen)
         $('#saveandclose').attr('disabled', true);
         $ctrl.validateFlag = true;
