@@ -47,7 +47,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var endCustomerOnly = $('#ComboBoxSelect').parent().find("input").val().trim();
         var patt = new RegExp("^[\\w .,:'\&-]*$");
         var res = patt.test(endCustomerOnly);
-        if (!res) {
+        if (!res && !isEndCustomerSelected) {
             $ctrl.IsError = true;
             $ctrl.msg = "Invalid Character identified in End customer/Retail. Please remove it and Save.";
         }
