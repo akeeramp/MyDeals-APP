@@ -19,7 +19,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
     vm.duplicateGlobalNames = [];
 
     vm.SpreadSheetRowsCount = 0;
-    vm.HasBulkUploadAccess = (window.usrRole == "SA" || window.isDeveloper);
+    vm.HasBulkUploadAccess = ((window.usrRole == "SA" && !window.isCustomerAdmin) || window.isDeveloper);
     vm.IsSpreadSheetEdited = true;
     var hasUnSavedFiles = false;
     var hasFiles = false;
@@ -215,7 +215,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                     }
                     if (vm.UnifyValidation.InValidCountries.length > 0) {
-                        if (jQuery.inArray(jQuery.trim(vm.inValidUnifyDeals[i].UCD_COUNTRY).toLowerCase(), vm.UnifyValidation.InValidCountries) != -1) {
+                        if (jQuery.inArray(jQuery.trim(vm.inValidUnifyDeals[i].UCD_COUNTRY), vm.UnifyValidation.InValidCountries) != -1) {
                             msg = "UCD_COUNTRY does not exists in My Deals!";
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
