@@ -365,12 +365,10 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.CheckAtrbLength,
                             Args = new object[] { new Dictionary<string, int> { 
-                                { AttributeCodes.QLTR_PROJECT, 65 }, 
-                                { AttributeCodes.END_CUSTOMER_RETAIL, 100 } 
+                                { AttributeCodes.QLTR_PROJECT, 65 }
                             } },
                             Target = new[] {
-                                AttributeCodes.QLTR_PROJECT,
-                                AttributeCodes.END_CUSTOMER_RETAIL
+                                AttributeCodes.QLTR_PROJECT
                             }
                         }
                     }
