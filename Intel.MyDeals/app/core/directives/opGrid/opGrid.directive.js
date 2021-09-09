@@ -3651,6 +3651,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         cellCurrValues: function () {
                             //if (typeof containerDataItem.CONSUMPTION_CUST_PLATFORM == "string") { // Original pattern for reference
                             if (typeof containerDataItem[fieldNameString] == "string") {
+                                if (fieldNameString == "CONSUMPTION_COUNTRY") {
+                                    return containerDataItem[fieldNameString].split("|").map(function (item) {
+                                        return item.trim();
+                                    });
+                                }
                                 return containerDataItem[fieldNameString].split(",").map(function (item) {
                                     return item.trim();
                                 });

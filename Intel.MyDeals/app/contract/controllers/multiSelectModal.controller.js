@@ -68,7 +68,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
 
         // Turn returnVal into a string rather than an array to prevent Kendo UIs drag-to-copy spreadsheet errors
         if (Array.isArray(returnVal)) {
-            returnVal = returnVal.toString();
+            returnVal = returnVal.join('|').toString();
             if ($ctrl.colName == "CONSUMPTION_COUNTRY") {
                 returnVal = mrktSegMultiSelectService.setConsumptionCtrySelect("MultiSelectSelections", returnVal);
             }
