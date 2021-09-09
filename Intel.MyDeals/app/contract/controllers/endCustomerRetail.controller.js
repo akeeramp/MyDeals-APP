@@ -385,6 +385,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             });
 
         }
+        $scope.$apply();
     }
 
     $ctrl.changeCountryField = function (e) {
