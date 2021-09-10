@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/31/2021 3:16:59 PM
+File Updated: 9/10/2021 8:30:55 AM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -1841,13 +1841,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End Revenue",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 8,
-			DATA_TYPE_CD = "VARCHAR",
+			DATA_TYPE_CD = "MONEY",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
 			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "VARCHAR",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute END_VOL = new MyDealsAttribute()
@@ -3345,6 +3345,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "NAND Interface",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 7078,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "PRD",
+			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute NAND_TRUE_DENSITY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "NAND_TRUE_DENSITY",
+			ATRB_DESC = "True NAND Density",
+			ATRB_LBL = "True NAND Density",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 7094,
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "PRD",
 			DIM_SID = 7,

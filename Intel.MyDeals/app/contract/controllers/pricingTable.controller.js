@@ -2188,21 +2188,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     let endKey;
                                     let strtKey;
                                     let firstDefault;
+                                    let maxValue;
                                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-                                        rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; firstDefault = 1;
+                                        rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL"; firstDefault = 1; maxValue = "Unlimited";
                                     }
                                     else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
-                                        rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0.01;
+                                        rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV"; firstDefault = 0.01; maxValue = "9999999999.99";
                                     }
                                     else { // DENSITY
-                                        rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.001;
+                                        rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB"; firstDefault = 0.001; maxValue = "Unlimited";
                                     }
                                     // Default to 0
                                     data[r][rateKey] = 0;
 
                                     if (pivotDim === parseInt(numPivotRows)) {
                                         // default last end vol to "unlimited"
-                                        data[r][endKey] = unlimitedVal;
+                                        data[r][endKey] = maxValue; //unlimitedVal;
                                     } else {
                                         // Default to 0
                                         data[r][endKey] = 0;

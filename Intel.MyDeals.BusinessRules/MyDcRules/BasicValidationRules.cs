@@ -235,6 +235,27 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
+                new MyOpRule
+                {
+                    Title="Restrict value to X decimal places",
+                    ActionRule = MyDcActions.RestrictDecimalPlaces,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.STRT_REV,
+                                AttributeCodes.END_REV,
+                                AttributeCodes.STRT_PB,
+                                AttributeCodes.END_PB
+                            }
+                        }
+                    }
+                },
                 #endregion Tiers  Start/End/Level/Relatioship checks
 
                 new MyOpRule
@@ -551,6 +572,26 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.FRCST_VOL,
                                 AttributeCodes.STRT_VOL, 
                                 AttributeCodes.END_VOL
+                            }
+                        }
+                    }
+                },
+
+                //CheckRevTierMaxVals
+                new MyOpRule
+                {
+                    Title="Rev Tier Max Volume Check",
+                    ActionRule = MyDcActions.CheckRevTierMaxVals,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.REV_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.STRT_REV,
+                                AttributeCodes.END_REV
                             }
                         }
                     }
