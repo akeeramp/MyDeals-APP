@@ -1695,8 +1695,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.updateScheduleEditor = function (dataItem, field, row) {
                 //if empty or max value, set to "Unlimited"
                 if (field === "END_VOL" || field === "END_REV") {
-                    if (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999") {
+                    if (field === "END_VOL" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
                         dataItem[field]["10___" + row] = "Unlimited";
+                    }
+                    if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
+                        dataItem[field]["10___" + row] = "9999999999.99";
                     }
                 }
 
@@ -1725,7 +1728,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (field === "END_REV") {
                     //if there is a next row/tier
                     if (!!dataItem["STRT_REV"]["10___" + (row + 1)]) {
-                        if (dataItem[field]["10___" + row] === "Unlimited") {
+                        if (dataItem[field]["10___" + row] === "9999999999.99") { // Was "Unlimited"
                             dataItem["STRT_REV"]["10___" + (row + 1)] = "0";
                         } else {
                             //if end vol is a number, then set next start vol to that number + .01 (a penny)

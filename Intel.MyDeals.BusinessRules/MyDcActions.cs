@@ -2965,6 +2965,27 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckRevTierMaxVals(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
+            {
+                if (de.AtrbValue.ToString().Contains("1E+"))
+                {
+                    de.AtrbValue = 9999999999.99;
+                }
+                bool isNumber = Double.TryParse(de.AtrbValue.ToString(), out double safeParse);
+
+                if (isNumber && safeParse > 9999999999.99)
+                {
+                    de.AtrbValue = 9999999999.99;
+                    de.State = OpDataElementState.Modified;
+                }
+            }
+        }
+
         public static void LongTermVolTierDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -3026,7 +3047,7 @@ namespace Intel.MyDeals.BusinessRules
                         case "REV_TIER":
                             if (!double.TryParse(de.OrigAtrbValue.ToString(), out double origRev)) origRev = 0;
                             if (!double.TryParse(de.AtrbValue.ToString(), out double newRev)) newRev = 0;
-                            if (origRev == 0) origRev = 999999999;
+                            if (origRev == 0) origRev = 9999999999.99;
                             if (origRev > newRev)
                             {
                                 errMsg = "The End Rev cannot be decreased when a tracker has been assigned, only increased.  Values have been reset to original values.  Please Re-validate to clear this message.";
@@ -3298,7 +3319,13 @@ namespace Intel.MyDeals.BusinessRules
                 if (de != null)
                 {
                     decimal currPercent;
-                    if (decimal.TryParse(de.AtrbValue.ToString(), out currPercent) && (currPercent >= 100 || currPercent <= 0))
+                    bool converted = decimal.TryParse(de.AtrbValue.ToString(), out currPercent);
+                    if (converted && Math.Round(currPercent, 2) != currPercent) // Fix decimals to 2 if more added
+                    {
+                        currPercent = Math.Round(currPercent, 2);
+                        de.AtrbValue = currPercent;
+                    }
+                    if (converted && (currPercent >= 100 || currPercent <= 0 || Math.Round(currPercent, 2) != currPercent))
                     {
                         // Stuff all bad rows into a list, process the list later and append all bad tier messages to every list member
                         badTiers.Add(x);
@@ -3317,7 +3344,46 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ValidateTierEcap(params object[] args)
+        public static void RestrictDecimalPlaces(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string objTypeCd = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            List<IOpDataElement> checkDes = r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd)).ToList();
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numOfTiers)) numOfTiers = 0;
+
+            foreach (IOpDataElement de in checkDes)
+            {
+                if (de.DimKey.FirstOrDefault().AtrbItemId <= numOfTiers)
+                {
+                    decimal currValue;
+                    bool converted = decimal.TryParse(de.AtrbValue.ToString(), out currValue);
+
+                    switch (objTypeCd)
+                    {
+                        case "REV_TIER":
+                            if (converted && Math.Round(currValue, 2) != currValue) // Fix decimals to 2 if more added
+                            {
+                                currValue = Math.Round(currValue, 2);
+                                de.AtrbValue = currValue;
+                            }
+                            break;
+                        case "DENSITY":
+                            if (converted && Math.Round(currValue, 3) != currValue) // Fix decimals to 3 if more added
+                            {
+                                currValue = Math.Round(currValue, 3);
+                                de.AtrbValue = currValue;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+            public static void ValidateTierEcap(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
