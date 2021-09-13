@@ -215,7 +215,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                     }
                     if (vm.UnifyValidation.InValidCountries.length > 0) {
-                        if (jQuery.inArray(jQuery.trim(vm.inValidUnifyDeals[i].UCD_COUNTRY), vm.UnifyValidation.InValidCountries) != -1) {
+                        if (jQuery.inArray(jQuery.trim(vm.inValidUnifyDeals[i].UCD_COUNTRY).toLowerCase(), vm.UnifyValidation.InValidCountries) != -1) {
                             msg = "UCD_COUNTRY does not exists in My Deals!";
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
@@ -284,7 +284,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             if (vm.duplicateGlobalIds.length > 1) {
                 strAlertMessage += "</br></br>Same UCD_GLOBAL_ID exists for multiple UCD_GLOBAL_NAMES!";
             }
-            if (vm.duplicateGlobalIds.length > 1) {
+            if (vm.duplicateGlobalNames.length > 1) {
                 strAlertMessage += "</br></br>Same UCD_GLOBAL_NAME exists for multiple UCD_GLOBAL_IDS!";
             }
             if (isGlobalContainsAny) {
