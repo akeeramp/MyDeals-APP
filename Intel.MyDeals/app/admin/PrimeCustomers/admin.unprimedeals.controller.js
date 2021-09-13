@@ -90,6 +90,7 @@
                 templateUrl: 'endCustomerRetailModal',
                 controller: 'EndCustomerRetailCtrl',
                 controllerAs: '$ctrl',
+                windowClass: 'multiselect-modal-window',
                 size: 'md',
                 resolve: {
                     items: function () {
@@ -125,7 +126,28 @@
             });
             //changing autocomplete to disabled for endcustomer country input to stop showing chrome autofill data
             endCustomerRetailModal.rendered.then(function () {
-                $('#DropdownSelections').parent().find("input").attr('autocomplete', 'disabled');
+                $timeout(function () {
+                    if (model.END_CUST_OBJ !== "") {
+                        var ecDataObj = JSON.parse(model.END_CUST_OBJ)
+                        if (ecDataObj.length == undefined) {
+                            ecDataObj = [ecDataObj]
+                        }
+                        if (ecDataObj.length > 0) {
+                            var index = 0;
+                            angular.forEach(ecDataObj, (item) => {
+                                //Embargo country validation alert.
+                                if (item.END_CUSTOMER_RETAIL.toUpperCase() == "ANY") {
+                                    $('#DropdownSelections_0').attr('disabled', true);
+                                }
+                                $('#DropdownSelections_' + index++).parent().find("input").attr('autocomplete', 'disabled');
+                            });
+                        }
+                    }
+                    else {
+                        $('#DropdownSelections_0').parent().find("input").attr('autocomplete', 'disabled');
+                    }
+
+                }, 1500);
             });
             endCustomerRetailModal.result.then(
                 function (endCustomerData) { //returns as an array

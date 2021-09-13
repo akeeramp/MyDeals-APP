@@ -3277,16 +3277,6 @@
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                     errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["END_CUSTOMER_RETAIL"]);
                                 }
-                                else if (gData[i]["END_CUSTOMER_RETAIL"].length > 60) {
-                                    if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
-                                        if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                        if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                        gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                                        gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("End Customer text can not be longer than 60 Characters");
-                                    }
-                                }
                                 else {
                                     if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
                                         delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
@@ -6547,12 +6537,7 @@
                                     angular.forEach(data, (item) => {
                                         $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
                                     });
-                                }
-                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
-                                    angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
-                                    });
-                                }
+                                }                                
                                 else {
                                     for (var i = 0; i < parsedEndCustObj.length; i++) {
                                         var exists = false;
@@ -6593,11 +6578,6 @@
                             if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                                 parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                                 if (parsedEndCustObj.length != endCustObj.length) {
-                                    angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
-                                    });
-                                }
-                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
                                     angular.forEach(data, (item) => {
                                         $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
                                     });
@@ -6644,11 +6624,6 @@
                             if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                                 parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                                 if (parsedEndCustObj.length != endCustObj.length) {
-                                    angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Program Deal');
-                                    });
-                                }
-                                else if (parsedEndCustObj.length == 1 && parsedEndCustObj[0]["END_CUSTOMER_RETAIL"] != "") {
                                     angular.forEach(data, (item) => {
                                         $scope.setEndCustomer(item, 'Program Deal');
                                     });
