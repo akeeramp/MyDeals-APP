@@ -193,7 +193,7 @@ namespace Intel.MyDeals.Controllers
                     unifyDealValidation.DuplicateGlobalNames.Add(unify.UCD_GLOBAL_NAME);
                 }
             }
-            unifyDealValidation.InValidCountries = lstUnifyDeals.Where(x => x.UCD_COUNTRY.Trim() != string.Empty).Select(x => x.UCD_COUNTRY.Trim()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM)).Where(x => x != string.Empty).ToList();
+            unifyDealValidation.InValidCountries = lstUnifyDeals.Where(x => x.UCD_COUNTRY.Trim() != string.Empty).Select(x => x.UCD_COUNTRY.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();
             if (lstUnifyDeals.Count > 0)
             {
                 foreach (var row in lstUnifyDeals)
@@ -219,7 +219,7 @@ namespace Intel.MyDeals.Controllers
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
                     else if (unifyDealValidation.InValidCountries.Count > 0
-                        && unifyDealValidation.InValidCountries.Contains(row.UCD_COUNTRY))
+                        && unifyDealValidation.InValidCountries.Contains(row.UCD_COUNTRY.ToLower()))
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
