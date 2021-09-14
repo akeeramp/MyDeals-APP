@@ -1563,6 +1563,8 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
             IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            //customerMemberSid set to zero , to get the date details as per Intel calendar
+            int customerMemberSid = 0;
 
             if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
 
@@ -1572,9 +1574,11 @@ namespace Intel.MyDeals.BusinessRules
             {
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-
+                var yearStartDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, startDate, null, null);
+                var yearEndDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, endDate, null, null);
                 DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
-                if (endDate > maxEndDt)
+                //to make sure date calculation happen as per Intel calendar, Added year number condition (TWC3167-191)
+                if (endDate > maxEndDt && yearStartDate.YR_NBR != yearEndDate.YR_NBR)
                 {
                     deEndDate.AddMessage("End date is limited to 1 year from deal start date");
                 }
