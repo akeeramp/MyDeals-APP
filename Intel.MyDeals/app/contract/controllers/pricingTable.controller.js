@@ -2969,10 +2969,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (key == "END_VOL") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("##,#");
                                 }
-                                if (key == "END_REV") {
-                                    myFieldModel.format = "{0:c}";
-                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
-                                }
+                                //if (key == "END_REV") { // End rev is now a money, so covered by number case above, enf_vol is a string to allow for "unlimited"
+                                //    myFieldModel.format = "{0:c}";
+                                //    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
+                                //}
                                 break;
                             case "percent":
                                 sheet.range(myColumnName + ":" + myColumnName).format("#,0.00 \\\%");

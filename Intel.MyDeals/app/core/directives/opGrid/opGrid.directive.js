@@ -1562,7 +1562,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                         } else if (f === fields.length - 1) { //density rate
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-step=".01" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                         } else {
                             //if end vol or if it is the very first tier, allow editable, f = field, d, = tier or row - Was just  (f === 2 || d === 1)
                             if ((f === 1 && hasTracker === "0" && d === 1) || f === 2) {
@@ -1570,7 +1570,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                                 }
                                 else {
-                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="999999999" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="999999999" k-step=".001" k-decimals="3" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                                 }
                             } else { //else disabled
                                 tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
@@ -1610,18 +1610,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var dim = "10___" + d;
                     tmplt += '<tr style="height: 25px;">';
                     for (var f = 0; f < fields.length; f++) {
-                        if (f === 0) {
+                        if (f === 0) { // tier (first field in list)
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
-                        } else if (f === fields.length - 1) { //rate
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-decimals="2" k-format="\'p2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
-                        } else {
+                        } else if (f === fields.length - 1) { // rate (last field in list)
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="100" k-step=".01" k-decimals="2" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>'; //k-format="\'p2\'" resulted in 15% -> 1,500.00%
+                        } else { // some middle field (schedule)
                             //if end vol or if it is the very first tier, allow editable, f = field, d, = tier or row - Was just  (f === 2 || d === 1)
                             if ((f === 1 && hasTracker === "0" && d === 1) || f === 2) {
                                 if (f === 2 && hasTracker === "1" && d !== numTiers) { // If End Vol and has tracker and is NOT last tier, read only
                                     tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                                 }
-                                else {
-                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="999999999" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                                else { // editor
+                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="10000000000" k-step=".01" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                                 }
                             } else { //else disabled
                                 tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
@@ -1698,7 +1698,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (field === "END_VOL" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
                         dataItem[field]["10___" + row] = "Unlimited";
                     }
-                    if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
+                    if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field]["10___" + row] == "9999999999.99")) {
                         dataItem[field]["10___" + row] = "9999999999.99";
                     }
                 }
@@ -1732,7 +1732,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["STRT_REV"]["10___" + (row + 1)] = "0";
                         } else {
                             //if end vol is a number, then set next start vol to that number + .01 (a penny)
-                            dataItem["STRT_REV"]["10___" + (row + 1)] = dataItem[field]["10___" + row].toFixed(2) + .01;
+                            dataItem["STRT_REV"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .01).toFixed(2);
                             //dataItem["STRT_REV"]["10___" + (row + 1)] = parseFloat(dataItem[field]["10___" + row].replace(/,/g, ".")).toFixed(2) + .01;
                         }
 
