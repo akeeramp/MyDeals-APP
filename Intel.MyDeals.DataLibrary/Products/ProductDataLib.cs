@@ -460,6 +460,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MTRL_TYPE_CD = DB.GetReaderOrdinal(rdr, "MTRL_TYPE_CD");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
+                    int IDX_NAND_TRUE_DENSITY = DB.GetReaderOrdinal(rdr, "NAND_TRUE_DENSITY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
@@ -514,6 +515,7 @@ namespace Intel.MyDeals.DataLibrary
                             MTRL_TYPE_CD = (IDX_MTRL_TYPE_CD < 0 || rdr.IsDBNull(IDX_MTRL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_TYPE_CD),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
+                            NAND_TRUE_DENSITY = (IDX_NAND_TRUE_DENSITY < 0 || rdr.IsDBNull(IDX_NAND_TRUE_DENSITY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_TRUE_DENSITY),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
@@ -598,6 +600,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
+                    int IDX_NAND_TRUE_DENSITY = DB.GetReaderOrdinal(rdr, "NAND_TRUE_DENSITY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
@@ -650,6 +653,7 @@ namespace Intel.MyDeals.DataLibrary
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
+                            NAND_TRUE_DENSITY = (IDX_NAND_TRUE_DENSITY < 0 || rdr.IsDBNull(IDX_NAND_TRUE_DENSITY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_TRUE_DENSITY),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
@@ -859,6 +863,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
+                    int IDX_NAND_TRUE_DENSITY = DB.GetReaderOrdinal(rdr, "NAND_TRUE_DENSITY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
@@ -904,6 +909,7 @@ namespace Intel.MyDeals.DataLibrary
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
+                            NAND_TRUE_DENSITY = (IDX_NAND_TRUE_DENSITY < 0 || rdr.IsDBNull(IDX_NAND_TRUE_DENSITY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_TRUE_DENSITY),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),

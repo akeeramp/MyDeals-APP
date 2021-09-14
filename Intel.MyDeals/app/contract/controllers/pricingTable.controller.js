@@ -467,6 +467,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
+            //merging for Density bands
+            if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                mergeDensity(sheet, data);
+            }
+
             // TODO maybe we need to clean up items past data length to merge = 1
             //debugger;
             sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge();
@@ -867,6 +872,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             syncSpreadRows(sheet, initRow, row - 1);
             root._dirty = true;
         }
+        $timeout(function () {
+            /*
+            * Function call to validate density..Since data is fetched from product selector it has valid values
+            * This function is being called in timeout with a delay of 20 since syncSpreadRows has a delay of 10.
+            */
+            validateDensityBand(productSelectorOutput);
+        }, 20);
     }
 
     function getColumns(ptTemplate) {
@@ -1438,7 +1450,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var rowStart = topLeftRowIndex - 2;
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
-
+                //First clear full error for density
+                clearDensityValidation(data[rowStart].DC_ID);
+                setOrCleanValidationError('DENSITY_BAND', 'full');
                 var delIds = hasDataOrPurge(data, rowStart, rowStop);
                 if (delIds.length > 0) {
                     stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
@@ -1510,6 +1524,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         colEnableDisablecheck(root, data, topLeftRowIndex, sheet, hasTracker, isDelete);
                     }, 10);
                 }
+                //Finally after rows are deleted assign the errors to correct rows 
+                setOrCleanValidationError('DENSITY_BAND', 'only');
             }
         }
         else {
@@ -2080,7 +2096,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
                 var newItems = 0;
-                var pivotDim = 1;
+                var pivotDim = 1, lastDCID = -99;
+                var pivotTimes = 1, splitcount = 0;
 
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
@@ -2121,6 +2138,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 sheet.batch(function () {
                     for (var r = 0; r < data.length; r++) {
+                        //for density to keep track of the last changed DCID
+                        if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && data[r]["DC_ID"] != null) {
+                            $scope.uid = data[r]["DC_ID"];
+                        }
                    
                         if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined && !data[r]["DC_ID"].toString().startsWith("k")) {
                             // Calcuate the KIT Rebate in case the number of products/tiers changes
@@ -2135,6 +2156,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r]["PRD_EXCLDS"] = sanitizeAndResizeRow(data[r]["PRD_EXCLDS"].toString(), sheet, (r + 1));
                             }
 
+                            //Manage DCID from both DEAL and WIP Deal for DENSITY Deals
+                            if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && data[r]["DC_PARENT_ID"] == undefined) {
+                                lastDCID = data[r]["DC_ID"];
+                            }
+
                             // This is an existing row. Don't do anything else
                             continue;
                         }
@@ -2143,7 +2169,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         newItems++;
                         var numPivotRows = root.numOfPivot(data[r]);
-                        data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
+                        //logic to manage the DCID for Density
+                        if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                            if (splitcount != 0 && splitcount % numPivotRows == 0) {
+                                lastDCID = lastDCID - 1; pivotDim = 1; pivotTimes = 1; splitcount = 0;
+                            }
+                            data[r]["DC_ID"] = lastDCID - 1;
+                            //split count logic is added for Product selector when split products is selected
+                            splitcount++
+                        }
+                        else {
+                            data[r]["DC_ID"] = (pivotDim === numPivotRows) ? $scope.uid-- : $scope.uid;
+                        }
+                        
                         data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
                         data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
                         data[r]["IS_HYBRID_PRC_STRAT"] = $scope.$parent.$parent.curPricingTable.IS_HYBRID_PRC_STRAT;
@@ -2200,8 +2238,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                     // Default to 0
                                     data[r][rateKey] = 0;
-
-                                    if (pivotDim === parseInt(numPivotRows)) {
+                                    let unlimitCond = (endKey == "END_PB") ? (pivotDim === parseInt(numPivotRows) / parseInt(root.curPricingTable["NUM_OF_DENSITY"])) :
+                                        (pivotDim === parseInt(numPivotRows))
+                                    if (unlimitCond) {
                                         // default last end vol to "unlimited"
                                         data[r][endKey] = maxValue; //unlimitedVal;
                                     } else {
@@ -2312,8 +2351,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
 
                         // increment pivot dim (example tier 1 to tier 2)
-                        pivotDim++;
-                        if (pivotDim > numPivotRows) pivotDim = 1;
+                        // we need to increase the record count based on Density
+                        if (root.curPricingTable && root.curPricingTable["NUM_OF_DENSITY"] && parseInt(root.curPricingTable["NUM_OF_DENSITY"]) > 0) {
+                            let denCount = parseInt(root.curPricingTable["NUM_OF_DENSITY"]);
+                            if (pivotTimes == denCount) {
+                                pivotDim++;
+                                pivotTimes = 0;
+                            }
+                            pivotTimes++;
+                        }
+                        else {
+                            pivotDim++;
+                            if (pivotDim > numPivotRows) pivotDim = 1;
+                        }
                     }
                 });
 
@@ -3807,6 +3857,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         if (isAllValidated) {
             root.child.setRowIdStyle(data);
+            validateDensityBand(transformResults);
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 //$timeout(function () {
@@ -3978,6 +4029,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.child.setRowIdStyle(data);
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
+                        validateDensityBand(transformResult, true);
                         //$timeout(function () {
                         if (saveOnContinue) {
                             if (transformResult.AbortProgration) {
@@ -4037,7 +4089,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,
-                    EXCLUDE: x.EXCLUDE
+                    EXCLUDE: x.EXCLUDE,
+                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
                 }
             });
         }
@@ -4844,6 +4897,258 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.undoCounter += 1;
             isFirstUndo = false;
         }
+    }
+
+    /*Density validation starts here*/
+    function clearDensityValidation(DCID) {
+        //the same function is called from onChange when there is a delete 
+        if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+            let data = root.spreadDs.data();
+            _.each(data, (itm) => {
+                if (itm.DC_ID == DCID) {
+                    clearBehaviors(itm, 'DENSITY_BAND');
+                    clearBehaviors(itm, 'DC_ID');
+                    itm.DENSITY_BAND = null;
+                }
+            });
+        }
+
+    }
+
+    function splitProductForDensity(response) {
+
+        let prdObj = {};
+        //skipping the excluded products
+        _.each(response.validateSelectedProducts, (prdDet, prd) => {
+            if (prdDet && prdDet.length > 0 && !prdDet[0].EXCLUDE) {
+                prdObj[`${prd}`] = prdDet;
+            }
+        });
+
+        if (response.splitProducts) {
+            let prod = {};
+            let items = _.keys(prdObj);
+            for (var i = 0; i < items.length; i++) {
+                let obj = {};
+                obj[`${items[i]}`] = prdObj[`${items[i]}`]
+                prod[i + 1] = obj;
+            }
+            return prod;
+        }
+        else {
+            return { "1": prdObj }
+        }
+    }
+
+    function validateDensityBand(response, prdSrc) {
+        try {
+            if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+                // covering first condition for product translator/corrector & second one for product selector
+                if ((response.ValidProducts && _.keys(response.ValidProducts).length > 0) || (response.validateSelectedProducts && _.keys(response.validateSelectedProducts).length > 0)) {
+                    let data = root.spreadDs.data();
+                    let validMisProd = [];
+                    // match the schema based on product translator/selector, in case of split product it can have multiple products
+                    let ValidProducts = response.ValidProducts ? response.ValidProducts : splitProductForDensity(response);
+                    _.each(ValidProducts, (item) => {
+                        // multiple products can be present in single row and in spreadDS data the products are sorted.
+                        let prod = getValidDenProducts(item, prdSrc);
+                        let selProds = _.filter(data, (itm) => {
+                            let ptrPRD = itm.PTR_USER_PRD ? itm.PTR_USER_PRD.toUpperCase().split(',') : [];
+                            // logic to check matching product since the product can come in any order and case to update code with those changes
+                            if (ptrPRD.length > 0 && _.isEqual(_.sortBy(ptrPRD), _.sortBy(prod))) {
+                                return itm;
+                            }
+                        });
+
+                        if (selProds && selProds.length > 0) {
+                            //There can be same product in different rows
+                            let distinctDC_IDs = _.uniq(_.pluck(selProds, 'DC_ID'));
+
+                            _.each(distinctDC_IDs, dcid => {
+                                let selProd = _.findWhere(selProds, { DC_ID: dcid });
+                                //clearing the density validation for the products having different response
+                                clearDensityValidation(selProd.DC_ID);
+                                let Nand_Den = [];
+                                _.each(item, (prdDet) => {
+                                    // Handle single product with multiple density_band
+                                    let densities = prdDet[0].NAND_TRUE_DENSITY ? prdDet[0].NAND_TRUE_DENSITY.split(",").map(function (el) { return el.trim(); }) : [];
+                                    densities.sort();
+                                    if (densities.length > 0) {
+                                        //underscore union creates a single array without duplicates.
+                                        Nand_Den = _.union(Nand_Den, densities);
+                                    }
+                                });
+                                
+                                if (selProd && selProd.NUM_OF_DENSITY != Nand_Den.length) {
+                                    validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length });
+                                }
+                                else {
+                                    // logic to assign the proper density bands in spreadDs
+                                    let tierNumber = selProd.NUM_OF_TIERS / selProd.NUM_OF_DENSITY;
+                                    for (var tier = 1; tier <= tierNumber; tier++) {
+                                        let ind = 0;
+                                        _.filter(data, (item) => {
+                                            // this condition is added in case of product corrector, only the selected Prod added to first row rest all will have user selected product
+                                            var firstObj = _.find(data, (itm) => { return itm.DC_ID == selProd.DC_ID });
+                                            if (item.DC_ID == selProd.DC_ID) {
+                                                item.PTR_USER_PRD = firstObj.PTR_USER_PRD
+                                            }
+
+                                            let ptrPRD = item.PTR_USER_PRD ? item.PTR_USER_PRD.toUpperCase().split(',') : [];
+                                            if (_.isEqual(_.sortBy(ptrPRD), _.sortBy(prod)) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
+                                                item[`DENSITY_BAND`] = Nand_Den[ind];
+                                                ind++;
+                                            }
+                                            return item;
+                                        });
+
+                                    }
+                                }
+
+                            });
+
+                        }
+                    });
+
+                    if (validMisProd.length > 0) {
+                        _.each(data, (itm, indx) => {
+                            _.each(validMisProd, (item) => {
+                                if (itm.DC_ID == item.DCID) {
+                                    itm._dirty = true;
+                                    setBehaviors(itm, 'DENSITY_BAND', `The product density selected was ${item.selDen} but the actual product density is ${item.actDen}`);
+                                }
+                            })
+                        });
+                    }
+
+                }
+                //finally assigning the validation messages
+                setOrCleanValidationError('DENSITY_BAND', 'only');
+
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+
+    }
+
+    function mergeDensity(sheet, data) {
+        let uniqDCId = _.uniq(_.map(data, (item) => { return item.DC_ID }));
+        let beginrow = 0, startOffset = 2, endOffset;
+        _.each(uniqDCId, dcid => {
+            if (dcid != null) {
+                beginrow++;
+                let dcidItems = _.where(data, { DC_ID: dcid });
+                if (dcidItems.length > 0) {
+                    let numDensity = parseInt(dcidItems[0].NUM_OF_DENSITY);
+                    let numTier = dcidItems[0].NUM_OF_TIERS / numDensity;
+                    if (beginrow == 1) {
+                        endOffset = 1 + numDensity;
+                    }
+                    if (beginrow != 1) {
+                        endOffset = startOffset + (numDensity - 1)
+                    }
+
+                    for (var d = 0; d < numTier; d++) {
+
+                        for (c = 0; c < ptTemplate.columns.length; c++) {
+                            var letter = String.fromCharCode(intA + c);
+                            letter = (c > 25) ? String.fromCharCode(intA) + String.fromCharCode(intA + c - 26) : String.fromCharCode(intA + c);
+                            if (ptTemplate.columns[c].field == 'TIER_NBR' || ptTemplate.columns[c].field == 'STRT_PB' || ptTemplate.columns[c].field == 'END_PB') {
+                                sheet.range(letter + startOffset + ":" + letter + endOffset).merge();
+                            }
+                        }
+
+                        startOffset = startOffset + numDensity;
+                        endOffset = startOffset + (numDensity - 1);
+                    }
+                }
+            }
+        });
+
+    }
+
+    function setBehaviors(item, elem, msg) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+        item._behaviors.isRequired[elem] = true;
+        item._behaviors.isError[elem] = true;
+        item._behaviors.validMsg[elem] = msg
+    }
+
+    function clearBehaviors(item, elem) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+        // removing the key because in setRowIdStyle it check for objects not for value
+        delete item._behaviors.isRequired[elem];
+        delete item._behaviors.isError[elem];
+        delete item._behaviors.validMsg[elem];
+    }
+
+    function setOrCleanValidationError(elem, action) {
+        if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+            let denColIndx = _.findIndex(ptTemplate.columns, { field: `${elem}` });
+            let DensityRowCol = denColIndx > 25 ? String.fromCharCode(intA) + String.fromCharCode(intA + denColIndx - 26) : String.fromCharCode(intA + denColIndx);
+            let dcColIndx = _.findIndex(ptTemplate.columns, { field: 'DC_ID' });
+            let dcRowCol = dcColIndx > 25 ? String.fromCharCode(intA) + String.fromCharCode(intA + dcColIndx - 26) : String.fromCharCode(intA + dcColIndx);
+            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            if (spreadsheet === undefined) return;
+            let sheet = spreadsheet.activeSheet();
+            let data = root.spreadDs.data();
+
+            if (action == 'full') {
+                // on change action setRowIdStyle is called and it assigns style to DC_ID if any errors.
+                _.each(data, (itm, indx) => {
+                    sheet.range(`${DensityRowCol}${indx + 2}`).validation(null);
+                    sheet.range(`${dcRowCol}${indx + 2}`).validation(null);
+                    // clearing the error background color and font color for DC_ID
+                    sheet.range(`${dcRowCol}${indx + 2}`).background("#eeeeee").color("#003C71");
+                });
+            }
+            else {
+                _.each(data, (itm, indx) => {
+                    if (itm._behaviors && itm._behaviors.isError && itm._behaviors.isError[elem]) {
+                        // setting the error message for Density
+                        sheet.range(`${DensityRowCol}${indx + 2}`).validation($scope.myDealsValidation(true, itm._behaviors.validMsg[`${elem}`], true));
+                        // setting the error and background for DC_ID
+                        sheet.range(`${dcRowCol}${indx + 2}`).validation($scope.myDealsValidation(true, elem + ":" + itm._behaviors.validMsg[`${elem}`], true));
+                        sheet.range(`${dcRowCol}${indx + 2}`).background("#FC4C02").color("#FFFFFF");
+                    }
+                    else {
+                        sheet.range(`${DensityRowCol}${indx + 2}`).validation(null);
+                        sheet.range(`${dcRowCol}${indx + 2}`).validation(null);
+                        sheet.range(`${dcRowCol}${indx + 2}`).background("#eeeeee").color("#003C71");
+                    }
+
+                });
+            }
+        }
+
+    }
+
+    function getValidDenProducts(item, prdSrc) {
+        /*
+        * A single row can have multiple products & in spreadDs data the products are sorted
+        * Also in case of product corrector the user input is not a valid product until selected from the list.
+        * In that case it will be good to read HIER_VAL_NM from the response as user input
+        */
+        let userInput;
+        if (prdSrc) {
+            userInput = updateUserInputFromCorrector(item);
+        }
+        else {
+            userInput = updateUserInput(item);
+        }
+
+        return userInput.contractProducts.split(',');
+
     }
 
     init();

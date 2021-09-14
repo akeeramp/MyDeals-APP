@@ -2182,6 +2182,10 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.String NAND_FAMILY { set; get; }
 
+
+        [DataMember]
+        public System.String NAND_TRUE_DENSITY { set; get; }
+
         [DataMember]
         public System.String PCSR_NBR { set; get; }
 

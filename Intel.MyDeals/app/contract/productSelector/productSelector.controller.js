@@ -1001,7 +1001,8 @@
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,
-                    EXCLUDE: false
+                    EXCLUDE: false,
+                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
                 }
             });
 
@@ -1031,7 +1032,8 @@
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,
-                    EXCLUDE: true
+                    EXCLUDE: true,
+                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
                 }
             });
 

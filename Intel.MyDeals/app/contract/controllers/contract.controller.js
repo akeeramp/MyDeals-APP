@@ -82,6 +82,7 @@
         $scope.pageTitle = $scope.ptTitle + " Editor";
 
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+        var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
         $scope.kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
 
         //Tender only columns for PRC_TBL_ROW
@@ -2674,7 +2675,13 @@
 
                     }
            
-                    sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+                    if (curPricingTableData[0].OBJ_SET_TYPE_CD != "DENSITY")
+                        sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+                    else {
+                        for (var index = 0; index < $scope.spreadDs.data().length; index++) {
+                            sData.push($scope.spreadDs.data()[index]);
+                        }
+                    }
 
                     // Remove any lingering blank rows from the data
                     if (!!sData) {
@@ -3603,7 +3610,7 @@
                     $scope.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
 
                     var anyWarnings = false;
-                    var totalWarnings = 0
+                    var totalWarnings = 0;
                     var totalserverWarnings = 0;
                     pc.mark("Constructing returnset");
                     if (!!data.PRC_TBL_ROW) {
@@ -4027,6 +4034,7 @@
                 $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
 
                 var pivotFieldName = "NUM_OF_TIERS";
+                var pivotDensity = $scope.curPricingTable["NUM_OF_DENSITY"];
                 // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
                 if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
                     if (dataItem["NUM_OF_TIERS"] !== undefined) return dataItem["NUM_OF_TIERS"];
@@ -4038,7 +4046,8 @@
                 if (!$scope.isPivotable()) return 1;
 
                 if (dataItem === undefined) {
-                    return $scope.curPricingTable[pivotFieldName] === undefined ? 1 : parseInt($scope.curPricingTable[pivotFieldName]);
+                    //condition for density also added here, this is identified in case of split product
+                    return $scope.curPricingTable[pivotFieldName] === undefined ? 1 : (pivotDensity == undefined ? parseInt($scope.curPricingTable[pivotFieldName]) : parseInt($scope.curPricingTable[pivotFieldName]) * parseInt(pivotDensity));
                 }
 
                 if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
@@ -4046,8 +4055,10 @@
 
                 //VT deal type
                 var pivotVal = $scope.curPricingTable[pivotFieldName];
+                var pivotDensity = $scope.curPricingTable["NUM_OF_DENSITY"];
 
-                return pivotVal === undefined ? 1 : parseInt(pivotVal);
+                //logic to add Density multiply by number of tier to add those many rows in spreadsheet
+                return pivotVal === undefined ? 1 : (pivotDensity == undefined ? parseInt(pivotVal) : parseInt(pivotVal) * parseInt(pivotDensity));
             }
 
             return 1;   //num of pivot is 1 for undim deal types
@@ -4089,15 +4100,20 @@
             data = $scope.assignProductProprties(data);
             if (!$scope.isPivotable()) return data;
             var newData = [];
+            let dealType = $scope.curPricingTable['OBJ_SET_TYPE_CD'];
+            var k = 0;
 
             for (var d = 0; d < data.length; d++) {
                 // Tiered data
                 var productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
                 var numTiers = $scope.numOfPivot(data[d]);
+                let curTier = 1, db = 1, dt = 1;
+
                 for (var t = 1; t <= numTiers; t++) {
                     var lData = util.deepClone(data[d]);
-                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
-                        $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+
+                    if (dealType === "VOL_TIER" || dealType === "FLEX" ||
+                        dealType === "REV_TIER") {
                         // Set attribute Keys for adding dimensions
                         let endKey;
                         let strtKey;
@@ -4107,9 +4123,7 @@
                         else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
                             endKey = "END_REV"; strtKey = "STRT_REV";
                         }
-                        else { // DENSITY
-                            endKey = "END_PB"; strtKey = "STRT_PB";
-                        }
+
                         // Vol-tier specific cols with tiers
                         for (var i = 0; i < tierAtrbs.length; i++) {
                             var tieredItem = tierAtrbs[i];
@@ -4147,7 +4161,74 @@
                                 lData._behaviors.isReadOnly[endKey] = true;
                             }
                         }
-                    } else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    }
+                    else if (dealType === "DENSITY") {
+                        let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
+                        let densityNumTiers = numTiers / densityBands;
+
+                        if (db > densityBands) {
+                            db = 1;
+                            curTier++;
+                        }
+
+                        if (dt > densityNumTiers) {
+                            dt = 1;
+                        }
+                        // Set attribute Keys for adding dimensions
+                        let endKey = "END_PB", strtKey = "STRT_PB";
+
+                        // Density specific cols with tiers
+                        for (var i = 0; i < densityTierAtrbs.length; i++) {
+                            var tieredItem = densityTierAtrbs[i];
+                            if (tieredItem != "DENSITY_RATE") {
+                                let dimKey = (tieredItem == "DENSITY_BAND") ? "_____8___" : "_____10___";
+                                if (tieredItem != "DENSITY_BAND") {
+                                    lData[tieredItem] = lData[tieredItem + dimKey + curTier];
+                                    mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
+                                }
+                                else {
+                                    lData[tieredItem] = lData[tieredItem + dimKey + db];
+                                    mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db);
+
+                                }
+                                /* HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. 
+                                 *   Note that we'll have to turn them back into numbers before saving.
+                                */
+                                if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n2");
+                                }
+                            }
+                            else {
+                                let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]), db;
+                                //let rate = [];
+                                for (db = 1; db <= densityBands; db++) {
+                                    lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + t];
+                                }
+
+                                mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+                                if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
+                                }
+                            }
+                        }
+                        // Disable all Start vols except the first if there is no tracker, else disable them all
+                        if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
+                            if (!data[d]._behaviors.isReadOnly) {
+                                data[d]._behaviors.isReadOnly = {};
+                            }
+                            lData._behaviors.isReadOnly[strtKey] = true;
+                        }
+                        // Disable all End volumes except for the last tier if there is a tracker
+                        if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
+                            if (t !== numTiers) {
+                                if (!data[d]._behaviors.isReadOnly) {
+                                    data[d]._behaviors.isReadOnly = {};
+                                }
+                                lData._behaviors.isReadOnly[endKey] = true;
+                            }
+                        }
+                    }
+                    else if (dealType === "KIT") {
                         // KIT specific cols with 'tiers'
                         for (var i = 0; i < $scope.kitDimAtrbs.length; i++) {
                             var tieredItem = $scope.kitDimAtrbs[i];
@@ -4173,9 +4254,16 @@
                             });
                         }
                     }
+
                     newData.push(lData);
+                    if (typeof lData.TIER_NBR !== 'undefined' && dealType == "DENSITY") {
+                        newData[k].DENSITY_RATE = lData["DENSITY_RATE" + "_____8___" + db + "____10___" + curTier]
+                        db++;
+                    }
+                    k++; dt++;
                 }
             }
+
             return newData;
         }
 
@@ -4200,6 +4288,7 @@
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
             if (!$scope.isPivotable()) return data;
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
             var a;
             var newData = [];
             var lData = {};
@@ -4210,47 +4299,98 @@
             var dimAtrbs;
             var isKit = 0;
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
-                $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+            let dealType = $scope.curPricingTable['OBJ_SET_TYPE_CD'];
+
+            if (dealType === "VOL_TIER" || dealType === "FLEX" ||
+                dealType === "REV_TIER" || dealType === "DENSITY") {
                 dimKey = tierDimKey;
                 dimAtrbs = tierAtrbs;
             }
-            else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+            else if (dealType === "KIT") {
                 dimKey = prodDimKey;
                 dimAtrbs = $scope.kitDimAtrbs;
                 isKit = 1;
             }
 
+            var prevTier = 1, densityBand = 1;
+
             for (var d = 0; d < data.length; d) {
                 var numTiers = $scope.numOfPivot(data[d]);      //KITTODO: rename numTiers to more generic var name for kit deals?
+                if (dealType == "DENSITY") {
+                    let numDensityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
+                    let densityNumTiers = numTiers / numDensityBands;
+                    let prevRow = (d == 0) ? parseInt(data[d]["DC_ID"]) : parseInt(data[d - 1]["DC_ID"]);
+                    let curRow = parseInt(data[d]["DC_ID"]);
+                    let count = 0;
 
-                for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
-                    if (t === 1 - isKit) { lData = data[d]; }
-                    for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
+                    for (var x = 1 - isKit; x <= numTiers - isKit; x++) {
+                        if (prevRow != curRow) {
+                            count = d;
+                            curRow = prevRow;
+                        }
+                        else {
+                            count = (d == 0) ? 0 : (count + numDensityBands);
+                        }
+                        if (prevTier != data[d].TIER_NBR) { densityBand = 1; prevTier = data[d].TIER_NBR; }
+                        if (x === 1 - isKit) { lData = data[d]; }
+                        for (a = 0; a < densityTierAtrbs.length; a++) { // each tiered attribute
+                            if (dealType == "DENSITY" && densityTierAtrbs[a] == "DENSITY_RATE") {
+                                let densityDimKey = "_____8___";
+                                lData[densityTierAtrbs[a] + densityDimKey + densityBand + "____10___" + data[d].TIER_NBR] = data[d][densityTierAtrbs[a]];
+                                densityBand++;
+                            }
+                            else {
+                                let densityDimKey = (densityTierAtrbs[a] == "DENSITY_BAND") ? "_____8___" : "_____10___";
+
+                                if ((densityTierAtrbs[a] == "DENSITY_BAND") && x <= numDensityBands) {
+                                    lData[densityTierAtrbs[a] + densityDimKey + x] = data[d][densityTierAtrbs[a]];
+                                }
+                                else if (densityTierAtrbs[a] != "DENSITY_BAND" && x <= densityNumTiers) {
+                                    lData[densityTierAtrbs[a] + densityDimKey + x] = data[count][densityTierAtrbs[a]];
+                                }
+                            }
+                            if (x === numTiers - isKit) { // last tier
+                                delete lData[densityTierAtrbs[a]];
+                            }
+                        }
+                        d++;
+                        if (d === data.length) {
+                            break;
+                        }
+                    }
+
+                }
+                else {
+
+                    for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
+                        if (t === 1 - isKit) { lData = data[d]; }
+                        for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
                             lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
 
-                        if (t === numTiers - isKit) { // last tier
-                            delete lData[dimAtrbs[a]];
+                            if (t === numTiers - isKit) { // last tier
+                                delete lData[dimAtrbs[a]];
 
-                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ) {
-                                // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
-                                //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                                for (var i = 0; i < $scope.maxKITproducts; i++) {
-                                    var tierToDel = (t + 1 + i);
-                                    lData[dimAtrbs[a] + dimKey + tierToDel] = "";
+                                if (dealType === "KIT") {
+                                    // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
+                                    //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
+                                    for (var i = 0; i < $scope.maxKITproducts; i++) {
+                                        var tierToDel = (t + 1 + i);
+                                        lData[dimAtrbs[a] + dimKey + tierToDel] = "";
+                                    }
                                 }
                             }
                         }
+                        // NOTE: the length of the data is the number of rows. But we need to iterate by the number of
+                        //		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
+                        //		Hence why we increment d and break on d === data.length manually.
+                        //		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
+                        //		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
+                        d++;
+                        if (d === data.length) {
+                            break;
+                        }
                     }
-                    // NOTE: the length of the data is the number of rows. But we need to iterate by the number of
-                    //		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
-                    //		Hence why we increment d and break on d === data.length manually.
-                    //		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
-                    //		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
-                    d++;
-                    if (d === data.length) {
-                        break;
-                    }
+
                 }
                 newData.push(lData);
             }
