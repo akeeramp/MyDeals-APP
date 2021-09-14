@@ -129,15 +129,15 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
                 },
 
-                new MyOpRule
-                {
-                    Title="Density Rate must have a positive value",
-                    ActionRule = MyDcActions.ValidateDensityRate,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.DENSITY_RATE)
-                },
+                //new MyOpRule
+                //{
+                //    Title="Density Rate must have a positive value",
+                //    ActionRule = MyDcActions.ValidateDensityRate,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                //    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                //    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.DENSITY_RATE)
+                //},
 
                 #region Tiers Start/End/Level/Relatioship checks
                 new MyOpRule
@@ -180,32 +180,32 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_REV)
                 },
 
-                new MyOpRule
-                {
-                    Title="Must be greater than 0 Start PB",
-                    ActionRule = MyDcActions.ValidateTierStartPb,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_PB)
-                },
+                //new MyOpRule
+                //{
+                //    Title="Must be greater than 0 Start PB",
+                //    ActionRule = MyDcActions.ValidateTierStartPb,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                //    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                //    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_PB)
+                //},
 
-                new MyOpRule
-                {
-                    Title="Must be greater than 0 End PB",
-                    ActionRule = MyDcActions.ValidateTierEndPb,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_PB)
-                },
+                //new MyOpRule
+                //{
+                //    Title="Must be greater than 0 End PB",
+                //    ActionRule = MyDcActions.ValidateTierEndPb,
+                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                //    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
+                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                //    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_PB)
+                //},
 
                 new MyOpRule
                 {
                     Title="End Vals must be greater than start vals",
                     ActionRule = MyDcActions.CompareStartEndVals,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
@@ -214,7 +214,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Tier Numbers must match Tier Level",
                     ActionRule = MyDcActions.ValidateTierNumber,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString() },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
 
