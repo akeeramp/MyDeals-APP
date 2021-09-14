@@ -157,7 +157,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             //to check whether user entered End customer/retail value is valid or not
             var res = patt.test(ecValues[i]);
 
-            var IsECSelected = ($ctrl.endCustOptions !== undefined && $ctrl.endCustOptions !== null) ? ($ctrl.endCustOptions.find(x => x.PRIM_CUST_NM === ecValues[i])) : undefined;
+            var IsECSelected = ($ctrl.endCustOptions !== undefined && $ctrl.endCustOptions !== null) ? ($ctrl.endCustOptions.find(x => x.Value === ecValues[i])) : undefined;
 
             if (!res && IsECSelected === undefined) {
                 $ctrl.IsError = true;
