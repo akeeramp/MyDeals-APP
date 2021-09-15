@@ -135,8 +135,8 @@ cons1_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse' 
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS1
   when: manual
-  only: 
-    - /^RC_W{2}\d{1,2}/
+  #only: 
+  #  - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CONS
@@ -153,8 +153,8 @@ cons2_deploy:
     - '& Copy-Item deployed/ITT -Destination deployed/CONS -Recurse'
     - npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-CONS2
   when: manual
-  only: 
-    - /^RC_W{2}\d{1,2}/
+  #only: 
+  #  - /^RC_W{2}\d{1,2}/
   allow_failure: true
   environment:
       name: CONS
