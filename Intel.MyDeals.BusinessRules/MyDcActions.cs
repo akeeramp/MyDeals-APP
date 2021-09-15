@@ -1575,10 +1575,21 @@ namespace Intel.MyDeals.BusinessRules
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
                 var yearStartDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, startDate, null, null);
-                var yearEndDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, endDate, null, null);
-                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
+                int qtr = yearStartDate.QTR_NBR - 1;
+                int yr = 0;
+                if (qtr > 0)
+                {
+                    yr = yearStartDate.YR_NBR + 1;
+                }
+                else
+                {
+                    qtr = 4;
+                    yr = yearStartDate.YR_NBR;
+                }
+                var EndquarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, null, (short)yr, (short)qtr);
+                DateTime maxEndDt = EndquarterDetails.QTR_END;
                 //to make sure date calculation happen as per Intel calendar, Added year number condition (TWC3167-191)
-                if (endDate > maxEndDt && yearStartDate.YR_NBR != yearEndDate.YR_NBR)
+                if (endDate > maxEndDt)
                 {
                     deEndDate.AddMessage("End date is limited to 1 year from deal start date");
                 }
