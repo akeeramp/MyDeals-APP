@@ -275,13 +275,13 @@
 			if (newValue != '' && newValue != null && newValue != undefined) {
 				var treeView = $("#" + treeViewDivId).data("kendoTreeView");
 				var list = treeView.dataSource._data.filter(x => x.ATRB_LKUP_DESC == "GEO");
-				var newValArray = newValue.split(',');
+				var newValArray = newValue.split('|');
 				angular.forEach(newValArray, function (item) {
 					if (list.filter(x => x.DROP_DOWN == item).length > 0) {
 						newValArray = newValArray.filter(x => x != item);
 					}
 				});
-				newValue = newValArray.join();
+				newValue = newValArray.join('|');
 			}
 			return newValue;
 		}
