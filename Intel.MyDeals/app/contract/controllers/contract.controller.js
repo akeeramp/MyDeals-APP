@@ -4055,8 +4055,7 @@
 
                 //VT deal type
                 var pivotVal = $scope.curPricingTable[pivotFieldName];
-                var pivotDensity = $scope.curPricingTable["NUM_OF_DENSITY"];
-
+                
                 //logic to add Density multiply by number of tier to add those many rows in spreadsheet
                 return pivotVal === undefined ? 1 : (pivotDensity == undefined ? parseInt(pivotVal) : parseInt(pivotVal) * parseInt(pivotDensity));
             }
@@ -4324,6 +4323,7 @@
                     let count = 0;
 
                     for (var x = 1 - isKit; x <= numTiers - isKit; x++) {
+                        if (prevTier != data[d].TIER_NBR || prevRow != curRow) { densityBand = 1; prevTier = data[d].TIER_NBR; }
                         if (prevRow != curRow) {
                             count = d;
                             curRow = prevRow;
@@ -4331,7 +4331,6 @@
                         else {
                             count = (d == 0) ? 0 : (count + numDensityBands);
                         }
-                        if (prevTier != data[d].TIER_NBR) { densityBand = 1; prevTier = data[d].TIER_NBR; }
                         if (x === 1 - isKit) { lData = data[d]; }
                         for (a = 0; a < densityTierAtrbs.length; a++) { // each tiered attribute
                             if (dealType == "DENSITY" && densityTierAtrbs[a] == "DENSITY_RATE") {
