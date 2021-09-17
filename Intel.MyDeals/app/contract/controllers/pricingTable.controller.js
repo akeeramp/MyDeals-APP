@@ -1307,6 +1307,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             let isEndVolUnlimited = false;
                             let numOfTiers = root.numOfPivot(myRow);
+                            let numDensityBands = myRow.NUM_OF_DENSITY;
 
                             if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
                                 isEndVolUnlimited = true;
@@ -1373,10 +1374,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                                 // End_Vol Col changed - update next row start values (DENSITY, Units + .001 PB)
                             else if (colIndex === endVolIndex && root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
-                                // If this vol tier isn't the last of its vol tier rows
-                                if (myRow.TIER_NBR != numOfTiers) {
+                                // If this density tier isn't the last of its density tier rows
+                                if (myRow.TIER_NBR != numOfTiers / numDensityBands) {
                                     var nextRow = data[(rowIndex)];
-                                    // Calculate next start vol using end vol
+                                    // Calculate next start pb using end pb
                                     if (nextRow !== undefined && !isEndVolUnlimited) {
                                         nextRow.STRT_PB = (value.value + .001);
                                         sourceData[(rowIndex)].STRT_PB = nextRow.STRT_PB;
