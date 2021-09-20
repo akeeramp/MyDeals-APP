@@ -77,6 +77,7 @@
                         CUST_MBR_SID: { editable: false },
                         CUST_NM: { editable: false, nullable: true },
                         VISTEX_CUST_FLAG: { type: "boolean" },
+                        DFLT_DOUBLE_CONSUMPTION: { editable: true, type: "boolean" },
                         DFLT_PERD_PRFL: { editable: true, nullable: true },
                         DFLT_AR_SETL_LVL: { editable: true, nullable: true },
                         DFLT_TNDR_AR_SETL_LVL: { editable: true, nullable: true },
@@ -187,6 +188,10 @@
             vm.PeriodProfile = vm.PeriodProfileData.filter(x => x.CUST_MBR_SID == options.model.CUST_MBR_SID || x.CUST_MBR_SID == 1); // customer specific OR all customers
 
             var editor = $('<select kendo-combo-box k-options="vm.PeriodProfileOptions" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.BoolEditor = function (container, options) {
+            $("<toggle size='btn-sm' field='" + options.field + "' ng-model='dataItem." + options.field + "' ></toggle>").appendTo(container);
         }
 
         vm.ARSettlementLevelDropDownEditor = function (container, options) {
@@ -340,6 +345,16 @@
                     width: "180px",
                     template: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
                     editor: gridUtils.boolViewer('VISTEX_CUST_FLAG'),
+                    attributes: { style: "text-align: center;" }
+                },
+                {
+                    field: "DFLT_DOUBLE_CONSUMPTION",
+                    // Use this pattern for hover-over helps, remove Title:
+                    //headerTemplate: 'Is Vistex Customer <span title="This is some definition for a Vistex Customer."><i class="intelicon-help" style="font-size: 15px !important"></i></span>',
+                    title: "Allow Double Consumption",
+                    width: "180px",
+                    template: gridUtils.boolViewer('DFLT_DOUBLE_CONSUMPTION'),
+                    editor: vm.BoolEditor,
                     attributes: { style: "text-align: center;" }
                 },
                 {
