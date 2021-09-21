@@ -55,8 +55,14 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         tmplt += '</div>';
         return tmplt;
     }
-
-
+    else if (field == 'NUM_OF_TIERS' && passedData['OBJ_SET_TYPE_CD'] == "DENSITY") {
+        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv"';
+        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
+        tmplt += '    <div class="ng-binding vert-center" ' + ' ' + ')">' + (passedData['NUM_OF_TIERS'] / passedData['NUM_OF_DENSITY']) + '</div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
     else
     {
         // MUCH FASTER
@@ -546,9 +552,10 @@ gridUtils.uiControlScheduleWrapperDensity = function (passedData) {
     var tmplt = '<table>';
     var fields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Band", "field": "DENSITY_BAND", "format": "number", "align": "right" },
         { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
         { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
-        { "title": "Density Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
+        { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
 
     tmplt += '<tr style="height: 15px;">';
@@ -563,16 +570,47 @@ gridUtils.uiControlScheduleWrapperDensity = function (passedData) {
     for (var key in tiers) {
         if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
             numTiers++;
-            var dim = "10___" + numTiers;
             tmplt += '<tr style="height: 25px;">';
             for (var f = 0; f < fields.length; f++) {
-                tmplt += '<td style="text-align: ' + fields[f].align + ';"';
-                tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
-                tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
-                tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
-                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
-                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
-                tmplt += '</td>';
+                var dim = (fields[f].field == "DENSITY_BAND" || fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
+                if (fields[f].field == "DENSITY_BAND" || fields[f].field == "DENSITY_RATE") {
+                    tmplt += '<td style="text-align: ' + fields[f].align + '">';
+
+                    tmplt += '<table>';
+                    for (var bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
+                        tmplt += '<tr>';
+                        tmplt += '<td ';
+
+                        if (fields[f].field == "DENSITY_BAND") {
+                            tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + bands + '\')"';
+                            tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
+                            tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + bands + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + bands + '" style="" data-role="tooltip"></div>';
+                            tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
+                            tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                        }
+                        else {
+                            tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + bands + "____" + key + '\')"';
+                            tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
+                            tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + bands + '____' + key + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + bands + '____' + key + '" style="" data-role="tooltip"></div>';
+                            tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
+                            tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                        }
+                        tmplt += '</td>';
+                        tmplt += '</tr>';
+                    }
+                    tmplt += '</table>';
+
+                    tmplt += '</td>';
+                }
+                else {
+                    tmplt += '<td style="text-align: ' + fields[f].align + ';"';
+                    tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
+                    tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
+                    tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
+                    tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
+                    tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                    tmplt += '</td>';
+                }
             }
             tmplt += '</tr>';
         }
@@ -586,9 +624,10 @@ gridUtils.exportControlScheduleWrapperDensity = function (passedData) {
     var tmplt = 'Tier, Start PB, End PB, Rate\n';
     var fields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Band", "field": "DENSITY_BAND", "format": "number", "align": "right" },
         { "title": "Start PB", "field": "STRT_PB", "format": "number", "align": "right" },
         { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
-        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+        { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
 
     var numTiers = 0;
@@ -596,9 +635,9 @@ gridUtils.exportControlScheduleWrapperDensity = function (passedData) {
     for (var key in tiers) {
         if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
             numTiers++;
-            var dim = "10___" + numTiers;
             var vals = [];
             for (var f = 0; f < fields.length; f++) {
+                var dim = (fields[f].field == "DENSITY_BAND") ? "8___" + numTiers : "10___" + numTiers;
                 var val = passedData[fields[f].field][dim];
                 if (val !== "Unlimited") {
                     val = gridUtils.formatValue(val, fields[f].format);

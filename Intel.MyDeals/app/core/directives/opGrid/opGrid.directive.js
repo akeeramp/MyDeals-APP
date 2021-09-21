@@ -33,7 +33,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             var depth = 5;
             var d = 0;
-            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB", "DENSITY_BAND"];
             var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION', 'AVG_RPU'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
@@ -1539,13 +1539,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.scheduleEditorDensity = function (container, options) {
                 var numTiers = options.model.NUM_OF_TIERS; // DE21100 - Was reading from auto-fill field ($scope.root.curPricingTable.NUM_OF_TIERS) which is not correct
                 var hasTracker = options.model.HAS_TRACKER;
+                let numDensityBands = options.model.NUM_OF_DENSITY;
 
                 var tmplt = '<table>';
                 var fields = [
                     { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
+                    { "title": "Band", "field": "DENSITY_BAND", "format": "", "align": "right" },
                     { "title": "Start PB", "field": "STRT_PB", "format": "", "align": "right" },
                     { "title": "End PB", "field": "END_PB", "format": "", "align": "right" },
-                    { "title": "Density Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
+                    { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
                 ];
 
                 tmplt += '<tr style="height: 15px;">';
@@ -1555,24 +1557,49 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 tmplt += '</tr>';
 
-                for (var d = 1; d <= numTiers; d++) {
-                    var dim = "10___" + d;
+                for (var d = 1; d <= numTiers / numDensityBands; d++) {
                     tmplt += '<tr style="height: 25px;">';
                     for (var f = 0; f < fields.length; f++) {
-                        if (f === 0) {
+                        var dim = (fields[f].field == "DENSITY_BAND" || fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + d;
+
+                        if (fields[f].field == "TIER_NBR") {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
-                        } else if (f === fields.length - 1) { //density rate
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-step=".01" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                        } else if (fields[f].field == "DENSITY_RATE") { //density rate
+                            tmplt += '<td style="margin: 0; padding: 0;">';
+                            tmplt += '<table>';
+                            for (var bands = 1; bands <= numDensityBands; bands++) {
+                                tmplt += '<tr>';
+                                tmplt += '<td>';
+                                tmplt += '<input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + bands + "____" + "10___" + d + '" k-min="0" k-step=".01" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + "10___" + d + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" />';
+                                tmplt += '</td>';
+                                tmplt += '</tr>';
+                            }
+                            tmplt += '</table>';
+                            tmplt += '</td > ';
                         } else {
-                            //if end vol or if it is the very first tier, allow editable, f = field, d, = tier or row - Was just  (f === 2 || d === 1)
-                            if ((f === 1 && hasTracker === "0" && d === 1) || f === 2) {
-                                if (f === 2 && hasTracker === "1" && d !== numTiers) { // If End Vol and has tracker and is NOT last tier, read only
+                            //if end pb or if it is the very first tier, allow editable, f = field, d, = tier or row
+                            if ((fields[f].field == "STRT_PB" && hasTracker === "0" && d === 1) || fields[f].field == "END_PB") {
+                                if (fields[f].field == "END_PB" && hasTracker === "1" && d !== numTiers) { // If End PB and has tracker and is NOT last tier, read only
                                     tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                                 }
                                 else {
-                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="999999999" k-step=".001" k-decimals="3" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                                    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + '" k-min="0" k-max="999999999" k-step=".001" k-decimals="3" k-format="\'n3\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                                 }
-                            } else { //else disabled
+                            }
+                            else if (fields[f].field == "DENSITY_BAND") { //else disabled
+                                tmplt += '<td style="margin: 0; padding: 0;">';
+                                tmplt += '<table>';
+                                for (var bands = 1; bands <= numDensityBands; bands++) {
+                                    tmplt += '<tr>';
+                                    tmplt += '<td>';
+                                    tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                                    tmplt += '</td>';
+                                    tmplt += '</tr>';
+                                }
+                                tmplt += '</table>';
+                                tmplt += '</td>';
+                            }
+                            else { //else disabled
                                 tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                             }
 
@@ -1694,17 +1721,28 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.updateScheduleEditor = function (dataItem, field, row) {
                 //if empty or max value, set to "Unlimited"
-                if (field === "END_VOL" || field === "END_REV") {
+                if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
                     if (field === "END_VOL" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
                         dataItem[field]["10___" + row] = "Unlimited";
                     }
                     if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field]["10___" + row] == "9999999999.99")) {
                         dataItem[field]["10___" + row] = "9999999999.99";
                     }
+                    if (field === "END_PB" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
+                        dataItem[field]["10___" + row] = "Unlimited";
+                    }
                 }
 
-                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE")  && dataItem[field]["10___" + row] === null) {
+                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE"|| field === "STRT_PB" )  && dataItem[field]["10___" + row] === null) {
                     dataItem[field]["10___" + row] = "0";
+                }
+
+                if (field === "DENSITY_RATE") {
+                    for (var key in dataItem[field]) {
+                        if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
+                            dataItem[field][key] = "0";
+                        }
+                    }
                 }
 
                 //save primary column and propogate changes if necessary
@@ -1737,6 +1775,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
 
                         $scope.saveFunctions(dataItem, "STRT_REV", dataItem["STRT_REV"])
+                    }
+                }
+
+                //DENSITY ITEMS
+                if (field === "END_PB") {
+                    //if there is a next row/tier
+                    if (!!dataItem["STRT_PB"]["10___" + (row + 1)]) {
+                        if (dataItem[field]["10___" + row] === "Unlimited") {
+                            dataItem["STRT_PB"]["10___" + (row + 1)] = "0";
+                        } else {
+                            //if end pb is a number, then set next start pb to that number + 0.001
+                            dataItem["STRT_PB"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .001).toFixed(3);;
+                        }
+
+                        $scope.saveFunctions(dataItem, "STRT_PB", dataItem["STRT_PB"])
                     }
                 }
             }

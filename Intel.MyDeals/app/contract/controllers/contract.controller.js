@@ -4190,11 +4190,9 @@
                                     mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db);
 
                                 }
-                                /* HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. 
-                                 *   Note that we'll have to turn them back into numbers before saving.
-                                */
+                                
                                 if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n2");
+                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
                                 }
                             }
                             else {
