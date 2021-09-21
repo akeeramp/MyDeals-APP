@@ -142,6 +142,15 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly }
                 },
 
+                new MyOpRule // Set to read only if deal is consumption and customer is not double consumption
+                {
+                    Title="Readonly if Consumption and Not Double",
+                    ActionRule = MyDcActions.ReadOnlyIfConsumptionAndNotDouble,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any()
+                },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
                     Title="Readonly Start Date if Tracker Exists and Is In Past",
