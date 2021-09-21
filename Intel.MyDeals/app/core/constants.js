@@ -338,6 +338,9 @@
                     "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_TYPE": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -515,6 +518,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_TYPE": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON": {
@@ -700,6 +706,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_TYPE": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON": {
@@ -900,6 +909,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_TYPE": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON": {
@@ -1198,6 +1210,9 @@
                     "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_TYPE": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -1377,6 +1392,9 @@
                     "CONSUMPTION_LOOKBACK_PERIOD": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_TYPE": {
+                        "Groups": ["Consumption"]
+                    },
                     "CONSUMPTION_REASON": {
                         "Groups": ["Consumption"]
                     },
@@ -1554,6 +1572,9 @@
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_LOOKBACK_PERIOD": {
+                        "Groups": ["Consumption"]
+                    },
+                    "CONSUMPTION_TYPE": {
                         "Groups": ["Consumption"]
                     },
                     "CONSUMPTION_REASON": {

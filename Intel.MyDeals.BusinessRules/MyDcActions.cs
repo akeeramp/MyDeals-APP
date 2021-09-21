@@ -616,8 +616,20 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
             IOpDataElement deConsCountry = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY);
             IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
+            IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
+            IOpDataElement deIsDoubleCons = r.Dc.GetDataElement(AttributeCodes.IS_DOUBLE_CONSUMPTION);
+
             var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
+
+            if (deConsType.AtrbValue.ToString() == "")
+            {
+                deConsType.AtrbValue = "Manufacture";
+            }
+            if (deIsDoubleCons.AtrbValue.ToString() == "")
+            {
+                deIsDoubleCons.AtrbValue = cust.DFLT_DOUBLE_CONSUMPTION ? (isTender ? 0 : 1) : 0; // If is tender default to 0 otherwise take cust default
+            }
 
             if (deConsLookback.AtrbValue.ToString() == "")
             {
@@ -633,6 +645,45 @@ namespace Intel.MyDeals.BusinessRules
             if (isTender && deConsReason.AtrbValue.ToString() == "" && (dealType == "ECAP" || dealType == "KIT"))
             {
                 deConsReason.AtrbValue = "End Customer";
+            }
+        }
+
+        public static void PopulateDoubleConsumptionIfBlank(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deIsDoubleCons = r.Dc.GetDataElement(AttributeCodes.IS_DOUBLE_CONSUMPTION);
+            IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
+
+            if (deIsDoubleCons.HasValue() || deConsType.HasValue()) return;
+
+            var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
+            MyCustomerDetailsWrapper custs = DataCollections.GetMyCustomers();
+            MyCustomersInformation cust = custs.CustomerInfo.FirstOrDefault(c => c.CUST_SID == custId);
+
+            if (deIsDoubleCons != null)
+            {
+                deIsDoubleCons.AtrbValue = cust.DFLT_DOUBLE_CONSUMPTION ? (isTender ? 0 : 1) : 0; // If is tender default to 0 otherwise take cust default
+            }
+
+            if (deConsType != null)
+            {
+                deConsType.AtrbValue = "Manufacture";
+            }
+        }
+
+        public static void ReadOnlyIfConsumptionAndNotDouble(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            if (r.Dc.GetDataElementValue(AttributeCodes.IS_DOUBLE_CONSUMPTION) == "0")
+            {
+                IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
+
+                if (deConsType != null) deConsType.IsReadOnly = true;
             }
         }
 

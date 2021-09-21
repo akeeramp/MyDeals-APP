@@ -98,17 +98,16 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
                     int IDX_DFLT_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_AR_SETL_LVL");
                     int IDX_DFLT_CUST_RPT_GEO = DB.GetReaderOrdinal(rdr, "DFLT_CUST_RPT_GEO");
+                    int IDX_DFLT_DOUBLE_CONSUMPTION = DB.GetReaderOrdinal(rdr, "DFLT_DOUBLE_CONSUMPTION");
                     int IDX_DFLT_LOOKBACK_PERD = DB.GetReaderOrdinal(rdr, "DFLT_LOOKBACK_PERD");
                     int IDX_DFLT_PERD_PRFL = DB.GetReaderOrdinal(rdr, "DFLT_PERD_PRFL");
-                    //US928779 adding DFLT_SETTLEMENT_PARTNER
                     int IDX_DFLT_SETTLEMENT_PARTNER = DB.GetReaderOrdinal(rdr, "DFLT_SETTLEMENT_PARTNER");
                     int IDX_DFLT_TNDR_AR_SETL_LVL = DB.GetReaderOrdinal(rdr, "DFLT_TNDR_AR_SETL_LVL");
                     int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
                     int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
-                    //US860853
                     int IDX_PRC_GRP_CD = DB.GetReaderOrdinal(rdr, "PRC_GRP_CD");
-                    //US860853 END
                     int IDX_VISTEX_CUST_FLAG = DB.GetReaderOrdinal(rdr, "VISTEX_CUST_FLAG");
+
                     while (rdr.Read())
                     {
                         retCustInfo.Add(new MyCustomersInformation
@@ -124,6 +123,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
                             DFLT_AR_SETL_LVL = (IDX_DFLT_AR_SETL_LVL < 0 || rdr.IsDBNull(IDX_DFLT_AR_SETL_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_AR_SETL_LVL),
                             DFLT_CUST_RPT_GEO = (IDX_DFLT_CUST_RPT_GEO < 0 || rdr.IsDBNull(IDX_DFLT_CUST_RPT_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_CUST_RPT_GEO),
+                            DFLT_DOUBLE_CONSUMPTION = (IDX_DFLT_DOUBLE_CONSUMPTION < 0 || rdr.IsDBNull(IDX_DFLT_DOUBLE_CONSUMPTION)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_DFLT_DOUBLE_CONSUMPTION),
                             DFLT_LOOKBACK_PERD = (IDX_DFLT_LOOKBACK_PERD < 0 || rdr.IsDBNull(IDX_DFLT_LOOKBACK_PERD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_LOOKBACK_PERD),
                             DFLT_PERD_PRFL = (IDX_DFLT_PERD_PRFL < 0 || rdr.IsDBNull(IDX_DFLT_PERD_PRFL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_PERD_PRFL),
                             DFLT_SETTLEMENT_PARTNER = (IDX_DFLT_SETTLEMENT_PARTNER < 0 || rdr.IsDBNull(IDX_DFLT_SETTLEMENT_PARTNER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DFLT_SETTLEMENT_PARTNER),

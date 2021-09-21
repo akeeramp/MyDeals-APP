@@ -785,14 +785,15 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.ClearNewDefaultValues,
-                            Where = de => de.AtrbCdIn(new List<string> { 
-                                AttributeCodes.CONSUMPTION_CUST_PLATFORM, 
-                                AttributeCodes.CONSUMPTION_CUST_SEGMENT, 
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                                AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
                                 AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
                                 AttributeCodes.CONSUMPTION_REASON,
-                                AttributeCodes.CONSUMPTION_REASON_CMNT
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
+                                AttributeCodes.CONSUMPTION_TYPE
                             })
                         }
                     }
@@ -804,7 +805,16 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SetCustDefaultValues,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any() // Check if this triggers rule
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any() 
+                },
+
+                new MyOpRule
+                {
+                    Title="Reset customer level defaults on payout based on consumption",
+                    ActionRule = MyDcActions.PopulateDoubleConsumptionIfBlank,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnLoad },
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any() 
                 },
 
                 new MyOpRule

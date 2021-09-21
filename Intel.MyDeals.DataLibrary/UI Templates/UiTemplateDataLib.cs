@@ -2488,6 +2488,22 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3459,
+                AtrbCd = AttributeCodes.CONSUMPTION_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
+                Width = 160,
+                IsFilterable = true,
+                IsSortable = true,
+                IsDefaultable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+
+            items.Add(new UiTemplateContainerItem  // WIP All types
+            {
+                Id = 3459,
                 AtrbCd = AttributeCodes.CONSUMPTION_REASON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not in FLEX or REV_TIER deals
