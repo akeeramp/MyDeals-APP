@@ -616,7 +616,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsDimKey = true,
                 IsReadOnly = true,
-                Label = "Density Band",
+                Label = "Density Band (GB)",
             });
 
             items.Add(new UiTemplateContainerItem
@@ -643,7 +643,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 20,
+                Id = 12,
                 AtrbCd = AttributeCodes.STRT_PB,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
@@ -656,7 +656,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 6,
+                Id = 13,
                 AtrbCd = AttributeCodes.END_PB,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
@@ -669,7 +669,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 56,
+                Id = 14,
                 AtrbCd = AttributeCodes.DENSITY_RATE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
