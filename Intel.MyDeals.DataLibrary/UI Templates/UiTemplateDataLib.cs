@@ -721,7 +721,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 DataType = "percent",
                 Template = "#=gridUtils.uiControlWrapper(data, 'INCENTIVE_RATE', 'percent')#",
-                Label = "Incentive Rate *",
+                Label = "Incentive Rate (%) *",
                 HelpText = "Percent rate where 1 is 1% and .01 is .01%."
             }) ;
 

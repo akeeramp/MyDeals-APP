@@ -663,7 +663,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.LastTierEndVolumeCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnMergeComplete }
                 },
 
                 new MyOpRule
@@ -1168,6 +1168,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.VOLUME,
                                 AttributeCodes.TOTAL_DOLLAR_AMOUNT,
                                 AttributeCodes.END_VOL,
+                                AttributeCodes.END_REV,
+                                AttributeCodes.END_PB,
                                 AttributeCodes.RATE,
                                 AttributeCodes.DENSITY_RATE,
                                 AttributeCodes.TITLE // Product Title at Deal Level

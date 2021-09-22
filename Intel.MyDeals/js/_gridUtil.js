@@ -657,7 +657,7 @@ gridUtils.uiControlScheduleWrapperRevTier = function (passedData) {
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start Rev", "field": "STRT_REV", "format": "currency", "align": "right" },
         { "title": "End Rev", "field": "END_REV", "format": "currency", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
-        { "title": "Incentive Rate", "field": "INCENTIVE_RATE", "format": "number", "align": "right" }
+        { "title": "Incentive Rate (%)", "field": "INCENTIVE_RATE", "format": "number", "align": "right" }
     ];
 
     tmplt += '<tr style="height: 15px;">';
@@ -697,7 +697,7 @@ gridUtils.exportControlScheduleWrapperRevTier = function (passedData) {
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start Rev", "field": "STRT_REV", "format": "currency", "align": "right" },
         { "title": "End Rev", "field": "ENDREV", "format": "currency", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
-        { "title": "Incentive Rate", "field": "INCENTIVE_RATE", "format": "number", "align": "right" }
+        { "title": "Incentive Rate (%)", "field": "INCENTIVE_RATE", "format": "number", "align": "right" }
     ];
 
     var numTiers = 0;

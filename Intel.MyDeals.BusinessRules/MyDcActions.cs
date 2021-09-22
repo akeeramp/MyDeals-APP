@@ -1051,12 +1051,15 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> updates = new List<string>();
 
-            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d =>
-                r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
+            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => r.Rule.OpRuleActions[0].Target.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList())
             {
                 MyDealsAttribute atrb = atrbMstr.All.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                 if (atrb == null) continue;
-                if (atrb.ATRB_LBL != "Title") updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]");
+                if (de.OrigAtrbValue == de.AtrbValue) continue; // If a value was reset back to original, prevent message
+                if (atrb.ATRB_LBL != "Title")
+                { 
+                    updates.Add(atrb.ATRB_LBL + " value changed from [" + de.OrigAtrbValue + "] to [" + de.AtrbValue + "]"); 
+                }
                 else
                 {
                     var origProds = de.OrigAtrbValue.ToString().Split(',');
