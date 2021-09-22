@@ -34,10 +34,21 @@
             PrimeCustomersService.getPrimeCustomers().then(function (response) {
                 vm.primeCustomers = response.data;
             }, function (response) {
-                    logger.error("Unable to get Unified Customers", response, response.statusText);
+                logger.error("Unable to get Unified Customers", response, response.statusText);
             });
         }
 
+        function updatePrimeCustomers(e) {
+            PrimeCustomersService.UpdatePrimeCustomer(e.data)
+                .then(function (response) {
+                    e.success(response.data);
+                    logger.success("Unified customer updated.");
+                    var primeCustIndex = vm.PrimeCustomersData.findIndex(x => (x.PRIM_SID === parseInt(response.data.PRIM_SID)));
+                    vm.PrimeCustomersData[primeCustIndex] = response.data;
+                }, function (response) {
+                    logger.error("Unable to update Unified customer.", response, response.statusText);
+                });
+        }
 
         vm.dataSource = new kendo.data.DataSource({
             transport: {
@@ -47,21 +58,25 @@
                         vm.PrimeCustomersData = response.data;
                         vm.initiateDropdown();
                     }, function (response) {
-                            logger.error("Unable to get Unified customers.", response, response.statusText);
+                        logger.error("Unable to get Unified customers.", response, response.statusText);
                     });
                 },
                 update: function (e) {
-                    if (vm.IsvalidPrimeCustomer(e.data)) {
-                        PrimeCustomersService.UpdatePrimeCustomer(e.data)
-                            .then(function (response) {
-                                e.success(response.data);
-                                logger.success("Unified customer updated.");
-                                var primeCustIndex = vm.PrimeCustomersData.findIndex(x => (x.PRIM_SID === parseInt(response.data.PRIM_SID)));
-                                vm.PrimeCustomersData[primeCustIndex] = response.data;
-                            }, function (response) {
-                                logger.error("Unable to update Unified customer.", response, response.statusText);
-                            });
-
+                    e.data.RPL_STS = e.data.RPL_STS ? 1 : 0;
+                    var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
+                        x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
+                    if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS != e.data.RPL_STS) {                        
+                        updatePrimeCustomers(e);
+                    }
+                    else if (!e.data.IS_ACTV) {
+                        kendo.confirm("There may be a chance of deals associated with this combination.<br/><br/> Are you sure want to deactivate this combination?").then(function () {
+                            updatePrimeCustomers(e);
+                        }).fail(function () {
+                            vm.dataSource.cancelChanges();
+                        });
+                    }
+                    else if (e.data.IS_ACTV && vm.IsvalidPrimeCustomer(e.data)) {
+                        updatePrimeCustomers(e);
                     }
                 },
                 create: function (e) {
@@ -72,7 +87,7 @@
                                 logger.success("New Unified customer added.");
                                 vm.PrimeCustomersData[vm.PrimeCustomersData.length] = response.data;
                             }, function (response) {
-                                    logger.error("Unable to insert Unified customer.", response, response.statusText);
+                                logger.error("Unable to insert Unified customer.", response, response.statusText);
                             });
                     }
                 }
@@ -87,7 +102,7 @@
                         PRIM_CUST_ID: { editable: true },
                         PRIM_CUST_NM: { editable: true },
                         PRIM_CUST_CTRY: { editable: true },
-                        RPL_STS: { editable: false },
+                        RPL_STS: { editable: true },
                         IS_ACTV: { editable: true },
                         PRIM_LVL_ID: { editable: true },
                         PRIM_LVL_NM: { editable: false },
@@ -96,7 +111,7 @@
                 }
             }
         })
-        
+
         vm.IsvalidPrimeCustomer = function (model) {
             var validationMessages = [];
             var isPrimeIdexist = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
@@ -110,22 +125,24 @@
                         validationMessages.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
                     }
                     else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null) {
-                            validationMessages.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is already associated with \"" + x.PRIM_CUST_NM+ "\" Unified Customer");
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null && x.IS_ACTV == true) {
+                            validationMessages.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active");
                         }
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID === model.PRIM_LVL_ID) {
-                            validationMessages.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists");
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID === model.PRIM_LVL_ID && x.PRIM_CUST_CTRY != model.PRIM_CUST_CTRY && x.IS_ACTV) {
+                            validationMessages.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status");
                         }
-                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
+                        if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
                             validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         }
-                        if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length === 1 && model.PRIM_SID !== "") {
-                            validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
+                        else if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY && x.IS_ACTV) {
+                            validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
+                        }
+                        if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length === 1 && model.PRIM_SID !== "" && x.IS_ACTV) {
+                            validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
                         }
                     }
-                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "") {
-                        validationMessages.push("\""+x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\"");
-
+                    else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
+                        validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
                     }
 
                 }
@@ -147,12 +164,12 @@
             if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
                 validationMessages.push("Please Select Valid Country.")
             if (validationMessages.length > 0) {
-                
+
                 var RemoveDuplicate = [...new Set(validationMessages)];
                 validationMessages = RemoveDuplicate;
                 kendo.alert(validationMessages.join("</br>"));
             }
-                
+
 
             return validationMessages.length == 0;
 
@@ -329,7 +346,11 @@
                 {
                     field: "RPL_STS",
                     title: "RPL Status",
-                    width: "200px"
+                    width: "200px",
+                    template: gridUtils.boolViewer('RPL_STS'),
+                    editor: gridUtils.boolEditor,
+                    filterable: { multi: true, search: true },
+                    editable: isRplEditable
                 }
 
             ]
@@ -361,6 +382,15 @@
             // If it is new record editable is set to true else false
             if (e.PRIM_SID == "") {
                 return true;
+            }
+            return false;
+        }
+
+        function isRplEditable(e) {
+            window.isCustomerAdmin = false;
+            if (window.isDeveloper || (window.usrRole == "SA" && !window.isCustomerAdmin)) {
+                if (e.PRIM_SID != "")
+                    return true;
             }
             return false;
         }
