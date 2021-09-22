@@ -15,8 +15,8 @@
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
-        var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
-        var verticalsWithFamilyLevelSelectionECAP = ["Nand (SSD)"] 
+        var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", "EIA MISC"];
+        var verticalsWithFamilyLevelSelectionECAP = ["Nand (SSD)", "DCG Client SSD", "DCG DC SSD"];
         var isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
