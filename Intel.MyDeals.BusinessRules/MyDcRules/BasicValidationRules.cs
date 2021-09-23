@@ -950,6 +950,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Rev Tier Deals default to Additive", // Rev Tiers are Additive only deals always
+                    ActionRule = MyDcActions.DefaultRevTierAdditive,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.REV_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
                     ActionRule = MyDcActions.CheckTotalDollarAmount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },

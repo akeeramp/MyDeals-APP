@@ -2881,6 +2881,19 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void DefaultRevTierAdditive(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement myCombType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);
+
+            if (myCombType.AtrbValue.ToString() != "Additive") // Rev Tiers are Additive only deals always
+            {
+                myCombType.AtrbValue = "Additive";
+            }
+        }
+
         public static void CheckEcapAdjUnit(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

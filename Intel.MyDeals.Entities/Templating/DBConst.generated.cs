@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 8/31/2021 3:23:21 PM
+File Updated: 9/23/2021 2:50:37 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -280,15 +280,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string CAP_STRT_DT = "CAP_STRT_DT";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 3322
-		/// TGT_COL_TYPE: MONEY
-		/// DOT_NET_DATA_TYPE: System.Double
-		///</summary>
-		public const string CEILING_LIMIT = "CEILING_LIMIT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1050,8 +1041,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 8
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string END_REV = "END_REV";
 
@@ -1900,6 +1891,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string NAND_INTERFACE = "NAND_INTERFACE";
+
+		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7094
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string NAND_TRUE_DENSITY = "NAND_TRUE_DENSITY";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -3148,6 +3148,7 @@ namespace Intel.MyDeals.Entities {
 		public const string RECYCLE_CACHE_COUNT_NODE2 = "RECYCLE_CACHE_COUNT_NODE2";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
+		public const string SSD_PRD_CAT_LIST = "SSD_PRD_CAT_LIST";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TENDER_ECAP_KIT_MIGRATION = "TENDER_ECAP_KIT_MIGRATION";
 		public const string TENDER_SEARCH_MAX_VALUE = "TENDER_SEARCH_MAX_VALUE";
