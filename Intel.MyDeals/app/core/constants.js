@@ -741,9 +741,6 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "FRCST_VOL": {
-                        "Groups": ["RPU"]
-                    },
                     "MAX_RPU": {
                         "Groups": ["RPU"]
                     },

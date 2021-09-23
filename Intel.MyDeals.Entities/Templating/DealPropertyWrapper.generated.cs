@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/10/2021 8:30:55 AM
+File Updated: 9/23/2021 2:50:28 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -473,22 +473,6 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
-		};
-		public static MyDealsAttribute CEILING_LIMIT = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CEILING_LIMIT",
-			ATRB_DESC = "Ceiling Limit",
-			ATRB_LBL = "Ceiling Limit",
-			ATRB_MAX_LEN = 0,
-			ATRB_SID = 3322,
-			DATA_TYPE_CD = "MONEY",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Double",
-			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MAJOR_INCREASE",
-			TGT_COL_TYPE = "MONEY",
-			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute CNSMPTN_LKBACK_PERD_DT = new MyDealsAttribute()
 		{

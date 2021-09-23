@@ -774,16 +774,6 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem
             {
-                Id = 22,
-                AtrbCd = AttributeCodes.CEILING_LIMIT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
-                Width = 100,
-                Label = "Ceiling Limit"
-            });
-
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 25,
                 AtrbCd = AttributeCodes.MAX_PAYOUT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -3177,20 +3167,6 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Format = "{0:c}",
                 Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT', 'currency')#",
-                IsFilterable = true,
-                IsSortable = true
-            });
-
-            items.Add(new UiTemplateContainerItem  // WIP Density types
-            {
-                Id = 22,
-                AtrbCd = AttributeCodes.CEILING_LIMIT,
-                Label = "Total Dollar Amount",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
-                Width = 100,
-                Format = "{0:c}",
-                Template = "#=gridUtils.uiControlWrapper(data, 'CEILING_LIMIT', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
