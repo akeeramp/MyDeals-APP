@@ -2152,6 +2152,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                     model._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
                 }
+
+                if (col == "CONSUMPTION_TYPE" && newVal == "Sell Thru") {
+                    if (model.CONSUMPTION_LOOKBACK_PERIOD != null && model.CONSUMPTION_LOOKBACK_PERIOD != undefined) {
+                        model.CONSUMPTION_LOOKBACK_PERIOD = "0";
+                    }
+                }
+
                 $scope.root.saveCell(model, col, $scope, newVal);
 
                 if (model.isLinked !== undefined && model.isLinked) {

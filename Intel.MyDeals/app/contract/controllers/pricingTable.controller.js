@@ -2976,7 +2976,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 //}
                                 break;
                             case "percent":
-                                sheet.range(myColumnName + ":" + myColumnName).format("#,0.00 \\\%");
+                                sheet.range(myColumnName + ":" + myColumnName).format("#,0.00"); //.format("#,0.00 \\\%"); // Shown on new row creation only
                                 break;
                             default:
                                 break;

@@ -823,7 +823,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3603,
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 100,
                 Label = "Forecast Volume",
                 DataType = "number"
@@ -3074,7 +3074,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 Label = "Forecast Volume",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.REV_TIER, OpDataElementSetType.DENSITY },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL', 'number')#",
                 IsFilterable = true,
