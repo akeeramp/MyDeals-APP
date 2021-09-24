@@ -3087,7 +3087,6 @@ namespace Intel.MyDeals.BusinessRules
                 }
                 var EndquarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, null, (short)yr, (short)qtr);
                 DateTime maxEndDt = EndquarterDetails.QTR_END;
-                //to make sure date calculation happen as per Intel calendar, Added year number condition (TWC3167-191)
                 if (endDate > maxEndDt)
                 {
                     deEndDate.AddMessage("End date is limited to 1 year from deal start date");
