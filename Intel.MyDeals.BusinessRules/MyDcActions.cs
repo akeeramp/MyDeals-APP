@@ -656,7 +656,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deIsDoubleCons = r.Dc.GetDataElement(AttributeCodes.IS_DOUBLE_CONSUMPTION);
             IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
 
-            if (deIsDoubleCons.HasValue() || deConsType.HasValue()) return;
+            if (deIsDoubleCons is null || deConsType is null || deIsDoubleCons.HasValue() || deConsType.HasValue()) return;
 
             var isTender = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE) == "TENDER";
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custId)) custId = 0;
@@ -2891,6 +2891,20 @@ namespace Intel.MyDeals.BusinessRules
             if (myCombType.AtrbValue.ToString() != "Additive") // Rev Tiers are Additive only deals always
             {
                 myCombType.AtrbValue = "Additive";
+            }
+        }
+
+        public static void DefaultConsumptionLookbackOnSellThru(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string consumptionType = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_TYPE);
+            IOpDataElement myLookbackPeriod = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
+
+            if (consumptionType  == "Sell Thru" && myLookbackPeriod.AtrbValue.ToString() != "0") // Sell Thru must reset CONSUMPTION_LOOKBACK_PERIOD to 0
+            {
+                myLookbackPeriod.AddMessage("Consumption Lookback Period must be 0 Months if Consumption Type is 'Sell Thru'.");
             }
         }
 

@@ -959,6 +959,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Consumption Type of Sell Thru locks Lookback Period to 0", 
+                    ActionRule = MyDcActions.DefaultConsumptionLookbackOnSellThru,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.CONSUMPTION_TYPE) && de.HasValue("Sell Thru")).Any()
+                },
+
+                new MyOpRule
+                {
                     Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
                     ActionRule = MyDcActions.CheckTotalDollarAmount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
