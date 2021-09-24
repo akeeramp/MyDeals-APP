@@ -62,7 +62,6 @@
                     });
                 },
                 update: function (e) {
-                    //e.data.RPL_STS = e.data.RPL_STS ? 1 : 0;
                     var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
                         x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
                     if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS != e.data.RPL_STS) {                        
@@ -344,7 +343,7 @@
                 },
                 {
                     field: "RPL_STS",
-                    title: "Is RPL?",
+                    title: "Is RPL ?",
                     width: "200px",
                     template: gridUtils.boolViewer('RPL_STS'),
                     editor: gridUtils.boolEditor,
