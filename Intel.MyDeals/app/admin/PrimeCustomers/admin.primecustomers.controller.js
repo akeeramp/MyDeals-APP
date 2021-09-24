@@ -62,7 +62,7 @@
                     });
                 },
                 update: function (e) {
-                    e.data.RPL_STS = e.data.RPL_STS ? 1 : 0;
+                    //e.data.RPL_STS = e.data.RPL_STS ? 1 : 0;
                     var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
                         x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
                     if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS != e.data.RPL_STS) {                        
@@ -102,8 +102,8 @@
                         PRIM_CUST_ID: { editable: true },
                         PRIM_CUST_NM: { editable: true },
                         PRIM_CUST_CTRY: { editable: true },
-                        RPL_STS: { editable: true },
-                        IS_ACTV: { editable: true },
+                        RPL_STS: { type: "boolean", editable: true },
+                        IS_ACTV: { type: "boolean", editable: true },
                         PRIM_LVL_ID: { editable: true },
                         PRIM_LVL_NM: { editable: false },
                         PRIM_SID: { editable: false }
@@ -296,7 +296,6 @@
                     field: "IS_ACTV",
                     title: "Is Active",
                     width: "200px",
-                    filterable: { multi: true, search: false },
                     template: gridUtils.boolViewer('IS_ACTV'),
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
@@ -345,11 +344,10 @@
                 },
                 {
                     field: "RPL_STS",
-                    title: "RPL Status",
+                    title: "Is RPL?",
                     width: "200px",
                     template: gridUtils.boolViewer('RPL_STS'),
                     editor: gridUtils.boolEditor,
-                    filterable: { multi: true, search: true },
                     editable: isRplEditable
                 }
 
