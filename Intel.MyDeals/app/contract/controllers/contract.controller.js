@@ -2732,6 +2732,9 @@
                         sData = $scope.validateFlexRules(sData);
                         //validate Marketing KIT products
                         sData = $scope.validateMarketingKIT(sData);
+                        //validate density bands
+                        sData = $scope.validateDensityBand(sData);
+
 
 
                         // find all date fields
@@ -6613,6 +6616,9 @@
             else if (cond == 'dateissue' && elem == 'PTR_USER_PRD') {
                 item._behaviors.validMsg[elem] = "Deal End Date must be greater than Start Date, please correct.";
             }
+            else if (cond != '' && elem == 'DENSITY_BAND') {
+                item._behaviors.validMsg[elem] = cond;
+            }
             else if (cond == 'emptyobject' && elem == 'FLEX') {
                 delete item._behaviors.isRequired[elem];
                 delete item._behaviors.isError[elem];
@@ -6874,6 +6880,28 @@
                         item._behaviors.validMsg["PTR_USER_PRD"] = "Marketing KIT products are not allowed for Consumption based KIT deals.";
                     }
                 });
+            }
+            return data;
+        }
+
+        $scope.validateDensityBand = function (data) {
+            if ($scope.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+                $scope.clearValidation(data, 'PTR_USER_PRD');
+                let temp = $scope.$broadcast('validateDensity', data);
+                if (data.some(function (el) { return el.DENSITY_BAND == null })) {
+                    angular.forEach(data, (item) => {
+                        if (item.DENSITY_BAND == null) {
+                            $scope.OVLPFlexPdtPTRUSRPRDError = true;
+                            if (!item._behaviors) item._behaviors = {};
+                            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+                            if (!item._behaviors.isError) item._behaviors.isError = {};
+                            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                            item._behaviors.isRequired["PTR_USER_PRD"] = true;
+                            item._behaviors.isError["PTR_USER_PRD"] = true;
+                            item._behaviors.validMsg["PTR_USER_PRD"] = "Mismatch found between products selected & density bands.";
+                        }
+                    });
+                }
             }
             return data;
         }
