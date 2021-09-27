@@ -3604,7 +3604,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT");
+                || (dealType == "KIT" || dealType == "DENSITY");
         });
 
         // Convert into format accepted by translator API
@@ -3621,7 +3621,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
                 IS_HYBRID_PRC_STRAT: row.IS_HYBRID_PRC_STRAT,
-                SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
+                SendToTranslation: (dealType == "KIT" || dealType == "DENSITY") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
         //adding Exclude
@@ -5025,7 +5025,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             _.each(validMisProd, (item) => {
                                 if (itm.DC_ID == item.DCID) {
                                     itm._dirty = true;
-                                    setBehaviors(itm, 'DENSITY_BAND', `The product density selected was ${item.selDen} but the actual product density is ${item.actDen}`);
+                                    root.setBehaviors(itm, 'DENSITY_BAND', `The product density selected was ${item.selDen} but the actual product density is ${item.actDen}`);
                                 }
                             })
                         });
@@ -5077,17 +5077,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         });
 
-    }
-
-    function setBehaviors(item, elem, msg) {
-        if (!item._behaviors) item._behaviors = {};
-        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        if (!item._behaviors.isError) item._behaviors.isError = {};
-        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-        item._behaviors.isRequired[elem] = true;
-        item._behaviors.isError[elem] = true;
-        item._behaviors.validMsg[elem] = msg
     }
 
     function clearBehaviors(item, elem) {
@@ -5160,6 +5149,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return userInput.contractProducts.split(',');
 
     }
+
+    $scope.$on('validateDensity', function (event, args) {
+        validateOnlyProducts();
+    });
 
     init();
 }
