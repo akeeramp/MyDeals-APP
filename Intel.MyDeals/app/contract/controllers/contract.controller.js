@@ -4209,7 +4209,8 @@
                             }
                         }
                         // Disable all Start vols except the first if there is no tracker, else disable them all
-                        if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
+                        let densityBandCount = parseInt(data[d]["NUM_OF_DENSITY"]);
+                        if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t > densityBandCount)) {
                             if (!data[d]._behaviors.isReadOnly) {
                                 data[d]._behaviors.isReadOnly = {};
                             }
