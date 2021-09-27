@@ -1544,7 +1544,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var tmplt = '<table>';
                 var fields = [
                     { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
-                    { "title": "Band", "field": "DENSITY_BAND", "format": "", "align": "right" },
+                    { "title": "Band (GB)", "field": "DENSITY_BAND", "format": "", "align": "right" },
                     { "title": "Start PB", "field": "STRT_PB", "format": "", "align": "right" },
                     { "title": "End PB", "field": "END_PB", "format": "", "align": "right" },
                     { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
