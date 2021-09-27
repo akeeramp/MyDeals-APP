@@ -696,6 +696,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         root.setBusy("", "");
+                        if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+                            var res = [];
+                            for (var i = 0; i < response.data.ProductSelectionLevels.length; i++) {
+                                if (response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('NAND') > -1) {
+                                    res.push(response.data.ProductSelectionLevels[i]);
+                                }
+                            }
+                            response.data.ProductSelectionLevels = res;
+                        }
                         productSelectionLevels = response;
                         return response;
                     }, function (response) {
