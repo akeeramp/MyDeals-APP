@@ -679,7 +679,10 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            if (r.Dc.GetDataElementValue(AttributeCodes.IS_DOUBLE_CONSUMPTION) == "0")
+            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            // Only VOL TIER deals are allowed to do Sell Thru, all others are read only 
+            if (r.Dc.GetDataElementValue(AttributeCodes.IS_DOUBLE_CONSUMPTION) == "0" || deDealTypeValue != OpDataElementSetType.VOL_TIER.ToString())
             {
                 IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
 
