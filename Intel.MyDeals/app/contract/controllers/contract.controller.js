@@ -3738,7 +3738,10 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                        }    
+                        }  
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+                            $scope.reloadPage();
+                        }
                     }
 
                     if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {
@@ -4002,8 +4005,16 @@
 
                         if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
                             // Set the validation message
-                            dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                            dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                            if (atrbToSetErrorTo == "DENSITY_RATE") {
+                                if (dataToTieTo.DENSITY_RATE < 0) {
+                                    dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                                    dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                                }
+                            }
+                            else {
+                                dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                                dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                            }
                         } else {
                             // Delete the tier-specific validation if it doesn't tie to this specific tier
                             delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
@@ -4200,12 +4211,10 @@
                             }
                             else {
                                 let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]), db;
-                                //let rate = [];
                                 for (db = 1; db <= densityBands; db++) {
                                     lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + t];
                                 }
-
-                                mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+                                //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
                                 if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                     lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
                                 }
@@ -4221,7 +4230,7 @@
                         }
                         // Disable all End volumes except for the last tier if there is a tracker
                         if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
-                            if (t !== numTiers) {
+                            if (t < numTiers - densityBandCount) {
                                 if (!data[d]._behaviors.isReadOnly) {
                                     data[d]._behaviors.isReadOnly = {};
                                 }
@@ -4260,6 +4269,7 @@
                     if (typeof lData.TIER_NBR !== 'undefined' && dealType == "DENSITY") {
                         newData[k].DENSITY_RATE = lData["DENSITY_RATE" + "_____8___" + db + "____10___" + curTier]
                         db++;
+                        mapTieredWarnings(newData[k], lData, "DENSITY_RATE", "DENSITY_RATE", curTier);
                     }
                     k++; dt++;
                 }

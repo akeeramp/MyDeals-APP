@@ -3124,6 +3124,13 @@ namespace Intel.MyDeals.BusinessRules
             List<string> readonlyAtrbs = new List<string> { AttributeCodes.END_VOL, AttributeCodes.END_REV, AttributeCodes.END_PB };
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS), out int numTiers)) numTiers = 0;
             string targetDim = "10:" + numTiers.ToString();
+            int numDensity = 1;
+
+            if (objTypeCd == "DENSITY")
+            {
+                numDensity = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_DENSITY));
+                targetDim = "10:" + (numTiers / numDensity).ToString();
+            }
 
             foreach (OpDataElement de in r.Dc.DataElements.Where(d => readonlyAtrbs.Contains(d.AtrbCd)))
             {
@@ -3166,6 +3173,7 @@ namespace Intel.MyDeals.BusinessRules
 
                     if (errMsg != "")
                     {
+                        if (objTypeCd == "DENSITY") { numTiers = numTiers / numDensity; }
                         AddTierValidationMessage(de, errMsg, numTiers);
                         de.AtrbValue = de.OrigAtrbValue;
                         de.State = OpDataElementState.Modified; // Trigger the save anyways to complete round trip and post the validation message
@@ -3339,7 +3347,7 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            ValidateVolTieredAttribute(AttributeCodes.DENSITY_RATE.ToString(), "Density Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one density rate must be greater than 0.");
+            ValidateDensityTieredAttribute(AttributeCodes.DENSITY_RATE.ToString(), "Density Rate must have a positive value.", IsGreaterOrEqualToZero, r, false, true, IsGreaterThanZero, "At least one density rate must be greater than 0.");
         }
 
         public static void ValidateTieredQty(params object[] args)
@@ -3502,11 +3510,114 @@ namespace Intel.MyDeals.BusinessRules
         public static void ValidateVolTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
         {
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
+            IOpDataElement deNumDensity = r.Dc.GetDataElement(AttributeCodes.NUM_OF_DENSITY);
+            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            int numOfTiers;
 
-            int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
+            
+            if (dealType == "DENSITY" && deNumDensity.AtrbValue.ToString() != string.Empty)
+            {
+                numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString()) / int.Parse(deNumDensity.AtrbValue.ToString());
+            }
+            else
+            {
+                numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+            }
 
             ValidateTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
+        }
+
+        public static void ValidateDensityTieredAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+        {
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deNumDensity = r.Dc.GetDataElement(AttributeCodes.NUM_OF_DENSITY);
+            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            int numOfTiers;
+
+            if (deNumTiers == null || deNumTiers.AtrbValue.ToString() == string.Empty) return;
+            if (dealType == "DENSITY" && deNumDensity.AtrbValue.ToString() != string.Empty)
+            {
+                numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString()) / int.Parse(deNumDensity.AtrbValue.ToString());
+            }
+            else
+            {
+                numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+            }
+
+            ValidateDensityTieredDecimalAttribute(myAtrbCd, validationMessage, validationCondition, r, numOfTiers, 0, isEndVol, isValidateAtrbTotal, totalValidationCondition, totalValidationMessage);
+        }
+
+        public static void ValidateDensityTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, int numOfTiers, int tierOffset, bool isEndVol = false, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
+        {
+            IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+            IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            IOpDataElement deNumDensity = r.Dc.GetDataElement(AttributeCodes.NUM_OF_DENSITY);
+
+            decimal totalOfAtrb = 0;
+
+            // Validate and set validation message if applicable on each tier
+            foreach (IOpDataElement atrb in atrbs)
+            {
+                if (atrb.DimKey.LastOrDefault() != null)
+                {
+                    int tier = atrb.DimKey.LastOrDefault().AtrbItemId;
+                    int density = atrb.DimKey.FirstOrDefault().AtrbItemId;
+
+                    if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset) && density <= int.Parse(deNumDensity.AtrbValue.ToString()))
+                    {
+                        if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                            continue;
+                        }
+
+                        // unlimited end vol
+                        if (isEndVol && (tier == numOfTiers) &&
+                            atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        decimal safeParse = 0;
+                        bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+                        totalOfAtrb += safeParse;
+
+                        // added this to prevent user from saving 0 as QTY breaking DSAs, only triggers for QTY and 0/improper values.
+                        if (atrb.AtrbCd == AttributeCodes.QTY && safeParse == 0)
+                        {
+                            atrb.AtrbValue = 1;  // Just default it to 1 since QTY must be populated and at least 1 unit.
+                            atrb.State = OpDataElementState.Modified; // Force it modified to save
+                            continue; // Dispense with the QTY validation message filled in below.
+                        }
+                        if (!isNumber)
+                        {
+                            AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
+                        }
+                        else if (!validationCondition(safeParse))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                        }
+
+                    }
+                }
+            }
+
+            // Validation of totals
+            if (isValidateAtrbTotal)
+            {
+                if (!totalValidationCondition(totalOfAtrb))
+                {
+                    foreach (IOpDataElement tieredObj in atrbs)
+                    {
+                        int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
+                        if (tier >= (1 - tierOffset) && tier <= (numOfTiers - tierOffset))
+                        {
+                            AddTierValidationMessage(atrbWithValidation, totalValidationMessage, tier);
+                        }
+                    }
+                }
+            }
         }
 
         public static void ValidateKitTieredDecimalAttribute(string myAtrbCd, string validationMessage, Func<decimal, bool> validationCondition, MyOpRuleCore r, bool isValidateAtrbTotal = false, Func<decimal, bool> totalValidationCondition = null, string totalValidationMessage = null)
