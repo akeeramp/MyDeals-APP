@@ -29,6 +29,7 @@
         vm.COMP_ATRB_SIDS.push(3457)
         vm.COMP_ATRB_SIDS.push(3458)
         vm.COMP_ATRB_SIDS.push(3464)
+        vm.COMP_ATRB_SIDS.push(3454)
         vm.selectedATRB_SID = 0;
         vm.selectedOBJ_SET_TYPE_SID = 0;
         vm.selectedCUST_MBR_SID = 1;
@@ -165,7 +166,7 @@
             var Id = (dataItem.dropdownID === undefined) ? dataItem.ATRB_SID : dataItem.dropdownID;
             //var Id = dataItem.dropdownID ?
             var restrictToConsumptionOnly = (usrRole === 'SA' && !isDeveloper);
-            var restrictedGroupList = [3456, 3457, 3458];
+            var restrictedGroupList = [3456, 3457, 3458,3454];
             if (restrictToConsumptionOnly === false) {
                 return true;
             }
