@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/23/2021 2:50:28 PM
+File Updated: 9/30/2021 5:05:16 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -1393,13 +1393,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Density",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 17,
-			DATA_TYPE_CD = "INT",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Int32",
-			FRMT_MSK = "{0:d}",
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
-			TGT_COL_TYPE = "INT",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute DENSITY_RATE = new MyDealsAttribute()
