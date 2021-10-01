@@ -4006,9 +4006,13 @@
                         if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
                             // Set the validation message
                             if (atrbToSetErrorTo == "DENSITY_RATE") {
-                                if (dataToTieTo.DENSITY_RATE < 0) {
+                                if (dataToTieTo.DENSITY_RATE <= 0) {
                                     dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
                                     dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                                }
+                                else {
+                                    delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                                    delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
                                 }
                             }
                             else {
@@ -4114,7 +4118,6 @@
             if (!$scope.isPivotable()) return data;
             var newData = [];
             let dealType = $scope.curPricingTable['OBJ_SET_TYPE_CD'];
-            var k = 0;
 
             for (var d = 0; d < data.length; d++) {
                 // Tiered data
@@ -4208,16 +4211,15 @@
                                 if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                     lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
                                 }
+
+                                if (tieredItem === strtKey && lData[strtKey] !== undefined && curTier == 1) {
+                                    lData[strtKey] = (parseFloat(lData[strtKey])).toFixed(3);
+                                }
+
                             }
                             else {
-                                let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]), db;
-                                for (db = 1; db <= densityBands; db++) {
-                                    lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + t];
-                                }
-                                //mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
-                                if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                    lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
-                                }
+                                    lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
+                                    mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
                             }
                         }
                         // Disable all Start vols except the first if there is no tracker, else disable them all
@@ -4266,12 +4268,7 @@
                     }
 
                     newData.push(lData);
-                    if (typeof lData.TIER_NBR !== 'undefined' && dealType == "DENSITY") {
-                        newData[k].DENSITY_RATE = lData["DENSITY_RATE" + "_____8___" + db + "____10___" + curTier]
-                        db++;
-                        mapTieredWarnings(newData[k], lData, "DENSITY_RATE", "DENSITY_RATE", curTier);
-                    }
-                    k++; dt++;
+                    dt++; db++;
                 }
             }
 

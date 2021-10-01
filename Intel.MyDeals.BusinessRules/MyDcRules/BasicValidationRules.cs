@@ -129,15 +129,15 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
                 },
 
-                //new MyOpRule
-                //{
-                //    Title="Density Rate must have a positive value",
-                //    ActionRule = MyDcActions.ValidateDensityRate,
-                //    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                //    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
-                //    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
-                //    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.DENSITY_RATE)
-                //},
+                new MyOpRule
+                {
+                    Title="Density Rate must have a positive value",
+                    ActionRule = MyDcActions.ValidateDensityRate,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.DENSITY_RATE)
+                },
 
                 #region Tiers Start/End/Level/Relatioship checks
                 new MyOpRule
