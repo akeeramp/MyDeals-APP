@@ -3205,6 +3205,11 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["FLEX_ROW_TYPE"]);
                             }
+
+                            if (gData[i]._behaviors.isError['CONSUMPTION_TYPE']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["CONSUMPTION_TYPE"]);
+                            }
                             
                             // TODO... this should probably mimic Pricing Table Rows
                             if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
@@ -6353,6 +6358,7 @@
                 $scope.clearValidation(data, 'PROGRAM_PAYMENT');
                 $scope.clearValidation(data, 'SETTLEMENT_PARTNER');
                 $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
+                $scope.clearValidation(data, 'CONSUMPTION_TYPE');
 
                 $scope.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"]);
                 if (hybCond) {
@@ -6365,6 +6371,7 @@
                 $scope.itemValidationBlock(data, "PROGRAM_PAYMENT", ["notequal", "equalblank"]);
                 $scope.itemValidationBlock(data, "SETTLEMENT_PARTNER", ["notequal"]);
                 $scope.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"]);
+                $scope.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"]);
 
                 //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
             }
@@ -6593,14 +6600,17 @@
                 case 'AR_SETTLEMENT_LVL':
                     $scope.setBehaviorsValidMessage(item, elem, 'Settlement Level', cond);
                     break;
+                case 'CONSUMPTION_TYPE':
+                    $scope.setBehaviorsValidMessage(item, elem, 'Consumption Type', cond);
+                    break;
                 default:
                 // code block
             }
 
 
             if (elem == 'REBATE_TYPE' || elem == 'PAYOUT_BASED_ON' || elem == 'CUST_ACCNT_DIV' || elem == 'GEO_COMBINED' || elem == 'PERIOD_PROFILE' || elem == 'RESET_VOLS_ON_PERIOD' || elem == 'PROGRAM_PAYMENT'
-                || elem == 'SETTLEMENT_PARTNER' || elem == 'AR_SETTLEMENT_LVL') {
-                // no opeeration - taken in above case statement
+                || elem == 'SETTLEMENT_PARTNER' || elem == 'AR_SETTLEMENT_LVL' || elem == 'CONSUMPTION_TYPE') {
+                // no operation - taken in above case statement
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_VOL') {
                 $scope.setBehaviorsValidMessage(item, elem, 'Overarching Max Volume', cond);
