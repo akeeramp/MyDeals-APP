@@ -653,6 +653,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             IOpDataElement deIsDoubleCons = r.Dc.GetDataElement(AttributeCodes.IS_DOUBLE_CONSUMPTION);
             IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
 
@@ -668,7 +669,7 @@ namespace Intel.MyDeals.BusinessRules
                 deIsDoubleCons.AtrbValue = cust.DFLT_DOUBLE_CONSUMPTION ? (isTender ? 0 : 1) : 0; // If is tender default to 0 otherwise take cust default
             }
 
-            if (deConsType != null)
+            if (payoutBasedOn == "Consumption" && deConsType != null)
             {
                 deConsType.AtrbValue = "Manufacture";
             }
