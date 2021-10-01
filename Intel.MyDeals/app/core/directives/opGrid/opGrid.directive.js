@@ -1544,7 +1544,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var tmplt = '<table>';
                 var fields = [
                     { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
-                    { "title": "Band (GB)", "field": "DENSITY_BAND", "format": "", "align": "right" },
+                    { "title": "Band", "field": "DENSITY_BAND", "format": "", "align": "right" },
                     { "title": "Start PB", "field": "STRT_PB", "format": "", "align": "right" },
                     { "title": "End PB", "field": "END_PB", "format": "", "align": "right" },
                     { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
@@ -1570,7 +1570,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             for (var bands = 1; bands <= numDensityBands; bands++) {
                                 tmplt += '<tr>';
                                 tmplt += '<td>';
-                                tmplt += '<input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + bands + "____" + "10___" + d + '" k-min="0" k-step=".01" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + "10___" + d + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" />';
+                                tmplt += '<input kendo-numeric-text-box id="sched_contrl_' + fields[f].field + '_' + dim + bands + "____" + "10___" + d + '" k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + "10___" + d + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" />';
                                 tmplt += '</td>';
                                 tmplt += '</tr>';
                             }
@@ -1579,7 +1579,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         } else {
                             //if end pb or if it is the very first tier, allow editable, f = field, d, = tier or row
                             if ((fields[f].field == "STRT_PB" && hasTracker === "0" && d === 1) || fields[f].field == "END_PB") {
-                                if (fields[f].field == "END_PB" && hasTracker === "1" && d !== numTiers) { // If End PB and has tracker and is NOT last tier, read only
+                                if (fields[f].field == "END_PB" && hasTracker === "1" && d !== numTiers / numDensityBands) { // If End PB and has tracker and is NOT last tier, read only
                                     tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                                 }
                                 else {

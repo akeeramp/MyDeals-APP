@@ -616,7 +616,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.DENSITY },
                 IsDimKey = true,
                 IsReadOnly = true,
-                Label = "Density Band (GB)",
+                Label = "Density Band",
             });
 
             items.Add(new UiTemplateContainerItem

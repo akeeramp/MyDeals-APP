@@ -150,7 +150,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         "GEO_COMBINED",
         "PROGRAM_PAYMENT",
         "PROD_INCLDS",
-        "REBATE_TYPE"
+        "REBATE_TYPE",
+        "MRKT_SEG"
     ];
     var firstEditableColBeforeProduct = null; // used along with to properly disable/enable cols before PTR_USR_PRD. Is calucated using editableColsBeforeProduct. Defaults to PTR_USR_PRD when editableColsBeforeProduct is empty
     var editableColsBeforeProduct = [
@@ -159,7 +160,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     ];
 
     // Performance and UX... removed this.  We will need to handle these in the MT rules
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT","REBATE_TYPE"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT", "REBATE_TYPE","MRKT_SEG"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     var initSearchValue = "";
