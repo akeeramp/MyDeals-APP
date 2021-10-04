@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/23/2021 2:50:37 PM
+File Updated: 10/4/2021 4:40:11 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -798,8 +798,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 17
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Int32
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string DENSITY_BAND = "DENSITY_BAND";
 
@@ -1639,6 +1639,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string IS_PRIMED_CUST = "IS_PRIMED_CUST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3355
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_RPL = "IS_RPL";
 
 		///<summary>
 		/// DIM_SID: 50
