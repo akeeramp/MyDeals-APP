@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/30/2021 5:05:16 PM
+File Updated: 10/4/2021 4:40:37 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -2881,6 +2881,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Is Unified Cust",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3352,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute IS_RPL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_RPL",
+			ATRB_DESC = "Is a RPLed Customer",
+			ATRB_LBL = "Is RPL Cust",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3355,
 			DATA_TYPE_CD = "BIT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
