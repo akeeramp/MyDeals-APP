@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -60,6 +61,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
 
         ProductSelectorWrapper GetProductSelectorWrapper();
+
+        ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode);
 
         Dictionary<string, string> GetSearchString();
 

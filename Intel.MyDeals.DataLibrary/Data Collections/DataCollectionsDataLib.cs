@@ -1,5 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.DataLibrary
@@ -158,6 +159,11 @@ namespace Intel.MyDeals.DataLibrary
         public ProductSelectorWrapper GetProductSelectorWrapper()
         {
             return DataCollections.GetProductSelectorWrapper();
+        }
+
+        public ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode)
+        {
+            return DataCollections.GetProductSelectorWrapperDensity(startDate, endDate, mediaCode);
         }
 
         public List<BasicDropdown> GetBasicDropdowns()

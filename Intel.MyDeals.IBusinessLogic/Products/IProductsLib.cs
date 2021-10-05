@@ -62,7 +62,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 
-        ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode);
+        ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode);
+
+        ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode, string dealType);
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, string mediaCd, OpDataElementSetType dealType);

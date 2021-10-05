@@ -567,6 +567,7 @@ namespace Intel.MyDeals.DataLibrary
         private static List<ProductAlias> _getProductsFromAlias;
 
         private static ProductSelectorWrapper _getProductSelectorWrapper;
+        private static ProductSelectorWrapper _getProductSelectorWrapperDensity;
 
         // This collection gets the selection level drill down levels for CPU, hierarchical levels
         private static IEnumerable<ProductSelectionLevels> _getProductSelectionLevels;
@@ -590,6 +591,18 @@ namespace Intel.MyDeals.DataLibrary
 
                     return _getProductSelectorWrapper;
                 }
+            }
+        }
+
+        public static ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                _getProductSelectorWrapperDensity = new ProductDataLib().GetProductSelectorWrapperDensity(startDate, endDate, mediaCode);
+                _getProductSelectionLevels = _getProductSelectorWrapperDensity.ProductSelectionLevels;
+                _getProductSelectionLevelsAttributes = _getProductSelectorWrapperDensity.ProductSelectionLevelsAttributes;
+
+                return _getProductSelectorWrapperDensity;
             }
         }
 
