@@ -26,6 +26,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 
+        ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode);
+
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, string mediaCd, OpDataElementSetType dealType);
 

@@ -946,14 +946,32 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Get product selection levels for density
+        /// </summary>
+        /// <returns></returns>
+        public ProductSelectorWrapper GetProductSelectorWrapperDensity(DateTime startDate, DateTime endDate, string mediaCode)
+        {
+            return _dataCollectionsDataLib.GetProductSelectorWrapperDensity(startDate, endDate, mediaCode);
+        }
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode)
+        public ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode, string dealType)
         {
-            var productSelectorWrapper = GetProductSelectorWrapper();
+
+            var productSelectorWrapper = new ProductSelectorWrapper();
+            
+            if (dealType.ToString() == "DENSITY")
+            {
+                productSelectorWrapper = GetProductSelectorWrapperDensity(startDate, endDate, mediaCode);
+            }
+            else {
+                productSelectorWrapper = GetProductSelectorWrapper();
+            }
             var productSelectionLevels = new List<ProductSelectionLevels>();
             var productSelectionLevelsAttributes = new List<ProductSelectionLevelsAttributes>();
 

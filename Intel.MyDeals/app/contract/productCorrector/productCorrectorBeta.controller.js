@@ -1025,7 +1025,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             resolve: {
                 productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
-                        startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l"), mediaCode: pricingTableRow.PROD_INCLDS
+                        startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l"), mediaCode: pricingTableRow.PROD_INCLDS, dealType: dealType
                     };
                     return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;
