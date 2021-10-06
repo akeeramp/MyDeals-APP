@@ -49,7 +49,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PAYOUT_BASED_ON,
                                 AttributeCodes.SEND_TO_VISTEX,
                                 AttributeCodes.FLEX_ROW_TYPE,
-                                AttributeCodes.RESET_VOLS_ON_PERIOD
+                                AttributeCodes.RESET_VOLS_ON_PERIOD,
+                                AttributeCodes.CONSUMPTION_TYPE
                             }
                         }
                     }
