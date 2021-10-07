@@ -1953,7 +1953,7 @@ namespace Intel.MyDeals.DataLibrary
                 Editor = "scheduleEditorDensity",
                 DataType = "object",
                 Label = "Rate Breakout",
-                Width = 300,
+                Width = 500,
                 ExcelTemplate = "#=gridUtils.exportControlScheduleWrapperDensity(data)#"
             });
 
