@@ -17,6 +17,19 @@ namespace Intel.MyDeals.Entities
         public int UCD_COUNTRY_CUST_ID { get; set; }
 
         public string UCD_COUNTRY { get; set; }
+
+        public string DEAL_END_CUSTOMER_RETAIL { get; set; }
+
+        public string DEAL_END_CUSTOMER_COUNTRY { get; set; }
+    }
+
+    public class UnifyInvalidCombination
+    {
+        public int DEAL_ID { get; set; }
+
+        public string DEAL_END_CUSTOMER_RETAIL { get; set; }
+
+        public string DEAL_END_CUSTOMER_COUNTRY { get; set; }
     }
 
     public class UnifyDealValidation
@@ -37,14 +50,20 @@ namespace Intel.MyDeals.Entities
 
         public List<string> InValidCountries { get; set; }
 
-        public List<int> DuplicateDealIds { get; set; }
+        public List<int> DuplicateDealCombination { get; set; }
+
+        public List<int> DuplicateDealEntryCombination { get; set; }
 
         public List<int> DuplicateGlobalIds { get; set; }
 
         public List<string> DuplicateGlobalNames { get; set; }
 
-        public bool IsDuplicateDealIdAvailable { get; set; }
-
         public bool IsDuplicateUcdCombinationavailable { get; set; }
+
+        public List<UnifyInvalidCombination> UnifiedCombination { get; set; }
+
+        public List<int> InvalidDeals { get; set; }
+
+        public List<UnifyInvalidCombination> InValidCombination { get; set; }
     }
 }

@@ -27,5 +27,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
+        List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
+
     }
 }

@@ -5,7 +5,7 @@ namespace Intel.MyDeals.Entities
 {
     public class in_t_end_cust_unify : SqlTableValueParameterBase
     {
-        private const string DATA_TABLE_NAME = "dbo.T_END_CUST_UNIFY";
+        private const string DATA_TABLE_NAME = "dbo.T_END_CUST_OBJ_UNIFY";
 
         public in_t_end_cust_unify()
             : base(DATA_TABLE_NAME)
@@ -22,6 +22,8 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("UCD_GLOBAL_NAME", typeof(string));
             this.Columns.Add("UCD_COUNTRY_CUST_ID", typeof(int));
             this.Columns.Add("UCD_COUNTRY", typeof(string));
+            this.Columns.Add("DEAL_END_CUSTOMER_RETAIL", typeof(string));
+            this.Columns.Add("DEAL_END_CUSTOMER_COUNTRY", typeof(string));
         }
 
         /// <summary>
@@ -36,6 +38,8 @@ namespace Intel.MyDeals.Entities
             r["UCD_GLOBAL_NAME"] = itm.UCD_GLOBAL_NAME;
             r["UCD_COUNTRY_CUST_ID"] = itm.UCD_COUNTRY_CUST_ID;
             r["UCD_COUNTRY"] = itm.UCD_COUNTRY;
+            r["DEAL_END_CUSTOMER_RETAIL"] = itm.DEAL_END_CUSTOMER_RETAIL;
+            r["DEAL_END_CUSTOMER_COUNTRY"] = itm.DEAL_END_CUSTOMER_COUNTRY;
             this.Rows.Add(r);
         }
 

@@ -521,9 +521,14 @@ using System.Collections.Generic;
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//For Bulk Update of Unify deals
-	ds = dbobjects.ExecuteDataSet("DECLARE @unifydata AS T_END_CUST_UNIFY; INSERT INTO @unifydata([DEAL ID],[UCD_GLOBAL_ID],[UCD_GLOBAL_NAME],[UCD_COUNTRY_CUST_ID],[UCD_COUNTRY]) VALUES (241813,1000005594,'China MIIT',1000008019,'CZECH rEPUBLICDRDR')   EXEC [dbo].[PR_MYDL_END_CUSTOMER_UNIFY] @unifydata, @in_emp_wwid = '12002785' ");
+	ds = dbobjects.ExecuteDataSet("DECLARE @unifydata AS T_END_CUST_OBJ_UNIFY; INSERT INTO @unifydata([DEAL ID],[UCD_GLOBAL_ID],[UCD_GLOBAL_NAME],[UCD_COUNTRY_CUST_ID],[UCD_COUNTRY],[DEAL_END_CUSTOMER_RETAIL],[DEAL_END_CUSTOMER_COUNTRY]) VALUES (241813,1000005594,'China MIIT',1000008019,'CZECH rEPUBLICDRDR','China MIIT','China') EXEC [dbo].[PR_MYDL_END_CUSTOMER_UNIFY] @unifydata, @in_emp_wwid = '12002785' ");
 	ds.Tables[0].TableName = "UnifiedDealsSummary";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To Validate Multiple EndCustomer combination for Bulk update
+	ds = dbobjects.ExecuteDataSet("DECLARE @unifydata AS T_END_CUST_OBJ_UNIFY; INSERT INTO @unifydata([DEAL ID],[UCD_GLOBAL_ID],[UCD_GLOBAL_NAME],[UCD_COUNTRY_CUST_ID],[UCD_COUNTRY],[DEAL_END_CUSTOMER_RETAIL],[DEAL_END_CUSTOMER_COUNTRY]) VALUES (241813,1000005594,'China MIIT',1000008019,'CZECH rEPUBLICDRDR','China MIIT','China') EXEC [dbo].[PR_MYDL_END_CUSTOMER_UNIFY_VALIDATE] @unifydata");
+    ds.Tables[0].TableName = "DealsUnificationValidationSummary";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

@@ -23,5 +23,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
+        List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
     }
 }
