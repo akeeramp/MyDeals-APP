@@ -3672,8 +3672,9 @@
                                 if (anyWarnings) {
                                     var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
                                     var isKit = 0;
-                                    var relevantAtrbs = tierAtrbs;
+                                    var relevantAtrbs = $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" ? densityTierAtrbs : tierAtrbs;
                                     var tierCount = dataItem.NUM_OF_TIERS;
+                                    let curTier = 1, db = 1
 
                                     if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                                         if (dataItem.PRODUCT_FILTER === undefined) { continue; }
@@ -3683,13 +3684,38 @@
                                         tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
                                     }
                                     // map tiered warnings
-                                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] != "DENSITY") {
+                                        for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                            for (var a = 0; a < relevantAtrbs.length; a++) {
+                                                mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);    //TODO: what happens in negative dim cases? this doesnt cover does it?
+                                            }
+                                        }
                                         for (var a = 0; a < relevantAtrbs.length; a++) {
-                                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);    //TODO: what happens in negative dim cases? this doesnt cover does it?
+                                            delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
                                         }
                                     }
-                                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                                    else {
+                                        var densityCount = dataItem.NUM_OF_DENSITY;
+                                        for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                                            if (db > densityCount) {
+                                                db = 1;
+                                                curTier++;
+                                            }
+                                            for (var a = 0; a < relevantAtrbs.length; a++) {
+                                                dimStr = (relevantAtrbs[a] == "DENSITY_RATE") ? "_8___" : "_10___";
+                                                if (relevantAtrbs[a] == "DENSITY_RATE") {
+                                                    mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + db + "____10___" + curTier), curTier);
+                                                    db++;
+                                                }
+                                                else
+                                                    mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t); //TODO: what happens in negative dim cases? this doesnt cover does it?
+                                            }
+
+                                        }
+                                        for (var a = 0; a < relevantAtrbs.length; a++) {
                                             delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
+                                        }
+
                                     }
                                 }
                             }
@@ -3744,7 +3770,7 @@
                                 $scope.setBusy("", "");
                             }, 2000);
                         }  
-                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip") {
                             $scope.reloadPage();
                         }
                     }
@@ -4010,8 +4036,19 @@
 
                         if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
                             // Set the validation message
-                            if (atrbToSetErrorTo == "DENSITY_RATE") {
-                                if (dataToTieTo.DENSITY_RATE <= 0) {
+                            if (atrbToSetErrorTo.contains("DENSITY_RATE")) {
+                                if (dataToTieTo.dc_type == "WIP_DEAL") {
+                                    let densityRateCheck = Object.values(dataToTieTo.DENSITY_RATE).every(item => item <= 0);
+                                    if (densityRateCheck) {
+                                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                                    }
+                                    else {
+                                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                                    }
+                                }
+                                else if (dataToTieTo.DENSITY_RATE <= 0) {
                                     dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
                                     dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
                                 }
@@ -4217,7 +4254,7 @@
                                     lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n3");
                                 }
 
-                                if (tieredItem === strtKey && lData[strtKey] !== undefined && curTier == 1) {
+                                if (tieredItem === strtKey && lData[strtKey] !== undefined) {
                                     lData[strtKey] = (parseFloat(lData[strtKey])).toFixed(3);
                                 }
 
