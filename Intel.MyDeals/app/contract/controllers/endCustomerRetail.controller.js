@@ -26,7 +26,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             "PRIMED_CUST_NM": "",
             "PRIMED_CUST_CNTRY": "",
             "IS_PRIMED_CUST": 0,
-            "IS_EXCLUDE": 0
+            "IS_EXCLUDE": 0,
+            "IS_RPL": 0
         }];
     if (cellCurrValues.END_CUST_OBJ !== "") {
         if (cellCurrValues.END_CUST_OBJ != undefined && cellCurrValues.END_CUST_OBJ != null) {
@@ -72,7 +73,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     "PRIMED_CUST_NM": "",
                     "PRIMED_CUST_CNTRY": "",
                     "IS_PRIMED_CUST": 0,
-                    "IS_EXCLUDE": 0
+                    "IS_EXCLUDE": 0,
+                    "IS_RPL": 0
                 });
         }
     }
@@ -86,7 +88,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 "PRIMED_CUST_NM": "",
                 "PRIMED_CUST_CNTRY": "",
                 "IS_PRIMED_CUST": 0,
-                "IS_EXCLUDE": 0
+                "IS_EXCLUDE": 0,
+                "IS_RPL": 0
             }
             return;
         }
@@ -242,6 +245,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     return [item.PRIMED_CUST_NM].join(",")
             }
             data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
+            data.IS_RPL = $ctrl.END_CUST_OBJ.filter(x => x.IS_RPL == 1).length > 0 ? 1 : 0;
 
             // setting PRIMED_CUST_ID to n/a to all the combinations except for any(as for End customer "any" PRIMED_CUST_ID is null)
             var primeCustObjWithoutAny = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")
@@ -320,6 +324,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var dataItem = dataElement.END_CUSTOMER_RETAIL;
         //on change event Re-setting Unified Values(PRIMED_CUST_ID,IS_PRIMED_CUST and PRIMED_CUST_NM) to empty(initial) values
         dataElement.IS_PRIMED_CUST = 0;
+        dataElement.IS_RPL = 0;
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
         $ctrl.ChangeErrorFlag = false;
@@ -395,6 +400,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var dataElement = e.sender.$angular_scope.e;
         var dataItem = dataElement.PRIMED_CUST_CNTRY;
         dataElement.IS_PRIMED_CUST = 0;
+        dataElement.IS_RPL = 0;
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
         if (dataItem === undefined || dataItem === null && dataItem === "") {

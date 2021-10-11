@@ -153,7 +153,7 @@
                 function (endCustomerData) { //returns as an array
                     //if all the selected End customer Combinations are unified then update the unified values in the deal level
                     if (endCustomerData.IS_PRIME) {
-                        var data = { "IS_PRIMED_CUST": endCustomerData.IS_PRIMED_CUST, "PRIMED_CUST_NM": endCustomerData.PRIMED_CUST_NM, "PRIMED_CUST_ID": endCustomerData.PRIMED_CUST_ID, "PRIMED_CUST_CNTRY": endCustomerData.PRIMED_CUST_CNTRY, "END_CUST_OBJ": endCustomerData.END_CUST_OBJ, "END_CUSTOMER_RETAIL": endCustomerData.END_CUSTOMER_RETAIL }
+                        var data = { "IS_PRIMED_CUST": endCustomerData.IS_PRIME, "IS_RPL": endCustomerData.IS_RPL, "PRIMED_CUST_NM": endCustomerData.PRIMED_CUST_NM, "PRIMED_CUST_ID": endCustomerData.PRIMED_CUST_ID, "PRIMED_CUST_CNTRY": endCustomerData.PRIMED_CUST_CNTRY, "END_CUST_OBJ": endCustomerData.END_CUST_OBJ, "END_CUSTOMER_RETAIL": endCustomerData.END_CUSTOMER_RETAIL }
                         PrimeCustomersService.UpdateUnPrimeDeals(model.OBJ_SID, data).then(function (response) {
                             var commandCell = gridrow.container.find("td:first");
                             commandCell.html("<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span title='Edit' class='k-icon k-i-edit'></span></a>");

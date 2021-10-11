@@ -891,18 +891,30 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     return x["isLinked"] === true
                 });
                 var isdealsUnified = undefined;
+                // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
+                var isEcRPLed = undefined;
                 if (checkedDeals.length > 0) {
                     isdealsUnified = checkedDeals.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
+                    });
+                    isEcRPLed = checkedDeals.filter(function (x) {
+                        return x["IS_RPL"] == 1;
                     });
                 } else {
                     isdealsUnified = data.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
                     });
+                    isEcRPLed = data.filter(function (x) {
+                        return x["IS_RPL"] == 1;
+                    });
                 }
 
                 if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
+                    return;
+                }
+                else if (args["action"] == "Won" && isEcRPLed.length > 0) {
+                    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
                     return;
                 }
 
@@ -2195,7 +2207,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (dataItem._behaviors === undefined) dataItem._behaviors = {};
                 if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
                 //Adding prime attributes in the if condition because they are readonly fields but still when deal tools is checked in DE, all the selected deal id's prime attributes needs to get updated based on updated values in the end customer/retail popup
-                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY" || newField == "PRIMED_CUST_ID" || newField == "PRIMED_CUST_NM" || newField == "IS_PRIMED_CUST") {
+                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false || newField == "PRIMED_CUST_CNTRY" || newField == "PRIMED_CUST_ID" || newField == "PRIMED_CUST_NM" || newField == "IS_PRIMED_CUST" || newField == "IS_RPL") {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
                         if (dataItem[newField] !== newValue) {
@@ -3553,12 +3565,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         containerDataItem.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
                         containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIMED_CUST_NM;
                         containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIMED_CUST_ID;
+                        containerDataItem.IS_RPL = endCustomerData.IS_RPL;
                         $scope.saveFunctions(containerDataItem, "END_CUST_OBJ", containerDataItem.END_CUST_OBJ);
                         $scope.saveFunctions(containerDataItem, "END_CUSTOMER_RETAIL", containerDataItem.END_CUSTOMER_RETAIL);
                         $scope.saveFunctions(containerDataItem, "PRIMED_CUST_CNTRY", containerDataItem.PRIMED_CUST_CNTRY);
                         $scope.saveFunctions(containerDataItem, "PRIMED_CUST_NM", containerDataItem.PRIMED_CUST_NM);
                         $scope.saveFunctions(containerDataItem, "PRIMED_CUST_ID", containerDataItem.PRIMED_CUST_ID);
                         $scope.saveFunctions(containerDataItem, "IS_PRIMED_CUST", containerDataItem.IS_PRIMED_CUST);
+                        $scope.saveFunctions(containerDataItem, "IS_RPL", containerDataItem.IS_RPL);
                     },
                     function () {
                     });

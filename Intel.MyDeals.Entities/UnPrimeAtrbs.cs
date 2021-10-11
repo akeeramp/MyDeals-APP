@@ -8,7 +8,9 @@ namespace Intel.MyDeals.Entities
 {
     public class UnPrimeAtrbs
     {
-        public bool IS_PRIMED_CUST { get; set; }
+        public string IS_PRIMED_CUST { get; set; }
+        
+        public string IS_RPL { get; set; }
 
         public string PRIMED_CUST_NM { get; set; }
 

@@ -2733,6 +2733,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
+            bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string Rebatetype = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
@@ -2751,17 +2752,31 @@ namespace Intel.MyDeals.BusinessRules
             DateTime chkDate = OpConvertSafe.ToDateTime(r.Dc.GetDataElementValue(AttributeCodes.END_DT));
             bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
 
-            if (!primedCheck && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr ) // If not primed and End customer has a value
+            if ((!primedCheck || rplCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr ) // If not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
-                    deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
+                    if (!primedCheck)
+                    {
+                        deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
+                    }
+                    else if (rplCheck)
+                    {
+                        deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be WON.");
+                    }
                 }
                 else if (!isTender)
                 {
                     if (!(programPayment.Contains("Frontend") && dealStage == WorkFlowStages.Active))
                     {
-                        deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                        if (!primedCheck)
+                        {
+                            deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                        }
+                        else if (rplCheck)
+                        {
+                            deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
+                        }
                     }
                 }
             }
