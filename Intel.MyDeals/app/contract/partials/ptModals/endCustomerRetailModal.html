@@ -14,14 +14,17 @@
             </p>
         <div class="filterRow">
                 <div ng-repeat="e in $ctrl.END_CUST_OBJ">
-                    <div class="col-md-12" ng-show="$first" style="padding-bottom: 1em;text-align:center;">
-                        <div class="col-md-1" style="text-align: left; padding-left: 0px; width: 90px; ">
+                    <div class="col-md-12" ng-show="$first" style="padding-left:5px;padding-bottom: 15px;text-align:center;">
+                        <div class="col-md-1" style="text-align: center; padding-left: 0px; width: 90px; ">
                             <label>Is Unified</label>
+                        </div>
+                        <div class="col-md-1" style="text-align: left; padding-left: 3px; width: 90px; ">
+                            <label>Is RPL</label>
                         </div>
                         <div class="col-md-1" style="padding-right: 0px;">
                             <label></label>
                         </div>
-                        <div ng-class="$ctrl.IsAny? 'col-md-4': 'col-md-5'" style="text-align:center;">
+                        <div class="col-md-4" style="text-align:center;">
                             <label>EndCustomer</label>
                         </div>
                         <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="text-align:center;">
@@ -31,18 +34,22 @@
                             <label>Exclude</label>
                         </div>
                     </div>
-                    <div class="col-md-12" style="padding-bottom: 1em;">
+                    <div class="col-md-12" style="padding-bottom: 15px;">
                         <div class="col-md-1" style="align-content:center">
                             <span title="Unified" ng-if="e.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
                             <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                        </div>
+                        <div class="col-md-1" style="align-content:center">
+                            <span title="NA" ng-if="e.IS_RPL==0" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
+                            <span title="RPL'ed" ng-if="e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                         </div>
                         <div class="col-md-1" style="width:90px;padding-right:0px;">
                             <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
                             <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
                             <span class="fl icnBtn" ng-if="$first"></span>
                         </div>
-                        <div ng-class="$ctrl.IsAny? 'col-md-4': 'col-md-5'">
-                            <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;'}}">
+                        <div class="col-md-4">
+                            <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
                                 <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
                                         k-placeholder="'Select End Customer'"
                                         k-data-text-field="'Text'"
@@ -54,10 +61,10 @@
                                         k-auto-bind="true"
                                         k-data-source="$ctrl.endCustOptions"
                                         class="fl opUiElement"
-                                        style="{{$ctrl.IsAny? 'width:250px;display:none;':'width:300px;display:none;'}}">
+                                        style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
                                 </select>
                             </span>
-                            <span class="fl" ng-if="$index > 0" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;'}}">
+                            <span class="fl" ng-if="$index > 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
                                 <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
                                         k-placeholder="'Select End Customer'"
                                         k-data-text-field="'Text'"
@@ -69,11 +76,12 @@
                                         k-auto-bind="true"
                                         k-data-source="$ctrl.endCustOptionswithOutAny"
                                         class="fl opUiElement"
-                                        style="{{$ctrl.IsAny? 'width:250px;display:none;':'width:300px;display:none;'}}">
+                                        style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
                                 </select>
                             </span>
                         </div>
                         <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
+                           <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;'}}">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
                                     k-placeholder="'Select Country'"
                                     k-data-text-field="'CTRY_NM'"
@@ -85,9 +93,10 @@
                                     k-auto-bind="true"
                                     k-data-source="$ctrl.countries"
                                     class="fl opUiElement"
-                                    ng-disabled="$ctrl.IsAny && $index == 0? true:false"                                        
-                                    style="width: 250px;">
+                                    ng-disabled="$ctrl.IsAny && $index == 0? true:false"
+                                    style="{{$ctrl.IsAny? 'width:250px;display:none;':'width:300px;display:none;'}}">
                             </select>
+                            </span>
                         </div>
                         <div class="col-md-1" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 15px; float: right; padding-top:5px;">
 
@@ -129,7 +138,7 @@
         }
 
         .modal-dialog {
-            width: 850px !important;
+            width: 1000px !important;
         }
 
         .filterRow {
@@ -177,10 +186,10 @@
             margin-left: 8px;
         }
         .buttonMinPadding{
-            padding-left:70px !important;
+            padding-left:120px !important;
         }
         .buttonMaxPadding {
-            padding-left: 100px !important;
+            padding-left: 150px !important;
         }
     </style>
 
