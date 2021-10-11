@@ -20,9 +20,12 @@ namespace Intel.MyDeals.Controllers
 
         private readonly IFilesLib _filesLib;
 
-        public FileAttachmentsController(IFilesLib _filesLib)
+        private readonly IPrimeCustomersLib _primeCustomersLib;
+
+        public FileAttachmentsController(IFilesLib _filesLib, IPrimeCustomersLib _primeCustomersLib)
         {
             this._filesLib = _filesLib;
+            this._primeCustomersLib = _primeCustomersLib;
         }
 
         /// <summary>
@@ -175,8 +178,11 @@ namespace Intel.MyDeals.Controllers
             unifyDealValidation.DuplicateGlobalNames = new List<string>();
             unifyDealValidation.InValidUnifyDeals = new List<UnifyDeal>();
             unifyDealValidation.ValidUnifyDeals = new List<UnifyDeal>();
-            unifyDealValidation.DuplicateDealIds = lstUnifyDeals.GroupBy(x => x.DEAL_ID).Where(grp => grp.Count() > 1).Select(y => y.Key).ToList();
-            unifyDealValidation.IsDuplicateDealIdAvailable = unifyDealValidation.DuplicateDealIds.Count > 0;
+            unifyDealValidation.UnifiedCombination = new List<UnifyInvalidCombination>();
+            unifyDealValidation.InvalidDeals = new List<int>();
+            unifyDealValidation.InValidCombination = new List<UnifyInvalidCombination>();
+            unifyDealValidation.DuplicateDealCombination = lstUnifyDeals.GroupBy(x => new { x.DEAL_ID, x.UCD_GLOBAL_ID,x.UCD_GLOBAL_NAME,x.UCD_COUNTRY_CUST_ID,x.UCD_COUNTRY}).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
+            unifyDealValidation.DuplicateDealEntryCombination = lstUnifyDeals.GroupBy(x => new { x.DEAL_ID, x.DEAL_END_CUSTOMER_COUNTRY, x.DEAL_END_CUSTOMER_RETAIL }).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
             var patt = @"^[\w\s.,'&:-]*$";
             foreach (var unify in lstUnifyDeals)
             {
@@ -200,12 +206,17 @@ namespace Intel.MyDeals.Controllers
                 {
                     if (row.DEAL_ID == 0 || row.UCD_COUNTRY_CUST_ID == 0 || row.UCD_GLOBAL_ID == 0
                         || row.UCD_COUNTRY == null || row.UCD_GLOBAL_NAME == null
-                        || row.UCD_COUNTRY == "" || row.UCD_GLOBAL_NAME == "")
+                        || row.UCD_COUNTRY == "" || row.UCD_GLOBAL_NAME == "" || row.DEAL_END_CUSTOMER_RETAIL == "" && row.DEAL_END_CUSTOMER_COUNTRY == "")
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
-                    else if (unifyDealValidation.DuplicateDealIds.Count > 0
-                        && unifyDealValidation.DuplicateDealIds.Contains(row.DEAL_ID))
+                    else if (unifyDealValidation.DuplicateDealCombination.Count > 0
+                        && unifyDealValidation.DuplicateDealCombination.Contains(row.DEAL_ID))
+                    {
+                        unifyDealValidation.InValidUnifyDeals.Add(row);
+                    }
+                    else if (unifyDealValidation.DuplicateDealEntryCombination.Count > 0
+                        && unifyDealValidation.DuplicateDealEntryCombination.Contains(row.DEAL_ID))
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
@@ -219,7 +230,7 @@ namespace Intel.MyDeals.Controllers
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
                     else if (unifyDealValidation.InValidCountries.Count > 0
-                        && unifyDealValidation.InValidCountries.Contains(row.UCD_COUNTRY))
+                        && unifyDealValidation.InValidCountries.Contains(row.UCD_COUNTRY.ToLower()))
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
@@ -238,6 +249,59 @@ namespace Intel.MyDeals.Controllers
                     }
                 }
             }
+            if (unifyDealValidation.ValidUnifyDeals.Count > 0)
+            {
+                var result = _primeCustomersLib.ValidateBulkUnifyDeals(unifyDealValidation.ValidUnifyDeals);
+                if(result != null && result.Count>0)
+                {
+                    foreach(var data in result)
+                    {
+                        var dealData = new UnifyInvalidCombination();
+                        dealData.DEAL_ID = data.OBJ_SID;
+                        dealData.DEAL_END_CUSTOMER_COUNTRY = data.END_CUSTOMER_COUNTRY;
+                        dealData.DEAL_END_CUSTOMER_RETAIL = data.END_CUSTOMER_RETAIL;
+                        if (data.COMMENTS.Trim().ToLower() == "already unified")
+                        {
+                            var invalidData = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID
+                            && x.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower() == dealData.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower()
+                            && x.DEAL_END_CUSTOMER_RETAIL.Trim().ToLower() == dealData.DEAL_END_CUSTOMER_RETAIL.Trim().ToLower()).FirstOrDefault();
+                            if (invalidData != null && !unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                            {
+                                unifyDealValidation.UnifiedCombination.Add(dealData);
+                                unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                            }
+                        }
+                        else if (data.COMMENTS.Trim().ToLower() == "count mismatch")
+                        {
+                            unifyDealValidation.InvalidDeals.Add(dealData.DEAL_ID);
+                            var invalidDataList = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).ToList();
+                            foreach(var invalidData in invalidDataList)
+                            {
+                                if (!unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                                {
+                                    unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                    unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                                }
+                            }                                
+                        }
+                        else if (data.COMMENTS.Trim().ToLower() == "end customer and country mismatch")
+                        {
+                            var invalidData = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID
+                            && x.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower() == dealData.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower()
+                            && x.DEAL_END_CUSTOMER_RETAIL.Trim().ToLower() == dealData.DEAL_END_CUSTOMER_RETAIL.Trim().ToLower()).FirstOrDefault();
+                            if (invalidData != null && !unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                            {
+                                unifyDealValidation.InValidCombination.Add(dealData);
+                                unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                            }
+                        }                        
+                    }
+                }
+            }
+            if(unifyDealValidation.InValidUnifyDeals.Count >0)
+                unifyDealValidation.InValidUnifyDeals = unifyDealValidation.InValidUnifyDeals.OrderBy(x => x.DEAL_ID).ToList();
             return unifyDealValidation;
         }
     }

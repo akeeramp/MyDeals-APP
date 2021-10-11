@@ -19,7 +19,7 @@
         }
         vm.editAccess = true;
 
-        vm.HasBulkUploadAccess = (window.usrRole == "SA" || window.isDeveloper);
+        vm.HasBulkUploadAccess = ((window.usrRole == "SA" && !window.isCustomerAdmin) || window.isDeveloper);
 
         vm.OpenBulkUploadUnifyModal = function () {
             var modalInstance = $uibModal.open({

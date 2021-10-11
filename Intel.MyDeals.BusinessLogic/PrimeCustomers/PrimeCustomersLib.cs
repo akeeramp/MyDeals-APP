@@ -138,5 +138,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.UploadBulkUnifyDeals(unifyDeals);
         }
+
+        public List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals)
+        {
+            return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
+        }
     }
 }
