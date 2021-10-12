@@ -18,7 +18,7 @@
         }
         vm.RequestType = [];
         vm.RequestType.Request_Type = "VISTEX_DEALS";
-        vm.spinnerMessageHeader = "Integraion Logs";
+        vm.spinnerMessageHeader = "Integration Logs"; 
         vm.spinnerMessageDescription = "Please wait while we loading integration logs..";
         vm.isBusyShowFunFact = true;
         vm.Vistex = [];
