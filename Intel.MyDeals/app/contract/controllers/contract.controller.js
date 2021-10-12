@@ -6719,7 +6719,7 @@
                     }
                 });
             }
-            if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER") {
+            if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP")) {
                 var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');                
                 if (rebateType && rebateType.length > 0) {
                     if (data.length > 1) {
@@ -6777,7 +6777,7 @@
                                 parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                        $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
                                     });
                                 }
                                 else {
@@ -6791,7 +6791,7 @@
                                         });
                                         if (!exists) {
                                             angular.forEach(data, (item) => {
-                                                $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                                $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
                                             });
                                             i = parsedEndCustObj.length;
                                         }
@@ -6801,7 +6801,7 @@
                             if (endCustObj == "" || parsedEndCustObj == "") {
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                        $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
                                     });
                                 }
                             }
@@ -6869,7 +6869,7 @@
             if (!item._behaviors.isError) item._behaviors.isError = {};
             if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
             if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
-                || ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
+                || (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
                 $scope.clearEndCustomer(item);
                 item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
                 item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country must be same for " + dealType + ".";
