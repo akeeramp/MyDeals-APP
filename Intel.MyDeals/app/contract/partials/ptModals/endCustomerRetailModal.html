@@ -40,8 +40,9 @@
                             <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                         </div>
                         <div class="col-md-1" style="align-content:center">
-                            <span title="NA" ng-if="e.IS_RPL==0" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
-                            <span title="RPL'ed" ng-if="e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                            <span title="NA" ng-if="e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
+                            <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                            <span title="Yes" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                         </div>
                         <div class="col-md-1" style="width:90px;padding-right:0px;">
                             <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>

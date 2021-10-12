@@ -335,6 +335,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             dataItem = $('#' + id).parent().find("input").val();
             if (dataItem != null && dataItem != undefined && dataItem != "") {
                 dataItem = dataItem.trim();
+                var ecIndex = id.slice(-1);
+                //Added this line to make sure alignment of the popup data doesnt go off when user enters "any" in the first EC pair before EC dropdown data load
+                $ctrl.IsAny = (dataItem.toUpperCase() == "ANY" && ecIndex==0) ? true : $ctrl.IsAny;
             }
             isECUserText = true;
             $ctrl.END_CUST_OBJ[index].END_CUSTOMER_RETAIL = dataItem;            
