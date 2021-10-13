@@ -9,7 +9,7 @@ angular
                 url: "/reportingdashboard",
                 abstract: false,
                 views: {
-                    reportingView: {
+                    mainView: {
                         template: '<reporting-dashboard></reporting-dashboard>'
                         // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
                         // controller: "ReportingDashboardController as vm"
@@ -27,7 +27,7 @@ angular
                 url: "/mykendo",
                 abstract: false,
                 views: {
-                    reportingView: {
+                    mainView: {
                         template: '<my-kendo></my-kendo>'
                     }
                 }
@@ -36,12 +36,12 @@ angular
                 url: "/myspread",
                 abstract: false,
                 views: {
-                    reportingView: {
+                    mainView: {
                         template: '<my-spread></my-spread>'
                     }
                 }
             })
-            // Admin route of Admin/Employee
+            // Admin route  starts here 
             .state("adminemployeedashboard", {
                 url: "/adminemployeedashboard",
                 abstract: false,
@@ -58,14 +58,11 @@ angular
                     }],
                 }
             })
-
-
-
             .state("admincache", {
                 url: "/admincache",
                 abstract: false,
                 views: {
-                    reportingView: {
+                    mainView: {
                         template: '<cache></cache>'
                         //templateUrl: "Client/src/app/admin/cache/cache.html",
                         //controller: "CacheController as vm"
@@ -73,6 +70,28 @@ angular
                     }
                 }
             })
-
+            .state("customers", {
+                url: "/customers",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-customer></admin-customer>'
+                        // templateUrl: "Client/src/app/admin/customer/customer.html",
+                        // controller: "CustomerController as vm"
+                    }
+                }
+            })
+            .state("customervendors", {
+                url: "/CustomerVendors",
+                abstract: false,
+                views: {
+                    mainView: { 
+                        template: '<admin-vendors-customer></admin-vendors-customer>'
+                        //  templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
+                        //  controller: "CustomerVendorsController as vm"
+                    }
+                }
+            })
+            // Admin route  ends here 
 
     });

@@ -13,7 +13,7 @@ export class logger {
     };
     toastr.info(message,title);
   }
-  static error(message : string ,title:string ) :void {
+  static error(message : string ,title:string,data?:string ) :void {
     toastr.options = {
         closeButton: false,
         extendedTimeOut: 4000,
@@ -22,7 +22,7 @@ export class logger {
     };
     toastr.error(message,title);
   }
-    static success(message: string, title: string): void {
+    static success(message: string, title?: string): void {
 
         toastr.options = {
             closeButton: false,

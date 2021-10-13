@@ -1,6 +1,7 @@
 import {Injectable, Inject} from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
+import { products,sampleProducts } from "./products";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -19,5 +20,12 @@ export class kendoService {
         let apiUrl: string = this.apiBaseUrl + 'GetCustomerVendors/0';
         return this.httpClient.get(apiUrl);
     }
+    public getKendo() {
+        let promise = new Promise((resolve, reject) => {
+                console.log("Async Work Complete");
+                resolve(sampleProducts);
+          });
+      return promise;
+    } 
 }
 

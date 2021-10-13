@@ -391,16 +391,26 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/clipboard.min.js",
                 "~/Scripts/Angular/ngclipboard.min.js",
                 "~/Scripts/modernizr-2.6.2.min.js",
-                "~/Scripts/anime.min.js"
+                "~/Scripts/anime.min.js",
+                 "~/Scripts/pikaday.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+           //"~/Scripts/Angular/1.8.0/angular.min.js",
            "~/Scripts/Angular/1.8.0/angular-ui-router.min.js"
            , "~/Scripts/Angular/1.8.0/angular-animate.min.js"
            , "~/Scripts/Angular/1.8.0/angular-sanitize.min.js"
            , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
            , "~/Scripts/Angular/angular-linq.min.js"
            , "~/Scripts/Angular/angular-filter.min.js"
+              //"~/Scripts/angular-bootstrap-toggle.js",
+              //  "~/Scripts/Angular/select.min.js",
+              //  "~/Scripts/Angular/angular-linq.min.js",
+              //  "~/Scripts/Angular/ngStorage.min.js",
+              //  "~/Scripts/angular-gridster.min.js",
+              //    "~/Scripts/Angular/clipboard.min.js",
+              //  "~/Scripts/Angular/ngclipboard.min.js",
+              //  "~/Scripts/intcAnalytics.js"
            ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
@@ -483,8 +493,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/oplog/oplog.service.js"
                 , "~/app/admin/constants/admin.constants.controller.js"
                 , "~/app/admin/constants/constants.service.js"
-                , "~/app/admin/customer/admin.customer.controller.js"
-                , "~/app/admin/customer/customer.service.js"
+                //, "~/app/admin/customer/admin.customer.controller.js"
+                //, "~/app/admin/customer/customer.service.js"
                 , "~/app/admin/vistexcustomermapping/admin.vistexcustomermapping.controller.js"
                 , "~/app/admin/vistexcustomermapping/vistexcustomermapping.service.js"
                 , "~/app/admin/dataquality/admin.dataquality.controller.js"
@@ -557,8 +567,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/workflowStage/workflowStages.service.js"
                 , "~/app/admin/meetComp/admin.meetComp.controller.js"
                 , "~/app/admin/meetComp/meetComp.service.js"
-                , "~/app/admin/CustomerVendors/admin.customerVendors.controller.js"
-                , "~/app/admin/CustomerVendors/customerVendors.service.js"
+                //, "~/app/admin/CustomerVendors/admin.customerVendors.controller.js"
+                //, "~/app/admin/CustomerVendors/customerVendors.service.js"
                 , "~/app/admin/PrimeCustomers/admin.primecustomers.controller.js"
                 , "~/app/admin/PrimeCustomers/admin.unprimedeals.controller.js"
                 , "~/app/admin/PrimeCustomers/primecustomers.service.js"
@@ -678,7 +688,8 @@ namespace Intel.MyDeals
                 "~/css/bootstrap-switch.min.css",
                 "~/app/core/directives/dealPopup/dealPopup.directive.css",
                 "~/app/core/directives/dealPopup/dealPopupDock.directive.css",
-                "~/app/core/directives/dealPopup/dealPopupIcon.directive.css"
+                "~/app/core/directives/dealPopup/dealPopupIcon.directive.css",
+                 "~/css/pikaday.css"
                 // TODO: Check with Tory...Commenting this for now as its affecting global css
                 // May be refer this in handbook html directly
                 //"~/css/simple-sidebar.css"

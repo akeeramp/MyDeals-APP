@@ -1,0 +1,58 @@
+.navbar-fixed-top {
+    top: -26px !important;
+    padding-bottom: 0px !important;
+}
+ a {
+    text-decoration: none !important;
+}
+.nav-tabs-intel-blocks {
+    padding-left: 0px !important;
+}
+.mainMenu{
+    background-color:#0071c5 !important ;
+    border: solid red;
+}
+
+
+
+/* .nav-tabs-intel-blocks{
+    border: solid red !important;
+    font-size: 14px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+} */
+/* .globSearch{
+    border: solid magenta !important;
+    height: 25px !important;
+}
+.btn-group{
+    height: 25px !important;
+}
+.globalSearchInpt{
+    height: 25px !important;
+}
+.container-fluid{
+    margin-top: -6px !important;
+} */
+/* .menu-bar {
+    padding: 0 6px 6px 6px !important;
+}
+
+.nav-tabs-intel-blocks li a{
+    border: solid magenta !important;
+    width: auto !important;
+
+    font-size: 14px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+ .globalSearchInpt {
+    width: 320px !important;
+    font-size: 14px !important;
+    padding: auto !important;
+    height:auto !important
+} 
+
+.ng-isolate-scope{
+    border: solid green !important;
+}   */

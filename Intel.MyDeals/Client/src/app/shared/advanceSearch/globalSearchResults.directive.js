@@ -223,7 +223,7 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
                     $scope.$root.globalSearchResultsData.searchIn = ["CNTRCT", "PRC_ST", "PRC_TBL", "WIP_DEAL"];
                     $scope.$root.globalSearchResultsData.colCount = 3;
                     $scope.$root.$broadcast('refreshSearchByType');
-                    if(kenWindow.data("kendoWindow").wrapper){
+                    if(kenWindow.data("kendoWindow") && kenWindow.data("kendoWindow").wrapper){
                         kenWindow.data("kendoWindow").wrapper.width("900px");
                     }
                     //kenWindow.data("kendoWindow").wrapper.width("900px");

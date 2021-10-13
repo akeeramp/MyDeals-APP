@@ -9,6 +9,7 @@ import 'rxjs/add/operator/toPromise';
 
 export class AuthService {
     public static getToken(): string {
+        //in this method we will put the get Token API and store to local variable and if not exist will hit again and store it
         return localStorage.getItem('ReqVerToken');
       }
 }

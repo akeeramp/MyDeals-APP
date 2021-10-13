@@ -29,11 +29,18 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
 import {KendoComponent} from './shared/kendo/kendo.component';
+
+//*********************admin modules starts here *********************
 import { CacheComponent } from './admin/cache/cache.component';
+import { adminCustomerComponent } from './admin/customer/admin.customer.component';
+import { adminCustomerVendorsComponent } from './admin/CustomerVendors/admin.customerVendors.component';
+//*********************admin modules ends here *********************
+
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //spreadsheet component
 import { HotTableModule } from '@handsontable/angular';
 import {SpreadComponent} from './shared/kendo/spreadsheet.component';
@@ -41,6 +48,7 @@ import {SpreadComponent} from './shared/kendo/spreadsheet.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input'
+
 
 @NgModule({
     imports: [
@@ -55,6 +63,7 @@ import {MatInputModule} from '@angular/material/input'
         ChartsModule,
         TooltipModule,
         MatButtonToggleModule,
+        MatSlideToggleModule,
         MatDialogModule,
         DialogModule,
         DropDownListModule,
@@ -85,6 +94,8 @@ import {MatInputModule} from '@angular/material/input'
         KendoComponent,
         EmployeeComponent,
         CacheComponent,
+        adminCustomerComponent,
+        adminCustomerVendorsComponent,
         MultiCheckFilterComponent,
         SpreadComponent,
         PingComponent,
@@ -96,6 +107,8 @@ import {MatInputModule} from '@angular/material/input'
         EmployeeComponent,
         CacheComponent,
         CacheComponent,
+        adminCustomerComponent,
+        adminCustomerVendorsComponent,
         SpreadComponent,
         PingComponent,
     ]

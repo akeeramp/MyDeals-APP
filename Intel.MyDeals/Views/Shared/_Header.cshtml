@@ -5,7 +5,8 @@
 @using Intel.MyDeals.Entities
 @using Intel.Opaque
 @using Intel.MyDeals.App
-@{var usrName = "UNKNOWN";
+@{
+    var usrName = "UNKNOWN";
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
     var usrRoleExtension = "";
@@ -67,7 +68,8 @@
     var env = ViewBag.AppToken == null || ViewBag.AppToken.OpEnvironment == null || ViewBag.AppToken.OpEnvironment.EnvLoc == null ? "UNKNOWN" : ViewBag.AppToken.OpEnvironment.EnvLoc.Location;
     //TODO: Fetch it from DB
     var GAID = env == "CONS" ? "UA-47054404-40" : "UA-47054404-41";
-    if (env == "PROD") { GAID = "UA-47054404-42"; }}
+    if (env == "PROD") { GAID = "UA-47054404-42"; }
+    }
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=@GAID"></script>
 <script>
@@ -134,7 +136,7 @@
         <!-- /.navbar-collapse -->
         @*<security-loader></security-loader>*@
     </div>
-    <div class="menu-bar {}">
+    <div class="menu-bar">
         <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
             @*<li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
@@ -144,14 +146,14 @@
                 </ul>
                 </li>*@
 
-            <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
+            <li><a class="mainMenu" href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
             @*<li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>*@
 
             @if (isDeveloper)
             {
                 <li class="dropdown">
-                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+                    <a class="btn btn-primary mainMenu" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
                     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
                         <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
                     </ul>
@@ -162,7 +164,7 @@
                 however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary mainMenu" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
                     @if (isDeveloper)
                     {
@@ -239,9 +241,11 @@
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @if (isRealSA || isCustomerAdmin || isDeveloper)
                                 {
-                                    <li><a href="Admin#/customers">Customer</a></li>
+                                    @*<li><a href="Admin#/customers">Customer</a></li>*@
+                                    <li ui-sref-active="active"><a ui-sref="customers">Customer</a></li>
                                     <li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>
-                                    <li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>
+                                    @*<li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>*@
+                                    <li ui-sref-active="active"><a ui-sref="customervendors">Customer - Vendors</a></li>
                                     <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 @if (usrRole == "RA" && !isDeveloper)
@@ -284,12 +288,12 @@
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
                             <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
-                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                           <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>
                                 <li><a href="Admin#/products">Product Hierarchy</a></li>
                                 <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
                             </ul>
                         </li>
-                    }
+                    
                     @if (usrRole == "Legal" || isRealSA || isDeveloper)
                     {
                         <li class="dropdown-submenu">
@@ -373,7 +377,7 @@
                                 }
                             </ul>
                         </li>
-                    }
+                    
 
                     @if (usrRole == "DA" || isRealSA || isDeveloper || isCustomerAdmin) // DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access.
                     {
@@ -400,20 +404,19 @@
                 </ul>
             </li>
 
-
             <li>
-                <a href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
+                <a class="mainMenu" href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
             </li>
             <li>
-                <a href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+                <a class="mainMenu" href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
             <li>
-                <a href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
+                <a class="mainMenu" href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
             </li>
             @if (isReportingUser)
             {
                 <li class="dropdown">
-                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                    <a class="btn btn-primary mainMenu" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
                         <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
                     </a>
                     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
@@ -421,7 +424,9 @@
                     </ul>
                 </li>
             }
+     
             @Html.Partial("_Search")
+        
         </ul>
     </div>
 </nav>
