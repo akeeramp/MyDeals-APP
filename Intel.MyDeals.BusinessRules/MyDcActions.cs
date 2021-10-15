@@ -3065,6 +3065,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ForceToIntVal(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(r.Rule.OpRuleActions[0].Target))
+            {
+                if (de.AtrbValue.ToString().IndexOf('.') > 0)
+                {
+                    int baseInt = Convert.ToInt32(de.AtrbValue.ToString().Substring(0, de.AtrbValue.ToString().IndexOf('.') > 0 ? de.AtrbValue.ToString().IndexOf('.') : de.AtrbValue.ToString().Length));
+                    de.AtrbValue = baseInt;
+                }
+            }
+        }
+
         public static void CheckRevTierMaxVals(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

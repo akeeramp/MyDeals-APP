@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/4/2021 4:40:37 PM
+File Updated: 10/15/2021 2:19:56 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -3041,13 +3041,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Max Payout",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 25,
-			DATA_TYPE_CD = "MONEY",
+			DATA_TYPE_CD = "INT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Double",
-			FRMT_MSK = "{0:c}",
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MAJOR_INCREASE",
-			TGT_COL_TYPE = "MONEY",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute MAX_RPU = new MyDealsAttribute()
