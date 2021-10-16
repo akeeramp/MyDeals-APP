@@ -780,6 +780,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 100,
                 Label = "Max Payout",
+                HelpText = "This is a $ amount field.",
                 IsRequired = true
             });
 
@@ -3188,12 +3189,12 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 25,
                 AtrbCd = AttributeCodes.MAX_PAYOUT,
-                Label = "Max Payout",
+                HeaderTemplate = "<span title = 'This is a $ amount field' > Max Payout </span>",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 100,
-                Format = "{0:c}",
-                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_PAYOUT', 'currency')#",
+                //Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_PAYOUT', 'number')#", // Was currency
                 IsFilterable = true,
                 IsSortable = true
             });

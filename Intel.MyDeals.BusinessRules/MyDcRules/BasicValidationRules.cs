@@ -577,6 +577,25 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule
+                {
+                    Title="Force to INT value",
+                    ActionRule = MyDcActions.ForceToIntVal,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.PROGRAM.ToString(), OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.DENSITY.ToString(), OpDataElementSetType.REV_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Target = new[] {
+                                AttributeCodes.FRCST_VOL,
+                                AttributeCodes.MAX_PAYOUT
+                            }
+                        }
+                    }
+                },
+
                 //CheckRevTierMaxVals
                 new MyOpRule
                 {

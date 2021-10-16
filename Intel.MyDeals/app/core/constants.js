@@ -115,7 +115,9 @@
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
-                    { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
+                    // Force Removed for now until we can work out RPUs for REV_TIER, bring back old line when RPU returns
+                    //{ "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "HAS_L1", "value": "0" }] },
+                    { "name": "RPU", "order": 3, "rules": [{ "logical": "HideIfAll", "atrb": "OBJ_SET_TYPE_CD", "value": "REV_TIER" }] },
                     { "name": "Payment", "order": 10 },
                     { "name": "All", "order": 99 }
                 ],
@@ -660,6 +662,9 @@
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
+                    "MAX_PAYOUT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "REBATE_TYPE": {
                         "Groups": ["Deal Info"]
                     },
@@ -741,21 +746,22 @@
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     },
-                    "MAX_RPU": {
-                        "Groups": ["RPU"]
-                    },
-                    "USER_MAX_RPU": {
-                        "Groups": ["RPU"]
-                    },
-                    "AVG_RPU": {
-                        "Groups": ["RPU"]
-                    },
-                    "USER_AVG_RPU": {
-                        "Groups": ["RPU"]
-                    },
-                    "RPU_OVERRIDE_CMNT": {
-                        "Groups": ["RPU"]
-                    },
+                    // Removed for now until we can work out RPUs for REV_TIER
+                    //"MAX_RPU": {
+                    //    "Groups": ["RPU"]
+                    //},
+                    //"USER_MAX_RPU": {
+                    //    "Groups": ["RPU"]
+                    //},
+                    //"AVG_RPU": {
+                    //    "Groups": ["RPU"]
+                    //},
+                    //"USER_AVG_RPU": {
+                    //    "Groups": ["RPU"]
+                    //},
+                    //"RPU_OVERRIDE_CMNT": {
+                    //    "Groups": ["RPU"]
+                    //},
                     "REBATE_OA_MAX_AMT": {
                         "Groups": ["All"]
                     },
