@@ -190,10 +190,16 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             }
         }
 
-        angular.forEach(ctryValues, (item) => {
+        angular.forEach(ctryValues, (item,i) => {
             //Embargo country validation alert.
             if ($scope.ovlapObjType == "PricingTable") {
-                $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
+                embCtry = $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
+                if (embCtry) {
+                    $ctrl.IsError = true;
+                    rowError = true;
+                    $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
+                    $("#DropdownSelections_" + i).parent().find("span").attr("title", $ctrl.embValidationMsg)
+                }
             }
         });
         
@@ -273,6 +279,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             if (countryVal != null && countryVal.CTRY_XPORT_CTRL_CD == 'EC') {
                 if (type == 'ok') {
                     kendo.alert(validationMsg);
+                    return countryVal;
                 }
                 else {
                     $ctrl.IsError = true;
@@ -406,9 +413,14 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.IS_RPL = 0;
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
+        var embCountry = $ctrl.showEmbAlert($ctrl.embValidationMsg, dataItem, 'ok');
         if (dataItem === undefined || dataItem === null && dataItem === "") {
             $("#" + id).parent().find("span").css("background-color", "red");
             $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
+        }
+        else if (embCountry) {
+            $("#" + id).parent().find("span").css("background-color", "red");
+            $("#" + id).parent().find("span").attr("title", $ctrl.embValidationMsg)
         }
         else {
             $("#" + id).parent().find("span").css("background-color", "white");
