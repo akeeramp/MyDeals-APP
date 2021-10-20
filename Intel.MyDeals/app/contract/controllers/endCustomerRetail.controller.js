@@ -388,9 +388,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         else if (dataItem !== null && !$ctrl.ChangeErrorFlag) {
             $("#" + id).parent().find("span").css("background-color", "white");
             $("#" + id).parent().find("span").removeAttr("title");
-            if (parseInt(index) == 0) {
+            if (parseInt(index) == 0 && $ctrl.END_CUST_OBJ[0].PRIMED_CUST_CNTRY.toUpperCase() == "ANY") {
                 dataElement.PRIMED_CUST_CNTRY = "";
                 $('#DropdownSelections_' + index).attr('disabled', false);
+                $("#DropdownSelections_" + index).parent().find("span").css("background-color", "white");
+                $("#DropdownSelections_" + index).parent().find("span").removeAttr("title")
             }
             angular.forEach($ctrl.END_CUST_OBJ, (item) => {
                 //Embargo country validation alert.
