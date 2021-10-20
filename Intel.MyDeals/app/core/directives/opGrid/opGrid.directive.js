@@ -3555,7 +3555,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $('#DropdownSelections_0').parent().find("input").attr('autocomplete', 'disabled');
                         }
 
-                    }, 1500);
+                    });
                 });
                 endCustomerRetailModal.result.then(
                     function (endCustomerData) { //returns as an array

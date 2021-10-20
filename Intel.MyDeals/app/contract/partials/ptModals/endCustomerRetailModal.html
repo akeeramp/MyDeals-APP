@@ -1,5 +1,4 @@
-﻿<script type="text/ng-template" id="endCustomerRetailModal">
-    <div>
+﻿<script type="text/ng-template" id="endCustomerRetailModal"><div>
         <div class="modal-header">
             <h3 class="modal-title" id="modal-title">Select EndCustomer/Retail and Country</h3>
         </div>
@@ -13,7 +12,7 @@
                 </div>
             </p>
         <div class="filterRow">
-                <div ng-repeat="e in $ctrl.END_CUST_OBJ">
+                <div ng-repeat="e in $ctrl.END_CUST_OBJ track by $index">
                     <div class="col-md-12" ng-show="$first" style="padding-left:5px;padding-bottom: 15px;text-align:center;">
                         <div class="col-md-1" style="text-align: center; padding-left: 0px; width: 90px; ">
                             <label>Is Unified</label>
@@ -27,7 +26,7 @@
                         <div class="col-md-4" style="text-align:center;">
                             <label>EndCustomer</label>
                         </div>
-                        <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="text-align:center;">
+                        <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}};text-align:center;">
                             <label>Country</label>
                         </div>
                         <div class="col-md-1" style="text-align:left;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
@@ -74,7 +73,7 @@
                                         k-change="$ctrl.changeField"
                                         k-value-primitive="true"
                                         k-filter="'contains'"
-                                        k-auto-bind="true"
+                                        k-auto-bind="{{$index ==1?true:false}}"
                                         k-data-source="$ctrl.endCustOptionswithOutAny"
                                         class="fl opUiElement"
                                         style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
@@ -82,7 +81,7 @@
                             </span>
                         </div>
                         <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
-                           <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;'}}">
+                           <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}}">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
                                     k-placeholder="'Select Country'"
                                     k-data-text-field="'CTRY_NM'"
@@ -91,7 +90,7 @@
                                     k-change="$ctrl.changeCountryField"
                                     k-value-primitive="true"
                                     k-filter="'contains'"
-                                    k-auto-bind="true"
+                                    k-auto-bind="{{$first?true:false}}"
                                     k-data-source="$ctrl.countries"
                                     class="fl opUiElement"
                                     ng-disabled="$ctrl.IsAny && $index == 0? true:false"
@@ -123,6 +122,7 @@
                 <div ng-class="$ctrl.IsAny? 'col-md-5 buttonMaxPadding' : 'col-md-5 buttonMinPadding'">
                     <button class="btn btn-primary" type="button" ng-disabled="$ctrl.ecOptionsFlag" ng-click="$ctrl.ok()">Validate</button>
                     <button id="saveandclose" class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
+
                 </div>
             </div>
         </div>
@@ -187,7 +187,7 @@
             margin-left: 8px;
         }
         .buttonMinPadding{
-            padding-left:120px !important;
+            padding-left:140px !important;
         }
         .buttonMaxPadding {
             padding-left: 150px !important;
