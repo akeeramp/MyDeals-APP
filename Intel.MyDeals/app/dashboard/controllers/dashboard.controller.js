@@ -19,8 +19,9 @@ object2Array.$inject = [];
 function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
-    //using to set spinner object
+    //using to set loader object
     $scope.isLoading = true;
+    $scope.isInitializing = false;
     $scope.loadMessage = 'Dashboard is loading...';
     $scope.moduleName = 'Dashboard.';
 

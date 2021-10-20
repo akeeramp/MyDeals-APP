@@ -35,30 +35,40 @@
             (dataStateChange)="dataStateChange($event)"
             [height]="500">
             <ng-template kendoGridToolbarTemplate>
-                <button (click)="clearFilter()" class="k-button clearButton">Clear Filter</button>
+                <button (click)="clearFilter()" class="k-button clearButton">
+                    <span class="k-icon  k-i-filter-clear k-icon-sm"></span>
+                    Clear Filter
+                </button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button (click)="refreshGrid()" class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-sm"></span> 
+                    Refresh
+                  </button>
               </ng-template>
-              <kendo-grid-column
+              <kendo-grid-column [headerClass]="{'headerClass':true}"
               field="CUST_NM"
               title="Customer Name">
               </kendo-grid-column>
 
-              <kendo-grid-column
+              <kendo-grid-column [headerClass]="{'headerClass':true}"
               field="CUST_DIV_NM"
               title="Division Name">
             </kendo-grid-column>
 
-            <kendo-grid-column
+            <kendo-grid-column [headerClass]="{'headerClass':true}"
             field="CUST_TYPE"
             title="Type">
             </kendo-grid-column>
 
-            <kendo-grid-column
+            <kendo-grid-column 
+            [headerClass]="{'headerClass':true}"
             field="HOSTED_GEO"
             title="Hosted Geo" 
+            width="200"  
             >
             </kendo-grid-column>
 
-            <kendo-grid-column
+            <kendo-grid-column [headerClass]="{'headerClass':true}"
             field="ACTV_IND"
             title="Is Active"
             width="100"  

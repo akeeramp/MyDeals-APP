@@ -4,16 +4,26 @@
 }
  a {
     text-decoration: none !important;
-}
-.nav-tabs-intel-blocks {
+} 
+ .nav-tabs-intel-blocks {
     padding-left: 0px !important;
+} 
+
+.nav-tabs-intel-blocks li a { 
+    padding: 5px 10px 5px 5px;
 }
-.mainMenu{
+ .mainMenu{
     background-color:#0071c5 !important ;
-    border: solid red;
 }
-
-
+.k-grid-header .headerClass {
+    background-color:#e7e7e8;
+    color:#1a3e6f;
+    font-size: 14px !important;
+    font-weight: bold;
+}
+.k-grid-toolbar {
+background-color: #0071c5;
+}
 
 /* .nav-tabs-intel-blocks{
     border: solid red !important;

@@ -1,24 +1,35 @@
 import * as angular from 'angular';
-import { Input, Component, OnInit } from "@angular/core";
+import { Input,Output, Component, OnInit,EventEmitter } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ccLoader',
-  templateUrl: 'Client/src/app/shared/loader/loader.html'
+  template: `
+  <div class="fullHeight" *ngIf="isLoading=='true'">
+    <div class="jumbotron ng-scope">
+        <div class="container">
+            <h1><strong>My</strong> Deals </h1>
+            <p class="lead">
+                {{ module }}
+            </p>
+            <p *ngIf="isInitializing=='true'"> <small>Initializing...</small></p>
+            <p>{{ message }}</p>
+        </div>
+    </div>
+  </div>`
 })
-export class LoaderComponent implements OnInit  {
+export class LoaderComponent  {
   constructor() { }
+  // Where ever loader is using the booler values are also giving in string format ,
+  //  for some reason the values are not identifying as expected thats the reason conditiong with 
+  //  NgIf
 
-    @Input() public isLoading: boolean;
-    @Input() public message: string;
-    @Input() public module: string;
-    @Input() public isInitializing: boolean;
-
-  ngOnInit() {
-    console.log('loader***************',this.message,this.module,this.isLoading,this.isInitializing);
-  }
-}
-
+    @Input() private isLoading: boolean;
+    @Input() private message: string;
+    @Input() private module: string;
+    @Input() private isInitializing: boolean;
+ }
 angular
 .module('app')
 .directive("ccLoader", downgradeComponent({

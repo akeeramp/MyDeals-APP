@@ -1,0 +1,11 @@
+.nav-tabs-intel-blocks{
+    background-color:#0071c5 !important ;
+}
+
+.mainMenu{
+    background-color:#0071c5 !important ;
+}
+
+.nav-tabs-intel-blocks li a { 
+    padding: 5px 10px 5px 5px;
+}

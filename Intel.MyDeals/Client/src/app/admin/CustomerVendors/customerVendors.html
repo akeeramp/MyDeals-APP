@@ -1,6 +1,8 @@
 ﻿﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/customer.css" rel="stylesheet" />
+
 <div class="row">
   <div class="col-md-12" style="height:50px">
   </div>
@@ -19,27 +21,48 @@
         [navigable]="true"  (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
         (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
         <ng-template kendoGridToolbarTemplate>
-            <button kendoGridAddCommand class="k-button addButton">Add</button>
-            <button (click)="clearFilter()" class="k-button clearButton">Clear Filter</button>
+              <button kendoGridAddCommand class="k-button addButton">
+                <span class="k-icon  k-i-plus-outline k-icon-sm"></span>
+                Add New Record
+              </button>
+              <button (click)="clearFilter()" class="k-button clearButton">
+                <span class="k-icon  k-i-filter-clear k-icon-sm"></span>
+                Clear Filters
+              </button>
+              <kendo-grid-spacer></kendo-grid-spacer>
+              <button (click)="refreshGrid()" class="k-button clearButton">
+                <span class="k-icon k-i-reload k-icon-sm"></span> 
+                Refresh
+              </button>
           </ng-template>
-          <kendo-grid-command-column title="command" width="100">
+          <kendo-grid-command-column title="Commands" width="75"  [headerClass]="{'headerClass':true}">
             <ng-template kendoGridCellTemplate let-isNew="isNew">
-              <button kendoGridEditCommand [primary]="true">Edit</button>
-              <!-- <button kendoGridSaveCommand> -->
-                <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
-                {{ isNew ? "Add" : "Update" }}
+              <button kendoGridEditCommand>
+                <span class="k-icon k-i-edit k-icon-sm"></span>
+              </button>
+              <button kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                <span class="k-icon k-i-check k-icon-sm"></span>
               </button>
               <button kendoGridCancelCommand>
-                {{ isNew ? "Discard changes" : "Cancel" }}
+                <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
               </button>
             </ng-template>
           </kendo-grid-command-column>
-        <kendo-grid-column field="ACTV_IND" title="Is Active" editor="boolean" width="50" filter="boolean">
-          <ng-template kendoGridCellTemplate let-dataItem>
-            <input type="checkbox" [checked]="dataItem.ACTV_IND" disabled />
+        <kendo-grid-column field="ACTV_IND" title="Is Active" editor="boolean" width="50" filter="boolean"  [headerClass]="{'headerClass':true}">
+          <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <mat-slide-toggle
+              [color]="color"
+              [checked]="dataItem.ACTV_IND" disabled>
+            </mat-slide-toggle> 
+          </ng-template>
+          <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+            <mat-slide-toggle
+            [color]="color"
+            [checked]="dataItem.ACTV_IND" [formControl]="formGroup.get('ACTV_IND')">
+          </mat-slide-toggle> 
           </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="CUST_NM" title="Customer" width="100">
+        <kendo-grid-column field="CUST_NM" title="Customer" width="100"  [headerClass]="{'headerClass':true}">
           <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -50,44 +73,53 @@
             </kendo-combobox>
           </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="BUSNS_ORG_NM" title="Settlement Partner Name" width="200">
+        <kendo-grid-column field="BUSNS_ORG_NM" title="Settlement Partner Name" width="200"  [headerClass]="{'headerClass':true}">
           <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
           </ng-template>
           <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-            <kendo-combobox #catDropDown [data]="distinctPartner" [formControl]="formGroup.get('BUSNS_ORG_NM')" [allowCustom]="allowCustom">
+            <kendo-combobox #catDropDown [data]="distinctPartner" 
+            [formControl]="formGroup.get('BUSNS_ORG_NM')" 
+            [allowCustom]="allowCustom"
+            (valueChange)="partnerNMChange($event)">
             </kendo-combobox>
           </ng-template>
        
         </kendo-grid-column>
-        <kendo-grid-column field="DROP_DOWN" title="Settlement Partner ID" width="100">
+        <kendo-grid-column field="DROP_DOWN" title="Settlement Partner ID" width="100"  [headerClass]="{'headerClass':true}">
           <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
           </ng-template>
           <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-            <kendo-combobox #partDropDown [data]="distinctPartId" [formControl]="formGroup.get('DROP_DOWN')" [allowCustom]="allowCustom">
+            <kendo-combobox #partDropDown [data]="distinctPartId" 
+            [formControl]="formGroup.get('DROP_DOWN')" [allowCustom]="allowCustom"
+            (valueChange)="partnerIDChange($event)"> 
             </kendo-combobox>
           </ng-template>
       
         </kendo-grid-column>
-        <kendo-grid-column field="CTRY_CD" title="Country" width="100">
+        <kendo-grid-column field="CTRY_CD" title="Country" width="100"  [headerClass]="{'headerClass':true}">
           <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
             let-filterService="filterService">
             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
           </ng-template>
           <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" >
-            <kendo-combobox #countDropDown [data]="distinctCountry" [formControl]="formGroup.get('CTRY_CD')" [allowCustom]="allowCustom">
-            </kendo-combobox>
+            <!-- <kendo-combobox #countDropDown [data]="distinctCountry" [formControl]="formGroup.get('CTRY_CD')" [allowCustom]="allowCustom">
+            </kendo-combobox> -->
+            <kendo-textbox
+             [formControl]="formGroup.get('CTRY_CD')"
+             [clearButton]="true"
+            ></kendo-textbox>
           </ng-template>
         </kendo-grid-column>
         </kendo-grid>
         <kendo-dialog title="Please Fix" *ngIf="isCombExists" (close)="saveConfirmation()">
-          <p style="margin: 30px; text-align: center;">This combination already exists</p>
+          <p style="margin: 30px; text-align: center;">{{errorMsg}}</p>
           <kendo-dialog-actions>
             <button class='k-button' (click)="saveConfirmation()">OK</button>
           </kendo-dialog-actions>

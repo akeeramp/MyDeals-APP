@@ -2,6 +2,7 @@
 import './app.main';
 import './app.routes';
 import './shared';
+import * as $ from 'jquery';
 //importing reporting to app module
 
 
@@ -27,8 +28,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { InputsModule } from "@progress/kendo-angular-inputs";
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
-import {KendoComponent} from './shared/kendo/kendo.component';
 
 //*********************admin modules starts here *********************
 import { CacheComponent } from './admin/cache/cache.component';
@@ -43,7 +44,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //spreadsheet component
 import { HotTableModule } from '@handsontable/angular';
-import {SpreadComponent} from './shared/kendo/spreadsheet.component';
 //Added angular material for popup toggle
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -68,6 +68,7 @@ import {MatInputModule} from '@angular/material/input'
         DialogModule,
         DropDownListModule,
         DropDownsModule,
+        InputsModule,
         GridModule,
         HotTableModule,
         MatFormFieldModule,
@@ -91,25 +92,21 @@ import {MatInputModule} from '@angular/material/input'
     declarations: [
         LoaderComponent,
         ReportingComponent,
-        KendoComponent,
         EmployeeComponent,
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
         MultiCheckFilterComponent,
-        SpreadComponent,
         PingComponent,
     ],
     entryComponents: [
         LoaderComponent,
         ReportingComponent,
-        KendoComponent,
         EmployeeComponent,
         CacheComponent,
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
-        SpreadComponent,
         PingComponent,
     ]
 })

@@ -1,6 +1,5 @@
 ﻿import * as angular from "angular";
 import {Component} from "@angular/core";
-import {gridUtils} from "../../shared/util/gridUtils";
 import {logger} from "../../shared/logger/logger";
 import {customerService} from "./customer.service";
 import {downgradeComponent} from "@angular/upgrade/static";
@@ -17,8 +16,8 @@ import {ThemePalette} from '@angular/material/core';
 export class adminCustomerComponent  {
     constructor(private customerSvc:customerService) {
        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-    $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-    $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+     $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+     $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     private isLoading: boolean = true;
     private loadMessage:string="Admin Customer Loading..";
@@ -67,6 +66,8 @@ export class adminCustomerComponent  {
           this.isLoading=false;
           this.gridResult = result;
           this.gridData = process(result,this.state);
+        },(error)=>{
+          logger.error('Customer service',error);
         }); 
       }
     }
@@ -80,6 +81,21 @@ export class adminCustomerComponent  {
         filters: [],
       };
       this.gridData = process(this.gridResult, this.state);
+    }
+    refreshGrid(){
+      this.isLoading=true;
+      this.state.filter={
+        logic: "and",
+        filters: [],
+      };
+      this.customerSvc.getCustomers().subscribe((result:Array<any>) =>{
+        this.isLoading=false;
+        this.gridResult = result;
+        this.gridData = process(result,this.state);
+      },(error)=>{
+        logger.error('Customer service',error);
+      }); 
+
     }
     ngOnInit() {
       this.loadCustomer();

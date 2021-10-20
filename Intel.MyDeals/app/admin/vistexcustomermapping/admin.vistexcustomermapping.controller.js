@@ -57,6 +57,7 @@
             transport: {
                 read: function (e) {
                     vistexcustomermappingService.getVistexCustomersMapList().then(function (response) {
+                        vm.isLoading = false;
                         e.success(response.data);
                         vm.InitiateDropDowns();
                     }, function (response) {

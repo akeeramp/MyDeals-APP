@@ -10,11 +10,10 @@
         overflow: auto !important;
     }
 </style>
-    ﻿<!-- using for Angular spinner while page load -->
-    <cc-spinner is-loading="isLoading"
-                message="{{loadMessage}}" module="{{moduleName}}" is-initializing="false">
-    </cc-spinner>
-
+    ﻿<!-- using for Angular loader while page load -->
+<cc-loader is-loading="{{isLoading}}"
+           message="{{loadMessage}}" module="{{moduleName}}" is-initializing="{{isInitializing}}">
+</cc-loader>
 
 
 <div id="horizontal-dashboard" class="overFlowDash" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" ng-show="!isLoading">
