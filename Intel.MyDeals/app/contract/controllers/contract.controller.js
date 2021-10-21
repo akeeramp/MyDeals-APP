@@ -2895,6 +2895,11 @@
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
                             }
 
+                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['DENSITY_BAND']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["DENSITY_BAND"]);
+                            }
+
                             if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PAYOUT_BASED_ON']) {
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PAYOUT_BASED_ON"]);
@@ -3098,7 +3103,12 @@
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                         sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
-                                        sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+                                        if (sData[s].OBJ_SET_TYPE_CD == "DENSITY") {
+                                            sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run. Please ensure you are using SSD products for Density deals.";
+                                        }
+                                        else {
+                                            sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+                                        }
                                         needPrdVld.push({
                                             "row": s + 1,
                                             "DC_ID": sData[s].DC_ID,
@@ -3108,6 +3118,8 @@
                                 }
                             }
                         }
+
+                        $scope.spreadDsDataCopy = angular.copy(sData);
                         // We should de-normalize pricing table row only when we are hitting MT
                         // If there are errors don't de-normalize, else PricingTableRow and spreadSheet data will be different
                         if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
@@ -6672,6 +6684,7 @@
             }
             else if (cond != '' && elem == 'DENSITY_BAND') {
                 item._behaviors.validMsg[elem] = cond;
+                if (!item.isDensity) { item.isDensity = {}; item.isDensity[elem] = true; item.isDensity['ErrorMsg'] = cond; }
             }
             else if (cond == 'emptyobject' && elem == 'FLEX') {
                 delete item._behaviors.isRequired[elem];
@@ -6940,19 +6953,19 @@
 
         $scope.validateDensityBand = function (data) {
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
-                $scope.clearValidation(data, 'PTR_USER_PRD');
-                let temp = $scope.$broadcast('validateDensity', data);
+                $scope.clearValidation(data, 'DENSITY_BAND');
+                $scope.$broadcast('validateDensity', data);
                 if (data.some(function (el) { return el.DENSITY_BAND == null })) {
                     angular.forEach(data, (item) => {
-                        if (item.DENSITY_BAND == null) {
-                            $scope.OVLPFlexPdtPTRUSRPRDError = true;
+                        if (item.isDensity && item.isDensity["DENSITY_BAND"] &&
+                            item.PTR_SYS_PRD.toString().contains('"DEAL_PRD_TYPE":"NAND (SSD)"')) {
                             if (!item._behaviors) item._behaviors = {};
                             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
                             if (!item._behaviors.isError) item._behaviors.isError = {};
                             if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-                            item._behaviors.isRequired["PTR_USER_PRD"] = true;
-                            item._behaviors.isError["PTR_USER_PRD"] = true;
-                            item._behaviors.validMsg["PTR_USER_PRD"] = "Mismatch found between products selected & density bands.";
+                            item._behaviors.isRequired["DENSITY_BAND"] = true;
+                            item._behaviors.isError["DENSITY_BAND"] = true;
+                            item._behaviors.validMsg["DENSITY_BAND"] = item.isDensity['ErrorMsg'];
                         }
                     });
                 }

@@ -2627,17 +2627,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if ($scope.pricingTableData.PRC_TBL_ROW.length > root.spreadDs._data.length) {
             RemoveGhostRows()
         }
-
+        let dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
-        if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER"
-            || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "FLEX" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER"
-            || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
+        if (dealType === "KIT" || dealType === "VOL_TIER" || dealType === "FLEX"
+            || dealType === "REV_TIER" || dealType === "DENSITY") {
             $timeout(function () {
                 //Note: This is to fix the Muiti-tier data Corrupt fix
                 if (root.spreadDs._data.length == $scope.pricingTableData.PRC_TBL_ROW.length) {
                     if ($scope.pricingTableData.PRC_TBL_ROW != null && $scope.pricingTableData.PRC_TBL_ROW != undefined && $scope.pricingTableData.PRC_TBL_ROW != '') {
                         for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
-                            if ($scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
+                            if (dealType != "DENSITY" && $scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
                                 var r = i + 1 - $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
                                 if ($scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
                                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "KIT" && $scope.pricingTableData.PRC_TBL_ROW[r]['DEAL_GRP_NM'] !== root.spreadDs._data[r]['DEAL_GRP_NM']) {
@@ -2649,7 +2648,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         root.spreadDs.sync();
                                     }
                                 }
-                            } 
+                            }
+
+                            else if (dealType == "DENSITY" && $scope.pricingTableData.PRC_TBL_ROW[i]) {
+                                let NoDensity = Number($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_DENSITY']);
+                                let TierNum = $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
+                                let TotalDensityTiers = NoDensity * TierNum;
+                                if ($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == TotalDensityTiers) {
+                                    let j = i + NoDensity - TotalDensityTiers;
+                                    if ($scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
+                                        if (root.spreadDs._data[j] && root.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && root.spreadDs._data[j]['TIER_NBR'] != 1) {
+                                            root.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
+                                            root.spreadDs.sync();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -3705,7 +3719,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                 $scope.$root.pc = null;
             }
-            kendo.alert("All of the products looks good.");
+            kendo.alert("All the products have been validated.");
             root.setBusy("", "");
         }
     }
@@ -3780,6 +3794,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.setBusy("", "");
                 if ($scope.$root.pc !== null) $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                 vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue);
+                if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+                    validateDensityBand(transformResults);
+                }
                 isAllValidated = false;
                 break;
             }
@@ -3888,7 +3905,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         $scope.$root.pc.stop().drawChart("perfChart", "perfMs", "perfLegend");
                         $scope.$root.pc = null;
                     }
-                    kendo.alert("All of the products looks good.");
+                    kendo.alert("All the products have been validated.");
                     root.setBusy("", "");
                 }
                 //}, 20);
@@ -5029,7 +5046,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             _.each(validMisProd, (item) => {
                                 if (itm.DC_ID == item.DCID) {
                                     itm._dirty = true;
-                                    root.setBehaviors(itm, 'DENSITY_BAND', `The product density selected was ${item.selDen} but the actual product density is ${item.actDen}`);
+                                    root.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`);
                                 }
                             })
                         });
@@ -5150,7 +5167,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             userInput = updateUserInput(item);
         }
 
-        return userInput.contractProducts.split(',');
+        return userInput == '' ? userInput : userInput.contractProducts.split(',');
 
     }
 
