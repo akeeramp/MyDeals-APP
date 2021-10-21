@@ -2907,6 +2907,8 @@ namespace Intel.MyDeals.BusinessRules
 
             IOpDataElement myCombType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);
 
+            if (myCombType == null) return;
+
             if (myCombType.AtrbValue.ToString() != "Additive") // Rev Tiers are Additive only deals always
             {
                 myCombType.AtrbValue = "Additive";
