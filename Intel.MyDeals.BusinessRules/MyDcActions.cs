@@ -3109,17 +3109,27 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deNumDensity = r.Dc.GetDataElement(AttributeCodes.NUM_OF_DENSITY);
             IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
             string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
             //customerMemberSid set to zero , to get the date details as per Intel calendar
             int customerMemberSid = 0;
+            int actualNumTiers = 1;
 
             if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
+            if (dealType == "DENSITY")
+            {
+                actualNumTiers = int.Parse(deNumTiers.AtrbValue.ToString()) / int.Parse(deNumDensity.AtrbValue.ToString());
+            }
+            else
+            {
+                actualNumTiers = int.Parse(deNumTiers.AtrbValue.ToString());
+            }
 
-            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+            if (!int.TryParse(actualNumTiers.ToString(), out int numTiers)) numTiers = 0;
 
-            if ((dealType == "VOL_TIER" && numTiers > 1) || dealType != "VOL_TIER")
+            if (((dealType == "VOL_TIER" || dealType == "DENSITY") && numTiers > 1) || (dealType != "VOL_TIER" && dealType != "DENSITY"))
             {
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
