@@ -2168,8 +2168,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
 
                             //Manage DCID from both DEAL and WIP Deal for DENSITY Deals
-                            if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && data[r]["DC_PARENT_ID"] == undefined) {
-                                lastDCID = data[r]["DC_ID"];
+                            if (root.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && (data[r]["DC_PARENT_ID"] == undefined || data[r]["DC_ID"] < 0 )) {
+                                    lastDCID = data[r]["DC_ID"];
                             }
 
                             // This is an existing row. Don't do anything else

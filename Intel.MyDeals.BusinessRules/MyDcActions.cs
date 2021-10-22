@@ -285,12 +285,17 @@ namespace Intel.MyDeals.BusinessRules
             string hasTrkr = (r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER)) ?? "";
             string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
             string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
-            if (!string.IsNullOrEmpty(prdJsonIvalid))
+            var dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            if (!string.IsNullOrEmpty(prdJsonIvalid) && dealType == "DENSITY")
+            {
+                dePrdUsr.AddMessage("Product select has some invalid products. Please ensure you are using SSD products for Density deals.");
+                return;
+            }
+            else if (!string.IsNullOrEmpty(prdJsonIvalid) && dealType != "DENSITY")
             {
                 dePrdUsr.AddMessage("Product select has some invalid products.");
                 return;
             }
-
             if (string.IsNullOrEmpty(prdJson)) return;
 
             ProdMappings items = null;
@@ -311,7 +316,12 @@ namespace Intel.MyDeals.BusinessRules
                 return;
             }
 
-            if (!string.IsNullOrEmpty(prdJsonIvalid))
+            if (!string.IsNullOrEmpty(prdJsonIvalid) && dealType == "DENSITY")
+            {
+                dePrdUsr.AddMessage("Product select has some invalid products. Please ensure you are using SSD products for Density deals.");
+                return;
+            }
+            else if (!string.IsNullOrEmpty(prdJsonIvalid) && dealType != "DENSITY")
             {
                 dePrdUsr.AddMessage("Product select has some invalid products.");
                 return;
