@@ -780,8 +780,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 100,
                 Label = "Max Payout",
-                HelpText = "This is a $ amount field.",
-                IsRequired = true
+                HelpText = "This is a $ amount field."
             });
 
             items.Add(new UiTemplateContainerItem

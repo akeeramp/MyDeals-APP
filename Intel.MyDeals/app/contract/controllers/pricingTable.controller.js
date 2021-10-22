@@ -2984,10 +2984,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 break;
                             case "number":
                                 // Money Formatting
-                                if (key == "MAX_PAYOUT") {
-                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#");
-                                }
-                                else if (myFieldModel.format == "{0:c}") {
+                                if (myFieldModel.format == "{0:c}" || key == "MAX_PAYOUT") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
                                 } else {
                                     sheet.range(myColumnName + ":" + myColumnName).format("##,#");
