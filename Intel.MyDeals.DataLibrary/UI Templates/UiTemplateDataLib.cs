@@ -3192,8 +3192,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.REV_TIER },
                 Width = 100,
-                //Format = "{0:c}",
-                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_PAYOUT', 'number')#", // Was currency
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_PAYOUT', 'currency')#", // Was currency
                 IsFilterable = true,
                 IsSortable = true
             });

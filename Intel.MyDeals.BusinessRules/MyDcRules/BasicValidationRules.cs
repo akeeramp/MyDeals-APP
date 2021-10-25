@@ -589,8 +589,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Target = new[] {
-                                AttributeCodes.FRCST_VOL,
-                                AttributeCodes.MAX_PAYOUT
+                                AttributeCodes.FRCST_VOL
                             }
                         }
                     }
