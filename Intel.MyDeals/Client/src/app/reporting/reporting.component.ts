@@ -15,7 +15,7 @@ export class ReportingComponent {
      
   }
   //created for Angular loader
-  public isLoading: boolean = true;
+  public isLoading: string = 'true';
   public loadMessage: string = "Report is Loading ...";
   public moduleName:string ="Report Dashboard";
 
@@ -211,8 +211,7 @@ export class ReportingComponent {
     let vm = this;
     this.reportingSvc.getReportData().subscribe(response => {
         //loader stops
-        vm.isLoading = false;
-
+        vm.isLoading = 'false';
         //variable assignment
         vm.masterData = response; 
         //vm.masterData =reportingResponse.response1; // changing to see all values

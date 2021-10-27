@@ -688,8 +688,8 @@ namespace Intel.MyDeals
                 "~/css/bootstrap-switch.min.css",
                 "~/app/core/directives/dealPopup/dealPopup.directive.css",
                 "~/app/core/directives/dealPopup/dealPopupDock.directive.css",
-                "~/app/core/directives/dealPopup/dealPopupIcon.directive.css",
-                 "~/css/pikaday.css"
+                "~/app/core/directives/dealPopup/dealPopupIcon.directive.css"
+                //  "~/css/pikaday.css"
                 // TODO: Check with Tory...Commenting this for now as its affecting global css
                 // May be refer this in handbook html directly
                 //"~/css/simple-sidebar.css"

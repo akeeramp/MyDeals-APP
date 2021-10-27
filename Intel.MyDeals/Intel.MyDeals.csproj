@@ -746,6 +746,7 @@
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
+    <Content Include="Client\src\app\admin\admin_nongrid.css" />
     <Content Include="Client\src\app\admin\cache\cache.css" />
     <Content Include="Client\src\app\admin\cache\cache.html" />
     <Content Include="Client\src\app\admin\customer.css" />
@@ -766,10 +767,8 @@
     <Content Include="Client\src\app\shared\core\dealpopupdock\dealPopupDock.directive.js" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.js" />
-    <Content Include="Client\src\app\shared\directives\spinner.html" />
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
-    <Content Include="Client\src\app\shared\loader\loader.html" />
     <Content Include="Client\src\dist\bundle.js" />
     <Content Include="Client\webpack.config.js" />
     <Content Include="Content\bootstrap-grid.css" />
@@ -948,7 +947,6 @@
     <Content Include="Content\kendo\2018.R1\textures\transparency.png" />
     <Content Include="Content\kendo\2018.R1\textures\transtexture.png" />
     <Content Include="css\bootstrap-switch.min.css" />
-    <Content Include="css\pikaday.css" />
     <Content Include="css\simple-sidebar.css" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
@@ -1867,7 +1865,6 @@
     <Content Include="Client\package-lock.json" />
     <Content Include="Client\package.json" />
     <Content Include="Client\tsconfig.json" />
-    <Content Include="Client\yarn-error.log" />
     <Content Include="Client\yarn.lock" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
@@ -1887,7 +1884,6 @@
     <Content Include="Scripts\moment-timezone.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\moment-range.min.js" />
-    <Content Include="Scripts\pikaday.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\polyfills.js" />
@@ -2082,13 +2078,13 @@
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\core\core.shared.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\directives\spinner.directive.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\index.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\multichecker.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\loader\loader.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\util\util.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />
     <TypeScriptCompile Include="Client\src\main.ts" />
     <TypeScriptCompile Include="Client\src\polyfills.ts" />

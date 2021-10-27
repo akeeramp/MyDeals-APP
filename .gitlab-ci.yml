@@ -40,11 +40,13 @@ variables:
   PROD1_DEPLOY_PATH:    '\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals'
   PROD2_DEPLOY_PATH:    '\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals'
 
+
 stages:
  - Restore
  - Build
  # - Dev_Deploy
- # - ITT_Deploy
+ # - ITT_Deploypaaru#3456
+
  # - CONS_Deploy
  # - CIAR_Deploy
  # - UTT_Deploy
@@ -60,6 +62,8 @@ stages:
 
 restore_packages:
   stage: Restore
+  tags:    
+    - MyDeals_Angular_Runner
   script:
     - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
   artifacts:
@@ -69,6 +73,8 @@ restore_packages:
 
 build_job:
   stage: Build
+  tags:    
+    - MyDeals_Angular_Runner
   script:
     - '& "$env:MSBUILD_PATH" /p:OutDir=$CI_PROJECT_DIR/output /p:TransformConfigFiles=true /p:Configuration=Release /p:Platform="Any CPU" /p:GenerateSerializationAssemblies=Off'  # build the project
   artifacts:
@@ -77,6 +83,61 @@ build_job:
       - output/_PublishedWebsites/
   dependencies:
     - restore_packages
+  only :
+    variables:
+      - $CI_PROJECT_NAMESPACE != 'akeeramp'
+      - $CI_COMMIT_REF_NAME != 'MyDeals_Migration'
+
+
+build_job_Angular:
+  stage: Build
+  tags:    
+    - MyDeals_Angular_Runner
+  cache:
+    key: "Node_modules"
+    paths:
+      - Intel.MyDeals/Client/node_modules/
+  script:
+    - 'Set-Location -Path Intel.MyDeals/Client/ -PassThru'
+    - 'npm install'
+    - 'Set-Location -Path .. -PassThru ; Set-Location -Path ..  -PassThru'
+    - '& "$env:MSBUILD_PATH" /p:OutDir=$CI_PROJECT_DIR/output /p:TransformConfigFiles=true /p:Configuration=Release /p:Platform="Any CPU" /p:GenerateSerializationAssemblies=Off'  # build the project
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - output/_PublishedWebsites/
+  dependencies:
+    - restore_packages
+  only :
+    variables:
+      - $CI_PROJECT_NAMESPACE == 'akeeramp'
+      - $CI_COMMIT_REF_NAME == 'MyDeals_Migration'
+
+Angular_deploy:
+  stage: Level_1
+  tags:    
+    - MyDeals_Angular_Runner
+  script:
+    - '& robocopy output/_PublishedWebsites/Intel.MyDeals $env:CINR_DEPLOY_PATH /e /MT /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - '& robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/DEV $env:CINR_DEPLOY_PATH Web.Config /copyall /secfix ; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null }'
+    - 'Set-Location -Path Intel.MyDeals/Client/ -PassThru'
+    - 'npm install'
+    - 'npm run build_env'
+    - 'Set-Location -Path .. -PassThru ; Set-Location -Path ..  -PassThru'
+    - 'if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"}; Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip")'
+    - '& Copy-Item C:\ClientZip\Client.zip $env:CINR_DEPLOY_PATH/ -Force'
+    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername HF2CINMYD2W01.amr.corp.intel.com -credential $cred -ScriptBlock {Remove-Item D:\WebSites\MyDeals\Client\* -Force -Recurse; Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\")}'
+  dependencies:
+    - build_job_Angular
+  when: manual
+  allow_failure: true
+  only :
+    variables:
+      - $CI_PROJECT_NAMESPACE == 'akeeramp'
+      - $CI_COMMIT_REF_NAME == 'MyDeals_Migration'
+  environment:
+      name: CINR
+
 
 dev_deploy:
   stage: Level_1
