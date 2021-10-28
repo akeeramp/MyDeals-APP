@@ -700,7 +700,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
                             var res = [];
                             for (var i = 0; i < response.data.ProductSelectionLevels.length; i++) {
-                                if (response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('NAND') > -1) {
+                                if (response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('NAND') > -1 || response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('SSD') > -1) {
                                     res.push(response.data.ProductSelectionLevels[i]);
                                 }
                             }
