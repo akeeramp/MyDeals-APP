@@ -2298,11 +2298,33 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             });
 
+            $scope.cleanOnlyModifiedDealFlags = function (modifiedDealData) {
+                $scope.clearBadges();
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    for (var a = 0; a < modifiedDealData.length; a++) {
+                        if (data[d].DC_ID == modifiedDealData[a].DC_ID) {
+                            var beh = data[d]._behaviors;
+                            // clear items for this row
+                            beh.isError = {};
+                            beh.validMsg = {};
+                            beh.isDirty = {};
+                        }
+                    }
+                }
 
+                $scope._dirty = false;
+                $scope.root._dirty = false;
+            }
 
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
-                $scope.cleanFlags();
+                var data = $scope.contractDs.data();
+                if ($scope.opName === "TenderDashboard" && args.WIP_DEAL != undefined && args.WIP_DEAL.length != data.length) {
+                    $scope.cleanOnlyModifiedDealFlags(args.WIP_DEAL);
+                }
+                else
+                    $scope.cleanFlags();
 
                 // clear out checkboxes
                 $.each($scope.grid.columns, function () {
@@ -2333,7 +2355,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.$on('saveWithWarnings', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
-                $scope.cleanFlags();
+                var data = $scope.contractDs.data();
+                if ($scope.opName === "TenderDashboard" && args.WIP_DEAL != undefined && args.WIP_DEAL.length != data.length) {
+                    $scope.cleanOnlyModifiedDealFlags(args.WIP_DEAL);
+                }
+                else
+                    $scope.cleanFlags();
 
                 // need to set all flags... dirty, error, validMsg
                 if (!!args.WIP_DEAL) {

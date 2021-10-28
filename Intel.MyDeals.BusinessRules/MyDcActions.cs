@@ -2761,8 +2761,9 @@ namespace Intel.MyDeals.BusinessRules
 
             DateTime chkDate = OpConvertSafe.ToDateTime(r.Dc.GetDataElementValue(AttributeCodes.END_DT));
             bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
+            string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
 
-            if ((!primedCheck || rplCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr ) // If not primed and End customer has a value
+            if ((!primedCheck || rplCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
