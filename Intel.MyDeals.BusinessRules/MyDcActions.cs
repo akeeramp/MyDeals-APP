@@ -934,20 +934,17 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void FlexReadOnlyOverarching(params object[] args)
         {
+            // Removed multi-tier read only checks
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            List<string> excludeAtrbs = new List<string> { AttributeCodes.EXPIRE_YCS2, AttributeCodes.NOTES };
 
             string rowType = r.Dc.GetDataElementValue(AttributeCodes.FLEX_ROW_TYPE);
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            IOpDataElement deOaAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
 
-            if (deNumTiers == null || deOaAmt == null) return;
-
-            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
-
-            if (rowType == "Draining" || numTiers > 1)
+            if (rowType == "Draining")
             {
+                IOpDataElement deOaAmt = r.Dc.GetDataElement(AttributeCodes.REBATE_OA_MAX_AMT);
+                if (deOaAmt == null) return;
+
                 deOaAmt.IsReadOnly = true;
             }
         }
