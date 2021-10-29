@@ -573,6 +573,9 @@
                     "RPU_OVERRIDE_CMNT": {
                         "Groups": ["RPU"]
                     },
+                    "REBATE_OA_MAX_VOL": {
+                        "Groups": ["All"]
+                    },
                     "REBATE_OA_MAX_AMT": {
                         "Groups": ["All"]
                     },

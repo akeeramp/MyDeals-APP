@@ -6241,7 +6241,7 @@
                 $scope.clearValidation(data, 'FLEX_ROW_TYPE');
 
                 var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-                var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
+                //var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
                 var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
 
                 if (drainingEntries.length > 0 && accrualEntries.length==0) {
@@ -6250,8 +6250,10 @@
                     });
                 }
                 //Validate overarching fields for FLEX Accrual rows
-                if (accrualSingleTierEntries.length > 0) {
-                    $scope.validateOverArching(accrualSingleTierEntries);
+                //if (accrualSingleTierEntries.length > 0) {
+                //    $scope.validateOverArching(accrualSingleTierEntries);
+                if (accrualEntries.length > 0) {
+                    $scope.validateOverArching(accrualEntries);
                 }
                 $scope.validateHybridFields(data);
             }
@@ -6341,8 +6343,12 @@
                         }
                     }
                     if (isFlatRate == 1) { // Check single column for Vol Tier - must have values
-                        if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {
-                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
+                        //if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {
+                            //$scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
+                        if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
+                            (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
+                            $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
                         }
                     }
                     // Check for 0 values
@@ -6353,7 +6359,8 @@
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
                     }
                     // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
-                    if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+                    //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+                    if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
                         testMaxAmtCount++;
                         if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
                             testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
@@ -6367,7 +6374,8 @@
                     }
                 });
                 // Check if this is a flex, and if it is, only accrual single tier rows count..
-                var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
+                //var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
+                var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
                 if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal');

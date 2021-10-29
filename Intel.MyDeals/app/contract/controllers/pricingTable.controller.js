@@ -1652,15 +1652,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
             }
             if (data[i].FLEX_ROW_TYPE == "Accrual") {
-                if (data[i].NUM_OF_TIERS > 1) {
-                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
-                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
-                    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-                }
-                else {
+                // Remove the restriction of single tier accrual lines only
+                // Sets column open or reead only
+                //if (data[i].NUM_OF_TIERS > 1) {
+                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
+                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
+                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
+                //}
+                //else {
                     sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(true);
                     sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background(null);
-                }
+                //}
             }
 
             var stlmentValue = data[i].AR_SETTLEMENT_LVL;
