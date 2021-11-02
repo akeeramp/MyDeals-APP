@@ -104,5 +104,15 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _primeCustomersLib.UploadBulkUnifyDeals(unifyDeals), "Unable to do bulk update");
         }
 
+        [Authorize]
+        [HttpPost]
+        [Route("UnPrimeDealsLogs/{dealId}")]
+        public bool UnPrimeDealsLogs(int dealId, [FromBody] string endCustData)
+        {
+            return SafeExecutor(() => _primeCustomersLib.UnPrimeDealsLogs(dealId, endCustData),
+                    $"Unable to Update UnUnified Deals Logs");
+        }
+
+
     }
 }

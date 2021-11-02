@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
 using System;
+using Newtonsoft.Json;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -17,17 +19,20 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IIntegrationLib _integrationLib;
 
+        private readonly IJmsDataLib _jmsDataLib;
+
         public PrimeCustomersLib()
         {
             _primeCustomersDataLib = new PrimeCustomersDataLib();
             _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
-        public PrimeCustomersLib(IPrimeCustomersDataLib primeCustomersDataLib, IDataCollectionsDataLib dataCollectionsDataLib, IIntegrationLib integrationLib)
+        public PrimeCustomersLib(IPrimeCustomersDataLib primeCustomersDataLib, IDataCollectionsDataLib dataCollectionsDataLib, IIntegrationLib integrationLib, IJmsDataLib jmsDataLib)
         {
             _primeCustomersDataLib = primeCustomersDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
             _integrationLib = integrationLib;
+            _jmsDataLib = jmsDataLib;
         }
 
         public List<PrimeCustomers> GetPrimeCustomerDetails()
@@ -144,5 +149,97 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
         }
+
+        public bool UnPrimeDealsLogs(int dealId, string endCustData)
+        {
+            bool success = false;
+            try
+            {
+                List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
+
+                result = _primeCustomersDataLib.UnPrimeDealsLogs(dealId, endCustData);
+                if (result.Count > 0)
+                {
+
+                    var UCDReqDataList = new UCDRequest
+                    {
+                        accountRequests = new List<UCDRequest.AccountRequests>()
+                    };
+
+
+                    foreach (UnPrimedDealLogs Customer in result)
+                    {
+                        var UCDReqData = new UCDRequest.AccountRequests
+                        {
+                            addresses = new List<UCDRequest.AccountRequests.Addresses>()
+                        };
+                        List<string> County = new List<string>();
+                        County.Add(Customer.PRIMED_CUST_CNTRY);
+                        UCDReqData.Name = Customer.END_CUSTOMER_RETAIL;
+                        UCDReqData.CustomerAggregationTypeCode = "UNFD_CTRY_CUST";
+                        UCDReqData.CustomerProcessEngagmentCode = "DIR_PRC_EXCPT";
+                        var newAddressess = new UCDRequest.AccountRequests.Addresses
+                        {
+
+                            CountryName = Customer.PRIMED_CUST_CNTRY
+                        };
+
+                        UCDReqData.addresses.Add(newAddressess);
+
+                        UCDReqDataList.accountRequests.Add(UCDReqData);
+                        String UCDJson = JsonConvert.SerializeObject(UCDReqData);
+
+                        if ((Customer.END_CUSTOMER_RETAIL != null && Customer.END_CUSTOMER_RETAIL != "") &&
+                            (Customer.PRIMED_CUST_CNTRY != null && Customer.PRIMED_CUST_CNTRY != "") && dealId != 0)
+                        {
+
+                            _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
+                               dealId, UCDJson, null, null, "API_REQUESTED");
+                        }
+
+                    }
+
+
+                    String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
+                    List<UCDResponse> ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
+
+                    foreach (UCDResponse Response in ucdResponse)
+                    {
+                        if (Response.status.ToLower() == "success")
+                        {
+                            string UCDJsonResponse = JsonConvert.SerializeObject(Response);
+                            if ((Response.data.Name != null && Response.data.Name != "") &&
+                              (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                            {
+                                _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                            dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
+                                success = true;
+                            }
+
+                        }
+                        else if (Response.errormessage.ToLower() == "Duplicate Account")
+                        {
+
+                        }
+                        else
+                        {
+                            OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                            success = false;
+                        }
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("UCD - ERROR: " + ex);
+
+            }
+
+            return success;
+
+        }
+
     }
 }

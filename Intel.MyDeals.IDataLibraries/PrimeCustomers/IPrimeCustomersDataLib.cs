@@ -29,5 +29,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
+        List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData);
+
+        List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId, string status);
     }
 }

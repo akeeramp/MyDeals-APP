@@ -9991,4 +9991,89 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class DealsUnificationValidationSummary
 
+
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on CHERUK1X-MOBL
+	/// by cheruk1x
+	/// at 10/25/2021 8:03:04 PM
+	///</summary>
+
+	[DataContract]
+	public partial class UnPrimedDealLogs
+	{
+
+		[DataMember]
+		public System.String END_CUSTOMER_RETAIL { set; get; }
+
+
+		[DataMember]
+		public System.String PRIMED_CUST_CNTRY { set; get; }
+
+
+		/*
+		private static List<UnPrimedDealLogs> UnPrimedDealLogsFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<UnPrimedDealLogs>();
+		int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
+		int IDX_PRIMED_CUST_CNTRY = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_CNTRY");
+
+		while (rdr.Read()){
+		ret.Add(new UnPrimedDealLogs {
+		END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+		PRIMED_CUST_CNTRY = (IDX_PRIMED_CUST_CNTRY < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_CNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_CNTRY)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
+	} // End of class UnPrimedDealLogs
+
+
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on CHERUK1X-MOBL
+	/// by cheruk1x
+	/// at 10/25/2021 8:03:04 PM
+	///</summary>
+
+	[DataContract]
+	public partial class DealIdEcJsonDetails
+	{
+
+		[DataMember]
+		public System.Int32 DEAL_ID { set; get; }
+
+
+		[DataMember]
+		public System.String END_CUST_OBJ { set; get; }
+
+
+		/*
+		private static List<DealIdEcJsonDetails> DealIdEcJsonDetailsFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<DealIdEcJsonDetails>();
+		int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+		int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+
+		while (rdr.Read()){
+		ret.Add(new DealIdEcJsonDetails {
+		DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+		END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
+	} // End of class DealIdEcJsonDetails
+
+
 }

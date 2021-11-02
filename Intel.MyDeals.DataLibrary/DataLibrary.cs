@@ -24,7 +24,8 @@ namespace Intel.MyDeals.DataLibrary
                 ["apiGeeResponseURL"] = envConfigs.ContainsKey("apiGeeResponseURL") ? envConfigs["apiGeeResponseURL"] : "",
                 ["apiGeeConsumerKey"] = envConfigs.ContainsKey("apiGeeConsumerKey") ? envConfigs["apiGeeConsumerKey"] : "",
                 ["apiGeeconsumerSecret"] = envConfigs.ContainsKey("apiGeeconsumerSecret") ? envConfigs["apiGeeconsumerSecret"] : "",
-                ["apiGeeTokenUrl"] = envConfigs.ContainsKey("apiGeeTokenUrl") ? envConfigs["apiGeeTokenUrl"] : ""
+                ["apiGeeTokenUrl"] = envConfigs.ContainsKey("apiGeeTokenUrl") ? envConfigs["apiGeeTokenUrl"] : "",
+                ["apiUCDRequestURL"] = envConfigs.ContainsKey("apiUCDRequestURL") ? envConfigs["apiUCDRequestURL"] : ""
             };
         }
 
