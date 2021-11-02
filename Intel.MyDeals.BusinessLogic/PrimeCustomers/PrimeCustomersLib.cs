@@ -196,6 +196,10 @@ namespace Intel.MyDeals.BusinessLogic
                             _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
                                dealId, UCDJson, null, null, "API_REQUESTED");
                         }
+                        else
+                        {
+                            OpLogPerf.Log("UCD - Error in saving AMQ request: ");
+                        }
 
                     }
 
@@ -203,33 +207,45 @@ namespace Intel.MyDeals.BusinessLogic
                     String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
                     List<UCDResponse> ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
 
-                    foreach (UCDResponse Response in ucdResponse)
+                    if (ucdResponse.Count >0 )
                     {
-                        if (Response.status.ToLower() == "success")
+                        foreach (UCDResponse Response in ucdResponse)
                         {
-                            string UCDJsonResponse = JsonConvert.SerializeObject(Response);
-                            if ((Response.data.Name != null && Response.data.Name != "") &&
-                              (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                            if (Response.status.ToLower() == "success")
                             {
-                                _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                            dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
-                                success = true;
+                                string UCDJsonResponse = JsonConvert.SerializeObject(Response);
+                                if ((Response.data.Name != null && Response.data.Name != "") &&
+                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                                {
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
+                                    success = true;
+                                }
+
+                                else
+                                {
+                                    OpLogPerf.Log("UCD - Error in saving AMQ response: ");
+                                }
+
                             }
-
-                        }
-                        else if (Response.errormessage.ToLower() == "Duplicate Account")
-                        {
-
-                        }
-                        else
-                        {
-                            OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
-                            success = false;
+                            else if (Response.errormessage.ToLower() == "Duplicate Account")
+                            {
+                                OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                            }
+                            else
+                            {
+                                OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                                
+                            }
                         }
                     }
-
+                    else
+                    {
+                        OpLogPerf.Log("UCD - Publish to ACM ERROR ");
+                    }
 
                 }
+                
             }
             catch (Exception ex)
             {
