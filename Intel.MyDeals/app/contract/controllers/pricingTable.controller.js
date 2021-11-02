@@ -3492,6 +3492,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                             return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
+                                if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+                                    var res = [];
+                                    for (var i = 0; i < response.data.ProductSelectionLevels.length; i++) {
+                                        if (response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('NAND') > -1 || response.data.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('SSD') > -1) {
+                                            res.push(response.data.ProductSelectionLevels[i]);
+                                        }
+                                    }
+                                    response.data.ProductSelectionLevels = res;
+                                }
                                 productSelectionLevels = response;
                                 return response;
                             }, function (response) {
@@ -4985,7 +4994,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         let selProds = _.filter(data, (itm) => {
                             let ptrPRD = itm.PTR_USER_PRD ? itm.PTR_USER_PRD.toUpperCase().split(',') : [];
                             // logic to check matching product since the product can come in any order and case to update code with those changes
-                            if (ptrPRD.length > 0 && _.isEqual(_.sortBy(ptrPRD), _.sortBy(prod))) {
+                            if (ptrPRD.length > 0 && _.isEqual(_.sortBy(ptrPRD), _.sortBy(prod.map(v => v.toUpperCase())))) {
                                 return itm;
                             }
                         });
@@ -5025,7 +5034,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             }
 
                                             let ptrPRD = item.PTR_USER_PRD ? item.PTR_USER_PRD.toUpperCase().split(',') : [];
-                                            if (_.isEqual(_.sortBy(ptrPRD), _.sortBy(prod)) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
+                                            if (_.isEqual(_.sortBy(ptrPRD), _.sortBy(prod.map(v => v.toUpperCase()))) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
                                                 item[`DENSITY_BAND`] = Nand_Den[ind];
                                                 ind++;
                                             }
