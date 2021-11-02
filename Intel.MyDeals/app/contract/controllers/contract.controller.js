@@ -6965,8 +6965,10 @@
                 $scope.$broadcast('validateDensity', data);
                 if (data.some(function (el) { return el.DENSITY_BAND == null })) {
                     angular.forEach(data, (item) => {
-                        if (item.isDensity && item.isDensity["DENSITY_BAND"] &&
-                            item.PTR_SYS_PRD.toString().contains('"DEAL_PRD_TYPE":"NAND (SSD)"')) {
+                        if (((item.isDensity && item.isDensity["DENSITY_BAND"]) &&
+                            ((item.PTR_SYS_PRD.toString().contains('"DEAL_PRD_TYPE":"NAND (SSD)"')) ||
+                            (item.PTR_SYS_PRD.toString().contains('"DEAL_PRD_TYPE":"DCG Client SSD"')) ||
+                            (item.PTR_SYS_PRD.toString().contains('"DEAL_PRD_TYPE":"DCG DC SSD"'))))) {
                             if (!item._behaviors) item._behaviors = {};
                             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
                             if (!item._behaviors.isError) item._behaviors.isError = {};
