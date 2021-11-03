@@ -530,6 +530,16 @@ using System.Collections.Generic;
     ds.Tables[0].TableName = "DealsUnificationValidationSummary";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//To check Entry in Log Table
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UCD_LOG_VAL]  @in_end_cust_obj='[{\"END_CUSTOMER_RETAIL\":\"LNCCtest\",\"PRIMED_CUST_ID\":\"\",\"PRIMED_CUST_NM\":\"\",\"PRIMED_CUST_CNTRY\":\"Brazil\",\"IS_PRIMED_CUST\":\"0\",\"IS_EXCLUDE\":\"0\",\"CTRY_NM\":\"\",\"IS_RPL\":\"0\"}]',@in_deal_id = 22276, @in_emp_wwid = 999999 ");
+	ds.Tables[0].TableName = "UnPrimedDealLogs";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//To get the deal id and end-cust-obj whose EC Json has End customer country combination sent to UCD 
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG] @in_cust_nm='Academediatest',@in_cust_ctry='Aland Islands',@in_rspn_json='{ \"accountId\":\"0012i00000c2JbbAAK\",\"accountName\":\"Academediatest\",\"primaryAddress\":{ \"countryName\":\"Aland Islands\"},\"masteredSimplifiedAccountName\":\"Academediatest\",\"masteredBusinessPhysicalAddress\":{ \"countryCode\":\"Aland Islands\",\"countryName\":\"Aland Islands\"},\"complianceWatchList\":[{ \"code\":\"DPL\",\"name\":\"Denied Parties List\"},{ \"code\":\"EC\",\"name\":\"Embargoed Country\"}],\"customerAggregationType\":{ \"code\":\"UNFD_CTRY_CUST\",\"name\":\"Unified Country Customer\"},\"customerProcessEngagement\":[{ \"code\":\"DIR_PRC_EXCPT\",\"name\":\"Direct Price Exception\"}],\"businessPartyIdentifier\":\"100443911\",\"parentAccount\":{ \"accountId\":\"0012D00000OmHaeQAK\",\"accountName\":\"Academedia\",\"businessPartyIdentifier\":\"1000006998\"}}',@in_acct_id='0012i00000c2JbbAAK',@in_sts='RESPONSE_RECEIVED',@in_deal_id=22276, @in_rqst_json=null, @in_emp_wwid=999999");
+    ds.Tables[0].TableName = "DealIdEcJsonDetails";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
