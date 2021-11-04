@@ -198,7 +198,7 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         else
                         {
-                            OpLogPerf.Log("UCD - Error in saving AMQ request: ");
+                            OpLogPerf.Log("UCD - Error in saving AMQ request ");
                         }
 
                     }
@@ -211,29 +211,30 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         foreach (UCDResponse Response in ucdResponse)
                         {
+                            string UCDJsonResponse = JsonConvert.SerializeObject(Response);
+                            if ((Response.data.Name != null && Response.data.Name != "") &&
+                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                            {
+                                _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                            dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
+                                success = true;
+                            }
+
+                            else
+                            {
+                                OpLogPerf.Log("UCD - Error in saving AMQ response");
+                            }
+
                             if (Response.status.ToLower() == "success")
                             {
-                                string UCDJsonResponse = JsonConvert.SerializeObject(Response);
-                                if ((Response.data.Name != null && Response.data.Name != "") &&
-                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
-                                {
-                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
-                                    success = true;
-                                }
-
-                                else
-                                {
-                                    OpLogPerf.Log("UCD - Error in saving AMQ response: ");
-                                }
-
+                                OpLogPerf.Log("UCD - AMQ response success ");
                             }
                             else if (Response.errormessage.ToLower() == "Duplicate Account")
-                            {
+                            {                                                              
                                 OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
                             }
                             else
-                            {
+                            {                                 
                                 OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
                                 
                             }
