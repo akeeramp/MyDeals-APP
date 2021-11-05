@@ -25,6 +25,7 @@ import {FormGroup, FormControl, Validators} from "@angular/forms";
 @Component({
   selector: "adminVendorsCustomer",
   templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
+  styleUrls: ['Client/src/app/admin/CustomerVendors/customerVendor.css']
 })
 export class adminCustomerVendorsComponent {
   constructor(private customerVendSvc: customerVendorService) {

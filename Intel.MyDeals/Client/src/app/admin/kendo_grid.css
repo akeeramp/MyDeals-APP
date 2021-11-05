@@ -2,27 +2,32 @@
     top: -26px !important;
     padding-bottom: 0px !important;
 }
- a {
-    text-decoration: none !important;
-} 
- .nav-tabs-intel-blocks {
-    padding-left: 0px !important;
-} 
 
-.nav-tabs-intel-blocks li a { 
+a {
+    text-decoration: none !important;
+}
+
+.nav-tabs-intel-blocks {
+    padding-left: 0px !important;
+}
+
+.nav-tabs-intel-blocks li a {
     padding: 5px 10px 5px 5px;
 }
- .mainMenu{
-    background-color:#0071c5 !important ;
+
+.mainMenu {
+    background-color: #0071c5 !important;
 }
+
 .k-grid-header .headerClass {
-    background-color:#e7e7e8;
-    color:#1a3e6f;
+    background-color: #e7e7e8;
+    color: #1a3e6f;
     font-size: 14px !important;
     font-weight: bold;
 }
+
 .k-grid-toolbar {
-background-color: #0071c5;
+    background-color: #0071c5;
 }
 
 /*Kendo-header changes*/
@@ -42,9 +47,9 @@ background-color: #0071c5;
     margin: 0 !important;
 }
 
-.nav-tabs-intel-blocks.nav .btn {
-    font-size: 14px !important;
-}
+    .nav-tabs-intel-blocks.nav .btn {
+        font-size: 14px !important;
+    }
 
 .navbar-default .search {
     color: #0071C5;
@@ -158,6 +163,28 @@ body {
 
 table {
     padding-top: 7px;
+}
+
+.kendo-grid-buttons {
+    position: relative !important;
+    padding-left: 35px !important;
+    padding-right: 25px !important;
+    padding-top: 10px !important;
+    width: 99% !important;
+    height: 200px !important;
+}
+
+.k-button {
+    color: #fff;
+    background-color: #0071c5;
+    border-color: #0071c5;
+    box-shadow: none;
+    font-size: 18px;
+}
+
+.k-button:hover {
+    background-color: #1187cb;
+    border: none;
 }
 
 /* .nav-tabs-intel-blocks{
