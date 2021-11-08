@@ -14,10 +14,10 @@ import {ThemePalette} from '@angular/material/core';
 })
 
 export class adminCustomerComponent  {
-    constructor(private customerSvc:customerService) {
+    constructor(private customerSvc:customerService,private loggerSvc:logger) {
        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-     $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-     $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+      $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+      $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     private isLoading: boolean = true;
     private loadMessage:string="Admin Customer Loading..";
@@ -67,7 +67,7 @@ export class adminCustomerComponent  {
           this.gridResult = result;
           this.gridData = process(result,this.state);
         },(error)=>{
-          logger.error('Customer service',error);
+          this.loggerSvc.error('Customer service',error);
         }); 
       }
     }
@@ -93,12 +93,17 @@ export class adminCustomerComponent  {
         this.gridResult = result;
         this.gridData = process(result,this.state);
       },(error)=>{
-        logger.error('Customer service',error);
+        this.loggerSvc.error('Customer service',error);
       }); 
 
     }
-    ngOnInit() {
+     ngOnInit() {
       this.loadCustomer();
+    }
+    ngOnDestroy(){
+      //The style removed are adding back
+      $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+      $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
   
 };

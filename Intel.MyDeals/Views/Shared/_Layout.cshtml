@@ -8,8 +8,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My Deals</title>
-    <link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
-    @Styles.Render("~/Content/css")
+    @*Removing Content ~/Content/css and pull those styles as reference to get Angular kendo grid working*@
+    <link href="/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="/css/toastr.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/css/jquery.rainbowJSON.css" rel="stylesheet">
+    <link href="/css/it-mlaf.min.css" rel="stylesheet">
+    <link href="/Content/kendo/2017.R1/kendo.common-material.min.css" rel="stylesheet">
+    <link href="/css/kendo.intel.css" rel="stylesheet">
+    <link href="/css/angular-bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="/css/select.min.css" rel="stylesheet">
+    <link href="/css/select2.min.css" rel="stylesheet">
+    <link href="/css/nv.d3.min.css" rel="stylesheet">
+    <link href="/css/_report.css" rel="stylesheet">
+    <link href="/css/angular-gridster.css" rel="stylesheet">
+    <link href="/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="/app/core/directives/dealPopup/dealPopup.directive.css" rel="stylesheet">
+    <link href="/app/core/directives/dealPopup/dealPopupDock.directive.css" rel="stylesheet">
+    <link href="/app/core/directives/dealPopup/dealPopupIcon.directive.css" rel="stylesheet">
+
     @Styles.Render("~/MyDeals/css")
 
     @Scripts.Render("~/bundles/scripts")

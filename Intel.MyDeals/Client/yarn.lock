@@ -1300,6 +1300,11 @@
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.3.tgz#ff5e2f1902969d305225a047c8a0fd5c915cebef"
   integrity sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==
 
+"@types/underscore@^1.11.3":
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.3.tgz#d6734f3741ce41b2630018c6b61c6745f6188c07"
+  integrity sha512-Fl1TX1dapfXyDqFg2ic9M+vlXRktcPJrc4PR7sRc7sdVrjavg/JHlbUXBt8qWWqhJrmSqg3RNAkAPRiOYw6Ahw==
+
 "@uirouter/core@6.0.7":
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-6.0.7.tgz#a66743dceb13a56d8908474ff891d63e5d5a2b01"
@@ -2854,6 +2859,13 @@ ng2-search-filter@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/ng2-search-filter/-/ng2-search-filter-0.5.1.tgz#6d5f4e26bd2b2c8c8cc4aad658aabae6a33fb4af"
   integrity sha512-noN8R+Gyxo5ZuboEOvq+u0zKio6pEf1IVYQTCZfAfXm6ONmzWu/M2xK0di9oVUprDbPBQXCGUuvD5i2GD+35HA==
+
+ngx-toastr@^14.1.4:
+  version "14.1.4"
+  resolved "https://registry.yarnpkg.com/ngx-toastr/-/ngx-toastr-14.1.4.tgz#80b9d3d3663e35cd11e402ed2eced8a29310b050"
+  integrity sha512-t1/9r+pOXm65LIl0gevvFat6XIl0g3tMA8UOArFjI4ta/nGwDe/14J/f4cZvOBDcomedvjvGAWi+d/2URdSTBg==
+  dependencies:
+    tslib "^2.2.0"
 
 node-abi@^2.18.0, node-abi@^2.7.0:
   version "2.30.0"

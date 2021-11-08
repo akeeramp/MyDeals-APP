@@ -20,15 +20,18 @@ import { NgIf } from '@angular/common';
   </div>`
 })
 export class LoaderComponent  {
-  constructor() { }
+  constructor() {
+
+   }
   // Where ever loader is using the booler values are also giving in string format ,
   //  for some reason the values are not identifying as expected thats the reason conditiong with 
   //  NgIf
 
-    @Input() private isLoading: boolean;
+    @Input() private isLoading: string;
     @Input() private message: string;
     @Input() private module: string;
     @Input() private isInitializing: boolean;
+    
  }
 angular
 .module('app')

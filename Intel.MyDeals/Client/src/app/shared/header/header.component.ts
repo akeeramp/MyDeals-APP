@@ -347,7 +347,7 @@ export let HeaderController = {
   controller: class HeaderComponent {
     private headerSvc: any = null;
 
-    constructor(headerService) {
+    constructor(headerService,private loggerSvc:logger) {
       this.headerSvc = headerService;
     }
 
@@ -461,11 +461,11 @@ export let HeaderController = {
           (<any>window).dataLayer = (<any>window).dataLayer || [];
           console.log('***************************** Header Component Success ************************');
         },err => {
-          logger.error("Unable to get getUserDetails.", err);
+          this.loggerSvc.error("Unable to get getUserDetails.", err);
         });
 
       }).catch(error =>{
-        logger.error("Unable to get token.", error);
+        this.loggerSvc.error("Unable to get token.", error);
       })
      
     }

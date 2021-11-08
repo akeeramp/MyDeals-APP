@@ -11,7 +11,7 @@ import { employeeService } from './employee.service';
 })
 
 export class EmployeeComponent {
-    constructor(private employeeSvc: employeeService) {
+    constructor(private employeeSvc: employeeService,private loggerSvc:logger) {
 
     }
 
@@ -30,11 +30,11 @@ export class EmployeeComponent {
         }
         this.employeeSvc.setEmployees(data)
             .subscribe(response => {
-                logger.success("Role was changed", "Done");
+                this.loggerSvc.success("Role was changed", "Done");
                 (<any>window).clearSessionData('/error/ResetMyCache');
                 document.location.href = "/error/ResetMyCache";
             }, err => {
-                logger.error("Unable to set User Roles.", err);
+                this.loggerSvc.error("Unable to set User Roles.", err);
             });
     };
 

@@ -28,7 +28,7 @@ import {FormGroup, FormControl, Validators} from "@angular/forms";
   styleUrls: ['Client/src/app/admin/CustomerVendors/customerVendor.css']
 })
 export class adminCustomerVendorsComponent {
-  constructor(private customerVendSvc: customerVendorService) {
+  constructor(private customerVendSvc: customerVendorService,private loggerSvc:logger) {
     //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
     $(
       'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
@@ -118,7 +118,7 @@ export class adminCustomerVendorsComponent {
               item => item.CUST_NM
             );
         }, function (response) {
-            logger.error("Unable to get Dropdown Customers.", response, response.statusText);
+            this.loggerSvc.error("Unable to get Dropdown Customers.", response, response.statusText);
         });
 }
 
@@ -132,7 +132,7 @@ export class adminCustomerVendorsComponent {
           item => item.VNDR_ID
         );
     }, function (response) {
-        logger.error("Unable to get Dropdown vendors.", response, response.statusText);
+        this.loggerSvc.error("Unable to get Dropdown vendors.", response, response.statusText);
     })
 }
 partnerIDChange(value: any){
@@ -147,7 +147,7 @@ partnerIDChange(value: any){
     });
   }
   else{
-    logger.error("Something wenr wrong","Vendor details not matching")
+    this.loggerSvc.error("Something wenr wrong","Vendor details not matching")
   }
  
 }
@@ -163,7 +163,7 @@ partnerNMChange(value: any){
     });
   }
   else{
-    logger.error("Something wenr wrong","Vendor details not matching")
+    this.loggerSvc.error("Something wenr wrong","Vendor details not matching")
   }
 }
   loadCustomerVendors() {
@@ -186,7 +186,7 @@ partnerNMChange(value: any){
           vm.isLoading = false;
         },
         function (response) {
-          logger.error(
+          this.loggerSvc.error(
             "Unable to get Customer Vendors.",
             response,
             response.statusText
@@ -324,7 +324,7 @@ partnerNMChange(value: any){
             sender.closeRow(rowIndex);
           },
           error => {
-            logger.error("Unable to save customer vendor data.", error);
+            this.loggerSvc.error("Unable to save customer vendor data.", error);
             this.isLoading = false;
           }
         );
@@ -338,7 +338,7 @@ partnerNMChange(value: any){
             sender.closeRow(rowIndex);
           },
           error => {
-            logger.error("Unable to update customer vendor data.", error);
+            this.loggerSvc.error("Unable to update customer vendor data.", error);
             this.isLoading = false;
           }
         );
@@ -359,6 +359,11 @@ partnerNMChange(value: any){
     this.getCustomersDataSource();
     this.getVendorsInfoDropdown();
     this.loadCustomerVendors();
+  }
+  ngOnDestroy(){
+    //The style removed are adding back
+    $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+    $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
   }
 }
 

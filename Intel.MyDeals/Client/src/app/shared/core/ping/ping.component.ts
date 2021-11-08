@@ -34,7 +34,7 @@ import { logger } from "../../logger/logger";
 })
 
 export class PingComponent {
-    constructor(private pingSvc: pingService) { }
+    constructor(private pingSvc: pingService,private loggerSvc:logger) { }
 
     public pingTime: any = null;
     public batchInProgress: boolean = false;
@@ -70,7 +70,7 @@ export class PingComponent {
                     this.pingHost();
                 }, this.pingCycle);
             }, err => {
-                    logger.error("Ping Error", err);
+                    this.loggerSvc.error("Ping Error", err);
             });
     }
 

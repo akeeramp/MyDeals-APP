@@ -85,7 +85,6 @@ build_job:
     - restore_packages
   only :
     variables:
-      - $CI_PROJECT_NAMESPACE != 'akeeramp'
       - $CI_COMMIT_REF_NAME != 'MyDeals_Migration'
 
 
@@ -110,7 +109,6 @@ build_job_Angular:
     - restore_packages
   only :
     variables:
-      - $CI_PROJECT_NAMESPACE == 'akeeramp'
       - $CI_COMMIT_REF_NAME == 'MyDeals_Migration'
 
 Angular_deploy:
@@ -129,15 +127,12 @@ Angular_deploy:
     - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername HF2CINMYD2W01.amr.corp.intel.com -credential $cred -ScriptBlock {Remove-Item D:\WebSites\MyDeals\Client\* -Force -Recurse; Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\")}'
   dependencies:
     - build_job_Angular
-  when: manual
   allow_failure: true
   only :
     variables:
-      - $CI_PROJECT_NAMESPACE == 'akeeramp'
       - $CI_COMMIT_REF_NAME == 'MyDeals_Migration'
   environment:
       name: CINR
-
 
 dev_deploy:
   stage: Level_1

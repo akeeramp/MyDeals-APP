@@ -11,7 +11,7 @@ import {List} from "linqts";
   styleUrls:['Client/src/app/reporting/reporting.css']
 })
 export class ReportingComponent {
-    constructor(private reportingSvc: reportingService) {
+    constructor(private reportingSvc: reportingService,private loggerSvc:logger) {
      
   }
   //created for Angular loader
@@ -368,7 +368,7 @@ export class ReportingComponent {
         vm.chartPieSeriesObj=vm.reportCounterPie;
         vm.chartSeriesObj=vm.chartDataBAR
       }, err=> {
-        logger.error("Unable to get Report Data.", err);
+        this.loggerSvc.error("Unable to get Report Data.", err);
       }
     );
   }

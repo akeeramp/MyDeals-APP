@@ -1,46 +1,47 @@
 import * as toastr from 'toastr';
+import { ToastrService } from 'ngx-toastr';
+import {Injectable} from "@angular/core";
+
+@Injectable({
+    providedIn: 'root'
+ })
 
 export class logger {
-    constructor() {
+    constructor(private toastr: ToastrService) {}
 
-    }
-  static info( message : string ,title:string ) :void {
-    toastr.options = {
+   info( message : string ,title:string ) :void {
+   
+    this.toastr.info(message, title,{
         closeButton: false,
         extendedTimeOut: 4000,
         timeOut: 4000,
         positionClass: 'toast-bottom-right'
-    };
-    toastr.info(message,title);
+    });
   }
-  static error(message : string ,title:string,data?:string ) :void {
-    toastr.options = {
+   error(message : string ,title:string,data?:string ) :void {
+    this.toastr.error(message, title,{
         closeButton: false,
         extendedTimeOut: 4000,
         timeOut: 4000,
         positionClass: 'toast-bottom-right'
-    };
-    toastr.error(message,title);
+    });
   }
-    static success(message: string, title?: string): void {
-
-        toastr.options = {
-            closeButton: false,
-            extendedTimeOut: 4000,
-            timeOut: 4000,
-            positionClass: 'toast-bottom-right'
-        };
-        toastr.success(message, title);
-    }
-
-    static warn(message: string, title: string): void {
-
-        toastr.options = {
-            closeButton: false,
-            extendedTimeOut: 4000,
-            timeOut: 4000,
-            positionClass: 'toast-bottom-right'
-        };
-        toastr.console.warn(message, title);
-    }
+   success(message: string, title?: string): void {
+    this.toastr.success(message, title,{
+        closeButton: false,
+        extendedTimeOut: 4000,
+        timeOut: 4000,
+        positionClass: 'toast-bottom-right'
+    });
+  }
+  warn(message: string, title: string): void { 
+    this.toastr.warning(message, title,{
+        closeButton: false,
+        extendedTimeOut: 4000,
+        timeOut: 4000,
+        positionClass: 'toast-bottom-right'
+    });
+}
+  
+   
 }

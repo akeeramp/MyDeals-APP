@@ -13,10 +13,11 @@ import { UpgradeModule } from '@angular/upgrade/static';
 import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
-//added for kendo chart to support animation
+//added for kendo chart to support animation and logging
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 // application component
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
@@ -60,6 +61,7 @@ import {MatInputModule} from '@angular/material/input'
         HttpClientModule,
         Ng2SearchPipeModule,
         BrowserAnimationsModule,
+        ToastrModule.forRoot(),
         ChartsModule,
         TooltipModule,
         MatButtonToggleModule,
@@ -97,7 +99,7 @@ import {MatInputModule} from '@angular/material/input'
         adminCustomerComponent,
         adminCustomerVendorsComponent,
         MultiCheckFilterComponent,
-        PingComponent,
+        PingComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -107,7 +109,7 @@ import {MatInputModule} from '@angular/material/input'
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
-        PingComponent,
+        PingComponent
     ]
 })
 

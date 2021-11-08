@@ -14,7 +14,7 @@ import { List } from "linqts";
 })
 
 export class CacheComponent {
-    constructor(private cacheSvc: cacheService) { }
+    constructor(private cacheSvc: cacheService,private loggerSvc:logger) { }
 
     private title: string = "Cache Manager";
     private cacheData: Array<any> = [];
@@ -30,7 +30,7 @@ export class CacheComponent {
             this.cacheData = res;
             this.defaultStatus();
         }, err => {
-            logger.error("Error in getting cache status.", err)
+            this.loggerSvc.error("Error in getting cache status.", err)
         });
     }
 
@@ -41,7 +41,7 @@ export class CacheComponent {
         this.cacheSvc.loadStaticCacheByName(data).subscribe(res => {
             this.loadCache();
         }, err => {
-            logger.error("Unable to load cache.", err);
+            this.loggerSvc.error("Unable to load cache.", err);
             data.loading = false;
         });
     }
@@ -51,10 +51,10 @@ export class CacheComponent {
         data.loading = true;
         this.currentCacheDetails = "";
         this.cacheSvc.clearStaticCacheByName(data).subscribe(res => {
-            logger.success("Deleted successfully", "Done")
+            this.loggerSvc.success("Deleted successfully", "Done")
             this.loadCache();
         }, err =>  {
-            logger.error("Unable to clear cache.", err);
+            this.loggerSvc.error("Unable to clear cache.", err);
             data.loading = false;
         });
     }
@@ -77,10 +77,10 @@ export class CacheComponent {
         console.log("clearall");
         this.resetCache();
         this.cacheSvc.clearStaticCache().subscribe(res => {
-            logger.success("Deleted successfully.", "Done");
+            this.loggerSvc.success("Deleted successfully.", "Done");
             this.loadCache();
         }, function (e) {
-            logger.error("Unable to Clear Cache.", e);
+            this.loggerSvc.error("Unable to Clear Cache.", e);
         });
     }
 
@@ -91,7 +91,7 @@ export class CacheComponent {
         this.cacheSvc.reloadAllStaticCache().subscribe(res => {
             this.loadCache();
         }, function (e) {
-                logger.error("Unable to Load Cache Status", e);
+                this.loggerSvc.error("Unable to Load Cache Status", e);
                 this.defaultStatus();
         });
     }
@@ -102,7 +102,7 @@ export class CacheComponent {
         this.cacheSvc.getApiCacheStatus().subscribe(res => {
             this.apiCacheData = res;
         }, err => {
-                logger.error("Unable to Load Api Cache Status", err);
+                this.loggerSvc.error("Unable to Load Api Cache Status", err);
         });
     }
 
@@ -112,7 +112,7 @@ export class CacheComponent {
         this.cacheSvc.clearApiCacheByName(data).subscribe(function () {
             this.loadApiCache();
         }, function (e) {
-            logger.error("Unable to clear Api Cache Status", e);
+            this.loggerSvc.error("Unable to clear Api Cache Status", e);
         });
     }
 
@@ -121,10 +121,10 @@ export class CacheComponent {
     clearAllApiCache() {
         this.currentCacheDetails = "";
         this.cacheSvc.clearApiCache().subscribe(function () {
-            logger.success("Api cache cleared successfully", "Done");
+            this.loggerSvc.success("Api cache cleared successfully", "Done");
             this.loadApiCache();
         }, function (e) {
-            logger.error("Unable to clear Cache Status.", e);
+            this.loggerSvc.error("Unable to clear Cache Status.", e);
         });
     }
 
@@ -168,65 +168,6 @@ angular.module("app").directive(
 
 
 
-    //angular
-    //    .module('app')
-    //    .controller('CacheController', CacheController)
-
-
-    //// logger :Injected logger service to for logging to remote database or throwing error on the ui
-    //// dataService :Application level service, to be used for common api calls, eg: user token, department etc
-    //CacheController.$inject = ['dataService', 'cacheService', 'logger'];
-
-    //function CacheController(dataService, cacheService, logger) {
-
-    //    // Declare public variables, function at top followed by private functions
-    //    var vm = this;
-    //    //Developer can see the Screen..
-    //    //Added By Bhuvaneswari for US932213
-    //    //if (!window.isDeveloper) {
-    //    //    document.location.href = "/Dashboard#/portal";
-    //    //}
-    //    vm.title = "Cache Manager";
-    //    vm.cacheData = [];
-    //    vm.apiCacheData = [];
-    //    vm.currentCacheDetails = "";
-    //    vm.loadCache = loadCache;
-    //    vm.clearAll = clearAll;
-    //    vm.reloadAll = reloadAll;
-    //    vm.loadCacheByName = loadCacheByName;
-    //    vm.clearCacheByName = clearCacheByName;
-    //    vm.viewCacheByName = viewCacheByName;
-    //    vm.loadApiCache = loadApiCache;
-    //    vm.clearApiCacheByName = clearApiCacheByName
-    //    vm.clearAllApiCache = clearAllApiCache;
-
-    //    //Initial load functions to be called at the end
-    //    vm.loadCache();
-    //    vm.loadApiCache();
-
-    //    //Get the cache Status
-    //    function loadCache() {
-    //        cacheService.getStaticCacheStatus().then(
-    //            function (response) {
-    //                vm.cacheData = response.data;
-    //            }, function (e) {
-    //                logger.error("Error in getting cache status.", e, e.statusText)
-    //            });
-    //    }
-
-    //   
-
-    //    
-    //    
-
-    //   
-
-    //   
-
-
-
-
-    //    
-    //}
+    
 
 
