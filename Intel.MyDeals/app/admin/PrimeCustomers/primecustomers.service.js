@@ -24,7 +24,8 @@
             UpdateUnPrimeDeals: UpdateUnPrimeDeals,
             validateEndCustomer: validateEndCustomer,
             ValidateUnifyDeals: ValidateUnifyDeals,
-            updateBulkUnifyDeals: updateBulkUnifyDeals
+            updateBulkUnifyDeals: updateBulkUnifyDeals,
+            UnPrimeDealsLogs: UnPrimeDealsLogs
         }
 
         return service;
@@ -76,6 +77,11 @@
         function updateBulkUnifyDeals(lstUnifyDeals) {
             return dataService.post(apiBaseUrl + 'UploadBulkUnifyDeals', lstUnifyDeals);
         }
+
+        function UnPrimeDealsLogs(dealId, endCustData) {
+            return dataService.post(apiBaseUrl + 'UnPrimeDealsLogs/' + dealId, endCustData);
+        }
+
 
     }
 

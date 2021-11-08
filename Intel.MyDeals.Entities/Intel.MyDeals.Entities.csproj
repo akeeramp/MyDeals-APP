@@ -278,6 +278,7 @@
     <Compile Include="TimeFlowItem.cs" />
     <Compile Include="TimeFlowMedia.cs" />
     <Compile Include="TimelinePacket.cs" />
+    <Compile Include="UCDRequest.cs" />
     <Compile Include="UI Templates\UiColumn.cs" />
     <Compile Include="UI Templates\UiAtrbs.cs" />
     <Compile Include="UI Templates\UiFieldItem.cs" />
@@ -290,7 +291,7 @@
     <Compile Include="UI Templates\UiTemplatesExtensionMethods.cs" />
     <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UnifyDeal.cs" />
-	<Compile Include="UnPrimeAtrbs.cs" />
+    <Compile Include="UnPrimeAtrbs.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
     <Compile Include="VistexLogFilters.cs" />

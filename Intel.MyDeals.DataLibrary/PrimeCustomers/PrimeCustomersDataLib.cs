@@ -477,5 +477,91 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        public List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData)
+        {
+            var ret = new List<UnPrimedDealLogs>();
+            var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_VAL
+            {
+                in_end_cust_obj = endCustData,
+                in_deal_id = dealId,
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+
+                    int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
+                    int IDX_PRIMED_CUST_CNTRY = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_CNTRY");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UnPrimedDealLogs
+                        {
+                            END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+                            PRIMED_CUST_CNTRY = (IDX_PRIMED_CUST_CNTRY < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_CNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_CNTRY)
+                        });
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return ret;
+        }
+
+        public List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId,
+          string status)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG
+                {
+                    @in_cust_nm = endCustomerName,
+                    @in_cust_ctry = primeCustomerCountry,
+                    @in_deal_id = dealId,
+                    @in_rqst_json = request,
+                    @in_rspn_json = response,
+                    @in_acct_id = accId,
+                    @in_sts = status,
+                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    var ret = new List<DealIdEcJsonDetails>();
+                    int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                    int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new DealIdEcJsonDetails
+                        {
+                            DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ)
+
+                        });
+                    } // while
+                    return ret;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+        }
+
+
     }
 }
