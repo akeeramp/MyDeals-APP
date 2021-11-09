@@ -119,6 +119,9 @@
                     country: function () {
                         return model.END_CUSTOMER_COUNTRY;
                     },
+                    dealId: function () {
+                        return model.OBJ_SID;
+                    },
                     isAdmin: function () {
                         return true;
                     }
