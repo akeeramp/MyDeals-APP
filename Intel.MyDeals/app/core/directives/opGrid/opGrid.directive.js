@@ -3563,6 +3563,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 });
 
+                endCustomerRetailModal.closed.then(function () {
+                    $scope.parentRoot.setBusy("", "");
+                });
+
                 endCustomerRetailModal.rendered.then(function () {
                     $timeout(function () {
                         if (containerDataItem.END_CUST_OBJ !== "") {
@@ -3589,20 +3593,28 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 });
                 endCustomerRetailModal.result.then(
                     function (endCustomerData) { //returns as an array
-                        containerDataItem.END_CUST_OBJ = endCustomerData.END_CUST_OBJ;
-                        containerDataItem.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
-                        containerDataItem.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
-                        containerDataItem.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
-                        containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIMED_CUST_NM;
-                        containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIMED_CUST_ID;
-                        containerDataItem.IS_RPL = endCustomerData.IS_RPL;
-                        $scope.saveFunctions(containerDataItem, "END_CUST_OBJ", containerDataItem.END_CUST_OBJ);
-                        $scope.saveFunctions(containerDataItem, "END_CUSTOMER_RETAIL", containerDataItem.END_CUSTOMER_RETAIL);
-                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_CNTRY", containerDataItem.PRIMED_CUST_CNTRY);
-                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_NM", containerDataItem.PRIMED_CUST_NM);
-                        $scope.saveFunctions(containerDataItem, "PRIMED_CUST_ID", containerDataItem.PRIMED_CUST_ID);
-                        $scope.saveFunctions(containerDataItem, "IS_PRIMED_CUST", containerDataItem.IS_PRIMED_CUST);
-                        $scope.saveFunctions(containerDataItem, "IS_RPL", containerDataItem.IS_RPL);
+                        if (endCustomerData != undefined) {
+                            containerDataItem.END_CUST_OBJ = endCustomerData.END_CUST_OBJ;
+                            containerDataItem.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL;
+                            containerDataItem.IS_PRIMED_CUST = endCustomerData.IS_PRIME;
+                            containerDataItem.PRIMED_CUST_CNTRY = endCustomerData.PRIMED_CUST_CNTRY;
+                            containerDataItem.PRIMED_CUST_NM = endCustomerData.PRIMED_CUST_NM;
+                            containerDataItem.PRIMED_CUST_ID = endCustomerData.PRIMED_CUST_ID;
+                            containerDataItem.IS_RPL = endCustomerData.IS_RPL;
+                            $scope.saveFunctions(containerDataItem, "END_CUST_OBJ", containerDataItem.END_CUST_OBJ);
+                            $scope.saveFunctions(containerDataItem, "END_CUSTOMER_RETAIL", containerDataItem.END_CUSTOMER_RETAIL);
+                            $scope.saveFunctions(containerDataItem, "PRIMED_CUST_CNTRY", containerDataItem.PRIMED_CUST_CNTRY);
+                            $scope.saveFunctions(containerDataItem, "PRIMED_CUST_NM", containerDataItem.PRIMED_CUST_NM);
+                            $scope.saveFunctions(containerDataItem, "PRIMED_CUST_ID", containerDataItem.PRIMED_CUST_ID);
+                            $scope.saveFunctions(containerDataItem, "IS_PRIMED_CUST", containerDataItem.IS_PRIMED_CUST);
+                            $scope.saveFunctions(containerDataItem, "IS_RPL", containerDataItem.IS_RPL);
+                            $(".ss-loading-panel").css("margin-top", "10%");
+                            $scope.parentRoot.setBusy("Saving End Customer Retails", "Saving the End Customer Retails Information");
+                        }
+                        else {
+                            $(".ss-loading-panel").css("margin-top", "10%");
+                            $scope.parentRoot.setBusy("Closing End Customer Retails", "Please wait while we closing the End Customer Retails Information");
+                        }
                     },
                     function () {
                     });
