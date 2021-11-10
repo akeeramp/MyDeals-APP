@@ -3609,11 +3609,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.saveFunctions(containerDataItem, "IS_PRIMED_CUST", containerDataItem.IS_PRIMED_CUST);
                             $scope.saveFunctions(containerDataItem, "IS_RPL", containerDataItem.IS_RPL);
                             $(".ss-loading-panel").css("margin-top", "10%");
-                            $scope.parentRoot.setBusy("Saving End Customer Retails", "Saving the End Customer Retails Information");
+                            $scope.parentRoot.setBusy("Saving...", "Saving the End Customer/Retail information.");
                         }
                         else {
                             $(".ss-loading-panel").css("margin-top", "10%");
-                            $scope.parentRoot.setBusy("Closing End Customer Retails", "Please wait while we closing the End Customer Retails Information");
+                            $scope.parentRoot.setBusy("Cancelling...", "Closing and Cancelling the changes in End Customer/Retail.");
                         }
                     },
                     function () {

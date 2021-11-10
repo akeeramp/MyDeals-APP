@@ -16,8 +16,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.countryValues = []
     $ctrl.validateFlag = true;
     $ctrl.ecOptionsFlag = true;
-    $ctrl.spinnerMessageHeader = "End Customer Retails";
-    $ctrl.spinnerMessageDescription = "Please wait while we loading End Customer details..";
+    $ctrl.spinnerMessageHeader = "Loading...";
+    $ctrl.spinnerMessageDescription = "Loading the End Customer/Retail details.";
     $ctrl.isBusyShowFunFact = true;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
@@ -104,7 +104,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     //on click on validate in pop up-to check for the errors in the selected data
     $ctrl.ok = function () {
-        $ctrl.spinnerMessageDescription = "Please wait while we validating End Customer details..";
+        $ctrl.spinnerMessageHeader = "Validating...";
+        $ctrl.spinnerMessageDescription = "Validating the End Customer/Retail details.";
         $ctrl.IsError = false;
         var ecValues = $ctrl.END_CUST_OBJ.map(getEndcustvalues)
 
@@ -244,7 +245,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     $ctrl.saveAndClose = function () {
         if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
-            $ctrl.spinnerMessageDescription = "Please wait while we saving End Customer details..";
             // to set unprimed combinations as n/a(not applicable)
             var primeNotApplicable = 'n/a';
             data.PRIMED_CUST_NM = $ctrl.END_CUST_OBJ.map(getPrimeCustNames).join();
