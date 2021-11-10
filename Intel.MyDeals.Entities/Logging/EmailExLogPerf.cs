@@ -10,7 +10,7 @@ namespace Intel.MyDeals.Entities.Logging
 {
     public class EmailExLogPerf : IOpLogPerf
     {
-        private static string _toEmailList = "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+        private static string _toEmailList = "michael.h.tipping@intel.com, saurav.kundu@intel.com"; // TODO: this should be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 
         //// not sure why this #if debug doesn't work, but we aren't getting emails from DEV/ITT/etc servers anymore. temp commenting out.
         //#if DEBUG
@@ -70,7 +70,7 @@ namespace Intel.MyDeals.Entities.Logging
             // if it is a local environment, only send it to the current user, otherwise, set it to the standard developers list above.
             if (env == "LOCAL")
             {
-                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: "michael.h.tipping@intel.com, mahesh.biradar@intel.com, saurav.kundu@intel.com";
+                _toEmailList = opUserToken.Usr.Email != null? opUserToken.Usr.Email: "michael.h.tipping@intel.com, saurav.kundu@intel.com";
             }
 
             // construct message
