@@ -1,87 +1,87 @@
 ﻿<script type="text/ng-template" id="endCustomerRetailModal"><div>
-        <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">Select EndCustomer/Retail and Country</h3>
-        </div>
-
-        <div class="modal-body" id="modal-body">
-            <p>
-                <div ng-if="$ctrl.IsError || $ctrl.ChangeErrorFlag">
-                    <span style="color:red;">
-                        <label>Please Fix the below Errors</label>
-                    </span>
-                </div>
-            </p>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Select EndCustomer/Retail and Country</h3>
+    </div>
+    <loading-panel id="EndCustomerLoading" style="z-index:500;" show="loading" header="$ctrl.spinnerMessageHeader" description="$ctrl.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="$ctrl.isBusyShowFunFact"></loading-panel>
+    <div class="modal-body" id="modal-body">
+        <p>
+            <div ng-if="$ctrl.IsError || $ctrl.ChangeErrorFlag">
+                <span style="color:red;">
+                    <label>Please Fix the below Errors</label>
+                </span>
+            </div>
+        </p>
         <div class="filterRow">
-                <div ng-repeat="e in $ctrl.END_CUST_OBJ track by $index">
-                    <div class="col-md-12" ng-show="$first" style="padding-left:5px;padding-bottom: 15px;text-align:center;">
-                        <div class="col-md-1" style="text-align: center; padding-left: 0px; width: 90px; ">
-                            <label>Is Unified</label>
-                        </div>
-                        <div class="col-md-1" style="text-align: left; padding-left: 3px; width: 90px; ">
-                            <label>Is RPL</label>
-                        </div>
-                        <div class="col-md-1" style="padding-right: 0px;">
-                            <label></label>
-                        </div>
-                        <div class="col-md-4" style="text-align:center;">
-                            <label>EndCustomer</label>
-                        </div>
-                        <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}};text-align:center;">
-                            <label>Country</label>
-                        </div>
-                        <div class="col-md-1" style="text-align:left;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
-                            <label>Exclude</label>
-                        </div>
+            <div ng-repeat="e in $ctrl.END_CUST_OBJ track by $index">
+                <div class="col-md-12" ng-show="$first" style="padding-left:5px;padding-bottom: 15px;text-align:center;">
+                    <div class="col-md-1" style="text-align: center; padding-left: 0px; width: 90px; ">
+                        <label>Is Unified</label>
                     </div>
-                    <div class="col-md-12" style="padding-bottom: 15px;">
-                        <div class="col-md-1" style="align-content:center">
-                            <span title="Unified" ng-if="e.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
-                            <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
-                        </div>
-                        <div class="col-md-1" style="align-content:center">
-                            <span title="NA" ng-if="e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
-                            <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
-                            <span title="Yes" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
-                        </div>
-                        <div class="col-md-1" style="width:90px;padding-right:0px;">
-                            <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
-                            <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
-                            <span class="fl icnBtn" ng-if="$first"></span>
-                        </div>
-                        <div class="col-md-4">
-                            <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
-                                <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
-                                        k-placeholder="'Select End Customer'"
-                                        k-data-text-field="'Text'"
-                                        k-data-value-field="'Value'"
-                                        k-ng-model="e.END_CUSTOMER_RETAIL"
-                                        k-change="$ctrl.changeField"
-                                        k-value-primitive="true"
-                                        k-filter="'contains'"
-                                        k-auto-bind="true"
-                                        k-data-source="$ctrl.endCustOptions"
-                                        class="fl opUiElement"
-                                        style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
-                                </select>
-                            </span>
-                            <span class="fl" ng-if="$index > 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
-                                <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
-                                        k-placeholder="'Select End Customer'"
-                                        k-data-text-field="'Text'"
-                                        k-data-value-field="'Value'"
-                                        k-ng-model="e.END_CUSTOMER_RETAIL"
-                                        k-change="$ctrl.changeField"
-                                        k-value-primitive="true"
-                                        k-filter="'contains'"
-                                        k-auto-bind="{{$index ==1?true:false}}"
-                                        k-data-source="$ctrl.endCustOptionswithOutAny"
-                                        class="fl opUiElement"
-                                        style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
-                                </select>
-                            </span>
-                        </div>
-                        <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
-                           <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}}">
+                    <div class="col-md-1" style="text-align: left; padding-left: 3px; width: 90px; ">
+                        <label>Is RPL</label>
+                    </div>
+                    <div class="col-md-1" style="padding-right: 0px;">
+                        <label></label>
+                    </div>
+                    <div class="col-md-4" style="text-align:center;">
+                        <label>EndCustomer</label>
+                    </div>
+                    <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}};text-align:center;">
+                        <label>Country</label>
+                    </div>
+                    <div class="col-md-1" style="text-align:left;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                        <label>Exclude</label>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom: 15px;">
+                    <div class="col-md-1" style="align-content:center">
+                        <span title="Unified" ng-if="e.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                    </div>
+                    <div class="col-md-1" style="align-content:center">
+                        <span title="NA" ng-if="e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Yes" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                    </div>
+                    <div class="col-md-1" style="width:90px;padding-right:0px;">
+                        <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
+                        <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
+                        <span class="fl icnBtn" ng-if="$first"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
+                            <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
+                                    k-placeholder="'Select End Customer'"
+                                    k-data-text-field="'Text'"
+                                    k-data-value-field="'Value'"
+                                    k-ng-model="e.END_CUSTOMER_RETAIL"
+                                    k-change="$ctrl.changeField"
+                                    k-value-primitive="true"
+                                    k-filter="'contains'"
+                                    k-auto-bind="true"
+                                    k-data-source="$ctrl.endCustOptions"
+                                    class="fl opUiElement"
+                                    style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
+                            </select>
+                        </span>
+                        <span class="fl" ng-if="$index > 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
+                            <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
+                                    k-placeholder="'Select End Customer'"
+                                    k-data-text-field="'Text'"
+                                    k-data-value-field="'Value'"
+                                    k-ng-model="e.END_CUSTOMER_RETAIL"
+                                    k-change="$ctrl.changeField"
+                                    k-value-primitive="true"
+                                    k-filter="'contains'"
+                                    k-auto-bind="{{$index ==1?true:false}}"
+                                    k-data-source="$ctrl.endCustOptionswithOutAny"
+                                    class="fl opUiElement"
+                                    style="{{$ctrl.IsAny? 'width:290px;display:none;':'width:300px;display:none;'}}">
+                            </select>
+                        </span>
+                    </div>
+                    <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
+                        <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}}">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
                                     k-placeholder="'Select Country'"
                                     k-data-text-field="'CTRY_NM'"
@@ -96,38 +96,38 @@
                                     ng-disabled="$ctrl.IsAny && $index == 0? true:false"
                                     style="{{$ctrl.IsAny? 'width:250px;display:none;':'width:300px;display:none;'}}">
                             </select>
-                            </span>
-                        </div>
-                        <div class="col-md-1" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 15px; float: right; padding-top:5px;">
-
-                            <div ng-if="$index>0">
-                                <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
-                            </div>
-                        </div>
-                        <br />
-
+                        </span>
                     </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-7" style="padding-left:30px;">
-                    <button class="btn btn-primary" id="ClearEndCustomer" ng-disabled="$ctrl.endCustomerRetailPopUpModal.clearEndCustomerDisabled" ng-click="$ctrl.remove()">Clear End Customer</button>
-                    <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-                </div>
-                <div ng-class="$ctrl.IsAny? 'col-md-5 buttonMaxPadding' : 'col-md-5 buttonMinPadding'">
-                    <button class="btn btn-primary" type="button" ng-disabled="$ctrl.ecOptionsFlag" ng-click="$ctrl.ok()">Validate</button>
-                    <button id="saveandclose" class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
+                    <div class="col-md-1" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 15px; float: right; padding-top:5px;">
+
+                        <div ng-if="$index>0">
+                            <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
+                        </div>
+                    </div>
+                    <br />
 
                 </div>
             </div>
         </div>
-        <br />
     </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-7" style="padding-left:30px;">
+                <button class="btn btn-primary" id="ClearEndCustomer" ng-disabled="$ctrl.endCustomerRetailPopUpModal.clearEndCustomerDisabled" ng-click="$ctrl.remove()">Clear End Customer</button>
+                <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            </div>
+            <div ng-class="$ctrl.IsAny? 'col-md-5 buttonMaxPadding' : 'col-md-5 buttonMinPadding'">
+                <button class="btn btn-primary" type="button" ng-disabled="$ctrl.ecOptionsFlag" ng-click="$ctrl.ok()">Validate</button>
+                <button id="saveandclose" class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
+
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
     <style type="text/css">
         .modal-body .opUiElement {
             width: 100%;
@@ -191,6 +191,10 @@
         }
         .buttonMaxPadding {
             padding-left: 150px !important;
+        }
+        .ss-loading-panel {
+            margin-top: 15%;
+            margin-left: 37%;
         }
     </style>
 

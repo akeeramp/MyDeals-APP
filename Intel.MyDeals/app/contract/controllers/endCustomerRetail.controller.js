@@ -16,6 +16,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.countryValues = []
     $ctrl.validateFlag = true;
     $ctrl.ecOptionsFlag = true;
+    $ctrl.spinnerMessageHeader = "Loading...";
+    $ctrl.spinnerMessageDescription = "Loading the End Customer/Retail information.";
+    $ctrl.isBusyShowFunFact = true;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
     $ctrl.endCustomerRetailPopUpModal = items;
@@ -80,7 +83,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     }
 
     $scope.removeRow = function (e) {
-        $ctrl.validateFlag = true;
+       $ctrl.validateFlag = true;
         if ($ctrl.END_CUST_OBJ.length === 1) {
             $ctrl.END_CUST_OBJ[0] = {
                 "END_CUSTOMER_RETAIL": "",
@@ -101,6 +104,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
     //on click on validate in pop up-to check for the errors in the selected data
     $ctrl.ok = function () {
+        $ctrl.spinnerMessageHeader = "Validating...";
+        $ctrl.spinnerMessageDescription = "Validating the End Customer/Retail information.";
         $ctrl.IsError = false;
         var ecValues = $ctrl.END_CUST_OBJ.map(getEndcustvalues)
 
@@ -315,7 +320,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     };
 
     $ctrl.cancel = function () {
-        $uibModalInstance.dismiss();
+        $uibModalInstance.close();
     };
 
 
