@@ -275,8 +275,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             data.PRIMED_CUST_ID = ecIdList.join();
             data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
             data.END_CUSTOMER_RETAIL = $ctrl.endCustomerValues.join();
-            data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ)
-            PrimeCustomersService.UnPrimeDealsLogs(dealId, JSON.stringify(data.END_CUST_OBJ));
+            data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ);
+            PrimeCustomersService.UnPrimeDealsLogs(dealId, JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))));
             $uibModalInstance.close(data);
         }
     }
