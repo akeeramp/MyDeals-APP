@@ -893,12 +893,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isdealsUnified = undefined;
                 // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
                 var isEcRPLed = undefined;
+                var isRPLReviewwip = undefined;
                 if (checkedDeals.length > 0) {
                     isdealsUnified = checkedDeals.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
                     });
                     isEcRPLed = checkedDeals.filter(function (x) {
                         return x["IS_RPL"] == 1;
+                    });
+                    isRPLReviewwip = checkedDeals.filter(function (x) {
+                        if (x["END_CUST_OBJ"] !== "") {
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL == "0").length > 0;
+                            return rplStatusCodeCheck;
+                        }
+                        else {
+                            return false
+                        }
+
                     });
                 } else {
                     isdealsUnified = data.filter(function (x) {
@@ -907,13 +918,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     isEcRPLed = data.filter(function (x) {
                         return x["IS_RPL"] == 1;
                     });
+                    isRPLReviewwip = data.filter(function (x) {
+                        if (x["END_CUST_OBJ"] !== "") {
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL=="0").length > 0;
+                            return rplStatusCodeCheck;
+                        }
+                        else {
+                            return false
+                        }
+
+                    });
                 }
 
                 if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
                 }
-                else if (args["action"] == "Won" && isEcRPLed.length > 0) {
+                else if (args["action"] == "Won" && (isEcRPLed.length > 0 || isRPLReviewwip.length>0)) {
                     kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
                     return;
                 }
