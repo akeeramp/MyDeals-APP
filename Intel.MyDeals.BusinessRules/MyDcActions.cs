@@ -2741,6 +2741,14 @@ namespace Intel.MyDeals.BusinessRules
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
             bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
+            var rplStatusCodeCheck = false;
+            var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);
+            if (endCustObj != "")
+            {
+                List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(endCustObj);
+                //Additional check for the RPL status code
+                rplStatusCodeCheck = endCustJsonObj.Where(data => data.RPL_STS_CD == "REVIEWWIP" && data.IS_RPL=="0").ToArray().Length > 0;
+            }
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string Rebatetype = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
@@ -2760,7 +2768,7 @@ namespace Intel.MyDeals.BusinessRules
             bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
             string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
 
-            if ((!primedCheck || rplCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
+            if ((!primedCheck || rplCheck || rplStatusCodeCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
@@ -2768,7 +2776,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
                     }
-                    else if (rplCheck)
+                    else if (rplCheck || rplStatusCodeCheck)
                     {
                         deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be WON.");
                     }
@@ -2781,7 +2789,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
                         }
-                        else if (rplCheck)
+                        else if (rplCheck || rplStatusCodeCheck)
                         {
                             deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
                         }

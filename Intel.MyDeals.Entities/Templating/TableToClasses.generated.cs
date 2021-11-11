@@ -9862,6 +9862,10 @@ namespace Intel.MyDeals.Entities {
 	public System.String PRIMED_CUST_NM {set;get;}
 	
 	
+	[DataMember]
+	public System.String RPL_STS_CD {set;get;}
+	
+	
 	/*
 	private static List<EndCustomer> EndCustomerFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
@@ -9875,6 +9879,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_PRIMED_CUST_CNTRY = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_CNTRY");
 	int IDX_PRIMED_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_ID");
 	int IDX_PRIMED_CUST_NM = DB.GetReaderOrdinal(rdr, "PRIMED_CUST_NM");
+	int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
 	
 	while (rdr.Read()){
 	ret.Add(new EndCustomer {
@@ -9884,7 +9889,8 @@ namespace Intel.MyDeals.Entities {
 	IS_RPL = (IDX_IS_RPL < 0 || rdr.IsDBNull(IDX_IS_RPL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IS_RPL),
 	PRIMED_CUST_CNTRY = (IDX_PRIMED_CUST_CNTRY < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_CNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_CNTRY),
 	PRIMED_CUST_ID = (IDX_PRIMED_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_ID),
-	PRIMED_CUST_NM = (IDX_PRIMED_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_NM)
+	PRIMED_CUST_NM = (IDX_PRIMED_CUST_NM < 0 || rdr.IsDBNull(IDX_PRIMED_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIMED_CUST_NM),
+	RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
 	});
 	} // while
 	return ret;

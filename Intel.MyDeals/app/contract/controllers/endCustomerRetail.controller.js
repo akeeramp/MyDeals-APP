@@ -30,7 +30,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             "PRIMED_CUST_CNTRY": "",
             "IS_PRIMED_CUST": 0,
             "IS_EXCLUDE": 0,
-            "IS_RPL": 0
+            "IS_RPL": 0,
+            "RPL_STS_CD":""
         }];
     if (cellCurrValues.END_CUST_OBJ !== "") {
         if (cellCurrValues.END_CUST_OBJ != undefined && cellCurrValues.END_CUST_OBJ != null) {
@@ -77,7 +78,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     "PRIMED_CUST_CNTRY": "",
                     "IS_PRIMED_CUST": 0,
                     "IS_EXCLUDE": 0,
-                    "IS_RPL": 0
+                    "IS_RPL": 0,
+                    "RPL_STS_CD": ""
                 });
         }
     }
@@ -92,7 +94,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 "PRIMED_CUST_CNTRY": "",
                 "IS_PRIMED_CUST": 0,
                 "IS_EXCLUDE": 0,
-                "IS_RPL": 0
+                "IS_RPL": 0,
+                "RPL_STS_CD": ""
             }
             return;
         }
@@ -340,6 +343,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.IS_RPL = 0;
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
+        dataElement.RPL_STS_CD = "";
         $ctrl.ChangeErrorFlag = false;
         var patt = new RegExp("^[\\w .,:'\&-]*$");
         var isECUserText = false;
@@ -421,6 +425,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.IS_RPL = 0;
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
+        dataElement.RPL_STS_CD = "";
         var embCountry = $ctrl.showEmbAlert($ctrl.embValidationMsg, dataItem, 'ok');
         if (dataItem === undefined || dataItem === null && dataItem === "") {
             $("#" + id).parent().find("span").css("background-color", "red");
