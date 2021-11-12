@@ -934,8 +934,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
                 }
-                else if (args["action"] == "Won" && (isEcRPLed.length > 0 || isRPLReviewwip.length>0)) {
+                else if (args["action"] == "Won" && isEcRPLed.length > 0) {
                     kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
+                    return;
+                }
+                else if (args["action"] == "Won" &&  isRPLReviewwip.length > 0) {
+                    kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] +" till Review is complete. ");
                     return;
                 }
 

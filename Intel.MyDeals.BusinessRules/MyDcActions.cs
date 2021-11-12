@@ -2776,9 +2776,13 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
                     }
-                    else if (rplCheck || rplStatusCodeCheck)
+                    else if (rplCheck)
                     {
                         deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be WON.");
+                    }
+                    else if(rplStatusCodeCheck)
+                    {
+                        deEndCust.AddMessage("End customer Review in Progress. Deal cannot be set to WON till Review is complete.");
                     }
                 }
                 else if (!isTender)
@@ -2789,9 +2793,13 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
                         }
-                        else if (rplCheck || rplStatusCodeCheck)
+                        else if (rplCheck)
                         {
                             deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
+                        }
+                        else if (rplStatusCodeCheck)
+                        {
+                            deEndCust.AddMessage("End customer Review in Progress. Deal cannot be approved till Review is complete.");
                         }
                     }
                 }
