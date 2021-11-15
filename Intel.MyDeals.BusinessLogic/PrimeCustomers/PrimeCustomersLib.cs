@@ -1,4 +1,4 @@
-﻿using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
@@ -65,7 +65,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-        public bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData)
+        public bool UpdateUnPrimeDeals(int dealId , UnPrimeAtrbs endCustData)
         {
             if (!string.IsNullOrEmpty(endCustData.PRIMED_CUST_NM) && !string.IsNullOrEmpty(endCustData.PRIMED_CUST_CNTRY))
             {
@@ -126,6 +126,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     }
                 }
+
 
                 return true;
             }
