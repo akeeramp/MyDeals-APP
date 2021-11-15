@@ -153,9 +153,11 @@ namespace Intel.MyDeals.BusinessLogic
         public bool UnPrimeDealsLogs(int dealId, string endCustData)
         {
             bool success = false;
+            List<UCDResponse> ucdResponse = new List<UCDResponse>();
+            List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
             try
             {
-                List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
+               
 
                 result = _primeCustomersDataLib.UnPrimeDealsLogs(dealId, endCustData);
                 if (result.Count > 0)
@@ -205,38 +207,95 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                     String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
-                    List<UCDResponse> ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
+                    ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
 
                     if (ucdResponse.Count >0 )
                     {
                         foreach (UCDResponse Response in ucdResponse)
                         {
                             string UCDJsonResponse = JsonConvert.SerializeObject(Response);
-                            if ((Response.data.Name != null && Response.data.Name != "") &&
-                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
-                            {
-                                _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                            dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
-                                success = true;
-                            }
-
-                            else
-                            {
-                                OpLogPerf.Log("UCD - Error in saving AMQ response");
-                            }
-
                             if (Response.status.ToLower() == "success")
                             {
+                                if ((Response.data.Name != null && Response.data.Name != "") &&
+                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                                {
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
+
+                                }
+
+                                else
+                                {
+
+                                    OpLogPerf.Log("UCD - Error in saving AMQ response");
+                                }
                                 OpLogPerf.Log("UCD - AMQ response success ");
                             }
-                            else if (Response.errormessage.ToLower() == "Duplicate Account")
-                            {                                                              
-                                OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                            else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() == "requested account")
+                            {
+                                if ((Response.data.Name != null && Response.data.Name != "") &&
+                                 (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
+                                {
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
+
+                                }
+
+
+                            }
+                            else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() == "intel account")
+                            {
+                                var DuplicateReqData = new DuplicateRequest
+                                {
+                                    businessOrganization = new DuplicateRequest.BusinessOrganization {
+                                    AccountId=new List<string>()},
+                                    attributes = new List<DuplicateRequest.Attributes>()
+                                   
+                                };
+                                DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
+                                
+                              //  DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
+                                DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
+
+                                var AccountInformation = new DuplicateRequest.Attributes
+                                { AttributeName = "AccountInformation" };
+                                DuplicateReqData.attributes.Add(AccountInformation);
+
+                                var ParentAccountInfomation = new DuplicateRequest.Attributes
+                                { AttributeName = "ParentAccountInfomation" };
+                                DuplicateReqData.attributes.Add(ParentAccountInfomation);
+
+                                var AccountMasteredDetails = new DuplicateRequest.Attributes
+                                { AttributeName = "AccountMasteredDetails" };
+                                DuplicateReqData.attributes.Add(AccountMasteredDetails);
+
+                                var AccountAddressInformation = new DuplicateRequest.Attributes
+                                { AttributeName = "AccountAddressInformation" };
+                                DuplicateReqData.attributes.Add(AccountAddressInformation);
+
+                                var AccountComplianceDetails = new DuplicateRequest.Attributes
+                                { AttributeName = "AccountComplianceDetails" };
+                                DuplicateReqData.attributes.Add(AccountComplianceDetails);
+
+                                String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
+                                List<DuplicateAccResponse> duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
+                                if (ucdResponse.Count > 0)
+                                {
+                                    foreach (DuplicateAccResponse res in duplicateAccountresponse)
+                                    {
+                                        string UCDResponse = JsonConvert.SerializeObject(res);
+                                        _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                dealId, null, UCDResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
+                                    }
+                                }
+                                        
+
+
                             }
                             else
-                            {                                 
+                            {
                                 OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
-                                
+
                             }
                         }
                     }
@@ -246,16 +305,19 @@ namespace Intel.MyDeals.BusinessLogic
                     }
 
                 }
-                
+
+                if (ucdResponse.Count == result.Count)
+                {
+                    success = true;
+                }
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log("UCD - ERROR: " + ex);
 
             }
-
+            
             return success;
-
         }
 
     }
