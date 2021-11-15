@@ -1579,47 +1579,6 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
-        public static void LongTermVolTierDates(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
-            //customerMemberSid set to zero , to get the date details as per Intel calendar
-            int customerMemberSid = 0;
-
-            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
-
-            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
-
-            if (numTiers > 1)
-            {
-                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
-                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-                var yearStartDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, startDate, null, null);
-                int qtr = yearStartDate.QTR_NBR - 1;
-                int yr = 0;
-                if (qtr > 0)
-                {
-                    yr = yearStartDate.YR_NBR + 1;
-                }
-                else
-                {
-                    qtr = 4;
-                    yr = yearStartDate.YR_NBR;
-                }
-                var EndquarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, null, (short)yr, (short)qtr);
-                DateTime maxEndDt = EndquarterDetails.QTR_END;
-                //to make sure date calculation happen as per Intel calendar, Added year number condition (TWC3167-191)
-                if (endDate > maxEndDt)
-                {
-                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
-                }
-            }
-        }
-
         public static void FlexDateRange(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

@@ -65,11 +65,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-        public bool UpdateUnPrimeDeals(int dealId , string primeCustId, string[] primeDetails)
+        public bool UpdateUnPrimeDeals(int dealId , UnPrimeAtrbs endCustData)
         {
-            string primeCustomerName = primeDetails[0];
-            string primeCustomerCountry = primeDetails[1];
-            if (!string.IsNullOrEmpty(primeCustomerName) && !string.IsNullOrEmpty(primeCustomerCountry) )
+            if (!string.IsNullOrEmpty(endCustData.PRIMED_CUST_NM) && !string.IsNullOrEmpty(endCustData.PRIMED_CUST_CNTRY))
             {
                 List<int> dealIdlist = new List<int>() { dealId };
                 MyDealsData mydealsdata = OpDataElementType.WIP_DEAL.GetByIDs(dealIdlist,
@@ -119,7 +117,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveResponse != null)
                 {
-                    _primeCustomersDataLib.sendMail(primeCustomerName, primeCustomerCountry, Int32.Parse(primeCustId), dealId);
+                    _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
                     bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
                     if (salesForceCheck)
                     {
@@ -128,6 +126,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     }
                 }
+
 
                 return true;
             }
