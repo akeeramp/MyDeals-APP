@@ -2649,6 +2649,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_MYDL_CNSMPTN_JSON]";
 			}
 
+
 			///<summary>
 			/// DataType: bit
 			/// Mode: IN
@@ -2657,6 +2658,17 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public Boolean in_delete_flag {
 				set { SetParmeter("in_delete_flag", value); }
 				get { return (Boolean)GetParameter("in_delete_flag"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_cnsmptn_sid
+			{
+				set { SetParmeter("in_cnsmptn_sid", value); }
+				get { return (Int32)GetParameter("in_cnsmptn_sid"); }
 			}
 
 			///<summary>
@@ -8807,6 +8819,28 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 1076355049
+		/// Modified: 8/21/2021 2:24:17 PM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_PRIM_VAL_MULTIPLE : SP {
+			public PR_MYDL_PRIM_VAL_MULTIPLE() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_VAL_MULTIPLE]";
+			}
+
+			///<summary>
+			/// DataType: nvarchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_json {
+				set { SetParmeter("in_json", value); }
+				get { return (String)GetParameter("in_json"); }
+			}
+		}
+				
+		///<summary>
 		/// ID: 1171535257
 		/// Modified: 2/13/2020 8:09:00 PM
 		/// Parameters: 3
@@ -13042,6 +13076,51 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
+
+
+		///<summary>
+		/// ID: 1188355448
+		/// Modified: 8/25/2021 1:28:42 AM
+		/// Parameters: 3
+		///</summary>
+		public partial class PR_MYDL_UPD_CMPT_CTRY : SP {
+			public PR_MYDL_UPD_CMPT_CTRY() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_UPD_CMPT_CTRY]";
+			}
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cmpt_ctry_nm {
+				set { SetParmeter("in_cmpt_ctry_nm", value); }
+				get { return (String)GetParameter("in_cmpt_ctry_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cmpt_geo_nm {
+				set { SetParmeter("in_cmpt_geo_nm", value); }
+				get { return (String)GetParameter("in_cmpt_geo_nm"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
 		///<summary>
 		/// ID: 1188355448
 		/// Modified: 8/25/2021 1:28:42 AM
@@ -13495,7 +13574,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				get { return (String)GetParameter("in_prim_ctry"); }
 			}
 		}
-
+				
 		///<summary>
 		/// ID: 304876303
 		/// Modified: 8/30/2021 10:54:04 PM

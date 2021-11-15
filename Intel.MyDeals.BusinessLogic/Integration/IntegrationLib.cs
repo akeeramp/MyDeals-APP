@@ -1078,6 +1078,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 }
             }
+
             else
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(723, "End Customer Error: Any is not a valid End Customer selection for IQR Tenders", "End Customer is not allowed"));
