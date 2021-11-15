@@ -54,6 +54,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<UCDResponse> SendRplUCDRequest(string data);
 
-        List<DuplicateAccResponse> SendRplUCDDuplicateRequest(string data);
+        DuplicateAccResponse SendRplUCDDuplicateRequest(string data);
     }
 }

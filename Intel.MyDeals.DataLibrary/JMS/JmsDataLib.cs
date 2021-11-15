@@ -1018,7 +1018,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        public List<DuplicateAccResponse> SendRplUCDDuplicateRequest(string data)
+        public DuplicateAccResponse SendRplUCDDuplicateRequest(string data)
         {
 
             OpLog.Log("JMS - Request to UCD");
@@ -1026,7 +1026,7 @@ namespace Intel.MyDeals.DataLibrary
             // bool sendSuccess = false;
             //Get APIGEE Token to send Payload
             string accessToken = GetApiGeeToken();
-            List<DuplicateAccResponse> ApiGeeResponse = new List<DuplicateAccResponse>();
+            DuplicateAccResponse duplicateAccRes = null;
             if (accessToken.Length > 0)
             {
                 string apiDuplicateReqURL = jmsEnvs.ContainsKey("apiDuplicateReqURL") ? jmsEnvs["apiDuplicateReqURL"] : "";
@@ -1057,9 +1057,8 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream());
                         string result = responseReader.ReadToEnd();
-                        // Get the stream containing content returned by the server.  
-                        // result = "{\"Data\":{\"Name\":\"3M\",\"CountryName\":\"Albania\",\"AccountStatus\":\"Requested Account\",\"AccountId\":\"0012i00000c0NnoAAE\"},\"status\":\"success\",\"errormessage\":\"null\",\"code\":\"200\"}";
-                        ApiGeeResponse = JsonConvert.DeserializeObject<List<DuplicateAccResponse>>(result);
+                        duplicateAccRes = JsonConvert.DeserializeObject<DuplicateAccResponse>(result);
+                        
                         // Open the stream using a StreamReader for easy access.
                         responseObjectDictionary["Data"] = result;
 
@@ -1076,7 +1075,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            return ApiGeeResponse;
+            return duplicateAccRes;
 
         }
 

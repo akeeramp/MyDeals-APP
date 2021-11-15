@@ -254,8 +254,8 @@ namespace Intel.MyDeals.BusinessLogic
                                 };
                                 DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
                                 
-                              //  DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
-                                DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
+                               DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
+                                //DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
 
                                 var AccountInformation = new DuplicateRequest.Attributes
                                 { AttributeName = "AccountInformation" };
@@ -278,15 +278,14 @@ namespace Intel.MyDeals.BusinessLogic
                                 DuplicateReqData.attributes.Add(AccountComplianceDetails);
 
                                 String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
-                                List<DuplicateAccResponse> duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
-                                if (ucdResponse.Count > 0)
+                                DuplicateAccResponse duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
+                                if (duplicateAccountresponse !=null)
                                 {
-                                    foreach (DuplicateAccResponse res in duplicateAccountresponse)
-                                    {
-                                        string UCDResponse = JsonConvert.SerializeObject(res);
+                                   
+                                        string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
                                         _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
-                                    }
+                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
+                                    
                                 }
                                         
 

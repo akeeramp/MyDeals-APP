@@ -119,26 +119,28 @@ namespace Intel.MyDeals.Entities
         public string InternalTxnID { get; set; }
         public string ExecutionTime { get; set; }
         [JsonProperty("Data")]
-        public List<Data> data { get; set; }
-
-       
+        public List<Data> data { get; set; }       
 
         public class Data
         {
             [JsonProperty("ParentAccountInfomation")]
-
             public ParentAccountInfomation parentAccountInfomation { get; set; }
+            public string Id { get; set; }
+            [JsonProperty("AccountMasteredDetails")]
+            public AccountMasteredDetails accountMasteredDetails { get; set; }
+            [JsonProperty("AccountInformation")]
+            public AccountInformation accountInformation { get; set; }
+            [JsonProperty("AccountComplianceDetails")]
+            public List<AccountComplianceDetails> accountComplianceDetails { get; set; }
+            [JsonProperty("AccountAddressInformation")]
+            public List<AccountAddressInformation> accountAddressInformation { get; set; }
             public class ParentAccountInfomation { 
 
                 public string BusinessPartyIdentifier { get; set; }
                 public string AcocuntId { get; set; }
                 public string AccountName { get; set; }
 
-            }
-
-            public string Id { get; set; }
-            [JsonProperty("AccountMasteredDetails")]
-            public AccountMasteredDetails accountMasteredDetails { get; set; }
+            }                      
             public class AccountMasteredDetails
             {
 
@@ -146,7 +148,6 @@ namespace Intel.MyDeals.Entities
                 public string BusinessPartyIdentifier { get; set; }
                 [JsonProperty("Address")]
                 public Address address { get; set; }
-
                 public class Address
                 {
                     public string CountryName { get; set; }
@@ -155,50 +156,37 @@ namespace Intel.MyDeals.Entities
                 }
 
             }
-
-            [JsonProperty("AccountInformation")]
-
-            public AccountInformation accountInformation { get; set; }
+            
 
             public class AccountInformation
             {
                 [JsonProperty("CustomerProcessEngagement")]
                 public List<CustomerProcessEngagement> customerProcessEngagement { get; set; }
-
+                [JsonProperty("CustomerAggregationType")]
+                public CustomerAggregationType customerAggregationType { get; set; }
+                public string BusinessPartyIdentifier { get; set; }
+                public string AccountOwner { get; set; }
+                public string AccountName { get; set; }
+                public string AccountId { get; set; }
                 public class CustomerProcessEngagement
                 {
                     public string Name { get; set; }
                     public string Code { get; set; }
-                }
-
-                [JsonProperty("CustomerAggregationType")]
-                public CustomerAggregationType customerAggregationType { get; set; }
+                }                              
 
                 public class CustomerAggregationType
                 {
                     public string Name { get; set; }
                     public string Code { get; set; }
                 }
-
-                public string BusinessPartyIdentifier { get; set; }
-                public string AccountOwner { get; set; }
-                public string AccountName { get; set; }
-                public string AccountId { get; set; }
+                               
             }
-
-            [JsonProperty("AccountComplianceDetails")]
-
-            public List<AccountComplianceDetails> accountComplianceDetails { get; set; }
 
             public class AccountComplianceDetails
             {
-                public string Name { get; set; }
-                public string Code { get; set; }
-            }
-
-            [JsonProperty("AccountAddressInformation")]
-
-            public List<AccountAddressInformation> accountAddressInformation { get; set; }
+               // public string Name { get; set; }
+               // public string Code { get; set; }
+            }           
 
             public class AccountAddressInformation
             {
