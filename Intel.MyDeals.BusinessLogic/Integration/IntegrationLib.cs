@@ -460,7 +460,7 @@ namespace Intel.MyDeals.BusinessLogic
                 RPLStatusCode = endCustObj.RPLStatusCode.ToString();
                 primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
                 primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
-                //creating End customer obj to update deal level END_CUST_OBJ attribute-- this is required to check if the selected EC has REVIEWWIP RPL status code(As RPL status code doesnt have deal level attribute , checking status code from the End customer json as it holds all the details
+                //As END_CUST_OBJ is the one which is used to load data in the End customer pop up(both in deal editor and deal reconcilaition screen), Creating End customer obj to update deal level END_CUST_OBJ attribute
                 if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
                 {
                     List<EndCustomer> endCustData = new List<EndCustomer>();
@@ -1084,7 +1084,7 @@ namespace Intel.MyDeals.BusinessLogic
                     RPLStatusCode = endCustObj.RPLStatusCode.ToString();
                     primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
                     primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
-                    //creating End customer obj to update deal level END_CUST_OBJ attribute-- this is required to check if the selected EC has REVIEWWIP RPL status code(As RPL status code doesnt have deal level attribute , checking status code from the End customer json as it holds all the details
+                    //As END_CUST_OBJ is the one which is used to load data in the End customer pop up, Creating End customer obj to update deal level END_CUST_OBJ attribute 
                     if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
                     {
                         List<EndCustomer> endCustData = new List<EndCustomer>();
