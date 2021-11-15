@@ -14730,10 +14730,10 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			/// Mode: IN
 			/// Max Length: 10
 			///</summary>
-			[SQLParameterAttribute(7, "ParameterDirection.Input", 10, false)]
-			public String in_rpl_sts {
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 0, false)]
+			public Boolean in_rpl_sts {
 				set { SetParmeter("in_rpl_sts", value); }
-				get { return (String)GetParameter("in_rpl_sts"); }
+				get { return (Boolean)GetParameter("in_rpl_sts"); }
 			}
 
 			///<summary>
