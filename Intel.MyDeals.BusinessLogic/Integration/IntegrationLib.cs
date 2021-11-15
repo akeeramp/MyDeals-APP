@@ -372,6 +372,9 @@ namespace Intel.MyDeals.BusinessLogic
             int initWipId = -1000 - currentRec;
 
             string isPrimedCustomer = null;
+            string isRPLedCustomer = null;
+            string RPLStatusCode = null;
+            string endCustomerObject = null;
             string primedCustomerL1Id = null;
             string primedCustomerL2Id = null;
             string primedCustName = null;
@@ -453,8 +456,27 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
                 isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                RPLStatusCode = endCustObj.RPLStatusCode.ToString();
                 primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
                 primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                //creating End customer obj to update deal level END_CUST_OBJ attribute-- this is required to check if the selected EC has REVIEWWIP RPL status code(As RPL status code doesnt have deal level attribute , checking status code from the End customer json as it holds all the details
+                if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
+                {
+                    List<EndCustomer> endCustData = new List<EndCustomer>();
+                    endCustData.Add(new EndCustomer
+                    {
+                       END_CUSTOMER_RETAIL = customer,
+                       PRIMED_CUST_CNTRY = endCustomerCountry,
+                       IS_EXCLUDE = "0",
+                       IS_PRIMED_CUST = isPrimedCustomer,
+                       PRIMED_CUST_ID = primedCustomerL1Id,
+                       RPL_STS_CD = RPLStatusCode,
+                       IS_RPL = isRPLedCustomer,
+                       PRIMED_CUST_NM = endCustObj.UnifiedEndCustomer
+                    });
+                    endCustomerObject = JsonConvert.SerializeObject(endCustData);
+                }
                 if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
                     primedCustName = unifiedEndCustomer;
                 else
@@ -647,6 +669,8 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerL1Id);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), primedCustName);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_RPL), isRPLedCustomer);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_CUST_OBJ), endCustomerObject);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPcsrNbr);
             UpdateProductDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRODUCT_FILTER), myPrdMbrSid.ToString(), myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId]);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
@@ -1020,6 +1044,8 @@ namespace Intel.MyDeals.BusinessLogic
             int ptrId = myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Keys.FirstOrDefault();
             int ptId = myDealsData[OpDataElementType.PRC_TBL].Data.Keys.FirstOrDefault();
             string isPrimedCustomer = null;
+            string isRPLedCustomer = null;
+            string RPLStatusCode = null;
             string primedCustomerL1Id = null;
             string primedCustomerL2Id = null;
             string primedCustName = null;
@@ -1044,6 +1070,7 @@ namespace Intel.MyDeals.BusinessLogic
             bool isIQRUnified = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
             string primedCtryId = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId;
             string customer = null;
+            string endCustomerObject = null;
             if (endCustomer != null && endCustomer != "") customer = endCustomer;
             else customer = unifiedEndCustomer;
 
@@ -1053,8 +1080,27 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
                     isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                    isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                    RPLStatusCode = endCustObj.RPLStatusCode.ToString();
                     primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
                     primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                    //creating End customer obj to update deal level END_CUST_OBJ attribute-- this is required to check if the selected EC has REVIEWWIP RPL status code(As RPL status code doesnt have deal level attribute , checking status code from the End customer json as it holds all the details
+                    if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
+                    {
+                        List<EndCustomer> endCustData = new List<EndCustomer>();
+                        endCustData.Add(new EndCustomer
+                        {
+                            END_CUSTOMER_RETAIL = customer,
+                            PRIMED_CUST_CNTRY = endCustomerCountry,
+                            IS_EXCLUDE = "0",
+                            IS_PRIMED_CUST = isPrimedCustomer,
+                            PRIMED_CUST_ID = primedCustomerL1Id,
+                            RPL_STS_CD = RPLStatusCode,
+                            IS_RPL = isRPLedCustomer,
+                            PRIMED_CUST_NM = endCustObj.UnifiedEndCustomer
+                        });
+                        endCustomerObject = JsonConvert.SerializeObject(endCustData);
+                    }
                     if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer!=null && unifiedEndCustomer!=""))
                     primedCustName = unifiedEndCustomer;
                     else 
@@ -1064,6 +1110,9 @@ namespace Intel.MyDeals.BusinessLogic
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerL1Id);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM), primedCustName);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
+                    UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_RPL), isRPLedCustomer);
+                    UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUST_OBJ), endCustomerObject);
+
                     workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId= primedCustomerL1Id == "" ? null : primedCustomerL1Id;
                     workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;

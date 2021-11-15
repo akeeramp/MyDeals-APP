@@ -420,6 +420,9 @@ namespace Intel.MyDeals.Entities
         public int UnifiedEndCustomerId { get; set; }
         public int UnifiedCountryEndCustomerId { get; set; }
         public int IsUnifiedEndCustomer { get; set; }
+        public int IsRPLedEndCustomer { get; set; }
+        public string RPLStatusCode { get; set; }
+
 
     }
     #endregion End Customer Support Classes
