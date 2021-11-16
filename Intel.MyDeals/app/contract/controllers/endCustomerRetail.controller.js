@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal', 'dealId', 'isAdmin'];
+EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal', 'dealId', 'isAdmin','logger'];
 
-function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, dealId, isAdmin) {
+function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, dealId, isAdmin, logger) {
     var $ctrl = this;
     $ctrl.IsError = false;
     $ctrl.ChangeErrorFlag = false;
@@ -276,8 +276,27 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
             data.END_CUSTOMER_RETAIL = $ctrl.endCustomerValues.join();
             data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ);
-            PrimeCustomersService.UnPrimeDealsLogs(dealId, JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))));
-            $uibModalInstance.close(data);
+            PrimeCustomersService.UnPrimeDealsLogs(dealId,JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")))).then(
+                function (response) {
+                   
+                    if (response.data == true) {
+                       logger.success("Request successfully sent to UCD.");
+                        
+                    }
+                    else {
+                       logger.error("Unable to sent UCD request.", response, response.statusText);
+                        
+                    }
+                    $uibModalInstance.close(data);
+                },
+                function (response) {
+                   logger.error("Unable to process UCD request.", response, response.statusText);
+                   $uibModalInstance.close(data);
+                   
+                }
+            );
+           
+
         }
     }
 

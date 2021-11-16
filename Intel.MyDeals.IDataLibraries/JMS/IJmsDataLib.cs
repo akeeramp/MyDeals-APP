@@ -53,5 +53,7 @@ namespace Intel.MyDeals.IDataLibrary
         ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
 
         List<UCDResponse> SendRplUCDRequest(string data);
+
+        DuplicateAccResponse SendRplUCDDuplicateRequest(string data);
     }
 }

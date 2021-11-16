@@ -1018,6 +1018,66 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
+        public DuplicateAccResponse SendRplUCDDuplicateRequest(string data)
+        {
+
+            OpLog.Log("JMS - Request to UCD");
+
+            // bool sendSuccess = false;
+            //Get APIGEE Token to send Payload
+            string accessToken = GetApiGeeToken();
+            DuplicateAccResponse duplicateAccRes = null;
+            if (accessToken.Length > 0)
+            {
+                string apiDuplicateReqURL = jmsEnvs.ContainsKey("apiDuplicateReqURL") ? jmsEnvs["apiDuplicateReqURL"] : "";
+                HttpWebRequest APIReq = WebRequest.Create(apiDuplicateReqURL) as HttpWebRequest;
+                APIReq.Method = "POST";
+                APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
+                APIReq.Method = "POST"; // Set the Method property of the request to POST. 
+                APIReq.KeepAlive = false;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                byte[] byteArray = Encoding.UTF8.GetBytes(data);
+                APIReq.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+                APIReq.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+                APIReq.Proxy = new WebProxy("proxy-chain.intel.com", 911);
+                Stream dataStream = APIReq.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+
+                Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                try
+                {
+                    WebResponse response = APIReq.GetResponse(); // Get the response.
+                    responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+
+                    // The using block ensures the stream is automatically closed.
+                    using (dataStream = response.GetResponseStream())
+                    {
+                        StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream());
+                        string result = responseReader.ReadToEnd();
+                        duplicateAccRes = JsonConvert.DeserializeObject<DuplicateAccResponse>(result);
+                        
+                        // Open the stream using a StreamReader for easy access.
+                        responseObjectDictionary["Data"] = result;
+
+                        //Logging
+                        // if (ApiGeeResponse.status.ToLower() == "success") sendSuccess = true;
+                        OpLog.Log("JMS - Publish to ACM Completed: " + result.ToString());
+                    }
+
+                    response.Close();
+                }
+                catch (Exception ex)
+                {
+                    OpLogPerf.Log("JMS - Publish to ACM ERROR: " + ex);
+                }
+            }
+
+            return duplicateAccRes;
+
+        }
 
     }
 }
