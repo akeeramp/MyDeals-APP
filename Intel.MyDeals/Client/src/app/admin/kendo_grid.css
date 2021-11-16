@@ -187,6 +187,10 @@ table {
     border: none;
 }
 
+.dropdown-toggle::after {
+    content: none !important;
+}
+
 /* .nav-tabs-intel-blocks{
     border: solid red !important;
     font-size: 14px !important;
