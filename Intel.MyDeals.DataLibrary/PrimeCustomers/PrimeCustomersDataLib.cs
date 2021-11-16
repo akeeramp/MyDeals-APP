@@ -325,6 +325,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
                     int IDX_PRIM_LVL_ID = DB.GetReaderOrdinal(rdr, "PRIM_LVL_ID");
                     int IDX_IS_PRIME = DB.GetReaderOrdinal(rdr, "IS_PRIME ");
+                    int IDX_IS_RPL = DB.GetReaderOrdinal(rdr, "IS_RPL");
+                    int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
 
 
                     while (rdr.Read())
@@ -341,6 +343,8 @@ namespace Intel.MyDeals.DataLibrary
                            : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID);
                         retObj.IsUnifiedEndCustomer = (IDX_IS_PRIME < 0 || rdr.IsDBNull(IDX_IS_PRIME))
                             ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_PRIME);
+                        retObj.IsRPLedEndCustomer = (IDX_IS_RPL < 0 || rdr.IsDBNull(IDX_IS_RPL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_RPL);
+                        retObj.RPLStatusCode = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD);
 
                     }
                 }
