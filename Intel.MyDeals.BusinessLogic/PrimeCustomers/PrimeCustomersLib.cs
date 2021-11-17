@@ -82,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
                 int CntrctId = mydealsdata[OpDataElementType.CNTRCT].Data.Keys.FirstOrDefault();
                 int custId = Int32.Parse(mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
 
-                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST).AtrbValue = "1";
+                mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST).AtrbValue = endCustData.IS_PRIMED_CUST;
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_RPL).AtrbValue = endCustData.IS_RPL;
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_NM).AtrbValue = endCustData.PRIMED_CUST_NM;
                 mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID).AtrbValue = endCustData.PRIMED_CUST_ID;
@@ -115,7 +115,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 MyDealsData saveResponse = mydealsdata.Save(saveContractToken);
 
-                if (saveResponse != null)
+                if (saveResponse != null && endCustData.IS_PRIMED_CUST == "1")
                 {
                     _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
                     bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
@@ -319,6 +319,79 @@ namespace Intel.MyDeals.BusinessLogic
             
             return success;
         }
+
+        public void saveAMQResponse(string amqResponse)
+        {
+            //var acmjsonData = JsonConvert.DeserializeObject<dynamic>(amqResponse);
+            AMCResponce res = new AMCResponce();
+            res = JsonConvert.DeserializeObject<AMCResponce>(amqResponse);
+            //call to save the AMQ response into the log table 
+            if (res != null && res.parentAccount != null && res.parentAccount.AccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
+            {
+                var response = _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
+                            0, null, amqResponse, res.AccountId, "RESPONSE_RECEIVED");
+
+                if (response != null)
+                {
+                    for (var j = 0; j < response.Count; j++)
+                    {
+                        if (response[j].DEAL_ID != 0)
+                        {
+                            var endCustomer = _primeCustomersDataLib.ValidateEndCustomer(response[j].END_CUST_OBJ);
+                            UnPrimeAtrbs data = new UnPrimeAtrbs();
+                            List<string> END_CUSTOMER_RETAIL = new List<string>();
+                            List<string> PRIMED_CUST_CNTRY = new List<string>();
+                            List<string> PRIMED_CUST_ID = new List<string>();
+                            List<string> PRIMED_CUST_NM = new List<string>();
+                            List<string> IS_RPL = new List<string>();
+                            List<string> IS_PRIMED_CUST = new List<string>();
+                            //List<string> IS_EXCLUDE = new List<string>();
+                            var primeNotApplicable = "n/a";
+                            for (var i = 0; i < endCustomer.Count; i++)
+                            {
+                                var endCustomerValue = endCustomer[i].END_CUSTOMER_RETAIL;
+                                var primeCustidvalue = endCustomer[i].PRIMED_CUST_ID;
+                                var primeCustNameValue = endCustomer[i].PRIMED_CUST_NM;
+                                if (endCustomerValue != "" || endCustomerValue != null)
+                                {
+                                    END_CUSTOMER_RETAIL.Add(endCustomerValue);
+                                    PRIMED_CUST_CNTRY.Add(endCustomer[i].PRIMED_CUST_CNTRY);
+                                    if (endCustomerValue.ToUpper() != "ANY")
+                                    {
+                                        if (endCustomer[i].IS_PRIMED_CUST == "0")
+                                        {
+                                            PRIMED_CUST_ID.Add(primeNotApplicable);
+                                            PRIMED_CUST_NM.Add(primeNotApplicable);
+                                        }
+                                        else
+                                        {
+                                            PRIMED_CUST_ID.Add(primeCustidvalue);
+                                            PRIMED_CUST_NM.Add(primeCustNameValue);
+                                        }
+                                    }
+
+                                    IS_RPL.Add(endCustomer[i].IS_RPL);
+                                    IS_PRIMED_CUST.Add(endCustomer[i].IS_PRIMED_CUST);
+                                }
+
+                            }
+                            data.END_CUSTOMER_RETAIL = string.Join(",", END_CUSTOMER_RETAIL);
+                            data.PRIMED_CUST_CNTRY = string.Join(",", PRIMED_CUST_CNTRY);
+                            data.PRIMED_CUST_ID = string.Join(",", PRIMED_CUST_ID);
+                            data.PRIMED_CUST_NM = string.Join(",", PRIMED_CUST_NM);
+                            data.IS_PRIMED_CUST = string.Join(",", IS_PRIMED_CUST);
+                            data.IS_RPL = string.Join(",", IS_RPL);
+                            data.END_CUST_OBJ = JsonConvert.SerializeObject(endCustomer);
+                            data.IS_PRIMED_CUST = data.IS_PRIMED_CUST.Contains("0") ? "0" : "1";
+                            data.IS_RPL = data.IS_RPL.Contains("1") ? "1" : "0";
+                            //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
+                            UpdateUnPrimeDeals(response[j].DEAL_ID, data);
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 }

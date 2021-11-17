@@ -54,6 +54,9 @@ namespace Intel.MyDeals.Entities
         public string RequestedAccountRejectionReason { get; set; }
         public string RequestedAccountRejectionNotes { get; set; }
         public string RecordType { get; set; }
+        public PrimaryAddress primaryAddress { get; set; }
+        public ParentAccount parentAccount { get; set; }
+        public MasteredBusinessPhysicalAddress masteredBusinessPhysicalAddress { get; set; }
         public class PrimaryAddress
         {
             public string TypeCode { get; set; }
