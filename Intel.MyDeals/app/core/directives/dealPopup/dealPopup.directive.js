@@ -487,17 +487,6 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
                             });
                         }
 
-                        //for (t = 1; t <= numTiers; t++) {
-                        //    var r = $scope.data["RATE"]["10___" + t];
-                        //    var rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(2);
-                        //    $scope.scheduleData.push({
-                        //        STRT_VOL: $scope.data["STRT_VOL"]["10___" + t],
-                        //        END_VOL: $scope.data["END_VOL"]["10___" + t],
-                        //        RATE: rate,
-                        //        TIER_NBR: t
-                        //    });
-                        //}
-
                     } else if ($scope.data["OBJ_SET_TYPE_CD"] === "KIT") {
                         var prd = $scope.data["PRODUCT_NAME"];
                         prd["20_____1"] = ""; // add KIT
