@@ -1770,7 +1770,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
 
-                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE"|| field === "STRT_PB" )  && dataItem[field]["10___" + row] === null) {
+                // If schduler editor is triggered and saved, check if values are blanked out and set to 0 (All schedule Rates)
+                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB" )  && dataItem[field]["10___" + row] === null) {
                     dataItem[field]["10___" + row] = "0";
                 }
 

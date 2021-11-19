@@ -2939,7 +2939,7 @@
                                     if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
                                         sData[s][endKey] = parseFloat(sData[s][endKey].toString().replace(/,/g, "") || 0);
                                     }
-                                    if (sData[s][rateKey] === null) {
+                                    if (sData[s][rateKey] === null || sData[s][rateKey] === "" || isNaN(sData[s][rateKey])) {
                                         sData[s][rateKey] = parseFloat(0);
                                     }
                                     if (sData[s][strtKey] === null) {
@@ -3351,6 +3351,20 @@
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
+
+                            // Correct Deal Tab Rate Removals - prevent blanking field, set to 0
+                            // Corrected on schdule editor instead, but this is code to walk through an object if eeded later
+                            //if (gData[i]["OBJ_SET_TYPE_CD"] == "REV_TIER") {
+                            //    if (gData[i].INCENTIVE_RATE !== null) {
+                            //        var keys = Object.keys(gData[i].INCENTIVE_RATE);
+                            //        for (let key of keys) {
+                            //            if (gData[i].INCENTIVE_RATE[key] === null || gData[i].INCENTIVE_RATE[key] === '') {
+                            //                gData[i].INCENTIVE_RATE[key] = '0.00';
+                            //            }
+                            //        };
+                            //    }
+                            //}
+
                         }
                     }
                 }
