@@ -55,9 +55,9 @@ namespace Intel.MyDeals.UCDService
             //    "\"parentAccount\":{\"accountId\":\"0012D00000OmHaeQAD\",\"accountName\":\"BMW\",\"businessPartyIdentifier\":\"1000006558\"}}";
             try
             {
-                HttpContent hp = new StringContent(res, Encoding.UTF8, "application/json");
+               // HttpContent hp = new StringContent(res, Encoding.UTF8, "application/json");
                 var UnifiedAMCResponsePath = UnifiedController + "SaveAMCResponceObject";
-                HttpResponseMessage response = await MyDealsClient.PostAsync(UnifiedAMCResponsePath,hp);
+                HttpResponseMessage response = await MyDealsClient.PostAsync(UnifiedAMCResponsePath,null);
             }
             catch(Exception ex)
             {
