@@ -114,13 +114,14 @@ namespace Intel.MyDeals.Controllers.API
                     $"Unable to Update UnUnified Deals Logs");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("SaveAMCResponceObject")]
         public string SaveAMCResponceObject()
         {
-            //HttpContent response = this.Request.Content;
-            //string amcResponse = response.ReadAsStringAsync().Result;
-            string amcResponse = null;
+            HttpContent response = this.Request.Content;
+            string amcResponse = response.ReadAsStringAsync().Result;
+            
             //HttpContent s = this.Request.Content;
             //string j = s.ReadAsStringAsync().Result;
             //var amqdata = "{ \"accountId\":\"0012j00000c0NnoAUU\",\"accountName\":\"ABANCAvan\",\"primaryAddress\":{ \"countryName\":\"Albania\"}," +
