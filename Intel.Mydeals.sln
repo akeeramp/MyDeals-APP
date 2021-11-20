@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Antlr3.Runtime.dll = Shared Libraries\Antlr3.Runtime.dll
 		Shared Libraries\Apache.NMS.ActiveMQ.dll = Shared Libraries\Apache.NMS.ActiveMQ.dll
 		Shared Libraries\Apache.NMS.dll = Shared Libraries\Apache.NMS.dll
+		Shared Libraries\Dejavu.Calendar.dll = Shared Libraries\Dejavu.Calendar.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.dll = Shared Libraries\ICSharpCode.SharpZipLib.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.pdb = Shared Libraries\ICSharpCode.SharpZipLib.pdb
 		Shared Libraries\Intel.Opaque.Config.dll = Shared Libraries\Intel.Opaque.Config.dll
@@ -413,7 +414,7 @@ Global
 		{D9B313CC-9EA7-4D2A-B373-C1DFB8CCA5AF} = {5376498F-F788-4B34-A51E-BEC1B8A05DD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F0833D76-D2F9-40D0-B013-ACB43C34A35D}
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		SolutionGuid = {F0833D76-D2F9-40D0-B013-ACB43C34A35D}
 	EndGlobalSection
 EndGlobal

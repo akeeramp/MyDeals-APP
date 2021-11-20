@@ -10,6 +10,7 @@ using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
+using Dejavu.Calendar;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -3127,6 +3128,47 @@ namespace Intel.MyDeals.BusinessRules
                     de.AtrbValue = 9999999999.99;
                     de.State = OpDataElementState.Modified;
                 }
+            }
+        }
+
+        public static void LongTermTesting(params object[] args)
+        {
+            // To replace the below function
+            // public static void LongTermVolTierDates(params object[] args)
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
+
+            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+
+            if ((dealType == "VOL_TIER" && numTiers > 1) || (dealType != "VOL_TIER")) // Because this rule only applies to multi-tiered VT deals
+            {
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+
+                // START Intel WW offsetting code
+                //DateTime startDate = DateTime.Parse("12-29-2020"); // DateTime.Now;
+
+                var currYr_WW = Workweek.Get(startDate);
+                int currWW = Workweek.Get(startDate).Ordinal;
+                int intDayOfWeek = (int)startDate.DayOfWeek;
+
+                int weeksThisYear = Year.Get(startDate).NumberOfWeeks;
+                int addWeeks = 52; // If this isn't the last week of the year and this year contains 53 weeks, place into same WW next year
+                if (weeksThisYear == 53 && currWW != 53) addWeeks = 53;
+                DateTime maxEndDt = currYr_WW.Add(addWeeks).StartDate.AddDays(intDayOfWeek);
+                // END Intel WW offsetting code
+
+                if (endDate > maxEndDt)
+                    {
+                        deEndDate.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
+                    }
             }
         }
 
