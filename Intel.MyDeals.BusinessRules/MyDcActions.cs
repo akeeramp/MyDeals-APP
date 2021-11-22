@@ -3533,7 +3533,7 @@ namespace Intel.MyDeals.BusinessRules
                         currPercent = Math.Round(currPercent, 2);
                         de.AtrbValue = currPercent;
                     }
-                    if (converted && (currPercent >= 100 || currPercent <= 0 || Math.Round(currPercent, 2) != currPercent))
+                    if (converted && (currPercent > 100 || currPercent < 0 || Math.Round(currPercent, 2) != currPercent))
                     {
                         // Stuff all bad rows into a list, process the list later and append all bad tier messages to every list member
                         badTiers.Add(x);
