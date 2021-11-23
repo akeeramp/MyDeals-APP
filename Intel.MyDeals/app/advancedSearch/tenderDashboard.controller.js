@@ -1465,7 +1465,9 @@
                                 PS_WF_STG_CD: gridDS[d].PS_WF_STG_CD,
                                 PS_ID: gridDS[d]._parentIdPS,
                                 IS_PRIMED_CUST: gridDS[d].IS_PRIMED_CUST,
-                                END_CUSTOMER_RETAIL: gridDS[d].END_CUSTOMER_RETAIL
+                                END_CUSTOMER_RETAIL: gridDS[d].END_CUSTOMER_RETAIL,
+                                IS_RPL: gridDS[d].IS_RPL,
+                                END_CUST_OBJ: gridDS[d].END_CUST_OBJ
                             });
                         }
                     }
@@ -1489,18 +1491,46 @@
 
             var plural = tenders.length > 1 ? "s" : "";
             var isDealNotUnififed = false;
+            var isDealRPLed = false;
+            var isRPLStatusReviewwip = false;
             if (dataItem.isLinked) {
                 var unUnifiedDeals = tenders.filter(function (x) {
                     return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
                 });
                 isDealNotUnififed = unUnifiedDeals.length > 0 ? true : false;
+                var rpledDeals = tenders.filter(function (x) {
+                    return x["IS_RPL"] == 1 && x["END_CUSTOMER_RETAIL"] !== "";
+                });
+                isDealRPLed = rpledDeals.length > 0 ? true : false;
+                var RPLStatusReviewwip = tenders.filter(function (x) {
+                    if (x["END_CUST_OBJ"] !== "") {
+                        var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL == "0").length > 0;
+                        return rplStatusCodeCheck;
+                    }
+                    else {
+                        return false
+                    }
+
+                });
+                isRPLStatusReviewwip = RPLStatusReviewwip.length > 0 ? true : false;
             }
             else {
                 isDealNotUnififed = dataItem["IS_PRIMED_CUST"] == 0 && dataItem["END_CUSTOMER_RETAIL"] !== "";
+                isDealRPLed = dataItem["IS_RPL"] == 1 && dataItem["END_CUSTOMER_RETAIL"] !== "";
+                isRPLStatusReviewwip = JSON.parse(dataItem["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL == "0").length > 0 ? true : false;
+
             }
 
-            if (newVal === "Won" && isDealNotUnififed) {
-                kendo.alert("End Customers needs to be Unified before it can be set to " + newVal);
+            if (newVal === "Won" && (isDealNotUnififed || isDealRPLed || isRPLStatusReviewwip)) {
+                if (isDealNotUnififed) {
+                    kendo.alert("End Customers needs to be Unified before it can be set to " + newVal);
+                }
+                else if (isDealRPLed) {
+                    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + newVal);
+                }
+                else if (isRPLStatusReviewwip) {
+                    kendo.alert("End customer Review in Progress. Deal cannot be set to " + newVal + " till Review is complete. ");
+                }
                 if ($scope.actionType == "BID") {
                     dataItem["tender_actions"].BidActnName = dataItem["WF_STG_CD"];
                     dataItem["tender_actions"].BidActnValue = dataItem["WF_STG_CD"];
