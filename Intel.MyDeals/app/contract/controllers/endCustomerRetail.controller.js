@@ -279,12 +279,12 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             PrimeCustomersService.UnPrimeDealsLogs(dealId,JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")))).then(
                 function (response) {
                    
-                    if (response.data == true) {
-                       logger.success("Request successfully sent to UCD.");
-                        
+                    if (response.data == "true") {
+                        logger.success("Request successfully sent to UCD.");
+
                     }
-                    else {
-                       logger.error("Unable to sent UCD request.", response, response.statusText);
+                    else if (response.data == "false") {
+                        logger.error("Unable to sent UCD request.", response, "Error");
                         
                     }
                     $uibModalInstance.close(data);

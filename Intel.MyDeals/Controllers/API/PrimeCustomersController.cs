@@ -108,7 +108,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("UnPrimeDealsLogs/{dealId}")]
-        public bool UnPrimeDealsLogs(int dealId, [FromBody] string endCustData)
+        public string UnPrimeDealsLogs(int dealId, [FromBody] string endCustData)
         {
             return SafeExecutor(() => _primeCustomersLib.UnPrimeDealsLogs(dealId, endCustData),
                     $"Unable to Update UnUnified Deals Logs");
