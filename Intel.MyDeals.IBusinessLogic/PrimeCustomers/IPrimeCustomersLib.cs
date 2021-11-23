@@ -25,7 +25,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
-        bool UnPrimeDealsLogs(int dealId, string endCustData);
+        string UnPrimeDealsLogs(int dealId, string endCustData);
 
         void saveAMQResponse(string amqResponse);
     }

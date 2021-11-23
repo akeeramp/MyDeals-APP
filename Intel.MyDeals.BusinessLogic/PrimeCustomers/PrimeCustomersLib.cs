@@ -8,6 +8,8 @@ using Intel.Opaque.Data;
 using System;
 using Newtonsoft.Json;
 using Intel.Opaque;
+using System.Configuration;
+using System.IO;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -151,18 +153,24 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
         }
 
-        public bool UnPrimeDealsLogs(int dealId, string endCustData)
+        public string UnPrimeDealsLogs(int dealId, string endCustData)
         {
-            bool success = false;
+            string success = "false";
+            int responseCount = 0;
+            int requestCount = 0;
             List<UCDResponse> ucdResponse = new List<UCDResponse>();
             List<UnPrimedDealLogs> result = new List<UnPrimedDealLogs>();
+            int batchSize = int.Parse(ConfigurationManager.AppSettings["acmBatchSize"]);
             try
             {
                
 
                 result = _primeCustomersDataLib.UnPrimeDealsLogs(dealId, endCustData);
-                if (result.Count > 0)
+                requestCount = result.Count;
+                while (result.Any())
                 {
+                    var batch = result.Take(batchSize);
+                    result = result.Skip(batchSize).ToList();
 
                     var UCDReqDataList = new UCDRequest
                     {
@@ -170,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic
                     };
 
 
-                    foreach (UnPrimedDealLogs Customer in result)
+                    foreach (UnPrimedDealLogs Customer in batch)
                     {
                         var UCDReqData = new UCDRequest.AccountRequests
                         {
@@ -208,8 +216,27 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                     String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
-                    ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
+                    var tempFolder = Path.Combine(Path.GetTempPath(), "UCD Requests");
+                    if (!Directory.Exists(tempFolder))
+                    {
+                        Directory.CreateDirectory(tempFolder);
+                    }
+                    FileStream objFilestream = new FileStream(string.Format("{0}\\{1}", tempFolder, "UCD Request_" + dealId), FileMode.Append, FileAccess.Write);
+                    StreamWriter objStreamWriter = new StreamWriter((Stream)objFilestream);
+                    objStreamWriter.WriteLine(UCDReqJson);
+                    objStreamWriter.Close();
+                    objFilestream.Close();
 
+                    string[] files = Directory.GetFiles(tempFolder);
+
+                    foreach (string file in files)
+                    {
+                        FileInfo fi = new FileInfo(file);
+                        if (fi.CreationTime < DateTime.Now.AddMonths(-1))
+                            fi.Delete();
+                    }
+                    ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
+                    responseCount = responseCount + ucdResponse.Count;
                     if (ucdResponse.Count >0 )
                     {
                         foreach (UCDResponse Response in ucdResponse)
@@ -318,9 +345,14 @@ namespace Intel.MyDeals.BusinessLogic
 
                 }
 
-                if (ucdResponse.Count == result.Count)
+                if (requestCount == 0)
                 {
-                    success = true;
+                    success = "NA";
+                }
+                else if (responseCount == requestCount)
+
+                {
+                    success = "true";
                 }
             }
             catch (Exception ex)
