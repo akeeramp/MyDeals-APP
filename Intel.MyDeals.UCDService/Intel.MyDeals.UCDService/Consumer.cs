@@ -68,11 +68,12 @@ namespace Intel.MyDeals.UCDService
 
                     //IMessage message = msgConsumer.Receive() as IMessage;
                     //Receives the next message if one is  immediately available at the client side, else return null.
-                    IMessage message = msgConsumer.Receive(new TimeSpan(0, 0, 1, 0, 0)) as IMessage;
+                    IMessage message = msgConsumer.Receive(new TimeSpan(0, 0, 0, 30, 0)) as IMessage;
 
                     if (message == null)
                     {
-                        Console.WriteLine("No message received!");
+                        Disconnect();
+                        return;
                     }
                     else
                     {

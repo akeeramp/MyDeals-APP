@@ -197,7 +197,7 @@ namespace Intel.MyDeals.BusinessLogic
                         {
 
                             _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
-                               dealId, UCDJson, null, null, "API_REQUESTED");
+                               dealId, UCDJson, null, null, "API_Request_Sent");
                         }
                         else
                         {
@@ -221,7 +221,7 @@ namespace Intel.MyDeals.BusinessLogic
                                   (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
                                 {
                                     _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDJsonResponse, Response.data.AccountId, "AMQ_RESPONSE_RECEIVED");
+                                dealId, null, UCDJsonResponse, Response.data.AccountId, "API_accountid_received");
 
                                 }
 
@@ -238,7 +238,7 @@ namespace Intel.MyDeals.BusinessLogic
                                  (Response.data.CountryName != null && Response.data.CountryName != "") && dealId != 0)
                                 {
                                     _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
+                                dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_accountid_received");
 
                                 }
 
@@ -285,23 +285,35 @@ namespace Intel.MyDeals.BusinessLogic
                                    
                                         string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
                                         _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "AMQ_RESPONSE_RECEIVED");
-                                    
-                                }
-                                        
+                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_complete");
 
+                                }
+                                else
+                                {
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                            dealId, null, null, Response.data.DuplicateAccountId, "API_processing_Error");
+                                }
 
                             }
                             else
                             {
-                                OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
 
-                            }
+                                OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                                _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                      dealId, null, UCDJsonResponse, null, "API_processing_Error");
+
+                        }
                         }
                     }
                     else
                     {
                         OpLogPerf.Log("UCD - Publish to ACM ERROR ");
+                        foreach (UnPrimedDealLogs Customer in result)
+                        {
+                            _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
+                              dealId, null, null, null, "API_processing_Error");
+                        }
+                           
                     }
 
                 }
@@ -329,7 +341,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (res != null && res.parentAccount != null && res.parentAccount.AccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
             {
                 var response = _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
-                            0, null, amqResponse, res.AccountId, "RESPONSE_RECEIVED");
+                            0, null, amqResponse, res.AccountId, "AMQ_Response_received");
 
                 if (response != null)
                 {
@@ -356,20 +368,19 @@ namespace Intel.MyDeals.BusinessLogic
                                 {
                                     END_CUSTOMER_RETAIL.Add(endCustomerValue);
                                     PRIMED_CUST_CNTRY.Add(endCustomer[i].PRIMED_CUST_CNTRY);
-                                    if (endCustomerValue.ToUpper() != "ANY")
+                                    if (endCustomer[i].IS_PRIMED_CUST == "0")
                                     {
-                                        if (endCustomer[i].IS_PRIMED_CUST == "0")
-                                        {
-                                            PRIMED_CUST_ID.Add(primeNotApplicable);
-                                            PRIMED_CUST_NM.Add(primeNotApplicable);
-                                        }
-                                        else
+                                        PRIMED_CUST_ID.Add(primeNotApplicable);
+                                        PRIMED_CUST_NM.Add(primeNotApplicable);
+                                    }
+                                    else
+                                    {
+                                        if (endCustomerValue.ToUpper() != "ANY")
                                         {
                                             PRIMED_CUST_ID.Add(primeCustidvalue);
-                                            PRIMED_CUST_NM.Add(primeCustNameValue);
                                         }
+                                        PRIMED_CUST_NM.Add(primeCustNameValue);
                                     }
-
                                     IS_RPL.Add(endCustomer[i].IS_RPL);
                                     IS_PRIMED_CUST.Add(endCustomer[i].IS_PRIMED_CUST);
                                 }
@@ -387,7 +398,17 @@ namespace Intel.MyDeals.BusinessLogic
                             //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
                             UpdateUnPrimeDeals(response[j].DEAL_ID, data);
                         }
+                        else
+                        {
+                            _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
+                            0, null, amqResponse, res.AccountId, "AMQ_processing_Error");
+                        }
                     }
+                }
+                else
+                {
+                    _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
+                    0, null, amqResponse, res.AccountId, "AMQ_processing_Error");
                 }
             }
         }
