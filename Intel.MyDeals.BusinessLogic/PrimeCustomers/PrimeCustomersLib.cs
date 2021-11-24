@@ -216,12 +216,13 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                     String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
-                    var tempFolder = Path.Combine(Path.GetTempPath(), "UCD Requests");
+                    var tempFolder = ConfigurationManager.AppSettings["ucdLogPath"];
+                    tempFolder = Path.Combine(tempFolder, "UCD Requests");
                     if (!Directory.Exists(tempFolder))
                     {
                         Directory.CreateDirectory(tempFolder);
                     }
-                    FileStream objFilestream = new FileStream(string.Format("{0}\\{1}", tempFolder, "UCD Request_" + dealId), FileMode.Append, FileAccess.Write);
+                    FileStream objFilestream = new FileStream(string.Format("{0}\\{1}", tempFolder, "UCD Request_" + dealId + "_" + DateTime.Now.ToString("dd-MM-yyyy-HHmmssfff")), FileMode.Append, FileAccess.Write);
                     StreamWriter objStreamWriter = new StreamWriter((Stream)objFilestream);
                     objStreamWriter.WriteLine(UCDReqJson);
                     objStreamWriter.Close();
