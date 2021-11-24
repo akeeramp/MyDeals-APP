@@ -164,7 +164,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     if(data.end_cust_obj!="" && data.obj_sid != 0)
                     {
-                        res=UnPrimeDealsLogs(data.obj_sid, data.end_cust_obj);
+                        UnPrimeDealsLogs(data.obj_sid, data.end_cust_obj);
                     }
                 }
             }
