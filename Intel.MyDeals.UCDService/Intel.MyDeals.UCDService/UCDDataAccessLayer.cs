@@ -43,7 +43,29 @@ namespace Intel.MyDeals.UCDService
             return ConfigurationManager.AppSettings[appSettingName];
         }
 
+        public static async Task<bool> RetryUCDRequest()
+        {
+            bool ret = false;
+            try
+            {
+                var UCDRetryPath = UnifiedController + "RetryUCDRequest";
+                HttpResponseMessage response1 = await MyDealsClient.GetAsync(UCDRetryPath);
+                Console.WriteLine("Received message: " + response1);
+                if (response1.IsSuccessStatusCode)
+                {
+                    //pairHash = await response.Content.ReadAsAsync<string>();
+                    ret = true;
+                }
+            }
+            catch (Exception ex)
+            {
 
+            }
+
+
+           return ret;
+
+        }
         public static async Task<String> PushUcdAMQResponse(string res)
         {
             string ret = "";

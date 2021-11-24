@@ -31,6 +31,13 @@ namespace Intel.MyDeals.UCDService
         ISession session;
         IQueue destination;
         IMessageConsumer msgConsumer;
+        public void RetryRequest()
+        {
+            bool result = false;
+            RetryUCDRequest();
+
+            //return result;
+        }
         public void Run(string brokerURI, string userName, string password, string queueName)
         {
 
@@ -110,7 +117,13 @@ namespace Intel.MyDeals.UCDService
             return result;
         }
 
+        private static async Task<bool> RetryUCDRequest()
+        {
+            bool result = false;
+            result = await UCDDataAccessLayer.RetryUCDRequest();
 
+            return result;
+        }
 
 
         public void OnException(Exception e)

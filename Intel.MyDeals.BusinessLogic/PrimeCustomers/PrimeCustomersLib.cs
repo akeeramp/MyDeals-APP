@@ -153,6 +153,23 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
         }
 
+        
+        public bool RetryUCDRequest()
+        {
+            var res = false;
+            List<UCDRetry> response = _primeCustomersDataLib.RetryUCDRequest();
+            if (response.Count > 0)
+            {
+                foreach (UCDRetry data in response)
+                {
+                    if(data.end_cust_obj!="" && data.obj_sid != 0)
+                    {
+                        res=UnPrimeDealsLogs(data.obj_sid, data.end_cust_obj);
+                    }
+                }
+            }
+           return res;
+        }
         public string UnPrimeDealsLogs(int dealId, string endCustData)
         {
             string success = "false";

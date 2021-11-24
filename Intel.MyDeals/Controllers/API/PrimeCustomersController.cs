@@ -115,6 +115,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [HttpGet]
+        [Route("RetryUCDRequest")]
+        public bool RetryUCDRequest()
+        {
+            return SafeExecutor(() => _primeCustomersLib.RetryUCDRequest(),
+                    $"Unable to retry UCD request");
+        }
+
+        [Authorize]
         [HttpPost]
         [Route("SaveAMCResponceObject")]
         public string SaveAMCResponceObject()
