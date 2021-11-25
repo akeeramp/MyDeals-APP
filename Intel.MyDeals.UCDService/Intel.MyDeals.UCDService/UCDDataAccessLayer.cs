@@ -49,11 +49,10 @@ namespace Intel.MyDeals.UCDService
             try
             {
                 var UCDRetryPath = UnifiedController + "RetryUCDRequest";
-                HttpResponseMessage response1 = await MyDealsClient.GetAsync(UCDRetryPath);
-                Console.WriteLine("Received message: " + response1);
-                if (response1.IsSuccessStatusCode)
+                HttpResponseMessage response = await MyDealsClient.GetAsync(UCDRetryPath);
+                Console.WriteLine("Received message: " + response);
+                if (response.IsSuccessStatusCode)
                 {
-                    //pairHash = await response.Content.ReadAsAsync<string>();
                     ret = true;
                 }
             }

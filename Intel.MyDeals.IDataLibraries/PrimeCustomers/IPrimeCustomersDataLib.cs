@@ -31,7 +31,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData);
 
-        List<UCDRetry> RetryUCDRequest();
+        List<UCDRetry> RetryUCDRequest(bool retryFlag, string endCustomer, string endCustomerCtry);
 
         List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId, string status);
     }

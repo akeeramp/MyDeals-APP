@@ -523,12 +523,16 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<UCDRetry> RetryUCDRequest()
+        public List<UCDRetry> RetryUCDRequest(bool retryFlag,string endCustomer,string endCustomerCtry)
         {
             var ret = new List<UCDRetry>();
             try
             {
-                var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_RETRY_COUNT { };
+                var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_RETRY_COUNT {
+                    @in_retry_flag = retryFlag,
+                    @in_end_cust_nm = endCustomer,
+                    @in_end_cust_ctry = endCustomerCtry
+                };
             
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
