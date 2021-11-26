@@ -336,7 +336,7 @@ namespace Intel.MyDeals.BusinessLogic
                                    
                                         string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
                                         _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_complete");
+                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_received");
 
                                 }
                                 else
