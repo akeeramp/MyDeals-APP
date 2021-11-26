@@ -523,6 +523,42 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public List<UCDRetry> RetryUCDRequest(bool retryFlag,string endCustomer,string endCustomerCtry)
+        {
+            var ret = new List<UCDRetry>();
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_RETRY_COUNT {
+                    @in_retry_flag = retryFlag,
+                    @in_end_cust_nm = endCustomer,
+                    @in_end_cust_ctry = endCustomerCtry
+                };
+            
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                   
+                    int IDX_end_cust_obj = DB.GetReaderOrdinal(rdr, "end_cust_obj");
+                    int IDX_obj_sid = DB.GetReaderOrdinal(rdr, "obj_sid");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new UCDRetry
+                        {
+                            end_cust_obj = (IDX_end_cust_obj < 0 || rdr.IsDBNull(IDX_end_cust_obj)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_end_cust_obj),
+                            obj_sid = (IDX_obj_sid < 0 || rdr.IsDBNull(IDX_obj_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_obj_sid)
+                        });
+                    } // while
+                        
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
         public List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId,
           string status)
         {

@@ -153,7 +153,26 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
         }
 
-        public string UnPrimeDealsLogs(int dealId, string endCustData)
+        
+        public bool RetryUCDRequest()
+        {
+            var res = false;
+            //call to get the API_processing_Error records in UCD log table
+            List<UCDRetry> response = _primeCustomersDataLib.RetryUCDRequest(false,null,null);
+            if (response.Count > 0)
+            {
+                foreach (UCDRetry data in response)
+                {
+                    if(data.end_cust_obj!="" && data.obj_sid != 0)
+                    {
+                        UnPrimeDealsLogs(data.obj_sid, data.end_cust_obj,true);
+                        res = true;
+                    }
+                }
+            }
+           return res;
+        }
+        public string UnPrimeDealsLogs(int dealId, string endCustData,bool isRetry=false)
         {
             string success = "false";
             int responseCount = 0;
@@ -203,7 +222,11 @@ namespace Intel.MyDeals.BusinessLogic
                         if ((Customer.END_CUSTOMER_RETAIL != null && Customer.END_CUSTOMER_RETAIL != "") &&
                             (Customer.PRIMED_CUST_CNTRY != null && Customer.PRIMED_CUST_CNTRY != "") && dealId != 0)
                         {
-
+                            //In the case of Retry API request,below line of code is to update retry count for the re-tried End customer-country record
+                            if (isRetry)
+                            {
+                                _primeCustomersDataLib.RetryUCDRequest(isRetry, Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY);
+                            }
                             _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
                                dealId, UCDJson, null, null, "API_Request_Sent");
                         }
@@ -313,7 +336,7 @@ namespace Intel.MyDeals.BusinessLogic
                                    
                                         string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
                                         _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_complete");
+                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_received");
 
                                 }
                                 else
@@ -336,8 +359,9 @@ namespace Intel.MyDeals.BusinessLogic
                     else
                     {
                         OpLogPerf.Log("UCD - Publish to ACM ERROR ");
-                        foreach (UnPrimedDealLogs Customer in result)
+                        foreach (UnPrimedDealLogs Customer in batch)
                         {
+                            //When no response received for API request sent to UCD,below call is to Update the record with API_processing_Error status in the UCD log table
                             _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
                               dealId, null, null, null, "API_processing_Error");
                         }
@@ -431,18 +455,10 @@ namespace Intel.MyDeals.BusinessLogic
                             //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
                             UpdateUnPrimeDeals(response[j].DEAL_ID, data);
                         }
-                        else
-                        {
-                            _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
-                            0, null, amqResponse, res.AccountId, "AMQ_processing_Error");
-                        }
+
                     }
                 }
-                else
-                {
-                    _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
-                    0, null, amqResponse, res.AccountId, "AMQ_processing_Error");
-                }
+                
             }
         }
 

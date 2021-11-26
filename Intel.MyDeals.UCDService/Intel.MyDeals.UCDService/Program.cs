@@ -16,7 +16,11 @@ namespace Intel.MyDeals.UCDService
             string queueName = ConfigurationManager.AppSettings["QueueName"];
             string userName = ConfigurationManager.AppSettings["UserName"];
             string password = ConfigurationManager.AppSettings["Password"];
-            new Consumer().Run(UCDURI, userName,password,queueName);
+
+            new Consumer().Run(UCDURI, userName, password, queueName);
+
+            new Consumer().RetryRequest();
+            
             //Console.ReadLine();
         }
 

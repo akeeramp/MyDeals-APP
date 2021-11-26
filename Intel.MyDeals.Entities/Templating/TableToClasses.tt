@@ -539,6 +539,11 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG] @in_cust_nm='Academediatest',@in_cust_ctry='Aland Islands',@in_rspn_json='{ \"accountId\":\"0012i00000c2JbbAAK\",\"accountName\":\"Academediatest\",\"primaryAddress\":{ \"countryName\":\"Aland Islands\"},\"masteredSimplifiedAccountName\":\"Academediatest\",\"masteredBusinessPhysicalAddress\":{ \"countryCode\":\"Aland Islands\",\"countryName\":\"Aland Islands\"},\"complianceWatchList\":[{ \"code\":\"DPL\",\"name\":\"Denied Parties List\"},{ \"code\":\"EC\",\"name\":\"Embargoed Country\"}],\"customerAggregationType\":{ \"code\":\"UNFD_CTRY_CUST\",\"name\":\"Unified Country Customer\"},\"customerProcessEngagement\":[{ \"code\":\"DIR_PRC_EXCPT\",\"name\":\"Direct Price Exception\"}],\"businessPartyIdentifier\":\"100443911\",\"parentAccount\":{ \"accountId\":\"0012D00000OmHaeQAK\",\"accountName\":\"Academedia\",\"businessPartyIdentifier\":\"1000006998\"}}',@in_acct_id='0012i00000c2JbbAAK',@in_sts='RESPONSE_RECEIVED',@in_deal_id=22276, @in_rqst_json=null, @in_emp_wwid=999999");
     ds.Tables[0].TableName = "DealIdEcJsonDetails";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//Retry UCD API request incase of error  
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UCD_LOG_RETRY_COUNT] @in_retry_flag=0,@in_end_cust_nm=null,@in_end_cust_ctry=null");
+    ds.Tables[0].TableName = "UCDRetry";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
 	PopIndent();
 	WriteLine("}"); // End NameSpace
