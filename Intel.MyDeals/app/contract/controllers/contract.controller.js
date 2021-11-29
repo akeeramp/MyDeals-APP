@@ -6427,6 +6427,7 @@
                 $scope.clearValidation(data, 'SETTLEMENT_PARTNER');
                 $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
                 $scope.clearValidation(data, 'CONSUMPTION_TYPE');
+                $scope.clearValidation(data, 'END_CUSTOMER_RETAIL');
 
                 $scope.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"]);
                 if (hybCond) {
@@ -6440,7 +6441,9 @@
                 $scope.itemValidationBlock(data, "SETTLEMENT_PARTNER", ["notequal"]);
                 $scope.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"]);
                 $scope.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"]);
-
+                if (isFlexDeal) {
+                    $scope.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"]);
+                }
                 //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
             }
             return data;
@@ -6497,6 +6500,19 @@
                         $scope.setBehaviors(item, key, 'equalblank');
                     }
                 });
+            }
+
+            if (key == "END_CUSTOMER_RETAIL") {
+                var uniqueEndCustomerCountry = filterData.map((val) => val["PRIMED_CUST_CNTRY"]).filter((value, index, self) => self.indexOf(value) === index);
+                if (uniqueEndCustomerCountry.length > 1) {
+                    angular.forEach(data, (item) => {
+                        if (!item._behaviors) item._behaviors = {};
+                        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                        if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
+                            $scope.setBehaviors(item, key, 'notequal');
+                        }
+                    });
+                }
             }
         }
 
@@ -6671,13 +6687,16 @@
                 case 'CONSUMPTION_TYPE':
                     $scope.setBehaviorsValidMessage(item, elem, 'Consumption Type', cond);
                     break;
+                case 'END_CUSTOMER_RETAIL':
+                    $scope.setBehaviorsValidMessage(item, elem, 'End Customer Country', cond);
+                    break;
                 default:
                 // code block
             }
 
 
             if (elem == 'REBATE_TYPE' || elem == 'PAYOUT_BASED_ON' || elem == 'CUST_ACCNT_DIV' || elem == 'GEO_COMBINED' || elem == 'PERIOD_PROFILE' || elem == 'RESET_VOLS_ON_PERIOD' || elem == 'PROGRAM_PAYMENT'
-                || elem == 'SETTLEMENT_PARTNER' || elem == 'AR_SETTLEMENT_LVL' || elem == 'CONSUMPTION_TYPE') {
+                || elem == 'SETTLEMENT_PARTNER' || elem == 'AR_SETTLEMENT_LVL' || elem == 'CONSUMPTION_TYPE' || elem == 'END_CUSTOMER_RETAIL') {
                 // no operation - taken in above case statement
             }
             else if (cond == 'notequal' && elem == 'REBATE_OA_MAX_VOL') {
