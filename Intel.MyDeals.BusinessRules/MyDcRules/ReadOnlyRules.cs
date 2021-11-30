@@ -367,6 +367,9 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.CONSUMPTION_COUNTRY,
                                 AttributeCodes.CONSUMPTION_CUST_SEGMENT,
                                 AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD,
+                                AttributeCodes.SYS_PRICE_POINT,
+                                AttributeCodes.CONSUMPTION_TYPE,
+                                AttributeCodes.CONSUMPTION_SYS_CONFIG,
                                 AttributeCodes.TERMS
                             }
                         }
