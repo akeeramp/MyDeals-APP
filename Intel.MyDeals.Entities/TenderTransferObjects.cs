@@ -285,6 +285,7 @@ namespace Intel.MyDeals.Entities
                     public string DealDescription { get; set; }
                     public string GroupType { get; set; }
                     public string MarketSegment { get; set; }
+                    public string CustomerDivision { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
                     [JsonProperty("CompetitorProduct")]
