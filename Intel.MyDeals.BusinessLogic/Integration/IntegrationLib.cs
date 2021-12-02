@@ -400,6 +400,7 @@ namespace Intel.MyDeals.BusinessLogic
             string groupType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].GroupType;
             string marketSegment = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MarketSegment;
             marketSegment = marketSegment.Replace(";", ", ");
+            string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
@@ -612,6 +613,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.CUST_ACCNT_DIV), customerDivision.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.VOLUME), quantity);
@@ -661,6 +663,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PROD_INCLDS), singleMedia); // From PTR_SYS_PRD single Product
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.ECAP_PRICE), ecapPrice);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CUST_MBR_SID), custId.ToString());
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CUST_ACCNT_DIV), customerDivision.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.VOLUME), quantity);
@@ -1161,6 +1164,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
+
+            // Add this in if IQR decides that they need to update this field prior to it having a tracker only.
+            //string HasTracker = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            //if (HasTracker == "1")
+            //{
+            //    string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[i].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
+            //    UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.CUST_ACCNT_DIV), customerDivision);
+            //    UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CUST_ACCNT_DIV), customerDivision);
+            //}
 
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[i].ApprovedECAPPrice;
             // Will need to add dimensions down the road

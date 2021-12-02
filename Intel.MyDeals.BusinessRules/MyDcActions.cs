@@ -759,7 +759,7 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             if (foundMisMatch)
-                deUserCustDivs.AddMessage("Please enter a valid value.");
+                deUserCustDivs.AddMessage("Please enter a valid Customer Division value.");
         }
 
         public static void MeetCompMandatoryCheck(params object[] args)
