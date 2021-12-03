@@ -16,6 +16,10 @@ namespace Intel.MyDeals.Entities
             public string Name { get; set; }
             public string CustomerAggregationTypeCode { get; set; }
             public string CustomerProcessEngagmentCode { get; set; }
+            public string RequesterName { get; set; }
+            public string RequesterWWID { get; set; }
+            public string RequesterEmail { get; set; }
+
             [JsonProperty("Addresses")]
             public List<Addresses> addresses { get; set; }
             public class Addresses

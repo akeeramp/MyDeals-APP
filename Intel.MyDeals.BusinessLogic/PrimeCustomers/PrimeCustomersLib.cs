@@ -208,6 +208,9 @@ namespace Intel.MyDeals.BusinessLogic
                         UCDReqData.Name = Customer.END_CUSTOMER_RETAIL;
                         UCDReqData.CustomerAggregationTypeCode = "UNFD_CTRY_CUST";
                         UCDReqData.CustomerProcessEngagmentCode = "DIR_PRC_EXCPT";
+                        UCDReqData.RequesterName = OpUserStack.MyOpUserToken.Usr.FullName;
+                        UCDReqData.RequesterWWID = OpUserStack.MyOpUserToken.Usr.WWID.ToString();
+                        UCDReqData.RequesterEmail = OpUserStack.MyOpUserToken.Usr.Email;
                         var newAddressess = new UCDRequest.AccountRequests.Addresses
                         {
 
@@ -295,7 +298,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                             }
-                            else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() == "intel account")
+                            else if (Response.errormessage.ToLower() == "duplicate account" && (Response.data.DuplicateAccountRecordType.ToLower() == "intel account" || Response.data.DuplicateAccountRecordType.ToLower() == "end customer account"))
                             {
                                 var DuplicateReqData = new DuplicateRequest
                                 {
