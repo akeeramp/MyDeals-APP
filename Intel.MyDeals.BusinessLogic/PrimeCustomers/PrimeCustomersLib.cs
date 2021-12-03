@@ -1,4 +1,4 @@
-using Intel.MyDeals.DataLibrary;
+﻿using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
@@ -153,7 +153,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.ValidateBulkUnifyDeals(unifyDeals);
         }
 
-        
+
         public bool RetryUCDRequest()
         {
             var res = false;
@@ -170,7 +170,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
             }
-           return res;
+            return res;
         }
         public string UnPrimeDealsLogs(int dealId, string endCustData,bool isRetry=false)
         {
@@ -182,7 +182,7 @@ namespace Intel.MyDeals.BusinessLogic
             int batchSize = int.Parse(ConfigurationManager.AppSettings["acmBatchSize"]);
             try
             {
-               
+
 
                 result = _primeCustomersDataLib.UnPrimeDealsLogs(dealId, endCustData);
                 requestCount = result.Count;
@@ -303,13 +303,13 @@ namespace Intel.MyDeals.BusinessLogic
                                 var DuplicateReqData = new DuplicateRequest
                                 {
                                     businessOrganization = new DuplicateRequest.BusinessOrganization {
-                                    AccountId=new List<string>()},
+                                        AccountId=new List<string>()},
                                     attributes = new List<DuplicateRequest.Attributes>()
-                                   
+
                                 };
                                 DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
-                                
-                               DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
+
+                                DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
                                 //DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
 
                                 var AccountInformation = new DuplicateRequest.Attributes
@@ -336,10 +336,10 @@ namespace Intel.MyDeals.BusinessLogic
                                 DuplicateAccResponse duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
                                 if (duplicateAccountresponse !=null)
                                 {
-                                   
-                                        string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
-                                        _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                                dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_received");
+
+                                    string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                            dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_received");
 
                                 }
                                 else
@@ -356,7 +356,7 @@ namespace Intel.MyDeals.BusinessLogic
                                 _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
                       dealId, null, UCDJsonResponse, null, "API_processing_Error");
 
-                        }
+                            }
                         }
                     }
                     else
@@ -368,7 +368,7 @@ namespace Intel.MyDeals.BusinessLogic
                             _primeCustomersDataLib.SaveUcdRequestData(Customer.END_CUSTOMER_RETAIL, Customer.PRIMED_CUST_CNTRY,
                               dealId, null, null, null, "API_processing_Error");
                         }
-                           
+
                     }
 
                 }
@@ -388,7 +388,7 @@ namespace Intel.MyDeals.BusinessLogic
                 OpLogPerf.Log("UCD - ERROR: " + ex);
 
             }
-            
+
             return success;
         }
 
@@ -461,10 +461,13 @@ namespace Intel.MyDeals.BusinessLogic
 
                     }
                 }
-                
+
             }
         }
 
-
+        public List<RplStatusCode> GetRplStatusCodes()
+        {
+            return _primeCustomersDataLib.GetRplStatusCodes();
+        }
     }
 }

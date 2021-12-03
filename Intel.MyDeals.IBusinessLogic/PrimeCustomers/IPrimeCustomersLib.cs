@@ -29,5 +29,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool RetryUCDRequest();
 
         void saveAMQResponse(string amqResponse);
+
+        List<RplStatusCode> GetRplStatusCodes();
     }
 }

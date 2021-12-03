@@ -23,6 +23,7 @@
         }
         vm.countries = [];
         vm.primeCustomers = [];
+        vm.RplStatusCodes = [];
 
         vm.initiateDropdown = function () {
             PrimeCustomersService.getCountries().then(function (response) {
@@ -35,6 +36,12 @@
                 vm.primeCustomers = response.data;
             }, function (response) {
                 logger.error("Unable to get Unified Customers", response, response.statusText);
+            });
+
+            PrimeCustomersService.getRplStatusCodes().then(function (response) {
+                vm.RplStatusCodes = response.data
+            }, function (response) {
+                logger.error("Unable to get RPL status code", response, response.statusText);
             });
         }
 
@@ -64,7 +71,7 @@
                 update: function (e) {
                     var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
                         x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
-                    if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS != e.data.RPL_STS) {                        
+                    if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS_CD != e.data.RPL_STS_CD) {
                         updatePrimeCustomers(e);
                     }
                     else if (!e.data.IS_ACTV) {
@@ -101,7 +108,7 @@
                         PRIM_CUST_ID: { editable: true },
                         PRIM_CUST_NM: { editable: true },
                         PRIM_CUST_CTRY: { editable: true },
-                        RPL_STS: { type: "boolean", editable: true },
+                        RPL_STS_CD: { editable: true },
                         IS_ACTV: { type: "boolean", editable: true },
                         PRIM_LVL_ID: { editable: true },
                         PRIM_LVL_NM: { editable: false },
@@ -215,12 +222,35 @@
 
         }
 
+        vm.PrimeCustRplStatusCodes = {
+            optionLabel: "Select RPL status code..",
+            dataSource: {
+                type: "json",
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        e.success(vm.RplStatusCodes);
+                    }
+                }
+            },
+            maxSelectedItems: 1,
+            autoBind: true,
+            dataTextField: "RPL_STS_CD",
+            dataValueField: "RPL_STS_CD",
+            valuePrimitive: true
+
+        }
+
         vm.PrimeCustNamesEditor = function (container, options) {
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustNames" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.PrimeCustCountryEditor = function (container, options) {
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustCountry"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        }
+
+        vm.PrimeCustRplStatusCodeEditor = function (container, options) {
+            var editor = $('<select kendo-combo-box k-options="vm.PrimeCustRplStatusCodes"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
         vm.PrimeIDEditor = function (container, options) {
@@ -342,11 +372,11 @@
                     editable: isEditable
                 },
                 {
-                    field: "RPL_STS",
-                    title: "Is RPL ?",
+                    field: "RPL_STS_CD",
+                    title: "RPL Status Code",
                     width: "200px",
-                    template: gridUtils.boolViewer('RPL_STS'),
-                    editor: gridUtils.boolEditor,
+                    editor: vm.PrimeCustRplStatusCodeEditor,
+                    filterable: { multi: true, search: true },
                     editable: isRplEditable
                 }
 
