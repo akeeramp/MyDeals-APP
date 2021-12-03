@@ -647,7 +647,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Restrict Long Term VT deals to 1 year",
                     ActionRule = MyDcActions.LongTermVolTierDates,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW,OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(),OpDataElementSetType.DENSITY.ToString() },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.REV_TIER.ToString() , OpDataElementSetType.DENSITY.ToString() },
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
 
