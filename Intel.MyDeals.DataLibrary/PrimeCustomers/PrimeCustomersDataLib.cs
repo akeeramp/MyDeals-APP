@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
                     int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
                     int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
+                    int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
 
                     while (rdr.Read())
                     {
@@ -42,8 +43,8 @@ namespace Intel.MyDeals.DataLibrary
                             PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
                             PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
                             PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
-                            RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS)
-
+                            RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
+                            RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
                         });
                     }
                 }
@@ -84,7 +85,7 @@ namespace Intel.MyDeals.DataLibrary
                 in_prim_cust_ctry = data.PRIM_CUST_CTRY,
                 in_prim_lvl_id = data.PRIM_LVL_ID,
                 in_prim_lvl_nm = data.PRIM_CUST_NM,
-                in_rpl_sts = data.RPL_STS,
+                in_rpl_sts_code = data.RPL_STS_CD,
                 in_is_actv = data.IS_ACTV,
                 in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
 
@@ -98,6 +99,7 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_PRIM_LVL_NM = DB.GetReaderOrdinal(rdr, "PRIM_LVL_NM");
                 int IDX_PRIM_SID = DB.GetReaderOrdinal(rdr, "PRIM_SID");
                 int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
+                int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
 
                 while (rdr.Read())
                 {
@@ -110,7 +112,8 @@ namespace Intel.MyDeals.DataLibrary
                         PRIM_LVL_ID = (IDX_PRIM_LVL_ID < 0 || rdr.IsDBNull(IDX_PRIM_LVL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_LVL_ID),
                         PRIM_LVL_NM = (IDX_PRIM_LVL_NM < 0 || rdr.IsDBNull(IDX_PRIM_LVL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_LVL_NM),
                         PRIM_SID = (IDX_PRIM_SID < 0 || rdr.IsDBNull(IDX_PRIM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_SID),
-                        RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS)
+                        RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
+                        RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
                     });
                 } // while
             }
@@ -207,6 +210,7 @@ namespace Intel.MyDeals.DataLibrary
             AnyData.PRIM_LVL_NM = "Any";
             AnyData.PRIM_SID = 0;
             AnyData.RPL_STS = false;
+            AnyData.RPL_STS_CD = "NOSNCTN";
             ret.Insert(0, AnyData);
             return ret;
         }
@@ -533,10 +537,10 @@ namespace Intel.MyDeals.DataLibrary
                     @in_end_cust_nm = endCustomer,
                     @in_end_cust_ctry = endCustomerCtry
                 };
-            
+
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                   
+
                     int IDX_end_cust_obj = DB.GetReaderOrdinal(rdr, "end_cust_obj");
                     int IDX_obj_sid = DB.GetReaderOrdinal(rdr, "obj_sid");
 
@@ -548,7 +552,7 @@ namespace Intel.MyDeals.DataLibrary
                             obj_sid = (IDX_obj_sid < 0 || rdr.IsDBNull(IDX_obj_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_obj_sid)
                         });
                     } // while
-                        
+
                 }
             }
             catch (Exception ex)
@@ -604,6 +608,32 @@ namespace Intel.MyDeals.DataLibrary
 
         }
 
+        public List<RplStatusCode> GetRplStatusCodes()
+        {
+            var ret = new List<RplStatusCode>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_RPL_DATA { };
 
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_RPL_STS = DB.GetReaderOrdinal(rdr, "RPL_STS");
+                int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
+                int IDX_RPL_STS_SID = DB.GetReaderOrdinal(rdr, "RPL_STS_SID");
+
+                while (rdr.Read())
+                {
+                    ret.Add(new RplStatusCode
+                    {
+                        RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
+                        RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD),
+                        RPL_STS_SID = (IDX_RPL_STS_SID < 0 || rdr.IsDBNull(IDX_RPL_STS_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RPL_STS_SID)
+                    });
+                }
+            }
+            if (ret != null)
+            {
+                ret = ret.OrderBy(x => x.RPL_STS_CD).ToList();
+            }
+            return ret;
+        }
     }
 }

@@ -130,7 +130,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             HttpContent response = this.Request.Content;
             string amcResponse = response.ReadAsStringAsync().Result;
-            
+
             //HttpContent s = this.Request.Content;
             //string j = s.ReadAsStringAsync().Result;
             //var amqdata = "{ \"accountId\":\"0012j00000c0NnoAUU\",\"accountName\":\"ABANCAvan\",\"primaryAddress\":{ \"countryName\":\"Albania\"}," +
@@ -150,6 +150,12 @@ namespace Intel.MyDeals.Controllers.API
             return ret;
         }
 
+        [Route("GetRplStatusCodes")]
+        public IEnumerable<RplStatusCode> GetRplStatusCodes()
+        {
+            return SafeExecutor(() => _primeCustomersLib.GetRplStatusCodes(),
+                $"Unable to Get Rpl Status Code");
+        }
 
 
     }

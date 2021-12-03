@@ -25,7 +25,8 @@
             validateEndCustomer: validateEndCustomer,
             ValidateUnifyDeals: ValidateUnifyDeals,
             updateBulkUnifyDeals: updateBulkUnifyDeals,
-            UnPrimeDealsLogs: UnPrimeDealsLogs
+            UnPrimeDealsLogs: UnPrimeDealsLogs,
+            getRplStatusCodes: getRplStatusCodes
         }
 
         return service;
@@ -82,7 +83,9 @@
             return dataService.post(apiBaseUrl + 'UnPrimeDealsLogs/' + dealId, endCustData);
         }
 
-
+        function getRplStatusCodes() {
+            return dataService.get(apiBaseUrl + 'GetRplStatusCodes');
+        }
     }
 
 })();
