@@ -246,36 +246,40 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         return rowError;
     }
 
+    $ctrl.saveEndcustomerData = function () {
+        // to set unprimed combinations as n/a(not applicable)
+        var primeNotApplicable = 'n/a';
+        data.PRIMED_CUST_NM = $ctrl.END_CUST_OBJ.map(getPrimeCustNames).join();
+        function getPrimeCustNames(item) {
+            if (item.IS_PRIMED_CUST == "0") {
+                return [primeNotApplicable].join(",");
+            }
+            else
+                return [item.PRIMED_CUST_NM].join(",")
+        }
+        data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
+        data.IS_RPL = $ctrl.END_CUST_OBJ.filter(x => x.IS_RPL == 1).length > 0 ? 1 : 0;
+
+        // setting PRIMED_CUST_ID to n/a to all the combinations except for any(as for End customer "any" PRIMED_CUST_ID is null)
+        var primeCustObjWithoutAny = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")
+        var ecIdList = primeCustObjWithoutAny.map(getPrimeCustIds);
+
+        function getPrimeCustIds(item) {
+            if (item.IS_PRIMED_CUST == "0") {
+                return [primeNotApplicable].join(",");
+            }
+            else
+                return [item.PRIMED_CUST_ID].join(",");
+        }
+        data.PRIMED_CUST_ID = ecIdList.join();
+        data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
+        data.END_CUSTOMER_RETAIL = $ctrl.endCustomerValues.join();
+        data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ);
+        $uibModalInstance.close(data);
+    }
+
     $ctrl.saveAndClose = function () {
         if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
-            // to set unprimed combinations as n/a(not applicable)
-            var primeNotApplicable = 'n/a';
-            data.PRIMED_CUST_NM = $ctrl.END_CUST_OBJ.map(getPrimeCustNames).join();
-            function getPrimeCustNames(item) {
-                if (item.IS_PRIMED_CUST == "0") {
-                    return [primeNotApplicable].join(",");
-                }
-                else
-                    return [item.PRIMED_CUST_NM].join(",")
-            }
-            data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
-            data.IS_RPL = $ctrl.END_CUST_OBJ.filter(x => x.IS_RPL == 1).length > 0 ? 1 : 0;
-
-            // setting PRIMED_CUST_ID to n/a to all the combinations except for any(as for End customer "any" PRIMED_CUST_ID is null)
-            var primeCustObjWithoutAny = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")
-            var ecIdList = primeCustObjWithoutAny.map(getPrimeCustIds);
-
-            function getPrimeCustIds(item) {
-                if (item.IS_PRIMED_CUST == "0") {
-                    return [primeNotApplicable].join(",");
-                }
-                else
-                    return [item.PRIMED_CUST_ID].join(",");
-            }
-            data.PRIMED_CUST_ID = ecIdList.join();
-            data.PRIMED_CUST_CNTRY = $ctrl.countryValues.join();
-            data.END_CUSTOMER_RETAIL = $ctrl.endCustomerValues.join();
-            data.END_CUST_OBJ = angular.toJson($ctrl.END_CUST_OBJ);
             PrimeCustomersService.UnPrimeDealsLogs(dealId,JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")))).then(
                 function (response) {
                    
@@ -285,13 +289,33 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     }
                     else if (response.data == "false") {
                         logger.error("Unable to sent UCD request.", response, "Error");
-                        
+
                     }
-                    $uibModalInstance.close(data);
+                    else if (response.data == "Yes") {
+                        //"Yes" indicates one of the end customer which is not present in our master table gone through the UCD approval flow and got Unified
+                        //AS new record got unified in our table we need to re validate the selected End customer and save the End customer atrbs
+                        PrimeCustomersService.validateEndCustomer(JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ))).then(
+                            function (res) {
+                                $ctrl.END_CUST_OBJ = res.data;
+                                //$ctrl.validateFlag = false;
+                                $ctrl.saveEndcustomerData();
+                                logger.success("Request successfully sent to UCD and Processed the response.");
+                            },
+                            function (res) {
+                                //$ctrl.saveEndcustomerData();
+                                logger.error("Unable to get Unified Customers.", response, response.statusText);
+                            }
+                        );
+                    }
+
+                    if (response.data !== "Yes") {
+                        $ctrl.saveEndcustomerData();
+                    }
+                    
                 },
                 function (response) {
                    logger.error("Unable to process UCD request.", response, response.statusText);
-                   $uibModalInstance.close(data);
+                    $ctrl.saveEndcustomerData();
                    
                 }
             );

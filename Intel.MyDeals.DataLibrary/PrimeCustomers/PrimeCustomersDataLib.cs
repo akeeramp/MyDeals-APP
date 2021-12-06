@@ -566,6 +566,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId,
           string status)
         {
+            var ret = new List<DealIdEcJsonDetails>();
             try
             {
                 var cmd = new Procs.dbo.PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG
@@ -582,7 +583,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
-                    var ret = new List<DealIdEcJsonDetails>();
+                    
                     int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
                     int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
 
@@ -595,7 +596,7 @@ namespace Intel.MyDeals.DataLibrary
 
                         });
                     } // while
-                    return ret;
+                   
                 }
 
 
@@ -605,7 +606,7 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
-
+            return ret;
         }
 
         public List<RplStatusCode> GetRplStatusCodes()

@@ -42,6 +42,95 @@ namespace Intel.MyDeals.Entities
         {
             public string Name { get; set; }
             public string DuplicateAccountRecordType { get; set; }
+            [JsonProperty("DuplicateAccountInfo")]
+            public DuplicateAccountInfo duplicateAccountInfo { get; set; }
+            public class DuplicateAccountInfo
+            {
+                public string SurvivorAccountId { get; set; }
+                [JsonProperty("SecondaryAddress")]
+                public SecondaryAddress secondaryAddress { get; set; }
+                
+                public class SecondaryAddress
+                {
+                    public string TypeCode { get; set; }
+
+                    public string CountryName { get; set; }
+                    public string CountryCode { get; set; }
+
+
+                }
+                public string RequestedAccountRejectionReason { get; set; }
+                public string RequestedAccountRejectionNotes { get; set; }
+                public string RecordType { get; set; } 
+                [JsonProperty("PrimaryAddress")]
+                public PrimaryAddress primaryAddress { get; set; }
+                public class PrimaryAddress
+                {
+                    public string TypeCode { get; set; }
+                    public string CountryName { get; set; }
+                    public string CountryCode { get; set; }
+                }
+                [JsonProperty("ParentAccount")]
+                public ParentAccount parentAccount { get; set; }
+                public class ParentAccount
+                {
+                   
+                    public string SurvivorAccountId { get; set; }
+                    public string SecondaryAddress { get; set; }
+                    public string RequestedAccountRejectionReason { get; set; }
+                    public string RequestedAccountRejectionNotes { get; set; }
+                    public string RecordType { get; set; }
+                    public string PrimaryAddress { get; set; }
+                    [JsonProperty("ParentAccount")]
+                    public string parentAccount { get; set; }
+                    public string MasteredSimplifiedAccountName { get; set; }
+                    public string MasteredBusinessPhysicalAddress { get; set; }
+                    public string CustomerProcessEngagement { get; set; }
+                    public string CustomerAggregationType { get; set; }
+                    public string ComplianceWatchList { get; set; }
+                    public string BusinessPartyIdentifier { get; set; }
+                    public string AccountName { get; set; }
+                    public string AccountId { get; set; }
+
+                }
+
+                public string MasteredSimplifiedAccountName { get; set; }
+                [JsonProperty("MasteredBusinessPhysicalAddress")]
+                public MasteredBusinessPhysicalAddress masteredBusinessPhysicalAddress { get; set; }
+
+                //public string MasteredSimplifiedAccountName { get; set; }
+                public class MasteredBusinessPhysicalAddress
+                {
+                    public string CountryName { get; set; }
+                    public string CountryCode { get; set; }
+                }
+                [JsonProperty("CustomerProcessEngagement")]
+                public List<CustomerProcessEngagement> customerProcessEngagement { get; set; }
+               
+                public class CustomerProcessEngagement
+                {
+                    public string Name { get; set; }
+                    public string Code { get; set; }
+                }
+                [JsonProperty("CustomerAggregationType")]
+                public  CustomerAggregationType customerAggregationType { get; set; }
+                public class CustomerAggregationType
+                {
+                    public string Name { get; set; }
+                    public string Code { get; set; }
+                }
+                [JsonProperty("ComplianceWatchList")]
+                public List<ComplianceWatchList> complianceWatchList { get; set; }
+                public class ComplianceWatchList
+                {
+                    public string Name { get; set; }
+                    public string Code { get; set; }
+                }
+                public string BusinessPartyIdentifier { get; set; }
+                public string AccountName { get; set; }
+                public string AccountId { get; set; }
+
+            }
             public string DuplicateAccountId { get; set; }
             public string CountryName { get; set; }
             public string AccountStatus { get; set; }
