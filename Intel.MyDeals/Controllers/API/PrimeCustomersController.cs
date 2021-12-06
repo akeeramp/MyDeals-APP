@@ -131,21 +131,11 @@ namespace Intel.MyDeals.Controllers.API
             HttpContent response = this.Request.Content;
             string amcResponse = response.ReadAsStringAsync().Result;
 
-            //HttpContent s = this.Request.Content;
-            //string j = s.ReadAsStringAsync().Result;
-            //var amqdata = "{ \"accountId\":\"0012j00000c0NnoAUU\",\"accountName\":\"ABANCAvan\",\"primaryAddress\":{ \"countryName\":\"Albania\"}," +
-            //    "\"masteredSimplifiedAccountName\":\"ABANCAvan\",\"masteredBusinessPhysicalAddress\":{ \"countryCode\":\"Albania\",\"countryName\":\"Albania\"}," +
-            //    "\"complianceWatchList\":[{ \"code\":\"DPL\",\"name\":\"Denied Parties List\"},{ \"code\":\"EC\",\"name\":\"Embargoed Country\"}],\"customerAggregationType\":" +
-            //    "{ \"code\":\"UNFD_CTRY_CUST\",\"name\":\"Unified Country Customer\"},\"customerProcessEngagement\":[{ \"code\":\"DIR_PRC_EXCPT\",\"name\":\"Direct Price Exception\"}]," +
-            //    "\"businessPartyIdentifier\":\"1000040089\",\"parentAccount\":{ \"accountId\":\"0012D00000OmHaeQAD\",\"accountName\":\"ABANCAvan\",\"businessPartyIdentifier\":\"1000783597\"}}";
-            //var amqdata = "{\"RequestedAccountRejectionReason\":\"\",\"RequestedAccountRejectionNotes\":\"\",\"RecordType\":\"Intel Account\",\"PrimaryAddress\":{\"TypeCode\":\"Billing\",\"CountryName\":" +
-            //    "\"Angola\",\"CountryCode\":\"ANG\"},\"ParentAccount\":{\"BusinessPartyIdentifier\":\"1000033778\",\"AccountName\":\"ABB\",\"AccountId\":\"0012i00000cGkJJAA0\"}," +
-            //    "\"MasteredSimplifiedAccountName\":\"Test Platform Event 01\",\"MasteredBusinessPhysicalAddress\":{\"CountryName\":\"Angola\",\"CountryCode\":\"ANG\"},\"customerProcessEngagement\":[{\"Name\":" +
-            //    "\"Direct Price Exception\",\"Code\":\"DIR_PRC_EXCPT\"}],\"CustomerAggregationType\":{\"Name\":\"Unified Country Customer\",\"Code\":\"UNFD_CTRY_CUST\"},\"ComplianceWatchList\":" +
-            //    "[{\"Name\":\"No Sanction or Embargo\",\"Code\":\"NOSNCTN\"}],\"BusinessPartyIdentifier\":\"1000123456\",\"AccountName\":\"ABB\",\"AccountId\":\"0012i00000cXVLPAA4\"}";
-            //AMCResponce res = new AMCResponce();
-            //res = JsonConvert.DeserializeObject <AMCResponce>(amqdata);
-            _primeCustomersLib.saveAMQResponse(amcResponse);
+            if(amcResponse!=null && amcResponse != "")
+            {
+                _primeCustomersLib.saveAMQResponse(amcResponse);
+            }
+            
             string ret = "";
             return ret;
         }

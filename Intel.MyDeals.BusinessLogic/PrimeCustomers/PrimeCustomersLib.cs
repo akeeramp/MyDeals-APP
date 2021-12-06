@@ -360,47 +360,57 @@ namespace Intel.MyDeals.BusinessLogic
             return success;
         }
 
-        //seperated this DuplicateRequest part into a function so that it can be used to process AMQ survivor account part
-        public DuplicateAccResponse DuplicateRequest(string accountId)
+       
+        public void saveDealEndCustomerAtrbs(int dealId, string endCustObjdata)
         {
-            var DuplicateReqData = new DuplicateRequest
+            var endCustomer = _primeCustomersDataLib.ValidateEndCustomer(endCustObjdata);
+            UnPrimeAtrbs data = new UnPrimeAtrbs();
+            List<string> END_CUSTOMER_RETAIL = new List<string>();
+            List<string> PRIMED_CUST_CNTRY = new List<string>();
+            List<string> PRIMED_CUST_ID = new List<string>();
+            List<string> PRIMED_CUST_NM = new List<string>();
+            List<string> IS_RPL = new List<string>();
+            List<string> IS_PRIMED_CUST = new List<string>();
+            //List<string> IS_EXCLUDE = new List<string>();
+            var primeNotApplicable = "n/a";
+            for (var i = 0; i < endCustomer.Count; i++)
             {
-                businessOrganization = new DuplicateRequest.BusinessOrganization
+                var endCustomerValue = endCustomer[i].END_CUSTOMER_RETAIL;
+                var primeCustidvalue = endCustomer[i].PRIMED_CUST_ID;
+                var primeCustNameValue = endCustomer[i].PRIMED_CUST_NM;
+                if (endCustomerValue != "" || endCustomerValue != null)
                 {
-                    AccountId = new List<string>()
-                },
-                attributes = new List<DuplicateRequest.Attributes>()
+                    END_CUSTOMER_RETAIL.Add(endCustomerValue);
+                    PRIMED_CUST_CNTRY.Add(endCustomer[i].PRIMED_CUST_CNTRY);
+                    if (endCustomer[i].IS_PRIMED_CUST == "0")
+                    {
+                        PRIMED_CUST_ID.Add(primeNotApplicable);
+                        PRIMED_CUST_NM.Add(primeNotApplicable);
+                    }
+                    else
+                    {
+                        if (endCustomerValue.ToUpper() != "ANY")
+                        {
+                            PRIMED_CUST_ID.Add(primeCustidvalue);
+                        }
+                        PRIMED_CUST_NM.Add(primeCustNameValue);
+                    }
+                    IS_RPL.Add(endCustomer[i].IS_RPL);
+                    IS_PRIMED_CUST.Add(endCustomer[i].IS_PRIMED_CUST);
+                }
 
-            };
-            DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
-
-            DuplicateReqData.businessOrganization.AccountId.Add(accountId);
-            //DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
-
-            var AccountInformation = new DuplicateRequest.Attributes
-            { AttributeName = "AccountInformation" };
-            DuplicateReqData.attributes.Add(AccountInformation);
-
-            var ParentAccountInfomation = new DuplicateRequest.Attributes
-            { AttributeName = "ParentAccountInfomation" };
-            DuplicateReqData.attributes.Add(ParentAccountInfomation);
-
-            var AccountMasteredDetails = new DuplicateRequest.Attributes
-            { AttributeName = "AccountMasteredDetails" };
-            DuplicateReqData.attributes.Add(AccountMasteredDetails);
-
-            var AccountAddressInformation = new DuplicateRequest.Attributes
-            { AttributeName = "AccountAddressInformation" };
-            DuplicateReqData.attributes.Add(AccountAddressInformation);
-
-            var AccountComplianceDetails = new DuplicateRequest.Attributes
-            { AttributeName = "AccountComplianceDetails" };
-            DuplicateReqData.attributes.Add(AccountComplianceDetails);
-
-            String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
-            DuplicateAccResponse duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
-            return duplicateAccountresponse;
-
+            }
+            data.END_CUSTOMER_RETAIL = string.Join(",", END_CUSTOMER_RETAIL);
+            data.PRIMED_CUST_CNTRY = string.Join(",", PRIMED_CUST_CNTRY);
+            data.PRIMED_CUST_ID = string.Join(",", PRIMED_CUST_ID);
+            data.PRIMED_CUST_NM = string.Join(",", PRIMED_CUST_NM);
+            data.IS_PRIMED_CUST = string.Join(",", IS_PRIMED_CUST);
+            data.IS_RPL = string.Join(",", IS_RPL);
+            data.END_CUST_OBJ = JsonConvert.SerializeObject(endCustomer);
+            data.IS_PRIMED_CUST = data.IS_PRIMED_CUST.Contains("0") ? "0" : "1";
+            data.IS_RPL = data.IS_RPL.Contains("1") ? "1" : "0";
+            //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
+            UpdateUnPrimeDeals(dealId, data);
         }
 
         public void saveAMQResponse(string amqResponse)
@@ -408,68 +418,101 @@ namespace Intel.MyDeals.BusinessLogic
             //var acmjsonData = JsonConvert.DeserializeObject<dynamic>(amqResponse);
             AMCResponce res = new AMCResponce();
             res = JsonConvert.DeserializeObject<AMCResponce>(amqResponse);
-            //call to save the AMQ response into the log table 
-            if (res != null && res.parentAccount != null && res.parentAccount.AccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
+
+            bool isValidAMQResponse = res.customerAggregationType.Code == "UNFD_CTRY_CUST" && res.customerProcessEngagement.Where(data => data.Code == "DIR_PRC_EXCPT").Count() > 0;
+            if (isValidAMQResponse)
             {
-                var response = _primeCustomersDataLib.SaveUcdRequestData(res.parentAccount.AccountName, res.primaryAddress.CountryName,
-                            0, null, amqResponse, res.AccountId, "AMQ_Response_received");
-
-                if (response != null)
+                if (res != null && res.parentAccount != null && res.parentAccount.AccountName != null && res.primaryAddress != null && res.primaryAddress.CountryName != null && res.AccountId != null)
                 {
-                    for (var j = 0; j < response.Count; j++)
+                    //call to save the AMQ response into the log table
+                    var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                0, null, amqResponse, res.AccountId, "AMQ_Response_received");
+
+                    if (response != null)
                     {
-                        if (response[j].DEAL_ID != 0)
+                        for (var j = 0; j < response.Count; j++)
                         {
-                            var endCustomer = _primeCustomersDataLib.ValidateEndCustomer(response[j].END_CUST_OBJ);
-                            UnPrimeAtrbs data = new UnPrimeAtrbs();
-                            List<string> END_CUSTOMER_RETAIL = new List<string>();
-                            List<string> PRIMED_CUST_CNTRY = new List<string>();
-                            List<string> PRIMED_CUST_ID = new List<string>();
-                            List<string> PRIMED_CUST_NM = new List<string>();
-                            List<string> IS_RPL = new List<string>();
-                            List<string> IS_PRIMED_CUST = new List<string>();
-                            //List<string> IS_EXCLUDE = new List<string>();
-                            var primeNotApplicable = "n/a";
-                            for (var i = 0; i < endCustomer.Count; i++)
+                            if (response[j].DEAL_ID != 0 && (response[j].END_CUST_OBJ != "" || response[j].END_CUST_OBJ != null))
                             {
-                                var endCustomerValue = endCustomer[i].END_CUSTOMER_RETAIL;
-                                var primeCustidvalue = endCustomer[i].PRIMED_CUST_ID;
-                                var primeCustNameValue = endCustomer[i].PRIMED_CUST_NM;
-                                if (endCustomerValue != "" || endCustomerValue != null)
-                                {
-                                    END_CUSTOMER_RETAIL.Add(endCustomerValue);
-                                    PRIMED_CUST_CNTRY.Add(endCustomer[i].PRIMED_CUST_CNTRY);
-                                    if (endCustomer[i].IS_PRIMED_CUST == "0")
-                                    {
-                                        PRIMED_CUST_ID.Add(primeNotApplicable);
-                                        PRIMED_CUST_NM.Add(primeNotApplicable);
-                                    }
-                                    else
-                                    {
-                                        if (endCustomerValue.ToUpper() != "ANY")
-                                        {
-                                            PRIMED_CUST_ID.Add(primeCustidvalue);
-                                        }
-                                        PRIMED_CUST_NM.Add(primeCustNameValue);
-                                    }
-                                    IS_RPL.Add(endCustomer[i].IS_RPL);
-                                    IS_PRIMED_CUST.Add(endCustomer[i].IS_PRIMED_CUST);
-                                }
-
+                                saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ);
                             }
-                            data.END_CUSTOMER_RETAIL = string.Join(",", END_CUSTOMER_RETAIL);
-                            data.PRIMED_CUST_CNTRY = string.Join(",", PRIMED_CUST_CNTRY);
-                            data.PRIMED_CUST_ID = string.Join(",", PRIMED_CUST_ID);
-                            data.PRIMED_CUST_NM = string.Join(",", PRIMED_CUST_NM);
-                            data.IS_PRIMED_CUST = string.Join(",", IS_PRIMED_CUST);
-                            data.IS_RPL = string.Join(",", IS_RPL);
-                            data.END_CUST_OBJ = JsonConvert.SerializeObject(endCustomer);
-                            data.IS_PRIMED_CUST = data.IS_PRIMED_CUST.Contains("0") ? "0" : "1";
-                            data.IS_RPL = data.IS_RPL.Contains("1") ? "1" : "0";
-                            //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
-                            UpdateUnPrimeDeals(response[j].DEAL_ID, data);
-                        }
 
+                        }
+                    }
+
+                }
+                else if (res != null && (res.RequestedAccountRejectionReason != ""|| res.RequestedAccountRejectionReason!=null) && (res.RecordType!="" || res.RecordType != null))
+                {
+                    if (res.RecordType.ToLower() == "rejected account")
+                    {
+                        //Raise a Duplicate API Request,if AMQ response has Survivor AccountId
+                        if (res.RequestedAccountRejectionReason.ToLower() == "duplicate" && res.SurvivorAccountId != null)
+                        {
+                            var DuplicateReqData = new DuplicateRequest
+                            {
+                                businessOrganization = new DuplicateRequest.BusinessOrganization
+                                {
+                                    AccountId = new List<string>()
+                                },
+                                attributes = new List<DuplicateRequest.Attributes>()
+
+                            };
+                            DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
+
+                            DuplicateReqData.businessOrganization.AccountId.Add(res.SurvivorAccountId);
+
+                            var AccountInformation = new DuplicateRequest.Attributes
+                            { AttributeName = "AccountInformation" };
+                            DuplicateReqData.attributes.Add(AccountInformation);
+
+                            var ParentAccountInfomation = new DuplicateRequest.Attributes
+                            { AttributeName = "ParentAccountInfomation" };
+                            DuplicateReqData.attributes.Add(ParentAccountInfomation);
+
+                            var AccountMasteredDetails = new DuplicateRequest.Attributes
+                            { AttributeName = "AccountMasteredDetails" };
+                            DuplicateReqData.attributes.Add(AccountMasteredDetails);
+
+                            var AccountAddressInformation = new DuplicateRequest.Attributes
+                            { AttributeName = "AccountAddressInformation" };
+                            DuplicateReqData.attributes.Add(AccountAddressInformation);
+
+                            var AccountComplianceDetails = new DuplicateRequest.Attributes
+                            { AttributeName = "AccountComplianceDetails" };
+                            DuplicateReqData.attributes.Add(AccountComplianceDetails);
+
+                            String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
+                            DuplicateAccResponse responseforSurvivorAccIDReq = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
+
+                            if (responseforSurvivorAccIDReq != null)
+                            {
+                                string UCDDupResponse = JsonConvert.SerializeObject(responseforSurvivorAccIDReq);
+                                var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                        0, UCDDuplicateReqJson, UCDDupResponse, res.SurvivorAccountId, "AMQ_SurvivorResponse_received");
+
+                                if (response.Count >0)
+                                {
+                                    for (var count = 0; count < response.Count; count++)
+                                    {
+                                        if (response[count].DEAL_ID != 0 && (response[count].END_CUST_OBJ!="" || response[count].END_CUST_OBJ != null))
+                                        {
+                                            saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                     0, null, null, res.SurvivorAccountId, "API_processing_Error");
+                            }
+                        }
+                        else if (res.RequestedAccountRejectionReason.ToLower() == "other")
+                        {
+                            // call to log the AMQ response in the UCD log table for the Account Rejection Scenario
+                            _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                0, null, amqResponse, res.AccountId, "AMQ_Rejected_Account");
+                        }
                     }
                 }
 

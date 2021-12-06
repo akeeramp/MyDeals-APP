@@ -144,6 +144,8 @@ namespace Intel.MyDeals.Entities
     {
         public List<ComplianceWatchList> complianceWatchList { get; set; }
         public List<CustomerProcessEngagement> customerProcessEngagement { get; set; }
+        public CustomerAggregationType customerAggregationType { get; set; }
+        public string SurvivorAccountId { get; set; }
         public string RequestedAccountRejectionReason { get; set; }
         public string RequestedAccountRejectionNotes { get; set; }
         public string RecordType { get; set; }

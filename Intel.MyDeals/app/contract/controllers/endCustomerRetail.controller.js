@@ -299,7 +299,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                                 $ctrl.END_CUST_OBJ = res.data;
                                 //$ctrl.validateFlag = false;
                                 $ctrl.saveEndcustomerData();
-                                logger.success("Request successfully sent to UCD and Processed the response.");
+                                logger.success("Request successfully sent to UCD.");
                             },
                             function (res) {
                                 //$ctrl.saveEndcustomerData();
