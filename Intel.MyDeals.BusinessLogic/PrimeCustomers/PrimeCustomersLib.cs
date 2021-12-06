@@ -175,6 +175,7 @@ namespace Intel.MyDeals.BusinessLogic
         public string UnPrimeDealsLogs(int dealId, string endCustData,bool isRetry=false)
         {
             string success = "false";
+            string isEndCustRecordUnified = "No";
             int responseCount = 0;
             int requestCount = 0;
             List<UCDResponse> ucdResponse = new List<UCDResponse>();
@@ -293,61 +294,25 @@ namespace Intel.MyDeals.BusinessLogic
                                 {
                                     _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
                                 dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_accountid_received");
-
+                      
                                 }
 
 
                             }
                             else if (Response.errormessage.ToLower() == "duplicate account" && (Response.data.DuplicateAccountRecordType.ToLower() == "intel account" || Response.data.DuplicateAccountRecordType.ToLower() == "end customer account"))
                             {
-                                var DuplicateReqData = new DuplicateRequest
+                                //call to process the duplicate account response, if the details are valid then record gets unified and inserted into prime master table and as a response we will receive a valid deal id and end cust obj
+                                       var dealEndCustomerResponse= _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                dealId, null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_Response_received");
+                                if (dealEndCustomerResponse!=null && dealEndCustomerResponse.Count() > 0)
                                 {
-                                    businessOrganization = new DuplicateRequest.BusinessOrganization {
-                                        AccountId=new List<string>()},
-                                    attributes = new List<DuplicateRequest.Attributes>()
-
-                                };
-                                DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
-
-                                DuplicateReqData.businessOrganization.AccountId.Add(Response.data.DuplicateAccountId);
-                                //DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
-
-                                var AccountInformation = new DuplicateRequest.Attributes
-                                { AttributeName = "AccountInformation" };
-                                DuplicateReqData.attributes.Add(AccountInformation);
-
-                                var ParentAccountInfomation = new DuplicateRequest.Attributes
-                                { AttributeName = "ParentAccountInfomation" };
-                                DuplicateReqData.attributes.Add(ParentAccountInfomation);
-
-                                var AccountMasteredDetails = new DuplicateRequest.Attributes
-                                { AttributeName = "AccountMasteredDetails" };
-                                DuplicateReqData.attributes.Add(AccountMasteredDetails);
-
-                                var AccountAddressInformation = new DuplicateRequest.Attributes
-                                { AttributeName = "AccountAddressInformation" };
-                                DuplicateReqData.attributes.Add(AccountAddressInformation);
-
-                                var AccountComplianceDetails = new DuplicateRequest.Attributes
-                                { AttributeName = "AccountComplianceDetails" };
-                                DuplicateReqData.attributes.Add(AccountComplianceDetails);
-
-                                String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
-                                DuplicateAccResponse duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
-                                if (duplicateAccountresponse !=null)
-                                {
-
-                                    string UCDDupResponse = JsonConvert.SerializeObject(duplicateAccountresponse);
-                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                            dealId, null, UCDDupResponse, Response.data.DuplicateAccountId, "API_Response_received");
-
+                                    if(dealEndCustomerResponse[0].DEAL_ID > 0)
+                                    {
+                                        //sending this status back to UI to re-validate End customer again so that Unified atributes and END_CUST_OBJ gets updated for the newly unified record.
+                                        isEndCustRecordUnified = "Yes";
+                                    }
                                 }
-                                else
-                                {
-                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
-                            dealId, null, null, Response.data.DuplicateAccountId, "API_processing_Error");
-                                }
-
+ 
                             }
                             else
                             {
@@ -372,8 +337,11 @@ namespace Intel.MyDeals.BusinessLogic
                     }
 
                 }
-
-                if (requestCount == 0)
+                if (isEndCustRecordUnified == "Yes")
+                {
+                    return isEndCustRecordUnified;
+                }
+                else if (requestCount == 0)
                 {
                     success = "NA";
                 }
@@ -390,6 +358,49 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return success;
+        }
+
+        //seperated this DuplicateRequest part into a function so that it can be used to process AMQ survivor account part
+        public DuplicateAccResponse DuplicateRequest(string accountId)
+        {
+            var DuplicateReqData = new DuplicateRequest
+            {
+                businessOrganization = new DuplicateRequest.BusinessOrganization
+                {
+                    AccountId = new List<string>()
+                },
+                attributes = new List<DuplicateRequest.Attributes>()
+
+            };
+            DuplicateReqData.TransactionId = Guid.NewGuid().ToString();
+
+            DuplicateReqData.businessOrganization.AccountId.Add(accountId);
+            //DuplicateReqData.businessOrganization.AccountId.Add("0012i00000cXqxhAAC");
+
+            var AccountInformation = new DuplicateRequest.Attributes
+            { AttributeName = "AccountInformation" };
+            DuplicateReqData.attributes.Add(AccountInformation);
+
+            var ParentAccountInfomation = new DuplicateRequest.Attributes
+            { AttributeName = "ParentAccountInfomation" };
+            DuplicateReqData.attributes.Add(ParentAccountInfomation);
+
+            var AccountMasteredDetails = new DuplicateRequest.Attributes
+            { AttributeName = "AccountMasteredDetails" };
+            DuplicateReqData.attributes.Add(AccountMasteredDetails);
+
+            var AccountAddressInformation = new DuplicateRequest.Attributes
+            { AttributeName = "AccountAddressInformation" };
+            DuplicateReqData.attributes.Add(AccountAddressInformation);
+
+            var AccountComplianceDetails = new DuplicateRequest.Attributes
+            { AttributeName = "AccountComplianceDetails" };
+            DuplicateReqData.attributes.Add(AccountComplianceDetails);
+
+            String UCDDuplicateReqJson = JsonConvert.SerializeObject(DuplicateReqData);
+            DuplicateAccResponse duplicateAccountresponse = _jmsDataLib.SendRplUCDDuplicateRequest(UCDDuplicateReqJson);
+            return duplicateAccountresponse;
+
         }
 
         public void saveAMQResponse(string amqResponse)
