@@ -299,7 +299,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                             }
-                            else if (Response.errormessage.ToLower() == "duplicate account" && (Response.data.DuplicateAccountRecordType.ToLower() == "intel account" || Response.data.DuplicateAccountRecordType.ToLower() == "end customer account"))
+                            else if (Response.errormessage.ToLower() == "duplicate account" && (Response.data.DuplicateAccountRecordType.ToLower() == "intel account" || Response.data.DuplicateAccountRecordType.ToLower() == "end customer account") && Response.data.duplicateAccountInfo.parentAccount != null)
                             {
                                 //call to process the duplicate account response, if the details are valid then record gets unified and inserted into prime master table and as a response we will receive a valid deal id and end cust obj
                                        var dealEndCustomerResponse= _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
@@ -446,7 +446,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (res.RecordType.ToLower() == "rejected account")
                     {
                         //Raise a Duplicate API Request,if AMQ response has Survivor AccountId
-                        if (res.RequestedAccountRejectionReason.ToLower() == "duplicate" && res.SurvivorAccountId != null)
+                        if (res.RequestedAccountRejectionReason.ToLower() == "duplicate" && res.SurvivorAccountId != null && res.SurvivorAccountId != "")
                         {
                             var DuplicateReqData = new DuplicateRequest
                             {
@@ -487,18 +487,26 @@ namespace Intel.MyDeals.BusinessLogic
                             if (responseforSurvivorAccIDReq != null)
                             {
                                 string UCDDupResponse = JsonConvert.SerializeObject(responseforSurvivorAccIDReq);
-                                var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
-                                        0, UCDDuplicateReqJson, UCDDupResponse, res.SurvivorAccountId, "AMQ_SurvivorResponse_received");
-
-                                if (response.Count >0)
+                                if (responseforSurvivorAccIDReq.data[0].parentAccountInfomation != null)
                                 {
-                                    for (var count = 0; count < response.Count; count++)
+                                    var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                            0, UCDDuplicateReqJson, UCDDupResponse, res.SurvivorAccountId, "AMQ_SurvivorResponse_received");
+
+                                    if (response.Count > 0)
                                     {
-                                        if (response[count].DEAL_ID != 0 && (response[count].END_CUST_OBJ!="" || response[count].END_CUST_OBJ != null))
+                                        for (var count = 0; count < response.Count; count++)
                                         {
-                                            saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ);
+                                            if (response[count].DEAL_ID != 0 && (response[count].END_CUST_OBJ != "" || response[count].END_CUST_OBJ != null))
+                                            {
+                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ);
+                                            }
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                         0, null, UCDDupResponse, res.SurvivorAccountId, "API_processing_Error");
                                 }
                             }
                             else
@@ -507,7 +515,7 @@ namespace Intel.MyDeals.BusinessLogic
                                      0, null, null, res.SurvivorAccountId, "API_processing_Error");
                             }
                         }
-                        else if (res.RequestedAccountRejectionReason.ToLower() == "other")
+                        else if (res.RequestedAccountRejectionReason!= null && res.RequestedAccountRejectionReason != "")
                         {
                             // call to log the AMQ response in the UCD log table for the Account Rejection Scenario
                             _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
