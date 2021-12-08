@@ -414,7 +414,6 @@
         }
 
         function isRplEditable(e) {
-            window.isCustomerAdmin = false;
             if (window.isDeveloper || (window.usrRole == "SA" && !window.isCustomerAdmin)) {
                 if (e.PRIM_SID != "")
                     return true;
