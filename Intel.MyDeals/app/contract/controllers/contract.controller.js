@@ -6429,7 +6429,6 @@
                 $scope.clearValidation(data, 'SETTLEMENT_PARTNER');
                 $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
                 $scope.clearValidation(data, 'CONSUMPTION_TYPE');
-                $scope.clearValidation(data, 'END_CUSTOMER_RETAIL');
 
                 $scope.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"]);
                 if (hybCond) {
@@ -6444,6 +6443,7 @@
                 $scope.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"]);
                 $scope.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"]);
                 if (isFlexDeal) {
+                    $scope.clearValidation(data, 'END_CUSTOMER_RETAIL');
                     $scope.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"]);
                 }
                 //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
