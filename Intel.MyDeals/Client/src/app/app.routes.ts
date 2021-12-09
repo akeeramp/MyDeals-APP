@@ -23,21 +23,12 @@ angular
                 }
 
             })
-            .state("mykendo", {
-                url: "/mykendo",
+            .state("myhandsone", {
+                url: "/myhandsone",
                 abstract: false,
                 views: {
                     mainView: {
-                        template: '<my-kendo></my-kendo>'
-                    }
-                }
-            })
-            .state("myspread", {
-                url: "/myspread",
-                abstract: false,
-                views: {
-                    mainView: {
-                        template: '<my-spread></my-spread>'
+                        template: '<my-handonse></my-handonse>'
                     }
                 }
             })

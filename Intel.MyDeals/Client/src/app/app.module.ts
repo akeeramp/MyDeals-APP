@@ -45,6 +45,9 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //spreadsheet component
 import { HotTableModule } from '@handsontable/angular';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {SpreadComponent} from './shared/handsone/spreadsheet.component.handson';
+import {DialogOverviewExampleDialog} from './shared/modalPopUp/modal.component';
 //Added angular material for popup toggle
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -72,9 +75,10 @@ import {MatInputModule} from '@angular/material/input'
         DropDownsModule,
         InputsModule,
         GridModule,
-        HotTableModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        HotTableModule,
+        NgbModule
         
      ],
      providers: [
@@ -99,7 +103,9 @@ import {MatInputModule} from '@angular/material/input'
         adminCustomerComponent,
         adminCustomerVendorsComponent,
         MultiCheckFilterComponent,
-        PingComponent
+        PingComponent,
+        SpreadComponent,
+        DialogOverviewExampleDialog
     ],
     entryComponents: [
         LoaderComponent,
@@ -109,7 +115,9 @@ import {MatInputModule} from '@angular/material/input'
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
-        PingComponent
+        PingComponent,
+        SpreadComponent,
+        DialogOverviewExampleDialog
     ]
 })
 

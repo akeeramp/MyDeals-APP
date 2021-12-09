@@ -1,4 +1,3 @@
-import * as toastr from 'toastr';
 import { ToastrService } from 'ngx-toastr';
 import {Injectable} from "@angular/core";
 
