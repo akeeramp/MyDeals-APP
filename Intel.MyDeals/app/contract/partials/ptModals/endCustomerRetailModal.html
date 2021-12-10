@@ -40,8 +40,8 @@
                     </div>
                     <div class="col-md-1" style="align-content:center">
                         <span title="NA" ng-if="e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
-                        <span title="Review in Progress" ng-if="e.IS_PRIMED_CUST==1 &&  e.RPL_STS_CD=='REVIEWWIP' && e.IS_RPL==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
-                        <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0 && e.RPL_STS_CD!='REVIEWWIP'" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Review in Progress" ng-if="e.IS_PRIMED_CUST==1 &&  (e.RPL_STS_CD == null || e.RPL_STS_CD == '' || e.RPL_STS_CD == 'REVIEWWIP') && e.IS_RPL==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0 && (e.RPL_STS_CD != null && e.RPL_STS_CD != '' && e.RPL_STS_CD != 'REVIEWWIP')" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
                         <span title="Yes" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                     </div>
                     <div class="col-md-1" style="width:90px;padding-right:0px;">
