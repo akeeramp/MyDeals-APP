@@ -3131,7 +3131,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void LongTermTesting(params object[] args)
+        public static void LongTermVolTierDates(params object[] args)
         {
             // To replace the below function
             // public static void LongTermVolTierDates(params object[] args)
@@ -3172,46 +3172,46 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void LongTermVolTierDates(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+        //public static void LongTermVolTierDates(params object[] args)
+        //{
+        //    MyOpRuleCore r = new MyOpRuleCore(args);
+        //    if (!r.IsValid) return;
 
-            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-            IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
-            string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-            //customerMemberSid set to zero , to get the date details as per Intel calendar
-            int customerMemberSid = 0;
+        //    IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+        //    IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+        //    IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+        //    string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+        //    //customerMemberSid set to zero , to get the date details as per Intel calendar
+        //    int customerMemberSid = 0;
 
-            if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
+        //    if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
 
-            if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
+        //    if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
 
-            if ((dealType == "VOL_TIER" && numTiers > 1) || (dealType != "VOL_TIER" ))
-            {
-                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
-                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-                var yearStartDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, startDate, null, null);
-                int qtr = yearStartDate.QTR_NBR - 1;
-                int yr = 0;
-                if (qtr > 0)
-                {
-                    yr = yearStartDate.YR_NBR + 1;
-                }
-                else
-                {
-                    qtr = 4;
-                    yr = yearStartDate.YR_NBR;
-                }
-                var EndquarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, null, (short)yr, (short)qtr);
-                DateTime maxEndDt = EndquarterDetails.QTR_END;
-                if (endDate > maxEndDt)
-                {
-                    deEndDate.AddMessage("End date is limited to 1 year from deal start date");
-                }
-            }
-        }
+        //    if ((dealType == "VOL_TIER" && numTiers > 1) || (dealType != "VOL_TIER" ))
+        //    {
+        //        DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+        //        DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+        //        var yearStartDate = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, startDate, null, null);
+        //        int qtr = yearStartDate.QTR_NBR - 1;
+        //        int yr = 0;
+        //        if (qtr > 0)
+        //        {
+        //            yr = yearStartDate.YR_NBR + 1;
+        //        }
+        //        else
+        //        {
+        //            qtr = 4;
+        //            yr = yearStartDate.YR_NBR;
+        //        }
+        //        var EndquarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, null, (short)yr, (short)qtr);
+        //        DateTime maxEndDt = EndquarterDetails.QTR_END;
+        //        if (endDate > maxEndDt)
+        //        {
+        //            deEndDate.AddMessage("End date is limited to 1 year from deal start date");
+        //        }
+        //    }
+        //}
 
         public static void LastTierEndVolumeCheck(params object[] args) // Lock down Tier Structures after tracker is generated (US1028743)
         {
