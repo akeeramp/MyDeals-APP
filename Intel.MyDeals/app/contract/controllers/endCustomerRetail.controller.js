@@ -257,8 +257,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             else
                 return [item.PRIMED_CUST_NM].join(",")
         }
-        data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1
-        data.IS_RPL = $ctrl.END_CUST_OBJ.filter(x => x.IS_RPL == 1).length > 0 ? 1 : 0;
+        data.IS_PRIME = $ctrl.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1;
+        //RPL status of Excluded End Customer should not be Considered in determining the deal level IS_RPL attribute
+        data.IS_RPL = $ctrl.END_CUST_OBJ.filter(x => x.IS_RPL == 1 && x.IS_EXCLUDE != "1").length > 0 ? 1 : 0;
 
         // setting PRIMED_CUST_ID to n/a to all the combinations except for any(as for End customer "any" PRIMED_CUST_ID is null)
         var primeCustObjWithoutAny = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")
