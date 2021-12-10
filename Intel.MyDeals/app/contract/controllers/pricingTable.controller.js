@@ -1390,11 +1390,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     // Calculate next start pb using end pb
                                     if (nextRow !== undefined && !isEndVolUnlimited) {
                                         nextRow.STRT_PB = (value.value + .001);
-                                        sourceData[(rowIndex)].STRT_PB = nextRow.STRT_PB;
+                                        sourceData[(rowIndex)].STRT_PB = kendo.toString(nextRow.STRT_PB,"n3");
                                     }
                                 }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                                 value.value = kendo.toString(value.value, "n3");
+                                
 
                                 myRow.END_PB = value.value;
                                 sourceData[(rowIndex - 1)].END_PB = myRow.END_PB;
@@ -5011,15 +5012,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 _.each(item, (prdDet) => {
                                     // Handle single product with multiple density_band
                                     let densities = prdDet[0].NAND_TRUE_DENSITY ? prdDet[0].NAND_TRUE_DENSITY.split(",").map(function (el) { return el.trim(); }) : [];
+                                    if (densities.length == 0) {
+                                        densities.push("null");
+                                    }
                                     densities.sort();
-                                    if (densities.length > 0) {
+                                    if (densities.length > 0 || densities.length == 0) {
                                         //underscore union creates a single array without duplicates.
                                         Nand_Den = _.union(Nand_Den, densities);
                                     }
                                 });
-                                
+
+                                if (Nand_Den.indexOf("null") > -1) {
+                                    validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'nullDensity' });
+                                    return;
+                                }
+
                                 if (selProd && selProd.NUM_OF_DENSITY != Nand_Den.length) {
-                                    validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length });
+                                    validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length,cond: 'insufficientDensity' });
                                 }
                                 else {
                                     // logic to assign the proper density bands in spreadDs
@@ -5054,7 +5063,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             _.each(validMisProd, (item) => {
                                 if (itm.DC_ID == item.DCID) {
                                     itm._dirty = true;
-                                    root.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`);
+                                    if (item.cond.contains('nullDensity')) {
+                                        root.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it')
+                                    }
+                                    else if(item.cond == 'insufficientDensity')
+                                        root.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`);
                                 }
                             })
                         });
