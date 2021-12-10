@@ -904,7 +904,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
                     isRPLReviewwip = checkedDeals.filter(function (x) {
                         if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL == "0").length > 0;
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL == "0").length > 0;
                             return rplStatusCodeCheck;
                         }
                         else {
@@ -926,7 +926,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
                     isRPLReviewwip = data.filter(function (x) {
                         if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL=="0").length > 0;
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL=="0").length > 0;
                             return rplStatusCodeCheck;
                         }
                         else {
