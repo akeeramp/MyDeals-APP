@@ -904,7 +904,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
                     isRPLReviewwip = checkedDeals.filter(function (x) {
                         if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL == "0").length > 0;
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0;
                             return rplStatusCodeCheck;
                         }
                         else {
@@ -926,7 +926,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
                     isRPLReviewwip = data.filter(function (x) {
                         if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL=="0").length > 0;
+                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL=="0" && x.IS_EXCLUDE!="1").length > 0;
                             return rplStatusCodeCheck;
                         }
                         else {
@@ -940,11 +940,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     isDealhasErrors = validationErrorCheck.length > 0 ? true : false;
                     
                 }
-                if (isDealhasErrors && args["action"] == "Won") {
-                    kendo.alert("Please Fix the Validation Errors before it can be set to " + args["action"]);
-                    return;
-                }
-
+                
                 if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
@@ -955,6 +951,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 else if (args["action"] == "Won" &&  isRPLReviewwip.length > 0) {
                     kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] +" till Review is complete. ");
+                    return;
+                }
+                if (isDealhasErrors && args["action"] == "Won") {
+                    kendo.alert("Please Fix the Validation Errors before it can be set to " + args["action"]);
                     return;
                 }
 
