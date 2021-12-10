@@ -886,11 +886,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var actionsChecked = false;
                 var isTenderStage = (args["action"] == "Offer" || args["action"] == "Won" || args["action"] == "Lost") ? true : false;
                 var data = $scope.contractDs.data();
-
+                var isDealhasErrors = true;
                 var checkedDeals = data.filter(function (x) {
                     return x["isLinked"] === true
                 });
                 var isdealsUnified = undefined;
+                var validationErrorCheck;
                 // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
                 var isEcRPLed = undefined;
                 var isRPLReviewwip = undefined;
@@ -911,6 +912,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
 
                     });
+                    validationErrorCheck = checkedDeals.filter(function (x) {
+                        return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
+                    });
+                    isDealhasErrors = validationErrorCheck.length>0?true:false;
+
                 } else {
                     isdealsUnified = data.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
@@ -928,6 +934,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
 
                     });
+                    validationErrorCheck = data.filter(function (x) {
+                        return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
+                    });
+                    isDealhasErrors = validationErrorCheck.length > 0 ? true : false;
+                    
+                }
+                if (isDealhasErrors && args["action"] == "Won") {
+                    kendo.alert("Please Fix the Validation Errors before it can be set to " + args["action"]);
+                    return;
                 }
 
                 if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
