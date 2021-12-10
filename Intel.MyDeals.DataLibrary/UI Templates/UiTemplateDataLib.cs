@@ -2844,7 +2844,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3346,
                 AtrbCd = AttributeCodes.END_CUST_OBJ,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 180,
+                Width = 0,
                 Label = "END_CUST_OBJ",
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_CUST_OBJ')#",
                 DataType = "string",
