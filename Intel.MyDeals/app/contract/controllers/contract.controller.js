@@ -2944,6 +2944,9 @@
                                     if (sData[s][rateKey] === null || sData[s][rateKey] === "" || isNaN(sData[s][rateKey])) {
                                         sData[s][rateKey] = parseFloat(0);
                                     }
+                                    if ((curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY" && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") && (sData[s][endKey] === null || sData[s][endKey] === "" || isNaN(sData[s][endKey]))) {
+                                        sData[s][endKey] = parseFloat(0);
+                                    }
                                     if (sData[s][strtKey] === null) {
                                         sData[s][strtKey] = parseFloat(0);
                                     }
