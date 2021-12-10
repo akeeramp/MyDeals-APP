@@ -1441,10 +1441,14 @@
         $scope.changeBidAction = function (dataItem, newVal, gridDS) {
             var tenders = [];
             var linkedUnactionables = [];
+            var isDealhasValidationerrors = false;
             // if item is checked (linked) then we need to make sure all linked items are in the same stages otherwise we disallow the action
             if (dataItem.isLinked) {
                 for (var d = 0; d < gridDS.length; d++) {
                     if (gridDS[d].isLinked) {
+                        if (gridDS[d].PASSED_VALIDATION.toLowerCase() == "dirty" && newVal === "Won") {
+                            isDealhasValidationerrors = true;
+                        }
                         if (gridDS[d].WF_STG_CD != dataItem.WF_STG_CD || gridDS[d].PS_WF_STG_CD != dataItem.PS_WF_STG_CD) {
                             //mismatch detected, end execution and warn user
                             kendo.alert("The selected deals must be in the same Stage in order to do Actions in bulk.");
@@ -1518,11 +1522,14 @@
                 isDealNotUnififed = dataItem["IS_PRIMED_CUST"] == 0 && dataItem["END_CUSTOMER_RETAIL"] !== "";
                 isDealRPLed = dataItem["IS_RPL"] == 1 && dataItem["END_CUSTOMER_RETAIL"] !== "";
                 isRPLStatusReviewwip = JSON.parse(dataItem["END_CUST_OBJ"]).filter(x => x.RPL_STS_CD == "REVIEWWIP" && x.IS_RPL == "0").length > 0 ? true : false;
-
+                isDealhasValidationerrors = dataItem["PASSED_VALIDATION"].toLowerCase() == "dirty" ? true:false;
             }
 
-            if (newVal === "Won" && (isDealNotUnififed || isDealRPLed || isRPLStatusReviewwip)) {
-                if (isDealNotUnififed) {
+            if (newVal === "Won" && (isDealNotUnififed || isDealRPLed || isRPLStatusReviewwip || isDealhasValidationerrors)) {
+                if (isDealhasValidationerrors) {
+                    kendo.alert("Please Fix the Validation Errors before it can be set to " + newVal);
+                }
+                else if (isDealNotUnififed) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + newVal);
                 }
                 else if (isDealRPLed) {
