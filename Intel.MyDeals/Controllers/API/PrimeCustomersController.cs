@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
 using System.Net.Http;
+using System;
 
 
 namespace Intel.MyDeals.Controllers.API
@@ -61,7 +62,8 @@ namespace Intel.MyDeals.Controllers.API
         {
             var result = SafeExecutor(() => _primeCustomersLib.GetPrimeCustomers(),
                 $"Unable to Get Unified Customers");
-            var distinctPrimcustNmList = result.Select(x => x.PRIM_CUST_NM).Distinct();
+            //get the distinct end customer names irrespective of the case. ex. Amazon or amazon only one distinct value should be considered.
+            var distinctPrimcustNmList = result.Select(x => x.PRIM_CUST_NM).Distinct(StringComparer.OrdinalIgnoreCase);
             return distinctPrimcustNmList.Select(x => new System.Web.Mvc.SelectListItem { Value = x, Text = x });
         }
 
