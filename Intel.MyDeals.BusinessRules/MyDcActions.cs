@@ -705,6 +705,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyIfConsumptionAndSellThru(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string consTypeValue = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_TYPE);
+
+            // Only VOL TIER deals are allowed to do Sell Thru, all others are read only 
+            if (consTypeValue == "Sell Thru")
+            {
+                IOpDataElement deLookbackPeriod = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
+                if (deLookbackPeriod != null) deLookbackPeriod.IsReadOnly = true;
+            }
+        }
+
         public static void CheckCustDivValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -2954,6 +2969,7 @@ namespace Intel.MyDeals.BusinessRules
             if (consumptionType  == "Sell Thru" && myLookbackPeriod.AtrbValue.ToString() != "0") // Sell Thru must reset CONSUMPTION_LOOKBACK_PERIOD to 0
             {
                 myLookbackPeriod.AddMessage("Consumption Lookback Period must be 0 Months if Consumption Type is 'Sell Thru'.");
+                myLookbackPeriod.AtrbValue = 0;
             }
         }
 
