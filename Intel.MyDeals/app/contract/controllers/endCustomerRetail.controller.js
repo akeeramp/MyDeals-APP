@@ -200,7 +200,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
 
         angular.forEach(ctryValues, (item,i) => {
             //Embargo country validation alert.
-            if ($scope.ovlapObjType == "PricingTable") {
                 embCtry = $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
                 if (embCtry) {
                     $ctrl.IsError = true;
@@ -208,7 +207,6 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
                     $("#DropdownSelections_" + i).parent().find("span").attr("title", $ctrl.embValidationMsg)
                 }
-            }
         });
         
         if (!$ctrl.IsError) {
@@ -229,8 +227,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var duplicateIndex = 0;
         var rowError = false;
         angular.forEach($ctrl.END_CUST_OBJ, (item) => {
-            if (i != duplicateIndex && item.END_CUSTOMER_RETAIL == ecVal && item.PRIMED_CUST_CNTRY == ctryVal) {
+            if (i != duplicateIndex && item.END_CUSTOMER_RETAIL.toUpperCase() == ecVal.toUpperCase() && item.PRIMED_CUST_CNTRY == ctryVal) {
                 $ctrl.IsError = true;
+                $ctrl.validateFlag = true;
                 rowError = true;
                 $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").css("background-color", "red");
                 $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")

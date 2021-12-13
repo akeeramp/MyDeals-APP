@@ -817,7 +817,7 @@
                                 delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
                                 delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
                             }
-                            gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString().toUpperCase();
+                            gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString();
                         }
                     }
 
