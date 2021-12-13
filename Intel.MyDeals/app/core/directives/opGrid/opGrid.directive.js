@@ -2209,6 +2209,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (col == "CONSUMPTION_TYPE" && newVal == "Sell Thru") {
                     if (model.CONSUMPTION_LOOKBACK_PERIOD != null && model.CONSUMPTION_LOOKBACK_PERIOD != undefined) {
                         model.CONSUMPTION_LOOKBACK_PERIOD = "0";
+                        model._behaviors.isReadOnly["CONSUMPTION_LOOKBACK_PERIOD"] = true;
+                    }
+                }
+
+                if (col == "CONSUMPTION_TYPE" && newVal == "Manufacture") {
+                    if (model.CONSUMPTION_LOOKBACK_PERIOD != null && model.CONSUMPTION_LOOKBACK_PERIOD != undefined) {
+                        model._behaviors.isReadOnly["CONSUMPTION_LOOKBACK_PERIOD"] = false;
                     }
                 }
 

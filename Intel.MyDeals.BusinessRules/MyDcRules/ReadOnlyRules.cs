@@ -152,6 +152,15 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any()
                 },
 
+                new MyOpRule // Set to read only if deal is consumption and double consumption is "sell thru"
+                {
+                    Title="Readonly if Consumption and Sell Thru",
+                    ActionRule = MyDcActions.ReadOnlyIfConsumptionAndSellThru,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.HasValue("Consumption")).Any()
+                },
+
                 new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
                 {
                     Title="Readonly Start Date if Tracker Exists and Is In Past",
