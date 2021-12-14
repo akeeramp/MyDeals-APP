@@ -6731,6 +6731,7 @@
             else if (cond != '' && elem == 'DENSITY_BAND') {
                 item._behaviors.validMsg[elem] = cond;
                 if (!item.isDensity) { item.isDensity = {}; item.isDensity[elem] = true; item.isDensity['ErrorMsg'] = cond; }
+                else { item.isDensity['ErrorMsg'] = cond; }
             }
             else if (cond == 'emptyobject' && elem == 'FLEX') {
                 delete item._behaviors.isRequired[elem];
