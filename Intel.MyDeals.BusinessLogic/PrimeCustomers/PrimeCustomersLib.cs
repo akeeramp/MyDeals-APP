@@ -299,7 +299,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
                             }
-                            else if (Response.errormessage.ToLower() == "duplicate account" && (Response.data.DuplicateAccountRecordType.ToLower() == "intel account" || Response.data.DuplicateAccountRecordType.ToLower() == "end customer account") && Response.data.duplicateAccountInfo.parentAccount != null)
+                            else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() != "requested account" && Response.data.duplicateAccountInfo.parentAccount != null)
                             {
                                 //call to process the duplicate account response, if the details are valid then record gets unified and inserted into prime master table and as a response we will receive a valid deal id and end cust obj
                                        var dealEndCustomerResponse= _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
@@ -490,7 +490,7 @@ namespace Intel.MyDeals.BusinessLogic
                                 if (responseforSurvivorAccIDReq.data[0].parentAccountInfomation != null)
                                 {
                                     var response = _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
-                                            0, UCDDuplicateReqJson, UCDDupResponse, res.SurvivorAccountId, "AMQ_SurvivorResponse_received");
+                                            0, UCDDuplicateReqJson, UCDDupResponse, res.AccountId, "AMQ_SurvivorResponse_received");
 
                                     if (response.Count > 0)
                                     {
