@@ -30,6 +30,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.pcVer = "Beta";
     $scope.pcCookUI = {};
     $scope.isUnmergedCellModifed = false;
+    $scope.isExcludePrdChange = false;
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
 
@@ -951,6 +952,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
         var isExcludeProductColumnIncludedInChanges = (range._ref.topLeft.col <= excludeProductColIndex) && (range._ref.bottomRight.col >= excludeProductColIndex);
+        $scope.isExcludePrdChange = isExcludeProductColumnIncludedInChanges;
 
         var data = root.spreadDs.data();
         var sourceData = root.pricingTableData.PRC_TBL_ROW;
@@ -3631,7 +3633,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT" || dealType == "DENSITY");
+                || (dealType == "KIT") || ($scope.isExcludePrdChange);
         });
 
         // Convert into format accepted by translator API
@@ -3648,7 +3650,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
                 IS_HYBRID_PRC_STRAT: row.IS_HYBRID_PRC_STRAT,
-                SendToTranslation: (dealType == "KIT" || dealType == "DENSITY") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
+                SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
         //adding Exclude
@@ -3666,7 +3668,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         "PROGRAM_PAYMENT": obj.PROGRAM_PAYMENT,
                         "CUST_MBR_SID": $scope.contractData.CUST_MBR_SID,
                         "IS_HYBRID_PRC_STRAT": obj.IS_HYBRID_PRC_STRAT,
-                        "SendToTranslation": !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                        "SendToTranslation": (dealType == "DENSITY" && $scope.isExcludePrdChange) || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
                     }
                     translationInput.push(object);
                 }
@@ -4201,6 +4203,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     if (excludeProducts !== "") {
                         input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
+                        $scope.isExcludePrdChange = true;
                     }
                 }
             }
@@ -5012,7 +5015,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 _.each(item, (prdDet) => {
                                     // Handle single product with multiple density_band
                                     let densities = prdDet[0].NAND_TRUE_DENSITY ? prdDet[0].NAND_TRUE_DENSITY.split(",").map(function (el) { return el.trim(); }) : [];
-                                    if (densities.length == 0) {
+                                    if (densities.length == 0 && !prdDet[0].EXCLUDE) {
                                         densities.push("null");
                                     }
                                     densities.sort();
@@ -5193,7 +5196,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     $scope.$on('validateDensity', function (event, args) {
-        validateOnlyProducts();
+        if (args && args.length != 0 && args[0].isDensity && !args[0].isDensity['DENSITY_BAND']) {
+            validateOnlyProducts();
+        }
+        else { return; }
     });
 
     init();
