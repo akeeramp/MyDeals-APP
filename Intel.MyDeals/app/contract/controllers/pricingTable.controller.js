@@ -1392,7 +1392,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     // Calculate next start pb using end pb
                                     if (nextRow !== undefined && !isEndVolUnlimited) {
                                         nextRow.STRT_PB = (value.value + .001);
-                                        sourceData[(rowIndex)].STRT_PB = kendo.toString(nextRow.STRT_PB,"n3");
+                                        sourceData[(rowIndex)].STRT_PB = kendo.toString(nextRow.STRT_PB, "n3");
+                                        data[(rowIndex)].STRT_PB = kendo.toString(nextRow.STRT_PB, "n3");
                                     }
                                 }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
@@ -3668,7 +3669,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         "PROGRAM_PAYMENT": obj.PROGRAM_PAYMENT,
                         "CUST_MBR_SID": $scope.contractData.CUST_MBR_SID,
                         "IS_HYBRID_PRC_STRAT": obj.IS_HYBRID_PRC_STRAT,
-                        "SendToTranslation": (dealType == "DENSITY" && $scope.isExcludePrdChange) || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                        "SendToTranslation": (dealType == "DENSITY" && ($scope.isExcludePrdChange)) || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
                     }
                     translationInput.push(object);
                 }
@@ -5069,7 +5070,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     if (item.cond.contains('nullDensity')) {
                                         root.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it')
                                     }
-                                    else if(item.cond == 'insufficientDensity')
+                                    else if (item.cond == 'insufficientDensity')
                                         root.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`);
                                 }
                             })
