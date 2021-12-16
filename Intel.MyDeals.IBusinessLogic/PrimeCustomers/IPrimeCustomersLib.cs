@@ -17,7 +17,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PrimeCustomerDetails> GetEndCustomerData(string endCustomerName, string endCustomerCountry);
 
-        bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData);
+        bool UpdateUnPrimeDeals(int dealId, UnPrimeAtrbs endCustData, bool isUnificationMailRequired=true);
 
         List<EndCustomer> ValidateEndCustomer(string endCustObj);
 
