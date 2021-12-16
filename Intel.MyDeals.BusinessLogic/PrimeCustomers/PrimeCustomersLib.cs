@@ -437,10 +437,10 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             if (response[j].DEAL_ID != 0 && (response[j].END_CUST_OBJ != "" || response[j].END_CUST_OBJ != null))
                             {
-                                List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(response[j].END_CUST_OBJ);
+                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[j].END_CUST_OBJ);
                                 //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                 //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
-                                var isUnificationMailRequired = endCustJsonObj.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
                                 saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ, isUnificationMailRequired);
                             }
 
@@ -507,8 +507,8 @@ namespace Intel.MyDeals.BusinessLogic
                                             {
                                                 //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                                 //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
-                                                List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ);
-                                                var isUnificationMailRequired = endCustJsonObj.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ);
+                                                var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
                                                 saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ, isUnificationMailRequired);
                                             }
                                         }
