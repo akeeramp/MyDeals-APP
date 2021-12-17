@@ -3335,7 +3335,11 @@
 
                             // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
                             if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                                dictGroupType[gData[i]["DEAL_COMB_TYPE"]] = i;
+                                if (Object.keys(dictGroupType).length == 0) {
+                                    gData.map(function (data, index) {
+                                        dictGroupType[data["DEAL_COMB_TYPE"]] = index;
+                                    });
+                                }
                                 if (Object.keys(dictGroupType).length > 1) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
