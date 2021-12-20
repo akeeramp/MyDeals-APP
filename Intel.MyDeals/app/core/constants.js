@@ -1598,6 +1598,9 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
+                    "CONSUMPTION_COUNTRY": {
+                        "Groups": ["Consumption"]
+                    },
                     "SYS_PRICE_POINT": {
                         "Groups": ["Consumption"]
                     },
