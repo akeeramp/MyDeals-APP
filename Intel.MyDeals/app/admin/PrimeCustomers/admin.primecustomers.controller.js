@@ -46,6 +46,7 @@
         }
 
         function updatePrimeCustomers(e) {
+            e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
             PrimeCustomersService.UpdatePrimeCustomer(e.data)
                 .then(function (response) {
                     e.success(response.data);
@@ -207,7 +208,6 @@
             optionLabel: "Select Customer Country..",
             dataSource: {
                 type: "json",
-                serverFiltering: true,
                 transport: {
                     read: function (e) {
                         e.success(vm.countries);
@@ -218,7 +218,8 @@
             autoBind: true,
             dataTextField: "CTRY_NM",
             dataValueField: "CTRY_NM",
-            valuePrimitive: true
+            valuePrimitive: true,
+            filter: "contains"
 
         }
 
@@ -226,15 +227,15 @@
             optionLabel: "Select RPL status code..",
             dataSource: {
                 type: "json",
-                serverFiltering: true,
                 transport: {
                     read: function (e) {
                         e.success(vm.RplStatusCodes);
                     }
                 }
             },
-            maxSelectedItems: 1,
-            autoBind: true,
+            autoBind: false,
+            autoClose: false,
+            filter: "contains",
             dataTextField: "RPL_STS_CD",
             dataValueField: "RPL_STS_CD",
             valuePrimitive: true
@@ -250,7 +251,11 @@
         }
 
         vm.PrimeCustRplStatusCodeEditor = function (container, options) {
-            var editor = $('<select kendo-combo-box k-options="vm.PrimeCustRplStatusCodes"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+            if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "") {
+                options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(',')
+            }
+            var editor = $('<select class="fr opUiContainer md" kendo-multi-select k-options="vm.PrimeCustRplStatusCodes" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+
         }
 
         vm.PrimeIDEditor = function (container, options) {
@@ -374,7 +379,7 @@
                 {
                     field: "RPL_STS_CD",
                     title: "RPL Status Code",
-                    width: "200px",
+                    width: "300px",
                     editor: vm.PrimeCustRplStatusCodeEditor,
                     filterable: { multi: true, search: true },
                     editable: isRplEditable

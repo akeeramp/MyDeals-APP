@@ -1508,7 +1508,7 @@
                 isDealRPLed = rpledDeals.length > 0 ? true : false;
                 var RPLStatusReviewwip = tenders.filter(function (x) {
                     if (x["END_CUST_OBJ"] !== "") {
-                        var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0;
+                        var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0;
                         return rplStatusCodeCheck;
                     }
                     else {
@@ -1522,7 +1522,7 @@
                 isDealNotUnififed = dataItem["IS_PRIMED_CUST"] == 0 && dataItem["END_CUSTOMER_RETAIL"] !== "";
                 isDealRPLed = dataItem["IS_RPL"] == 1 && dataItem["END_CUSTOMER_RETAIL"] !== "";
                 if (dataItem["END_CUST_OBJ"] != "") {
-                    isRPLStatusReviewwip = JSON.parse(dataItem["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD == "REVIEWWIP") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0 ? true : false;
+                    isRPLStatusReviewwip = JSON.parse(dataItem["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0 ? true : false;
                 }
                 isDealhasValidationerrors = dataItem["PASSED_VALIDATION"].toLowerCase() == "dirty" ? true:false;
             }
