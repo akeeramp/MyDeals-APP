@@ -67,7 +67,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _primeCustomersDataLib.GetEndCustomerData(endCustomerName, endCustomerCountry);
         }
 
-        public bool UpdateUnPrimeDeals(int dealId , UnPrimeAtrbs endCustData)
+        public bool UpdateUnPrimeDeals(int dealId , UnPrimeAtrbs endCustData,bool isUnificationMailRequired=true)
         {
             if (!string.IsNullOrEmpty(endCustData.PRIMED_CUST_NM) && !string.IsNullOrEmpty(endCustData.PRIMED_CUST_CNTRY))
             {
@@ -119,7 +119,10 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (saveResponse != null && endCustData.IS_PRIMED_CUST == "1")
                 {
-                    _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
+                    if (isUnificationMailRequired)
+                    {
+                        _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
+                    }
                     bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
                     if (salesForceCheck)
                     {
@@ -361,7 +364,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
        
-        public void saveDealEndCustomerAtrbs(int dealId, string endCustObjdata)
+        public void saveDealEndCustomerAtrbs(int dealId, string endCustObjdata, bool isUnificationMailRequired)
         {
             var endCustomer = _primeCustomersDataLib.ValidateEndCustomer(endCustObjdata);
             UnPrimeAtrbs data = new UnPrimeAtrbs();
@@ -410,7 +413,7 @@ namespace Intel.MyDeals.BusinessLogic
             data.IS_PRIMED_CUST = data.IS_PRIMED_CUST.Contains("0") ? "0" : "1";
             data.IS_RPL = data.IS_RPL.Contains("1") ? "1" : "0";
             //calling this function to update the deal data(end customer data) once we receive AMQ response and data inserted to the UCD log table 
-            UpdateUnPrimeDeals(dealId, data);
+            UpdateUnPrimeDeals(dealId, data, isUnificationMailRequired);
         }
 
         public void saveAMQResponse(string amqResponse)
@@ -434,7 +437,11 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             if (response[j].DEAL_ID != 0 && (response[j].END_CUST_OBJ != "" || response[j].END_CUST_OBJ != null))
                             {
-                                saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ);
+                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[j].END_CUST_OBJ);
+                                //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
+                                //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
+                                var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ, isUnificationMailRequired);
                             }
 
                         }
@@ -498,7 +505,11 @@ namespace Intel.MyDeals.BusinessLogic
                                         {
                                             if (response[count].DEAL_ID != 0 && (response[count].END_CUST_OBJ != "" || response[count].END_CUST_OBJ != null))
                                             {
-                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ);
+                                                //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
+                                                //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
+                                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ);
+                                                var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
+                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ, isUnificationMailRequired);
                                             }
                                         }
                                     }
