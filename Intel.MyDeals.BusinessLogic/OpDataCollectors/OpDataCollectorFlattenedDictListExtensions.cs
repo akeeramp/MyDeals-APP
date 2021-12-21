@@ -51,7 +51,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 decoderDict[odt] = data.ToDictionaryByDcParentId(odt);
             }
 
-            return data[opDataElementType].RecurFlattenedItems(opDataElementType, decoderDict);
+            //Added if condition to fix TWC3167-814 defect
+            //if we take an offer stage tender deal and open any of the popup fields(ex:System price point,Customer Segment,end customer etc), without doing any modifictions save and close the popup  and then save that deal,in that scenario at this place it is throwing an internal server error with the message "the given key was not present in the dictionary". To avoid that added a check for the Key in the data.
+            if (data.ContainsKey(opDataElementType))
+            {
+                return data[opDataElementType].RecurFlattenedItems(opDataElementType, decoderDict);
+            }
+            else
+            {
+                return new OpDataCollectorFlattenedList();
+            }
         }
 
         private static OpDataCollectorFlattenedList RecurFlattenedItems(this OpDataCollectorFlattenedList data, OpDataElementType opDataElementType,
