@@ -24,6 +24,7 @@
         vm.countries = [];
         vm.primeCustomers = [];
         vm.RplStatusCodes = [];
+        vm.editingRowData = null;
 
         vm.initiateDropdown = function () {
             PrimeCustomersService.getCountries().then(function (response) {
@@ -46,7 +47,9 @@
         }
 
         function updatePrimeCustomers(e) {
-            e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+            if (e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && jQuery.isArray(e.data.RPL_STS_CD)) {
+                e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+            }
             PrimeCustomersService.UpdatePrimeCustomer(e.data)
                 .then(function (response) {
                     e.success(response.data);
@@ -70,20 +73,30 @@
                     });
                 },
                 update: function (e) {
-                    var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
-                        x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
-                    if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS_CD != e.data.RPL_STS_CD) {
-                        updatePrimeCustomers(e);
+                    if (vm.editingRowData != null && vm.editingRowData != undefined
+                        && vm.editingRowData.IS_ACTV == e.data.IS_ACTV && vm.editingRowData.RPL_STS_CD != null
+                        && vm.editingRowData.RPL_STS_CD != undefined && vm.editingRowData.RPL_STS_CD != ""
+                        && e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && e.data.RPL_STS_CD != "" &&
+                        vm.editingRowData.RPL_STS_CD.join(',') == e.data.RPL_STS_CD.join(',')) {
+                        e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+                        vm.dataSource.cancelChanges();
                     }
-                    else if (!e.data.IS_ACTV) {
-                        kendo.confirm("There may be a chance of deals associated with this combination.<br/><br/> Are you sure want to deactivate this combination?").then(function () {
+                    else {
+                        var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
+                            x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
+                        if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS_CD != e.data.RPL_STS_CD) {
                             updatePrimeCustomers(e);
-                        }).fail(function () {
-                            vm.dataSource.cancelChanges();
-                        });
-                    }
-                    else if (e.data.IS_ACTV && vm.IsvalidPrimeCustomer(e.data)) {
-                        updatePrimeCustomers(e);
+                        }
+                        else if (!e.data.IS_ACTV) {
+                            kendo.confirm("There may be a chance of deals associated with this combination.<br/><br/> Are you sure want to deactivate this combination?").then(function () {
+                                updatePrimeCustomers(e);
+                            }).fail(function () {
+                                vm.dataSource.cancelChanges();
+                            });
+                        }
+                        else if (e.data.IS_ACTV && vm.IsvalidPrimeCustomer(e.data)) {
+                            updatePrimeCustomers(e);
+                        }
                     }
                 },
                 create: function (e) {
@@ -233,12 +246,28 @@
                     }
                 }
             },
-            autoBind: false,
+            autoBind: true,
             autoClose: false,
             filter: "contains",
             dataTextField: "RPL_STS_CD",
-            dataValueField: "RPL_STS_CD",
-            valuePrimitive: true
+            dataValueField: "RPL_STS_CD",            
+            change: function (e) {
+                var grid = $("#primeCustomersGrid").data("kendoGrid");
+                if (grid != undefined && grid != null) {
+                    var currentRow = grid.dataItem(grid.current().closest("tr"));
+                    currentRow.dirty = true;
+                    currentRow.RPL_STS_CD = this.value();
+                }
+            },
+            dataBound: function (e) {
+                var grid = $("#primeCustomersGrid").data("kendoGrid");
+                if (grid != undefined && grid != null) {
+                    var currentRow = grid.dataItem(grid.current().closest("tr"));
+                    if (currentRow.RPL_STS_CD != undefined && currentRow.RPL_STS_CD != null && currentRow.RPL_STS_CD != "") {
+                        currentRow.dirty = true;
+                    }
+                }
+            }
 
         }
 
@@ -251,7 +280,7 @@
         }
 
         vm.PrimeCustRplStatusCodeEditor = function (container, options) {
-            if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "") {
+            if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "" && !jQuery.isArray(options.model.RPL_STS_CD)) {
                 options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(',')
             }
             var editor = $('<select class="fr opUiContainer md" kendo-multi-select k-options="vm.PrimeCustRplStatusCodes" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
@@ -307,6 +336,7 @@
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
+                vm.editingRowData = util.deepClone(e.model);
                 commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
             },
             columns: [
