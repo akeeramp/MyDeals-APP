@@ -2766,7 +2766,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(endCustObj);
                 //Additional check for the RPL status code
-                rplStatusCodeCheck = endCustJsonObj.Where(data => (string.IsNullOrEmpty(data.RPL_STS_CD) || data.RPL_STS_CD == "REVIEWWIP") && data.IS_RPL=="0" && data.IS_EXCLUDE != "1").ToArray().Length > 0;
+                rplStatusCodeCheck = endCustJsonObj.Where(data => (string.IsNullOrEmpty(data.RPL_STS_CD) || data.RPL_STS_CD.Contains("REVIEWWIP")) && data.IS_RPL=="0" && data.IS_EXCLUDE != "1").ToArray().Length > 0;
             }
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
