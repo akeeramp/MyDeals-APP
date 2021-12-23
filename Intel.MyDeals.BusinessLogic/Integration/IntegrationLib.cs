@@ -400,7 +400,7 @@ namespace Intel.MyDeals.BusinessLogic
             string groupType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].GroupType;
             string marketSegment = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].MarketSegment;
             marketSegment = marketSegment.Replace(";", ", ");
-            string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
+            string customerDivision = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].CustomerDivision; // SF will have to handle if this is needed or not for any given customer as a drop down
             string ecapPrice = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedECAPPrice;
             string quantity = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedQuantity;
             string userEnteredProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Name;
