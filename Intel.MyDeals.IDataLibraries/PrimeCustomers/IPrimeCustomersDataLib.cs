@@ -28,12 +28,12 @@ namespace Intel.MyDeals.IDataLibrary
         List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
         List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
+        // Commenting below lines of code to disable the UCD Code changes
+        //List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData);
 
-        List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData);
+        //List<UCDRetry> RetryUCDRequest(bool retryFlag, string endCustomer, string endCustomerCtry);
 
-        List<UCDRetry> RetryUCDRequest(bool retryFlag, string endCustomer, string endCustomerCtry);
-
-        List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId, string status);
+        //List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId, string status);
 
         List<RplStatusCode> GetRplStatusCodes();
     }

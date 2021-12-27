@@ -106,41 +106,41 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _primeCustomersLib.UploadBulkUnifyDeals(unifyDeals), "Unable to do bulk update");
         }
+        // Commenting the below methods to disable the UCD Code changes
+        //[Authorize]
+        //[HttpPost]
+        //[Route("UnPrimeDealsLogs/{dealId}")]
+        //public string UnPrimeDealsLogs(int dealId, [FromBody] string endCustData)
+        //{
+        //    return SafeExecutor(() => _primeCustomersLib.UnPrimeDealsLogs(dealId, endCustData),
+        //            $"Unable to Update UnUnified Deals Logs");
+        //}
 
-        [Authorize]
-        [HttpPost]
-        [Route("UnPrimeDealsLogs/{dealId}")]
-        public string UnPrimeDealsLogs(int dealId, [FromBody] string endCustData)
-        {
-            return SafeExecutor(() => _primeCustomersLib.UnPrimeDealsLogs(dealId, endCustData),
-                    $"Unable to Update UnUnified Deals Logs");
-        }
+        //[Authorize]
+        //[HttpGet]
+        //[Route("RetryUCDRequest")]
+        //public bool RetryUCDRequest()
+        //{
+        //    return SafeExecutor(() => _primeCustomersLib.RetryUCDRequest(),
+        //            $"Unable to retry UCD request");
+        //}
 
-        [Authorize]
-        [HttpGet]
-        [Route("RetryUCDRequest")]
-        public bool RetryUCDRequest()
-        {
-            return SafeExecutor(() => _primeCustomersLib.RetryUCDRequest(),
-                    $"Unable to retry UCD request");
-        }
+        //[Authorize]
+        //[HttpPost]
+        //[Route("SaveAMCResponceObject")]
+        //public string SaveAMCResponceObject()
+        //{
+        //    HttpContent response = this.Request.Content;
+        //    string amcResponse = response.ReadAsStringAsync().Result;
 
-        [Authorize]
-        [HttpPost]
-        [Route("SaveAMCResponceObject")]
-        public string SaveAMCResponceObject()
-        {
-            HttpContent response = this.Request.Content;
-            string amcResponse = response.ReadAsStringAsync().Result;
-
-            if(amcResponse!=null && amcResponse != "")
-            {
-                _primeCustomersLib.saveAMQResponse(amcResponse);
-            }
+        //    if(amcResponse!=null && amcResponse != "")
+        //    {
+        //        _primeCustomersLib.saveAMQResponse(amcResponse);
+        //    }
             
-            string ret = "";
-            return ret;
-        }
+        //    string ret = "";
+        //    return ret;
+        //}
 
         [Route("GetRplStatusCodes")]
         public IEnumerable<RplStatusCode> GetRplStatusCodes()

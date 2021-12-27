@@ -526,88 +526,88 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
+        // Commenting the below methods to disable the UCD Code changes
+        //public List<UCDRetry> RetryUCDRequest(bool retryFlag,string endCustomer,string endCustomerCtry)
+        //{
+        //    var ret = new List<UCDRetry>();
+        //    try
+        //    {
+        //        var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_RETRY_COUNT {
+        //            @in_retry_flag = retryFlag,
+        //            @in_end_cust_nm = endCustomer,
+        //            @in_end_cust_ctry = endCustomerCtry
+        //        };
 
-        public List<UCDRetry> RetryUCDRequest(bool retryFlag,string endCustomer,string endCustomerCtry)
-        {
-            var ret = new List<UCDRetry>();
-            try
-            {
-                var cmd = new Procs.dbo.PR_MYDL_UCD_LOG_RETRY_COUNT {
-                    @in_retry_flag = retryFlag,
-                    @in_end_cust_nm = endCustomer,
-                    @in_end_cust_ctry = endCustomerCtry
-                };
+        //        using (var rdr = DataAccess.ExecuteReader(cmd))
+        //        {
 
-                using (var rdr = DataAccess.ExecuteReader(cmd))
-                {
+        //            int IDX_end_cust_obj = DB.GetReaderOrdinal(rdr, "end_cust_obj");
+        //            int IDX_obj_sid = DB.GetReaderOrdinal(rdr, "obj_sid");
 
-                    int IDX_end_cust_obj = DB.GetReaderOrdinal(rdr, "end_cust_obj");
-                    int IDX_obj_sid = DB.GetReaderOrdinal(rdr, "obj_sid");
+        //            while (rdr.Read())
+        //            {
+        //                ret.Add(new UCDRetry
+        //                {
+        //                    end_cust_obj = (IDX_end_cust_obj < 0 || rdr.IsDBNull(IDX_end_cust_obj)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_end_cust_obj),
+        //                    obj_sid = (IDX_obj_sid < 0 || rdr.IsDBNull(IDX_obj_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_obj_sid)
+        //                });
+        //            } // while
 
-                    while (rdr.Read())
-                    {
-                        ret.Add(new UCDRetry
-                        {
-                            end_cust_obj = (IDX_end_cust_obj < 0 || rdr.IsDBNull(IDX_end_cust_obj)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_end_cust_obj),
-                            obj_sid = (IDX_obj_sid < 0 || rdr.IsDBNull(IDX_obj_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_obj_sid)
-                        });
-                    } // while
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OpLogPerf.Log(ex);
+        //        throw;
+        //    }
+        //    return ret;
+        //}
 
-                }
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw;
-            }
-            return ret;
-        }
+        //public List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId,
+        //  string status)
+        //{
+        //    var ret = new List<DealIdEcJsonDetails>();
+        //    try
+        //    {
+        //        var cmd = new Procs.dbo.PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG
+        //        {
+        //            @in_cust_nm = endCustomerName,
+        //            @in_cust_ctry = primeCustomerCountry,
+        //            @in_deal_id = dealId,
+        //            @in_rqst_json = request,
+        //            @in_rspn_json = response,
+        //            @in_acct_id = accId,
+        //            @in_sts = status,
+        //            @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+        //        };
 
-        public List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId,
-          string status)
-        {
-            var ret = new List<DealIdEcJsonDetails>();
-            try
-            {
-                var cmd = new Procs.dbo.PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG
-                {
-                    @in_cust_nm = endCustomerName,
-                    @in_cust_ctry = primeCustomerCountry,
-                    @in_deal_id = dealId,
-                    @in_rqst_json = request,
-                    @in_rspn_json = response,
-                    @in_acct_id = accId,
-                    @in_sts = status,
-                    @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
-                };
+        //        using (var rdr = DataAccess.ExecuteReader(cmd))
+        //        {
 
-                using (var rdr = DataAccess.ExecuteReader(cmd))
-                {
-                    
-                    int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-                    int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+        //            int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+        //            int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
 
-                    while (rdr.Read())
-                    {
-                        ret.Add(new DealIdEcJsonDetails
-                        {
-                            DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ)
+        //            while (rdr.Read())
+        //            {
+        //                ret.Add(new DealIdEcJsonDetails
+        //                {
+        //                    DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+        //                    END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ)
 
-                        });
-                    } // while
-                   
-                }
+        //                });
+        //            } // while
+
+        //        }
 
 
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw;
-            }
-            return ret;
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OpLogPerf.Log(ex);
+        //        throw;
+        //    }
+        //    return ret;
+        //}
 
         public List<RplStatusCode> GetRplStatusCodes()
         {
