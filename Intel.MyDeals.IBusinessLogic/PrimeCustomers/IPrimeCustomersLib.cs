@@ -24,11 +24,11 @@ namespace Intel.MyDeals.IBusinessLogic
         List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
         List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
+        // Commenting below lines of code to disable the UCD Code changes
+        //string UnPrimeDealsLogs(int dealId, string endCustData,bool isRetry=false);
+        //bool RetryUCDRequest();
 
-        string UnPrimeDealsLogs(int dealId, string endCustData,bool isRetry=false);
-        bool RetryUCDRequest();
-
-        void saveAMQResponse(string amqResponse);
+        //void saveAMQResponse(string amqResponse);
 
         List<RplStatusCode> GetRplStatusCodes();
     }
