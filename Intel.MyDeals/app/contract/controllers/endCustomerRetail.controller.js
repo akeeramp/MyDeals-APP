@@ -158,7 +158,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.IsError = true;
                 rowError = true;
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End customer country")
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
             }
 
             else {
@@ -443,7 +443,8 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         else if (dataItem !== null && !$ctrl.ChangeErrorFlag) {
             $("#" + id).parent().find("span").css("background-color", "white");
             $("#" + id).parent().find("span").removeAttr("title");
-            if (parseInt(index) == 0 && $ctrl.END_CUST_OBJ[0].PRIMED_CUST_CNTRY.toUpperCase() == "ANY") {
+            var primeCustCountryValue = $ctrl.END_CUST_OBJ[0].PRIMED_CUST_CNTRY == null ? "" : $ctrl.END_CUST_OBJ[0].PRIMED_CUST_CNTRY;
+            if (parseInt(index) == 0 && primeCustCountryValue.toUpperCase()=="ANY") {
                 dataElement.PRIMED_CUST_CNTRY = "";
                 $('#DropdownSelections_' + index).attr('disabled', false);
                 $("#DropdownSelections_" + index).parent().find("span").css("background-color", "white");
@@ -472,7 +473,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
         var embCountry = $ctrl.showEmbAlert($ctrl.embValidationMsg, dataItem, 'ok');
-        if (dataItem === undefined || dataItem === null && dataItem === "") {
+        if (dataItem === undefined || dataItem === null || dataItem === "") {
             $("#" + id).parent().find("span").css("background-color", "red");
             $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
         }
