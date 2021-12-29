@@ -146,6 +146,17 @@ angular
                     }
                 }
             })
+            .state("productCategories", {
+                url: "/productCategories",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-product-categories></admin-product-categories>'
+                        //  templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
+                        //  controller: "CustomerVendorsController as vm"
+                    }
+                }
+            })
 
             .state("constants", {
                 url: "/constants",

@@ -544,7 +544,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/vistex/admin.vistex.controller.js"
                 , "~/app/admin/vistex/admin.vistexTestAPI.controller.js"
                 , "~/app/admin/vistex/admin.vistexOutbound.controller.js"
-                , "~/app/admin/vistex/admin.vistexProductVertical.controller.js"
+                //, "~/app/admin/vistex/admin.vistexProductVertical.controller.js"
                 , "~/app/admin/vistex/admin.vistexProductVerticalOutbound.controller.js"
                 , "~/app/admin/vistex/dsa.service.js"
                 , "~/app/admin/rules/rulesSimulationModal.controller.js"

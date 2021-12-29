@@ -51,6 +51,7 @@ import { geoComponent } from './admin/geo/admin.geo.component';
 import { ConstantsComponent } from './admin/constants/admin.constants.component';
 import { adminProductAliasComponent } from './admin/productAlias/admin.productAlias.component';
 
+import { adminProductCategoriesComponent } from './admin/productCategories/admin.productCategories.component';
 //*********************admin modules ends here *********************
 
 //Authentication purpose for token
@@ -66,7 +67,7 @@ import {DialogOverviewExampleDialog} from './shared/modalPopUp/modal.component';
 //Added angular material for popup toggle
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input'
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -124,6 +125,7 @@ import {MatInputModule} from '@angular/material/input'
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
+        adminProductCategoriesComponent,
         MultiCheckFilterComponent,
         PingComponent,
         SpreadComponent,
@@ -146,6 +148,7 @@ import {MatInputModule} from '@angular/material/input'
         CacheComponent,
         adminCustomerComponent,
         adminCustomerVendorsComponent,
+        adminProductCategoriesComponent,
         PingComponent,
         SpreadComponent,
         DialogOverviewExampleDialog,

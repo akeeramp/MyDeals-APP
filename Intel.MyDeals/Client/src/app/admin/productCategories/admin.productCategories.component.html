@@ -1,0 +1,154 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<!-- using for Angular spinner while page load -->
+
+<div class="row">
+	<div class="col-md-12" style="padding-left: 35px;padding-top: 20px;">
+		<h3>Product Vertical Rules</h3>
+	</div>
+	<div class="col-md-12" style="padding-left: 35px">
+		<div class="messageBox">
+			<b>
+				<i class="intelicon-alert-solid icon-lg">
+				</i> Note:
+			</b> Please be aware of potential impacts to live deals & downstream partners before making changes to existing data.
+		</div>
+	</div>
+	<div class="col-md-12 kendo-grid-buttons">
+			<kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+						filterable="menu" (dataStateChange)="dataStateChange($event)"
+						[navigable]="true" (edit)="editHandler($event)"
+						(cancel)="cancelHandler($event)" (save)="saveHandler($event)" [resizable]="true">
+				<ng-template kendoGridToolbarTemplate>
+					<button (click)="clearFilter()" class="k-button clearButton">
+						<span class="k-icon  k-i-filter-clear k-icon-md"></span>
+						CLEAR FILTERS
+					</button>
+					<kendo-grid-spacer></kendo-grid-spacer>
+					<button (click)="refreshGrid()" class="k-button clearButton">
+						<span class="k-icon k-i-reload k-icon-md"></span>
+						Refresh
+					</button>
+				</ng-template>
+				<kendo-grid-command-column title="Commands" width="100" [headerClass]="{'headerClass':true}">
+					<ng-template kendoGridCellTemplate let-isNew="isNew">
+						<div class="text-center">
+							<button class="k-command-icon" id="command-icon" kendoGridEditCommand>
+								<span class="k-icon k-i-edit k-icon-sm"></span>
+							</button>
+							</div>
+							<button class="k-command-icon" id="command-icon" kendoGridSaveCommand>
+								<span class="k-icon k-i-check k-icon-sm"></span>
+							</button>
+							<button class="k-command-icon" id="command-icon" kendoGridCancelCommand>
+								<span class="k-icon k-i-cancel-outline k-icon-sm"></span>
+							</button>
+					</ng-template>
+				</kendo-grid-command-column>
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Actv Ind" width="120" filter="boolean">
+					<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+						<div class="text-center">
+							<mat-slide-toggle [color]="color"
+											  [checked]="dataItem.ACTV_IND" disabled>
+							</mat-slide-toggle>
+						</div>
+					</ng-template>
+					<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+						<div class="text-center">
+							<mat-slide-toggle [color]="color"
+											  [checked]="dataItem.ACTV_IND" [formControl]="formGroup.get('ACTV_IND')">
+							</mat-slide-toggle>
+						</div>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_PRD_TYPE_NM" title="Gdm Product Type" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_VRT_NM" title="GDM Vertical Name" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="DIV_NM" title="Division Short Name" width="200" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="OP_CD" title="Op Code" width="120" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_TYPE" title="Deal Product Type">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+					<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+							<kendo-textbox title="{{isVisibilityDealErrMsg && formGroup.get('ACTV_IND')?'Deal Product Type is required when row is active.' :''}}" class="tooltipReq" [formControl]="formGroup.get('DEAL_PRD_TYPE')"
+										   [clearButton]="true"></kendo-textbox>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical">
+
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+					<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+							<kendo-textbox title="{{isVisibilityProductErrMsg && formGroup.get('ACTV_IND')?'Product Vertical is required when row is active.' :''}}" class="tooltipReq" [formControl]="formGroup.get('PRD_CAT_NM')" 
+										   [clearButton]="true"></kendo-textbox>
+					</ng-template>
+				</kendo-grid-column>
+
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_NM" title="Last Updated By" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+								 let-filterService="filterService">
+						<multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+										   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column [headerClass]="{'headerClass':true}" field="filterableCHG_DTM" title="Last Update Date" filter="date"
+								   format="{0:M/d/yyyy}" [editable]="false">
+					<ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+						<kendo-grid-date-filter-menu [column]="column"
+													 [filter]="filter"
+													 [filterService]="filterService" [extra]="false" >
+						</kendo-grid-date-filter-menu>
+					</ng-template>
+					<ng-template kendoGridCellTemplate let-dataItem>
+						{{dataItem.filterableCHG_DTM | date: 'M/d/yyyy h:mm a'}}
+					</ng-template>
+
+				</kendo-grid-column>
+			</kendo-grid>
+		<kendo-dialog title="Error" *ngIf="isInValidData" (close)="closeDialog()">
+			<p style="margin: 30px; text-align: center;">{{errorMsg}}</p>
+			<kendo-dialog-actions>
+				<button class='k-button' kendoButton (click)="closeDialog()">Okay</button>
+			</kendo-dialog-actions>
+		</kendo-dialog>
+
+	</div>
+	</div>
