@@ -751,6 +751,8 @@
     <Content Include="Client\src\app\admin\employee\employee.html" />
     <Content Include="Client\src\app\admin\kendo_grid.css" />
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
+    <Content Include="Client\src\app\admin\oplog\oplog.css" />
+    <Content Include="Client\src\app\admin\oplog\oplog.html" />
     <Content Include="Client\src\app\reporting\ReportDashboard.html" />
     <Content Include="Client\src\app\reporting\reporting.css" />
     <Content Include="Client\src\app\shared\advanceSearch\globalSearch.directive.js" />
@@ -2068,6 +2070,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\customer\customer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\employee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\oplog\oplog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\app.main.ts" />
     <TypeScriptCompile Include="Client\src\app\app.module.ts" />
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />

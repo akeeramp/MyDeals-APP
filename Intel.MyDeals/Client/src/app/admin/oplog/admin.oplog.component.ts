@@ -25,6 +25,12 @@ export class OpLogComponent {
     private test: number = this.enDate.setDate(this.enDate.getDate() - 30);
     private startDate: Date = this.enDate;
     private endDate: Date = this.stDate;
+    private dateRangeInvalid: boolean = false;
+
+    //created for Angular loader
+    public isLoading: string = 'true';
+    public loadMessage: string = "Log Viewer is Loading ...";
+    public moduleName: string = "Log Viewer Dashboard";
 
 
     getDateFormat(timestamp) {
@@ -33,6 +39,7 @@ export class OpLogComponent {
 
     getOpaqueLog(startDate, endDate) {
         let vm = this;
+        vm.isLoading = 'false';
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
@@ -81,13 +88,19 @@ export class OpLogComponent {
         let one_day = 1000 * 60 * 60 * 24;
         let dateDifference = <any> new Date(this.endDate) - <any> new Date(this.startDate);
         let noOfDays = dateDifference / one_day;
+        this.dateRangeInvalid = false;
+
         if (noOfDays <= 30 && noOfDays > 0) {
             this.opLogData = [];
             this.getOpaqueLog(this.startDate, this.endDate);
         }
         else {
-            alert('Please Check Dates. Log can be fetched for maximum 30 days...');
+            this.dateRangeInvalid = true;
         }            
+    }
+
+    close() {
+        this.dateRangeInvalid = false;
     }
 
     ngOnDestroy() {

@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Injectable } from "@angular/core";
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from "rxjs";
 import 'rxjs/add/operator/toPromise';
@@ -26,7 +24,6 @@ export class opLogService {
         let apiUrl: string = this.apiBaseUrl + 'GetOpaqueLog';
         
         return this.httpClient.post(apiUrl, logDate); 
-        
     }
 
     public getDetailsOpaqueLog(fileName: any): Observable<any> {
@@ -35,6 +32,3 @@ export class opLogService {
     }  
 }
 
-angular
-    .module('app')
-    .factory('opLogService', downgradeInjectable(opLogService));
