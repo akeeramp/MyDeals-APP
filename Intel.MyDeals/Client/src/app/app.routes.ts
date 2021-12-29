@@ -83,6 +83,17 @@ angular
                     }
                 }
             })
+            .state("oplog", {
+                url: "/opLog",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<op-log></op-log>'
+                        //  templateUrl: "Client/src/app/admin/oplog/oplog.html",
+                        //  controller: "OpLogController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });

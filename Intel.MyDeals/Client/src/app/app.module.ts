@@ -31,11 +31,16 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { InputsModule } from "@progress/kendo-angular-inputs";
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
+import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
+import { OrderModule } from 'ngx-order-pipe';
+import { OrderByPipe } from 'ngx-pipes'
 
 //*********************admin modules starts here *********************
 import { CacheComponent } from './admin/cache/cache.component';
 import { adminCustomerComponent } from './admin/customer/admin.customer.component';
 import { adminCustomerVendorsComponent } from './admin/CustomerVendors/admin.customerVendors.component';
+import { OpLogComponent } from './admin/oplog/admin.oplog.component';
+
 //*********************admin modules ends here *********************
 
 //Authentication purpose for token
@@ -78,8 +83,9 @@ import {MatInputModule} from '@angular/material/input'
         MatFormFieldModule,
         MatInputModule,
         HotTableModule,
-        NgbModule
-        
+        NgbModule,
+        DateInputsModule,
+        OrderModule
      ],
      providers: [
         {
@@ -105,7 +111,9 @@ import {MatInputModule} from '@angular/material/input'
         MultiCheckFilterComponent,
         PingComponent,
         SpreadComponent,
-        DialogOverviewExampleDialog
+        DialogOverviewExampleDialog,
+        OpLogComponent,
+        OrderByPipe
     ],
     entryComponents: [
         LoaderComponent,
@@ -117,7 +125,8 @@ import {MatInputModule} from '@angular/material/input'
         adminCustomerVendorsComponent,
         PingComponent,
         SpreadComponent,
-        DialogOverviewExampleDialog
+        DialogOverviewExampleDialog,
+        OpLogComponent
     ]
 })
 

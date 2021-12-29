@@ -84,6 +84,8 @@
         "jquery-ui": "^1.12.1",
         "linqts": "^1.14.4",
         "ng2-search-filter": "^0.5.1",
+        "ngx-order-pipe": "^2.2.0",
+        "ngx-pipes": "^2.7.6",
         "ngx-toastr": "13.2.1",
         "rxjs": "^6.5.5",
         "rxjs-compat": "^6.5.5",
