@@ -323,19 +323,16 @@ namespace Intel.MyDeals.DataLibrary
                                 int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
                                 int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
                                 int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
-                                //if(dbDealId != 0 && dbPrimCustId != 0 && dbPrimLvlId != 0 && !string.IsNullOrEmpty(ucdGlobalName) && !string.IsNullOrEmpty(ucdCtry)
-                                //    && !string.IsNullOrEmpty(dealEcRetail) && !string.IsNullOrEmpty(dealEcCtry)) {
-                                    lstRtn.Add(new UnifyDeal
-                                    {
-                                        DEAL_ID = dbDealId,
-                                        UCD_GLOBAL_ID = dbPrimCustId,
-                                        UCD_GLOBAL_NAME = ucdGlobalName,
-                                        UCD_COUNTRY_CUST_ID = dbPrimLvlId,
-                                        UCD_COUNTRY = ucdCtry,
-                                        DEAL_END_CUSTOMER_RETAIL = dealEcRetail,
-                                        DEAL_END_CUSTOMER_COUNTRY = dealEcCtry
-                                    });
-                                //}                                
+                                lstRtn.Add(new UnifyDeal
+                                {
+                                    DEAL_ID = dbDealId,
+                                    UCD_GLOBAL_ID = dbPrimCustId,
+                                    UCD_GLOBAL_NAME = ucdGlobalName,
+                                    UCD_COUNTRY_CUST_ID = dbPrimLvlId,
+                                    UCD_COUNTRY = ucdCtry,
+                                    DEAL_END_CUSTOMER_RETAIL = dealEcRetail,
+                                    DEAL_END_CUSTOMER_COUNTRY = dealEcCtry
+                                });                          
                             }
                         }
 

@@ -199,13 +199,13 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == '') {
                         isEmptyDealEndCustomerRetail = true;
                         msg = "End Customer Retail must not be empty!";
-                        sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, msg, true));
+                        sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                     }
                     if (vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == undefined || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == null
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == '') {
                         isEmptyDealEndCustomerCountry = true;
                         msg = "End Customer Country must not be empty!";
-                        sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, msg, true));
+                        sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                     }
                     if (vm.UnifyValidation.IsEmptyDealAvailable) {
                         msg = "Deal ID must not be empty and must be Integer!";
@@ -290,7 +290,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
 
                     if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.AlreadyUnifiedDeals) != -1) {
-                            msg = "Deal ID is already unified!"
+                            msg = "Deal is already unified!"
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
@@ -376,7 +376,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 strAlertMessage += "</br></br>Deal ID is having more combination of ununified End Customers than Deal Editor screen! Please fix."
             }
             if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
-                strAlertMessage += "</br></br>Deal ID is already unified! Please fix."
+                strAlertMessage += "</br></br>Deal is already unified! Please fix."
             }
             if (vm.UnifyValidation.UnifiedCombination.length > 0) {
                 strAlertMessage += "</br></br>End Customer Retail and End Customer Country combination entered is already unified! Please fix."

@@ -240,7 +240,7 @@ namespace Intel.MyDeals.Controllers
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
-                    else if (!Regex.IsMatch(row.UCD_GLOBAL_NAME, patt))
+                    else if (!Regex.IsMatch(row.UCD_GLOBAL_NAME, patt) || row.UCD_GLOBAL_NAME.Length > 65)
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
@@ -263,7 +263,7 @@ namespace Intel.MyDeals.Controllers
                         dealData.DEAL_END_CUSTOMER_RETAIL = data.END_CUSTOMER_RETAIL;
                         if (data.COMMENTS.Trim().ToLower() == "already unified")
                         {
-                            if (data.END_CUSTOMER_COUNTRY != null && data.END_CUSTOMER_RETAIL != null)
+                            if (string.IsNullOrEmpty(data.END_CUSTOMER_COUNTRY) && string.IsNullOrEmpty(data.END_CUSTOMER_RETAIL))
                             {
                                 var alreadyunified = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).FirstOrDefault();
                                 if (alreadyunified != null && !unifyDealValidation.InValidUnifyDeals.Contains(alreadyunified))
