@@ -17,6 +17,7 @@
         var filterDataChildGrid = "";
         vm.validationMessage = "";
         $scope.ChildGridSelect = false;
+        $scope.dataItem = { Select_All: false };
         vm.exceptionData;
         vm.legalExceptionData;
         vm.colSize = 12;
@@ -1086,8 +1087,11 @@
             var allData = dataSource.data();
             var query = new kendo.data.Query(allData);
             filterData = query.filter(filters).data;
+            if (dataItem.IS_SELECTED == undefined) {
+                dataItem.Select_All = !dataItem.Select_All;
+            }
 
-            if (dataItem.Select_All)
+            if (dataItem.Select_All && dataItem.IS_SELECTED == undefined)
             {
                 for (var i = 0; i < filterData.length; i++)
                 {                  
@@ -1095,7 +1099,7 @@
                                        
                 }     
             }
-            else if (dataItem.Select_All == false)
+            else if (dataItem.Select_All == false && dataItem.IS_SELECTED == undefined)
             {
                 for (var i = 0; i < filterData.length; i++) {
                     filterData[i].IS_SELECTED = false;                    
