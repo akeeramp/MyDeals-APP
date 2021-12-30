@@ -65,5 +65,7 @@ namespace Intel.MyDeals.Entities
         public List<int> InvalidDeals { get; set; }
 
         public List<UnifyInvalidCombination> InValidCombination { get; set; }
+
+        public List<int> AlreadyUnifiedDeals { get; set; }
     }
 }

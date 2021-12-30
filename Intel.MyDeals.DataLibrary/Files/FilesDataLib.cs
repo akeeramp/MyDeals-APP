@@ -272,7 +272,7 @@ namespace Intel.MyDeals.DataLibrary
             FileAttachmentData fileAttachmentData = new FileAttachmentData();
             fileAttachmentData.FILE_NM = "BulkUnifyDeals.xlsx";
             fileAttachmentData.IS_COMPRS = false;
-            string strTemplateContent = string.Join("\n", string.Join("\t", "DEAL ID", "UCD_GLOBAL_ID", "UCD_GLOBAL_NAME", "UCD_COUNTRY_CUST_ID", "UCD_COUNTRY", "DEAL_END_CUSTOMER_RETAIL","DEAL_END_CUSTOMER_COUNTRY"));
+            string strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country Customer ID", "Country Customer Name", "End Customer Retail", "End Customer Country"));
             string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
@@ -323,8 +323,8 @@ namespace Intel.MyDeals.DataLibrary
                                 int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
                                 int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
                                 int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
-                                if(dbDealId != 0 && dbPrimCustId != 0 && dbPrimLvlId != 0 && !string.IsNullOrEmpty(ucdGlobalName) && !string.IsNullOrEmpty(ucdCtry)
-                                    && !string.IsNullOrEmpty(dealEcRetail) && !string.IsNullOrEmpty(dealEcCtry)) {
+                                //if(dbDealId != 0 && dbPrimCustId != 0 && dbPrimLvlId != 0 && !string.IsNullOrEmpty(ucdGlobalName) && !string.IsNullOrEmpty(ucdCtry)
+                                //    && !string.IsNullOrEmpty(dealEcRetail) && !string.IsNullOrEmpty(dealEcCtry)) {
                                     lstRtn.Add(new UnifyDeal
                                     {
                                         DEAL_ID = dbDealId,
@@ -335,7 +335,7 @@ namespace Intel.MyDeals.DataLibrary
                                         DEAL_END_CUSTOMER_RETAIL = dealEcRetail,
                                         DEAL_END_CUSTOMER_COUNTRY = dealEcCtry
                                     });
-                                }                                
+                                //}                                
                             }
                         }
 
