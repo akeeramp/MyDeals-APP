@@ -1,0 +1,206 @@
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<br/>
+
+<div class="container-fluid overflow">
+    <div class="row">
+        <div class="col-md-3">
+            <h3> Kendo Date Picker</h3>
+            <kendo-datepicker #picker [(value)]="dateValue" calendarType="classic">
+            </kendo-datepicker>
+            <button (click)="dateClick()">CheckDate</button>
+        </div>
+        <div class="col-md-6">
+            <h3> Kendo editor</h3>
+            <kendo-editor [value]="editValue"></kendo-editor>
+        </div>
+        <div class="col-md-3">
+            <h3> Kendo tab</h3>
+
+            <div class="wrapper">
+                <kendo-tabstrip (tabSelect)="onTabSelect($event)">
+                    <kendo-tabstrip-tab title="Tab 1">
+                        <ng-template kendoTabContent>
+                            <p>Tab 1 Content</p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                    <kendo-tabstrip-tab title="Tab 2" [selected]="true">
+                        <ng-template kendoTabContent>
+                            <p>Tab 2 Content</p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                    <kendo-tabstrip-tab title="Tab 3">
+                        <ng-template kendoTabContent>
+                            <p>Tab 3 Content</p>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                </kendo-tabstrip>
+            </div>
+        </div>
+
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <h3> Kendo Combo box</h3>
+            <kendo-combobox #cmbApiName [suggest]="true" [allowCustom]="false" [data]="listItems" textField="text" valueField="value" [valuePrimitive]="true" [(ngModel)]="selectedValue">
+            </kendo-combobox>
+            <button (click)="comboClick()">Combo</button>
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo dropdown</h3>
+            <kendo-dropdownlist #cmbApiDrop [data]="listItems" textField="text" valueField="value" [valuePrimitive]="true" [(ngModel)]="selectedValue">
+            </kendo-dropdownlist>
+            <button (click)="comboClick()">Drop</button>
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo multi</h3>
+            <kendo-multiselect #cmbmulti [data]="listItems" textField="text" valueField="value" [valuePrimitive]="true" [(ngModel)]="selectedItem" style="width: 250px;">
+            </kendo-multiselect>
+            <button (click)="comboMulti()">Multi</button>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <h3> Kendo menu</h3>
+            <kendo-menu>
+                <kendo-menu-item text="My Web Site" icon="folder">
+                    <kendo-menu-item icon="folder">
+                        <ng-template kendoMenuItemTemplate>
+                            <span (click)="dateClick()">folder</span>
+                        </ng-template>
+                    </kendo-menu-item>
+                    <kendo-menu-item text="resources" icon="image">
+                    </kendo-menu-item>
+                    <kendo-menu-item text="about.html" icon="file"></kendo-menu-item>
+                    <kendo-menu-item text="data.pdf" icon="pdf"></kendo-menu-item>
+                    <kendo-menu-item text="setting" icon="config"></kendo-menu-item>
+                </kendo-menu-item>
+            </kendo-menu>
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo Dialog</h3>
+            <button kendoButton *ngIf="!opened" (click)="open()">Open dialog</button>
+            <kendo-dialog *ngIf="opened" (close)="close()" [minWidth]="250" [width]="450">
+                <p style="margin: 30px; text-align: center;">
+                    Are you sure you want to Close?
+                </p>
+                <kendo-dialog-actions>
+                    <button kendoButton (click)="close()">YES</button>
+                </kendo-dialog-actions>
+            </kendo-dialog>
+
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo Autocomplete</h3>
+            <kendo-autocomplete [data]="autoData" [(ngModel)]="selAuto" placeholder="Enter country" class="countries" [filterable]="true" (filterChange)="handleFilter($event)">
+            </kendo-autocomplete>
+            <button (click)="autoClick()">autoClick</button>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <h3> Kendo numeric text box</h3>
+            <kendo-numerictextbox [(ngModel)]="selNumeric" [min]="0" [max]="100" [autoCorrect]="false">
+            </kendo-numerictextbox>
+            <button (click)="autoClick()">numClick</button>
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo check box</h3>
+            <input type="checkbox" id="disabledBinding" [disabled]="false" [(ngModel)]="isChecked" kendoCheckBox />
+            <button (click)="autoClick()">checkClick</button>
+        </div>
+        <div class="col-md-4">
+            <h3> Kendo tooltip</h3>
+            <div kendoTooltip>
+                <button class="k-button" title="Saves the current document">Save</button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <h3> bootstrap collapse</h3>
+            <p>
+                <button type="button" class="btn btn-outline-primary" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+              Toggle
+            </button>
+            </p>
+            <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+                <div class="card">
+                    <div class="card-body">
+                        You can collapse this card by clicking Toggle
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h3> Modal Popup</h3>
+            <button (click)="openPopUp()">openPopUp</button>
+        </div>
+        <div class="col-md-4">
+            <h3>Observable/Watch</h3>
+            Value: {{obsObj}}
+            <button (click)="observeClick()">observeClick</button>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Kendo Grid export excel</h3>
+            <kendo-grid [data]="gridData">
+                <ng-template kendoGridToolbarTemplate>
+                    <button type="button" kendoGridExcelCommand icon="file-excel">
+                      Export to Excel 
+                    </button>
+                </ng-template>
+                <kendo-grid-column field="ProductID" title="ID"> </kendo-grid-column>
+                <kendo-grid-column field="ProductName" title="Name"> </kendo-grid-column>
+                <kendo-grid-column field="Category.CategoryName" title="Category">
+                </kendo-grid-column>
+                <kendo-grid-column field="UnitPrice" title="Price"> </kendo-grid-column>
+                <kendo-grid-excel fileName="Products.xlsx"></kendo-grid-excel>
+            </kendo-grid>
+        </div>
+        <div class="col-md-6">
+            <h3>Kendo Window</h3>
+            <button kendoButton *ngIf="!windowOpened" (click)="windowOpen()">Open window</button>
+            <kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="250" [width]="450" [top]="100" [left]="50">
+                <kendo-window-titlebar>
+                    <div class="k-window-title">
+                        Title of kendo Window
+                    </div>
+                    <button kendoWindowMinimizeAction></button>
+                    <button kendoWindowMaximizeAction></button>
+                    <button kendoWindowRestoreAction></button>
+                    <button kendoWindowCloseAction></button>
+                </kendo-window-titlebar>
+                <form class="k-form">
+                    <fieldset>
+                        <legend>User Details</legend>
+
+                        <label class="k-form-field">
+                    <span>First Name</span>
+                    <input class="k-textbox" placeholder="Your Name" />
+                  </label>
+                        <label class="k-form-field">
+                    <span>Last Name</span>
+                    <input class="k-textbox" placeholder="Your Last Name" />
+                  </label>
+                    </fieldset>
+
+                    <div class="k-actions k-actions-end">
+                        <button type="button" class="k-button" (click)="windowClose()">
+                    Cancel
+                  </button>
+                        <button type="button" class="k-button k-primary" (click)="windowClose()">
+                    Submit
+                  </button>
+                    </div>
+                </form>
+            </kendo-window>
+        </div>
+    </div>

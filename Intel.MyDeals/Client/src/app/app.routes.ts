@@ -23,6 +23,7 @@ angular
                 }
 
             })
+            //*****************poc items starts here*****************
             .state("myhandsone", {
                 url: "/myhandsone",
                 abstract: false,
@@ -32,6 +33,17 @@ angular
                     }
                 }
             })
+            .state("mykendocontrol", {
+                url: "/mykendocontrol",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<my-kendo-control></my-kendo-control>'
+                    }
+                }
+            })
+
+            //*****************poc items ends here*******************
             // Admin route  starts here 
             .state("adminemployeedashboard", {
                 url: "/adminemployeedashboard",

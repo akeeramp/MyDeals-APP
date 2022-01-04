@@ -769,8 +769,6 @@
     <Content Include="Client\src\app\shared\core\dealpopupdock\dealPopupDock.directive.js" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\shared\core\notification\notificationDock.directive.js" />
-    <Content Include="Client\src\app\shared\handsone\spread.component.handson.html" />
-    <Content Include="Client\src\app\shared\handsone\spreadsheet.style.css" />
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
     <Content Include="Client\src\app\shared\modalPopUp\modal.component.html" />
@@ -2085,7 +2083,6 @@
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\core\core.shared.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\handsone\spreadsheet.component.handson.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\index.ts" />

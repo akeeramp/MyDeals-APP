@@ -26,14 +26,18 @@ import { PingComponent } from './shared/core/ping/ping.component'
 //kendo component POC
 import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { GridModule } from '@progress/kendo-angular-grid';
-import { DialogModule } from '@progress/kendo-angular-dialog';
+import { GridModule,ExcelModule } from '@progress/kendo-angular-grid';
+import { DialogModule,WindowModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { InputsModule } from "@progress/kendo-angular-inputs";
 import { MultiCheckFilterComponent } from "./shared/kendo/multichecker.component";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
+import { EditorModule } from "@progress/kendo-angular-editor";
+import { LayoutModule } from "@progress/kendo-angular-layout";
+import { MenusModule } from '@progress/kendo-angular-menu';
 import { OrderModule } from 'ngx-order-pipe';
 import { OrderByPipe } from 'ngx-pipes'
+import {KendoControlComponent} from './shared/kendo_controls/kendocontrol.component';
 
 //*********************admin modules starts here *********************
 import { CacheComponent } from './admin/cache/cache.component';
@@ -77,14 +81,20 @@ import {MatInputModule} from '@angular/material/input'
         MatSlideToggleModule,
         MatDialogModule,
         DialogModule,
+        WindowModule,
         DropDownListModule,
         DropDownsModule,
         InputsModule,
         GridModule,
+        ExcelModule,
         MatFormFieldModule,
         MatInputModule,
         HotTableModule,
         NgbModule,
+        DateInputsModule,
+        EditorModule,
+        LayoutModule,
+        MenusModule,
         DateInputsModule,
         OrderModule
      ],
@@ -115,7 +125,8 @@ import {MatInputModule} from '@angular/material/input'
         DialogOverviewExampleDialog,
         OpLogComponent,
         OrderByPipe,
-        batchTimingComponent
+        batchTimingComponent,
+        KendoControlComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -129,7 +140,8 @@ import {MatInputModule} from '@angular/material/input'
         SpreadComponent,
         DialogOverviewExampleDialog,
         OpLogComponent,
-        batchTimingComponent
+        batchTimingComponent,
+        KendoControlComponent
     ]
 })
 

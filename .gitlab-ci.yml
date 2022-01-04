@@ -36,9 +36,10 @@ variables:
   CIAR_DEPLOY_PATH:     '\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals'
   PERF_DEPLOY_PATH:     '\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals'
   CINR_DEPLOY_PATH:     '\\HF2CINMYDLW01.amr.corp.intel.com\MyDeals'
-  DR_DEPLOY_PATH:       '\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals'
-  PROD1_DEPLOY_PATH:    '\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals'
-  PROD2_DEPLOY_PATH:    '\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals'
+  DR_DEPLOY_PATH:       '\\CH2DRMYD2W01.amr.corp.intel.com\MyDeals'
+  PROD1_DEPLOY_PATH:    '\\FM1PRDMYD2W01.amr.corp.intel.com\MyDeals'
+  PROD2_DEPLOY_PATH:    '\\FM1PRDMYD2W02.amr.corp.intel.com\MyDeals'
+  CINR_DEPLOY_SERVER:   'HF2CINMYDLW01.amr.corp.intel.com'
 
 
 stages:
@@ -122,9 +123,12 @@ Angular_deploy:
     - 'npm install'
     - 'npm run build_env'
     - 'Set-Location -Path .. -PassThru ; Set-Location -Path ..  -PassThru'
-    - 'if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"}; Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip")'
+    - 'if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"}'
+    - 'Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip")'
+    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {if (Test-Path "D:\WebSites\MyDeals\Client.zip") {Remove-Item -Path "D:\WebSites\MyDeals\Client.zip"}}'
     - '& Copy-Item C:\ClientZip\Client.zip $env:CINR_DEPLOY_PATH/ -Force'
-    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername HF2CINMYD2W01.amr.corp.intel.com -credential $cred -ScriptBlock {Remove-Item D:\WebSites\MyDeals\Client\* -Force -Recurse; Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\")}'
+    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {Remove-Item D:\WebSites\MyDeals\Client\* -Force -Recurse}'
+    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\")}'
   dependencies:
     - build_job_Angular
   allow_failure: true
