@@ -40,6 +40,7 @@ import { CacheComponent } from './admin/cache/cache.component';
 import { adminCustomerComponent } from './admin/customer/admin.customer.component';
 import { adminCustomerVendorsComponent } from './admin/CustomerVendors/admin.customerVendors.component';
 import { OpLogComponent } from './admin/oplog/admin.oplog.component';
+import { batchTimingComponent } from './admin/batchTiming/admin.batchTiming.component';
 
 //*********************admin modules ends here *********************
 
@@ -113,7 +114,8 @@ import {MatInputModule} from '@angular/material/input'
         SpreadComponent,
         DialogOverviewExampleDialog,
         OpLogComponent,
-        OrderByPipe
+        OrderByPipe,
+        batchTimingComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -126,7 +128,8 @@ import {MatInputModule} from '@angular/material/input'
         PingComponent,
         SpreadComponent,
         DialogOverviewExampleDialog,
-        OpLogComponent
+        OpLogComponent,
+        batchTimingComponent
     ]
 })
 

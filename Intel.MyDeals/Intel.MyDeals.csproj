@@ -743,6 +743,9 @@
     <Content Include="app\testCases\performanceTesting\performanceTesting.controller.js" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.manage.html" />
     <Content Include="app\testCases\performanceTesting\performanceTesting.service.js" />
+    <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
+    <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
     <Content Include="Client\src\app\admin\cache\cache.css" />
     <Content Include="Client\src\app\admin\cache\cache.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\customerVendors.html" />

@@ -94,6 +94,17 @@ angular
                     }
                 }
             })
+            .state("batchTiming", {
+                url: "/batchTiming",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<batch-timing></batch-timing>'
+                        //  templateUrl: "Client/src/app/admin/batchTiming/batchTiming.html",
+                        //  controller: "batchTimingController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });
