@@ -892,6 +892,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 });
                 var isdealsUnified = undefined;
                 var validationErrorCheck;
+                //Commented RPL Related code as part of TWC3167-906 US
                 // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
                 //var isEcRPLed = undefined;
                 //var isRPLReviewwip = undefined;

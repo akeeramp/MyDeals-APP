@@ -2759,6 +2759,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
+            //Commented RPL Related code as part of TWC3167-906 US
             //bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
             //var rplStatusCodeCheck = false;
             var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);

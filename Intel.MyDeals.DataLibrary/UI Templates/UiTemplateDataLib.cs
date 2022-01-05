@@ -2903,7 +2903,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsHidden = true,
                 IsFilterable = true
             });
-
+            //Commented RPL Related code as part of TWC3167-906 US
             //items.Add(new UiTemplateContainerItem
             //{
             //    Id = 3355,

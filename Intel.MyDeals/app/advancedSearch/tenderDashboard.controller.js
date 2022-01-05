@@ -1495,6 +1495,7 @@
 
             var plural = tenders.length > 1 ? "s" : "";
             var isDealNotUnififed = false;
+            //Commented RPL Related code as part of TWC3167-906 US
             //var isDealRPLed = false;
             //var isRPLStatusReviewwip = false;
             if (dataItem.isLinked) {
