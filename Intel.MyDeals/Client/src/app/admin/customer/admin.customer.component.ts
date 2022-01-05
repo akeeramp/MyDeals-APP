@@ -1,7 +1,7 @@
 ﻿import * as angular from "angular";
 import {Component} from "@angular/core";
 import {logger} from "../../shared/logger/logger";
-import {customerService} from "./customer.service";
+import {customerService} from "./admin.customer.service";
 import {downgradeComponent} from "@angular/upgrade/static";
 import { GridDataResult, PageChangeEvent,DataStateChangeEvent,PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State,GroupDescriptor } from "@progress/kendo-data-query";
@@ -10,7 +10,7 @@ import {ThemePalette} from '@angular/material/core';
 
 @Component({
   selector: "adminCustomer",
-  templateUrl: "Client/src/app/admin/customer/customer.html",
+  templateUrl: "Client/src/app/admin/customer/admin.customer.component.html",
 })
 
 export class adminCustomerComponent  {

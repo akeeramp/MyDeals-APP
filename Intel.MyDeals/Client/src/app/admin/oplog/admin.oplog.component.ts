@@ -1,14 +1,14 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
-import { opLogService } from "./oplog.service";
+import { opLogService } from "./admin.oplog.service";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import * as _ from "underscore";
 
 @Component({
     selector: "opLog",
-    templateUrl: "Client/src/app/admin/oplog/oplog.html",
-    styleUrls: ['Client/src/app/admin/oplog/oplog.css']
+    templateUrl: "Client/src/app/admin/oplog/admin.oplog.component.html",
+    styleUrls: ['Client/src/app/admin/oplog/admin.oplog.component.css']
 })
 
 export class OpLogComponent {

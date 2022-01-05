@@ -1,9 +1,9 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
-import { customerVendorService } from "./customerVendors.service";
+import { customerVendorService } from "./admin.customerVendors.service";
 import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Cust_Map } from "./cust_map.model";
+import { Cust_Map } from "./admin.customerVendors.model";
 import { ThemePalette } from "@angular/material/core";
 import * as _ from "underscore";
 import {
@@ -24,8 +24,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
     selector: "adminVendorsCustomer",
-    templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
-    styleUrls: ['Client/src/app/admin/CustomerVendors/customerVendor.css']
+    templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
+    styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 export class adminCustomerVendorsComponent {
     constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) {

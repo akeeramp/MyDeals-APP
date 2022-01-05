@@ -40,7 +40,7 @@ import { OrderByPipe } from 'ngx-pipes'
 import {KendoControlComponent} from './shared/kendo_controls/kendocontrol.component';
 
 //*********************admin modules starts here *********************
-import { CacheComponent } from './admin/cache/cache.component';
+import { CacheComponent } from './admin/cache/admin.cache.component';
 import { adminCustomerComponent } from './admin/customer/admin.customer.component';
 import { adminCustomerVendorsComponent } from './admin/CustomerVendors/admin.customerVendors.component';
 import { OpLogComponent } from './admin/oplog/admin.oplog.component';

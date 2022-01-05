@@ -4,13 +4,13 @@ import { Component, ViewChild, ViewContainerRef } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 //import { logger } from "src/app/shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { cacheService } from "./cache.service";
+import { cacheService } from "./admin.cache.service";
 import { List } from "linqts";
 
 @Component({
     selector: "cache",
-    templateUrl: "Client/src/app/admin/cache/cache.html",
-    styleUrls: ['Client/src/app/admin/cache/cache.css']
+    templateUrl: "Client/src/app/admin/cache/admin.cache.component.html",
+    styleUrls: ['Client/src/app/admin/cache/admin.cache.component.css']
 })
 
 export class CacheComponent {

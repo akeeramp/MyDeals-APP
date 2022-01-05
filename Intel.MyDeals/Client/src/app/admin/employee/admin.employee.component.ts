@@ -2,12 +2,12 @@
 import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { employeeService } from './employee.service';
+import { employeeService } from './admin.employee.service';
 
 @Component({
     selector: "employeeDashboard",
-    templateUrl: "Client/src/app/admin/employee/employee.html",
-    styleUrls: ['Client/src/app/admin/employee/employee.css']
+    templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
+    styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
 
 export class EmployeeComponent {

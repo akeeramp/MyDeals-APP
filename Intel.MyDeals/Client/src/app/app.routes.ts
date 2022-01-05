@@ -11,7 +11,7 @@ angular
                 views: {
                     mainView: {
                         template: '<reporting-dashboard></reporting-dashboard>'
-                        // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
+                        // templateUrl: "Client/src/app/reporting/reporting.component.html",
                         // controller: "ReportingDashboardController as vm"
 
                     }
@@ -51,7 +51,7 @@ angular
                 views: {
                     dashboardView: {
                         template: '<employee-dashboard></employee-dashboard>'
-                        // templateUrl: "Client/src/app/reporting/ReportDashboard.html",
+                        // templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
                         // controller: "ReportingDashboardController as vm"
                     }
                 },
@@ -67,7 +67,7 @@ angular
                 views: {
                     mainView: {
                         template: '<cache></cache>'
-                        //templateUrl: "Client/src/app/admin/cache/cache.html",
+                        //templateUrl: "Client/src/app/admin/cache/admin.cache.component.html",
                         //controller: "CacheController as vm"
 
                     }
@@ -79,7 +79,7 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-customer></admin-customer>'
-                        // templateUrl: "Client/src/app/admin/customer/customer.html",
+                        // templateUrl: "Client/src/app/admin/customer/admin.customer.component.html",
                         // controller: "CustomerController as vm"
                     }
                 }
@@ -90,7 +90,7 @@ angular
                 views: {
                     mainView: { 
                         template: '<admin-vendors-customer></admin-vendors-customer>'
-                        //  templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
+                        //  templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
                         //  controller: "CustomerVendorsController as vm"
                     }
                 }
@@ -101,7 +101,7 @@ angular
                 views: {
                     mainView: {
                         template: '<op-log></op-log>'
-                        //  templateUrl: "Client/src/app/admin/oplog/oplog.html",
+                        //  templateUrl: "Client/src/app/admin/oplog/admin.oplog.component.html",
                         //  controller: "OpLogController as vm"
                     }
                 }
@@ -112,7 +112,7 @@ angular
                 views: {
                     mainView: {
                         template: '<batch-timing></batch-timing>'
-                        //  templateUrl: "Client/src/app/admin/batchTiming/batchTiming.html",
+                        //  templateUrl: "Client/src/app/admin/batchTiming/admin.batchTiming.component.html",
                         //  controller: "batchTimingController as vm"
                     }
                 }

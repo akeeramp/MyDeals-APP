@@ -7,8 +7,8 @@ import {List} from "linqts";
 
 @Component({
   selector: "reportingDashboard",
-  templateUrl: "Client/src/app/reporting/ReportDashboard.html",
-  styleUrls:['Client/src/app/reporting/reporting.css']
+    templateUrl: "Client/src/app/reporting/reporting.component.html",
+    styleUrls: ['Client/src/app/reporting/reporting.component.css']
 })
 export class ReportingComponent {
     constructor(private reportingSvc: reportingService,private loggerSvc:logger) {
