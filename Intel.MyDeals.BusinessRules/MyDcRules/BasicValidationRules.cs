@@ -348,9 +348,27 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.AddMessage,
                             Args = new object[] { "{0} must be no more than 80 characters." },
-                            Where = de => de.AtrbCdIn(new List<string> { 
-                                AttributeCodes.TITLE 
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.TITLE
                             }) && de.ExceedsMaxLength(80)
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="C2A Number does not contain special characters (Strip them out)",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave },
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.RestrictCharacters,
+                            Where = de => de.AtrbCdIn(new List<string> {
+                                AttributeCodes.C2A_DATA_C2A_ID
+                            })
                         }
                     }
                 },
