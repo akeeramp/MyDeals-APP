@@ -412,6 +412,8 @@
                     field: "RPL_STS",
                     title: "RPL Status",
                     width: "200px",
+                    //added template to show 0 or 1 on the grid display instead of true or false
+                    template: "#if(RPL_STS == true){ # 1 # }else{ # 0 # }#"
                 }
                 //{
                 //    field: "RPL_STS_CD",
