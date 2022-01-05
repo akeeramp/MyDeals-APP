@@ -893,25 +893,25 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isdealsUnified = undefined;
                 var validationErrorCheck;
                 // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
-                var isEcRPLed = undefined;
-                var isRPLReviewwip = undefined;
+                //var isEcRPLed = undefined;
+                //var isRPLReviewwip = undefined;
                 if (checkedDeals.length > 0) {
                     isdealsUnified = checkedDeals.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
                     });
-                    isEcRPLed = checkedDeals.filter(function (x) {
-                        return x["IS_RPL"] == 1;
-                    });
-                    isRPLReviewwip = checkedDeals.filter(function (x) {
-                        if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0;
-                            return rplStatusCodeCheck;
-                        }
-                        else {
-                            return false
-                        }
+                    //isEcRPLed = checkedDeals.filter(function (x) {
+                    //    return x["IS_RPL"] == 1;
+                    //});
+                    //isRPLReviewwip = checkedDeals.filter(function (x) {
+                    //    if (x["END_CUST_OBJ"] !== "") {
+                    //        var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0;
+                    //        return rplStatusCodeCheck;
+                    //    }
+                    //    else {
+                    //        return false
+                    //    }
 
-                    });
+                    //});
                     validationErrorCheck = checkedDeals.filter(function (x) {
                         return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
                     });
@@ -921,19 +921,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     isdealsUnified = data.filter(function (x) {
                         return x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "";
                     });
-                    isEcRPLed = data.filter(function (x) {
-                        return x["IS_RPL"] == 1;
-                    });
-                    isRPLReviewwip = data.filter(function (x) {
-                        if (x["END_CUST_OBJ"] !== "") {
-                            var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL=="0" && x.IS_EXCLUDE!="1").length > 0;
-                            return rplStatusCodeCheck;
-                        }
-                        else {
-                            return false
-                        }
+                    //isEcRPLed = data.filter(function (x) {
+                    //    return x["IS_RPL"] == 1;
+                    //});
+                    //isRPLReviewwip = data.filter(function (x) {
+                    //    if (x["END_CUST_OBJ"] !== "") {
+                    //        var rplStatusCodeCheck = JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "" || x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL=="0" && x.IS_EXCLUDE!="1").length > 0;
+                    //        return rplStatusCodeCheck;
+                    //    }
+                    //    else {
+                    //        return false
+                    //    }
 
-                    });
+                    //});
                     validationErrorCheck = data.filter(function (x) {
                         return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
                     });
@@ -945,14 +945,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
                 }
-                else if (args["action"] == "Won" && isEcRPLed.length > 0) {
-                    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
-                    return;
-                }
-                else if (args["action"] == "Won" &&  isRPLReviewwip.length > 0) {
-                    kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] +" till Review is complete. ");
-                    return;
-                }
+                //else if (args["action"] == "Won" && isEcRPLed.length > 0) {
+                //    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
+                //    return;
+                //}
+                //else if (args["action"] == "Won" &&  isRPLReviewwip.length > 0) {
+                //    kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] +" till Review is complete. ");
+                //    return;
+                //}
                 if (isDealhasErrors && args["action"] == "Won") {
                     kendo.alert("Please Fix the Validation Errors before it can be set to " + args["action"]);
                     return;
