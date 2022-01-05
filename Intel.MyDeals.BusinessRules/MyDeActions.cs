@@ -348,6 +348,21 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = newVal;
         }
 
+        public static void RestrictCharacters(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string c2AString = de.AtrbValue.ToString();
+            //"#$&'()+,-./:;=>?_ [0-9a-zA-Z]
+            c2AString = Regex.Replace(c2AString, @"[^0-9a-zA-Z #$&?'`""()[\]+,-_./\|\=<>:]+", "");
+
+            if (c2AString != de.AtrbValue.ToString())
+            {
+                de.AtrbValue = c2AString;
+                de.State = OpDataElementState.Modified;
+            }
+        }
+
         public static void AddMessage(this IOpDataElement de, params object[] args)
         {
             if (de == null || args == null || args.Length != 1) return;
