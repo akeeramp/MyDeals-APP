@@ -201,7 +201,6 @@
             placeholder: "Enter Customer Name..",
             dataSource: {
                 type: "json",
-                serverFiltering: true,
                 transport: {
                     read: function (e) {
                         e.success(vm.primeCustomers);
@@ -212,8 +211,8 @@
             autoBind: true,
             dataTextField: "Text",
             dataValueField: "Value",
-            valuePrimitive: true
-
+            valuePrimitive: true,
+            filter: "contains"
         }
 
 
