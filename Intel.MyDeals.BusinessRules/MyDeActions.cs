@@ -353,8 +353,8 @@ namespace Intel.MyDeals.BusinessRules
             if (de == null) return;
 
             string c2AString = de.AtrbValue.ToString();
-            //"#$&'()+,-./:;=>?_ [0-9a-zA-Z]
-            c2AString = Regex.Replace(c2AString, @"[^0-9a-zA-Z #$&?'`""()[\]+,-_./\|\=<>:]+", "");
+
+            c2AString = Regex.Replace(c2AString, @"[^0-9a-zA-Z #$&?'`""()[\]+,\-_./\|\=<>:]+", "");
 
             if (c2AString != de.AtrbValue.ToString())
             {
