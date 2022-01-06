@@ -1613,20 +1613,45 @@ namespace Intel.MyDeals.BusinessRules
             {
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-                DateTime maxEndDt = startDate.AddYears(1).AddDays(-1);
+
+                // START Intel WW offsetting code
+
+                var currYr_WW = Workweek.Get(startDate);
+                int currWW = Workweek.Get(startDate).Ordinal;
+                int intDayOfWeek = (int)startDate.DayOfWeek;
+
+                int weeksThisYear = Year.Get(startDate).NumberOfWeeks;
+                int addWeeks = 52; // If this isn't the last week of the year and this year contains 53 weeks, place into same WW next year
+                if (weeksThisYear == 53 && currWW != 53) addWeeks = 53;
+                DateTime maxEndDt = currYr_WW.Add(addWeeks).StartDate.AddDays(intDayOfWeek);
+                // END Intel WW offsetting code
+
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("For Accrual products, end date is limited to 12 months from deal start date");
+                    deEndDate.AddMessage("For Accrual products, end date is limited to 1 Intel Calendar Year from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
                 }
             }
             else if (deRowType == "Draining")
             {
                 DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
                 DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
-                DateTime maxEndDt = startDate.AddYears(2).AddDays(-1);
+
+                // START Intel WW offsetting code
+
+                var currYr_WW = Workweek.Get(startDate);
+                int currWW = Workweek.Get(startDate).Ordinal;
+                int intDayOfWeek = (int)startDate.DayOfWeek;
+
+                int weeksThisYear = Year.Get(startDate).NumberOfWeeks;
+                int weeksNextYear = Year.Get(startDate.AddYears(1)).NumberOfWeeks;
+                int addWeeks = 104; // This is geared for 2 years, so it is 52*2. If this isn't the last week of the year and this year contains 53 weeks, place into same WW next year
+                if ((weeksThisYear == 53 || weeksNextYear == 53) && currWW != 53) addWeeks = 105; //only this year or next year canbe 53, so adding only one additional week.
+                DateTime maxEndDt = currYr_WW.Add(addWeeks).StartDate.AddDays(intDayOfWeek);
+                // END Intel WW offsetting code
+
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("For Draining products, end date is limited to 24 months from deal start date");
+                    deEndDate.AddMessage("For draining products, end date is limited to 2 Intel Calendar Years from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
                 }
             }
         }
