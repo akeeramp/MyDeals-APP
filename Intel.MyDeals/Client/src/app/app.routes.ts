@@ -128,6 +128,15 @@ angular
                     }
                 }
             })
+            .state("primeCustomers", {
+                url: "/UnifiedCustomerAdmin",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-prime-customers></admin-prime-customers>'
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });
