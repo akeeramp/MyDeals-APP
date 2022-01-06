@@ -2,6 +2,17 @@ kendo-grid {
     height: 480px;
 }
 
+.k-column-title {
+    overflow: visible !important;
+    white-space: normal !important;
+}
+
+.k-command-icon {
+    background-color: unset !important;
+    color: #424141 !important;
+    border: none !important;
+}
+
 .navbar-fixed-top {
     top: -26px !important;
     padding-bottom: 0px !important;

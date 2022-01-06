@@ -117,6 +117,17 @@ angular
                     }
                 }
             })
+            .state("vistexCustomerMapping", {
+                url: "/VistexCustomerMapping",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-vistex-customer-mapping></admin-vistex-customer-mapping>'
+                        //  templateUrl: "Client/src/app/admin/VistexCustomerMapping/admin.vistexCustomerMapping.component.html",
+                        //  controller: "VistexCustomerMappingController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });

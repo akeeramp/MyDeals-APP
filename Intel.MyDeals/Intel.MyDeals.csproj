@@ -756,6 +756,7 @@
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
+    <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\advanceSearch\globalSearch.directive.js" />
@@ -2073,6 +2074,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.service.ts" />
     <TypeScriptCompile Include="Client\src\app\app.main.ts" />
     <TypeScriptCompile Include="Client\src\app\app.module.ts" />
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />

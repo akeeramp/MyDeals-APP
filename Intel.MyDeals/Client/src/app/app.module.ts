@@ -45,6 +45,7 @@ import { adminCustomerComponent } from './admin/customer/admin.customer.componen
 import { adminCustomerVendorsComponent } from './admin/CustomerVendors/admin.customerVendors.component';
 import { OpLogComponent } from './admin/oplog/admin.oplog.component';
 import { batchTimingComponent } from './admin/batchTiming/admin.batchTiming.component';
+import { adminVistexCustomerMappingComponent } from './admin/vistexCustomerMapping/admin.vistexCustomerMapping.component';
 
 //*********************admin modules ends here *********************
 
@@ -126,7 +127,8 @@ import {MatInputModule} from '@angular/material/input'
         OpLogComponent,
         OrderByPipe,
         batchTimingComponent,
-        KendoControlComponent
+        KendoControlComponent,
+        adminVistexCustomerMappingComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -141,7 +143,8 @@ import {MatInputModule} from '@angular/material/input'
         DialogOverviewExampleDialog,
         OpLogComponent,
         batchTimingComponent,
-        KendoControlComponent
+        KendoControlComponent,
+        adminVistexCustomerMappingComponent
     ]
 })
 
