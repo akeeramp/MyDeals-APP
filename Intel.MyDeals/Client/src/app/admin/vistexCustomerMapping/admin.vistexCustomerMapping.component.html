@@ -40,14 +40,14 @@
                 </button>
             </ng-template>
         </kendo-grid-command-column>
-        <kendo-grid-column field="CUST_NM" title="Customer Name" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="CUST_NM" title="Customer Name"  width="230" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="VISTEX_CUST_FLAG" title="Is Vistex Customer" editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="VISTEX_CUST_FLAG" title="Is Vistex Customer" width="180" editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
                     <mat-slide-toggle [color]="color"
@@ -63,7 +63,7 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_DOUBLE_CONSUMPTION" title="Allow Double Consumption" editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_DOUBLE_CONSUMPTION" title="Allow Double Consumption" width="180" editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
                     <mat-slide-toggle [color]="color"
@@ -79,7 +79,7 @@
                 </div>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_PERD_PRFL" title="Period Profile" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_PERD_PRFL" title="Period Profile" width="190" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -91,7 +91,7 @@
                 </kendo-combobox>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_TNDR_AR_SETL_LVL" title="Tenders Settlement Level" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_TNDR_AR_SETL_LVL" title="Tenders Settlement Level" width="230" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -103,7 +103,7 @@
                 </kendo-combobox>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_AR_SETL_LVL" title="Non-Tenders Settlement Level" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_AR_SETL_LVL" title="Non-Tenders Settlement Level" width="230" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -128,7 +128,7 @@
                 </kendo-combobox>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_LOOKBACK_PERD" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_LOOKBACK_PERD" width="200" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                 <span style="overflow:visible;white-space:normal">Billing Rolling Lookback Period (Months)</span>
                 <div kendoTooltip>
@@ -148,7 +148,7 @@
                 </kendo-numerictextbox>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="CUST_CIM_ID" title="CIM ID" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="CUST_CIM_ID" title="CIM ID" width="200" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -160,7 +160,7 @@
                 </kendo-textbox>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="DFLT_SETTLEMENT_PARTNER" title="Default Settlement Partner" [headerClass]="{'headerClass':true}">
+        <kendo-grid-column field="DFLT_SETTLEMENT_PARTNER" title="Default Settlement Partner" width="250" [headerClass]="{'headerClass':true}">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

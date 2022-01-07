@@ -64,6 +64,7 @@ export class adminPrimeCustomersComponent {
     public distinctCountry: Array<any>;
     public errorMsg: string = "";
     public allowCustom: boolean = true;
+    public editAccess: boolean = true;
     private isNew: boolean; primeCust_map: any; rowIndex: number; saveAction: string = "Active";
     isCombExists: boolean = false; isDialogVisible: boolean = false; cancelConfirm: boolean = false;
     private state: State = {
@@ -100,8 +101,12 @@ export class adminPrimeCustomersComponent {
     }
 
     loadPrimeCustomer() {
+        //RA alone will have view access
+        if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
+            this.editAccess = false;
+        }
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
+        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && (<any>window).usrRole != "RA" && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
         else {

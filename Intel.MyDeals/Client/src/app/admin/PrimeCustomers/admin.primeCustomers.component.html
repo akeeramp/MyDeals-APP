@@ -22,7 +22,7 @@
                     [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
                     (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
             <ng-template kendoGridToolbarTemplate>
-                <button kendoGridAddCommand class="k-button addButton">
+                <button kendoGridAddCommand class="k-button addButton" *ngIf="editAccess">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>
                     ADD NEW RECORD
                 </button>
@@ -36,7 +36,7 @@
                     Refresh
                 </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="75" [headerClass]="{'headerClass':true}">
+            <kendo-grid-command-column title="Commands" width="75" *ngIf="editAccess" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
                         <span class="k-icon k-i-edit k-icon-sm"></span>
