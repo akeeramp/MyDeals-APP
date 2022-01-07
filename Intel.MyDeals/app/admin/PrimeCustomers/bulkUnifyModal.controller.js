@@ -168,7 +168,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 logger.error("Operation failed");
             });
         } else
-            kendo.alert("There is no data to validate!");
+            kendo.alert("There is no data to validate");
     };
 
     $scope.UnifiedDealValidation = function (isError, msg, isReq) {
@@ -198,58 +198,58 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                     if (vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == undefined || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == null
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == '') {
                         isEmptyDealEndCustomerRetail = true;
-                        msg = "End Customer Retail must not be empty!";
+                        msg = "End Customer Retail needs to be entered.";
                         sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                     }
                     if (vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == undefined || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == null
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == '') {
                         isEmptyDealEndCustomerCountry = true;
-                        msg = "End Customer Country must not be empty!";
+                        msg = "End Customer Country needs to be entered.";
                         sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                     }
                     if (vm.UnifyValidation.IsEmptyDealAvailable) {
-                        msg = "Deal ID must not be empty and must be Integer!";
+                        msg = "Deal ID is a mandatory numeric field.";
                         sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));                        
                     }
                     if (vm.UnifyValidation.DuplicateDealCombination.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.DuplicateDealCombination) != -1) {
-                            msg = "Deal ID having same combination of Unified Customer ID, Unified Customer Name, Country Customer ID and Country Customer Name multiple times";
+                            msg = "Duplicate rows found with same combinations for Deal ID, Unified Customer ID, Unified Customer Name, Country Customer ID and Unified Country.";
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
                     if (vm.UnifyValidation.DuplicateDealEntryCombination.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.DuplicateDealEntryCombination) != -1) {
-                            msg = "Deal ID having same comnination of End Customer Retail and End Customer Country multiple times";
+                            msg = "Duplicate rows found with same combinations for Deal ID, End Customer Retail and End Customer Country.";
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCustIdAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_ID == "0") {
-                            msg = "Unified Customer ID must not be empty  and must be Integer!";
+                            msg = "Unified Customer is a mandatory numeric field.";
                             sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCustNameAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME == null || vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME == "") {
-                            msg = "Unified Customer Name must not be empty!";
+                            msg = "Unified Customer Name needs to be entered.";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCountryIdAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_COUNTRY_CUST_ID == "0") {
-                            msg = "Country Customer ID must not be empty and must be integer!";
+                            msg = "Country Customer ID is a mandatory numeric field.";
                             sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCountryAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_COUNTRY == null || vm.inValidUnifyDeals[i].UCD_COUNTRY == "") {
-                            msg = "Country Customer Name must not be empty!";
+                            msg = "Unified Country needs to be entered.";
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                     }
                     if (vm.UnifyValidation.InValidCountries.length > 0) {
                         if (jQuery.inArray(jQuery.trim(vm.inValidUnifyDeals[i].UCD_COUNTRY).toLowerCase(), vm.UnifyValidation.InValidCountries) != -1) {
-                            msg = "Country Customer Name does not exists in My Deals!";
+                            msg = "Unified Country does not exist in My Deals.";
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                     }
@@ -257,40 +257,40 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                     if (vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME != null && vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME != "") {
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME.toLowerCase() == "any") {
                             isGlobalContainsAny = true;
-                            msg = "Any cannot be used as Unified Customer Name for unification process!";
+                            msg = "'ANY' cannot be used as Unified Customer Name.";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME.toLowerCase() == "null") {
                             isGlobalContainsNull = true;
-                            msg = "null cannot be used as Unified Customer Name for unification process!";
+                            msg = "NULL cannot be used as Unified Customer Name.";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                         var patt = new RegExp("^[\\w\\s.,:'\&-]*$");
                         var res = patt.test(vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
                         if (!res || vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME.length > 65) {
                             isInvalidGlobalName = true;
-                            msg = "Unified Customer Name contains invalid character or it has more than 65 characters!";
+                            msg = "Unified Customer Name either contains more than 65 characters or invalid characters.";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, msg, false));
                         }
                     }
 
                     if (vm.duplicateGlobalIds.length > 1) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].UCD_GLOBAL_ID, vm.duplicateGlobalIds) != -1) {
-                            msg = "Unified Customer ID already exists with another Unified Customer Name!";
+                            msg = "Same Unified Customer ID cannot be associated with multiple Unified Customer Names.";
                             sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
 
                     if (vm.duplicateGlobalNames.length > 1) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME, vm.duplicateGlobalNames) != -1) {
-                            msg = "Unified Customer Name already exists with another Unified Customer ID!";
+                            msg = "Same Unified Customer Name cannot be associated with multiple Unified Customer IDs.";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
 
                     if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.AlreadyUnifiedDeals) != -1) {
-                            msg = "Deal is already unified!"
+                            msg = "Deal ID is already Unified."
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
@@ -300,14 +300,14 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             && x.DEAL_END_CUSTOMER_COUNTRY == vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY);
 
                         if (index > -1) {
-                            msg = "End Customer Retail and End Customer Country combination entered is already unified!"
+                            msg = "End Customer Retail and End Customer Country combination have already been unified."
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
 
                     if (vm.UnifyValidation.InvalidDeals.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.InvalidDeals) != -1) {
-                            msg = "Deal ID is having more combination of ununified end Customers than Deal Editor screen!"
+                            msg = "End Customer - Country combination is not a user entered value in the Deal."
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
@@ -317,7 +317,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             && x.DEAL_END_CUSTOMER_COUNTRY == vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY);
 
                         if (index > -1) {
-                            msg = "End Customer Retail and End Customer Country combination not matched with Deal Editor Screen!"
+                            msg = "Incorrect values of End Customer Retail and End Customer Country associated with the Deal ID."
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, msg, true));
                         }
                     }
@@ -325,63 +325,64 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 }
             });
             if (isEmptyDealEndCustomerRetail) {
-                strAlertMessage += "</br></br>End Customer Retail must not be empty! Please fix.";
+                strAlertMessage += "<li>End Customer Retail needs to be entered.</li>";
             }
             if (isEmptyDealEndCustomerCountry) {
-                strAlertMessage += "</br></br>End Customer Country must not be empty! Please fix.";
+                strAlertMessage += "<li>End Customer Country needs to be entered.</li>";
             }
             if (vm.UnifyValidation.IsEmptyDealAvailable) {
-                strAlertMessage += "</br></br>Deal ID must not be empty and must be Integer! Please fix.";
+                strAlertMessage += "<li>Deal ID is a mandatory numeric field.</li>";
             }
             if (vm.UnifyValidation.DuplicateDealEntryCombination.length > 0) {
-                strAlertMessage += "</br></br>Deal ID having same comnination of End Customer Retail and End Customer Country multiple times";
+                strAlertMessage += "<li>Duplicate rows found with same combinations for Deal ID, End Customer Retail and End Customer Country.</li>";
             }
             if (vm.UnifyValidation.DuplicateDealCombination.length > 0) {
-                strAlertMessage += "</br></br>Deal ID having same comnination of Unified Customer ID, Unified Customer Name, Country Customer ID and Country Customer Name multiple times";
+                strAlertMessage += "<li>Duplicate rows found with same combinations for Deal ID, Unified Customer ID, Unified Customer Name, Country Customer ID and Unified Country.</li>";
             }
             if (vm.UnifyValidation.IsEmptyCustIdAvailable) {
-                strAlertMessage += "</br></br>Unified Customer ID must not be empty and must be Integer! Please fix."
+                strAlertMessage += "<li>Unified Customer is a mandatory numeric field.</li>"
             }
             if (vm.UnifyValidation.IsEmptyCustNameAvailable) {
-                strAlertMessage += "</br></br>Unified Customer Name must not be empty! Please fix."
+                strAlertMessage += "<li>Unified Customer Name needs to be entered.</li>"
             }
             if (vm.UnifyValidation.IsEmptyCountryIdAvailable) {
-                strAlertMessage += "</br></br>Country Customer ID must not be empty and must be integer! Please fix."
+                strAlertMessage += "<li>Country Customer ID is a mandatory numeric field.</li>"
             }
             if (vm.UnifyValidation.IsEmptyCountryAvailable) {
-                strAlertMessage += "</br></br>Country Customer Name must not be empty! Please fix."
+                strAlertMessage += "<li>Unified Country needs to be entered.</li>"
             }
             if (vm.UnifyValidation.InValidCountries.length > 0) {
-                strAlertMessage += "</br></br>Country Customer Name does not exists in My Deals! Please fix."
+                strAlertMessage += "<li>Unified Country does not exist in My Deals.</li>"
             }
             if (isInvalidGlobalName) {
-                strAlertMessage += "</br></br>Unified Customer Name contains invalid character or it has more than 65 characters!";
+                strAlertMessage += "<li>Unified Customer Name either contains more than 65 characters or invalid characters.</li>";
             }
             if (vm.duplicateGlobalIds.length > 1) {
-                strAlertMessage += "</br></br>Same Unified Customer ID exists for multiple Unified Customer Name!";
+                strAlertMessage += "<li>Same Unified Customer ID cannot be associated with multiple Unified Customer Names.</li>";
             }
             if (vm.duplicateGlobalNames.length > 1) {
-                strAlertMessage += "</br></br>Same Unified Customer Name exists for multiple Unified Customer ID!";
+                strAlertMessage += "<li>Same Unified Customer Name cannot be associated with multiple Unified Customer IDs.</li>";
             }
             if (isGlobalContainsAny) {
-                strAlertMessage += "</br></br>Any cannot be used as Unified Customer Name for unification process! Please fix."
+                strAlertMessage += "<li>'ANY' cannot be used as Unified Customer Name.</li>"
             }
             if (isGlobalContainsNull) {
-                strAlertMessage += "</br></br>null cannot be used as Unified Customer Name for unification process! Please fix."
+                strAlertMessage += "<li>NULL cannot be used as Unified Customer Name.</li>"
             }
             if (vm.UnifyValidation.InValidCombination.length > 0) {
-                strAlertMessage += "</br></br>End Customer Retail and End Customer Country combination not matched with Deal Editor Screen! Please fix."
+                strAlertMessage += "<li>Incorrect values of End Customer Retail and End Customer Country associated with the Deal ID.</li>"
             }
             if (vm.UnifyValidation.InvalidDeals.length > 0) {
-                strAlertMessage += "</br></br>Deal ID is having more combination of ununified End Customers than Deal Editor screen! Please fix."
+                strAlertMessage += "<li>End Customer - Country combination is not a user entered value in the Deal.</li>"
             }
             if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
-                strAlertMessage += "</br></br>Deal is already unified! Please fix."
+                strAlertMessage += "<li>Deal ID is already Unified.</li>"
             }
             if (vm.UnifyValidation.UnifiedCombination.length > 0) {
-                strAlertMessage += "</br></br>End Customer Retail and End Customer Country combination entered is already unified! Please fix."
+                strAlertMessage += "<li>End Customer Retail and End Customer Country combination have already been unified.</li>"
             }
             if (strAlertMessage != "") {
+                strAlertMessage = "<b>The highlighted row(s) in the excel have not been updated in the MyDeals because of the following error(s).</b></br>" + strAlertMessage;
                 kendo.alert(jQuery.trim(strAlertMessage));
 
             } else {
@@ -492,7 +493,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("Unified Customer Name");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Country Customer ID");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Country Customer Name");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Unified Country");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("End Customer Retail");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("End Customer Country");
 
