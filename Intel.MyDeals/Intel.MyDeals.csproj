@@ -2073,7 +2073,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\customer\admin.customer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
+     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.model.ts" />

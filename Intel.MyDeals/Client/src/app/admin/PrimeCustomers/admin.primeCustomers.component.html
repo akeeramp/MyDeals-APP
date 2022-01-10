@@ -66,7 +66,7 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column field="PRIM_CUST_ID" title="Unified Customer ID" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="PRIM_CUST_ID" title="Unified Customer ID" width="100" [headerClass]="{'headerClass':true}" [editable]="isUnifiedIdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -78,7 +78,7 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column field="PRIM_CUST_NM" title="Unified Customer Name" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="PRIM_CUST_NM" title="Unified Customer Name" width="100" [headerClass]="{'headerClass':true}" [editable]="isPrimCustNmEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -90,7 +90,7 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column field="PRIM_LVL_ID" title="Country Customer ID" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="PRIM_LVL_ID" title="Country Customer ID" width="100" [headerClass]="{'headerClass':true}" [editable]="isPrimLvlIdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -102,19 +102,19 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column field="PRIM_LVL_NM" title="Country Customer Name" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="PRIM_LVL_NM" title="Country Customer Name" width="100" [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
-                <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
+                <!--<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #ctryCustNmDropDown [data]="distinctCtryCustNm" [formControl]="formGroup.get('PRIM_LVL_NM')" [allowCustom]="allowCustom">
                     </kendo-combobox>
-                </ng-template>
+                </ng-template>-->
             </kendo-grid-column>
 
-            <kendo-grid-column field="PRIM_CUST_CTRY" title="Unified Country" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="PRIM_CUST_CTRY" title="Unified Country" width="100" [headerClass]="{'headerClass':true}" [editable]="isPrimCustCtryEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -127,7 +127,7 @@
             </kendo-grid-column>
 
             <!--Hiding the column temporarily as part of UCD Development. This might be enabled in future (functionality is implemented)-->
-            <kendo-grid-column Current field="RPL_STS_CD" title="RPL Status Code" width="100" [headerClass]="{'headerClass':true}" [hidden]="true">
+            <kendo-grid-column Current field="RPL_STS_CD" title="RPL Status Code" width="100" [headerClass]="{'headerClass':true}" [hidden]="true" [editable]="isRplStsDdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

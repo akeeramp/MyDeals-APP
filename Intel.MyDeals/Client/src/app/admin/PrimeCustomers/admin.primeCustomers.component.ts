@@ -67,6 +67,8 @@ export class adminPrimeCustomersComponent {
     public editAccess: boolean = true;
     private isNew: boolean; primeCust_map: any; rowIndex: number; saveAction: string = "Active";
     isCombExists: boolean = false; isDialogVisible: boolean = false; cancelConfirm: boolean = false;
+    public isUnifiedIdEditable: boolean = false; isPrimCustNmEditable: boolean = false;
+    isPrimLvlIdEditable: boolean = false; isPrimCustCtryEditable: boolean = false; isRplStsDdEditable: boolean = false;
     private state: State = {
         skip: 0,
         take: 10,
@@ -133,6 +135,10 @@ export class adminPrimeCustomersComponent {
 
     addHandler({ sender }) {
         this.closeEditor(sender);
+        this.isUnifiedIdEditable = true;
+        this.isPrimCustNmEditable = true;
+        this.isPrimLvlIdEditable = true;
+        this.isPrimCustCtryEditable = true;
         this.formGroup = new FormGroup({
             IS_ACTV: new FormControl(false, Validators.required),
             PRIM_CUST_ID: new FormControl("", Validators.compose([
@@ -162,6 +168,7 @@ export class adminPrimeCustomersComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isRplStsDdEditable = true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -225,10 +232,20 @@ export class adminPrimeCustomersComponent {
 
     cancelHandler({ sender, rowIndex }) {
         this.closeEditor(sender, rowIndex);
+        this.isUnifiedIdEditable = false;
+        this.isPrimCustNmEditable = false;
+        this.isPrimLvlIdEditable = false;
+        this.isPrimCustCtryEditable = false;
+        this.isRplStsDdEditable = false;
     }
 
     saveConfirmation() {
         this.isDialogVisible = false;
+        this.isUnifiedIdEditable = false;
+        this.isPrimCustNmEditable = false;
+        this.isPrimLvlIdEditable = false;
+        this.isPrimCustCtryEditable = false;
+        this.isRplStsDdEditable = false;
 
         if (this.isDialogVisible)
             this.isDialogVisible = false;
@@ -243,6 +260,11 @@ export class adminPrimeCustomersComponent {
     saveCancel() {
         this.isDialogVisible = false;
         this.cancelConfirm = false;
+        this.isUnifiedIdEditable = false;
+        this.isPrimCustNmEditable = false;
+        this.isPrimLvlIdEditable = false;
+        this.isPrimCustCtryEditable = false;
+        this.isRplStsDdEditable = false;
     }
 
 
@@ -351,6 +373,11 @@ export class adminPrimeCustomersComponent {
     }
 
     saveHandler({ sender, rowIndex, formGroup, isNew }) {
+        this.isUnifiedIdEditable = false;
+        this.isPrimCustNmEditable = false;
+        this.isPrimLvlIdEditable = false;
+        this.isPrimCustCtryEditable = false;
+        this.isRplStsDdEditable = false;
         let primeCust_map: PrimeCust_Map = formGroup.getRawValue();
         if (primeCust_map.RPL_STS_CD) {
             primeCust_map.RPL_STS_CD = primeCust_map.RPL_STS_CD.join();
