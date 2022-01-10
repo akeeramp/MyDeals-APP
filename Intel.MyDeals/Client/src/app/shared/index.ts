@@ -14,3 +14,4 @@ import './core/adminBanner/adminBanner.directive.js';
 import './core/dealpopupdock/dealPopupDock.directive';
 import './advanceSearch/globalSearch.directive.js';
 import './advanceSearch/globalSearchResults.directive.js';
+import './core/adminBanner/adminBanner.service.js';

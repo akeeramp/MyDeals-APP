@@ -748,6 +748,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
     <Content Include="Client\src\app\admin\cache\admin.cache.component.css" />
     <Content Include="Client\src\app\admin\cache\admin.cache.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.component.ts" />
+    <Content Include="Client\src\app\admin\constants\admin.constants.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.service.ts" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
@@ -1872,6 +1875,7 @@
     <Content Include="Client\tsconfig.json" />
     <Content Include="Client\yarn.lock" />
     <Content Include="Client\src\app\admin\geo\admin.geo.component.html" />
+    <Content Include="Client\src\app\shared\core\adminBanner\adminBanner.service.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
@@ -2067,6 +2071,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.model.ts" />

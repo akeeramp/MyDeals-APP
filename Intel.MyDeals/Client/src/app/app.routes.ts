@@ -147,6 +147,17 @@ angular
                 }
             })
 
+            .state("constants", {
+                url: "/constants",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<constants></constants>'
+                        //  templateUrl: "Client/src/app/admin/constants/admin.constants.component.html",
+                        //  controller: "ConstantsController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });

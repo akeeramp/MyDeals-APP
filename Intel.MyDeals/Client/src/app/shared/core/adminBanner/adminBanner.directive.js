@@ -5,7 +5,7 @@
         .module('app')
         .directive('adminBanner', adminBanner);
 
-    adminBanner.$inject = ['$localStorage', 'constantsService', '$rootScope', '$state', '$location'];
+    adminBanner.$inject = ['$localStorage', 'bannerConstantsService', '$rootScope', '$state', '$location'];
     function adminBanner($localStorage, constantsService, $rootScope, $state, $location) {
         return {
             restrict: 'E',

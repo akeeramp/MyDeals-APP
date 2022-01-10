@@ -22,7 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoaderComponent } from './shared/loader/loader.component';
 import { ReportingComponent } from './reporting/reporting.component';
 import { EmployeeComponent } from './admin/employee/admin.employee.component';
-import { PingComponent } from './shared/core/ping/ping.component'
+import { PingComponent } from './shared/core/ping/ping.component';
 //kendo component POC
 import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -36,7 +36,7 @@ import { EditorModule } from "@progress/kendo-angular-editor";
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
 import { OrderModule } from 'ngx-order-pipe';
-import { OrderByPipe } from 'ngx-pipes'
+import { OrderByPipe } from 'ngx-pipes';
 import {KendoControlComponent} from './shared/kendo_controls/kendocontrol.component';
 
 //*********************admin modules starts here *********************
@@ -48,6 +48,7 @@ import { batchTimingComponent } from './admin/batchTiming/admin.batchTiming.comp
 import { adminVistexCustomerMappingComponent } from './admin/vistexCustomerMapping/admin.vistexCustomerMapping.component';
 import { adminPrimeCustomersComponent } from './admin/PrimeCustomers/admin.primeCustomers.component';
 import { geoComponent } from './admin/geo/admin.geo.component';
+import { ConstantsComponent } from './admin/constants/admin.constants.component';
 
 //*********************admin modules ends here *********************
 
@@ -132,7 +133,8 @@ import {MatInputModule} from '@angular/material/input'
         KendoControlComponent,
         adminVistexCustomerMappingComponent,
         adminPrimeCustomersComponent,
-        geoComponent
+        geoComponent,
+        ConstantsComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -150,7 +152,8 @@ import {MatInputModule} from '@angular/material/input'
         KendoControlComponent,
         adminVistexCustomerMappingComponent,
         adminPrimeCustomersComponent,
-        geoComponent
+        geoComponent,
+        ConstantsComponent
     ]
 })
 
