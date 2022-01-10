@@ -1871,6 +1871,7 @@
     <Content Include="Client\package.json" />
     <Content Include="Client\tsconfig.json" />
     <Content Include="Client\yarn.lock" />
+    <Content Include="Client\src\app\admin\geo\admin.geo.component.html" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
@@ -2073,6 +2074,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\customer\admin.customer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.service.ts" />
      <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.ts" />

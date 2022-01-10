@@ -47,6 +47,7 @@ import { OpLogComponent } from './admin/oplog/admin.oplog.component';
 import { batchTimingComponent } from './admin/batchTiming/admin.batchTiming.component';
 import { adminVistexCustomerMappingComponent } from './admin/vistexCustomerMapping/admin.vistexCustomerMapping.component';
 import { adminPrimeCustomersComponent } from './admin/PrimeCustomers/admin.primeCustomers.component';
+import { geoComponent } from './admin/geo/admin.geo.component';
 
 //*********************admin modules ends here *********************
 
@@ -130,7 +131,8 @@ import {MatInputModule} from '@angular/material/input'
         batchTimingComponent,
         KendoControlComponent,
         adminVistexCustomerMappingComponent,
-        adminPrimeCustomersComponent
+        adminPrimeCustomersComponent,
+        geoComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -147,7 +149,8 @@ import {MatInputModule} from '@angular/material/input'
         batchTimingComponent,
         KendoControlComponent,
         adminVistexCustomerMappingComponent,
-        adminPrimeCustomersComponent
+        adminPrimeCustomersComponent,
+        geoComponent
     ]
 })
 

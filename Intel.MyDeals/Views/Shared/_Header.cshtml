@@ -264,7 +264,8 @@
 
                     @if (isRealSA || isDeveloper) // All SA users allowed
                     {
-                        <li><a href="Admin#/geo">Geo</a></li>
+                        @*<li><a href="Admin#/geo">Geo</a></li>*@
+                        <li ui-sref-active="active"><a ui-sref="geo">Geo</a></li>
                         <li><a href="Admin#/funfact">Fun Facts</a></li>
                     }
 

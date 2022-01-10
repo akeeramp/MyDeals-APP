@@ -137,6 +137,16 @@ angular
                     }
                 }
             })
+            .state("geo", {
+                url: "/adminGeo",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-geo></admin-geo>'
+                    }
+                }
+            })
+
             // Admin route  ends here 
 
     });
