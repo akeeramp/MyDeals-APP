@@ -49,6 +49,7 @@ import { adminVistexCustomerMappingComponent } from './admin/vistexCustomerMappi
 import { adminPrimeCustomersComponent } from './admin/PrimeCustomers/admin.primeCustomers.component';
 import { geoComponent } from './admin/geo/admin.geo.component';
 import { ConstantsComponent } from './admin/constants/admin.constants.component';
+import { adminProductAliasComponent } from './admin/productAlias/admin.productAlias.component';
 
 //*********************admin modules ends here *********************
 
@@ -134,7 +135,8 @@ import {MatInputModule} from '@angular/material/input'
         adminVistexCustomerMappingComponent,
         adminPrimeCustomersComponent,
         geoComponent,
-        ConstantsComponent
+        ConstantsComponent,
+        adminProductAliasComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -153,7 +155,8 @@ import {MatInputModule} from '@angular/material/input'
         adminVistexCustomerMappingComponent,
         adminPrimeCustomersComponent,
         geoComponent,
-        ConstantsComponent
+        ConstantsComponent,
+        adminProductAliasComponent
     ]
 })
 

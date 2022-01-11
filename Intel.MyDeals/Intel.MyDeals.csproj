@@ -759,6 +759,7 @@
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
+    <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
@@ -2081,8 +2082,11 @@
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.service.ts" />
-     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.service.ts" />

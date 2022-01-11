@@ -158,6 +158,17 @@ angular
                     }
                 }
             })
+            .state("productAlias", {
+                url: "/productAlias",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-product-alias></admin-product-alias>'
+                        //  templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html",
+                        //  controller: "productAliasController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });
