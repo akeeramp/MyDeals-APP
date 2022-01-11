@@ -52,6 +52,7 @@ export class ConstantsComponent {
     public constData: Array<any>;
     public formGroup: FormGroup;
     public isFormChange: boolean = false;
+    public isCnstNmEditable: boolean = false;
     private editedRowIndex: number;
     private adminBannerMessage: string;
     private isDialogVisible: boolean = false;
@@ -147,6 +148,7 @@ export class ConstantsComponent {
 
     addHandler({ sender }) {
         this.closeEditor(sender);
+        this.isCnstNmEditable = true;
         this.formGroup = new FormGroup({
             CNST_SID: new FormControl(),
             CNST_NM: new FormControl("", Validators.required),
@@ -208,9 +210,11 @@ export class ConstantsComponent {
 
     cancelHandler({ sender, rowIndex }) {
         this.closeEditor(sender, rowIndex);
+        this.isCnstNmEditable = false;
     }
 
     saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
+        this.isCnstNmEditable = false;
         const cnst_map: Cnst_Map = formGroup.value;
         if (!isNew) {
             formGroup.value.CNST_NM = dataItem.CNST_NM;

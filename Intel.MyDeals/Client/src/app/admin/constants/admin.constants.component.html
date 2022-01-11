@@ -12,8 +12,8 @@
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"
                     [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
-                    [groupable]="false" [group]="state.group" filterable="menu" [height]="450"
-                    [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
+                    [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true" 
+                    (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
                     (cancel)="cancelHandler($event)" (save)="saveHandler($event)" (remove)="removeHandler($event)">
 
             <ng-template kendoGridToolbarTemplate>
@@ -51,7 +51,7 @@
                 </ng-template>
             </kendo-grid-command-column>
 
-            <kendo-grid-column field="CNST_NM" title="Name" width="100" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="CNST_NM" title="Name" width="100" [headerClass]="{'headerClass':true}" [editable]="isCnstNmEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
