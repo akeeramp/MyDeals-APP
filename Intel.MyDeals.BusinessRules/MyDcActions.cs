@@ -1628,7 +1628,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("For Accrual products, end date is limited to 1 Intel Calendar Year from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
+                    deEndDate.AddMessage("For Accrual products, the end date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                 }
             }
             else if (deRowType == "Draining")
@@ -1651,7 +1651,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("For draining products, end date is limited to 2 Intel Calendar Years from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
+                    deEndDate.AddMessage("For draining products, the end date is limited to 2 Intel Calendar Years from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                 }
             }
         }
@@ -3209,7 +3209,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                     {
-                        deEndDate.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date (" + maxEndDt.ToString("MM/dd/yyyy") + ")");
+                        deEndDate.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                     }
             }
         }
