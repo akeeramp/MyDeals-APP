@@ -629,7 +629,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.openCancelDialog = function () {
                 if ($scope.getLinkedIds($scope.dataItem).length > 1) {
-                    kendo.alert("<h4>Unable to Delete</h4><p>You cannot cancel multiple deals.  Please uncheck all deals before trying to cancel.</p>");
+                    kendo.alert("<h4>Unable to Cancel</h4><p>You cannot cancel multiple deals.  Please uncheck all deals before trying to cancel.</p>");
                     return;
                 }
                 kendo.confirm("<h4>Would you like to cancel this deal?</h4><p>This will set the deal stage to Canceled.</p>").then(function () {
@@ -639,7 +639,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.openRollBackDialog = function () {
                 if ($scope.getLinkedIds($scope.dataItem).length > 1) {
-                    kendo.alert("<h4>Unable to Delete</h4><p>You cannot rollback multiple deals.  Please uncheck all deals before trying to rollback.</p>");
+                    kendo.alert("<h4>Unable to Rollback</h4><p>You cannot rollback multiple deals.  Please uncheck all deals before trying to rollback.</p>");
                     return;
                 }
                 kendo.confirm("<h4>Would you like to undo this deals current re-deal action?</h4><p>This will remove the deal edits from the Pricing Editor also.</p>").then(function () {

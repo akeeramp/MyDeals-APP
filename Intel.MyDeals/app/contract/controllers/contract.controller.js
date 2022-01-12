@@ -2820,7 +2820,7 @@
                                     if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                                     if (hasTender && hasNonTender) {
                                         el._behaviors.isError["REBATE_TYPE"] = true;
-                                        el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same " + $scope.ptTitle + ".";
+                                        el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table (" + $scope.ptTitle + ").";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                     }
@@ -2847,7 +2847,7 @@
                                     if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
                                         el._behaviors.isError["PTR_USER_PRD"] = true;
                                         el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
-                                            duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicate within rows " + duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                            duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicated within rows " + duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                         errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PTR_USER_PRD"]);
                                     }
@@ -3242,9 +3242,9 @@
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only increase after approval";
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased after approval";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Lookback Period can only increase after approval");
+                                    errs.PRC_TBL_ROW.push("Lookback Period can only be increased after approval");
                                 }
                             }
 
@@ -3253,11 +3253,11 @@
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Geo or Consumption Country, but not both";
                                     gData[i]._behaviors.isError['CONSUMPTION_COUNTRY'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter value in either Customer Reported Geo or Consumption Country ,but not both";
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter a value in either Customer Reported Geo or Consumption Country, but not both";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Please enter value in either Customer Reported Geo or Consumption Country ,but not both");
+                                    errs.PRC_TBL_ROW.push("Please enter a value in either Customer Reported Geo or Consumption Country, but not both");
                                 }
                             }
 
@@ -3437,11 +3437,11 @@
                         rtn = false;
                     }
                     else if (!isPtUnique) {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " must have unique name within contract.";
+                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "Table title (" + $scope.ptTitle + ") must be a unique name within this contract.";
                         $scope.curPricingTable._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     } else if ($scope.curPricingTable["TITLE"] !== undefined && $scope.curPricingTable["TITLE"].length > 80) {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
+                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The title (" + $scope.ptTitle + ") cannot have more than 80 characters.";
                         $scope.curPricingTable._behaviors.isError["TITLE"] = true;
                         rtn = false;
                     }
@@ -3545,7 +3545,7 @@
                     return;
                 }
                 else {
-                    logger.stickyError("Something went wrong please try after sometime");
+                    logger.stickyError("Something went wrong please try after some time.");
                     return;
                 }
             });
@@ -4821,7 +4821,7 @@
                 $scope.contractData._behaviors.isError["CUST_MBR_SID"] = true;
                 $scope.isValid = false;
             } else if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
-                $scope.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 2099/12/31";
+                $scope.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 12/31/2099";
                 $scope.contractData._behaviors.isError["END_DT"] = true;
                 $scope.isValid = false;
             }
@@ -4886,7 +4886,7 @@
 
             if ($scope.isValid) {
                 if ($scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && $scope.contractData.CUST_ACCNT_DIV == "") {
-                    kendo.confirm("The division is blank. Do you intend for this contract to apply to all divisions ?").then(function () {
+                    kendo.confirm("The division is blank. Do you intend for this contract to apply to all divisions?").then(function () {
                         if ($scope.isCopyContract) {
                             $scope.copyContract();
                         } else {
@@ -6637,18 +6637,18 @@
             item._behaviors.isError[elem] = true;
            
             if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
-                item._behaviors.validMsg[elem] = "There should be atleast one accrual product.";
+                item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
             }
             else if (cond == 'invalidDate' && elem == 'START_DT') {
-                item._behaviors.validMsg[elem] = "Draining products should have atleast 1 day delay from Accrual Start date";
+                item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
             }
 
             else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
-                item._behaviors.validMsg[elem] = "Products within same bucket should have same payout based on value";
+                item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
             }
 
             else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
-                item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is invalid";
+                item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
             }
 
         }
@@ -6727,7 +6727,7 @@
                 item._behaviors.validMsg[elem] = "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot contain values. Choose one or the other.";
             }
             else if (cond == 'duplicate' && elem == 'PTR_USER_PRD') {
-                item._behaviors.validMsg[elem] = "Overlapping products identified, please change the overlapping Accrual and Draining dates.";
+                item._behaviors.validMsg[elem] = "Overlapping products have been identified, please change the overlapping Accrual and Draining dates.";
             }
             else if (cond == 'dateissue' && elem == 'PTR_USER_PRD') {
                 item._behaviors.validMsg[elem] = "Deal End Date must be greater than Start Date, please correct.";
@@ -6743,7 +6743,7 @@
             }
 
             else {
-                item._behaviors.validMsg[elem] = 'All Settlement Levels must be same within a Hybrid Pricing Strategy.';
+                item._behaviors.validMsg[elem] = 'All Settlement Levels must be the same within a Hybrid Pricing Strategy.';
             }
         }
         $scope.setBehaviorsValidMessage = function (item, elem, elemLabel, cond) {
