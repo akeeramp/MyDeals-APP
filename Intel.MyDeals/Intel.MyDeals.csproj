@@ -762,6 +762,7 @@
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.css" />
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.html" />
     <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.html" />
+    <Content Include="Client\src\app\admin\products\admin.products.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
@@ -2092,6 +2093,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\ProductAlias\admin.productAlias.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\products\admin.products.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.service.ts" />

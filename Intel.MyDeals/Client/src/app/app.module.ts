@@ -50,8 +50,9 @@ import { adminPrimeCustomersComponent } from './admin/PrimeCustomers/admin.prime
 import { geoComponent } from './admin/geo/admin.geo.component';
 import { ConstantsComponent } from './admin/constants/admin.constants.component';
 import { adminProductAliasComponent } from './admin/productAlias/admin.productAlias.component';
-
+import { adminProductsComponent } from './admin/products/admin.products.component';
 import { adminProductCategoriesComponent } from './admin/productCategories/admin.productCategories.component';
+
 //*********************admin modules ends here *********************
 
 //Authentication purpose for token
@@ -138,7 +139,8 @@ import { MatInputModule } from '@angular/material/input';
         adminPrimeCustomersComponent,
         geoComponent,
         ConstantsComponent,
-        adminProductAliasComponent
+        adminProductAliasComponent,
+        adminProductsComponent
     ],
     entryComponents: [
         LoaderComponent,
@@ -159,7 +161,8 @@ import { MatInputModule } from '@angular/material/input';
         adminPrimeCustomersComponent,
         geoComponent,
         ConstantsComponent,
-        adminProductAliasComponent
+        adminProductAliasComponent,
+        adminProductsComponent
     ]
 })
 

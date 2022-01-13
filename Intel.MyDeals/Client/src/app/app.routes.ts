@@ -180,6 +180,16 @@ angular
                     }
                 }
             })
+            .state("products", {
+                url: "/products",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-products></admin-products>'
+                    }
+                }
+            })
+
             // Admin route  ends here 
 
     });

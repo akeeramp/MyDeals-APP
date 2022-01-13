@@ -1,0 +1,81 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12" style="height:50px">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="padding-left: 35px;">
+        <h3>Products</h3>
+    </div>
+    <div class="col-md-12">
+        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;">
+            <b><i class="intelicon-alert-solid icon-lg"></i> Note:</b> This admin screen is a <strong>Read-Only</strong> screen for viewing data.
+        </div>
+    </div>
+    <div class="col-md-12 kendo-grid-buttons">
+        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true" [group]="state.group"
+                    filterable="menu" (dataStateChange)="dataStateChange($event)">
+
+            <ng-template kendoGridToolbarTemplate>
+                <button (click)="clearFilter()" class="k-button clearButton">
+                    <span class="k-icon  k-i-filter-clear k-icon-md"></span>
+                    CLEAR FILTERS
+                </button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button (click)="refreshGrid()" class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-md"></span>
+                    Refresh
+                </button>
+            </ng-template>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_MBR_SID" title="ID">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_TYPE" title="Type">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CATGRY_NM" title="Category">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM" title="Family">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRCSSR_NBR" title="Processor Number">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_NM" title="Name">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="MTRL_ID" title="Material ID">
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Start Date">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.PRD_STRT_DTM | date: 'MM-dd-yyyy'}}
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_END_DTM" title="End Date">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.PRD_END_DTM | date: 'MM-dd-yyyy'}}
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean" [style]="{'text-align':'center'}">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
+                    </mat-slide-toggle>
+                </ng-template>
+            </kendo-grid-column>
+
+        </kendo-grid>
+    </div>
+</div>
