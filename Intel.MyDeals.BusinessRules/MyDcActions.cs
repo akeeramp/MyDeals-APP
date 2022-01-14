@@ -3453,6 +3453,10 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     AddTierValidationMessage(endAtrbWithValidation, "End " + atrbMsgToken + " must be greater than start " + atrbMsgToken + ".", tierKey);
                 }
+                if (prevEndVal > currStartVal) // Ensure that user didn't make a large GAP
+                {
+                    AddTierValidationMessage(startAtrbWithValidation, "Start " + atrbMsgToken + " must be greater than previous tier end " + atrbMsgToken + ".", tierKey);
+                }
                 prevStartVal = currStartVal;
                 prevEndVal = currEndVal;
             }
