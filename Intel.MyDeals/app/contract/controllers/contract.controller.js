@@ -6879,52 +6879,7 @@
                     }
                 }
             }
-            else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") {
-                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
-                if (rebateType && rebateType.length > 0) {
-                    if (data.length > 1) {
-                        var endCustObj = ""
-                        if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
-                            endCustObj = JSON.parse(data[0].END_CUST_OBJ)
-                        }
-                        angular.forEach(data, (item) => {
-                            var parsedEndCustObj = "";
-                            if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
-                                parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
-                                if (parsedEndCustObj.length != endCustObj.length) {
-                                    angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Program Deal');
-                                    });
-                                }
-                                else {
-                                    for (var i = 0; i < parsedEndCustObj.length; i++) {
-                                        var exists = false;
-                                        angular.forEach(endCustObj, (item) => {
-                                            if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
-                                                item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
-                                                exists = true;
-                                            }
-                                        });
-                                        if (!exists) {
-                                            angular.forEach(data, (item) => {
-                                                $scope.setEndCustomer(item, 'Program Deal');
-                                            });
-                                            i = parsedEndCustObj.length;
-                                        }
-                                    }
-                                }
-                            }
-                            if (endCustObj == "" || parsedEndCustObj == "") {
-                                if (parsedEndCustObj.length != endCustObj.length) {
-                                    angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Program Deal');
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }
-            }
+            
             return data;
         }
         $scope.clearEndCustomer = function (item) {
