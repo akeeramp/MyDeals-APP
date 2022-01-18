@@ -2,6 +2,8 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <br/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
 
 <div class="container-fluid overflow">
     <div class="row">
@@ -108,16 +110,26 @@
             </kendo-numerictextbox>
             <button (click)="autoClick()">numClick</button>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <h3> Kendo check box</h3>
             <input type="checkbox" id="disabledBinding" [disabled]="false" [(ngModel)]="isChecked" kendoCheckBox />
             <button (click)="autoClick()">checkClick</button>
         </div>
-        <div class="col-md-4">
-            <h3> Kendo tooltip</h3>
-            <div kendoTooltip>
-                <button class="k-button" title="Saves the current document">Save</button>
+        <div class="col-md-2">
+            <h3> Kendo tooltip </h3>
+            <div #tool1 kendoTooltip showOn="none" closable="true" ng>
+                <a #toolTip1 title="Saves the current document 1">Check the tool tip here 1 </a>
             </div>
+            <button class="k-button" (click)=toggleTooltip1()>toggle1</button>
+        </div>
+        <div class="col-md-4">
+            <h3>bootstrap tooltip 2</h3>
+            <kendo-textbox placeholder="Username 1" [autoClose]="false" triggers="manual" [clearButton]="true" (valueChange)="onTxt1ValueChange($event)" ngbTooltip="text 1 title" #txtTool1="ngbTooltip" container="body">
+            </kendo-textbox>
+            <kendo-textbox placeholder="Username 2" [autoClose]="false" triggers="manual" [clearButton]="true" (valueChange)="onTxt2ValueChange($event)" ngbTooltip="text 2 title" #txtTool2="ngbTooltip" container="body">
+            </kendo-textbox>
+            <button class="k-button" (click)=disableTooltip()>disabled</button>
+            <button class="k-button" (click)=enableTooltip()>enable</button>
         </div>
     </div>
     <br/>
@@ -165,7 +177,7 @@
                 <kendo-grid-excel fileName="Products.xlsx"></kendo-grid-excel>
             </kendo-grid>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h3>Kendo Window</h3>
             <button kendoButton *ngIf="!windowOpened" (click)="windowOpen()">Open window</button>
             <kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="250" [width]="450" [top]="100" [left]="50">
@@ -202,5 +214,9 @@
                     </div>
                 </form>
             </kendo-window>
+        </div>
+        <div class="col-md-2">
+            <h3>Kendo Slider </h3>
+            <kendo-slider [min]="minSlide" [max]="maxSlide" [largeStep]="stepSlide" [(ngModel)]="sliderValue" [vertical]="false"></kendo-slider>
         </div>
     </div>

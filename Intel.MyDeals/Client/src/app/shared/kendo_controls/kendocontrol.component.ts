@@ -5,6 +5,8 @@ import {downgradeComponent} from "@angular/upgrade/static";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import {MatDialog} from '@angular/material/dialog';
 import {DialogOverviewExampleDialog} from '../../shared/modalPopUp/modal.component';
+import { TooltipDirective } from "@progress/kendo-angular-tooltip";
+import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 
 interface Item {
   text: string;
@@ -89,8 +91,40 @@ export class KendoControlComponent {
     public windowWidth:any = 600;
     public windowHeight:any = 500;
     public windowOpened:boolean = false;
+    public isTooltip:string="none";
+    public minSlide:number=1;maxSlide:number=4;stepSlide:number=1;sliderValue:number=2;
+    @ViewChild(TooltipDirective) public tooltipDir: TooltipDirective;
+    @ViewChild("toolTip1") public toolElm1:ElementRef;
+    @ViewChild('txtTool1', {static: false}) mytooltip1: NgbTooltip;
+    @ViewChild('txtTool2', {static: false}) mytooltip2: NgbTooltip;
 
-
+    toggleTooltip1(){
+     this.tooltipDir.toggle(this.toolElm1);
+    }
+    onTxt1ValueChange(e:any){
+      if(e.length>0){
+        this.mytooltip1.close();
+      }
+      else{
+        this.mytooltip1.open();
+      }
+    }
+    onTxt2ValueChange(e:any){
+      if(e.length>0){
+        this.mytooltip2.close();
+      }
+      else{
+        this.mytooltip2.open();
+      }
+    }
+    disableTooltip(){
+      this.mytooltip1.close();
+      this.mytooltip2.close();
+    }
+    enableTooltip(){
+      this.mytooltip1.open();
+      this.mytooltip2.open();
+    }
     windowOpen() {
       this.windowOpened = true;
     }
