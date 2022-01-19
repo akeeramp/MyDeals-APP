@@ -4190,11 +4190,11 @@
             return data;
         }
 
-        function thousands_separators(num) {
-            var num_parts = num.toString().split(".");
-            num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            return num_parts.join(".");
-        }
+        //function thousands_separators(num) {
+        //    var num_parts = num.toString().split(".");
+        //    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //    return num_parts.join(".");
+        //}
 
         $scope.pivotData = function (data) {        //convert how we save data in MT to UI spreadsheet consumable format
             data = $scope.assignProductProprties(data);
@@ -4296,7 +4296,8 @@
                                 }
 
                                 if (tieredItem === strtKey && lData[strtKey] !== undefined) {
-                                    lData[strtKey] = thousands_separators((parseFloat(lData[strtKey].replace(/[$,]/g, ''))).toFixed(3));
+                                    //lData[strtKey] = thousands_separators((parseFloat(lData[strtKey].replace(/[$,]/g, ''))).toFixed(3));
+                                    lData[strtKey] = kendo.toString(parseFloat(lData[strtKey].replace(/[$,]/g, '') || 0), "n3");
                                 }
 
                             }

@@ -3810,6 +3810,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
 
                         decimal safeParse = 0;
+                        atrb.AtrbValue = atrb.AtrbValue.ToString().Replace(",", ""); // Kludge to rip out "," characters from stored values for all start/end values
                         bool isNumber = Decimal.TryParse(atrb.AtrbValue.ToString(), out safeParse);
                         totalOfAtrb += safeParse;
 
