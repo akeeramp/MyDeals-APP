@@ -3479,6 +3479,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 prd_mbr_sid = 0;
                             }
                         }
+                        else if (!isNaN(prd_mbr_sid)) {
+                            var splitKey = p.split("___");
+                            if (splitKey.length > 1 && prd_mbr_sid != splitKey[1]) {
+                                prd_mbr_sid = splitKey[1];
+                            }
+                        }
                         break;
                     }
                 }
