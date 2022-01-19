@@ -11,6 +11,7 @@ import { ConstantsComponent } from '../admin/constants/admin.constants.component
 import { adminProductAliasComponent } from '../admin/productAlias/admin.productAlias.component';
 import { adminProductsComponent } from '../admin/products/admin.products.component';
 import { adminProductCategoriesComponent } from '../admin/productCategories/admin.productCategories.component';
+import { adminFunFactComponent } from '../admin/funFact/admin.funFact.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -25,5 +26,6 @@ export let adminComponents =[
     ConstantsComponent,
     adminProductAliasComponent,
     adminProductsComponent,
-    adminProductCategoriesComponent
+    adminProductCategoriesComponent,
+    adminFunFactComponent
 ]

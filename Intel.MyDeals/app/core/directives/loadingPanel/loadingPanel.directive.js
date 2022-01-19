@@ -5,9 +5,9 @@ angular
     .module('app.core')
     .directive('loadingPanel', loadingPanel);
 
-loadingPanel.$inject = ['funfactService', 'logger'];
+loadingPanel.$inject = ['funFactLoadingPanelService', 'logger'];
 
-function loadingPanel(funfactService, logger) {
+function loadingPanel(funFactLoadingPanelService, logger) {
 	return {
 		scope: {
 			show: '=',
@@ -33,7 +33,7 @@ function loadingPanel(funfactService, logger) {
 			$scope.GetRandomFact = function () {
 			    if ($scope.isFunFactEnabled == true) {
 			        if ($scope.funfactsList == null || $scope.funfactsList.length == 0) {
-			            funfactService.GetActiveFunfacts()
+						funFactLoadingPanelService.GetActiveFunfacts()
                                 .then(function (response) {
                                     //if no facts are loaded disable fun facts. facts will remain disabled until a page refresh
                                     if (response.data.length == 0) {

@@ -189,6 +189,15 @@ angular
                     }
                 }
             })
+            .state("funFact", {
+                url: "/funfact",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-fun-fact></admin-fun-fact>'
+                    }
+                }
+            })
 
             // Admin route  ends here 
 
