@@ -1,0 +1,81 @@
+﻿.deal-popup-docking {
+    color: #ffffff;
+    margin-right: 15px;
+}
+.deal-popup-docking > div {
+    margin-top: 8px;
+}
+.badge.badge-docking {
+    background-color: #f3D54E;
+    font-size: 10px;
+    color: #0071C5;
+    vertical-align: top;
+    margin-right: -9px;
+    padding: 2px 4px;
+}
+.deal-popup-docking > div > span > i {
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.deal-popup-docking .draggable {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+.animation {
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.cn-deal-popup-recent-icon {
+    cursor: pointer;
+    color: #00AEEF;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.cn-deal-popup-recent-icon:hover {
+    color: #003C71;
+}
+.cn-deal-link {
+    color: #00AEEF; 
+    font-size: 14px; 
+    font-weight: 200; 
+    margin-left: -7px;
+}
+.cn-deal-link:hover {
+    color: #003C71;
+}
+.cn-deal-label {
+    color: #cccccc;
+    font-size: 12px;
+    border-bottom: 1px solid #cccccc;
+    margin: 10px 8px 0 8px;
+}
+
+.cn-dock-title {
+    margin-left: 6px;
+    font-size: 16px;
+}
+.cn-dock-btns a {
+    margin: 2px 0px;
+    color: #00AEEF;
+    background-color: transparent;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+.cn-dock-btns a:hover {
+    color: #ffffff;
+    background-color: #00AEEF;
+}
+.deal-popup-docking .dropdown-menu {
+    z-index: 1100;
+}
+.deal-popup-docking hr {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
