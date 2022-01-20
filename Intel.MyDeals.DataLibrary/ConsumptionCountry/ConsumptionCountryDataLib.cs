@@ -16,7 +16,7 @@ namespace Intel.MyDeals.DataLibrary
     public class ConsumptionCountryDataLib : IConsumptionCountryDataLib
     {
         /// <summary>
-        /// To get Consumption Country Mapped Data to Admin Screen
+        /// To get Consumption Country/Region Mapped Data to Admin Screen
         /// </summary>
         /// <param name="custId"></param>
         /// <returns></returns>

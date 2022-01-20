@@ -19,7 +19,7 @@ namespace Intel.MyDeals.Controllers.API
 
 
         /// <summary>
-        /// Get Consumption Country List
+        /// Get Consumption Country/Region List
         /// </summary>
         /// <param name="getCachedResult"></param>
         /// <returns></returns>
@@ -27,7 +27,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetConsumptionCountry/{getCachedResult:bool?}")]
         public List<ConsumptionCountry> GetConsumptionCountry(bool getCachedResult = true)
         {
-            return SafeExecutor(() => _consumptionCountryLib.GetConsumptionCountry(), "Unable to get Consumption Country");
+            return SafeExecutor(() => _consumptionCountryLib.GetConsumptionCountry(), "Unable to get Consumption Country/Region");
         }
 
         [HttpPut]

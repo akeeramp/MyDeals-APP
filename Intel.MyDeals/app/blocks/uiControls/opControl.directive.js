@@ -372,7 +372,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                         for (var i = 0; i < msValues.length; i++) {
                             var matches = treeview.findByText(msValues[i]);
                             if (matches.length > 1) {
-                                //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
+                                //quickfix for Region having same name as Country/Region - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same Country/Region name
                                 //for now we select the deepest level node, aka the childless nodes
 
                                 for (var j = 0; j < matches.length; j++) {
@@ -383,7 +383,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                 }
                             } else {
                                 var node = treeview.dataItem(matches);
-                                if (typeof node != 'undefined' && node !== null) {    //for reason yet unknown to me, this for loop is executed multiple times and the first time findbytext does not detect children node at the country level and will sometimes thus error out - this fixes it but is only a hacky bandaid - figuring out why it does multiple calls may optimize runtime
+                                if (typeof node != 'undefined' && node !== null) {    //for reason yet unknown to me, this for loop is executed multiple times and the first time findbytext does not detect children node at the Country/Region level and will sometimes thus error out - this fixes it but is only a hacky bandaid - figuring out why it does multiple calls may optimize runtime
                                     treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
                                 }
                             }

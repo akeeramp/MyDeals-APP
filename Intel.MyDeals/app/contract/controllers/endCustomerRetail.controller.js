@@ -42,7 +42,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.IsAny = false;
     $ctrl.IsAny = $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY';
     $ctrl.colName = colName;
-    $ctrl.embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer country. Please verify the agreement.';
+    $ctrl.embValidationMsg = 'Intel is currently unable to approve deals with the selected End Customer Country/Region. Please verify the agreement.';
 
     $ctrl.isEndCustomer = (colName === endCustomer);
     $ctrl.isEmptyList = false;
@@ -57,11 +57,11 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         logger.error("Unable to get endCustomer details.", response, response.statusText);
     });
 
-    //Get country details
+    //Get Country/Region details
     $scope.countries = PrimeCustomersService.getCountries().then(function (response) {
         $ctrl.countries = response.data;
     }, function (response) {
-        logger.error("Unable to get Country details.", response, response.statusText);
+        logger.error("Unable to get Country/Region details.", response, response.statusText);
     });
 
 
@@ -143,9 +143,9 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.IsError = true;
                 rowError = true;
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail and End customer country")
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End Customer/Retail and End Customer Country/Region")
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End customer/Retail and End customer country")
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End Customer/Retail and End Customer Country/Region")
             }
             else if (ecValues[i] == "") {
                 rowError = true;
@@ -158,7 +158,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.IsError = true;
                 rowError = true;
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please Select End Customer Country/Region from the dropdown")
             }
 
             else {
@@ -199,7 +199,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         }
 
         angular.forEach(ctryValues, (item,i) => {
-            //Embargo country validation alert.
+            //Embargo Country/Region validation alert.
                 embCtry = $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
                 if (embCtry) {
                     $ctrl.IsError = true;
@@ -232,13 +232,13 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $ctrl.validateFlag = true;
                 rowError = true;
                 $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
                 $("#DropdownSelections_" + duplicateIndex).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#DropdownSelections_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
                 $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
                 $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country Combination must be unique")
+                $("#DropdownSelections_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
             }
             duplicateIndex++;
         });
@@ -452,7 +452,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                 $("#DropdownSelections_" + index).parent().find("span").removeAttr("title")
             }
             angular.forEach($ctrl.END_CUST_OBJ, (item) => {
-                //Embargo country validation alert.
+                //Embargo Country/Region validation alert.
                 if (item.END_CUSTOMER_RETAIL === dataItem && item.PRIMED_CUST_CNTRY === dataElement.PRIMED_CUST_CNTRY) {
                     $ctrl.showEmbAlert($ctrl.embValidationMsg, item, 'ok');
                 }
@@ -476,7 +476,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         var embCountry = $ctrl.showEmbAlert($ctrl.embValidationMsg, dataItem, 'ok');
         if (dataItem === undefined || dataItem === null || dataItem === "") {
             $("#" + id).parent().find("span").css("background-color", "red");
-            $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country from the dropdown")
+            $("#" + id).parent().find("span").attr("title", "Please Select End Customer Country/Region from the dropdown")
         }
         else if (embCountry) {
             $("#" + id).parent().find("span").css("background-color", "red");

@@ -1,7 +1,7 @@
 ﻿<script type="text/ng-template" id="endCustomerRetailModal">
 <div>
     <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Select End Customer/Retail and Country</h3>
+        <h3 class="modal-title" id="modal-title">Select End Customer/Retail and Country/Region</h3>
     </div>
     <loading-panel id="EndCustomerLoading" style="z-index:500;" show="loading" header="$ctrl.spinnerMessageHeader" description="$ctrl.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="$ctrl.isBusyShowFunFact"></loading-panel>
     <div class="modal-body" id="modal-body">
@@ -28,7 +28,7 @@
                         <label>End Customer</label>
                     </div>
                     <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}};text-align:center;">
-                        <label>Country</label>
+                        <label>Country/Region</label>
                     </div>
                     <div class="col-md-2" style="text-align:center;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
                         <label>Exclude</label>
@@ -87,7 +87,7 @@
                     <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
                         <span class="fl" style="{{$ctrl.IsAny? 'width:250px;margin-left:10px':'width:300px;margin-left:30px'}}">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
-                                    k-placeholder="'Select Country'"
+                                    k-placeholder="'Select Country/Region'"
                                     k-data-text-field="'CTRY_NM'"
                                     k-data-value-field="'CTRY_NM'"
                                     k-ng-model="e.PRIMED_CUST_CNTRY"

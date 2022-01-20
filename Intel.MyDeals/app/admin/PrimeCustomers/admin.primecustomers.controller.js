@@ -154,10 +154,10 @@
                             validationMessages.push("For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status");
                         }
                         if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY) {
-                            validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
+                            validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country/Region \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         }
                         else if (x.PRIM_CUST_ID === model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY === model.PRIM_CUST_CTRY && x.IS_ACTV) {
-                            validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
+                            validationMessages.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country/Region \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
                         }
                         if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length === 1 && model.PRIM_SID !== "" && x.IS_ACTV) {
                             validationMessages.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
@@ -184,7 +184,7 @@
             //if (isPrimeexist.length > 1)
             //    validationMessages.push("This Combination of Unified Customer ID and Level 2 ID is already exists")
             if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || vm.countries.filter(x => x.CTRY_NM === model.PRIM_CUST_CTRY).length == 0)
-                validationMessages.push("Please Select Valid Country.")
+                validationMessages.push("Please Select Valid Country/Region.")
             if (validationMessages.length > 0) {
 
                 var RemoveDuplicate = [...new Set(validationMessages)];
@@ -219,7 +219,7 @@
 
 
         vm.PrimeCustCountry = {
-            optionLabel: "Select Customer Country..",
+            optionLabel: "Select Customer Country/Region..",
             dataSource: {
                 type: "json",
                 transport: {
@@ -360,7 +360,7 @@
                 {
                     field: "IS_ACTV",
                     title: "Is Active",
-                    width: "200px",
+                    width: "130px",
                     template: gridUtils.boolViewer('IS_ACTV'),
                     editor: gridUtils.boolEditor,
                     attributes: { style: "text-align: center;" }
@@ -369,7 +369,7 @@
                 {
                     field: "PRIM_CUST_ID",
                     title: "Unified Customer Id",
-                    width: "200px",
+                    width: "190px",
                     editor: vm.PrimeIDEditor,
                     filterable: { multi: true, search: true },
                     editable: isEditable
@@ -388,20 +388,20 @@
 
                 {
                     field: "PRIM_LVL_ID",
-                    title: "Country Customer Id",
-                    width: "200px",
+                    title: "Country/Region Customer Id",
+                    width: "240px",
                     editor: vm.PrimeIDL2Editor,
                     filterable: { multi: true, search: true },
                     editable: isEditable
                 },
                 {
                     field: "PRIM_LVL_NM",
-                    title: "Country Customer Name",
-                    width: "230px"
+                    title: "Country/Region Customer Name",
+                    width: "250px"
                 },
                 {
                     field: "PRIM_CUST_CTRY",
-                    title: "Unified Country",
+                    title: "Unified Country/Region",
                     width: "200px",
                     editor: vm.PrimeCustCountryEditor,
                     filterable: { multi: true, search: true },
@@ -410,7 +410,7 @@
                 {
                     field: "RPL_STS",
                     title: "RPL Status",
-                    width: "200px",
+                    width: "150px",
                     //added template to show 0 or 1 on the grid display instead of true or false
                     template: "#if(RPL_STS == true){ # 1 # }else{ # 0 # }#"
                 }

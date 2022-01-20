@@ -127,7 +127,7 @@
 
 				    
 				} else {
-				    //this is the uncheck case - which covers when a user clicks a country within a region that has been checked (or region within entire geo
+				    //this is the uncheck case - which covers when a user clicks a Country/Region within a region that has been checked (or region within entire geo
                     //for now we do nothing here, but if we aim to get child-checking and partial checkChildren enabled we would likely need to account uncheck scenarios here
 				}
 

@@ -947,7 +947,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Validate Target Regions",
+                    Title="Validate Target Sales Geos",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate },
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TRGT_RGN) && de.HasValue()).Any(),
@@ -1120,7 +1120,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="End Customer country has been selected",
+                    Title="End Customer Country/Region has been selected",
                     ActionRule = MyDcActions.ValidatePrimeCountry,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }

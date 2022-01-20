@@ -238,7 +238,7 @@
                 },
                 {
                     field: "END_CUSTOMER_COUNTRY",
-                    title: "End Customer Country",
+                    title: "End Customer Country/Region",
                     width: "230px"
                 },
                 {

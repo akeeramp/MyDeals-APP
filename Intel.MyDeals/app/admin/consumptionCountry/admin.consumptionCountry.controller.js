@@ -42,7 +42,7 @@
             if (model.GEO_NM == null || model.GEO_NM == '' || vm.Geo.filter(x => x.dropdownName === model.GEO_NM).length == 0)
                 validationMessages.push("Please Select Valid <b>Geo</b>.");
             if (model.CNSMPTN_CTRY_NM == null || model.CNSMPTN_CTRY_NM == '' || vm.Countries.filter(x => x.CTRY_NM === model.CNSMPTN_CTRY_NM).length == 0)
-                validationMessages.push("Please Select Valid <b>Consumption Country</b>.");
+                validationMessages.push("Please Select Valid <b>Consumption Country/Region</b>.");
             if (vm.ConsumptionCountry.filter(x => x.CNSMPTN_CTRY_NM === model.CNSMPTN_CTRY_NM && x.GEO_NM === model.GEO_NM).length != 0)
                 validationMessages.push("The Combination of <b>" + model.GEO_NM + " </b>and<b> " + model.CNSMPTN_CTRY_NM + " </b>aleady exists.");
             if (vm.ConsumptionCountry.filter(x => x.CNSMPTN_CTRY_NM === model.CNSMPTN_CTRY_NM).length != 0)
@@ -63,7 +63,7 @@
                         vm.InitiateDropDowns();
                         vm.ConsumptionCountry = response.data;
                     }, function (response) {
-                        logger.error("Unable to get Consumption Countries.", response, response.statusText);
+                        logger.error("Unable to get Consumption Countries/Regions.", response, response.statusText);
                     });
                 }
                 , update: function (e) {
@@ -71,9 +71,9 @@
                         consumptionCountryService.updateConsumptionCountry(e.data)
                             .then(function (response) {
                                 e.success(response.data);
-                                logger.success("Consumption Country updated.");
+                                logger.success("Consumption Country/Region updated.");
                             }, function (response) {
-                                logger.error("Unable to update Consumption Country.", response, response.statusText);
+                                logger.error("Unable to update Consumption Country/Region.", response, response.statusText);
                             });
                     }
 
@@ -84,9 +84,9 @@
                         consumptionCountryService.insertConsumptionCountry(e.data)
                             .then(function (response) {
                                 e.success(response.data);
-                                logger.success("New Consumption Country Added.");
+                                logger.success("New Consumption Country/Region Added.");
                             }, function (response) {
-                                logger.error("Unable to insert Consumption Country.", response, response.statusText);
+                                logger.error("Unable to insert Consumption Country/Region.", response, response.statusText);
                             });
                     }
                     // }
@@ -134,7 +134,7 @@
         };
 
         vm.CtryOptions = {
-            placeholder: "Select Consumption Country..",
+            placeholder: "Select Consumption Country/Region..",
             dataSource: {
                 type: "json",
                 serverFiltering: true,
@@ -200,7 +200,7 @@
                 },
                 {
                     field: "CNSMPTN_CTRY_NM",
-                    title: "Conusumption Country",
+                    title: "Conusumption Country/Region",
                     width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.CountryDropDownEditor

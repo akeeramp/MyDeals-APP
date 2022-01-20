@@ -3253,11 +3253,11 @@
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Geo or Consumption Country, but not both";
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
                                     gData[i]._behaviors.isError['CONSUMPTION_COUNTRY'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter a value in either Customer Reported Geo or Consumption Country, but not both";
+                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
                                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Please enter a value in either Customer Reported Geo or Consumption Country, but not both");
+                                    errs.PRC_TBL_ROW.push("Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both");
                                 }
                             }
 
@@ -6762,7 +6762,7 @@
                     $scope.setBehaviorsValidMessage(item, elem, 'Consumption Type', cond);
                     break;
                 case 'END_CUSTOMER_RETAIL':
-                    $scope.setBehaviorsValidMessage(item, elem, 'End Customer Country', cond);
+                    $scope.setBehaviorsValidMessage(item, elem, 'End Customer Country/Region', cond);
                     break;
                 default:
                 // code block
@@ -6956,7 +6956,7 @@
                 || (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
                 $scope.clearEndCustomer(item);
                 item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
-                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country must be same for " + dealType + ".";
+                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country/Region must be same for " + dealType + ".";
             }
             else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
                 && (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
