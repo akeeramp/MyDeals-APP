@@ -57,6 +57,7 @@
         "@progress/kendo-theme-default": "^4.39.0",
         "@progress/kendo-ui": "^2021.2.616",
         "@types/angular": "^1.8.1",
+        "@types/file-saver": "^2.0.5",
         "@types/jquery": "^3.5.6",
         "@types/node": "^16.0.0",
         "angular": "1.8.0",

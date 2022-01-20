@@ -7,6 +7,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {DialogOverviewExampleDialog} from '../../shared/modalPopUp/modal.component';
 import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
+import { saveAs } from 'file-saver';
+import {kendoControlService} from './kendocontrol.service';
 
 interface Item {
   text: string;
@@ -20,7 +22,7 @@ interface Item {
 })
 
 export class KendoControlComponent {
-    constructor(protected dialog: MatDialog) {
+    constructor(protected dialog: MatDialog, protected kendoSVC:kendoControlService) {
       $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
       $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
@@ -177,6 +179,17 @@ export class KendoControlComponent {
       this.autoData = this.autoList.filter(
         (s) => s.toLowerCase().indexOf(value.toLowerCase()) !== -1
       );
+    }
+    downloadClick(){
+      this.kendoSVC.downloadFile()
+      .subscribe(response => {
+        let contentDisposition = response.headers.get('content-disposition');
+        let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+        saveAs(response.body, filename);
+      }, err => {
+         console.error("downloadFile************************",err);
+      });
+     // saveAs("https://file-examples-com.github.io/uploads/2017/10/file-sample_150kB.pdf", "sample.pdf");
     }
     ngOnInit(){
       this.autoData =this.autoList.slice();
