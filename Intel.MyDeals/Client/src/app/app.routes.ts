@@ -198,7 +198,17 @@ angular
                     }
                 }
             })
-
+            .state("dealTypes", {
+                url: "/dealTypes",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-deal-types></admin-deal-types>'
+                        //  templateUrl: "Client/src/app/admin/dealTypes/admin.dealTypes.component.html",
+                        //  controller: "dealTypesController as vm"
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });
