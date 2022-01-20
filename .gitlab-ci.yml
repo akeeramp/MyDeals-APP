@@ -129,6 +129,7 @@ Angular_deploy:
     - '& Copy-Item C:\ClientZip\Client.zip $env:CINR_DEPLOY_PATH/ -Force'
     - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {Remove-Item D:\WebSites\MyDeals\Client\* -Force -Recurse}'
     - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\")}'
+    - '$pw = convertto-securestring -AsPlainText -Force -String ${PWD};$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "${USN}",$pw;Invoke-Command -computername $env:CINR_DEPLOY_SERVER -credential $cred -ScriptBlock {Restart-WebAppPool -Name "cinmydeals.intel.com"}'
   dependencies:
     - build_job_Angular
   allow_failure: true
