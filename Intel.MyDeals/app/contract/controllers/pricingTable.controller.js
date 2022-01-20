@@ -2644,25 +2644,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
                             if (dealType != "DENSITY" && $scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
                                 var r = i + 1 - $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
-                                if ($scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
+                                if (r >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
                                     if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "KIT" && $scope.pricingTableData.PRC_TBL_ROW[r]['DEAL_GRP_NM'] !== root.spreadDs._data[r]['DEAL_GRP_NM']) {
                                         root.spreadDs._data[r] = $scope.pricingTableData.PRC_TBL_ROW[r];
                                         root.spreadDs.sync();
                                     }
+                                    else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" && $scope.pricingTableData.PRC_TBL_ROW[r]['NUM_OF_TIERS'] > 1 && $scope.pricingTableData.PRC_TBL_ROW[r]['TIER_NBR'] != 1) {
+                                        $scope.pricingTableData.PRC_TBL_ROW[r] = root.spreadDs._data[r];
+                                    }
+
                                     else if (root.spreadDs._data[r] && root.spreadDs._data[r]['NUM_OF_TIERS'] > 1 && root.spreadDs._data[r]['TIER_NBR'] != 1) {
                                         root.spreadDs._data[r] = $scope.pricingTableData.PRC_TBL_ROW[r];
                                         root.spreadDs.sync();
                                     }
                                 }
                             }
-
                             else if (dealType == "DENSITY" && $scope.pricingTableData.PRC_TBL_ROW[i]) {
                                 let NoDensity = Number($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_DENSITY']);
                                 let TierNum = $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
                                 let TotalDensityTiers = NoDensity * TierNum;
                                 if ($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == TotalDensityTiers) {
                                     let j = i + NoDensity - TotalDensityTiers;
-                                    if ($scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
+                                    if (j >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
                                         if (root.spreadDs._data[j] && root.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && root.spreadDs._data[j]['TIER_NBR'] != 1) {
                                             root.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
                                             root.spreadDs.sync();
