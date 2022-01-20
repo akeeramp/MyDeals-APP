@@ -1645,10 +1645,26 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var stlmntPrtnrIndex = root.colToLetter["SETTLEMENT_PARTNER"];
         var resetPrdIndex = root.colToLetter["RESET_VOLS_ON_PERIOD"];
         var prdProfileIndex = root.colToLetter["PERIOD_PROFILE"];
+        var trackerData = [];
+        if (root.pricingTableData.WIP_DEAL != undefined && root.pricingTableData.WIP_DEAL != null && root.pricingTableData.WIP_DEAL.length > 0) {
+             trackerData = root.pricingTableData.WIP_DEAL.reduce(function (acc, curr) {
+                acc[curr.DC_PARENT_ID] = curr.HAS_TRACKER;
+                return acc;
+            }, {})
+        }
+
         //this is because 2 rows in the PTE header 
         var pteHeaderIndex = 2;
         //Adding for loop to make sure all the columns in PTE enable and disable properly when we perform different operations like delete a product,bulk delete,adding products etc.,
         for (var i = topLeftRowIndex - pteHeaderIndex; i < data.length; i++) {
+
+            if (trackerData[data[i]["DC_ID"]] == 1) {
+                hasTracker = true
+            }
+            else {
+                hasTracker = false;
+            }
+
             //Disable overarching fields when FLEX row type is Draining
             if (data[i].FLEX_ROW_TYPE == "Draining") {
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
@@ -1719,15 +1735,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).enable(true);
                     sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).background(null);
                 }
-                if (sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === null || sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === '') {
-                    // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
-                    var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
-                        ($scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined || $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "" ? "Issue Credit to Billing Sold To" : $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL) :
-                        $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
-                    sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value(newArSettlementValue);
-                    //As AR_SETTLEMENT_LVL and PERIOD_PROFILE set as non-editable fields in tender, these updated values are not getting saved in the data obj when we change from frontend to backend(DE118310) so to fix this issue we have to assign it explicitly to data obj
-                    if (root.isTenderContract == "1") {
-                        data[i].AR_SETTLEMENT_LVL = newArSettlementValue;
+                if (data[i].AR_SETTLEMENT_LVL == '' || data[i].AR_SETTLEMENT_LVL == null || data[i].AR_SETTLEMENT_LVL == undefined) {
+                    if (sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === null || sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value() === '') {
+                        // It PT Defautls are blank, fill in with customer defaults, else go with what user set is PR Defaults
+                        var newArSettlementValue = ($scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL == undefined || $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL === "") ?
+                            ($scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL == undefined || $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL === "" ? "Issue Credit to Billing Sold To" : $scope.contractData.Customer.DFLT_TNDR_AR_SETL_LVL) :
+                            $scope.$parent.$parent.curPricingTable.AR_SETTLEMENT_LVL;
+                        sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value(newArSettlementValue);
+                        //As AR_SETTLEMENT_LVL and PERIOD_PROFILE set as non-editable fields in tender, these updated values are not getting saved in the data obj when we change from frontend to backend(DE118310) so to fix this issue we have to assign it explicitly to data obj
+                        if (root.isTenderContract == "1") {
+                            data[i].AR_SETTLEMENT_LVL = newArSettlementValue;
+                        }
                     }
                 }
 
