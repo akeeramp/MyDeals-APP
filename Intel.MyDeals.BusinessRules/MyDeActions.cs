@@ -253,7 +253,7 @@ namespace Intel.MyDeals.BusinessRules
                 geo = t_regions[i].Split('/')[0].Trim();
                 if (geos.Contains(geo))
                 {
-                    de.AddMessage(geo + " can only have one associated target region.");
+                    de.AddMessage(geo + " can only have one associated target sales geo.");
                 }
                 else
                 {

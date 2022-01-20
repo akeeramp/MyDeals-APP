@@ -605,8 +605,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute CONSUMPTION_COUNTRY = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CONSUMPTION_COUNTRY",
-			ATRB_DESC = "Consumption Country",
-			ATRB_LBL = "Consumption Country",
+			ATRB_DESC = "Consumption Country/Region",
+			ATRB_LBL = "Consumption Country/Region",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 3464,
 			DATA_TYPE_CD = "VARCHAR",
@@ -637,8 +637,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute CONSUMPTION_CUST_RPT_GEO = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CONSUMPTION_CUST_RPT_GEO",
-			ATRB_DESC = "Consumption Customer Reported Geo",
-			ATRB_LBL = "Customer Reported Region",
+			ATRB_DESC = "Consumption Customer Reported Sales Geo",
+			ATRB_LBL = "Customer Reported Sales Geo",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3458,
 			DATA_TYPE_CD = "VARCHAR",
@@ -1453,8 +1453,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DFLT_CUST_RPT_GEO = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DFLT_CUST_RPT_GEO",
-			ATRB_DESC = "Vistex Customer Default Customer Reported Geo",
-			ATRB_LBL = "Vistex Customer Default Customer Reported Geo",
+			ATRB_DESC = "Vistex Customer Default Customer Reported Sales Geo",
+			ATRB_LBL = "Vistex Customer Default Customer Reported Sales Geo",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2027,
 			DATA_TYPE_CD = "CUSTOM",
@@ -3917,8 +3917,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PRIMED_CUST_CNTRY = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRIMED_CUST_CNTRY",
-			ATRB_DESC = "Unified Customer Country",
-			ATRB_LBL = "Unified Customer Country",
+			ATRB_DESC = "Unified Customer Country/Region",
+			ATRB_LBL = "Unified Customer Country/Region",
 			ATRB_MAX_LEN = 70,
 			ATRB_SID = 3349,
 			DATA_TYPE_CD = "VARCHAR",
@@ -4861,8 +4861,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute TRGT_RGN = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "TRGT_RGN",
-			ATRB_DESC = "Target Region",
-			ATRB_LBL = "Target Region",
+			ATRB_DESC = "Target Sales Geo",
+			ATRB_LBL = "Target Sales Geo",
 			ATRB_MAX_LEN = 50,
 			ATRB_SID = 23,
 			DATA_TYPE_CD = "VARCHAR",

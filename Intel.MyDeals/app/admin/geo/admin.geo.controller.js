@@ -82,11 +82,11 @@
             },
             {
                 field: "RGN_NM",
-                title: "Region"
+                title: "Geography"
             },
             {
                 field: "CTRY_NM",
-                title: "Category"
+                title: "Country/Region"
             },
             {
                 field: "ACTV_IND",

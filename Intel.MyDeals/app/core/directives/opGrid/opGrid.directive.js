@@ -893,7 +893,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isdealsUnified = undefined;
                 var validationErrorCheck;
                 //Commented RPL Related code as part of TWC3167-906 US
-                // RPL check for the selected end customer, country combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
+                // RPL check for the selected end customer, Country/Region combination- if User selects RPL'ed end customer restrict that deal to move approved/WON stage
                 //var isEcRPLed = undefined;
                 //var isRPLReviewwip = undefined;
                 if (checkedDeals.length > 0) {
@@ -3563,7 +3563,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.root._dirty = true;
 
                         $scope.root.saveCell(containerDataItem, "TRGT_RGN", $scope);
-                        //Note: we do not call the below because we do not want target region to update all linked rows.  If we did, uncomment the below line and comment out the one above
+                        //Note: we do not call the below because we do not want Target Sales Geo to update all linked rows.  If we did, uncomment the below line and comment out the one above
                         //$scope.saveFunctions(containerDataItem, "TRGT_RGN", containerDataItem.TRGT_RGN)
                     },
                     function () {
@@ -3632,7 +3632,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             if (ecDataObj.length > 0) {
                                 var index = 0;
                                 angular.forEach(ecDataObj, (item) => {
-                                    //Embargo country validation alert.
+                                    //Embargo Country/Region validation alert.
                                     if (item.END_CUSTOMER_RETAIL.toUpperCase() == "ANY") {
                                         $('#DropdownSelections_0').attr('disabled', true);
                                     }

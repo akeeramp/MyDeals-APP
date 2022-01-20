@@ -299,7 +299,7 @@ namespace Intel.MyDeals.Controllers
                                 }
                             }                                
                         }
-                        else if (data.COMMENTS.Trim().ToLower() == "end customer and country mismatch")
+                        else if (data.COMMENTS.Trim().ToLower() == "End Customer and Country/Region mismatch")
                         {
                             var invalidData = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID
                             && x.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower() == dealData.DEAL_END_CUSTOMER_COUNTRY.Trim().ToLower()

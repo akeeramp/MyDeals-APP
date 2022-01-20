@@ -224,7 +224,7 @@
         }
 
         vm.CustPlatformModalReportedGeoOptions = {
-            title: "Customer Reported Geos",
+            title: "Customer Reported Sales Geo",
             uiType: "EMBEDDEDMULTISELECT",
             lookupUrl: "/api/Dropdown/GetDropdownsWithCustomerId/CONSUMPTION_CUST_RPT_GEO/",
             lookupText: "DROP_DOWN",
@@ -380,7 +380,7 @@
                 },
                 {
                     field: "DFLT_CUST_RPT_GEO",
-                    title: "Consumption Customer Reported Geo",
+                    title: "Consumption Customer Reported Sales Geo",
                     filterable: { multi: true, search: true },
                     template: "<div title='#= DFLT_CUST_RPT_GEO #'>#= DFLT_CUST_RPT_GEO #<div>",
                     editor: vm.CustomerReportedGeoDropDownEditor,

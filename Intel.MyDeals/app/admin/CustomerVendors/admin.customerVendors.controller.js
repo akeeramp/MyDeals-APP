@@ -267,7 +267,7 @@
                 },
                 {
                     field: "CTRY_CD",
-                    title: "Country",
+                    title: "Country/Region",
                     editor: vm.CountryEditor,
                     filterable: { multi: true, search: true }
                 }]
