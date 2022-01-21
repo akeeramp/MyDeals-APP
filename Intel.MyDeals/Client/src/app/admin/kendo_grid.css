@@ -2,6 +2,12 @@ kendo-grid {
     height: 480px;
 }
 
+.k-header-alignment {
+    padding-top: 50px;
+    padding-left: 35px;
+    padding-bottom: 10px;
+}
+
 .k-column-title {
     overflow: visible !important;
     white-space: normal !important;

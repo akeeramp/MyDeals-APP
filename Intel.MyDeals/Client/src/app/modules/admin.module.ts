@@ -13,6 +13,7 @@ import { adminProductsComponent } from '../admin/products/admin.products.compone
 import { adminProductCategoriesComponent } from '../admin/productCategories/admin.productCategories.component';
 import { adminFunFactComponent } from '../admin/funFact/admin.funFact.component';
 import { adminDealTypesComponent } from '../admin/dealTypes/admin.dealTypes.component';
+import { admindataQualityComponent } from '../admin/dataQuality/admin.dataQuality.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -29,5 +30,6 @@ export let adminComponents =[
     adminProductsComponent,
     adminProductCategoriesComponent,
     adminFunFactComponent,
-    adminDealTypesComponent
+    adminDealTypesComponent,
+    admindataQualityComponent
 ]

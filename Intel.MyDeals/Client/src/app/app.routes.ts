@@ -209,6 +209,16 @@ angular
                     }
                 }
             })
+            .state("dataquality", {
+                url: "/dataquality",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-dataquality></admin-dataquality>'
+                    }
+                }
+            })
+
             // Admin route  ends here 
 
     });
