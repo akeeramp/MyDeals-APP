@@ -6,9 +6,9 @@
 
 SetRequestVerificationToken.$inject = ['$http'];
 
-EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal', 'dealId', 'isAdmin','logger'];
+EndCustomerRetailCtrl.$inject = ['$scope', '$uibModalInstance', 'items', 'cellCurrValues', 'colName', 'country', 'dataService', 'PrimeCustomersService', '$uibModal', 'dealId', 'isAdmin', 'logger','$timeout'];
 
-function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, dealId, isAdmin, logger) {
+function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues, colName, country, dataService, PrimeCustomersService, $uibModal, dealId, isAdmin, logger, $timeout) {
     var $ctrl = this;
     $ctrl.IsError = false;
     $ctrl.ChangeErrorFlag = false;
@@ -82,6 +82,15 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     "RPL_STS_CD": ""
                 });
         }
+    }
+
+    $scope.OnRenderComplete = function (e) {
+        $timeout(function () {
+            var index = $ctrl.END_CUST_OBJ.indexOf(e);
+            for (var i = 0; i <= index; i++) {
+                $('#DropdownSelections_' + i).parent().find("input").attr('autocomplete', 'disabled');
+            }
+        }, 200);
     }
 
     $scope.removeRow = function (e) {
