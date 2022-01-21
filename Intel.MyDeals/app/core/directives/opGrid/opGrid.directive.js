@@ -3636,12 +3636,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     if (item.END_CUSTOMER_RETAIL.toUpperCase() == "ANY") {
                                         $('#DropdownSelections_0').attr('disabled', true);
                                     }
-                                    $('#DropdownSelections_' + index++).parent().find("input").attr('autocomplete', 'disabled');
                                 });
                             }
-                        }
-                        else {
-                            $('#DropdownSelections_0').parent().find("input").attr('autocomplete', 'disabled');
                         }
 
                     });
