@@ -3684,19 +3684,27 @@
 
                         if (!!$scope.spreadDs) {
                             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-                                for (var i = 0; i < data.PRC_TBL_ROW.length; i++) {
-                                    let NoDensity = Number($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_DENSITY']);
-                                    let TierNum = $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
-                                    let TotalDensityTiers = NoDensity * TierNum;
-                                    if ($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == TotalDensityTiers) {
-                                        let j = i + NoDensity - TotalDensityTiers;
-                                        if (j >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
-                                            if ($scope.spreadDs._data[j] && $scope.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && $scope.spreadDs._data[j]['TIER_NBR'] != 1) {
-                                                $scope.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
-                                                $scope.spreadDs.sync();
+                                // For density deals to show seriver side errors avoid page reload
+                                if (data.PRC_TBL_ROW.length == $scope.pricingTableData.PRC_TBL_ROW.length) {
+                                    for (var i = 0; i < data.PRC_TBL_ROW.length; i++) {
+                                        let NoDensity = Number($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_DENSITY']);
+                                        let TierNum = $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
+                                        let TotalDensityTiers = NoDensity * TierNum;
+                                        if ($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == TotalDensityTiers) {
+                                            let j = i + NoDensity - TotalDensityTiers;
+                                            if (j >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
+                                                if ($scope.spreadDs._data[j] && $scope.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && $scope.spreadDs._data[j]['TIER_NBR'] != 1) {
+                                                    $scope.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
+                                                    $scope.spreadDs.sync();
+                                                }
                                             }
                                         }
                                     }
+                                }
+                                else {
+                                    //for First time Density deal save : we need to reload the Grid.
+                                    $scope.spreadDs.read();
+                                    $scope.reloadPage();
                                 }
                             }
                             else {
