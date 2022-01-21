@@ -3290,7 +3290,7 @@ namespace Intel.MyDeals.BusinessRules
                             if (origVol == 0) origVol = 999999999;
                             if (origVol > newVol)
                             {
-                                errMsg = "The End Volume can only be increased after a tracker has been assigned.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                                errMsg = "The End Volume can only be increased after a tracker has been assigned.  Please refresh the page to reset to original values.";
                             }
                             break;
                         case "REV_TIER":
@@ -3299,7 +3299,7 @@ namespace Intel.MyDeals.BusinessRules
                             if (origRev == 0) origRev = 9999999999.99;
                             if (origRev > newRev)
                             {
-                                errMsg = "The End Rev can only be increased after a tracker has been assigned.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                                errMsg = "The End Rev can only be increased after a tracker has been assigned.  Please refresh the page to reset to original values.";
                             }
                             break;
                         case "DENSITY":
@@ -3308,7 +3308,7 @@ namespace Intel.MyDeals.BusinessRules
                             if (origPb == 0) origPb = 999999999;
                             if (origPb > newPb)
                             {
-                                errMsg = "The End PB can only be increased after a tracker has been assigned.  Values have been reset to original values.  Please Re-validate to clear this message.";
+                                errMsg = "The End PB can only be increased after a tracker has been assigned.  Please refresh the page to reset to original values.";
                             }
                             break;
                         default:
