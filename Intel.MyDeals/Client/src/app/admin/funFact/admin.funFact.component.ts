@@ -93,9 +93,7 @@ export class adminFunFactComponent {
                 this.isLoading = true;
                 this.funFactSvc.setFunfact(fun_facts).subscribe(
                     result => {
-                        this.gridResult.splice(0, 0, result[0]);
-                        this.gridData = process(this.gridResult, this.state);
-                        this.isLoading = false;
+                        this.loadFunFacts();
                         this.loggerSvc.success("New Fun Fact added.");
                         //sender.closeRow(rowIndex);
                     },
@@ -108,9 +106,7 @@ export class adminFunFactComponent {
                 this.isLoading = true;
                 this.funFactSvc.updateFunFact(fun_facts).subscribe(
                     result => {
-                        this.gridResult[rowIndex] = result[0];
-                        this.gridData = process(this.gridResult , this.state);
-                        this.isLoading = false;
+                        this.loadFunFacts();
                         this.loggerSvc.success("Funfact updated.");
                         //sender.closeRow(rowIndex);
                     },
@@ -119,7 +115,7 @@ export class adminFunFactComponent {
                         this.isLoading = false;
                     }
                 );
-            }
+        }
     }
     
     loadFunFacts() {

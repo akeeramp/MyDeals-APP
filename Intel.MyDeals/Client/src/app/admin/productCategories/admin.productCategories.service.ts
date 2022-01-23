@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
+﻿import { Injectable, Inject } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
 import { Product_categories } from './admin.productCategories.model';
@@ -29,7 +27,3 @@ export class productCategoryService {
     
 
 }
-
-angular
-    .module('app')
-    .factory('productCategoryService', downgradeInjectable(productCategoryService));
