@@ -3702,9 +3702,7 @@
                                     }
                                 }
                                 else {
-                                    //for First time Density deal save : we need to reload the Grid.
-                                    $scope.spreadDs.read();
-                                    $scope.reloadPage();
+                                    $scope.spreadDs.sync();
                                 }
                             }
                             else {
@@ -3832,9 +3830,10 @@
                                 $scope.setBusy("", "");
                             }, 2000);
                         }  
-                        //if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip") {
-                        //    $scope.reloadPage();
-                        //}
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip") {
+                            $scope.reloadPage();
+                            $scope.spreadDs.read();
+                        }
                     }
 
                     if (toState === undefined || toState === null || toState === "" || $scope.isTenderContract) {
@@ -4343,11 +4342,21 @@
                         }
                         // Disable all End volumes except for the last tier if there is a tracker
                         if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
-                            if (t < numTiers - densityBandCount) {
-                                if (!data[d]._behaviors.isReadOnly) {
-                                    data[d]._behaviors.isReadOnly = {};
+                            if (densityBandCount != 1) {
+                                if (t < numTiers - densityBandCount) {
+                                    if (!data[d]._behaviors.isReadOnly) {
+                                        data[d]._behaviors.isReadOnly = {};
+                                    }
+                                    lData._behaviors.isReadOnly[endKey] = true;
                                 }
-                                lData._behaviors.isReadOnly[endKey] = true;
+                            }
+                            else {
+                                if (t != numTiers) {
+                                    if (!data[d]._behaviors.isReadOnly) {
+                                        data[d]._behaviors.isReadOnly = {};
+                                    }
+                                    lData._behaviors.isReadOnly[endKey] = true;
+                                }
                             }
                         }
                     }
