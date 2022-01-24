@@ -3655,6 +3655,7 @@
                     var anyWarnings = false;
                     var totalWarnings = 0;
                     var totalserverWarnings = 0;
+                    var isendpbreduced = false;
                     pc.mark("Constructing returnset");
                     if (!!data.PRC_TBL_ROW) {
                         data.PRC_TBL_ROW = $scope.pivotData(data.PRC_TBL_ROW);
@@ -3684,7 +3685,7 @@
 
                         if (!!$scope.spreadDs) {
                             if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-                                // For density deals to show seriver side errors avoid page reload
+                                // For density deals to show server side errors avoid page reload
                                 if (data.PRC_TBL_ROW.length == $scope.pricingTableData.PRC_TBL_ROW.length) {
                                     for (var i = 0; i < data.PRC_TBL_ROW.length; i++) {
                                         let NoDensity = Number($scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_DENSITY']);
@@ -3695,6 +3696,7 @@
                                             if (j >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
                                                 if ($scope.spreadDs._data[j] && $scope.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && $scope.spreadDs._data[j]['TIER_NBR'] != 1) {
                                                     $scope.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
+                                                    isendpbreduced = true;
                                                     $scope.spreadDs.sync();
                                                 }
                                             }
@@ -3830,7 +3832,7 @@
                                 $scope.setBusy("", "");
                             }, 2000);
                         }  
-                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip") {
+                        if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip" && isendpbreduced == false) {
                             $scope.reloadPage();
                             $scope.spreadDs.read();
                         }
