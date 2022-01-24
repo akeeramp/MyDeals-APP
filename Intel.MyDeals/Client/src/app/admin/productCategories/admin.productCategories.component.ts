@@ -171,8 +171,16 @@ export class adminProductCategoriesComponent {
             this.isLoading = true;
             this.productCategorySvc.updateCategory(product_categories).subscribe(
                 result => {
-                    this.loadproductCategoriesData();
-                    //sender.closeRow(rowIndex);
+                    //getting the index value of the grid result by comparing the edited row PRD_CAT_MAP_SID to the grid result PRD_CAT_MAP_SID. so that we can update the user edited/modified data to proper grid result index
+                    let index = this.gridResult.findIndex(x => product_categories[0].PRD_CAT_MAP_SID == x.PRD_CAT_MAP_SID);;
+                    //In the below line of code result.length check is added because some times when user edit the data and if user saves it how it was previously there without any changes at that scenario, we are not receiving any data from this service call so at that case we set product_categories(grid row level data) data to the grid result.
+                    this.gridResult[index] = (result.length > 0) ? result[0] : product_categories[0];
+                    //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
+                    if (result.length > 0) {
+                        this.gridResult[index].CHG_DTM = new Date(this.gridResult[index].CHG_DTM);
+                    }
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                     this.loggerSvc.success("Product Verticals were successfully updated.");
                 },
                 error => {

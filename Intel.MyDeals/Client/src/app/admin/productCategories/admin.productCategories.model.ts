@@ -8,5 +8,5 @@ export class Product_categories {
     public PRD_CAT_NM:string;
     public CHG_EMP_NM:string;
     public CHG_DTM: string;
-    public PRD_CAT_MAP_SID: string;
+    public PRD_CAT_MAP_SID: number;
   }

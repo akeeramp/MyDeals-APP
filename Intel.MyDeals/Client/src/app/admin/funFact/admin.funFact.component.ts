@@ -47,6 +47,7 @@ export class adminFunFactComponent {
         skip: 0,
         take: 10,
         group: [],
+        sort:[],
         // Initial filter descriptor
         filter: {
             logic: "and",
@@ -93,9 +94,12 @@ export class adminFunFactComponent {
                 this.isLoading = true;
                 this.funFactSvc.setFunfact(fun_facts).subscribe(
                     result => {
-                        this.loadFunFacts();
+                        //TO show the new saved record at whatever page currently selected by the user
+                        //if already any filters or sorting is applied to the grid then those filters/sorting will get cleared when user try to add a new record and newly added record will be shown in first page in that case
+                        this.gridResult.splice(this.state.skip, 0, result[0]);
+                        this.gridData = process(this.gridResult, this.state);
+                        this.isLoading = false;
                         this.loggerSvc.success("New Fun Fact added.");
-                        //sender.closeRow(rowIndex);
                     },
                     error => {
                         this.loggerSvc.error("Unable to insert Fun Fact.", error);
@@ -106,7 +110,12 @@ export class adminFunFactComponent {
                 this.isLoading = true;
                 this.funFactSvc.updateFunFact(fun_facts).subscribe(
                     result => {
-                        this.loadFunFacts();
+                        //getting the index value of the grid result by comparing the edited row FACT_SID to the grid result FACT_SID. so that we can update the user edited/modified data to proper grid result index
+                        let index = this.gridResult.findIndex(x => fun_facts.FACT_SID == x.FACT_SID);  
+                        this.gridResult[index] = result[0];
+                        this.gridData = process(this.gridResult, this.state);
+                        this.isLoading = false;
+                        //this.loadFunFacts();
                         this.loggerSvc.success("Funfact updated.");
                         //sender.closeRow(rowIndex);
                     },
@@ -136,6 +145,19 @@ export class adminFunFactComponent {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
+    clearFilterandSorting() {
+        this.state={
+            skip: 0,
+            take: 10,
+            group: [],
+            sort: [],
+            filter: {
+                logic: "and",
+                filters: [],
+            },
+        };
+        this.gridData = process(this.gridResult, this.state);
+    }
     clearFilter() {
         this.state.filter = {
             logic: "and",
@@ -158,6 +180,12 @@ export class adminFunFactComponent {
         this.formGroup = undefined;
     }
     addHandler({ sender }) {
+        //if there are any filters or sorting applied on the grid, at this scenario if users try to add new record,
+        //then the below line of code clears all the filters and sorting applied so that the newly added data is visible in the first page.
+        //if no filters/sorting applied then newly added record will be shown in whatever page user is in
+        if (this.state.filter.filters.length || this.state.sort.length) {
+            this.clearFilterandSorting();
+        }
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             FACT_SID: new FormControl(""),
