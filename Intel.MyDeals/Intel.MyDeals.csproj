@@ -767,6 +767,7 @@
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.html" />
     <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.html" />
     <Content Include="Client\src\app\admin\products\admin.products.component.html" />
+    <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.css" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.directive.js" />
@@ -781,6 +782,7 @@
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.js" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.js" />
+    <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.css" />
@@ -2121,6 +2123,8 @@
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.service.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\index.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\reporting.component.ts" />
     <TypeScriptCompile Include="Client\src\app\reporting\reporting.service.ts" />

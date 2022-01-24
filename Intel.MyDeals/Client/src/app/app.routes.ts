@@ -157,7 +157,6 @@ angular
                     }
                 }
             })
-
             .state("constants", {
                 url: "/constants",
                 abstract: false,
@@ -215,6 +214,17 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-dataquality></admin-dataquality>'
+                    }
+                }
+            })
+            .state("quoteLetter", {
+                url: "/quoteLetter",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<quote-letter></quote-letter>'
+                        //  templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetter.component.html",
+                        //  controller: "QuoteLetterController as vm"
                     }
                 }
             })

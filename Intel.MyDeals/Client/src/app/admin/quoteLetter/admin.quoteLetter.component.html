@@ -1,0 +1,81 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<!-- using for Angular spinner while page load -->
+<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false"
+          [message]="loadMessage">
+</ccLoader>
+
+<div class="form-horizontal" [hidden] ="isLoading=='true'">
+
+    <div class="section">
+        <label>Template: </label>
+        <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems"
+                            textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate"
+                            (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded">
+        </kendo-dropdownlist>
+    </div>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate == null}">
+        <label>Upper Content Block </label>
+        <kendo-editor style="width: 1390px" [(ngModel)]="headerInfo">
+            <kendo-toolbar>
+                <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorInsertImageButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-editor-insert-table-button></kendo-editor-insert-table-button>
+            </kendo-toolbar>
+        </kendo-editor>
+    </div>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate == null}">
+        <label>Lower Content Block</label>
+        <kendo-editor style="width: 1390px" [(ngModel)]="bodyInfo">
+            <kendo-toolbar>
+                <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-toolbar-buttongroup>
+                    <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
+                    <kendo-toolbar-button kendoEditorInsertImageButton></kendo-toolbar-button>
+                </kendo-toolbar-buttongroup>
+                <kendo-editor-insert-table-button></kendo-editor-insert-table-button>
+            </kendo-toolbar>
+        </kendo-editor>
+    </div>
+
+    <div class="pull-right section">
+        <button class="btn btn-default btn-lg" [disabled]="selectedTemplate == null" (click)="onGeneratePreviewClick()">Generate Preview</button>
+        <button class="btn btn-primary btn-lg" [disabled]="selectedTemplate == null" (click)="onSaveChangesClick($event)" style="margin-left:5px">Save Changes</button>
+    </div>
+</div>
