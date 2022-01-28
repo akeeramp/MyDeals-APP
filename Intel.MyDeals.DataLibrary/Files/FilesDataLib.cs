@@ -272,7 +272,7 @@ namespace Intel.MyDeals.DataLibrary
             FileAttachmentData fileAttachmentData = new FileAttachmentData();
             fileAttachmentData.FILE_NM = "BulkUnifyDeals.xlsx";
             fileAttachmentData.IS_COMPRS = false;
-            string strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country Customer ID", "Unified Country", "End Customer Retail", "End Customer Country"));
+            string strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region"));
             string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
