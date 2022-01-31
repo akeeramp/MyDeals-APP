@@ -1136,16 +1136,19 @@ namespace Intel.MyDeals.BusinessRules
             {
                 OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
 
-                DateTime chkDate = OpConvertSafe.ToDateTime(de.AtrbValue.ToString());
-                // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
-                bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
-
-                if (de != null && de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker())
+                if (de != null) // Seem to be cases where rule is triggered, but DC doesn't have the element, so bring this forward prior to pulling the vaule.
                 {
-                    de.IsReadOnly = true;
-                    foreach (OpDataElement dx in r.Dc.DataElements) // Lock down the entire cell, it is 90 days old!!
+                    DateTime chkDate = OpConvertSafe.ToDateTime(de.AtrbValue.ToString());
+                    // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
+                    bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
+
+                    if (de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker())
                     {
-                        dx.IsReadOnly = true;
+                        de.IsReadOnly = true;
+                        foreach (OpDataElement dx in r.Dc.DataElements) // Lock down the entire cell, it is 90 days old!!
+                        {
+                            dx.IsReadOnly = true;
+                        }
                     }
                 }
             }
@@ -1509,22 +1512,6 @@ namespace Intel.MyDeals.BusinessRules
 
             if (dtSt == DateTime.MinValue || dtEn == DateTime.MinValue) return;
 
-            // US705342 get dates for previous quarter
-            var currentQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, dtSt, null, null);
-            int qtr = currentQuarterDetails.QTR_NBR - 1;
-            int yr = 0;
-            if (qtr > 0) // Didn't start in the first quarter of this year, so stay in the current year
-            {
-                yr = currentQuarterDetails.YR_NBR;
-            }
-            else // Started in Q1 of the current year, so must go back to Q4 of previous year
-            {
-                qtr = 4;
-                yr = currentQuarterDetails.YR_NBR - 1;
-            }
-
-            var quarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custMbrSid, null, (short)yr, (short)qtr);
-
             // changed billing start date to equal deal start date as part of US705342
             // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
             // End date =  Billing End date
@@ -1564,9 +1551,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(bllgTenderCutoverDealCnst, out int bllgTenderCutoverDeal)) bllgTenderCutoverDeal = 0;
             if (deBllgStart.DcID > bllgTenderCutoverDeal) // Apply new rules for tenders billing start dates
             {
-                if (dtBllgStart < quarterDetails.QTR_STRT && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                if (dtBllgStart < dtSt.AddDays(-180) && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) 
                 {
-                    deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond the Deal Start Date's previous quarter.");
+                    deBllgStart.AddMessage("Billing Start Date cannot be backdated before (" + dtSt.AddDays(-180).ToString("MM/dd/yyyy") + "), or 180 days prior to the Deal Start Date.");
                 }
             }
             else // Apply old rules to old tenders before break off point
