@@ -10,6 +10,11 @@
     DealMassUpdateController.$inject = ['dealMassUpdateService', '$scope', 'gridConstants', 'logger', '$timeout','dataService'];
 
     function DealMassUpdateController(dealMassUpdateService, $scope, gridConstants, logger, $timeout, dataService) {
+        const NumericAtrbIds = [3352, 3355, 3461, 3708];
+        const TextBoxAtrbIds = [3349, 3350, 3351, 3453, 3464, 3568];
+        const NumericIdTo1 = [3352, 3355, 3708];
+        const NumericIdTo24 = [3461];
+        const SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465];
 
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
@@ -21,6 +26,7 @@
         vm.UpdatedResults = [];
         vm.Send_Vstx_Flg = {};
         $scope.MassUpdateData = {};
+        $scope.MassUpdateData.MaxNumericValue = 24;
         $scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
         $scope.ShowResults = false;
         $scope.ShowNumeric = false;
@@ -72,6 +78,7 @@
                     if (!$scope.MassUpdateData._behaviors.isHidden) $scope.MassUpdateData._behaviors.isHidden = {};
                     $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_MULTISELECT"] = true;
                     $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_DROPDOWN"] = true;
+                    $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_TEXT"] = true;
                 }
                 return
             };
@@ -80,14 +87,27 @@
             if ($scope.MassUpdateData.UPD_VAL) delete $scope.MassUpdateData.UPD_VAL;
             if ($scope.MassUpdateData.UPD_VAL_MULTISELECT) delete $scope.MassUpdateData.UPD_VAL_MULTISELECT;
             if ($scope.MassUpdateData.UPD_VAL_DROPDOWN) delete $scope.MassUpdateData.UPD_VAL_DROPDOWN;
-            if (newValue.ATRB_SID === 3461) {
+            if ($scope.MassUpdateData.UPD_VAL_TEXT) delete $scope.MassUpdateData.UPD_VAL_TEXT;
+            // Numeric Value Controller
+            if (NumericAtrbIds.includes(newValue.ATRB_SID)) { 
                 $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_DROPDOWN"] = true;
                 $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_MULTISELECT"] = true;
+                $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_TEXT"] = true;
+                if (NumericIdTo1.includes(newValue.ATRB_SID)) {
+                    $scope.MassUpdateData.MaxNumericValue = 1;
+                }
+                else if (NumericIdTo24.includes(newValue.ATRB_SID)) {
+                    $scope.MassUpdateData.MaxNumericValue = 24;
+                }
+                else {
+                    $scope.MassUpdateData.MaxNumericValue = 999999999;
+                }
                 $scope.ShowNumeric = true;
             }
             else {
                 dataService.get("/api/DealMassUpdate/GetUpdateAttributes/" + newValue.ATRB_SID).then(function (response) {
-                    if (newValue.ATRB_SID === 3717 || newValue.ATRB_SID === 3719) {
+                    // Single Dropdown Value Controller
+                    if (SingleValueDropdownAtrbIds.includes(newValue.ATRB_SID)) {
                         if (!!$("#UPD_VAL_DROPDOWN").data("kendoDropDownList")) {
                             $("#UPD_VAL_DROPDOWN").data("kendoDropDownList").setDataSource(response.data);
                             $("#UPD_VAL_DROPDOWN").data("kendoDropDownList").refresh();
@@ -95,14 +115,23 @@
                         }
                         $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_DROPDOWN"] = false;
                         $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_MULTISELECT"] = true;
+                        $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_TEXT"] = true;
                         $scope.ShowNumeric = false;
                     }
+                    else if (TextBoxAtrbIds.includes(newValue.ATRB_SID)) {
+                        $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_DROPDOWN"] = true;
+                        $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_MULTISELECT"] = true;
+                        $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_TEXT"] = false;
+                        $scope.ShowNumeric = false;
+                    }
+                    // Multivalue Dropdown Value Controller
                     else {
                         if (!!$("#UPD_VAL_MULTISELECT").data("kendoMultiSelect")) {
                             $("#UPD_VAL_MULTISELECT").data("kendoMultiSelect").dataSource.data(response.data);
                         }
                         $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_DROPDOWN"] = true;
                         $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_MULTISELECT"] = false;
+                        $scope.MassUpdateData._behaviors.isHidden["UPD_VAL_TEXT"] = true;
                         $scope.ShowNumeric = false;
                     }
                 },
@@ -145,10 +174,23 @@
                 $scope.MassUpdateData._behaviors.isError["ATRB_SID"] = false;
             }
 
-            if ($scope.MassUpdateData.ATRB_SID === 3461) {
+            // Numeric Value Controller Read
+            if (NumericAtrbIds.includes($scope.MassUpdateData.ATRB_SID)) {
                 updatedValues = $scope.MassUpdateData.UPD_VAL;
             }
-            else if ($scope.MassUpdateData.ATRB_SID === 3717 || $scope.MassUpdateData.ATRB_SID === 3719) {
+            // Text Value Controller Read
+            else if (TextBoxAtrbIds.includes($scope.MassUpdateData.ATRB_SID)) {
+                //if ($scope.MassUpdateData.UPD_VAL_TEXT) {
+                    updatedValues = $scope.MassUpdateData.UPD_VAL_TEXT;
+                //}
+                //else {
+                //    $scope.MassUpdateData._behaviors.validMsg["UPD_VAL_TEXT"] = "Please Select Valid Values";
+                //    $scope.MassUpdateData._behaviors.isError["UPD_VAL_TEXT"] = true;
+                //    isvalidAtrb = false;
+                //}
+            }
+            // Single Dropdown Value Controller Read
+            else if (SingleValueDropdownAtrbIds.includes($scope.MassUpdateData.ATRB_SID)) {
                 if ($scope.MassUpdateData.UPD_VAL_DROPDOWN) {
                     updatedValues = $scope.MassUpdateData.UPD_VAL_DROPDOWN;
                 }
@@ -158,6 +200,7 @@
                     isvalidAtrb = false;
                 }
             }
+            // Multivalue Dropdown Value Controller Read
             else {
                 if ($scope.MassUpdateData.UPD_VAL_MULTISELECT && $scope.MassUpdateData.UPD_VAL_MULTISELECT.length > 0) {
                     updatedValues = $scope.MassUpdateData.UPD_VAL_MULTISELECT.toString();

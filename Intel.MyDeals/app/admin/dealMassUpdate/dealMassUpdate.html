@@ -35,8 +35,10 @@
                      op-is-form="true"
                      op-ui-mode="'HORIZONTAL'"></div>
             </div>
+
+
             <div class="row" ng-if="ShowNumeric == true">
-                <div class="col-md-3" style="font-weight:bold;width:21%">
+                <div class="col-md-3" style="width:21%">
                     New Value :
                 </div>
                 <div class="col-md-8 row" style="width:69%">
@@ -46,7 +48,7 @@
                          op-label="''"
                          op-type="'NUMERIC'"
                          op-min-value="0"
-                         op-max-value="24"
+                         op-max-value="MassUpdateData.MaxNumericValue"
                          op-is-stealth="true"
                          op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
@@ -58,7 +60,7 @@
                      ng-model="MassUpdateData"
                      op-cd="'UPD_VAL_MULTISELECT'"
                      op-type="'MULTISELECT'"
-                     op-label="'New Value'"
+                     op-label="'New Multiselect Value'"
                      op-lookup-values="[]"
                      op-lookup-text="'ATRB_VAL_TXT'"
                      op-lookup-value="'ATRB_VAL_TXT'"
@@ -69,13 +71,20 @@
                      ng-model="MassUpdateData"
                      op-cd="'UPD_VAL_DROPDOWN'"
                      op-type="'DROPDOWN'"
-                     op-label="'New Value'"
+                     op-label="'New Dropdown Value'"
                      op-lookup-text="'ATRB_VAL_TXT'"
                      op-lookup-value="'ATRB_VAL_TXT'"
                      op-is-form="true"
                      op-ui-mode="'HORIZONTAL'"></div>
+                <div op-control-flat
+                     ng-model="MassUpdateData"
+                     op-cd="'UPD_VAL_TEXT'"
+                     op-type="'TEXTBOX'"
+                     op-label="'New Text Value'"
+                     op-is-form="true"
+                     op-ui-mode="'HORIZONTAL'"></div>
             </div>
-           
+
             <div class="row">
                 <div class="col-md-3 row dateRangeLabel" style="left:11px;">
                     <b>Update Vistex Staging Table.*</b>
