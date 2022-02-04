@@ -44,23 +44,6 @@
                         <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
                     </div>
 
-
-                    <!--<div class="col-md-11 row">
-                        <div class="col-md-11 row"
-                             op-control-flat
-                             ng-model="contractData"
-                             op-cd="'CNTRCT_CUST_TYPE'"
-                             op-type="'DROPDOWN'"
-                             op-label="'Customer Type:'"
-                             op-lookup-url="'api/Dropdown/GetDropdowns/CNTRCT_CUST_TYPE'"
-                             op-lookup-text="'DROP_DOWN'"
-                             op-lookup-value="'DROP_DOWN'"
-                             op-is-stealth="true"
-                             op-is-form="true"
-                             op-ui-mode="'VERTICAL'"></div>
-                    </div>-->
-
-
                     <div class="col-md-11 row"
                          op-control-flat
                          ng-model="contractData"
@@ -69,8 +52,6 @@
                          op-label="contractName"
                          op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
-
-
 
 
                     <div class="col-md-12 row" style="margin-top: 20px;">
@@ -191,8 +172,9 @@
                              op-lookup-value="'DROP_DOWN'"
                              op-is-form="true"
                              op-ui-mode="'VERTICAL'"></div>
-                        <div class="col-md-11 row"
-                             op-control-flat
+                    </div>
+                    <div class="col-md-11 row mb5">
+                        <div op-control-flat
                              ng-model="contractData"
                              op-cd="'CONTRACT_TYPE'"
                              op-type="'DROPDOWN'"
@@ -201,7 +183,7 @@
                              op-lookup-text="'DROP_DOWN'"
                              op-lookup-value="'DROP_DOWN'"
                              op-is-form="true"
-                             op-ui-mode="'VERTICAL'"></div>
+                             op-ui-mode="'HORIZONTAL'"></div>
                     </div>
 
                 </div>
