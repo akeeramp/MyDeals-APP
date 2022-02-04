@@ -760,7 +760,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
+			UI_TYPE_CD = "DropDownList"
 		};
 		public static MyDealsAttribute COST_MISSING_FLG = new MyDealsAttribute()
 		{

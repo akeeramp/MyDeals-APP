@@ -2766,12 +2766,13 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.CONTRACT_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 220,
-                IsFilterable = true,
-                IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONTRACT_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/CONTRACT_TYPE",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true,
+                ExcelTemplate = "#=CONTRACT_TYPE#",
             });
 
             items.Add(new UiTemplateContainerItem  // WIP All types
