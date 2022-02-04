@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/15/2021 11:30:31 AM
-On: SPENCEKE-MOBL
+File Updated: 2/3/2022 2:54:36 PM
+On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 using System;
@@ -433,6 +433,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string CONSUMPTION_TYPE = "CONSUMPTION_TYPE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3595
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONTRACT_TYPE = "CONTRACT_TYPE";
 
 		///<summary>
 		/// DIM_SID: 3
