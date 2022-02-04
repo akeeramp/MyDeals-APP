@@ -200,7 +200,7 @@
                 },
                 {
                     field: "CNSMPTN_CTRY_NM",
-                    title: "Conusumption Country/Region",
+                    title: "Consumption Country/Region",
                     width: "230px",
                     filterable: { multi: true, search: true },
                     editor: vm.CountryDropDownEditor
