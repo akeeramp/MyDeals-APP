@@ -50,7 +50,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.SEND_TO_VISTEX,
                                 AttributeCodes.FLEX_ROW_TYPE,
                                 AttributeCodes.RESET_VOLS_ON_PERIOD,
-                                AttributeCodes.CONSUMPTION_TYPE
+                                AttributeCodes.CONSUMPTION_TYPE,
+                                AttributeCodes.CONTRACT_TYPE
                             }
                         }
                     }
@@ -379,7 +380,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.SYS_PRICE_POINT,
                                 AttributeCodes.CONSUMPTION_TYPE,
                                 AttributeCodes.CONSUMPTION_SYS_CONFIG,
-                                AttributeCodes.TERMS
+                                AttributeCodes.TERMS,
+                                AttributeCodes.CONTRACT_TYPE
                             }
                         }
                     }

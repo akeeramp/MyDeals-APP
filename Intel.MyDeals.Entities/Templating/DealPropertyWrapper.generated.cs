@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/15/2021 9:11:08 AM
-On: SPENCEKE-MOBL
+File Updated: 2/3/2022 2:55:02 PM
+On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 
@@ -746,6 +746,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute CONTRACT_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONTRACT_TYPE",
+			ATRB_DESC = "Type of Contract",
+			ATRB_LBL = "Type of Contract",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3595,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute COST_MISSING_FLG = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "COST_MISSING_FLG",
@@ -1453,8 +1469,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute DFLT_CUST_RPT_GEO = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DFLT_CUST_RPT_GEO",
-			ATRB_DESC = "Vistex Customer Default Customer Reported Sales Geo",
-			ATRB_LBL = "Vistex Customer Default Customer Reported Sales Geo",
+			ATRB_DESC = "Vistex Cust Default Customer Reported Sales Geo",
+			ATRB_LBL = "Vistex Cust Default Customer Reported Sales Geo",
 			ATRB_MAX_LEN = 100,
 			ATRB_SID = 2027,
 			DATA_TYPE_CD = "CUSTOM",

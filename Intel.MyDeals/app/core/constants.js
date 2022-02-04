@@ -292,6 +292,9 @@
                     "MRKT_SEG": {
                         "Groups": ["Deal Info"]
                     },
+                    "CONTRACT_TYPE": {
+                        "Groups": ["Deal Info"]
+                    },
                     "GEO_COMBINED": {
                         "Groups": ["Deal Info"]
                     },
@@ -478,6 +481,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CONTRACT_TYPE": {
                         "Groups": ["Deal Info"]
                     },
                     "GEO_COMBINED": {
@@ -672,6 +678,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CONTRACT_TYPE": {
                         "Groups": ["Deal Info"]
                     },
                     "GEO_COMBINED": {
@@ -873,6 +882,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CONTRACT_TYPE": {
                         "Groups": ["Deal Info"]
                     },
                     "GEO_COMBINED": {
@@ -1171,6 +1183,9 @@
                     "MRKT_SEG": {
                         "Groups": ["Deal Info"]
                     },
+                    "CONTRACT_TYPE": {
+                        "Groups": ["Deal Info"]
+                    },
                     "GEO_COMBINED": {
                         "Groups": ["Deal Info"]
                     },
@@ -1354,6 +1369,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CONTRACT_TYPE": {
                         "Groups": ["Deal Info"]
                     },
                     "GEO_COMBINED": {
@@ -1545,6 +1563,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "MRKT_SEG": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CONTRACT_TYPE": {
                         "Groups": ["Deal Info"]
                     },
                     "GEO_COMBINED": {
