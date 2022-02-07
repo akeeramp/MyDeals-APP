@@ -48,7 +48,7 @@
 
         function updatePrimeCustomers(e) {
             if (e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && jQuery.isArray(e.data.RPL_STS_CD)) {
-                e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+                e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(', ');
             }
             PrimeCustomersService.UpdatePrimeCustomer(e.data)
                 .then(function (response) {
@@ -78,7 +78,7 @@
                         && vm.editingRowData.RPL_STS_CD != undefined && vm.editingRowData.RPL_STS_CD != ""
                         && e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && e.data.RPL_STS_CD != "" &&
                         vm.editingRowData.RPL_STS_CD.join(',') == e.data.RPL_STS_CD.join(',')) {
-                        e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+                        e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(', ');
                         vm.dataSource.cancelChanges();
                     }
                     else {
@@ -280,7 +280,7 @@
 
         vm.PrimeCustRplStatusCodeEditor = function (container, options) {
             if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "" && !jQuery.isArray(options.model.RPL_STS_CD)) {
-                options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(',')
+                options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(', ')
             }
             var editor = $('<select class="fr opUiContainer md" kendo-multi-select k-options="vm.PrimeCustRplStatusCodes" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
 

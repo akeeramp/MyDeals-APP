@@ -289,52 +289,52 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             $uibModalInstance.close(data);
         }
     }
-     // Commenting below lines of code to disable the UCD Code changes
-    //$ctrl.saveAndClose = function () {
-    //    if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
-    //        PrimeCustomersService.UnPrimeDealsLogs(dealId,JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")))).then(
-    //            function (response) {
+     
+    $ctrl.saveAndClose = function () {
+        if ($ctrl.IsError == false && $ctrl.END_CUST_OBJ.length !== 0) {
+            PrimeCustomersService.UnPrimeDealsLogs(dealId,JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY")))).then(
+                function (response) {
                    
-    //                if (response.data == "true") {
-    //                    logger.success("Request successfully sent to UCD.");
+                    if (response.data == "true") {
+                        logger.success("Request successfully sent to UCD.");
 
-    //                }
-    //                else if (response.data == "false") {
-    //                    logger.error("Unable to sent UCD request.", response, "Error");
+                    }
+                    else if (response.data == "false") {
+                        logger.error("Unable to sent UCD request.", response, "Error");
 
-    //                }
-    //                else if (response.data == "Yes") {
-    //                    //"Yes" indicates one of the end customer which is not present in our master table gone through the UCD approval flow and got Unified
-    //                    //AS new record got unified in our table we need to re validate the selected End customer and save the End customer atrbs
-    //                    PrimeCustomersService.validateEndCustomer(JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ))).then(
-    //                        function (res) {
-    //                            $ctrl.END_CUST_OBJ = res.data;
-    //                            //$ctrl.validateFlag = false;
-    //                            $ctrl.saveEndcustomerData();
-    //                            logger.success("Request successfully sent to UCD.");
-    //                        },
-    //                        function (res) {
-    //                            //$ctrl.saveEndcustomerData();
-    //                            logger.error("Unable to get Unified Customers.", response, response.statusText);
-    //                        }
-    //                    );
-    //                }
+                    }
+                    else if (response.data == "Yes") {
+                        //"Yes" indicates one of the end customer which is not present in our master table gone through the UCD approval flow and got Unified
+                        //AS new record got unified in our table we need to re validate the selected End customer and save the End customer atrbs
+                        PrimeCustomersService.validateEndCustomer(JSON.stringify(angular.toJson($ctrl.END_CUST_OBJ))).then(
+                            function (res) {
+                                $ctrl.END_CUST_OBJ = res.data;
+                                //$ctrl.validateFlag = false;
+                                $ctrl.saveEndcustomerData();
+                                logger.success("Request successfully sent to UCD.");
+                            },
+                            function (res) {
+                                //$ctrl.saveEndcustomerData();
+                                logger.error("Unable to get Unified Customers.", response, response.statusText);
+                            }
+                        );
+                    }
 
-    //                if (response.data !== "Yes") {
-    //                    $ctrl.saveEndcustomerData();
-    //                }
+                    if (response.data !== "Yes") {
+                        $ctrl.saveEndcustomerData();
+                    }
                     
-    //            },
-    //            function (response) {
-    //               logger.error("Unable to process UCD request.", response, response.statusText);
-    //                $ctrl.saveEndcustomerData();
+                },
+                function (response) {
+                   logger.error("Unable to process UCD request.", response, response.statusText);
+                    $ctrl.saveEndcustomerData();
                    
-    //            }
-    //        );
+                }
+            );
            
 
-    //    }
-    //}
+        }
+    }
 
     $ctrl.showEmbAlert = function (validationMsg, country, type) {
         var countryVal = '';
