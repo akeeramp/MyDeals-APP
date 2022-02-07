@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Intel.MyDeals.Entities</RootNamespace>
     <AssemblyName>Intel.MyDeals.Entities</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -52,9 +52,8 @@
     <Reference Include="Intel.Opaque.Utilities.Server">
       <HintPath>..\Shared Libraries\Intel.Opaque.Utilities.Server.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Types, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\Microsoft.SqlServer.Types.dll</HintPath>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -184,6 +183,7 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="TableTypeParameters\in_dsa_rspn_log.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -301,6 +301,17 @@
     <Compile Include="WorkFlowQueueStatus.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial110.dll" />
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial110.dll" />
     <Content Include="Templating\ColumnNames.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ColumnNames.generated.cs</LastGenOutput>
