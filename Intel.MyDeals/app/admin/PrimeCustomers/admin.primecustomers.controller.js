@@ -23,8 +23,8 @@
         }
         vm.countries = [];
         vm.primeCustomers = [];
-        //vm.RplStatusCodes = [];
-        //vm.editingRowData = null;
+        vm.RplStatusCodes = [];
+        vm.editingRowData = null;
 
         vm.initiateDropdown = function () {
             PrimeCustomersService.getCountries().then(function (response) {
@@ -39,17 +39,17 @@
                 logger.error("Unable to get Unified Customers", response, response.statusText);
             });
 
-            //PrimeCustomersService.getRplStatusCodes().then(function (response) {
-            //    vm.RplStatusCodes = response.data
-            //}, function (response) {
-            //    logger.error("Unable to get RPL status code", response, response.statusText);
-            //});
+            PrimeCustomersService.getRplStatusCodes().then(function (response) {
+                vm.RplStatusCodes = response.data
+            }, function (response) {
+                logger.error("Unable to get RPL status code", response, response.statusText);
+            });
         }
 
         function updatePrimeCustomers(e) {
-            //if (e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && jQuery.isArray(e.data.RPL_STS_CD)) {
-            //    e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
-            //}
+            if (e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && jQuery.isArray(e.data.RPL_STS_CD)) {
+                e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+            }
             PrimeCustomersService.UpdatePrimeCustomer(e.data)
                 .then(function (response) {
                     e.success(response.data);
@@ -73,19 +73,18 @@
                     });
                 },
                 update: function (e) {
-                    //if (vm.editingRowData != null && vm.editingRowData != undefined
-                    //    && vm.editingRowData.IS_ACTV == e.data.IS_ACTV && vm.editingRowData.RPL_STS_CD != null
-                    //    && vm.editingRowData.RPL_STS_CD != undefined && vm.editingRowData.RPL_STS_CD != ""
-                    //    && e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && e.data.RPL_STS_CD != "" &&
-                    //    vm.editingRowData.RPL_STS_CD.join(',') == e.data.RPL_STS_CD.join(',')) {
-                    //    e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
-                    //    vm.dataSource.cancelChanges();
-                    //}
-                    //else {
+                    if (vm.editingRowData != null && vm.editingRowData != undefined
+                        && vm.editingRowData.IS_ACTV == e.data.IS_ACTV && vm.editingRowData.RPL_STS_CD != null
+                        && vm.editingRowData.RPL_STS_CD != undefined && vm.editingRowData.RPL_STS_CD != ""
+                        && e.data.RPL_STS_CD != null && e.data.RPL_STS_CD != undefined && e.data.RPL_STS_CD != "" &&
+                        vm.editingRowData.RPL_STS_CD.join(',') == e.data.RPL_STS_CD.join(',')) {
+                        e.data.RPL_STS_CD = e.data.RPL_STS_CD.join(',');
+                        vm.dataSource.cancelChanges();
+                    }
+                    else {
                         var updatedData = vm.PrimeCustomersData.filter(x => x.PRIM_CUST_ID == e.data.PRIM_CUST_ID && x.PRIM_CUST_NM == e.data.PRIM_CUST_NM &&
-                            x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);
-                        //&& updatedData[0].RPL_STS_CD != e.data.RPL_STS_CD
-                        if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV ) {
+                            x.PRIM_LVL_ID == e.data.PRIM_LVL_ID && x.PRIM_LVL_NM == e.data.PRIM_LVL_NM);                        
+                        if (updatedData.length == 1 && updatedData[0].IS_ACTV == e.data.IS_ACTV && updatedData[0].RPL_STS_CD != e.data.RPL_STS_CD ) {
                             updatePrimeCustomers(e);
                         }
                         else if (!e.data.IS_ACTV) {
@@ -98,7 +97,7 @@
                         else if (e.data.IS_ACTV && vm.IsvalidPrimeCustomer(e.data)) {
                             updatePrimeCustomers(e);
                         }
-                    //}
+                    }
                 },
                 create: function (e) {
                     if (vm.IsvalidPrimeCustomer(e.data)) {
@@ -123,8 +122,7 @@
                         PRIM_CUST_ID: { editable: true },
                         PRIM_CUST_NM: { editable: true },
                         PRIM_CUST_CTRY: { editable: true },
-                        RPL_STS_CD: {editable: false },
-                        RPL_STS: { editable: false },
+                        RPL_STS_CD: {editable: true },
                         IS_ACTV: { type: "boolean", editable: true },
                         PRIM_LVL_ID: { editable: true },
                         PRIM_LVL_NM: { editable: false },
@@ -237,40 +235,40 @@
 
         }
 
-        //vm.PrimeCustRplStatusCodes = {
-        //    optionLabel: "Select RPL status code..",
-        //    dataSource: {
-        //        type: "json",
-        //        transport: {
-        //            read: function (e) {
-        //                e.success(vm.RplStatusCodes);
-        //            }
-        //        }
-        //    },
-        //    autoBind: true,
-        //    autoClose: false,
-        //    filter: "contains",
-        //    dataTextField: "RPL_STS_CD",
-        //    dataValueField: "RPL_STS_CD",            
-        //    change: function (e) {
-        //        var grid = $("#primeCustomersGrid").data("kendoGrid");
-        //        if (grid != undefined && grid != null) {
-        //            var currentRow = grid.dataItem(grid.current().closest("tr"));
-        //            currentRow.dirty = true;
-        //            currentRow.RPL_STS_CD = this.value();
-        //        }
-        //    },
-        //    dataBound: function (e) {
-        //        var grid = $("#primeCustomersGrid").data("kendoGrid");
-        //        if (grid != undefined && grid != null) {
-        //            var currentRow = grid.dataItem(grid.current().closest("tr"));
-        //            if (currentRow.RPL_STS_CD != undefined && currentRow.RPL_STS_CD != null && currentRow.RPL_STS_CD != "") {
-        //                currentRow.dirty = true;
-        //            }
-        //        }
-        //    }
+        vm.PrimeCustRplStatusCodes = {
+            optionLabel: "Select RPL status code..",
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: function (e) {
+                        e.success(vm.RplStatusCodes);
+                    }
+                }
+            },
+            autoBind: true,
+            autoClose: false,
+            filter: "contains",
+            dataTextField: "RPL_STS_CD",
+            dataValueField: "RPL_STS_CD",            
+            change: function (e) {
+                var grid = $("#primeCustomersGrid").data("kendoGrid");
+                if (grid != undefined && grid != null) {
+                    var currentRow = grid.dataItem(grid.current().closest("tr"));
+                    currentRow.dirty = true;
+                    currentRow.RPL_STS_CD = this.value();
+                }
+            },
+            dataBound: function (e) {
+                var grid = $("#primeCustomersGrid").data("kendoGrid");
+                if (grid != undefined && grid != null) {
+                    var currentRow = grid.dataItem(grid.current().closest("tr"));
+                    if (currentRow.RPL_STS_CD != undefined && currentRow.RPL_STS_CD != null && currentRow.RPL_STS_CD != "") {
+                        currentRow.dirty = true;
+                    }
+                }
+            }
 
-        //}
+        }
 
         vm.PrimeCustNamesEditor = function (container, options) {
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustNames" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
@@ -280,13 +278,13 @@
             var editor = $('<select kendo-combo-box k-options="vm.PrimeCustCountry"  name="' + options.field + '" style="width:100%"></select>').appendTo(container);
         }
 
-        //vm.PrimeCustRplStatusCodeEditor = function (container, options) {
-        //    if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "" && !jQuery.isArray(options.model.RPL_STS_CD)) {
-        //        options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(',')
-        //    }
-        //    var editor = $('<select class="fr opUiContainer md" kendo-multi-select k-options="vm.PrimeCustRplStatusCodes" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
+        vm.PrimeCustRplStatusCodeEditor = function (container, options) {
+            if (options.model.RPL_STS_CD != undefined && options.model.RPL_STS_CD != null && options.model.RPL_STS_CD != "" && !jQuery.isArray(options.model.RPL_STS_CD)) {
+                options.model.RPL_STS_CD = options.model.RPL_STS_CD.split(',')
+            }
+            var editor = $('<select class="fr opUiContainer md" kendo-multi-select k-options="vm.PrimeCustRplStatusCodes" name="' + options.field + '" style="width:100%"></select>').appendTo(container);
 
-        //}
+        }
 
         vm.PrimeIDEditor = function (container, options) {
             // hard coded value on editor to display all -1 default options as blank. Gets converted back to -1 on save
@@ -337,7 +335,7 @@
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
-                //vm.editingRowData = util.deepClone(e.model);
+                vm.editingRowData = util.deepClone(e.model);
                 commandCell.html('<a class="k-grid-update" href="#"><span title="Save" class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span title="Cancel" class="k-icon k-i-cancel"></span></a>');
             },
             columns: [
@@ -408,20 +406,13 @@
                     editable: isEditable
                 },
                 {
-                    field: "RPL_STS",
-                    title: "RPL Status",
+                    field: "RPL_STS_CD",
+                    title: "RPL Status Code",
                     width: "150px",
-                    //added template to show 0 or 1 on the grid display instead of true or false
-                    template: "#if(RPL_STS == true){ # 1 # }else{ # 0 # }#"
+                    editor: vm.PrimeCustRplStatusCodeEditor,
+                    filterable: { multi: true, search: true },
+                    editable: isRplEditable
                 }
-                //{
-                //    field: "RPL_STS_CD",
-                //    title: "RPL Status Code",
-                //    width: "300px",
-                //    editor: vm.PrimeCustRplStatusCodeEditor,
-                //    filterable: { multi: true, search: true },
-                //    editable: isRplEditable
-                //}
 
             ]
 
@@ -456,13 +447,13 @@
             return false;
         }
 
-        //function isRplEditable(e) {
-        //    if (window.isDeveloper || (window.usrRole == "SA" && !window.isCustomerAdmin)) {
-        //        if (e.PRIM_SID != "")
-        //            return true;
-        //    }
-        //    return false;
-        //}
+        function isRplEditable(e) {
+            if (window.isDeveloper || (window.usrRole == "SA" && !window.isCustomerAdmin)) {
+                if (e.PRIM_SID != "")
+                    return true;
+            }
+            return false;
+        }
     }
 
 })();

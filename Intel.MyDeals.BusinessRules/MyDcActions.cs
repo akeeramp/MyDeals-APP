@@ -2771,16 +2771,17 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
-            //Commented RPL Related code as part of TWC3167-906 US
-            //bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
-            //var rplStatusCodeCheck = false;
+            bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
+            var rplStatusCodeCheck = false;
+            var isNoRplStatusAvailable = false;
             var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);
-            //if (endCustObj != "")
-            //{
-            //    List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(endCustObj);
-            //    //Additional check for the RPL status code
-            //    rplStatusCodeCheck = endCustJsonObj.Where(data => (string.IsNullOrEmpty(data.RPL_STS_CD) || data.RPL_STS_CD.Contains("REVIEWWIP")) && data.IS_RPL=="0" && data.IS_EXCLUDE != "1").ToArray().Length > 0;
-            //}
+            if (endCustObj != "")
+            {
+                List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(endCustObj);
+                //Additional check for the RPL status code
+                rplStatusCodeCheck = endCustJsonObj.Where(data => (!string.IsNullOrEmpty(data.RPL_STS_CD) && data.RPL_STS_CD.Contains("REVIEWWIP")) && data.IS_RPL == "0" && data.IS_EXCLUDE != "1").ToArray().Length > 0;
+                isNoRplStatusAvailable = endCustJsonObj.Where(data => string.IsNullOrEmpty(data.RPL_STS_CD) && data.IS_RPL == "0" && data.IS_EXCLUDE != "1" && data.PRIMED_CUST_NM.ToLower() != "any").ToArray().Length > 0;
+            }
             bool salesForceCheck = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
             string dealStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             string Rebatetype = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
@@ -2799,8 +2800,8 @@ namespace Intel.MyDeals.BusinessRules
             DateTime chkDate = OpConvertSafe.ToDateTime(r.Dc.GetDataElementValue(AttributeCodes.END_DT));
             bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
             string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
-            //|| rplCheck|| rplStatusCodeCheck
-            if ((!primedCheck) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
+
+            if ((!primedCheck || rplCheck || rplStatusCodeCheck || isNoRplStatusAvailable) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
@@ -2808,14 +2809,18 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
                     }
-                    //else if (rplCheck)
-                    //{
-                    //    deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be WON.");
-                    //}
-                    //else if(rplStatusCodeCheck)
-                    //{
-                    //    deEndCust.AddMessage("End customer Review in Progress. Deal cannot be set to WON till Review is complete.");
-                    //}
+                    else if (rplCheck)
+                    {
+                        deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be WON.");
+                    }
+                    else if (rplStatusCodeCheck)
+                    {
+                        deEndCust.AddMessage("End customer Review in Progress. Deal cannot be set to WON till Review is complete.");
+                    }
+                    else if (isNoRplStatusAvailable)
+                    {
+                        deEndCust.AddMessage("End customer has been sent for RPL review. Deal cannot be set to WON until the review completes.");
+                    }
                 }
                 else if (!isTender)
                 {
@@ -2825,14 +2830,18 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
                         }
-                        //else if (rplCheck)
-                        //{
-                        //    deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
-                        //}
-                        //else if (rplStatusCodeCheck)
-                        //{
-                        //    deEndCust.AddMessage("End customer Review in Progress. Deal cannot be approved till Review is complete.");
-                        //}
+                        else if (rplCheck)
+                        {
+                            deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
+                        }
+                        else if (rplStatusCodeCheck)
+                        {
+                            deEndCust.AddMessage("End customer Review in Progress. Deal cannot be approved till Review is complete.");
+                        }
+                        else if (isNoRplStatusAvailable)
+                        {
+                            deEndCust.AddMessage("End customer has been sent for RPL review. Deal cannot be approved until the review completes.");
+                        }
                     }
                 }
             }

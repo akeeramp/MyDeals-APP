@@ -282,8 +282,8 @@ namespace Intel.MyDeals.Entities
 
             public class AccountComplianceDetails
             {
-               // public string Name { get; set; }
-               // public string Code { get; set; }
+                public string Name { get; set; }
+                public string Code { get; set; }
             }           
 
             public class AccountAddressInformation

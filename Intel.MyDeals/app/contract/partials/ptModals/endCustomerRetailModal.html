@@ -18,9 +18,9 @@
                     <div class="col-md-1" style="text-align: center; padding-left: 0px; width: 90px; ">
                         <label>Is Unified</label>
                     </div>
-                    <!--<div class="col-md-1" style="text-align: left; padding-left: 3px; width: 100px; ">
+                    <div class="col-md-1" style="text-align: left; padding-left: 3px; width: 100px; ">
                         <label>RPL Status</label>
-                    </div>-->
+                    </div>
                     <div class="col-md-1" style="padding-right: 0px;">
                         <label></label>
                     </div>
@@ -30,7 +30,7 @@
                     <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}};text-align:center;">
                         <label>Country/Region</label>
                     </div>
-                    <div class="col-md-2" style="text-align:center;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                    <div class="col-md-1" style="text-align:left;float:right;padding-left:0px;" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
                         <label>Exclude</label>
                     </div>
                 </div>
@@ -39,19 +39,17 @@
                         <span title="Unified" ng-if="e.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
                         <span title="Not Unified" ng-if="e.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                     </div>
-                    <!--<div class="col-md-1" style="align-content:center">
-                        <span title="NA" ng-if="e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
-                        <span title="Review in Progress" ng-if="e.IS_PRIMED_CUST==1 &&  (e.RPL_STS_CD == null || e.RPL_STS_CD == '' || e.RPL_STS_CD.match('REVIEWWIP')) && e.IS_RPL==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
-                        <span title="No" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0 && (e.RPL_STS_CD != null && e.RPL_STS_CD != '' && !e.RPL_STS_CD.match('REVIEWWIP'))" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
-                        <span title="Yes" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
-                    </div>-->
+                    <div class="col-md-1" style="align-content:center">
+                        <span title="NA" ng-if="(e.IS_PRIMED_CUST==0 && (e.IS_RPL==0 || e.IS_RPL==null)) || (e.RPL_STS_CD == null || e.RPL_STS_CD == '')" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="Review in Progress" ng-if="e.IS_PRIMED_CUST==1 &&  (e.RPL_STS_CD != null && e.RPL_STS_CD != '' && e.RPL_STS_CD.match('REVIEWWIP')) && e.IS_RPL==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="Non – Sanctioned" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==0 && (e.RPL_STS_CD != null && e.RPL_STS_CD != '' && !e.RPL_STS_CD.match('REVIEWWIP'))" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Sanctioned" ng-if="e.IS_PRIMED_CUST==1 && e.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                    </div>
                     <div class="col-md-1" style="width:90px;padding-right:0px;">
                         <span class="fl icnBtn icnSkyBtn" ng-click="addRow(e)"><i class="intelicon-plus-max"></i></span>
                         <span class="fl icnBtn icnGryBtn" ng-click="removeRow(e)" ng-if="!$first"><i class="intelicon-minus-max"></i></span>
                         <span class="fl icnBtn" ng-if="$first"></span>
                     </div>
-                    <!--<div ng-class="$ctrl.IsAny? 'col-md-4': 'col-md-5'">
-                        <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;'}}">-->
                     <div class="col-md-4">
                         <span class="fl" ng-if="$index == 0" style="{{$ctrl.IsAny? 'width:290px;':'width:300px;'}}">
                             <select kendo-combo-box id="ComboBoxSelect_{{$index}}"
@@ -85,7 +83,7 @@
                         </span>
                     </div>
                     <div ng-class="$ctrl.IsAny? 'col-md-3': 'col-md-4'">
-                        <span class="fl" style="{{$ctrl.IsAny? 'width:250px;margin-left:10px':'width:300px;margin-left:30px'}}">
+                        <span class="fl" style="{{$ctrl.IsAny? 'width:250px;':'width:300px;margin-left:30px'}}">
                             <select kendo-combo-box id="DropdownSelections_{{$index}}"
                                     k-placeholder="'Select Country/Region'"
                                     k-data-text-field="'CTRY_NM'"
@@ -102,7 +100,7 @@
                             </select>
                         </span>
                     </div>
-                    <div class="col-md-2" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 55px; float: right; padding-top:5px;">
+                    <div class="col-md-1" ng-if="$ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && $ctrl.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 15px; float: right; padding-top:5px;">
 
                         <div ng-if="$index>0">
                             <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
@@ -125,7 +123,7 @@
             </div>
             <div ng-class="$ctrl.IsAny? 'col-md-5 buttonMaxPadding' : 'col-md-5 buttonMinPadding'">
                 <button class="btn btn-primary" type="button" ng-disabled="$ctrl.ecOptionsFlag" ng-click="$ctrl.ok()">Validate</button>
-                <button id="saveandclose" class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveEndcustomerData()">Save And Close</button>
+                <button id="saveandclose" class="btn btn-primary" type="button" ng-disabled="$ctrl.validateFlag" ng-click="$ctrl.saveAndClose()">Save And Close</button>
 
             </div>
         </div>
