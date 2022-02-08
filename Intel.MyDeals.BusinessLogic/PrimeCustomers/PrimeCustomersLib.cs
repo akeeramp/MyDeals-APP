@@ -115,6 +115,11 @@ namespace Intel.MyDeals.BusinessLogic
                 bool hasErrors = false;
                 hasErrors = mydealsdata.ValidationApplyRules(savePacket);
 
+                if (OpUserStack.MyOpUserToken.Usr.WWID == 0)
+                {
+                    OpUserStack.MyOpUserToken.Usr.WWID = 999999999;
+                }
+
                 MyDealsData saveResponse = mydealsdata.Save(saveContractToken);
 
                 if (saveResponse != null && endCustData.IS_PRIMED_CUST == "1")
