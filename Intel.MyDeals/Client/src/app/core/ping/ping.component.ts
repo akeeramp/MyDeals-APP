@@ -5,6 +5,7 @@ import { pingService } from '../core.shared.service';
 import { logger } from "../../shared/logger/logger";
 
 @Component({
+    selector:'ping',
     template: `<i class="fa fa-signal ping-net" role="button" [ngClass]="getClassName(pingTime)" (click)="pingHost()" title="Network Ping: {{pingTime}} ms" aria-hidden="true"></i>
         <i class="batch-running" *ngIf="batchInProgress" title="There is a database batch job currently in progress&#013;This will effect performance a little" style="padding-left: 10px;"><b>BATCH IN PROGRESS</b></i> <!--intelicon-database-solid  Removed and replaced with text-->
         

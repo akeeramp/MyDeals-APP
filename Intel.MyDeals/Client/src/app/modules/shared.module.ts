@@ -3,7 +3,9 @@ import { MultiCheckFilterComponent } from "../shared/kendo/multichecker.componen
 import {KendoControlComponent} from '../shared/kendo_controls/kendocontrol.component';
 import {SpreadComponent} from '../shared/handsone/spreadsheet.component.handson';
 import {DialogOverviewExampleDialog} from '../shared/modalPopUp/modal.component';
-import { CustomDateFilterComponent } from '../shared/kendo/customDateFilter.component'
+import { CustomDateFilterComponent } from '../shared/kendo/customDateFilter.component';
+import { FooterComponent } from '../shared/footer/footer.component';
+import {LoadingSpinnerComponent} from '../shared/loadingSpinner/loadingspinner.component';
 
 export let sharedComponents =[
     LoaderComponent,
@@ -11,5 +13,7 @@ export let sharedComponents =[
     KendoControlComponent,
     SpreadComponent,
     DialogOverviewExampleDialog,
-    CustomDateFilterComponent
+    CustomDateFilterComponent,
+    FooterComponent,
+    LoadingSpinnerComponent,
 ]

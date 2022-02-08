@@ -66,8 +66,10 @@
         <div ui-view="mainView"></div>
         @RenderBody()
     </div>
-    @Html.Partial("_Footer")
-    @Html.Partial("_Loading")
+    @*@Html.Partial("_Footer")*@
+    <app-footer></app-footer>
+    @*@Html.Partial("_Loading")*@
+    <app-loader></app-loader>
 
 
     @Scripts.Render("~/bundles/angular")
@@ -83,7 +85,7 @@
 
     </script>
     <script src="~/Client/src/dist/bundle.js"></script>
-    
+
 </body>
 
 </html>

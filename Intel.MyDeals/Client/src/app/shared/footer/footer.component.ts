@@ -1,0 +1,36 @@
+import * as angular from "angular";
+import { Component } from "@angular/core";
+import { downgradeComponent } from "@angular/upgrade/static";
+import { footerService } from "./footer.service";
+import { logger } from "../logger/logger";
+
+@Component({
+    selector: "app-footer",
+    templateUrl: "Client/src/app/shared/footer/footer.component.html",
+    styleUrls: ['Client/src/app/shared/footer/footer.component.css']
+})
+
+export class FooterComponent {
+    constructor(private footerSvc: footerService,private loggerSVC:logger) { }
+    private appVersion: string;
+    private environment: string;
+
+    loadFooter() {
+        this.footerSvc.getFooterDetails().subscribe(res => {
+            this.appVersion=res.AppVer;
+            this.environment=res.AppEnv;
+        }, err => {
+           this.loggerSVC.error("FooterComponent::getFooterDetails::",err);
+        });
+    }
+    ngOnInit() {
+        this.loadFooter();
+    }
+}
+
+angular.module("app").directive(
+    "appFooter",
+    downgradeComponent({
+        component: FooterComponent,
+    })
+);
