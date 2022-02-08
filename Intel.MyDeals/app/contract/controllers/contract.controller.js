@@ -3699,6 +3699,7 @@
                                             if (j >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[j]['DC_ID']) {
                                                 if ($scope.spreadDs._data[j] && $scope.spreadDs._data[j]['NUM_OF_TIERS'] > 1 && $scope.spreadDs._data[j]['TIER_NBR'] != 1) {
                                                     $scope.spreadDs._data[j] = $scope.spreadDsDataCopy[j];
+                                                    $scope.spreadDs._data[i]['END_PB'] = data.PRC_TBL_ROW[i]['END_PB'];
                                                     isendpbreduced = true;
                                                     $scope.spreadDs.sync();
                                                 }
