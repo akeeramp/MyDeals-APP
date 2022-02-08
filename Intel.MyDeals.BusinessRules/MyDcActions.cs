@@ -1574,6 +1574,9 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
             string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
+
+            if (deStartDate == null || deEndDate == null) return;
+
             DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
             DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
 

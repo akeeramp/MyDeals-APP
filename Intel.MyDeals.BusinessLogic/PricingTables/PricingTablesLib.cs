@@ -61,7 +61,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.PRC_TBL_ROW])
                     {
-                        if (item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
+                        if (item.ContainsKey("SETTLEMENT_PARTNER") && item.Count > 1 && item["SETTLEMENT_PARTNER"] != null && item["SETTLEMENT_PARTNER"].ToString() != string.Empty)
                         {
                             var supplierName = customerVendorData.Where(ob => ob.DROP_DOWN == item["SETTLEMENT_PARTNER"].ToString()).Select(x => x.BUSNS_ORG_NM).FirstOrDefault();
                             supplierName = supplierName + " - " + item["SETTLEMENT_PARTNER"].ToString();
