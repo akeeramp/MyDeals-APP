@@ -117,7 +117,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (OpUserStack.MyOpUserToken.Usr.WWID == 0)
                 {
-                    OpUserStack.MyOpUserToken.Usr.WWID = 999999999;
+                    OpUserStack.MyOpUserToken.Usr.WWID = 99999999;
                 }
 
                 MyDealsData saveResponse = mydealsdata.Save(saveContractToken);
