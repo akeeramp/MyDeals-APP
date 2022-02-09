@@ -379,7 +379,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = creEmpWwid.ToString() } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
-                OpUserStack.MyOpUserToken.Usr = tempLookupSetting.UserToken.Usr;
+                OpUserStack.MyOpUserToken.Usr = opUserToken.Usr;
             }
             var endCustomer = _primeCustomersDataLib.ValidateEndCustomer(endCustObjdata);
             UnPrimeAtrbs data = new UnPrimeAtrbs();
