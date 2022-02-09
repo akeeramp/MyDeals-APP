@@ -78,6 +78,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }
+        let objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+        let filterData = _.uniq(_.sortBy(pricingTableData.data.WIP_DEAL, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+        let accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
+        let drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+        let accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
+        let drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
+        if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0)
+        { $scope.restrictGroupFlexOverlap = true; }
+
+        if ($scope.restrictGroupFlexOverlap) {
+            root.clearValidation(pricingTableData.data.WIP_DEAL, "DEAL_COMB_TYPE");
+            var filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
+            if (filteredGroupTypeRestriction.length > 0) {
+                angular.forEach(filteredGroupTypeRestriction, (item) => {
+                    if (!item._behaviors.isError) item._behaviors.isError = {};
+                    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                    item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                    item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX dealsss having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
+                });
+            }
+        }
     }
     function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
         if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {

@@ -28,6 +28,7 @@
             });
         }
         $scope.overlapFlexResult = null;
+        $scope.restrictGroupFlexOverlap = false;
         $scope.selectedTAB = 'PTR'; // Tender Deals
         $scope._tabDetails = []; // Tender Deals
         $scope.templates = $scope.templates || templateData.data;
@@ -3343,7 +3344,25 @@
                                         dictGroupType[data["DEAL_COMB_TYPE"]] = index;
                                     });
                                 }
-                                if (Object.keys(dictGroupType).length > 1) {
+
+                                if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX" && $scope.restrictGroupFlexOverlap) {
+                                    $scope.clearValidation(gData, "DEAL_COMB_TYPE");
+                                    let objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                                    let filterData = _.uniq(_.sortBy(gData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+                                    let filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
+                                    if (filteredGroupTypeRestriction.length > 0) {
+                                        angular.forEach(filteredGroupTypeRestriction, (item) => {
+                                            if (!item._behaviors.isError) item._behaviors.isError = {};
+                                            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                                            item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                                            item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push(item._behaviors.validMsg['DEAL_COMB_TYPE']);
+                                        });
+                                    }
+                                }
+                                else if (Object.keys(dictGroupType).length > 1) {
                                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                                     gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
@@ -6248,7 +6267,8 @@
             }
         }
         $scope.validateOVLPFlexProduct = function (data,mode) {
-        if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+                $scope.restrictGroupFlexOverlap = false;
                 //Clearing the behaviors for the first time if no error the result will be clean
                 $scope.clearValidation(data, "PTR_USER_PRD");
                 if ($scope.overlapFlexResult && $scope.overlapFlexResult.length && $scope.overlapFlexResult.length > 0) {
@@ -6271,11 +6291,19 @@
                     if (mode) {
                         return finalResult;
                     }
+                    var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
+                    var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+                    var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
+                    var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
+                    if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length) { $scope.restrictGroupFlexOverlap = true; }
+
                     angular.forEach(data, (item) => {
                         angular.forEach(finalResult, (itm) => {
                             //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
                             if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
-                                if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate') {
+                                if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'
+                                    && (!($scope.restrictGroupFlexOverlap))) {
                                     $scope.OVLPFlexPdtPTRUSRPRDError = true;
                                     $scope.setBehaviors(item, "PTR_USER_PRD", "duplicate");
                                 }
