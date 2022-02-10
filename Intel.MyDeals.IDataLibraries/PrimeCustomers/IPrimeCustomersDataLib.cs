@@ -7,7 +7,7 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<PrimeCustomers> GetPrimeCustomerDetails();
 
-        PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
+        UpdatedPrimeCustomerDetail ManagePrimeCustomers(CrudModes mode, PrimeCustomers data);
 
         List<Countires> GetCountries();
 

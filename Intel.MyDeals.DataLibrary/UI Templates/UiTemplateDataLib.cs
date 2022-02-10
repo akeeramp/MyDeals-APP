@@ -2918,19 +2918,19 @@ namespace Intel.MyDeals.DataLibrary
                 IsHidden = true,
                 IsFilterable = true
             });
-            //Commented RPL Related code as part of TWC3167-906 US
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 3355,
-            //    AtrbCd = AttributeCodes.IS_RPL,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 130,
-            //    Label = "Is RPL Cust",
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'IS_RPL')#",
-            //    IsHidden = true,
-            //    IsFilterable = true,
-            //    DataType = "string"
-            //});
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 3355,
+                AtrbCd = AttributeCodes.IS_RPL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Label = "Is RPL Cust",
+                Template = "#=gridUtils.uiControlWrapper(data, 'IS_RPL')#",
+                IsHidden = true,
+                IsFilterable = true,
+                DataType = "string"
+            });
 
             // REBATE_TYPE
             items.Add(new UiTemplateContainerItem  // WIP All types

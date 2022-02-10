@@ -550,6 +550,10 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "RplStatusCode";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//To update Prime Customers data
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRIM_CUST] @in_prim_sid =20364,@in_prim_cust_id=1000678979,@in_prim_cust_nm='Jupiter Corporation',@in_prim_cust_ctry='United Kingdom',@in_prim_lvl_id=1000614584,@in_prim_lvl_nm='Jupiter Corporation',@in_rpl_sts_code='NOPAYIN',@in_is_actv=1,@in_emp_wwid=11978445");
+	ds.Tables[0].TableName = "UpdatedPrimeCustomerDetail";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
 	PopIndent();
 	WriteLine("}"); // End NameSpace
