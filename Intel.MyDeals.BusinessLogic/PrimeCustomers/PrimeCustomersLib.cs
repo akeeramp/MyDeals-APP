@@ -44,7 +44,62 @@ namespace Intel.MyDeals.BusinessLogic
 
         public PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
         {
-            return _primeCustomersDataLib.ManagePrimeCustomers(mode, data);
+            var primCustdata = _primeCustomersDataLib.ManagePrimeCustomers(mode, data);
+            if(mode == CrudModes.Update && primCustdata != null && !String.IsNullOrEmpty(primCustdata.DEALID))
+            {
+                List<int> modifiedDealIds = primCustdata.DEALID.Split(',').Select(int.Parse).ToList();
+                foreach(var dealId in modifiedDealIds)
+                {
+                    List<int> dealIdlist = new List<int>() { dealId };
+                    MyDealsData mydealsdata = OpDataElementType.WIP_DEAL.GetByIDs(dealIdlist,
+                    new List<OpDataElementType>
+                     {
+                    OpDataElementType.WIP_DEAL,
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.CNTRCT
+                        }).FillInHolesFromAtrbTemplate();
+
+                    int CntrctId = mydealsdata[OpDataElementType.CNTRCT].Data.Keys.FirstOrDefault();
+                    int custId = Int32.Parse(mydealsdata[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+
+                    ContractToken saveContractToken = new ContractToken("ContractToken Created - Save Deal Updates")
+                    {
+                        CustId = custId,
+                        ContractId = CntrctId
+                    };
+
+                    mydealsdata[OpDataElementType.WIP_DEAL].AddSaveActions();
+                    List<int> possibleIds = mydealsdata[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
+                    mydealsdata[OpDataElementType.WIP_DEAL].AddSyncActions(null, possibleIds, DataCollections.GetAttributeData());
+                    mydealsdata.EnsureBatchIDs();
+
+                    SavePacket savePacket = new SavePacket
+                    {
+                        MyContractToken = saveContractToken,
+                        ValidateIds = dealIdlist,
+                        ForcePublish = true,
+                        SourceEvent = "WIP_DEAL",
+                        ResetValidationChild = false
+                    };
+                    bool hasErrors = false;
+                    hasErrors = mydealsdata.ValidationApplyRules(savePacket);
+
+                    MyDealsData saveResponse = mydealsdata.Save(saveContractToken);
+                }
+            }
+            return new PrimeCustomers()
+            {
+                PRIM_CUST_ID = primCustdata.PRIM_CUST_ID,
+                PRIM_CUST_NM = primCustdata.PRIM_CUST_NM,
+                PRIM_CUST_CTRY = primCustdata.PRIM_CUST_CTRY,
+                PRIM_LVL_ID = primCustdata.PRIM_LVL_ID,
+                PRIM_LVL_NM = primCustdata.PRIM_LVL_NM,
+                PRIM_SID = primCustdata.PRIM_SID,
+                RPL_STS = primCustdata.RPL_STS,
+                RPL_STS_CD = primCustdata.RPL_STS_CD,
+                IS_ACTV = primCustdata.IS_ACTV
+            };
         }
 
         public List<Countires> GetCountries()

@@ -61,9 +61,9 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        public PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
+        public UpdatedPrimeCustomerDetail ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
         {
-            List<PrimeCustomers> ret = ManagePrimeCustomersExcute(mode, data);
+            List<UpdatedPrimeCustomerDetail> ret = ManagePrimeCustomersExcute(mode, data);
             return ret.FirstOrDefault();
         }
 
@@ -73,9 +73,9 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="mode"></param> // CrudModes - Insert / Update / Delete
         /// <param name="data"></param>
         /// <returns></returns>
-        public List<PrimeCustomers> ManagePrimeCustomersExcute(CrudModes mode, PrimeCustomers data)
+        public List<UpdatedPrimeCustomerDetail> ManagePrimeCustomersExcute(CrudModes mode, PrimeCustomers data)
         {
-            var retPrimeCustomers = new List<PrimeCustomers>();
+            var retPrimeCustomers = new List<UpdatedPrimeCustomerDetail>();
 
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRIM_CUST
             {
@@ -91,6 +91,7 @@ namespace Intel.MyDeals.DataLibrary
 
             }))
             {
+                int IDX_DEALID = DB.GetReaderOrdinal(rdr, "DEALID");
                 int IDX_IS_ACTV = DB.GetReaderOrdinal(rdr, "IS_ACTV");
                 int IDX_PRIM_CUST_CTRY = DB.GetReaderOrdinal(rdr, "PRIM_CUST_CTRY");
                 int IDX_PRIM_CUST_ID = DB.GetReaderOrdinal(rdr, "PRIM_CUST_ID");
@@ -103,8 +104,9 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    retPrimeCustomers.Add(new PrimeCustomers
+                    retPrimeCustomers.Add(new UpdatedPrimeCustomerDetail
                     {
+                        DEALID = (IDX_DEALID < 0 || rdr.IsDBNull(IDX_DEALID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEALID),
                         IS_ACTV = (IDX_IS_ACTV < 0 || rdr.IsDBNull(IDX_IS_ACTV)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_ACTV),
                         PRIM_CUST_CTRY = (IDX_PRIM_CUST_CTRY < 0 || rdr.IsDBNull(IDX_PRIM_CUST_CTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRIM_CUST_CTRY),
                         PRIM_CUST_ID = (IDX_PRIM_CUST_ID < 0 || rdr.IsDBNull(IDX_PRIM_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRIM_CUST_ID),
@@ -115,9 +117,8 @@ namespace Intel.MyDeals.DataLibrary
                         RPL_STS = (IDX_RPL_STS < 0 || rdr.IsDBNull(IDX_RPL_STS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_RPL_STS),
                         RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
                     });
-                } // while
+                }
             }
-
 
             return retPrimeCustomers;
         }
