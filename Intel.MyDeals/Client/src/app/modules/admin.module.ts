@@ -15,6 +15,7 @@ import { adminFunFactComponent } from '../admin/funFact/admin.funFact.component'
 import { adminDealTypesComponent } from '../admin/dealTypes/admin.dealTypes.component';
 import { admindataQualityComponent } from '../admin/dataQuality/admin.dataQuality.component';
 import { QuoteLetterComponent } from '../admin/quoteLetter/admin.quoteLetter.component';
+import { RuleOwnerComponent } from '../admin/ruleOwner/admin.RuleOwner.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -33,5 +34,6 @@ export let adminComponents =[
     adminFunFactComponent,
     adminDealTypesComponent,
     admindataQualityComponent,
-    QuoteLetterComponent
+    QuoteLetterComponent,
+    RuleOwnerComponent
 ]

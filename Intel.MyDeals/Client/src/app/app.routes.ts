@@ -228,6 +228,17 @@ angular
                     }
                 }
             })
+            .state("ruleOwner", {
+                url: "/ruleOwner",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<rule-owner></rule-owner>'
+                        //  templateUrl: "Client/src/app/admin/ruleOwner/admin.ruleOwner.component.html",
+                        //  controller: "ruleOwnerController as vm"
+                    }
+                }
+            })
 
             // Admin route  ends here 
 
