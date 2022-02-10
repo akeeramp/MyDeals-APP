@@ -245,10 +245,11 @@ export class adminVistexCustomerMappingComponent {
                         this.gridResult[rowIndex] = cust_map;
                         this.gridResult.push(cust_map);
                         this.loadCustomerMapping();
+                        this.loggerSvc.success("Vistex Customer Mapping updated.");
                         /*sender.closeRow(rowIndex);*/
                     },
                     err => {
-                        this.loggerSvc.error("Unable to update customer data.", err.statusText);
+                        this.loggerSvc.error("Unable to update Vistex Customer Mapping.", err.statusText);
                         this.isLoading = false;
                     }
                 );
@@ -282,5 +283,3 @@ angular
         "adminVistexCustomerMapping",
         downgradeComponent({ component: adminVistexCustomerMappingComponent })
     );
-
-

@@ -337,10 +337,11 @@ export class adminCustomerVendorsComponent {
                         result => {
                             this.gridResult.push(cust_map);
                             this.loadCustomerVendors();
+                            this.loggerSvc.success("New Customer Vendor Added.");
                             /*sender.closeRow(rowIndex);*/
                         },
                         error => {
-                            this.loggerSvc.error("Unable to save customer vendor data.", error);
+                            this.loggerSvc.error("Unable to insert customer vendor data.", error);
                             this.isLoading = false;
                         }
                     );
@@ -351,6 +352,7 @@ export class adminCustomerVendorsComponent {
                             this.gridResult[rowIndex] = cust_map;
                             this.gridResult.push(cust_map);
                             this.loadCustomerVendors();
+                            this.loggerSvc.success("Customer Vendor Updated.");
                             /*sender.closeRow(rowIndex);*/
                         },
                         error => {

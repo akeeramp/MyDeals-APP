@@ -196,6 +196,7 @@ export class adminProductAliasComponent {
         this.productAliasSvc.DeleteProductAlias(this.product_map).subscribe(
             result => {
                 this.loadProductAlias();
+                this.loggerSvc.success("Product Alias Deleted.");
                 /*sender.closeRow(rowIndex);*/
             },
             error => {
@@ -211,7 +212,6 @@ export class adminProductAliasComponent {
         this.isDelete = false;
         this.isOk = false;
         this.deleteOperation();
-
     }
 
     saveCancel() {
@@ -227,6 +227,7 @@ export class adminProductAliasComponent {
                 result => {
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
+                    this.loggerSvc.success("Product Alias Mapping successfully added.");
                     /*sender.closeRow(rowIndex);*/
                 },
                 error => {
@@ -244,6 +245,7 @@ export class adminProductAliasComponent {
                     this.gridResult[rowIndex] = product_map;
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
+                    this.loggerSvc.success("Product Alias Mapping successfully updated.");
                     /*sender.closeRow(rowIndex);*/
                 },
                 error => {

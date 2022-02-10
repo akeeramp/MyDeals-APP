@@ -69,10 +69,12 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean" [style]="{'text-align':'center'}">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
-                    </mat-slide-toggle>
+                    <div class="text-center">
+                        <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
+                        </mat-slide-toggle>
+                    </div>
                 </ng-template>
             </kendo-grid-column>
 

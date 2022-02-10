@@ -763,7 +763,6 @@
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
-    <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.css" />
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.html" />
     <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.html" />
     <Content Include="Client\src\app\admin\products\admin.products.component.html" />

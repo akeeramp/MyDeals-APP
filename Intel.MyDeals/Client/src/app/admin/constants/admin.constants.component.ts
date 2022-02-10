@@ -195,7 +195,7 @@ export class ConstantsComponent {
             .subscribe(
                 (result: Array<any>) => {
                     this.refreshGrid();
-                    this.loggerSvc.success("Constant Deleted.")
+                    this.loggerSvc.success("Constant Deleted.");
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -230,9 +230,9 @@ export class ConstantsComponent {
                 this.constantsSvc.insertConstants(cnst_map).subscribe(
                     result => {
                         this.gridResult.push(cnst_map);
-                        this.loadConstants();
                         this.updateBannerMessage(cnst_map);
-                        this.loggerSvc.success("New constant added.")
+                        this.loadConstants();
+                        this.loggerSvc.success("New constant added.");
                     },
                     error => {
                         this.loggerSvc.error("Unable to save constants data.", error);

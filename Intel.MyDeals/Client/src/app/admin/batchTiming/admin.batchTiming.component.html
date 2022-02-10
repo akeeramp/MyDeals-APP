@@ -5,17 +5,15 @@
 <!-- using for Angular spinner while page load -->
 
 <div class="row">
-    <div class="col-md-12" style="height:30px">
+    <div class="col-md-12 k-header-alignment">
+        <h3>Batch Job Details</h3>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12" style="padding-left: 35px;">
-        <h3>Batch Job Details</h3>
-    </div>
-
     <div class="col-md-12 kendo-grid-buttons">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true" [group]="state.group"
+        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"
+                    [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true" [group]="state.group"
                     filterable="menu" (dataStateChange)="dataStateChange($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
@@ -40,13 +38,12 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="BTCH_JOB_STS" title="Batch Job Status" width="170">
             </kendo-grid-column>
 
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="BTCH_JOB_EXEC_DTM" title="Batch Job Last Execution Date" width="200" >
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="BTCH_JOB_EXEC_DTM" title="Batch Job Last Execution Date" width="200">
             </kendo-grid-column>
 
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ERR_MSG" title="Error Message" width="200" >
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ERR_MSG" title="Error Message" width="200">
             </kendo-grid-column>
 
-            
         </kendo-grid>
     </div>
 </div>

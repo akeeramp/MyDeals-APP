@@ -5,22 +5,18 @@
 <!-- using for Angular spinner while page load -->
 
 <div class="row">
-    <div class="col-md-12" style="height:50px">
+    <div class="col-md-12 k-header-alignment">
+        <h3>Unified Customer Admin</h3>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12" style="padding-left: 35px;">
-        <h3>Unified Customer Admin</h3>
-    </div>
-
-
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"
                     [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
                     [groupable]="false" [group]="state.group" filterable="menu"
                     [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
-                    (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
+                    (cancel)="cancelHandler($event)" (save)="saveHandler($event)" [columnMenu]="true">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton" *ngIf="editAccess">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>
@@ -36,17 +32,21 @@
                     Refresh
                 </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="75" *ngIf="editAccess" [headerClass]="{'headerClass':true}">
+            <kendo-grid-command-column title="Commands" width="60" *ngIf="editAccess" [headerClass]="{'headerClass':true}" [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
-                    <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
-                        <span class="k-icon k-i-edit k-icon-sm"></span>
-                    </button>
-                    <button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
-                        <span class="k-icon k-i-check k-icon-sm"></span>
-                    </button>
-                    <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
-                        <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
-                    </button>
+                    <div class="text-center">
+                        <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
+                            <span class="k-icon k-i-edit k-icon-sm"></span>
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                            <span class="k-icon k-i-check k-icon-sm"></span>
+                        </button>
+                        <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
+                            <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
+                        </button>
+                    </div>
                 </ng-template>
             </kendo-grid-command-column>
             <kendo-grid-column field="IS_ACTV" title="Is Active" editor="boolean" width="50" filter="boolean" [headerClass]="{'headerClass':true}">
@@ -63,6 +63,14 @@
                                           [checked]="dataItem.IS_ACTV" [formControl]="formGroup.get('IS_ACTV')">
                         </mat-slide-toggle>
                     </div>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="PRIM_SID" title="Customer ID" [hidden]="true" width="70" [headerClass]="{'headerClass':true}" [editable]="false">
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
             </kendo-grid-column>
 

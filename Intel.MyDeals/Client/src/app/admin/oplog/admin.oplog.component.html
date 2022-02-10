@@ -9,12 +9,12 @@
           [message]="loadMessage">
 </ccLoader>
 
-<div [hidden] ="isLoading=='true'">
+<div [hidden]="isLoading=='true'" style="margin:20px;">
     <div class="fl" style="width:100%">
         <div class="col-md-3" style="margin-left:-15px"><h2>{{title}}</h2></div>
         <div class="col-md-5"></div>
         <div class="col-md-4">
-            <button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10" style="margin-left:10px;">Reload</button>
+            <button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10" style="margin-left:10px; margin-top:20px;">Reload</button>
             <kendo-dialog *ngIf="dateRangeInvalid" [minWidth]="250" [width]="450">
                 <p style="margin: 30px; text-align: center;">
                     Please Check Dates. Log can be fetched for maximum 30 days...
@@ -33,7 +33,7 @@
                               calendarType="classic" style="width: 130px; margin-top: 20px;">
             </kendo-datepicker>
 
-            <h5 class="fr" style="font-size: 16px; margin-top: 25px">Date Range: </h5>
+            <h5 class="fr" style="font-size: 16px; margin-top: 28px">Date Range:&nbsp;</h5>
 
         </div>
     </div>
@@ -95,7 +95,7 @@
     }
 
     #logViewResult {
-        font_size: 12px;
+        font-size: 12px;
     }
 
     .margin10 {

@@ -20,7 +20,7 @@
     </div>
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true" [group]="state.group"
-            filterable="menu" (dataStateChange)="dataStateChange($event)">
+                    filterable="menu" (dataStateChange)="dataStateChange($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon  k-i-filter-clear k-icon-md"></span>
@@ -41,13 +41,15 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="CUST_TYPE" title="Type">
             </kendo-grid-column>
 
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="HOSTED_GEO" title="Hosted Geo" width="200">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="HOSTED_GEO" title="Hosted Geo">
             </kendo-grid-column>
 
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" width="100" filter="boolean" [style]="{'text-align':'center'}">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
-                    </mat-slide-toggle>
+                    <div class="text-center">
+                        <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
+                        </mat-slide-toggle>
+                    </div>
                 </ng-template>
             </kendo-grid-column>
             <!-- <kendo-grid-column *ngFor="let x of columns"

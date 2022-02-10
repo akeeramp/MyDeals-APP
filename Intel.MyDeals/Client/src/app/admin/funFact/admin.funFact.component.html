@@ -2,11 +2,11 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />-->
 
 <div class="row">
-    <div class="col-md-12" style="padding-top: 30px; padding-left: 35px; padding-bottom: 10px;">
-        <h2>Fun Facts</h2>
+    <div class="col-md-12 k-header-alignment">
+        <h3>Fun Facts</h3>
     </div>
 </div>
 
@@ -32,33 +32,37 @@
                     Refresh
                 </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="100px" [headerClass]="{'headerClass':true}">
+            <kendo-grid-command-column title="Commands" width="100" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
-                    <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
-                        <span class="k-icon k-i-edit k-icon-sm"></span>
-                    </button>
-                    <button id="command-icon" class="k-command-icon" kendoGridSaveCommand>
-                        <span class="k-icon k-i-check k-icon-sm"></span>
-                    </button>
-                    <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
-                        <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
-                    </button>
+                    <div class="text-center">
+                        <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
+                            <span class="k-icon k-i-edit k-icon-sm"></span>
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <button id="command-icon" class="k-command-icon" kendoGridSaveCommand>
+                            <span class="k-icon k-i-check k-icon-sm"></span>
+                        </button>
+                        <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
+                            <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
+                        </button>
+                    </div>
                 </ng-template>
             </kendo-grid-command-column>
-            <kendo-grid-column field="FACT_SID" title="Id" width="100px" [headerClass]="{'headerClass':true}" [editable]="false">
+            <kendo-grid-column field="FACT_SID" title="Id" width="100" [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox [formControl]="formGroup.get('FACT_SID')"
                                    [clearButton]="true">
                     </kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="FACT_TXT" title="Fun Fact" width="500px" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="FACT_TXT" title="Fun Fact" width="500" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox [formControl]="formGroup.get('FACT_TXT')" [clearButton]="true" ngbTooltip="Fun Fact is required" tooltipClass="toolTipReq" placement="bottom" container="body" triggers="manual" #funFactTooltip="ngbTooltip" [autoClose]="false">
                     </kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="FACT_HDR" title="Header" width="200px" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="FACT_HDR" title="Header" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -69,7 +73,7 @@
                     </kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="FACT_ICON" title="Font Awesome Icon" width="220px" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="FACT_ICON" title="Font Awesome Icon" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridHeaderTemplate
                              let-column>
                     {{ column.title  }} &nbsp;
@@ -83,7 +87,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-textbox [formControl]="formGroup.get('FACT_ICON')" [clearButton]="true" ngbTooltip="Font Awesome Icon is required"  tooltipClass="toolTipReq" placement="bottom" container="body" triggers="manual" #fontAwesomeTooltip="ngbTooltip" [autoClose]="false">
+                    <kendo-textbox [formControl]="formGroup.get('FACT_ICON')" [clearButton]="true" ngbTooltip="Font Awesome Icon is required" tooltipClass="toolTipReq" placement="bottom" container="body" triggers="manual" #fontAwesomeTooltip="ngbTooltip" [autoClose]="false">
                     </kendo-textbox>
                 </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -92,7 +96,7 @@
                     </div>
                     <div class='col-md-6'>{{dataItem.FACT_ICON}}</div>
                 </ng-template>
-                
+
             </kendo-grid-column>
             <kendo-grid-column field="FACT_SRC" title="Fact Source/Credentials" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridHeaderTemplate let-column>
@@ -106,7 +110,7 @@
                     </kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="ACTV_IND" title="Active" width="150px" [headerClass]="{'headerClass':true}" filter="boolean">
+            <kendo-grid-column field="ACTV_IND" title="Active" width="150" [headerClass]="{'headerClass':true}" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
                         <mat-slide-toggle [color]="color"
@@ -119,7 +123,7 @@
                         <mat-slide-toggle [color]="color"
                                           [checked]="dataItem.ACTV_IND" [formControl]="formGroup.get('ACTV_IND')">
                         </mat-slide-toggle>
-                        </div>
+                    </div>
                 </ng-template>
             </kendo-grid-column>
 

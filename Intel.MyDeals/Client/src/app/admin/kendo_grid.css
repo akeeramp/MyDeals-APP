@@ -4,7 +4,7 @@ kendo-grid {
 
 .k-header-alignment {
     padding-top: 50px;
-    padding-left: 35px;
+    padding-left: 35px !important;
     padding-bottom: 10px;
 }
 

@@ -347,10 +347,11 @@ export class adminPrimeCustomersComponent {
                     result => {
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
+                        this.loggerSvc.success("New Unified Customer Added.");
                         //sender.closeRow(rowIndex);
                     },
                     error => {
-                        this.loggerSvc.error("Unable to save prime customer data.", error);
+                        this.loggerSvc.error("Unable to insert Unified Customer.", error);
                         this.isLoading = false;
                     }
                 );
@@ -361,6 +362,7 @@ export class adminPrimeCustomersComponent {
                         this.gridResult[rowIndex] = primeCust_map;
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
+                        this.loggerSvc.success("Unified Customer updated.");
                         //sender.closeRow(rowIndex);
                     },
                     error => {
