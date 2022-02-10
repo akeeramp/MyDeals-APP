@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessLogic
         public PrimeCustomers ManagePrimeCustomers(CrudModes mode, PrimeCustomers data)
         {
             var primCustdata = _primeCustomersDataLib.ManagePrimeCustomers(mode, data);
-            if(mode == CrudModes.Update)
+            if(mode == CrudModes.Update && primCustdata != null && !String.IsNullOrEmpty(primCustdata.DEALID))
             {
                 List<int> modifiedDealIds = primCustdata.DEALID.Split(',').Select(int.Parse).ToList();
                 foreach(var dealId in modifiedDealIds)
@@ -73,7 +73,6 @@ namespace Intel.MyDeals.BusinessLogic
                     List<int> possibleIds = mydealsdata[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
                     mydealsdata[OpDataElementType.WIP_DEAL].AddSyncActions(null, possibleIds, DataCollections.GetAttributeData());
                     mydealsdata.EnsureBatchIDs();
-
 
                     SavePacket savePacket = new SavePacket
                     {
