@@ -375,7 +375,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public void saveDealEndCustomerAtrbs(int dealId, string endCustObjdata, bool isUnificationMailRequired, int creEmpWwid)
         {
-            if (OpUserStack.MyOpUserToken.Usr.WWID == 0 || OpUserStack.MyOpUserToken.Usr.WWID != creEmpWwid)
+            if (OpUserStack.MyOpUserToken == null || OpUserStack.MyOpUserToken.Usr == null || OpUserStack.MyOpUserToken.Usr.WWID == 0 || OpUserStack.MyOpUserToken.Usr.WWID != creEmpWwid)
             {
                 OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = creEmpWwid.ToString() } };
                 UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
