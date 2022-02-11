@@ -276,7 +276,8 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     [AttributeCodes.TITLE] = true,
                     [AttributeCodes.CUST_MBR_SID] = true,
                     [AttributeCodes.START_DT] = true,
-                    [AttributeCodes.END_DT] = true
+                    [AttributeCodes.END_DT] = true,
+                    [AttributeCodes.CONTRACT_TYPE] = true
                 };
             }
 
