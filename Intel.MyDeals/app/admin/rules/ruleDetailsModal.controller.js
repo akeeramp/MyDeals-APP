@@ -6,7 +6,7 @@ angular
 SetRequestVerificationToken.$inject = ["$http"];
 
 RuleModalController.$inject = [
-    "$rootScope", "$location", "ruleService", "$scope", "$stateParams", "logger", "$timeout", "confirmationModal", "gridConstants", "constantsService", "$uibModalInstance", "RuleConfig", "dataItem"];
+    "$rootScope", "$location", "ruleService", "$scope", "$stateParams", "logger", "$timeout", "confirmationModal", "gridConstants", "bannerConstantsService", "$uibModalInstance", "RuleConfig", "dataItem"];
 
 function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModalInstance, RuleConfig, dataItem) {
     var vm = this;

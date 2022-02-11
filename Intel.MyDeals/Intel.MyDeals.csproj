@@ -783,6 +783,7 @@
     <Content Include="Client\src\app\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.js" />
     <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.html" />
+    <Content Include="Client\src\app\core\trashcan\trashcan.component.css" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
@@ -2126,7 +2127,9 @@
     <TypeScriptCompile Include="Client\src\app\core\core.shared.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\index.ts" />
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\trashcan\trashcan.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\core.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.service.ts" />

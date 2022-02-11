@@ -7,7 +7,7 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'constantsService', '$uibModal', 'rid']
+    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'bannerConstantsService', '$uibModal', 'rid']
 
     function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
         var vm = this;

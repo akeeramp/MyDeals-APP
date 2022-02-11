@@ -35,7 +35,7 @@ import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //reporting component
 import { ReportingComponent } from './reporting/reporting.component';
 //core component
-import { PingComponent } from './core/ping/ping.component';
+import { coreComponents } from './modules/core.module';
 //kendo components
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
@@ -103,16 +103,16 @@ import { adminComponents } from './modules/admin.module';
     declarations: [
         OrderByPipe,
         ReportingComponent,
-        PingComponent,
         sharedComponents,
         adminComponents,
+        coreComponents
     ],
     entryComponents: [
         
         ReportingComponent,
-        PingComponent,
         sharedComponents,
-        adminComponents
+        adminComponents,
+        coreComponents
     ]
 })
 
