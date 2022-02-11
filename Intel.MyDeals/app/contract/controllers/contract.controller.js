@@ -423,6 +423,7 @@
             $scope.ptTitleLbl = "Enter Tender Table Name";
             $scope.contractData["CUST_ACCPT"] = "Acceptance Not Required in C2A";
             $scope.contractData["C2A_DATA_C2A_ID"] = "Tender Folio Auto";
+            $scope.contractData._behaviors.isRequired["CONTRACT_TYPE"] = false;
             $scope.isTenderContract = $scope.contractData["IS_TENDER"];
             if ($location.url().split('tender=').length > 1 || $scope.isTenderContract) {
                 $scope.contractData["IS_TENDER"] = "1";
