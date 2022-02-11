@@ -3029,9 +3029,11 @@
                                             //Delete if there is any previous Error  messages
                                             if ((invalidFlexDate || invalidFlexDate != undefined)) {
                                                 angular.forEach(invalidFlexDate, (item) => {
-                                                    $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
-                                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                    errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
+                                                    if (!$scope.restrictGroupFlexOverlap) {
+                                                        $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
+                                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                        errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
+                                                    }
                                                 });
                                             }
                                         }
@@ -3301,9 +3303,11 @@
                                 //Delete if there is any previous Error  messages
                                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
                                     angular.forEach(invalidFlexDate, (item) => {
-                                        $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                        if (!$scope.restrictGroupFlexOverlap) {
+                                            $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
+                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                        }
                                     });
                                 }
                             }
