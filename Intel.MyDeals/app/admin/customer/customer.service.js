@@ -17,8 +17,6 @@
             getMyCustomersNameInfo: getMyCustomersNameInfo
         }
 
-        return service;
-
         function getCustomers() {
             // We do not want show Cached data in Admin screen, thus passing getCachedResults = 'false'
             return dataService.get(apiBaseUrl + 'GetCustomers/false');
@@ -27,5 +25,7 @@
         function getMyCustomersNameInfo() {
             return dataService.get(apiBaseUrl + 'GetMyCustomersNameInfo');
         }
+
+        return service;
     }
 })();

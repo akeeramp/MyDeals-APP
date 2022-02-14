@@ -11,7 +11,8 @@
         var service = {
             getDataFixActions: getDataFixActions,
             updateDataFix: updateDataFix,
-            getDataFixes: getDataFixes
+            getDataFixes: getDataFixes,
+            getMyCustomersNameInfo: getMyCustomersNameInfo
         }
 
         return service;
@@ -26,6 +27,11 @@
 
         function getDataFixes() {
             return dataService.get(apiBaseUrl + 'GetDataFixes');
+        }
+
+        function getMyCustomersNameInfo() {
+            var apiCustBaseUrl = "api/Customers/";
+            return dataService.get(apiCustBaseUrl + 'GetMyCustomersNameInfo');
         }
     }
 })();
