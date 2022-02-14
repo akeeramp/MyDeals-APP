@@ -1064,7 +1064,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<ProductCAPYCS2Calc> lpCap = new List<ProductCAPYCS2Calc>();
             lpCap.Add(pCap);
-
             List<ProductCAPYCS2> capResult = _productDataLib.GetCAPForProduct(lpCap, getAvailable, priceCondition);
             return capResult;
         }

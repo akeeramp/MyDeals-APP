@@ -288,6 +288,8 @@ namespace Intel.MyDeals.Entities
                     public string CustomerDivision { get; set; }
                     [JsonProperty("Product")]
                     public Product product { get; set; }
+                    public string ProductType { get; set; }
+
                     [JsonProperty("CompetitorProduct")]
                     public CompetitorProduct competitorProduct { get; set; }
                     public string OtherProduct { get; set; }
@@ -321,6 +323,11 @@ namespace Intel.MyDeals.Entities
                         public string Id { get; set; }
                         public string Name { get; set; }
                         public string ProductNameEPMID { get; set; }
+                        public string ProductLevel { get; set; }
+                        public string Family { get; set; }
+                        public string DealProductName { get; set; }
+                        //public string MaterialID { get; set; }
+                        public string ProcessorNumber { get; set; }
                     }
 
                     public class CompetitorProduct
@@ -408,9 +415,9 @@ namespace Intel.MyDeals.Entities
     public class ProductEpmObject
     {
         public int PrdGrpEpmId { get; set; }
-        public int PcsrNbrSid { get; set; }
+        public int PdctNbrSid { get; set; }
         public string EdwPcsrNbr { get; set; }
-        public string MydlPcsrNbr { get; set; }
+        public string MydlPdctName { get; set; }
     }
     #endregion Tenders Common Message Classes
 
