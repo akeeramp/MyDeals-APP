@@ -518,8 +518,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isChecked = document.getElementById('chkDealTools').checked;
                 var data = $scope.contractDs.view();
                 for (var i = 0; i < data.length; i++) {
-                    if (!(data[i].SALESFORCE_ID != undefined && data[i].SALESFORCE_ID != "" && (usrRole != "DA" || data[i].WF_STG_CD == 'Offer')))
-                    data[i].isLinked = isChecked;
+                    if (!(data[i].SALESFORCE_ID != "" && data[i].WF_STG_CD == 'Offer'))
+                        data[i].isLinked = isChecked;
                 }
             }
             $scope.excludeAllItems = function () {
