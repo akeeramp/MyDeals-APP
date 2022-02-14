@@ -6,13 +6,13 @@
         <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' ng-style="getStageBgColorStyle(stgFullTitleChar())" ng-bind-html="stgOneChar()"></div>
 
         <!-- Checkbox -->
-        <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && ((!dataItem.SALESFORCE_ID || dataItem.SALESFORCE_ID === '') || isDaUser === true)">
+        <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (((!dataItem.SALESFORCE_ID || dataItem.SALESFORCE_ID === '') || isDaUser === true) && dataItem.WF_STG_CD !== 'Offer')">
             <!-- ng-disabled="dataItem.SALESFORCE_ID !== ''" was another option, but visually couldn't change it from notmal looking check box, so... -->
             <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all checked rows"></label>
         </div>
 
         <!-- SalesForce Checkbox Disabled icon except for DA users -->
-        <div class='fl md-icon' ng-if="isSalesForceDeal && isDaUser != true">
+        <div class='fl md-icon' ng-if="isSalesForceDeal && (isDaUser != true || dataItem.WF_STG_CD === 'Offer')">
             <i class="intelicon-minus-max" ng-attr-title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
         </div>
 

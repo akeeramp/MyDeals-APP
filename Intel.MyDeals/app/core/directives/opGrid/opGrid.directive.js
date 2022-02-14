@@ -518,7 +518,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var isChecked = document.getElementById('chkDealTools').checked;
                 var data = $scope.contractDs.view();
                 for (var i = 0; i < data.length; i++) {
-                    if (!(usrRole != "DA" && data[i].SALESFORCE_ID != undefined && data[i].SALESFORCE_ID != ""))
+                    if (!(data[i].SALESFORCE_ID != undefined && data[i].SALESFORCE_ID != "" && (usrRole != "DA" || data[i].WF_STG_CD == 'Offer')))
                     data[i].isLinked = isChecked;
                 }
             }
