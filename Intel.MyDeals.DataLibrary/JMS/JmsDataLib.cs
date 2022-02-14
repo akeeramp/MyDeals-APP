@@ -908,13 +908,16 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId)
+        public ProductEpmObject FetchProdFromProcessorEpmMap(int epmId,string productType, string productLevel, string productData)
         {
             ProductEpmObject retObj = new ProductEpmObject();
 
             var cmd = new Procs.dbo.PR_MYDL_PRD_PCSR_EPM_MAP_DTL()
             {
-                in_prd_epm_id = epmId
+                in_prd_epm_id = epmId,
+                in_prd_type= productType,
+                in_deal_level= productLevel,
+                in_prd_nm= productData
             };
 
             try
@@ -922,24 +925,24 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_PRD_GRP_EPM_ID = DB.GetReaderOrdinal(rdr, "PRD_GRP_EPM_ID");
-                    int IDX_PCSR_NBR_SID = DB.GetReaderOrdinal(rdr, "PCSR_NBR_SID");
-                    int IDX_EDW_PCSR_NBR = DB.GetReaderOrdinal(rdr, "EDW_PCSR_NBR");
-                    int IDX_MYDL_PCSR_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PCSR_NBR");
+                    int IDX_PRD_NBR_SID = DB.GetReaderOrdinal(rdr, "PRD_NBR_SID");
+                    int IDX_EDW_PRD_NBR = DB.GetReaderOrdinal(rdr, "EDW_PRD_NBR");
+                    int IDX_MYDL_PRD_NBR = DB.GetReaderOrdinal(rdr, "MYDL_PRD_NBR");
 
                     while (rdr.Read())
                     {
                         retObj.PrdGrpEpmId = (IDX_PRD_GRP_EPM_ID < 0 || rdr.IsDBNull(IDX_PRD_GRP_EPM_ID))
                             ? default(System.Int32)
                             : rdr.GetFieldValue<System.Int32>(IDX_PRD_GRP_EPM_ID);
-                        retObj.PcsrNbrSid = (IDX_PCSR_NBR_SID < 0 || rdr.IsDBNull(IDX_PCSR_NBR_SID))
+                        retObj.PdctNbrSid = (IDX_PRD_NBR_SID < 0 || rdr.IsDBNull(IDX_PRD_NBR_SID))
                             ? default(System.Int32)
-                            : rdr.GetFieldValue<System.Int32>(IDX_PCSR_NBR_SID);
-                        retObj.EdwPcsrNbr = (IDX_EDW_PCSR_NBR < 0 || rdr.IsDBNull(IDX_EDW_PCSR_NBR))
+                            : rdr.GetFieldValue<System.Int32>(IDX_PRD_NBR_SID);
+                        retObj.EdwPcsrNbr = (IDX_EDW_PRD_NBR < 0 || rdr.IsDBNull(IDX_EDW_PRD_NBR))
                             ? String.Empty
-                            : rdr.GetFieldValue<System.String>(IDX_EDW_PCSR_NBR);
-                        retObj.MydlPcsrNbr = (IDX_MYDL_PCSR_NBR < 0 || rdr.IsDBNull(IDX_MYDL_PCSR_NBR))
+                            : rdr.GetFieldValue<System.String>(IDX_EDW_PRD_NBR);
+                        retObj.MydlPdctName = (IDX_MYDL_PRD_NBR < 0 || rdr.IsDBNull(IDX_MYDL_PRD_NBR))
                             ? String.Empty
-                            : rdr.GetFieldValue<System.String>(IDX_MYDL_PCSR_NBR);
+                            : rdr.GetFieldValue<System.String>(IDX_MYDL_PRD_NBR);
                     } // while
                 }
             }

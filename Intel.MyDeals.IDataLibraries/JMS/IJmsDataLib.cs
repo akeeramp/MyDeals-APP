@@ -50,7 +50,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         TenderXidObject FetchTendersReturnByXid(string xid);
 
-        ProductEpmObject FetchProdFromProcessorEpmMap(int epmId);
+        ProductEpmObject FetchProdFromProcessorEpmMap(int epmId, string productType, string productLevel, string productData);
 
         List<UCDResponse> SendRplUCDRequest(string data);
 

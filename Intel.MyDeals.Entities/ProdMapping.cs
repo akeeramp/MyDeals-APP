@@ -19,8 +19,10 @@
         public string PRD_CAT_NM { get; set; }
 		public string DEAL_PRD_TYPE { get; set; }
 		public string MM_MEDIA_CD { get; set; }
-
-		public string HIER_NM_HASH { get; set; }
+        public string BRND_NM { get; set; }
+        public string FMLY_NM { get; set; }
+        public string HIER_NM_HASH { get; set; }
+        public int PRD_ATRB_SID { get; set; }
 
         /// <summary>
         /// Include or Exclude

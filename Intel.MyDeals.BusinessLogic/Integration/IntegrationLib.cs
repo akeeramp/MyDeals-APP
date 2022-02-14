@@ -178,12 +178,12 @@ namespace Intel.MyDeals.BusinessLogic
             return singleCustomer;
         }
 
-        private ProdMappings TranslateIQRProducts(ProductEpmObject epmProduct, int epmId, int custId, string geoCombined, DateTime strtDt, DateTime endDt,
+        private ProdMappings TranslateIQRProducts(ProductEpmObject epmProduct, int epmId, int custId, string geoCombined, DateTime strtDt, DateTime endDt,string productType,
             ref List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrorResponse)
         {
             ProdMappings returnedProducts = new ProdMappings();
             PRD_LOOKUP_RESULTS prd = new PRD_LOOKUP_RESULTS();
-            prd.PRD_MBR_SID = epmProduct.PcsrNbrSid;
+            prd.PRD_MBR_SID = epmProduct.PdctNbrSid;
             List<PRD_LOOKUP_RESULTS> temp_products = new List<PRD_LOOKUP_RESULTS>();
             temp_products.Add(prd);
 
@@ -192,24 +192,30 @@ namespace Intel.MyDeals.BusinessLogic
             var result = pl.GetProductAttributes(temp_products);
             if (result != null && result.Count == 1)
             {
-                var opt = pl.GetCAPForProduct(epmProduct.PcsrNbrSid, custId, geoCombined, strtDt, endDt);
+                var opt = pl.GetCAPForProduct(epmProduct.PdctNbrSid, custId, geoCombined, strtDt, endDt);
 
-                if(opt.Count == 1)
+                //Additional 'OR' check added to allow deals to get created even if there is Missing CAP for the PMem,SSD,Ethernet product types 
+                //In my deals (Tenders)deals are allowed to move upto submitted stage even selected product has missing CAP data .
+                if ((opt.Count == 1)|| (productType.ToLower()!="server" && opt.Count == 0))
                 {
-                    if (opt[0].CAP == "No CAP")
+                    if (opt.Count == 1)
                     {
-                        // Decide if we toss this back as error or allow create
+                        if (opt[0].CAP == "No CAP")
+                        {
+                            //Decide if we toss this back as error or allow create
+                        }
+
                     }
 
                     result[0].USR_INPUT = result[0].HIER_NM_HASH;
                     result[0].DERIVED_USR_INPUT = result[0].HIER_NM_HASH;
-                    result[0].CAP = opt[0].CAP;
-                    result[0].CAP_START = opt[0].CAP_START;
-                    result[0].CAP_END = opt[0].CAP_END;
-                    result[0].YCS2 = opt[0].YCS2;
-                    result[0].YCS2_START = opt[0].YCS2_START;
-                    result[0].YCS2_END = opt[0].YCS2_END;
-
+                    result[0].CAP = opt.Count == 1?opt[0].CAP:"No CAP";
+                    result[0].CAP_START = opt.Count == 1 ? opt[0].CAP_START: result[0].CAP_START;
+                    result[0].CAP_END = opt.Count == 1 ? opt[0].CAP_END : result[0].CAP_END;
+                    result[0].YCS2 = opt.Count == 1 ? opt[0].YCS2: "No YCS2";
+                    result[0].YCS2_START = opt.Count == 1 ? opt[0].YCS2_START: result[0].YCS2_START;
+                    result[0].YCS2_END = opt.Count == 1 ? opt[0].YCS2_END: result[0].YCS2_END;
+                    
                     foreach (var newItem in result.Select(row => new ProdMapping()
                     {
                         CAP = row.CAP,
@@ -229,7 +235,10 @@ namespace Intel.MyDeals.BusinessLogic
                         YCS2 = row.YCS2,
                         YCS2_END = row.YCS2_END.ToString("MM/dd/yyyy"),
                         YCS2_START = row.YCS2_START.ToString("MM/dd/yyyy"),
-                        EXCLUDE = false
+                        EXCLUDE = false,
+                        BRND_NM=row.BRND_NM,
+                        FMLY_NM=row.FMLY_NM,
+                        PRD_ATRB_SID=row.PRD_ATRB_SID
                     }))
                     {
                         returnedProducts.Add(result[0].HIER_VAL_NM, new[] { newItem }); //result[0].HIER_NM_HASH
@@ -250,7 +259,7 @@ namespace Intel.MyDeals.BusinessLogic
             return returnedProducts;
         }
 
-        private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, int custId, TenderTransferRootObject workRecordDataFields, int currentRec)
+        private void EnterMeetCompData(int strategyId, int dealId, int prdId, string usrInputProd, string myPrdCat, string myDealPrdType, int custId, TenderTransferRootObject workRecordDataFields, int currentRec)
         {
             // We only take the first instance of values as per Mahesh ([0] below)
             string competitorProductName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].competitorProduct.Name;
@@ -272,7 +281,7 @@ namespace Intel.MyDeals.BusinessLogic
                 COMP_SKU = competitorProductName,
                 CUST_NM_SID = custId,
                 DEAL_OBJ_SID = dealId,
-                DEAL_PRD_TYPE = "CPU",
+                DEAL_PRD_TYPE = myDealPrdType,
                 GRP = "PRD",
                 GRP_PRD_NM = usrInputProd,
                 GRP_PRD_SID = prdId.ToString(),
@@ -289,7 +298,7 @@ namespace Intel.MyDeals.BusinessLogic
                 COMP_SKU = competitorProductName,
                 CUST_NM_SID = custId,
                 DEAL_OBJ_SID = dealId,
-                DEAL_PRD_TYPE = "CPU",
+                DEAL_PRD_TYPE = myDealPrdType,
                 GRP = "DEAL",
                 GRP_PRD_NM = usrInputProd,
                 GRP_PRD_SID = prdId.ToString(),
@@ -306,11 +315,18 @@ namespace Intel.MyDeals.BusinessLogic
             List<MeetCompResult> meetCompResult = new List<MeetCompResult>();
             try
             {
-                meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(strategyId, OpDataElementType.PRC_ST.ToId(), mcu);
-
-                if (meetCompResult == null || meetCompResult.Count == 0) // 0 records returned for product dimension not being set correctly causing mismatch meet comp save result
+                //mode (MC_MODE) should be passed as "A" while we intially create a deal or when there is need to run PCT. ;
+                var meetCompDetails = _meetCompLib.GetMeetCompProductDetails(strategyId, "A", OpDataElementType.PRC_ST.ToId());
+                // Added this condition to skip updating meet comp data for exempt products(ex:SSD Products) and products for which Meet comp is not applicable. 
+                //FYI, if meetCompDetails length is 0 and try to UpdateMeetCompProductDetails then it throws an exception 
+                if (meetCompDetails.Count > 0)
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Saving Meet Comp data failed"));
+                    meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(strategyId, OpDataElementType.PRC_ST.ToId(), mcu);
+
+                    if (meetCompResult == null || meetCompResult.Count == 0) // 0 records returned for product dimension not being set correctly causing mismatch meet comp save result
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(730, "Unable to push to next stage. Work with your DA to review PCT/MCT", "Saving Meet Comp data failed"));
+                    }
                 }
             }
             catch (Exception e)
@@ -410,14 +426,47 @@ namespace Intel.MyDeals.BusinessLogic
             string backdateReason = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason != "" ?
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BackdateReason :
                 "Contract Negotiation Delay";
-
+            string productType = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ProductType == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ProductType;
+            string productLevel = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductLevel == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProductLevel;
+            string productFamilyName= workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Family == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Family;
+            string processorNumber= workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber;
+            string dealPdctName= workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName;
+            //variable to hold the Selected product name
+            string productData = "";
             #region Product Check and translation
+
+            //if IQR deals created other than processor,SSD-family level,[PMem,Ethernet] products at Deal product name level and Server products at Processor level throw error.
+            if (!((productType.ToLower() == "ssd" && productLevel.ToLower()=="family")|| ((productType.ToLower() == "ethernet"|| productType.ToLower() == "pmem") && productLevel.ToLower()== "dealproductname") || (productType.ToLower() == "server" && productLevel.ToLower() == "processor")))
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created at [" + productLevel + "] level for [" + productType + "].", "Deal cannot be created at the selected level for the selected product type"));
+                return initWipId; // Bail out - no products matched
+            }
+            else
+            {
+                if (productType.ToLower() == "ssd" && productLevel.ToLower() == "family")
+                {
+                    productData = productFamilyName;
+                }
+                else if((productType.ToLower() == "ethernet" || productType.ToLower() == "pmem") && productLevel.ToLower() == "dealproductname")
+                {
+                    productData = dealPdctName;
+                }
+                else if (productType.ToLower() == "server" && productLevel.ToLower() == "processor")
+                {
+                    productData = processorNumber;
+                }
+            }
             // Use the MyTranslatedProduct function and expect null if no product is matched
             int epmId = int.TryParse(productEpmId, out epmId) ? epmId : 0;
+            //checking whether product type is server or not because to create new product types productData,productLevel,productType information is required where as processor level/server type products can be created without that info as well. 
+            if (productData=="" || productType==""|| productLevel=="")
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Please enter all the required product details", "Please enter all the required product details"));
+                return initWipId; // Bail out - Required product data is not provided to proceed further
+            }
+            ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId,productType, productLevel,productData);
 
-            ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
-
-            if (productLookupObj?.MydlPcsrNbr == String.Empty || productLookupObj?.PcsrNbrSid == 0)
+            if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: No valid products matched, for EPM Id [" + epmId + "]. Please contact L2 Support", "Product EMP ID not found"));
                 return initWipId; // Bail out - no products matched
@@ -425,20 +474,24 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> productErrors = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
             //GET Product JSON by PRD_MBR_SID
-            ProdMappings myTranslatedProduct = TranslateIQRProducts(productLookupObj, epmId, custId, geoCombined, dealStartDate, dealEndDate, ref productErrors);
+            ProdMappings myTranslatedProduct = TranslateIQRProducts(productLookupObj, epmId, custId, geoCombined, dealStartDate, dealEndDate,productType, ref productErrors);
             if (productErrors.Any())
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.AddRange(productErrors);
                 return initWipId;  // Bail out of this deal creation since it is missing critical field and errors have already been appended
             }
-
-            string translatedValidProductJson = JsonConvert.SerializeObject(myTranslatedProduct);
-            ProdMapping singleProduct = myTranslatedProduct[productLookupObj.MydlPcsrNbr].FirstOrDefault();
+        string translatedValidProductJson = JsonConvert.SerializeObject(myTranslatedProduct);
+            ProdMapping singleProduct = myTranslatedProduct[productLookupObj.MydlPdctName].FirstOrDefault();
 
             int myPrdMbrSid = singleProduct != null ? ToInt32(singleProduct.PRD_MBR_SID) : 0;
             string myPrdCat = singleProduct != null ? singleProduct.PRD_CAT_NM : "";
+            string myDealPrdType= singleProduct != null ? singleProduct.DEAL_PRD_TYPE : "";
             // Future MM_MEDIA_CD add from IQR here.  First check what they pass and apply it, but if empty, apply the below.  If they pass one, ensure that a chile below contains what they pass.
             string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD: ""; //singleProduct?.MM_MEDIA_CD
+            string myDealProduct = productLookupObj.MydlPdctName;//used to set the attribute TITLE(My deals product). In case of Family level selected products(i.e SSD products), In the WIP deal MY deals product field should be saved whatever received in the IQR Json Packet. To do that this variable is used
+            //if product is selected at a family level then full product name should be saved ex: if SSD selected at family level- D4800X015T then product name should be saved as DCG DC SSD NA DCG DC SSD D4800X015T. To do that below check is added
+            productLookupObj.MydlPdctName = (productLevel.ToLower() == "family" && singleProduct.PRD_ATRB_SID <=7005)? (singleProduct.PRD_CAT_NM + " " + (singleProduct.BRND_NM == "NA" ? "" : singleProduct.BRND_NM) + " " + (singleProduct.FMLY_NM == "NA" ? "" : singleProduct.FMLY_NM)).Trim() : productLookupObj.MydlPdctName;
+
             #endregion Product Check
 
             #region Deal Stability Check
@@ -617,7 +670,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.VOLUME), quantity);
-            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPcsrNbr);
+            UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPdctName);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.PTR_SYS_PRD), translatedValidProductJson); // Json representation of Product
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[initPtrId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
@@ -653,7 +706,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.dc_parent_type), OpDataElementType.PRC_TBL_ROW.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DC_PARENT_ID), initPtrId.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD), dealType); // 3002
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.TITLE), productLookupObj.MydlPcsrNbr); // Echo out user product name
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.TITLE), myDealProduct); // Echo out user product name
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.REBATE_TYPE), "TENDER");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SALESFORCE_ID), dealSfId);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PAYOUT_BASED_ON), "Consumption");
@@ -674,7 +727,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRIMED_CUST_CNTRY), endCustomerCountry);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.IS_RPL), isRPLedCustomer);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.END_CUST_OBJ), endCustomerObject);
-            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPcsrNbr);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PTR_USER_PRD), productLookupObj.MydlPdctName);
             UpdateProductDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PRODUCT_FILTER), myPrdMbrSid.ToString(), myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId]);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.SERVER_DEAL_TYPE), serverDealType);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.QLTR_PROJECT), projectName);
@@ -781,7 +834,7 @@ namespace Intel.MyDeals.BusinessLogic
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
 
             // Update the Meet Comp data now.
-            EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPcsrNbr, myPrdCat, custId,
+            EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPdctName, myPrdCat,myDealPrdType, custId,
                 workRecordDataFields, currentRec);
 
             // TODO: POTENTIALLY PLACE APRV_AUDIT CALL HERE
@@ -1350,9 +1403,11 @@ namespace Intel.MyDeals.BusinessLogic
                 // Update the Meet Comp data now.
                 int prdMbrSid = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
                 string prdCat = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES);
-                string mydlPcsrNbr = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
-
-                EnterMeetCompData(psId, dealId, prdMbrSid, mydlPcsrNbr, prdCat, custId, workRecordDataFields, recordId);
+                string MydlPdctName = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.TITLE);
+                //To do meet comp DEAL_PRD_TYPE info is needed, As we dont have DEAL_PRD_TYPE data saved in mydeals data, To get the that value below line of code is used
+                //for NIC,PMem,SSD >> PRD_CAT_NM(PRODUCT_CATEGORIES) and DEAL_PRD_TYPE are same and for server type products, deal prd type is  CPU
+                string myDealPrdType = (prdCat.ToLower() == "dt" || prdCat.ToLower() == "mb" || prdCat.ToLower() == "svrws") ? "CPU" : prdCat;
+                EnterMeetCompData(psId, dealId, prdMbrSid, MydlPdctName, prdCat, myDealPrdType, custId, workRecordDataFields, recordId);
                 //gather return fields and post back to json record (things like stage and approved by fields)
 
                 string psWfStage = saveResponse.ContainsKey(OpDataElementType.PRC_ST) ?
@@ -1753,14 +1808,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             string productEpmId = jsonDataPacket.ProductNameEPMID; // For lookup
             int epmId = int.TryParse(productEpmId, out epmId) ? epmId : 0;
+            //To be checked
+            ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId, "Server", null,null);
 
-            ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId);
-
-            if (productLookupObj?.MydlPcsrNbr == String.Empty || productLookupObj?.PcsrNbrSid == 0)
+            if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)
             {
                 return "ERROR: Failed on EPM ID Lookup"; // Bail out - no products matched
             }
-            int pcsrNbrSid = productLookupObj.PcsrNbrSid;
+            int PdctNbrSid = productLookupObj.PdctNbrSid;
 
             DateTime dealStartDate = DateTime.ParseExact(jsonDataPacket.RangeStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime dealEndDate = DateTime.ParseExact(jsonDataPacket.RangeEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
@@ -1769,7 +1824,7 @@ namespace Intel.MyDeals.BusinessLogic
             string geoCombined = jsonDataPacket.Region != "APJ" ? jsonDataPacket.Region : "APAC,IJKK";
 
             ProductCAPYCS2Calc pCap = new ProductCAPYCS2Calc();
-            pCap.PRD_MBR_SID = pcsrNbrSid;
+            pCap.PRD_MBR_SID = PdctNbrSid;
             pCap.CUST_MBR_SID = custId;
             pCap.GEO_MBR_SID = geoCombined;
             pCap.DEAL_STRT_DT = dealStartDate;
@@ -1778,7 +1833,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<ProductCAPYCS2Calc> lpCap = new List<ProductCAPYCS2Calc>();
             lpCap.Add(pCap);
 
-            //var opt = pl.GetCAPForProduct(pcsrNbrSid, custId, geoCombined, dealStartDate, dealEndDate);
+            //var opt = pl.GetCAPForProduct(PdctNbrSid, custId, geoCombined, dealStartDate, dealEndDate);
             List<ProductCAPYCS2> opt = pl.GetProductCAPYCS2Data(lpCap, "N", "CAP");
 
             string returnData = JsonConvert.SerializeObject(opt, Formatting.None);
