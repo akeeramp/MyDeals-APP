@@ -2767,6 +2767,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 220,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONTRACT_TYPE')#",
+                Label = "Contract Type",
                 LookupUrl = "/api/Dropdown/GetDropdowns/CONTRACT_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",

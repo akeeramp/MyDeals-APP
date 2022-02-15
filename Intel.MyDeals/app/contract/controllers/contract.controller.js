@@ -667,6 +667,18 @@
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? "Pending" : $scope.contractData.CUST_ACCPT;
             $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: ($scope.contractData.CUST_ACCPT === 'Pending');
 
+            //By default set the CONTRACT_TYPE to Standard if new contract
+            if ($scope.isContractDetailsPage) {
+                objsetService.constantsService("CONTRACT_TYPE")
+                    .then(function (response) {
+                        if (response.data) { $scope.contractData.CONTRACT_TYPE = response.data.CNST_VAL_TXT; }
+                        else { $scope.contractData.CONTRACT_TYPE = "Standard"; }
+                    },
+                        function (error) {
+                            logger.error("Unable to get Contract Type deafult. Please set value in Admin Constants screen.", error, error.statusText);
+                    })
+            }
+            
             // TODO: Ideally undefined check should be removed, once we run the DBConst.tt and DealPropertyWrapper.tt we can remove this
             // Not running now I see many new Attributes added for VOL_TIER
             $scope.contractData["NO_END_DT"] = ($scope.contractData.NO_END_DT_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined);
