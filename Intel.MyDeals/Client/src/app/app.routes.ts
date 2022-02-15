@@ -239,6 +239,16 @@ angular
                     }
                 }
             })
+            .state("workflowStages", {
+                url: "/workflowStages",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-workflow-stages></admin-workflow-stages>'
+                    }
+                }
+            })
+
 
             // Admin route  ends here 
 
