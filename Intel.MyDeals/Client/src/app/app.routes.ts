@@ -248,6 +248,17 @@ angular
                     }
                 }
             })
+            .state("workFlow", {
+                url: "/workFlow",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-work-flow></admin-work-flow>'
+                        //  templateUrl: "Client/src/app/admin/ruleOwner/admin.ruleOwner.component.html",
+                        //  controller: "ruleOwnerController as vm"
+                    }
+                }
+            })
 
 
             // Admin route  ends here 

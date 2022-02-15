@@ -17,6 +17,7 @@ import { admindataQualityComponent } from '../admin/dataQuality/admin.dataQualit
 import { QuoteLetterComponent } from '../admin/quoteLetter/admin.quoteLetter.component';
 import { RuleOwnerComponent } from '../admin/ruleOwner/admin.RuleOwner.component';
 import { adminWorkflowStagesComponent } from '../admin/workflowStages/admin.workflowStages.component';
+import { adminWorkFlowComponent } from '../admin/workFlow/admin.workFlow.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -37,5 +38,6 @@ export let adminComponents =[
     admindataQualityComponent,
     QuoteLetterComponent,
     RuleOwnerComponent,
-    adminWorkflowStagesComponent
+    adminWorkflowStagesComponent,
+    adminWorkFlowComponent
 ]
