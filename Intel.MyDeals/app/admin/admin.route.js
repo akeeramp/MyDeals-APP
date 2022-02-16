@@ -424,6 +424,15 @@
                 }
             },
             {
+                state: 'admin.validateVistexR3Checks',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/validateVistexR3Checks/validateVistexR3Checks.html'
+                    , url: 'validateVistexR3Checks'
+                    , controller: 'ValidateVistexR3Checkscontroller as vm'
+                }
+            },
+            {
                 state: 'admin.CustomerVendors',
                 abstract: false,
                 config: {

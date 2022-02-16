@@ -543,15 +543,15 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
 
-                    int IDX_end_cust_obj = DB.GetReaderOrdinal(rdr, "end_cust_obj");
-                    int IDX_obj_sid = DB.GetReaderOrdinal(rdr, "obj_sid");
+                    int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+                    int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
 
                     while (rdr.Read())
                     {
                         ret.Add(new UCDRetry
                         {
-                            end_cust_obj = (IDX_end_cust_obj < 0 || rdr.IsDBNull(IDX_end_cust_obj)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_end_cust_obj),
-                            obj_sid = (IDX_obj_sid < 0 || rdr.IsDBNull(IDX_obj_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_obj_sid)
+                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
+                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID)
                         });
                     } // while
 
@@ -596,8 +596,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
                             DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ)
-
+                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_END_CUST_OBJ)
                         });
                     } // while
 

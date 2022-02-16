@@ -16,6 +16,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IVistexCustomerMappingDataLib, VistexCustomerMappingDataLib>();
             registerService.RegisterType<IDealMassUpdateDataLib, DealMassUpdateDataLib>();
             registerService.RegisterType<IPushDealstoVistexDataLib, PushDealstoVistexDataLib>();
+            registerService.RegisterType<IValidateVistexR3ChecksDataLib, ValidateVistexR3ChecksDataLib>();
             registerService.RegisterType<IVistexServiceDataLib, VistexServiceDataLib>();
             registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();

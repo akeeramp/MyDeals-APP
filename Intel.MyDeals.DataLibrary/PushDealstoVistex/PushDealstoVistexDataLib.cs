@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataAccessLib;

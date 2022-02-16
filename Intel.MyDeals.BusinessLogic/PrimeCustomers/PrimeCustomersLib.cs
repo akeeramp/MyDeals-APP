@@ -221,9 +221,9 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 foreach (UCDRetry data in response)
                 {
-                    if (data.end_cust_obj != "" && data.obj_sid != 0)
+                    if (data.END_CUST_OBJ != "" && data.OBJ_SID != 0)
                     {
-                        UnPrimeDealsLogs(data.obj_sid.ToString(), data.end_cust_obj, true);
+                        UnPrimeDealsLogs(data.OBJ_SID.ToString(), data.END_CUST_OBJ, true);
                         res = true;
                     }
                 }
@@ -505,13 +505,13 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         for (var j = 0; j < response.Count; j++)
                         {
-                            if (response[j].DEAL_ID != 0 && (response[j].END_CUST_OBJ != "" || response[j].END_CUST_OBJ != null))
+                            if (response[j].DEAL_ID != 0 && response[j].END_CUST_OBJ.ToString() != "")
                             {
-                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[j].END_CUST_OBJ);
+                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[j].END_CUST_OBJ.ToString());
                                 //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                 //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
                                 var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
-                                saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ, isUnificationMailRequired, response[j].CRE_EMP_WWID);
+                                saveDealEndCustomerAtrbs(response[j].DEAL_ID, response[j].END_CUST_OBJ.ToString(), isUnificationMailRequired, response[j].CRE_EMP_WWID);
                             }
 
                         }
@@ -573,13 +573,13 @@ namespace Intel.MyDeals.BusinessLogic
                                     {
                                         for (var count = 0; count < response.Count; count++)
                                         {
-                                            if (response[count].DEAL_ID != 0 && (response[count].END_CUST_OBJ != "" || response[count].END_CUST_OBJ != null))
+                                            if (response[count].DEAL_ID != 0 && response[count].END_CUST_OBJ.ToString() != "")
                                             {
                                                 //check whether the deal is already unified or not. if deal is already unified then no need to trigger unification mail after saving end customer attributes
                                                 //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
-                                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ);
+                                                List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ.ToString());
                                                 var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
-                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ, isUnificationMailRequired,response[count].CRE_EMP_WWID);
+                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ.ToString(), isUnificationMailRequired,response[count].CRE_EMP_WWID);
                                             }
                                         }
                                     }

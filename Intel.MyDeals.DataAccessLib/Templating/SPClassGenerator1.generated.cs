@@ -3494,6 +3494,28 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 985926734
+		/// Modified: 12/30/2021 1:40:07 AM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_END_CUSTOMER_UNIFY_VALIDATE_VT : SP {
+			public PR_MYDL_END_CUSTOMER_UNIFY_VALIDATE_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_END_CUSTOMER_UNIFY_VALIDATE_VT]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase Unify_input_data {
+				set { SetParmeter("Unify_input_data", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("Unify_input_data"); }
+			}
+		}
+
+		///<summary>
 		/// ID: 77399495
 		/// Modified: 10/8/2021 3:19:56 AM
 		/// Parameters: 2
@@ -3768,6 +3790,50 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public SqlTableValueParameterBase deal_sid_list {
 				set { SetParmeter("deal_sid_list", value); }
 				get { return (SqlTableValueParameterBase)GetParameter("deal_sid_list"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1001926791
+		/// Modified: 1/4/2022 9:27:10 AM
+		/// Parameters: 2
+		///</summary>
+		public partial class PR_MYDL_GEN_TRKR_NBR_TEST : SP {
+			public PR_MYDL_GEN_TRKR_NBR_TEST() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_GEN_TRKR_NBR_TEST]";
+			}
+
+			///<summary>
+			/// DataType: bit
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public Boolean debug {
+				set { SetParmeter("debug", value); }
+				get { return (Boolean)GetParameter("debug"); }
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase deal_sid_list {
+				set { SetParmeter("deal_sid_list", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("deal_sid_list"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1449928387
+		/// Modified: 1/18/2022 12:03:36 AM
+		/// Parameters: 0
+		///</summary>
+		public partial class PR_MYDL_GEN_TRKR_NBR_VT : SP {
+			public PR_MYDL_GEN_TRKR_NBR_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_GEN_TRKR_NBR_VT]";
 			}
 		}
 
@@ -5394,6 +5460,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 1033926905
+		/// Modified: 1/4/2022 10:49:16 PM
+		/// Parameters: 0
+		///</summary>
+		public partial class PR_MYDL_GET_PRIM_CUST_DTL_WW12 : SP {
+			public PR_MYDL_GET_PRIM_CUST_DTL_WW12() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_GET_PRIM_CUST_DTL_WW12]";
+			}
+		}
+
+		///<summary>
 		/// ID: 1230783592
 		/// Modified: 4/5/2021 4:08:26 AM
 		/// Parameters: 0
@@ -6216,8 +6294,372 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("in_cust_ctry", value); }
 				get { return (String)GetParameter("in_cust_ctry"); }
 			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
 		}
 		        
+		///<summary>
+		/// ID: 441924796
+		/// Modified: 12/6/2021 5:28:33 AM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_CHECK_DEC : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_CHECK_DEC() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_CHECK_DEC]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 345924454
+		/// Modified: 12/2/2021 9:51:35 PM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_OLD : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_OLD() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_OLD]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 361924511
+		/// Modified: 12/2/2021 10:35:44 PM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_PRE : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_PRE() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_PRE]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 217923998
+		/// Modified: 12/5/2021 10:05:30 PM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_SUD : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_SUD() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_SUD]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 137923713
+		/// Modified: 11/24/2021 10:30:36 PM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_testrpl : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_testrpl() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_testrpl]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1757405480
+		/// Modified: 11/24/2021 10:28:50 PM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_INS_UCD_LOG_PRIM_CUST_VT : SP {
+			public PR_MYDL_INS_UCD_LOG_PRIM_CUST_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UCD_LOG_PRIM_CUST_VT]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+		}
+
 		///<summary>
 		/// ID: 1261403713
 		/// Modified: 10/21/2021 5:03:28 AM
@@ -6281,6 +6723,101 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+			public String in_rqst_json {
+				set { SetParmeter("in_rqst_json", value); }
+				get { return (String)GetParameter("in_rqst_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+			public String in_acct_id {
+				set { SetParmeter("in_acct_id", value); }
+				get { return (String)GetParameter("in_acct_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 30, false)]
+			public String in_sts {
+				set { SetParmeter("in_sts", value); }
+				get { return (String)GetParameter("in_sts"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 425924739
+		/// Modified: 12/6/2021 1:40:37 AM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_check_dec : SP {
+			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_check_dec() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_check_dec]";
 			}
 
 			///<summary>
@@ -6434,6 +6971,386 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			/// Mode: IN
 			///</summary>
 			[SQLParameterAttribute(6, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 329924397
+		/// Modified: 12/2/2021 9:49:34 PM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_old : SP {
+			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_old() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_old]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+			public String in_rqst_json {
+				set { SetParmeter("in_rqst_json", value); }
+				get { return (String)GetParameter("in_rqst_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+			public String in_acct_id {
+				set { SetParmeter("in_acct_id", value); }
+				get { return (String)GetParameter("in_acct_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 30, false)]
+			public String in_sts {
+				set { SetParmeter("in_sts", value); }
+				get { return (String)GetParameter("in_sts"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 493400977
+		/// Modified: 2/8/2022 9:50:00 PM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_PRE : SP {
+			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_PRE() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_PRE]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+			public String in_rqst_json {
+				set { SetParmeter("in_rqst_json", value); }
+				get { return (String)GetParameter("in_rqst_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+			public String in_acct_id {
+				set { SetParmeter("in_acct_id", value); }
+				get { return (String)GetParameter("in_acct_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 30, false)]
+			public String in_sts {
+				set { SetParmeter("in_sts", value); }
+				get { return (String)GetParameter("in_sts"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 41923371
+		/// Modified: 12/5/2021 10:03:18 PM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_SUD : SP {
+			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_SUD() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_SUD]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+			public String in_rqst_json {
+				set { SetParmeter("in_rqst_json", value); }
+				get { return (String)GetParameter("in_rqst_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+			public String in_acct_id {
+				set { SetParmeter("in_acct_id", value); }
+				get { return (String)GetParameter("in_acct_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 30, false)]
+			public String in_sts {
+				set { SetParmeter("in_sts", value); }
+				get { return (String)GetParameter("in_sts"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 9923257
+		/// Modified: 11/23/2021 8:31:24 AM
+		/// Parameters: 8
+		///</summary>
+		public partial class PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_VT : SP {
+			public PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_INS_UPD_UCD_RSPN_RQST_LOG_VT]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", -1, false)]
+			public String in_rqst_json {
+				set { SetParmeter("in_rqst_json", value); }
+				get { return (String)GetParameter("in_rqst_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", -1, false)]
+			public String in_rspn_json {
+				set { SetParmeter("in_rspn_json", value); }
+				get { return (String)GetParameter("in_rspn_json"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", -1, false)]
+			public String in_acct_id {
+				set { SetParmeter("in_acct_id", value); }
+				get { return (String)GetParameter("in_acct_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(30)
+			/// Mode: IN
+			/// Max Length: 30
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 30, false)]
+			public String in_sts {
+				set { SetParmeter("in_sts", value); }
+				get { return (String)GetParameter("in_sts"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
 			public Int32 in_emp_wwid {
 				set { SetParmeter("in_emp_wwid", value); }
 				get { return (Int32)GetParameter("in_emp_wwid"); }
@@ -8709,6 +9626,61 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 1673929185
+		/// Modified: 2/6/2022 5:52:22 AM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_PRD_PCSR_EPM_MAP_DTL_SUD : SP {
+			public PR_MYDL_PRD_PCSR_EPM_MAP_DTL_SUD() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRD_PCSR_EPM_MAP_DTL_SUD]";
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public Int32 in_prd_epm_id {
+				set { SetParmeter("in_prd_epm_id", value); }
+				get { return (Int32)GetParameter("in_prd_epm_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(20)
+			/// Mode: IN
+			/// Max Length: 20
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 20, false)]
+			public String in_prd_type {
+				set { SetParmeter("in_prd_type", value); }
+				get { return (String)GetParameter("in_prd_type"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(20)
+			/// Mode: IN
+			/// Max Length: 20
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 20, false)]
+			public String in_deal_lelel {
+				set { SetParmeter("in_deal_lelel", value); }
+				get { return (String)GetParameter("in_deal_lelel"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_prd_nm {
+				set { SetParmeter("in_prd_nm", value); }
+				get { return (String)GetParameter("in_prd_nm"); }
+			}
+		}
+
+		///<summary>
 		/// ID: 1513160536
 		/// Modified: 2/13/2020 8:08:59 PM
 		/// Parameters: 1
@@ -8739,6 +9711,130 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public PR_MYDL_PRIM_CUST_MAIL() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_CUST_MAIL]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", -1, false)]
+			public String in_cust_id {
+				set { SetParmeter("in_cust_id", value); }
+				get { return (String)GetParameter("in_cust_id"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 521925081
+		/// Modified: 12/14/2021 12:49:25 PM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_PRIM_CUST_MAIL_jk : SP {
+			public PR_MYDL_PRIM_CUST_MAIL_jk() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_CUST_MAIL_jk]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", -1, false)]
+			public String in_cust_id {
+				set { SetParmeter("in_cust_id", value); }
+				get { return (String)GetParameter("in_cust_id"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+			public Int32 in_deal_id {
+				set { SetParmeter("in_deal_id", value); }
+				get { return (Int32)GetParameter("in_deal_id"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 537925138
+		/// Modified: 12/22/2021 2:16:52 AM
+		/// Parameters: 5
+		///</summary>
+		public partial class PR_MYDL_PRIM_CUST_MAIL_VT : SP {
+			public PR_MYDL_PRIM_CUST_MAIL_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_CUST_MAIL_VT]";
 			}
 
 			///<summary>
@@ -8835,6 +9931,48 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 473924910
+		/// Modified: 12/13/2021 12:27:00 AM
+		/// Parameters: 3
+		///</summary>
+		public partial class PR_MYDL_PRIM_CUST_NOTIF_old : SP {
+			public PR_MYDL_PRIM_CUST_NOTIF_old() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_CUST_NOTIF_old]";
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: varchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", -1, false)]
+			public String in_cust_id {
+				set { SetParmeter("in_cust_id", value); }
+				get { return (String)GetParameter("in_cust_id"); }
+			}
+		}
+
+		///<summary>
 		/// ID: 910782452
 		/// Modified: 2/6/2022 10:25:24 PM
 		/// Parameters: 2
@@ -8877,6 +10015,50 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public PR_MYDL_PRIM_VAL_MULTIPLE() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_VAL_MULTIPLE]";
+			}
+
+			///<summary>
+			/// DataType: nvarchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_json {
+				set { SetParmeter("in_json", value); }
+				get { return (String)GetParameter("in_json"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1076355049
+		/// Modified: 1/5/2022 3:17:33 AM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_PRIM_VAL_MULTIPLE_WW : SP {
+			public PR_MYDL_PRIM_VAL_MULTIPLE_WW() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_VAL_MULTIPLE_WW]";
+			}
+
+			///<summary>
+			/// DataType: nvarchar
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", -1, false)]
+			public String in_json {
+				set { SetParmeter("in_json", value); }
+				get { return (String)GetParameter("in_json"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1305927874
+		/// Modified: 2/6/2022 10:25:20 PM
+		/// Parameters: 1
+		///</summary>
+		public partial class PR_MYDL_PRIM_VAL_MULTIPLE_WW12 : SP {
+			public PR_MYDL_PRIM_VAL_MULTIPLE_WW12() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_PRIM_VAL_MULTIPLE_WW12]";
 			}
 
 			///<summary>
@@ -12826,6 +14008,117 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 1017926848
+		/// Modified: 1/6/2022 10:02:48 AM
+		/// Parameters: 3
+		///</summary>
+		public partial class PR_MYDL_TRKR_GEN_test : SP {
+			public PR_MYDL_TRKR_GEN_test() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_TRKR_GEN_test]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase deal_lst {
+				set { SetParmeter("deal_lst", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("deal_lst"); }
+			}
+
+			///<summary>
+			/// DataType: char(1)
+			/// Mode: IN
+			/// Max Length: 1
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 1, false)]
+			public String pmt_flg {
+				set { SetParmeter("pmt_flg", value); }
+				get { return (String)GetParameter("pmt_flg"); }
+			}
+
+			///<summary>
+			/// DataType: bit
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+			public Boolean debug {
+				set { SetParmeter("debug", value); }
+				get { return (Boolean)GetParameter("debug"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1433928330
+		/// Modified: 1/16/2022 11:44:32 PM
+		/// Parameters: 0
+		///</summary>
+		public partial class PR_MYDL_TRKR_GEN_VT : SP {
+			public PR_MYDL_TRKR_GEN_VT() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_TRKR_GEN_VT]";
+			}
+		}
+
+		///<summary>
+		/// ID: 377924568
+		/// Modified: 2/6/2022 10:25:16 PM
+		/// Parameters: 4
+		///</summary>
+		public partial class PR_MYDL_UCD_END_CUST_OBJ : SP {
+			public PR_MYDL_UCD_END_CUST_OBJ() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_UCD_END_CUST_OBJ]";
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+			public String in_cust_nm {
+				set { SetParmeter("in_cust_nm", value); }
+				get { return (String)GetParameter("in_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+			public String in_cust_ctry {
+				set { SetParmeter("in_cust_ctry", value); }
+				get { return (String)GetParameter("in_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_prim_cust_nm {
+				set { SetParmeter("in_prim_cust_nm", value); }
+				get { return (String)GetParameter("in_prim_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_prim_cust_ctry {
+				set { SetParmeter("in_prim_cust_ctry", value); }
+				get { return (String)GetParameter("in_prim_cust_ctry"); }
+			}
+		}
+
+		///<summary>
 		/// ID: 1581404853
 		/// Modified: 2/6/2022 10:25:12 PM
 		/// Parameters: 3
@@ -14558,13 +15851,13 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 
 			///<summary>
-			/// DataType: int
+			/// DataType: bigint
 			/// Mode: IN
 			///</summary>
 			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-			public Int32 in_prim_cust_id {
+			public Int64 in_prim_cust_id {
 				set { SetParmeter("in_prim_cust_id", value); }
-				get { return (Int32)GetParameter("in_prim_cust_id"); }
+				get { return (Int64)GetParameter("in_prim_cust_id"); }
 			}
 
 			///<summary>
@@ -14594,9 +15887,115 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			/// Mode: IN
 			///</summary>
 			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
-			public Int32 in_prim_lvl_id {
+			public Int64 in_prim_lvl_id {
 				set { SetParmeter("in_prim_lvl_id", value); }
-				get { return (Int32)GetParameter("in_prim_lvl_id"); }
+				get { return (Int64)GetParameter("in_prim_lvl_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(6, "ParameterDirection.Input", 100, false)]
+			public String in_prim_lvl_nm {
+				set { SetParmeter("in_prim_lvl_nm", value); }
+				get { return (String)GetParameter("in_prim_lvl_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(7, "ParameterDirection.Input", 100, false)]
+			public String in_rpl_sts_code {
+				set { SetParmeter("in_rpl_sts_code", value); }
+				get { return (String)GetParameter("in_rpl_sts_code"); }
+			}
+
+			///<summary>
+			/// DataType: bit
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+			public Boolean in_is_actv {
+				set { SetParmeter("in_is_actv", value); }
+				get { return (Boolean)GetParameter("in_is_actv"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(9, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid {
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1321927931
+		/// Modified: 1/5/2022 3:38:06 AM
+		/// Parameters: 9
+		///</summary>
+		public partial class PR_MYDL_UPD_PRIM_CUST_WW12 : SP {
+			public PR_MYDL_UPD_PRIM_CUST_WW12() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_UPD_PRIM_CUST_WW12]";
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public Int32 in_prim_sid {
+				set { SetParmeter("in_prim_sid", value); }
+				get { return (Int32)GetParameter("in_prim_sid"); }
+			}
+
+			///<summary>
+			/// DataType: bigint
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int64 in_prim_cust_id {
+				set { SetParmeter("in_prim_cust_id", value); }
+				get { return (Int64)GetParameter("in_prim_cust_id"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String in_prim_cust_nm {
+				set { SetParmeter("in_prim_cust_nm", value); }
+				get { return (String)GetParameter("in_prim_cust_nm"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(4, "ParameterDirection.Input", 100, false)]
+			public String in_prim_cust_ctry {
+				set { SetParmeter("in_prim_cust_ctry", value); }
+				get { return (String)GetParameter("in_prim_cust_ctry"); }
+			}
+
+			///<summary>
+			/// DataType: bigint
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(5, "ParameterDirection.Input", 0, false)]
+			public Int64 in_prim_lvl_id {
+				set { SetParmeter("in_prim_lvl_id", value); }
+				get { return (Int64)GetParameter("in_prim_lvl_id"); }
 			}
 
 			///<summary>
@@ -15246,6 +16645,18 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 		}
 
 		///<summary>
+		/// ID: 1609928957
+		/// Modified: 1/24/2022 12:08:51 AM
+		/// Parameters: 0
+		///</summary>
+		public partial class PR_PRD_TEST : SP {
+			public PR_PRD_TEST() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_PRD_TEST]";
+			}
+		}
+
+		///<summary>
 		/// ID: 1529772507
 		/// Modified: 7/13/2018 1:55:57 AM
 		/// Parameters: 1
@@ -15308,6 +16719,49 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public Boolean refresh_flg {
 				set { SetParmeter("refresh_flg", value); }
 				get { return (Boolean)GetParameter("refresh_flg"); }
+			}
+		}
+
+		///<summary>
+		/// ID: 1385928159
+		/// Modified: 1/7/2022 3:24:38 PM
+		/// Parameters: 3
+		///</summary>
+		public partial class PR_R3_CUT_OVER_VALIDATION : SP {
+			public PR_R3_CUT_OVER_VALIDATION() {
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_R3_CUT_OVER_VALIDATION]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase in_deal_list {
+				set { SetParmeter("in_deal_list", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("in_deal_list"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 action {
+				set { SetParmeter("action", value); }
+				get { return (Int32)GetParameter("action"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(100)
+			/// Mode: IN
+			/// Max Length: 100
+			///</summary>
+			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+			public String cust_nm {
+				set { SetParmeter("cust_nm", value); }
+				get { return (String)GetParameter("cust_nm"); }
 			}
 		}
 

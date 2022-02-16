@@ -90,6 +90,7 @@
     <Compile Include="Timeline\ITimelineDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
     <Compile Include="Funfact\IFunfactDataLib.cs" />
+    <Compile Include="ValidateVistexR3Checks\IValidateVistexR3ChecksLib.cs" />
     <Compile Include="VistexCustomerMapping\IVistexCustomerMappingDataLib.cs" />
     <Compile Include="VistexService\IVistexServiceDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />

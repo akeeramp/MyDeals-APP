@@ -30,5 +30,21 @@ namespace Intel.MyDeals.Entities
         public int ERR_FLAG { get; set; }
     }
 
-   
+    [DataContract]
+    public class PushValidateVistexR3Data
+    {
+        [DataMember]
+        public string DEAL_IDS { get; set; }
+
+        [DataMember]
+        public bool VSTX_CUST_FLAG { get; set; }
+
+        [DataMember]
+        public string CUST { get; set; }
+
+        [DataMember]
+        public int MODE { get; set; }
+
+    }
+
 }

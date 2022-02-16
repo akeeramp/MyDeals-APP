@@ -160,6 +160,7 @@
     <Compile Include="Timeline\TimelineDataLib.cs" />
     <Compile Include="UI Templates\UiTemplateDataLib.cs" />
     <Compile Include="Funfact\FunfactDataLib.cs" />
+    <Compile Include="ValidateVistexR3Checks\ValidateVistexR3ChecksLib.cs" />
     <Compile Include="VistexCustomerMapping\VistexCustomerMappingDataLib.cs" />
     <Compile Include="VistexService\VistexServiceDataLib.cs" />
     <Compile Include="WorkFlow\WorkFlowDataLib.cs" />

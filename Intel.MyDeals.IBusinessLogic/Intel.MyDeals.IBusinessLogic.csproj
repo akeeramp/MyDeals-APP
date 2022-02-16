@@ -106,6 +106,7 @@
     <Compile Include="OpLog\IOpLogLib.cs" />
     <Compile Include="UserPreferences\IUserPreferences.cs" />
     <Compile Include="Funfact\IFunfactLib.cs" />
+    <Compile Include="ValidateVistexR3Checks\IValidateVistexR3ChecksLib.cs" />
     <Compile Include="VistexCustomerMapping\IVistexCustomerMappingLib.cs" />
     <Compile Include="VistexService\IVistexServiceLib.cs" />
     <Compile Include="Workflow\IWorkFlowLib.cs" />
