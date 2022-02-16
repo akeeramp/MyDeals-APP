@@ -87,6 +87,7 @@
     <Compile Include="DataFix.cs" />
     <Compile Include="DcPath.cs" />
     <Compile Include="DcPathTitle.cs" />
+    <Compile Include="DealIdEcJsonDetails.cs" />
     <Compile Include="DealMassUpdate.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
