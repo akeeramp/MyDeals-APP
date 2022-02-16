@@ -241,6 +241,7 @@
     <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
     <Folder Include="Views\Timeline\" />
+    <Folder Include="Views\ValidateVistexR3Checks\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\ApiAuthorizeAttribute.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
+    <Compile Include="Controllers\API\ValidateVistexR3ChecksController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
@@ -461,6 +463,9 @@
     <Content Include="app\admin\funfact\admin.funfact.controller.js" />
     <Content Include="app\admin\funfact\funfact.html" />
     <Content Include="app\admin\funfact\funfact.service.js" />
+    <Content Include="app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.controller.js" />
+    <Content Include="app\admin\validateVistexR3Checks\validateVistexR3Checks.service.js" />
+    <Content Include="app\admin\validateVistexR3Checks\validateVistexR3Checks.html" />
     <Content Include="app\admin\vistexcustomermapping\admin.vistexcustomermapping.controller.js" />
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.html" />
     <Content Include="app\admin\vistexcustomermapping\vistexcustomermapping.service.js" />
