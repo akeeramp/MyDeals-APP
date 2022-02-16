@@ -435,11 +435,16 @@ namespace Intel.MyDeals.BusinessLogic
             string productData = "";
             #region Product Check and translation
 
+            if (productType == "" || productLevel == "")
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Please Provide all the Required Product details", "Please Provide all the Required Product details"));
+                return initWipId; // Bail out - Required product data is not provided to proceed further
+            }
             //if IQR deals created other than processor,SSD-family level,[PMem,Ethernet] products at Deal product name level and Server products at Processor level throw error.
             if (!((productType.ToLower() == "ssd" && productLevel.ToLower()=="family")|| ((productType.ToLower() == "ethernet"|| productType.ToLower() == "pmem") && productLevel.ToLower()== "dealproductname") || (productType.ToLower() == "server" && productLevel.ToLower() == "processor")))
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created at [" + productLevel + "] level for [" + productType + "].", "Deal cannot be created at the selected level for the selected product type"));
-                return initWipId; // Bail out - no products matched
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created at [" + productLevel + "] level for [" + productType + "] Product type.", "Deal cannot be created at the selected level for the selected Product type"));
+                return initWipId; // Bail out - Invalid Product level/ Product Type selected
             }
             else
             {
@@ -458,10 +463,10 @@ namespace Intel.MyDeals.BusinessLogic
             }
             // Use the MyTranslatedProduct function and expect null if no product is matched
             int epmId = int.TryParse(productEpmId, out epmId) ? epmId : 0;
-            //checking whether product type is server or not because to create new product types productData,productLevel,productType information is required where as processor level/server type products can be created without that info as well. 
-            if (productData=="" || productType==""|| productLevel=="")
+
+            if (productData == "")
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Please enter all the required product details", "Please enter all the required product details"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Please Provide all the Required Product details", "Please Provide all the Required Product details"));
                 return initWipId; // Bail out - Required product data is not provided to proceed further
             }
             ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId,productType, productLevel,productData);
@@ -1808,7 +1813,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             string productEpmId = jsonDataPacket.ProductNameEPMID; // For lookup
             int epmId = int.TryParse(productEpmId, out epmId) ? epmId : 0;
-            //To be checked
+            //PR_MYDL_PRD_PCSR_EPM_MAP_DTL proc modified to give the product details for new product types.As part of that SP change, To make sure nothing breaks and work as expected,Added these additional parameters("Server", null,null). 
             ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId, "Server", null,null);
 
             if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)
