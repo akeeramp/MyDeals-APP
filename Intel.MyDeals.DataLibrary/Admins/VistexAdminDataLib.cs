@@ -202,7 +202,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         //Only for internal testing
-        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage)
+        public Guid UpdateStatus(Guid batchId, VistexStage vistexStage, int? dealId, string strErrorMessage, int RQST_SID)
         {
             var myDict = new Dictionary<int, string>
             {
@@ -222,6 +222,7 @@ namespace Intel.MyDeals.DataLibrary
             var cmd = new Procs.dbo.PR_MYDL_STG_OUTB_BTCH_STS_CHG()
             {
                 in_btch_id = batchId,
+                rqst_id = RQST_SID,
                 in_dsa_rspn_log = opDealMessages
             };
             try
