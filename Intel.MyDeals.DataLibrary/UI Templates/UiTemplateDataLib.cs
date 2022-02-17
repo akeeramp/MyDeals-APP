@@ -405,7 +405,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 3464,
-                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY_REGION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country/Region </span>",
                 Width = 180,
@@ -415,7 +415,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY_REGION')#",
                 IsHidden = true
             });
 
@@ -1432,7 +1432,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 3464,
-                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY_REGION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country/Region </span>",
                 Width = 180,
@@ -1442,7 +1442,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY_REGION')#",
                 IsHidden = true,
                 IsReadOnly = true
             });
@@ -2577,7 +2577,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
                 Id = 3464,
-                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY,
+                AtrbCd = AttributeCodes.CONSUMPTION_COUNTRY_REGION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 HeaderTemplate = "<span title = 'This field applies to only Consumption based' > Consumption Country/Region </span>",
                 Width = 180,
@@ -2587,7 +2587,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetConsumptionCountryHierarchy/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_COUNTRY_REGION')#",
                 IsFilterable = true,
                 IsSortable = true,
             });

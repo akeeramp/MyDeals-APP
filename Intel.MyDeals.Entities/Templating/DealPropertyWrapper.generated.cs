@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/3/2022 2:55:02 PM
+File Updated: 2/17/2022 3:33:15 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -602,9 +602,9 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
-		public static MyDealsAttribute CONSUMPTION_COUNTRY = new MyDealsAttribute()
+		public static MyDealsAttribute CONSUMPTION_COUNTRY_REGION = new MyDealsAttribute()
 		{
-			ATRB_COL_NM = "CONSUMPTION_COUNTRY",
+			ATRB_COL_NM = "CONSUMPTION_COUNTRY_REGION",
 			ATRB_DESC = "Consumption Country/Region",
 			ATRB_LBL = "Consumption Country/Region",
 			ATRB_MAX_LEN = 100,

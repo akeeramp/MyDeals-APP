@@ -13,8 +13,8 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     var geo = "GEO_COMBINED";
     var mrktSeg = "MRKT_SEG";
     var corp = "CUST_ACCNT_DIV";
-    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY", "CONSUMPTION_SYS_CONFIG","DEAL_SOLD_TO_ID"];
-    var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO","DEAL_SOLD_TO_ID"];
+    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG","DEAL_SOLD_TO_ID"];
+    var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO","DEAL_SOLD_TO_ID"];
 
     $ctrl.multiSelectPopUpModal = items;
     $ctrl.popupResult = [];
@@ -68,8 +68,8 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
 
         // Turn returnVal into a string rather than an array to prevent Kendo UIs drag-to-copy spreadsheet errors
         if (Array.isArray(returnVal)) {
-            returnVal = ($ctrl.colName == "CONSUMPTION_COUNTRY") ? returnVal.join('|').toString() : returnVal.toString();
-            if ($ctrl.colName == "CONSUMPTION_COUNTRY") {
+            returnVal = ($ctrl.colName == "CONSUMPTION_COUNTRY_REGION") ? returnVal.join('|').toString() : returnVal.toString();
+            if ($ctrl.colName == "CONSUMPTION_COUNTRY_REGION") {
                 returnVal = mrktSegMultiSelectService.setConsumptionCtrySelect("MultiSelectSelections", returnVal);
             }
 
