@@ -106,18 +106,18 @@
             return false;
         }
 
-        vm.UpdateVistexStatus = function (strTransantionId, dealId) {
+        vm.UpdateVistexStatus = function (strTransantionId, dealId, rqstSid) {
             if (vm.EnteredMessage == '')
                 vm.EnteredMessage = null;
             vm.spinnerMessageDescription = "Please wait while updating the status..";
-            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage).then(function (response) {
+            dsaService.updateVistexStatus(strTransantionId, vm.SelectedStatus, dealId, vm.EnteredMessage, rqstSid).then(function (response) {
                 if (response.data == strTransantionId) {
                     angular.forEach(vm.Vistex.filter(x => x.BTCH_ID === response.data && x.DEAL_ID === dealId), function (dataItem) {
                         dataItem.RQST_STS = vm.SelectedStatus;
                         dataItem.ERR_MSG = vm.EnteredMessage == null ? '' : vm.EnteredMessage;
                     });                  
                     vm.vistexDataSource.read();                  
-                    logger.success("Status has been updated with the message!");
+                    logger.success("Status has been updated with the message. Please reload the page to see updated result!");
                 } else {
                     logger.error("Unable to update the status!");
                 }
@@ -240,7 +240,7 @@
                 refresh: true
             },
             save: function (e) {
-                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID);
+                vm.UpdateVistexStatus(e.model.BTCH_ID, e.model.DEAL_ID, e.model.RQST_SID);
             },
             edit: function (e) {
                 var commandCell = e.container.find("td:eq(1)");
@@ -251,7 +251,7 @@
                     command: [
                         {
                             name: "edit",
-                            template: "<a ng-if='dataItem.BTCH_ID != \"00000000-0000-0000-0000-000000000000\"' class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                            template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
                         }
                     ],
                     title: " ",

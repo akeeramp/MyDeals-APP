@@ -63,14 +63,14 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("UpdateVistexStatus/{strTransantionId}/{strVistexStage}/{dealId}")]
+        [Route("UpdateVistexStatus/{strTransantionId}/{strVistexStage}/{dealId}/{rqstSid}")]
         [HttpPost]
         [AntiForgeryValidate]
-        public Guid UpdateVistexStatus(string strTransantionId, string strVistexStage, int? dealId,[FromBody] string strErrorMessage)
+        public Guid UpdateVistexStatus(string strTransantionId, string strVistexStage, int? dealId, int rqstSid, [FromBody] string strErrorMessage)
         {
             Guid batchId = Guid.Parse(strTransantionId);
             VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), strVistexStage);
-            return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, dealId, strErrorMessage), $"Unable to update vistex status");
+            return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, dealId, strErrorMessage, rqstSid), $"Unable to update vistex status");
         }
 
         [Authorize]
