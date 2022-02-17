@@ -1,0 +1,41 @@
+<div *ngIf="show=='true'" class="ss-loading-overlay">
+    <div class="ss-loading-panel ss-{{msgType}}" *ngIf="show=='true'" style="text-align: center;">
+        <div *ngIf="msgType != 'Success' && msgType != 'Error'" class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <div class="ss-icon-lg" *ngIf="msgType == 'Success'">
+            <i class="intelicon-passed-completed-solid sky-blue"></i>
+        </div>
+        <div class="ss-icon-lg" *ngIf="msgType == 'Error'">
+            <i class="intelicon-alert-solid red"></i>
+        </div>
+
+        <h2>{{header}}</h2>
+        <p>{{description}} </p>
+
+
+        <div *ngIf="isShowFunFact && isFunFactEnabled" class="ss-funfact-container">
+            <p class="col-md-12 ss-funfact-title">
+                <i class="fa {{ funFactIcon }} ss-funfact-icon"></i> {{ funFactTitle }}
+            </p>
+            <div *ngIf="(currFunFact?.FontAwesomeIcon && currFunFact?.FontAwesomeIcon != '')" class="row">
+                <!--<div class="col-md-3 ss-funfact-icon">
+	                <i class="fa {{ funFactIcon }}"></i>
+	            </div>-->
+                <div class="col-md-12 ss-funfact-description" style="text-align: left; white-space: pre-line;">
+                    {{ funFactDesc }}
+                </div>
+            </div>
+            <div *ngIf="(currFunFact?.FontAwesomeIcon == undefined || currFunFact?.FontAwesomeIcon == '')" class="row">
+                <div class="col-md-12 ss-funfact-description" style="text-align: center; white-space: pre-line;">
+                    {{ funFactDesc }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

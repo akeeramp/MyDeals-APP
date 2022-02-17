@@ -2137,6 +2137,10 @@
     <TypeScriptCompile Include="Client\src\app\core\index.ts" />
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\trashcan\trashcan.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.service.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\core.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />

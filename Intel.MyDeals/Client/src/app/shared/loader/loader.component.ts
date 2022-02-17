@@ -30,7 +30,7 @@ export class LoaderComponent  {
     @Input() private isLoading: string;
     @Input() private message: string;
     @Input() private module: string;
-    @Input() private isInitializing: boolean;
+    @Input() private isInitializing: string;
     
  }
 angular

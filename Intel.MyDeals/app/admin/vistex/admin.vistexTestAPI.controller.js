@@ -16,6 +16,12 @@
         if (!window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
+        //for loading screen
+        vm.spinnerMessageHeader = "Test your API";
+        vm.spinnerMessageDescription = "Please wait while we are running your API..";
+        vm.isBusyShowFunFact = true;
+        vm.isLoading = false;
+
         vm.selectedApiID = 1;
         vm.apiList = [];
         vm.apiSelectedCD = "";
@@ -32,8 +38,7 @@
             "E": 'GetVistexDealOutBoundData',
             "F": 'GetVistexDealOutBoundData',
             "M": 'GetVistexDealOutBoundData',
-            "L": 'GetVistexDealOutBoundData',
-            "T": 'ExecuteSalesForceTenderData'
+            "L": 'GetVistexDealOutBoundData'
         };
         //Creating API
         vm.apiList.push({ API_ID: 1, API_NM: "Customer ", API_CD: "C" });
@@ -45,7 +50,6 @@
         vm.apiList.push({ API_ID: 7, API_NM: "Prod VerticalFailed", API_CD: "F" });
         vm.apiList.push({ API_ID: 7, API_NM: "Consumption Data", API_CD: "M" });
         vm.apiList.push({ API_ID: 8, API_NM: "Claim Data", API_CD: "L" });
-        vm.apiList.push({ API_ID: 9, API_NM: "Tender Deals", API_CD: "T" }); //TENDER_DEALS
 
         vm.apiDs = new kendo.data.DataSource({
             transport: {
@@ -75,7 +79,7 @@
             var selectedIndex = comboboxApi._prev;
             if (vm.apiSelectedCD == "") {
                 logger.warning('Please select an API to run Simulator...');
-            }            
+            }
             else {
                 vm.callAPI(vm.apiSelectedCD);
             }
@@ -92,16 +96,17 @@
                 vm.numberOfRecrods = 10;
             }
 
-        }  
+        }
 
         //
         vm.callAPI = function (mode) {
-            vm.spinnerMessageHeader = "Test your API";
-            vm.spinnerMessageDescription = "Please wait while we are running your API..";
-            vm.isBusyShowFunFact = true;
+            //for loading to load
+            vm.isLoading = true;
             var startTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
             dsaService.callAPI(vm.apiPair[vm.apiSelectedCD], vm.apiSelectedCD).then(function (response) {
-                if (vm.apiSelectedCD == "R" || vm.apiSelectedCD == "T") {
+                //set loading screen to false
+                vm.isLoading = false;
+                if (vm.apiSelectedCD == "R") {
                     if (response.status == 200) {
                         logger.success('Transaction was successful...');
                     } else {
@@ -117,6 +122,9 @@
                         logger.success('Transaction was successful...');
                     }
                 }
+            }).catch(function (ex) {
+                vm.isLoading = false;
+                logger.error('Transaction was failure...', ex);
             });
         }
     }
