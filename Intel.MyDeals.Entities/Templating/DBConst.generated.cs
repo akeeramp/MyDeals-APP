@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/3/2022 2:54:36 PM
+File Updated: 2/17/2022 3:49:58 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -360,7 +360,7 @@ namespace Intel.MyDeals.Entities {
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
-		public const string CONSUMPTION_COUNTRY = "CONSUMPTION_COUNTRY";
+		public const string CONSUMPTION_COUNTRY_REGION = "CONSUMPTION_COUNTRY_REGION";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -3103,6 +3103,7 @@ namespace Intel.MyDeals.Entities {
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string CNSMPTN_LD = "CNSMPTN_LD";
+		public const string CONTRACT_TYPE = "CONTRACT_TYPE";
 		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
 		public const string COST_TEST_PRD_MODE_2 = "COST_TEST_PRD_MODE_2";
 		public const string COST_TEST_ROLES = "COST_TEST_ROLES";

@@ -585,7 +585,7 @@ namespace Intel.MyDeals.BusinessRules
                 AttributeCodes.SYS_PRICE_POINT,
                 AttributeCodes.CONSUMPTION_CUST_PLATFORM,
                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                AttributeCodes.CONSUMPTION_COUNTRY,
+                AttributeCodes.CONSUMPTION_COUNTRY_REGION,
                 AttributeCodes.CONSUMPTION_SYS_CONFIG
             };
 
@@ -628,7 +628,7 @@ namespace Intel.MyDeals.BusinessRules
 
             IOpDataElement deConsLookback = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD);
             IOpDataElement deConsRptGeo = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
-            IOpDataElement deConsCountry = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY);
+            IOpDataElement deConsCountry = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION);
             IOpDataElement deConsReason = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_REASON);
             IOpDataElement deConsType = r.Dc.GetDataElement(AttributeCodes.CONSUMPTION_TYPE);
             IOpDataElement deIsDoubleCons = r.Dc.GetDataElement(AttributeCodes.IS_DOUBLE_CONSUMPTION);

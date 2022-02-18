@@ -361,7 +361,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -546,7 +546,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -743,7 +743,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -947,7 +947,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -1249,7 +1249,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -1434,7 +1434,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
@@ -1619,7 +1619,7 @@
                     "CONSUMPTION_CUST_RPT_GEO": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_COUNTRY": {
+                    "CONSUMPTION_COUNTRY_REGION": {
                         "Groups": ["Consumption"]
                     },
                     "SYS_PRICE_POINT": {
