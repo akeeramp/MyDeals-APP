@@ -1,0 +1,61 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div class="col-md-12 k-header-alignment">
+    <h2>Push Deals to Vistex</h2>
+    <p class="info">Use the tool below to push the existing deals to Vistex</p>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form [formGroup]="pushDealsToVistexForm">
+            <div class="form-group row">
+                <label for="DEAL_IDS" class="col-sm-3 col-form-label">Deal Id(s) :</label>
+                    <div class="col-sm-8">
+                    <kendo-textarea placeholder="Multiple deal IDs can be separated with comma."
+                                    formControlName="DEAL_IDS" id="DEAL_IDS"
+                                    name="DEAL_IDS"
+                                    pattern="^[0-9,\s]*$"
+                                    resizable="vertical" [rows]="5" [cols]="65"></kendo-textarea>
+                    </div>
+                    <kendo-formerror *ngIf="formData.DEAL_IDS.touched && formData.DEAL_IDS.errors?.required">
+                        Please enter valid Deal Ids
+                    </kendo-formerror>
+                    <kendo-formerror *ngIf="formData.DEAL_IDS.errors?.pattern">
+                        Please enter valid characters. Only numeric values separated with comma is allowed
+                    </kendo-formerror>
+                </div>
+                <div class="form-group row">
+                    <label for="VSTX_CUST_FLAG" class="col-sm-3 col-form-label">Vistex Customer Flag :</label>
+                    <div class="col-sm-8">
+                        <mat-slide-toggle id="VSTX_CUST_FLAG" name="VSTX_CUST_FLAG" [color]="color"
+                                          formControlName="VSTX_CUST_FLAG">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3">
+                    <button class="btn btn-primary" (click)="ValidateAndSendDeals()">
+                        Send Deals
+                    </button></div>
+                </div>
+</form>
+    </div>
+
+    <div class="col-md-6" *ngIf="showResults">
+        <div class="row">
+            <div class="results">
+                <label>Results:</label>
+                Deals Processed: {{UpdCnt.all}}, <i>Errors: {{UpdCnt.error}}</i>, Successful Updated: {{UpdCnt.success}}
+            </div>
+
+            <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" [sort]="state.sort" (dataStateChange)="dataStateChange($event)">
+                <kendo-grid-column title="Deal Id" field="DEAL_ID" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+                <kendo-grid-column title="Results" field="UPD_MSG" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+</div>
+
+

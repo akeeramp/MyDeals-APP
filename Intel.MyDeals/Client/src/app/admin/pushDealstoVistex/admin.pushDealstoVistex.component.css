@@ -1,0 +1,22 @@
+.form-group{
+    margin-bottom:25px !important;
+}
+kendo-grid {
+   height:440px;
+}
+kendo-formerror {
+    margin-left: 25%;
+}
+form{
+    margin-left:35px;
+}
+.results label {
+    text-decoration: underline;
+}
+.results i {
+    color: red;
+    font-weight: bold;
+}
+.info {
+    color: #FC4C02;
+}

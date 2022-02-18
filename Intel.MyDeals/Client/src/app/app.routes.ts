@@ -277,6 +277,15 @@ angular
                     }
                 }
             })
+            .state("pushDealstoVistex", {
+                url: "/pushDealstoVistex",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-push-dealsto-vistex></admin-push-dealsto-vistex>'
+                    }
+                }
+            })
 
             // Admin route  ends here 
 

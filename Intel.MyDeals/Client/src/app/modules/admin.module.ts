@@ -20,6 +20,7 @@ import { adminWorkflowStagesComponent } from '../admin/workflowStages/admin.work
 import { adminWorkFlowComponent } from '../admin/workFlow/admin.workFlow.component';
 import { dropdownsComponent } from '../admin/dropdowns/admin.dropdowns.component';
 import { adminConsumptionCountryComponent } from '../admin/consumptionCountry/admin.consumptionCountry.component';
+import { adminPushDealsToVistexComponent } from '../admin/pushDealstoVistex/admin.pushDealstoVistex.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -41,6 +42,8 @@ export let adminComponents =[
     QuoteLetterComponent,
     RuleOwnerComponent,
     adminWorkflowStagesComponent,
+    adminWorkFlowComponent,
+    adminPushDealsToVistexComponent,
     adminWorkFlowComponent,
     dropdownsComponent,
     adminConsumptionCountryComponent
