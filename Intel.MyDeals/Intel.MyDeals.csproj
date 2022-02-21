@@ -757,6 +757,7 @@
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
     <Content Include="Client\src\app\admin\dataQuality\admin.dataQuality.component.html" />
     <Content Include="Client\src\app\admin\dealTypes\admin.dealTypes.component.html" />
+    <Content Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.html" />
     <Content Include="Client\src\app\admin\funFact\admin.funFact.component.html" />
@@ -2098,6 +2099,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\dataQuality\admin.dataQuality.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dealTypes\admin.dealTypes.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dealTypes\admin.dealTypes.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\funFact\admin.funFact.component.ts" />

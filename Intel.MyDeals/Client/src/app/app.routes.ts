@@ -259,7 +259,15 @@ angular
                     }
                 }
             })
-
+            .state("dropdowns", {
+                url: "/dropdowns",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<dropdowns></dropdowns>'
+                    }
+                }
+            })
 
             // Admin route  ends here 
 

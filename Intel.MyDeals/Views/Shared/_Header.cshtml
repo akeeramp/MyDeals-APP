@@ -310,7 +310,8 @@
 
                     @if (isRealSA || isCustomerAdmin || isDeveloper) // All SA users allowed
                     {
-                        <li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>
+                        @*<li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>*@
+                        <li ui-sref-active="active"><a ui-sref="dropdowns">UI Dropdown Values</a></li>
                     }
 
                     @if (isRealSA || isDeveloper)
@@ -383,7 +384,7 @@
                             <a tabindex="-1">Approval Rules Management</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 <li><a href="Admin#/rules/">Price Rules</a></li>
-                              @*<li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>*@
+                                @*<li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="ruleOwner">Rules Ownership Admin</a></li>
                             </ul>
                         </li>

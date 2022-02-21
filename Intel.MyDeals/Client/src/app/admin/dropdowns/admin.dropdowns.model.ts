@@ -1,0 +1,15 @@
+export class ui_dropdown {
+    public ACTV_IND: boolean;
+    public ATRB_CD: string;
+    public ATRB_SID: number;
+    public CUST_NM: string;
+    public CUST_MBR_SID: number;
+    public DROP_DOWN: string;
+    public OBJ_SET_TYPE_SID: number;
+    public OBJ_SET_TYPE_CD: string;
+    public ATRB_LKUP_TTIP: string;
+    public ATRB_LKUP_DESC: string;
+    public ATRB_LKUP_SID: string;
+    public ORD: string;
+    public LK_UP_SID: number;
+}
