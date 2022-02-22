@@ -225,7 +225,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
                     $ctrl.validateFlag = false;
                     var i = 0;
                     angular.forEach($ctrl.END_CUST_OBJ, (item) => {
-                        var data = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_ID == item.PRIMED_CUST_ID && x.PRIMED_CUST_CNTRY == item.PRIMED_CUST_CNTRY);
+                        var data = $ctrl.END_CUST_OBJ.filter(x => x.PRIMED_CUST_ID != null && x.PRIMED_CUST_ID != "" && x.PRIMED_CUST_ID == item.PRIMED_CUST_ID && x.PRIMED_CUST_CNTRY == item.PRIMED_CUST_CNTRY);
                         if (data.length > 1) {
                             $ctrl.validateFlag = true;
                             $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
