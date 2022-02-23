@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    ConsumptionCountryController.$inject = ['consumptionCountryService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$uibModal'];
+    ConsumptionCountryController.$inject = ['consumptionCountryService', '$scope', 'logger', 'gridConstants', '$uibModal'];
 
-    function ConsumptionCountryController(consumptionCountryService, dropdownsService, $scope, logger, gridConstants, $uibModal) {
+    function ConsumptionCountryController(consumptionCountryService, $scope, logger, gridConstants, $uibModal) {
 
         $scope.accessAllowed = true;
         if (!(window.usrRole === 'SA' || window.isDeveloper || window.isCustomerAdmin)) {
@@ -23,7 +23,7 @@
         vm.ConsumptionCountry = [];
 
         vm.InitiateDropDowns = function () {
-            dropdownsService.getDropdown('GetGeosDropdowns').then(function (response) {
+            consumptionCountryService.getDropdown('GetGeosDropdowns').then(function (response) {
                 vm.Geo = response.data;
             }, function (response) {
                 logger.error("Unable to get Geo.", response, response.statusText);

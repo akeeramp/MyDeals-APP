@@ -5,9 +5,9 @@
         .controller('DataFixController', DataFixController)
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
-    DataFixController.$inject = ['$rootScope', '$scope', '$timeout','$linq', 'dataFixService', 'logger', 'gridConstants', 'dropdownsService'];
+    DataFixController.$inject = ['$rootScope', '$scope', '$timeout','$linq', 'dataFixService', 'logger', 'gridConstants'];
 
-    function DataFixController($rootScope, $scope, $timeout, $linq, dataFixService, logger, gridConstants, dropdownsService) {
+    function DataFixController($rootScope, $scope, $timeout, $linq, dataFixService, logger, gridConstants) {
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
             // Kick not valid users out of the page 
@@ -60,7 +60,7 @@
                 logger.error("Unable to get actions");
             });
 
-            dropdownsService.getOpDataElements().then(function (response) {                
+            dataFixService.getOpDataElements().then(function (response) {
                 vm.OpDataElements = response.data;
             }, function (response) {
                 logger.error("Unable to get op data elements.", response, response.statusText);

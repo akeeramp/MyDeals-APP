@@ -16,7 +16,8 @@
             getConsumptionCountry: getConsumptionCountry,
             updateConsumptionCountry: updateConsumptionCountry,
             insertConsumptionCountry: insertConsumptionCountry,
-            getCountryList: getCountryList
+            getCountryList: getCountryList,
+            getDropdown: getDropdown
 
         }
 
@@ -35,6 +36,10 @@
 
         function insertConsumptionCountry(dropdown) {
             return dataService.post(apiBaseUrl + 'InsertConsumptionCountry', dropdown);
+        }
+        function getDropdown(strDropDownType) {
+            var apiDropUrl = "api/Dropdown/";
+            return dataService.get(apiDropUrl + strDropDownType);
         }
 
     }

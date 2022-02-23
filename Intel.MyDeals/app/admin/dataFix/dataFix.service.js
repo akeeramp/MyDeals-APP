@@ -12,7 +12,9 @@
             getDataFixActions: getDataFixActions,
             updateDataFix: updateDataFix,
             getDataFixes: getDataFixes,
-            getMyCustomersNameInfo: getMyCustomersNameInfo
+            getMyCustomersNameInfo: getMyCustomersNameInfo,
+            getOpDataElements: getOpDataElements
+
         }
 
         return service;
@@ -33,5 +35,10 @@
             var apiCustBaseUrl = "api/Customers/";
             return dataService.get(apiCustBaseUrl + 'GetMyCustomersNameInfo');
         }
+        function getOpDataElements() {
+            var apiDropUrl = "api/Dropdown/";
+            return dataService.get(apiDropUrl + 'GetOpDataElements');
+        }
+
     }
 })();
