@@ -29,6 +29,9 @@ namespace Intel.MyDeals.Entities
         public int DEAL_ID { get; set; }
 
         [DataMember]
+        public string ATRB_DESC { get; set; }
+
+        [DataMember]
         public string UPD_MSG { get; set; }
 
         [DataMember]

@@ -33,6 +33,7 @@ namespace Intel.MyDeals.DataLibrary
                 }))
                 {
                     int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+                    int IDX_ATRB_DESC = DB.GetReaderOrdinal(rdr, "ATRB_DESC");
                     int IDX_UPD_MSG = DB.GetReaderOrdinal(rdr, "UPD_MSG");
                     int IDX_ERR_FLAG = DB.GetReaderOrdinal(rdr, "ERR_FLAG");
 
@@ -41,6 +42,7 @@ namespace Intel.MyDeals.DataLibrary
                         result.Add(new DealMassUpdateResults
                         {
                             DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                            ATRB_DESC = (IDX_UPD_MSG < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
                             UPD_MSG = (IDX_UPD_MSG < 0 || rdr.IsDBNull(IDX_UPD_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UPD_MSG),
                             ERR_FLAG = (IDX_ERR_FLAG < 0 || rdr.IsDBNull(IDX_ERR_FLAG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ERR_FLAG)
 

@@ -254,6 +254,7 @@
                     id: "DEAL_ID",
                     fields: {
                         DEAL_ID: { editable: false, nullable: false },
+                        ATRB_DESC: { editable: false, nullable: false },
                         UPD_MSG: { editable: false, nullable: false }
                     }
                 }
@@ -269,7 +270,13 @@
             columns: [
                 {
                     field: "DEAL_ID",
+                    width: "75px",
                     title: "Deal Id"
+                },
+                {
+                    field: "ATRB_DESC",
+                    width: "200px",
+                    title: "Field"
                 },
                 {
                     field: "UPD_MSG",
