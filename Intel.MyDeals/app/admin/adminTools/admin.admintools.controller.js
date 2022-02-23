@@ -8,6 +8,8 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
+    // Testing pull request approvals
+
     // logger :Injected logger service to for logging to remote database or throwing error on the ui
     // dataService :Application level service, to be used for common api calls, eg: user token, department etc
     AdminToolsController.$inject = ['adminTools', '$scope', 'logger'];
