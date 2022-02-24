@@ -22,7 +22,6 @@
         public string BRND_NM { get; set; }
         public string FMLY_NM { get; set; }
         public string HIER_NM_HASH { get; set; }
-        public int PRD_ATRB_SID { get; set; }
 
         /// <summary>
         /// Include or Exclude

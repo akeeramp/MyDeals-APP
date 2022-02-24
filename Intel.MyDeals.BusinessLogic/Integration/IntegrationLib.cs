@@ -237,8 +237,7 @@ namespace Intel.MyDeals.BusinessLogic
                         YCS2_START = row.YCS2_START.ToString("MM/dd/yyyy"),
                         EXCLUDE = false,
                         BRND_NM=row.BRND_NM,
-                        FMLY_NM=row.FMLY_NM,
-                        PRD_ATRB_SID=row.PRD_ATRB_SID
+                        FMLY_NM=row.FMLY_NM
                     }))
                     {
                         returnedProducts.Add(result[0].HIER_VAL_NM, new[] { newItem }); //result[0].HIER_NM_HASH
@@ -495,7 +494,7 @@ namespace Intel.MyDeals.BusinessLogic
             string singleMedia = singleProduct != null ? singleProduct.MM_MEDIA_CD.Contains(",") ? "All" : singleProduct.MM_MEDIA_CD: ""; //singleProduct?.MM_MEDIA_CD
             string myDealProduct = productLookupObj.MydlPdctName;//used to set the attribute TITLE(My deals product). In case of Family level selected products(i.e SSD products), In the WIP deal MY deals product field should be saved whatever received in the IQR Json Packet. To do that this variable is used
             //if product is selected at a family level then full product name should be saved ex: if SSD selected at family level- D4800X015T then product name should be saved as DCG DC SSD NA DCG DC SSD D4800X015T. To do that below check is added
-            productLookupObj.MydlPdctName = (productLevel.ToLower() == "family" && singleProduct.PRD_ATRB_SID <=7005)? (singleProduct.PRD_CAT_NM + " " + (singleProduct.BRND_NM == "NA" ? "" : singleProduct.BRND_NM) + " " + (singleProduct.FMLY_NM == "NA" ? "" : singleProduct.FMLY_NM)).Trim() : productLookupObj.MydlPdctName;
+            productLookupObj.MydlPdctName = (productLevel.ToLower() == "family")? (singleProduct.PRD_CAT_NM + " " + (singleProduct.BRND_NM == "NA" ? "" : singleProduct.BRND_NM) + " " + (singleProduct.FMLY_NM == "NA" ? "" : singleProduct.FMLY_NM)).Trim() : productLookupObj.MydlPdctName;
 
             #endregion Product Check
 
