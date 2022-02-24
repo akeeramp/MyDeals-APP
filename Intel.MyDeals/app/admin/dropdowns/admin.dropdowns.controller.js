@@ -11,6 +11,20 @@
 
     function DropdownsController(dropdownsService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
+
+        const KnownDropdownAttributes = ["AR_SETTLEMENT_LVL", "BACK_DATE_RSN", "CNTRCT_CUST_TYPE", "COMP_MISSING_FLG", "CONSUMPTION_COUNTRY_REGION",
+            "CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_REASON", "CONSUMPTION_SYS_CONFIG",
+            "CONSUMPTION_TYPE", "COST_TEST_RESULT", "CS_SHIP_AHEAD_END_DT", "CS_SHIP_AHEAD_STRT_DT", "CUST_ACCPT", "DEAL_COMB_TYPE",
+            "DIVISION_APPROVED_LIMIT", "EXCLUDE_AUTOMATION", "EXPIRE_YCS2", "FLEX_ROW_TYPE", "MEETCOMP_TEST_RESULT", "MRKT_SEG", "MRKT_SEG_NON_CORP",
+            "MRKT_SUB_SEGMENT", "NO_END_DT_RSN", "OVERLAP_RESULT", "PASSED_VALIDATION", "PAYOUT_BASED_ON", "PERIOD_PROFILE", "PROD_INCLDS",
+            "PROGRAM_PAYMENT", "REBATE_TYPE", "RESET_VOLS_ON_PERIOD", "SEND_TO_VISTEX", "SERVER_DEAL_TYPE"];
+
+        //Comsumption Fields List: CONSUMPTION_SYS_CONFIG, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT, CONSUMPTION_CUST_RPT_GEO, CONSUMPTION_COUNTRY_REGION
+        const ConsumptionAttributeSidsList = [3454, 3456, 3457, 3458, 3464];
+
+        // Restricted List: CONSUMPTION_SYS_CONFIG, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT, CONSUMPTION_CUST_RPT_GEO
+        const RestrictedGroupAttributesSidsList = [3456, 3457, 3458, 3454];
+        
         //Added By Bhuvaneswari for US932213
         if (!isCustomerAdmin && window.usrRole != 'SA' && !window.isDeveloper) {
             document.location.href = "/Dashboard#/portal";
@@ -23,13 +37,6 @@
         vm.nonCorpInheritableValues = [];
         vm.selectedInheritanceGroup = "";
         vm.selectedInheritanceCust = "";
-        vm.COMP_ATRB_SIDS = [];
-        //Added CONSUMPTION_CUST_RPT_GEO, CONSUMPTION_CUST_PLATFORM, CONSUMPTION_CUST_SEGMENT, CONSUMPTION_COUNTRY_REGION
-        vm.COMP_ATRB_SIDS.push(3456)
-        vm.COMP_ATRB_SIDS.push(3457)
-        vm.COMP_ATRB_SIDS.push(3458)
-        vm.COMP_ATRB_SIDS.push(3464)
-        vm.COMP_ATRB_SIDS.push(3454)
         vm.selectedATRB_SID = 0;
         vm.selectedOBJ_SET_TYPE_SID = 0;
         vm.selectedCUST_MBR_SID = 1;
@@ -41,7 +48,8 @@
                     dropdownsService.getBasicDropdowns(true)
                         .then(function (response) {
                             setNonCorpInheritableValues(response.data);
-                            response.data = response.data.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER" && ob.ATRB_CD !== "PRIMED_CUST_CNTRY");
+                            //response.data = response.data.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER" && ob.ATRB_CD !== "PRIMED_CUST_CNTRY");
+                            response.data = response.data.filter(ob => KnownDropdownAttributes.includes(ob.ATRB_CD) );
                             e.success(response.data.filter(checkRestrictions));
                         }, function (response) {
                             logger.error("Unable to get Dropdowns.", response, response.statusText);
@@ -90,7 +98,7 @@
                 create: function (e) {
                     var IS_MODEL_VALID = true;
                     if (e.data.models[0]) {
-                        if (vm.COMP_ATRB_SIDS.indexOf(e.data.models[0].ATRB_SID) > -1) {
+                        if (ConsumptionAttributeSidsList.indexOf(e.data.models[0].ATRB_SID) > -1) {
                             if (e.data.models[0].DROP_DOWN.length > 40) {
                                 logger.warning("Value can not be more than 40 characters long.");
                                 IS_MODEL_VALID = false;
@@ -164,14 +172,12 @@
 
         function checkRestrictions(dataItem) {
             var Id = (dataItem.dropdownID === undefined) ? dataItem.ATRB_SID : dataItem.dropdownID;
-            //var Id = dataItem.dropdownID ?
             var restrictToConsumptionOnly = (usrRole === 'SA' && !isDeveloper);
-            var restrictedGroupList = [3456, 3457, 3458,3454];
             if (restrictToConsumptionOnly === false) {
                 return true;
             }
             else {
-                return restrictedGroupList.includes(Id);
+                return RestrictedGroupAttributesSidsList.includes(Id);
             }
 
         }
@@ -191,7 +197,8 @@
         function getGroupsDataSource() {
             dropdownsService.getDropdownGroups(true)
                 .then(function (response) {
-                    response.data = response.data.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER" && ob.dropdownName !== "PRIMED_CUST_CNTRY");
+                    response.data = response.data.filter(ob => KnownDropdownAttributes.includes(ob.dropdownName));
+                    //response.data = response.data.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER" && ob.dropdownName !== "PRIMED_CUST_CNTRY");
                     vm.groupsDataSource = response.data.filter(checkRestrictions);
                         }, function (response) {
                             logger.error("Unable to get Dropdown Groups.", response, response.statusText);
