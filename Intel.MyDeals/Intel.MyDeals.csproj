@@ -753,6 +753,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.component.ts" />
     <Content Include="Client\src\app\admin\constants\admin.constants.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.service.ts" />
+    <Content Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.component.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
     <Content Include="Client\src\app\admin\dataQuality\admin.dataQuality.component.html" />
@@ -2090,6 +2091,9 @@
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.model.ts" />

@@ -19,6 +19,7 @@ import { RuleOwnerComponent } from '../admin/ruleOwner/admin.RuleOwner.component
 import { adminWorkflowStagesComponent } from '../admin/workflowStages/admin.workflowStages.component';
 import { adminWorkFlowComponent } from '../admin/workFlow/admin.workFlow.component';
 import { dropdownsComponent } from '../admin/dropdowns/admin.dropdowns.component';
+import { adminConsumptionCountryComponent } from '../admin/consumptionCountry/admin.consumptionCountry.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -41,5 +42,6 @@ export let adminComponents =[
     RuleOwnerComponent,
     adminWorkflowStagesComponent,
     adminWorkFlowComponent,
-    dropdownsComponent
+    dropdownsComponent,
+    adminConsumptionCountryComponent
 ]

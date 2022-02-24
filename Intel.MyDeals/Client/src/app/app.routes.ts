@@ -268,6 +268,15 @@ angular
                     }
                 }
             })
+            .state("consumptionCountry", {
+                url: "/consumptionCountry",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-consumption-country></admin-consumption-country>'
+                    }
+                }
+            })
 
             // Admin route  ends here 
 
