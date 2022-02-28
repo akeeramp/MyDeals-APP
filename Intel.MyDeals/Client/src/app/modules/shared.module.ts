@@ -6,6 +6,7 @@ import {DialogOverviewExampleDialog} from '../shared/modalPopUp/modal.component'
 import { CustomDateFilterComponent } from '../shared/kendo/customDateFilter.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import {LoadingSpinnerComponent} from '../shared/loadingSpinner/loadingspinner.component';
+import {nestedLoaderComponent} from '../shared/kendo_controls/kendonested.component';
 
 export let sharedComponents =[
     LoaderComponent,
@@ -16,4 +17,5 @@ export let sharedComponents =[
     CustomDateFilterComponent,
     FooterComponent,
     LoadingSpinnerComponent,
+    nestedLoaderComponent
 ]

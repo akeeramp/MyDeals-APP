@@ -226,4 +226,9 @@
             <h3>download pdf</h3>
             <button (click)="downloadClick()">download</button>
         </div>
+        <div class="col-md-4">
+            <h3>Nested Loop</h3>
+            <button (click)="checkElement()">CheckElem</button>
+            <nested-loader [items]="nestedArray" (getId)="getElem($event)"></nested-loader>
+        </div>
     </div>

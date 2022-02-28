@@ -1,0 +1,10 @@
+<div *ngFor="let item of items.groups;let ind=index" class="row" style="border: solid;">
+    <div class="col-sm">
+        <p>{{item.id}} </p>
+        <button (click)="onAdd(item.id,ind)">Add</button>
+        <button (click)="onRemove(item.id,ind)">Remove</button>
+        <div *ngIf="item.groups?.length>0" style="width:98%;margin: 1px;">
+            <nested-loader [items]="item" (getId)="getElem($event)"></nested-loader>
+        </div>
+    </div>
+</div>

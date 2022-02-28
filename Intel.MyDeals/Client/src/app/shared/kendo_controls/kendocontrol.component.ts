@@ -9,6 +9,7 @@ import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver';
 import {kendoControlService} from './kendocontrol.service';
+import * as _ from "underscore";
 
 interface Item {
   text: string;
@@ -99,7 +100,48 @@ export class KendoControlComponent {
     @ViewChild("toolTip1") public toolElm1:ElementRef;
     @ViewChild('txtTool1', {static: false}) mytooltip1: NgbTooltip;
     @ViewChild('txtTool2', {static: false}) mytooltip2: NgbTooltip;
+    //nested array
+    public nestedArray:any={
+      id:"start",
+      groups:[
+        {
+          id:"0",
+          groups:[{id:"0_0",groups:[]}]
+        },
+        {
+          id:"1",
+          groups:[{id:"1_0",groups:[{id:"1_0_0",groups:[]}]}]
+        }
+      ]
+      
+    };
+    public conditionArray=null;
+    checkElement(){
+      console.log('checkElement**************',this.conditionArray);
+    }
 
+    getElem(elem:any){
+     console.log('**************ID',elem);
+     if(elem.id && elem.id=='start'){
+      this.conditionArray=elem.item;
+     }
+     else{
+      let i=0;
+      this.updateGroup(this.conditionArray.groups,elem,i);
+     }
+    }
+
+     updateGroup(group:any,elem:any,i:any) {
+      let count=elem.id.split("_");
+      //identifying selectd group
+        if(group[parseInt(count[i])].id && group[parseInt(count[i])].id==elem.id){
+           group[parseInt(count[i])]=elem.item;
+        }
+        else{
+          this.updateGroup(group[parseInt(count[i])].groups,elem,i++)
+        }
+      
+    }
     toggleTooltip1(){
      this.tooltipDir.toggle(this.toolElm1);
     }
@@ -193,6 +235,7 @@ export class KendoControlComponent {
     }
     ngOnInit(){
       this.autoData =this.autoList.slice();
+      this.conditionArray=this.nestedArray;
     }
     ngOnDestroy(){
       //The style removed are adding back
