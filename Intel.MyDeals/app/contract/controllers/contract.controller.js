@@ -6288,33 +6288,34 @@
                 $scope.restrictGroupFlexOverlap = false;
                 //Clearing the behaviors for the first time if no error the result will be clean
                 $scope.clearValidation(data, "PTR_USER_PRD");
+
+                //Parent is different at PTE and DE level
+                var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+                //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+                var spreadData;
+                if ($scope.spreadDs != undefined) {
+                    spreadData = $scope.spreadDs.data();
+                }
+                else {
+                    spreadData = data
+                }
+
+                //For multi tiers last record will have latest date, skipping duplicate DC_ID
+                var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+                var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
+                var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+                var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
+                var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
+                if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length) { $scope.restrictGroupFlexOverlap = true; }
                 if ($scope.overlapFlexResult && $scope.overlapFlexResult.length && $scope.overlapFlexResult.length > 0) {
-                    //Parent is different at PTE and DE level
-                    var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-                    //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
-                    //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
-                    var spreadData;
-                    if ($scope.spreadDs != undefined) {
-                        spreadData = $scope.spreadDs.data();
-                    }
-                    else {
-                         spreadData = data
-                    }
-                    
-                    //For multi tiers last record will have latest date, skipping duplicate DC_ID
-                    var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
                     //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                     var finalResult = $scope.checkOVLPDate(filterData, $scope.overlapFlexResult, objectId);
                     if (mode) {
                         return finalResult;
                     }
-                    var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
-                    var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
-                    var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
-                    var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
-
-                    if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length) { $scope.restrictGroupFlexOverlap = true; }
-
                     angular.forEach(data, (item) => {
                         angular.forEach(finalResult, (itm) => {
                             //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
@@ -6772,7 +6773,7 @@
             if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
                 item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
             }
-            else if (cond == 'invalidDate' && elem == 'START_DT') {
+            else if (cond == 'invalidDate' && elem == 'START_DT' && !$scope.restrictGroupFlexOverlap) {
                 item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
             }
 
