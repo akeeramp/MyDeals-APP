@@ -5731,26 +5731,32 @@
                 }
             }
 
-            if (data.length > 0 && $scope.curPricingTable['OBJ_SET_TYPE_CD'] == "REV_TIER") {
-                if (data.length == $scope.pricingTableData.PRC_TBL_ROW.length) {
-                    if ($scope.pricingTableData.PRC_TBL_ROW != null && $scope.pricingTableData.PRC_TBL_ROW != undefined && $scope.pricingTableData.PRC_TBL_ROW != '') {
-                        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
-                            if ($scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
-                                var r = i + 1 - $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
-                                if (r >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
-                                    if (data[r] && data[r]['NUM_OF_TIERS'] > 1 && data[r]['AR_SETTLEMENT_LVL'] != data[i]['AR_SETTLEMENT_LVL']) {
-                                        data[i]['AR_SETTLEMENT_LVL'] = data[r]['AR_SETTLEMENT_LVL'];
-                                        $scope.pricingTableData.PRC_TBL_ROW[i]['AR_SETTLEMENT_LVL'] = data[r]['AR_SETTLEMENT_LVL'];
-                                    }
+            if (data.length > 0 && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] == "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY")) {
+
+                data = $scope.multitierDataFix(data);
+
+            }
+
+            return data;
+        }
+
+        $scope.multitierDataFix = function (data) {
+            if ($scope.pricingTableData.PRC_TBL_ROW != null && $scope.pricingTableData.PRC_TBL_ROW != undefined && $scope.pricingTableData.PRC_TBL_ROW != '') {
+                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] == "REV_TIER") {
+                    for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
+                        if ($scope.pricingTableData.PRC_TBL_ROW[i] && $scope.pricingTableData.PRC_TBL_ROW[i]['NUM_OF_TIERS'] == $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR']) {
+                            var r = i + 1 - $scope.pricingTableData.PRC_TBL_ROW[i]['TIER_NBR'];
+                            if (r >= 0 && $scope.pricingTableData.PRC_TBL_ROW[i]['DC_ID'] == $scope.pricingTableData.PRC_TBL_ROW[r]['DC_ID']) {
+                                if (data[r] && data[r]['NUM_OF_TIERS'] > 1 && data[r]['AR_SETTLEMENT_LVL'] != data[i]['AR_SETTLEMENT_LVL']) {
+                                    data[i]['AR_SETTLEMENT_LVL'] = data[r]['AR_SETTLEMENT_LVL'];
+                                    $scope.pricingTableData.PRC_TBL_ROW[i]['AR_SETTLEMENT_LVL'] = data[r]['AR_SETTLEMENT_LVL'];
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-                if ($scope.pricingTableData.PRC_TBL_ROW != null && $scope.pricingTableData.PRC_TBL_ROW != undefined && $scope.pricingTableData.PRC_TBL_ROW != '') {
+                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
                     for (var i = 0; i < data.length; i++) {
                         let NoDensity = Number(data[i]['NUM_OF_DENSITY']);
                         let TierNum = data[i]['TIER_NBR'];
