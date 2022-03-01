@@ -2775,6 +2775,7 @@ namespace Intel.MyDeals.BusinessRules
 
             bool primedCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_PRIMED_CUST) == "1" ? true : false; // Safe call returns empty if not set or found
             bool rplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "1" ? true : false;
+            bool CopyDealrplCheck = r.Dc.GetDataElementValue(AttributeCodes.IS_RPL) == "-1" && primedCheck ? true : false;
             var rplStatusCodeCheck = false;
             var isNoRplStatusAvailable = false;
             var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);
@@ -2804,13 +2805,17 @@ namespace Intel.MyDeals.BusinessRules
             bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
             string isCancelled = r.Dc.GetDataElementValue(AttributeCodes.IS_CANCELLED);
 
-            if ((!primedCheck || rplCheck || rplStatusCodeCheck || isNoRplStatusAvailable) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
+            if ((!primedCheck || rplCheck || CopyDealrplCheck || rplStatusCodeCheck || isNoRplStatusAvailable) && deEndCust.AtrbValue.ToString() != "" && !salesForceCheck && !isPnr && isCancelled != "1") // If not cancelled, not primed and End customer has a value
             {
                 if (Rebatetype == "TENDER" && dealStage == WorkFlowStages.Offer)
                 {
                     if (!primedCheck)
                     {
                         deEndCust.AddMessage("End Customers needs to be Unified before it can be WON.");
+                    }
+                    else if (CopyDealrplCheck)
+                    {
+                        deEndCust.AddMessage("Please re-run the RPL validation through End Customer/Retail popup.");
                     }
                     else if (rplCheck)
                     {
@@ -2832,6 +2837,10 @@ namespace Intel.MyDeals.BusinessRules
                         if (!primedCheck)
                         {
                             deEndCust.AddMessage("End Customers needs to be Unified before it can be approved.");
+                        }
+                        else if (CopyDealrplCheck)
+                        {
+                            deEndCust.AddMessage("Please re-run the RPL validation through End Customer/Retail popup.");
                         }
                         else if (rplCheck)
                         {

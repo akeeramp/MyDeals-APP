@@ -403,7 +403,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ptr.SetDataElementsValue(AttributeCodes.HAS_TRACKER, ""); // copied items can't have a tracker
                 ptr.SetDataElementsValue(AttributeCodes.IN_REDEAL, ""); // copied items can't be in redeal
                 ptr.SetDataElementsValue(AttributeCodes.IS_CANCELLED, ""); // copied items can't be already cancelled
-                ptr.SetDataElementsValue(AttributeCodes.IS_RPL, "1");  // For the end customer RPL Status to be re-validated
+                ptr.SetDataElementsValue(AttributeCodes.IS_RPL, "-1");  // For the end customer RPL Status to be re-validated
                 IOpDataElement checkForSFID = ptr.GetDataElement(AttributeCodes.SALESFORCE_ID);
                 if (checkForSFID != null) // Reset Salesforce IDs to blank if user attempts to copy one
                 {
