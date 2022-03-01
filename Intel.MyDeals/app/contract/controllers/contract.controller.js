@@ -2689,7 +2689,7 @@
 
                     }
            
-                    if (curPricingTableData[0].OBJ_SET_TYPE_CD != "DENSITY")
+                    if (curPricingTableData[0].OBJ_SET_TYPE_CD != "DENSITY" && curPricingTableData[0].OBJ_SET_TYPE_CD != "FLEX" && curPricingTableData[0].OBJ_SET_TYPE_CD != "VOL_TIER")
                         sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
                     else {
                         for (var index = 0; index < $scope.spreadDs.data().length; index++) {
