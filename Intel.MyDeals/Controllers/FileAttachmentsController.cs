@@ -161,6 +161,8 @@ namespace Intel.MyDeals.Controllers
                 lstUnifyDeals[i].UCD_COUNTRY_CUST_ID = dbPrimLvlId;
                 lstUnifyDeals[i].UCD_GLOBAL_NAME = lstUnifyDeals[i].UCD_GLOBAL_NAME != null ? lstUnifyDeals[i].UCD_GLOBAL_NAME.Trim() : string.Empty;
                 lstUnifyDeals[i].UCD_COUNTRY = lstUnifyDeals[i].UCD_COUNTRY != null ? lstUnifyDeals[i].UCD_COUNTRY.Trim() : string.Empty;
+                lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL = lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL.Trim() : string.Empty;
+                lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY = lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY.Trim() : string.Empty;
             }
             var result = ValidateUnifyDeals(lstUnifyDeals);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -182,20 +184,26 @@ namespace Intel.MyDeals.Controllers
             unifyDealValidation.InvalidDeals = new List<int>();
             unifyDealValidation.AlreadyUnifiedDeals = new List<int>();
             unifyDealValidation.InValidCombination = new List<UnifyInvalidCombination>();
-            unifyDealValidation.DuplicateDealCombination = lstUnifyDeals.GroupBy(x => new { x.DEAL_ID, x.UCD_GLOBAL_ID,x.UCD_GLOBAL_NAME,x.UCD_COUNTRY_CUST_ID,x.UCD_COUNTRY}).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
-            unifyDealValidation.DuplicateDealEntryCombination = lstUnifyDeals.GroupBy(x => new { x.DEAL_ID, x.DEAL_END_CUSTOMER_COUNTRY, x.DEAL_END_CUSTOMER_RETAIL }).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
-            var patt = @"^[\w\s.,'&:-]*$";
-            foreach (var unify in lstUnifyDeals)
+            var validRows = lstUnifyDeals.Where(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "").ToList();
+            unifyDealValidation.DuplicateDealCombination = validRows.GroupBy(x => new { x.DEAL_ID, x.UCD_GLOBAL_ID,x.UCD_GLOBAL_NAME,x.UCD_COUNTRY_CUST_ID,x.UCD_COUNTRY})
+                .Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
+            unifyDealValidation.DuplicateDealEntryCombination = validRows.Where(x => x.DEAL_END_CUSTOMER_RETAIL != "" && x.DEAL_END_CUSTOMER_COUNTRY != "").ToList().
+                GroupBy(x => new { x.DEAL_ID, x.DEAL_END_CUSTOMER_COUNTRY, x.DEAL_END_CUSTOMER_RETAIL }).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
+            var patt = @"^[\w\s.,'&:+-]*$";
+            var validUcdRow = lstUnifyDeals.Where(x => x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "").ToList();
+            foreach (var unify in validUcdRow)
             {
-                var globalid = lstUnifyDeals.Where(x => x.UCD_GLOBAL_ID == unify.UCD_GLOBAL_ID && x.UCD_GLOBAL_ID != 0).Select(y => y.UCD_GLOBAL_NAME).Distinct().ToList();
-                if (globalid.Count > 1)
+                var globalid = validUcdRow.Where(x => x.UCD_GLOBAL_ID == unify.UCD_GLOBAL_ID && x.UCD_GLOBAL_ID != 0)
+                        .Select(y => y.UCD_GLOBAL_NAME).Distinct().ToList();
+                if (globalid.Count > 1 && !unifyDealValidation.DuplicateGlobalIds.Contains(unify.UCD_GLOBAL_ID))
                 {
                     unifyDealValidation.DuplicateGlobalIds.Add(unify.UCD_GLOBAL_ID);
                 }
-                var globalName = lstUnifyDeals.Where(x => x.UCD_GLOBAL_NAME == unify.UCD_GLOBAL_NAME
-                && x.UCD_GLOBAL_NAME != null && x.UCD_GLOBAL_NAME != "" && x.UCD_GLOBAL_NAME.ToLower() != "any" && x.UCD_GLOBAL_NAME.ToLower() != "null")
-                    .Select(y => y.UCD_GLOBAL_ID).Distinct().ToList();
-                if (globalName.Count > 1)
+                
+                var globalName = validUcdRow.Where(x => x.UCD_GLOBAL_NAME == unify.UCD_GLOBAL_NAME
+                    && !string.IsNullOrEmpty(x.UCD_GLOBAL_NAME) && x.UCD_GLOBAL_NAME.ToLower() != "any" && x.UCD_GLOBAL_NAME.ToLower() != "null")
+                        .Select(y => y.UCD_GLOBAL_ID).Distinct().ToList();
+                if (globalName.Count > 1 && !unifyDealValidation.DuplicateGlobalNames.Contains(unify.UCD_GLOBAL_NAME))
                 {
                     unifyDealValidation.DuplicateGlobalNames.Add(unify.UCD_GLOBAL_NAME);
                 }
@@ -211,13 +219,21 @@ namespace Intel.MyDeals.Controllers
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
+                    else if(row.UCD_COUNTRY != "" && row.DEAL_END_CUSTOMER_COUNTRY != "" && row.UCD_COUNTRY.ToLower() != row.DEAL_END_CUSTOMER_COUNTRY.ToLower())
+                    {
+                        unifyDealValidation.InValidUnifyDeals.Add(row);
+                    }
                     else if (unifyDealValidation.DuplicateDealCombination.Count > 0
-                        && unifyDealValidation.DuplicateDealCombination.Contains(row.DEAL_ID))
+                        && unifyDealValidation.DuplicateDealCombination.Contains(row.DEAL_ID) &&
+                        lstUnifyDeals.Where(x => x.DEAL_ID == row.DEAL_ID && x.UCD_GLOBAL_ID == row.UCD_GLOBAL_ID && x.UCD_GLOBAL_NAME == row.UCD_GLOBAL_NAME
+                        && x.UCD_COUNTRY_CUST_ID == row.UCD_COUNTRY_CUST_ID && x.UCD_COUNTRY == row.UCD_COUNTRY).ToList().Count > 1)
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
                     else if (unifyDealValidation.DuplicateDealEntryCombination.Count > 0
-                        && unifyDealValidation.DuplicateDealEntryCombination.Contains(row.DEAL_ID))
+                        && unifyDealValidation.DuplicateDealEntryCombination.Contains(row.DEAL_ID)
+                        && lstUnifyDeals.Where(x  => x.DEAL_ID == row.DEAL_ID && x.DEAL_END_CUSTOMER_RETAIL == row.DEAL_END_CUSTOMER_RETAIL &&
+                        x.DEAL_END_CUSTOMER_COUNTRY == row.DEAL_END_CUSTOMER_COUNTRY).ToList().Count > 1)
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
@@ -241,6 +257,10 @@ namespace Intel.MyDeals.Controllers
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
                     else if (!Regex.IsMatch(row.UCD_GLOBAL_NAME, patt) || row.UCD_GLOBAL_NAME.Length > 65)
+                    {
+                        unifyDealValidation.InValidUnifyDeals.Add(row);
+                    }
+                    else if(row.UCD_GLOBAL_ID != 0 && row.UCD_COUNTRY_CUST_ID != 0 && row.UCD_GLOBAL_ID == row.UCD_COUNTRY_CUST_ID)
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }

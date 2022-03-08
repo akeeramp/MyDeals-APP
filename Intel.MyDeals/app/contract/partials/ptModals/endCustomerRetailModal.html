@@ -95,7 +95,7 @@
                                         k-auto-bind="{{$first?true:false}}"
                                         k-data-source="$ctrl.countries"
                                         class="fl opUiElement"
-                                        ng-disabled="$ctrl.IsAny && $index == 0? true:false"
+                                        ng-disabled="($ctrl.IsAny && $index == 0) || $ctrl.isAdmin? true:false"
                                         style="{{$ctrl.IsAny? 'width:250px;display:none;':'width:300px;display:none;'}}">
                                 </select>
                             </span>

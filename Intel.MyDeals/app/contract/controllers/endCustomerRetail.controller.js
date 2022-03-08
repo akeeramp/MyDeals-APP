@@ -19,6 +19,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
     $ctrl.spinnerMessageHeader = "Loading...";
     $ctrl.spinnerMessageDescription = "Loading the End Customer/Retail information.";
     $ctrl.isBusyShowFunFact = true;
+    $ctrl.isAdmin = isAdmin;
     var endCustomer = "END_CUSTOMER_RETAIL"
     var data = [];
     $ctrl.endCustomerRetailPopUpModal = items;
@@ -130,7 +131,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
             return [item.PRIMED_CUST_CNTRY].join(",");
         }
         //countryVal = ctryValues
-        var patt = new RegExp("^[\\w .,:'\&-]*$");
+        var patt = new RegExp("^[\\w .,:'\&+-]*$");
         var isExclude = 0;
         $ctrl.endCustomerValues = ecValues
         $ctrl.countryValues = ctryValues
@@ -411,7 +412,7 @@ function EndCustomerRetailCtrl($scope, $uibModalInstance, items, cellCurrValues,
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
         $ctrl.ChangeErrorFlag = false;
-        var patt = new RegExp("^[\\w .,:'\&-]*$");
+        var patt = new RegExp("^[\\w .,:'\&+-]*$");
         var isECUserText = false;
         //to get the user entered free text end customer value
         if (dataItem === undefined || dataItem === null) {
