@@ -107,7 +107,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         for (var i = 0; i < data.length; i++) {
                             if (data[i].COMMENTS != "Bulk Unified Deal(s)" && data[i].COMMENTS != "ECAP Hybrid Deal(s)" && data[i].COMMENTS != "Voltier Hybrid Deal(s)")
                                 msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
-                            else if (data[i].COMMENTS != "Bulk Unified Deal(s)") {
+                            else if (data[i].COMMENTS == "Bulk Unified Deal(s)") {
                                 msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
                             }
                         }
@@ -346,17 +346,15 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                     }
                     if (rowMsg != '') {
-                        //var height = Math.round(rowMsg.length / 36);
-                        rowMsg = rowMsg.slice(0, -1);
-                       // rowMsg = rowMsg.replaceAll('|', '\n* ')
-                        arr = rowMsg.split('|');
-                        height = arr.length + 1;
-                        index = 1;
-                        msg = "Please fix the below errors \n";
+                        var rowMsg = rowMsg.slice(0, -1);
+                        var arr = rowMsg.split('|');
+                        var height = arr.length + 1;
+                        var index = 1;
+                        var msg = "Please fix the below errors \n";
                         angular.forEach(arr, function (row) {
                             msg = msg + (index++) + ". " + row + "\n";
-                            if (Math.ceil((row.length) / 40) > 1)
-                                height = height + Math.ceil((row.length) / 40) -1;
+                            if (Math.ceil(row.length / 40) > 1)
+                                height = height + Math.ceil(row.length / 40) -1;
                         });
                         var rowht = height > 1 ? height * 15 : 30;
                         sheet.rowHeight(i, rowht);
@@ -461,7 +459,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             for (var i = 0; i < data.length; i++) {
                                 if (data[i].COMMENTS != "Bulk Unified Deal(s)" && data[i].COMMENTS != "ECAP Hybrid Deal(s)" && data[i].COMMENTS != "Voltier Hybrid Deal(s)")
                                     msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
-                                else if (data[i].COMMENTS != "Bulk Unified Deal(s)"){
+                                else if (data[i].COMMENTS == "Bulk Unified Deal(s)"){
                                     msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
                                 }
                             }
