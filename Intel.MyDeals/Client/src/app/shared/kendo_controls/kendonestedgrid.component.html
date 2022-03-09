@@ -1,0 +1,46 @@
+<div class="alert alert-info alert-group">
+    <form name="qb.form" novalidate>
+        <div class="form-inline">
+            <kendo-dropdownlist [(ngModel)]="group.operator" [data]="operators" [ngModelOptions]="{standalone: true}" class="form-control input-sm"
+                                style="width: 100px; height: auto"
+                                textField="name" valueField="name" [valuePrimitive]="true">
+            </kendo-dropdownlist>
+            <button style="margin-left: 5px" (click)="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
+            <button style="margin-left: 5px" (click)="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
+            <button style="margin-left: 5px" (click)="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
+        </div>
+        <div class="group-conditions">
+            <div *ngFor="let rule of group.rules; let indx = index" class="condition">
+                <div [ngSwitch]="rule.hasOwnProperty('group')">
+                    <div *ngSwitchCase="true">
+                        <nested-grid-directive [group]="rule.group" [parent]="group" [form]="form" [operators]="operators" [leftValues]="leftValues"></nested-grid-directive>
+                    </div>
+                    <div *ngSwitchDefault>
+                        <div class="form-inline">
+                            <div>
+                                <kendo-combobox [(ngModel)]="rule.criteria" [data]="leftValues" [ngModelOptions]="{standalone: true}" class="qb-field-core" title="Choose an attribute"
+                                                placeholder="Select an attribute"
+                                                [valuePrimitive]="true" [required]="true">
+                                </kendo-combobox>
+                                <kendo-dropdownlist [(ngModel)]="rule.condition" [data]="conditions" [ngModelOptions]="{standalone: true}" class="qb-field form-control input-sm"
+                                                    style="width: 100px; height: auto" textField="name" valueField="name" [valuePrimitive]="true">
+                                </kendo-dropdownlist>
+                                <span [ngSwitch]="rule.condition == 'LIKE'">
+                                    <span *ngSwitchCase="true">
+                                        <input name="value" type="text" [(ngModel)]="rule.data" [required]="true" placeholder="Enter the values" class="qb-field-core form-control input-sm" />
+                                    </span>
+                                    <span *ngSwitchDefault>
+                                        <kendo-combobox [(ngModel)]="rule.data" [required]="true" [data]="rightValues" [ngModelOptions]="{standalone: true}" class="qb-field-core"
+                                                        title="Choose a value" placeholder="Select a value" style="width: 200px; height: auto" textField="VALUE" valueField="VALUE" [valuePrimitive]="true">
+                                        </kendo-combobox>
+                                    </span>
+                                </span>
+                                <button (click)="removeCondition(indx)" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

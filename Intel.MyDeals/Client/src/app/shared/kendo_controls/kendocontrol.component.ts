@@ -14,7 +14,7 @@ import {DialogOverviewExampleDialog} from "../../shared/modalPopUp/modal.compone
 import {TooltipDirective} from "@progress/kendo-angular-tooltip";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {saveAs} from "file-saver";
-import {kendoControlService} from "./kendocontrol.service";
+import { kendoControlService } from "./kendocontrol.service";
 import * as _ from "underscore";
 
 interface Item {
@@ -23,30 +23,30 @@ interface Item {
 }
 
 @Component({
-  selector: "myKendoControl",
-  templateUrl:
-    "Client/src/app/shared/kendo_controls/kendocontrol.component.html",
-  styleUrls: ["Client/src/app/shared/kendo_controls/kendocontrol.style.css"],
+    selector: "myKendoControl",
+    templateUrl:
+        "Client/src/app/shared/kendo_controls/kendocontrol.component.html",
+    styleUrls: ["Client/src/app/shared/kendo_controls/kendocontrol.style.css"],
 })
 export class KendoControlComponent {
-  constructor(
-    protected dialog: MatDialog,
-    protected kendoSVC: kendoControlService
-  ) {
-    $(
-      'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-    ).remove();
-    $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-  }
-  private dateValue: Date;
-  public listItems: Array<any> = [
-    {text: "Small", value: 1},
-    {text: "Medium", value: 2},
-    {text: "Large", value: 3},
-    {text: "XLarge", value: 4},
-    {text: "XXLarge", value: 5},
-  ];
-  public editValue: string = `<p>
+    constructor(
+        protected dialog: MatDialog,
+        protected kendoSVC: kendoControlService
+    ) {
+        $(
+            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
+        ).remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
+    private dateValue: Date;
+    public listItems: Array<any> = [
+        { text: "Small", value: 1 },
+        { text: "Medium", value: 2 },
+        { text: "Large", value: 3 },
+        { text: "XLarge", value: 4 },
+        { text: "XXLarge", value: 5 },
+    ];
+    public editValue: string = `<p>
     The Kendo UI Angular Editor allows your users to edit HTML in a familiar, user-friendly way.<br />
     In this version, the Editor provides the core HTML editing engine which includes basic text formatting, hyperlinks, and lists.
     The widget <strong>outputs identical HTML</strong> across all major browsers, follows
@@ -60,98 +60,109 @@ export class KendoControlComponent {
         <li>Hyperlinks</li>
     </ul>
     </div>`;
-  public selectedItems: Item[] = [this.listItems[1]];
-  public selectedValue = 2;
-  public opened: boolean = false;
-  public autoList: Array<string> = [
-    "Abhilash",
-    "Arun",
-    "Arjun",
-    "Abhijith",
-    "Abhishek",
-  ];
-  public autoData: Array<string>;
-  public selAuto: string = "Abhilash";
-  public selNumeric: number = 5;
-  public isChecked: boolean = false;
-  public isCollapsed: boolean = false;
-  public obsObj: string = "Abhilash";
-  public objObserv: Observable<string>;
-  public gridData: any[] = [
-    {
-      ProductID: 1,
-      ProductName: "Chai",
-      UnitPrice: 18,
-      Category: {
-        CategoryID: 1,
-        CategoryName: "Beverages",
-      },
-    },
-    {
-      ProductID: 2,
-      ProductName: "Chang",
-      UnitPrice: 19,
-      Category: {
-        CategoryID: 1,
-        CategoryName: "Beverages",
-      },
-    },
-    {
-      ProductID: 3,
-      ProductName: "Aniseed Syrup",
-      UnitPrice: 10,
-      Category: {
-        CategoryID: 2,
-        CategoryName: "Condiments",
-      },
-    },
-  ];
-  public windowWidth: any = 600;
-  public windowHeight: any = 500;
-  public windowOpened: boolean = false;
-  public isTooltip: string = "none";
-  public minSlide: number = 1;
-  maxSlide: number = 4;
-  stepSlide: number = 1;
-  sliderValue: number = 2;
-  @ViewChild(TooltipDirective) public tooltipDir: TooltipDirective;
-  @ViewChild("toolTip1") public toolElm1: ElementRef;
-  @ViewChild("txtTool1", {static: false}) mytooltip1: NgbTooltip;
-  @ViewChild("txtTool2", {static: false}) mytooltip2: NgbTooltip;
-  //nested array
-  public nestedArray: any = {
-    id: "start",
-    groups: [
-      {
-        id: "0",
-        conditions: [{name: "And", operator: "+,>"}],
+    public selectedItems: Item[] = [this.listItems[1]];
+    public selectedValue = 2;
+    public opened: boolean = false;
+    public autoList: Array<string> = [
+        "Abhilash",
+        "Arun",
+        "Arjun",
+        "Abhijith",
+        "Abhishek",
+    ];
+    public autoData: Array<string>;
+    public selAuto: string = "Abhilash";
+    public selNumeric: number = 5;
+    public isChecked: boolean = false;
+    public isCollapsed: boolean = false;
+    public obsObj: string = "Abhilash";
+    public objObserv: Observable<string>;
+    public gridData: any[] = [
+        {
+            ProductID: 1,
+            ProductName: "Chai",
+            UnitPrice: 18,
+            Category: {
+                CategoryID: 1,
+                CategoryName: "Beverages",
+            },
+        },
+        {
+            ProductID: 2,
+            ProductName: "Chang",
+            UnitPrice: 19,
+            Category: {
+                CategoryID: 1,
+                CategoryName: "Beverages",
+            },
+        },
+        {
+            ProductID: 3,
+            ProductName: "Aniseed Syrup",
+            UnitPrice: 10,
+            Category: {
+                CategoryID: 2,
+                CategoryName: "Condiments",
+            },
+        },
+    ];
+    public windowWidth: any = 600;
+    public windowHeight: any = 500;
+    public windowOpened: boolean = false;
+    public isTooltip: string = "none";
+    public minSlide: number = 1;
+    maxSlide: number = 4;
+    stepSlide: number = 1;
+    sliderValue: number = 2;
+    @ViewChild(TooltipDirective) public tooltipDir: TooltipDirective;
+    @ViewChild("toolTip1") public toolElm1: ElementRef;
+    @ViewChild("txtTool1", { static: false }) mytooltip1: NgbTooltip;
+    @ViewChild("txtTool2", { static: false }) mytooltip2: NgbTooltip;
+    //nested array
+    public nestedArray: any = {
+        id: "start",
         groups: [
-          {id: "0_0", conditions: [{name: "And", operator: "+,>"}], groups: []},
+            {
+                id: "0",
+                conditions: [{ name: "And", operator: "+,>" }],
+                groups: [
+                    { id: "0_0", conditions: [{ name: "And", operator: "+,>" }], groups: [] },
+                ],
+            },
+            {
+                id: "1",
+                conditions: [{ name: "And", operator: "+,>" }],
+                groups: [
+                    {
+                        id: "1_0",
+                        conditions: [{ name: "And", operator: "+,>" }],
+                        groups: [
+                            {
+                                id: "1_0_0",
+                                conditions: [{ name: "And", operator: "+,>" }],
+                                groups: [],
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
-      },
-      {
-        id: "1",
-        conditions: [{name: "And", operator: "+,>"}],
-        groups: [
-          {
-            id: "1_0",
-            conditions: [{name: "And", operator: "+,>"}],
-            groups: [
-              {
-                id: "1_0_0",
-                conditions: [{name: "And", operator: "+,>"}],
-                groups: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+    };
+
+    public filter: any = { "group": { "operator": "AND", "rules": [] } };
+    public form: any = { 'isValid': false };
+    public operators: Array<any> = [{ name: 'AND' }, { name: 'OR' }];
+    public leftValues: Array<any> = [ 'Brand Name', 'External Name']
+    public initial: any = {};
+
   public conditionArray = null;
   checkElement() {
     console.log("checkElement**************", this.conditionArray);
-  }
+    }
+
+    checkData() {
+        console.log("Nested Grid Data: ", this.filter);
+    }
 
   getElem(elem: any) {
     console.log("**************ID", elem);

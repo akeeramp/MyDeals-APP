@@ -7,6 +7,7 @@ import { CustomDateFilterComponent } from '../shared/kendo/customDateFilter.comp
 import { FooterComponent } from '../shared/footer/footer.component';
 import {LoadingSpinnerComponent} from '../shared/loadingSpinner/loadingspinner.component';
 import {nestedLoaderComponent} from '../shared/kendo_controls/kendonested.component';
+import {nestedGridComponent} from '../shared/kendo_controls/kendonestedgrid.component';
 
 export let sharedComponents =[
     LoaderComponent,
@@ -17,5 +18,6 @@ export let sharedComponents =[
     CustomDateFilterComponent,
     FooterComponent,
     LoadingSpinnerComponent,
-    nestedLoaderComponent
+    nestedLoaderComponent,
+    nestedGridComponent
 ]

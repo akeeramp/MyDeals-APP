@@ -231,4 +231,8 @@
             <button (click)="checkElement()">CheckElem</button>
             <nested-loader [items]="nestedArray" (getId)="getElem($event)"></nested-loader>
         </div>
+        <div class="col-md-4">
+            <button (click)="checkData()">Check Final Data</button>
+            <nested-grid-directive [group]="filter.group" [parent]="initial" [form]="form" [operators]="operators" [leftValues]="leftValues"></nested-grid-directive>
+        </div>
     </div>
