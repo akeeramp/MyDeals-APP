@@ -1,9 +1,15 @@
 ﻿import { PingComponent } from '../core/ping/ping.component';
 import { TrashcanComponent } from '../core/trashcan/trashcan.component';
 import { LoadingPanelComponent } from '../core/loadingPanel/loadingpanel.component';
+import { notificationDockComponent } from '../core/notification/notificationDock.component';
+import { notificationsSettingsDialog } from '../core/notification/notificationsSettings.component';
+import { notificationsModalDialog } from '../core/notification/notificationsModal.component';
 
 export let coreComponents = [
     PingComponent,
     TrashcanComponent,
-    LoadingPanelComponent
+    LoadingPanelComponent,
+    notificationDockComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]

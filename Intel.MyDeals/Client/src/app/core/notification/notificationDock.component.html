@@ -1,0 +1,29 @@
+﻿﻿<div>
+    <div>
+        <div class="dropdown notificationDock">
+            <a id="dLabel" role="button" (click)="getNotification('SELECT')" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="">
+                <span class="badge badge-docking" *ngIf="unreadMessages > 0">{{unreadMessages}}</span>
+                <i class="intelicon-notification" style="font-size:20px"></i>
+            </a>
+            <ul class="dropdown-menu scaleTopAnim multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li class="notificationStyles">
+                    &nbsp;Notifications
+                    <span title="Settings" (click)="gotoNotificationSettings()" class="settingsStyles fr">
+                        <i class="intelicon-settings-solid"></i>
+                    </span>
+                </li>
+                <li (click)="openMessage(msg)" [ngClass]="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" *ngFor="let msg of notifications">
+                    {{msg.NOTIF_SHR_DSC}}
+                </li>
+                <li class="read" *ngIf="notifications?.length === 0">
+                    No messages
+                </li>
+                <li class="text-center seeAllNotificationsStyle" (click)="seeAllNotifications()">
+                    See All
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--<div style="position: absolute; top: 0; z-index: 1000; left: 0px;">
+    </div>-->
+</div>

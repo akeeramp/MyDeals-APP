@@ -787,6 +787,8 @@
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.css" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.html" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.js" />
+    <Content Include="Client\src\app\core\notification\notificationDock.component.css" />
+    <Content Include="Client\src\app\core\notification\notificationDock.component.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.js" />
     <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.html" />
@@ -2147,6 +2149,10 @@
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />
     <TypeScriptCompile Include="Client\src\app\core\core.shared.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\index.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\notification\notificationsModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\notification\notificationsSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\trashcan\trashcan.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.ts" />
