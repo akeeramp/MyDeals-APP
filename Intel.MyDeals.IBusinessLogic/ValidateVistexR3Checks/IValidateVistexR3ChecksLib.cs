@@ -6,6 +6,6 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IValidateVistexR3ChecksLib
     {
-        List<R3CutoverResponse> ValidateVistexR3Checks(PushValidateVistexR3Data data);
+        ValidateVistexR3Wrapper ValidateVistexR3Checks(PushValidateVistexR3Data data);
     }
 }

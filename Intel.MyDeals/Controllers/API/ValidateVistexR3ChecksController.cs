@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("VistexR3Checks")]
         [HttpPost]
-        public List<R3CutoverResponse> R3Checks(PushValidateVistexR3Data data)
+        public ValidateVistexR3Wrapper R3Checks(PushValidateVistexR3Data data)
         {
             return SafeExecutor(() => _validateVistexR3ChecksLib.ValidateVistexR3Checks(data), "Unable to Send Deals");
         }

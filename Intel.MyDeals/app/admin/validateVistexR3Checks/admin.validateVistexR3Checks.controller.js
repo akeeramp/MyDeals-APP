@@ -9,8 +9,6 @@
 
     ValidateVistexR3Checkscontroller.$inject = ['validateVistexR3ChecksService', '$scope', 'logger','gridConstants'];
 
-    var blah = 23;
-
     function ValidateVistexR3Checkscontroller(validateVistexR3ChecksService, $scope, logger, gridConstants) {
 
         $scope.accessAllowed = true;
@@ -22,6 +20,9 @@
 
         var vm = this;
         vm.Results = [];
+        vm.GoodToSendResults = [];
+        $scope.GoodToSendDealIds = "";
+
         vm.vistexApiNames = [];
         vm.vistexApiNames.Request_Type = "MODES";
         $scope.ValidateForVistexR3 = {};
@@ -107,15 +108,15 @@
                 $scope.DealstoSend._behaviors.validMsg["DEAL_IDS"] = "";
                 $scope.DealstoSend._behaviors.isError["DEAL_IDS"] = false;
             }
-            if ($scope.SelectedCustId.ATRB_SID == undefined) {
-                $scope.SelectedCustId._behaviors.validMsg["ATRB_SID"] = "Please enter valid Customer";
-                $scope.SelectedCustId._behaviors.isError["ATRB_SID"] = true;
-                isValidData = false;
-            }
-            else {
-                $scope.SelectedCustId._behaviors.validMsg["ATRB_SID"] = "";
-                $scope.SelectedCustId._behaviors.isError["ATRB_SID"] = false;
-            }
+            //if ($scope.SelectedCustId.ATRB_SID == undefined) {
+            //    $scope.SelectedCustId._behaviors.validMsg["ATRB_SID"] = "Please enter valid Customer";
+            //    $scope.SelectedCustId._behaviors.isError["ATRB_SID"] = true;
+            //    isValidData = false;
+            //}
+            //else {
+            //    $scope.SelectedCustId._behaviors.validMsg["ATRB_SID"] = "";
+            //    $scope.SelectedCustId._behaviors.isError["ATRB_SID"] = false;
+            //}
             if (vm.selectedApiID == undefined) {
                 isValidMode = false;
             }
@@ -125,11 +126,19 @@
                 data.DEAL_IDS = $scope.DealstoSend.DEAL_IDS;
                 data.VSTX_CUST_FLAG = $scope.VstxCustFlag;
                 data.MODE = vm.selectedApiID.OPT_ID;
-                data.CUST = $scope.SelectedCustId.ATRB_SID;
+                if ($scope.SelectedCustId.ATRB_SID == undefined) {
+                    data.CUST = null;
+                }
+                else {
+                    data.CUST = $scope.SelectedCustId.ATRB_SID;
+                }
 
 
                 validateVistexR3ChecksService.ValidateVistexR3Checks(data).then(function (response) {
-                    vm.Results = response.data;
+                    vm.Results = response.data.R3CutoverResponses;
+                    vm.GoodToSendResults = response.data.R3CutoverResponsePassedDeals;
+                    $scope.GoodToSendDealIds = _.pluck(vm.GoodToSendResults, 'Deal_Id').toString();
+
                     $scope.UpdCnt.sent = sentDeals;
                     $scope.UpdCnt.returned = vm.Results.length;
                     vm.dataSource.read();
@@ -152,36 +161,36 @@
         };
 
         function GetActiveColumns(runMode) {
-            var ShowColumns = ["Deal"];
+            var ShowColumns = ["Deal_Id"];
             if (runMode === 1) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Deal_Stage", "Deal_Type", "Pricing_Strategy_Stage", "COMMENTS" ]; //"LAST_TRACKER_NUMBER" is 2nd from last
             }
             if (runMode === 2) {
-                ShowColumns = ["Deal", "Deal_Stage", "Payout_Based_On", "Look_Back_Period_Months"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Look_Back_Period_Months", "Payout_Based_On", "AR_Settlement_Level", "COMMENTS" ]; 
             }
             if (runMode === 3) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "AR_Settlement_Level"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "COMMENTS" ];
             }
             if (runMode === 4) {
-                ShowColumns = ["Deal", "Deal_Stage", "End_Customer_Retailer", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "End_Customer_Retailer", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "COMMENTS" ];
             }
             if (runMode === 5) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "Reset_Per_Period"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Reset_Per_Period", "COMMENTS" ];
             }
             if (runMode === 6) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "Period_Profile"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Period_Profile", "COMMENTS" ];
             }
             if (runMode === 7) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "Send_To_Vistex"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "COMMENTS" ];
             }
             if (runMode === 8) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "Settlement_Partner"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "Settlement_Partner", "COMMENTS" ];
             }
             if (runMode === 9) {
-                ShowColumns = ["Deal", "Deal_Stage", "Deal_Type", "Rebate_Type", "Send_To_Vistex"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Send_To_Vistex", "COMMENTS" ];
             }
             else if (runMode === 10) {
-                ShowColumns = ["Host_Geo", "Customer_Name", "Customer_Division", "Vertical", "Deal", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Deal_Type", "Rebate_Type", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex"];
+                ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex", "COMMENTS" ];
             }
             //else {
             //    ShowColumns = ["Deal"];
@@ -229,50 +238,51 @@
                 pageSizes: gridConstants.pageSizes,
             },
             columns: [
-                { field: "Host_Geo", title: "Host Geo", width: "120px", filterable: { multi: true, search: true }, hidden: false },
-                { field: "Customer_Name", title: "Customer Name", width: "100px", filterable: { multi: true, search: true }, hidden: false },
-                { field: "Customer_Division", title: "Customer Division", width: "100px", filterable: { multi: true, search: true }, hidden: false },
+                { field: "Deal_Id", title: "Deal #", width: "100px", filterable: { multi: true, search: true } },
+                { field: "Customer_Name", title: "Customer Name", width: "150px", filterable: { multi: true, search: true }, hidden: false },
+                { field: "Geo", title: "Geo", width: "90px", filterable: { multi: true, search: true }, hidden: false },
+                { field: "Deal_Type", title: "Deal Type", width: "120px", filterable: { multi: true, search: true } },
+                { field: "Rebate_Type", title: "Rebate Type", width: "120px", filterable: { multi: true, search: true } },
+                { field: "Customer_Division", title: "Customer Division", width: "160px", filterable: { multi: true, search: true }, hidden: false },
                 { field: "Vertical", title: "Vertical", width: "100px", filterable: { multi: true, search: true }, hidden: false },
-                { field: "Deal", title: "Deal #", width: "80px", filterable: { multi: true, search: true } },
-                { field: "Deal_Stage", title: "Deal Stage", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Pricing_Strategy_Stage", title: "Pricing Strategy Stage", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Expire_Deal_Flag", title: "Expire Deal Flag", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Deal_Start_Date", title: "Deal Start Date", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Deal_End_Date", title: "Deal End Date", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Deal_Type", title: "Deal Type", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Rebate_Type", title: "Rebate Type", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Payout_Based_On", title: "Payout Based On", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Program_Payment", title: "Program Payment", width: "100px", filterable: { multi: true, search: true } },
+                { field: "Deal_Stage", title: "Deal Stage", width: "130px", filterable: { multi: true, search: true } },
+                { field: "Pricing_Strategy_Stage", title: "PS Stage", width: "120px", filterable: { multi: true, search: true } },
+                { field: "Expire_Deal_Flag", title: "Expire Deal Flag", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Deal_Start_Date", title: "Deal Start Date", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Deal_End_Date", title: "Deal End Date", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Payout_Based_On", title: "Payout Based On", width: "160px", filterable: { multi: true, search: true } },
+                { field: "Program_Payment", title: "Program Payment", width: "150px", filterable: { multi: true, search: true } },
                 { field: "Additive_Standalone", title: "Additive/Standalone", width: "100px", filterable: { multi: true, search: true } },
-                { field: "End_Customer_Retailer", title: "End Customer/Retailer", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Request_Date", title: "Request Date", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Requested_by", title: "Requested by", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Request_Quarter", title: "Request Quarter", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Division_Approved_Date", title: "Division Approved Date", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Division_Approver", title: "Division Approver", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Geo_Approver", title: "Geo Approver", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Market_Segment", title: "Market Segment", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Deal_Description", title: "Deal Description", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Ceiling_Limit_End_Volume_for_VT", title: "Ceiling Limit/End Volume (for VT)", width: "100px", filterable: { multi: true, search: true } },
+                { field: "End_Customer_Retailer", title: "End Customer/Retailer", width: "160px", filterable: { multi: true, search: true } },
+                { field: "Request_Date", title: "Request Date", width: "130px", filterable: { multi: true, search: true } },
+                { field: "Requested_by", title: "Requested by", width: "130px", filterable: { multi: true, search: true } },
+                { field: "Request_Quarter", title: "Request Quarter", width: "130px", filterable: { multi: true, search: true } },
+                { field: "Division_Approved_Date", title: "Division Approved Date", width: "170px", filterable: { multi: true, search: true } },
+                { field: "Division_Approver", title: "Division Approver", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Geo_Approver", title: "Geo Approver", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Market_Segment", title: "Market Segment", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Deal_Description", title: "Deal Description", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Ceiling_Limit_End_Volume_for_VT", title: "Ceiling Limit/End Volume (for VT)", width: "200px", filterable: { multi: true, search: true } },
                 { field: "Limit", title: "$ Limit", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Consumption_Reason", title: "Consumption Reason", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Consumption_Reason_Comment", title: "Consumption Reason Comment", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Period_Profile", title: "Period Profile", width: "100px", filterable: { multi: true, search: true } },
-                { field: "AR_Settlement_Level", title: "AR Settlement Level", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Look_Back_Period_Months", title: "Look Back Period (Months)", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Consumption_Customer_Platform", title: "Consumption Customer Platform", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Consumption_Customer_Segment", title: "Consumption Customer Segment", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Consumption_Customer_Reported_Geo", title: "Consumption Customer Reported Geo", width: "100px", filterable: { multi: true, search: true } },
-                { field: "End_Customer", title: "End Customer", width: "100px", filterable: { multi: true, search: true } },
-                { field: "End_Customer_Country", title: "End Customer Country", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Unified_Customer_ID", title: "Unified Customer ID", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Is_a_Unified_Cust", title: "Is a Unified Cust", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Project_Name", title: "Project Name", width: "100px", filterable: { multi: true, search: true } },
-                { field: "System_Price_Point", title: "System Price Point", width: "100px", filterable: { multi: true, search: true } },
-                { field: "System_Configuration", title: "System Configuration", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Settlement_Partner", title: "Settlement Partner", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Reset_Per_Period", title: "Reset Per Period", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Send_To_Vistex", title: "Send To Vistex", width: "100px", filterable: { multi: true, search: true } }
+                { field: "Consumption_Reason", title: "Consumption Reason", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Consumption_Reason_Comment", title: "Consumption Reason Comment", width: "170px", filterable: { multi: true, search: true } },
+                { field: "Period_Profile", title: "Period Profile", width: "150px", filterable: { multi: true, search: true } },
+                { field: "AR_Settlement_Level", title: "AR Settlement Level", width: "160px", filterable: { multi: true, search: true } },
+                { field: "Look_Back_Period_Months", title: "Look Back Period (Months)", width: "190px", filterable: { multi: true, search: true } },
+                { field: "Consumption_Customer_Platform", title: "Consumption Customer Platform", width: "200px", filterable: { multi: true, search: true } },
+                { field: "Consumption_Customer_Segment", title: "Consumption Customer Segment", width: "200px", filterable: { multi: true, search: true } },
+                { field: "Consumption_Customer_Reported_Geo", title: "Consumption Customer Reported Geo", width: "220px", filterable: { multi: true, search: true } },
+                { field: "End_Customer", title: "End Customer", width: "150px", filterable: { multi: true, search: true } },
+                { field: "End_Customer_Country", title: "End Customer Country", width: "180px", filterable: { multi: true, search: true } },
+                { field: "Unified_Customer_ID", title: "Unified Customer ID", width: "170px", filterable: { multi: true, search: true } },
+                { field: "Is_a_Unified_Cust", title: "Is a Unified Cust", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Project_Name", title: "Project Name", width: "150px", filterable: { multi: true, search: true } },
+                { field: "System_Price_Point", title: "System Price Point", width: "160px", filterable: { multi: true, search: true } },
+                { field: "System_Configuration", title: "System Configuration", width: "180px", filterable: { multi: true, search: true } },
+                { field: "Settlement_Partner", title: "Settlement Partner", width: "170px", filterable: { multi: true, search: true } },
+                { field: "Reset_Per_Period", title: "Reset Per Period", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } },
+                { field: "COMMENTS", title: "Comments", width: "500px", filterable: { multi: true, search: true } }
             ]
         };
 

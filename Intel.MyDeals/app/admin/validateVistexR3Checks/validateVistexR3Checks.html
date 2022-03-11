@@ -49,11 +49,13 @@
 
             <div class="col-md-8" style="margin-left:-15px;">
                 <button ng-click="ValidateForVistexR3()" class="btn btn-primary"> Run Validation </button>
+                <span style="margin-left:15px;margin-top:10px;" ng-if="ShowResults == true">
+                    <a style="text-decoration:underline"><b>Results:</b></a> Deals Sent: {{UpdCnt.sent}}, <i style="color:darkblue;">Returned: {{UpdCnt.returned}}</i>
+                </span>
             </div>
 
             <div class="col-md-8 row dateRangeLabel" style="margin-left:15px;margin-top:10px;" ng-if="ShowResults == true">
-                <a style="text-decoration:underline"><b>Results:</b></a>
-                Deals Sent: {{UpdCnt.sent}}, <i style="color:darkblue;">Returned: {{UpdCnt.returned}}</i>
+                Good to go: {{GoodToSendDealIds}}
             </div>
 
         </div>
@@ -66,6 +68,6 @@
         </div>
 
     </div>
-    <div style="height=20px;"></div>
+    <div style="height:20px;"></div>
 
 </div>

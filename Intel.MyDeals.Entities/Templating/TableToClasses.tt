@@ -553,7 +553,9 @@ using System.Collections.Generic;
 	//R3 Cutover Response
 	ds = dbobjects.ExecuteDataSet("DECLARE @OBJ_IDS [dbo].[type_int_list];INSERT INTO @OBJ_IDS(ITEM) VALUES (644008);exec [dbo].[PR_R3_CUT_OVER_VALIDATION] @in_deal_list = @OBJ_IDS, @action = 10, @cust_nm = 'Dell'");
 	ds.Tables[0].TableName = "R3CutoverResponse";
+	ds.Tables[1].TableName = "R3CutoverResponsePassedDeals";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

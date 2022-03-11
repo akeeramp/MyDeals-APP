@@ -1812,7 +1812,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem  // WIP KIT
             {
-                Id = 50,
+                Id = 3684,
                 AtrbCd = AttributeCodes.PRD_BCKT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -2267,7 +2267,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem   // We include this so that the subkit tab can filter against it, only appearing if any deals can have subkit or showing only the deals eligible for subkits
             {
                 Id = 3701,
-                AtrbCd = "HAS_SUBKIT",
+                AtrbCd = AttributeCodes.HAS_SUBKIT,
                 Label = "Has Subkit",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
@@ -2352,7 +2352,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem  // Fake atrb, placeholder for a block of items for display reasons only
             {
-                Id = 10009,
+                Id = 201,
                 AtrbCd = "YCS2_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT },

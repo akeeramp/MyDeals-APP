@@ -14,12 +14,12 @@ namespace Intel.MyDeals.BusinessLogic
             _validateVistexR3ChecksDataLib = validateVistexR3ChecksDataLib;
         }
 
-        public List<R3CutoverResponse> ValidateVistexR3Checks(PushValidateVistexR3Data data)
+        public ValidateVistexR3Wrapper ValidateVistexR3Checks(PushValidateVistexR3Data data)
         {
             List<int> dealIds = new List<int>(System.Array.ConvertAll(data.DEAL_IDS.Split(','), int.Parse));
             string custName = data.CUST;
             int action = data.MODE;
-            List<R3CutoverResponse> results = _validateVistexR3ChecksDataLib.ValidateVistexR3Check(dealIds, action, custName);
+            ValidateVistexR3Wrapper results = _validateVistexR3ChecksDataLib.ValidateVistexR3Check(dealIds, action, custName);
             return results;
         }
     }

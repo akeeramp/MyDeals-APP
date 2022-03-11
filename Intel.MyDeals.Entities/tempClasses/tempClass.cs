@@ -2364,4 +2364,17 @@ public partial class DealTemplateDataGram
         [DataMember]
         public List<ReportName> ReportName;
     }
+
+    public class ValidateVistexR3Wrapper
+    {
+        public ValidateVistexR3Wrapper(List<R3CutoverResponse> r3CutoverResponses, List<R3CutoverResponsePassedDeals> r3CutoverResponsePassedDeals)
+        {
+            R3CutoverResponses = r3CutoverResponses;
+            R3CutoverResponsePassedDeals = r3CutoverResponsePassedDeals;
+        }
+
+        public List<R3CutoverResponse> R3CutoverResponses { get; set; }
+        public List<R3CutoverResponsePassedDeals> R3CutoverResponsePassedDeals { get; set; }
+    }
+
 }

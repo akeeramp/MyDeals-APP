@@ -12,11 +12,12 @@ namespace Intel.MyDeals.DataLibrary
     public class ValidateVistexR3ChecksDataLib : IValidateVistexR3ChecksDataLib
     {
 
-        public List<R3CutoverResponse> ValidateVistexR3Check(List<int> dealIds, int action, string custName)
+        public ValidateVistexR3Wrapper ValidateVistexR3Check(List<int> dealIds, int action, string custName)
         {
-            var result = new List<R3CutoverResponse>();
-            //@in_deal_list = @OBJ_IDS, @action = 10, @cust_nm = 'Dell'
-            try
+			var CutoverResults = new List<R3CutoverResponse>();
+			var CutoverPassedDeals = new List<R3CutoverResponsePassedDeals>();
+			//@in_deal_list = @OBJ_IDS, @action = 10, @cust_nm = 'Dell'
+			try
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_R3_CUT_OVER_VALIDATION
                 {
@@ -25,11 +26,11 @@ namespace Intel.MyDeals.DataLibrary
                     cust_nm = custName
                 }))
                 {
-					var ret = new List<R3CutoverResponse>();
 					int IDX_Limit = DB.GetReaderOrdinal(rdr, "$ Limit");
 					int IDX_Additive_Standalone = DB.GetReaderOrdinal(rdr, "Additive/Standalone");
 					int IDX_AR_Settlement_Level = DB.GetReaderOrdinal(rdr, "AR Settlement Level");
 					int IDX_Ceiling_Limit_End_Volume_for_VT = DB.GetReaderOrdinal(rdr, "Ceiling Limit/End Volume (for VT)");
+					int IDX_COMMENTS = DB.GetReaderOrdinal(rdr, "COMMENTS");
 					int IDX_Consumption_Customer_Platform = DB.GetReaderOrdinal(rdr, "Consumption Customer Platform");
 					int IDX_Consumption_Customer_Reported_Geo = DB.GetReaderOrdinal(rdr, "Consumption Customer Reported Geo");
 					int IDX_Consumption_Customer_Segment = DB.GetReaderOrdinal(rdr, "Consumption Customer Segment");
@@ -37,9 +38,9 @@ namespace Intel.MyDeals.DataLibrary
 					int IDX_Consumption_Reason_Comment = DB.GetReaderOrdinal(rdr, "Consumption Reason Comment");
 					int IDX_Customer_Division = DB.GetReaderOrdinal(rdr, "Customer Division");
 					int IDX_Customer_Name = DB.GetReaderOrdinal(rdr, "Customer Name");
-					int IDX_Deal = DB.GetReaderOrdinal(rdr, "Deal #");
 					int IDX_Deal_Description = DB.GetReaderOrdinal(rdr, "Deal Description");
 					int IDX_Deal_End_Date = DB.GetReaderOrdinal(rdr, "Deal End Date");
+					int IDX_Deal_Id = DB.GetReaderOrdinal(rdr, "Deal Id");
 					int IDX_Deal_Stage = DB.GetReaderOrdinal(rdr, "Deal Stage");
 					int IDX_Deal_Start_Date = DB.GetReaderOrdinal(rdr, "Deal Start Date");
 					int IDX_Deal_Type = DB.GetReaderOrdinal(rdr, "Deal Type");
@@ -49,8 +50,8 @@ namespace Intel.MyDeals.DataLibrary
 					int IDX_End_Customer_Country = DB.GetReaderOrdinal(rdr, "End Customer Country");
 					int IDX_End_Customer_Retailer = DB.GetReaderOrdinal(rdr, "End Customer/Retailer");
 					int IDX_Expire_Deal_Flag = DB.GetReaderOrdinal(rdr, "Expire Deal Flag");
+					int IDX_Geo = DB.GetReaderOrdinal(rdr, "Geo");
 					int IDX_Geo_Approver = DB.GetReaderOrdinal(rdr, "Geo Approver");
-					int IDX_Host_Geo = DB.GetReaderOrdinal(rdr, "Host Geo");
 					int IDX_Is_a_Unified_Cust = DB.GetReaderOrdinal(rdr, "Is a Unified Cust");
 					int IDX_Look_Back_Period_Months = DB.GetReaderOrdinal(rdr, "Look Back Period (Months)");
 					int IDX_Market_Segment = DB.GetReaderOrdinal(rdr, "Market Segment");
@@ -72,13 +73,14 @@ namespace Intel.MyDeals.DataLibrary
 					int IDX_Vertical = DB.GetReaderOrdinal(rdr, "Vertical");
 
 					while (rdr.Read())
-                    {
-						result.Add(new R3CutoverResponse
+					{
+						CutoverResults.Add(new R3CutoverResponse
 						{
 							Limit = (IDX_Limit < 0 || rdr.IsDBNull(IDX_Limit)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Limit),
 							Additive_Standalone = (IDX_Additive_Standalone < 0 || rdr.IsDBNull(IDX_Additive_Standalone)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Additive_Standalone),
 							AR_Settlement_Level = (IDX_AR_Settlement_Level < 0 || rdr.IsDBNull(IDX_AR_Settlement_Level)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_AR_Settlement_Level),
 							Ceiling_Limit_End_Volume_for_VT = (IDX_Ceiling_Limit_End_Volume_for_VT < 0 || rdr.IsDBNull(IDX_Ceiling_Limit_End_Volume_for_VT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Ceiling_Limit_End_Volume_for_VT),
+							COMMENTS = (IDX_COMMENTS < 0 || rdr.IsDBNull(IDX_COMMENTS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMMENTS),
 							Consumption_Customer_Platform = (IDX_Consumption_Customer_Platform < 0 || rdr.IsDBNull(IDX_Consumption_Customer_Platform)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Consumption_Customer_Platform),
 							Consumption_Customer_Reported_Geo = (IDX_Consumption_Customer_Reported_Geo < 0 || rdr.IsDBNull(IDX_Consumption_Customer_Reported_Geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Consumption_Customer_Reported_Geo),
 							Consumption_Customer_Segment = (IDX_Consumption_Customer_Segment < 0 || rdr.IsDBNull(IDX_Consumption_Customer_Segment)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Consumption_Customer_Segment),
@@ -86,9 +88,9 @@ namespace Intel.MyDeals.DataLibrary
 							Consumption_Reason_Comment = (IDX_Consumption_Reason_Comment < 0 || rdr.IsDBNull(IDX_Consumption_Reason_Comment)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Consumption_Reason_Comment),
 							Customer_Division = (IDX_Customer_Division < 0 || rdr.IsDBNull(IDX_Customer_Division)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Customer_Division),
 							Customer_Name = (IDX_Customer_Name < 0 || rdr.IsDBNull(IDX_Customer_Name)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Customer_Name),
-							Deal = (IDX_Deal < 0 || rdr.IsDBNull(IDX_Deal)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Deal),
 							Deal_Description = (IDX_Deal_Description < 0 || rdr.IsDBNull(IDX_Deal_Description)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_Description),
 							Deal_End_Date = (IDX_Deal_End_Date < 0 || rdr.IsDBNull(IDX_Deal_End_Date)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_End_Date),
+							Deal_Id = (IDX_Deal_Id < 0 || rdr.IsDBNull(IDX_Deal_Id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Deal_Id),
 							Deal_Stage = (IDX_Deal_Stage < 0 || rdr.IsDBNull(IDX_Deal_Stage)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_Stage),
 							Deal_Start_Date = (IDX_Deal_Start_Date < 0 || rdr.IsDBNull(IDX_Deal_Start_Date)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_Start_Date),
 							Deal_Type = (IDX_Deal_Type < 0 || rdr.IsDBNull(IDX_Deal_Type)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Deal_Type),
@@ -98,8 +100,8 @@ namespace Intel.MyDeals.DataLibrary
 							End_Customer_Country = (IDX_End_Customer_Country < 0 || rdr.IsDBNull(IDX_End_Customer_Country)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_End_Customer_Country),
 							End_Customer_Retailer = (IDX_End_Customer_Retailer < 0 || rdr.IsDBNull(IDX_End_Customer_Retailer)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_End_Customer_Retailer),
 							Expire_Deal_Flag = (IDX_Expire_Deal_Flag < 0 || rdr.IsDBNull(IDX_Expire_Deal_Flag)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Expire_Deal_Flag),
+							Geo = (IDX_Geo < 0 || rdr.IsDBNull(IDX_Geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo),
 							Geo_Approver = (IDX_Geo_Approver < 0 || rdr.IsDBNull(IDX_Geo_Approver)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Geo_Approver),
-							Host_Geo = (IDX_Host_Geo < 0 || rdr.IsDBNull(IDX_Host_Geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Host_Geo),
 							Is_a_Unified_Cust = (IDX_Is_a_Unified_Cust < 0 || rdr.IsDBNull(IDX_Is_a_Unified_Cust)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Is_a_Unified_Cust),
 							Look_Back_Period_Months = (IDX_Look_Back_Period_Months < 0 || rdr.IsDBNull(IDX_Look_Back_Period_Months)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Look_Back_Period_Months),
 							Market_Segment = (IDX_Market_Segment < 0 || rdr.IsDBNull(IDX_Market_Segment)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Market_Segment),
@@ -120,16 +122,32 @@ namespace Intel.MyDeals.DataLibrary
 							Unified_Customer_ID = (IDX_Unified_Customer_ID < 0 || rdr.IsDBNull(IDX_Unified_Customer_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Unified_Customer_ID),
 							Vertical = (IDX_Vertical < 0 || rdr.IsDBNull(IDX_Vertical)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Vertical)
 						});
+					}
 
-                    }
-                }
+					rdr.NextResult();
+
+					//TABLE 2
+					int IDX_Customer_Name2 = DB.GetReaderOrdinal(rdr, "Customer Name");
+					int IDX_Deal_Id2 = DB.GetReaderOrdinal(rdr, "Deal Id");
+
+					while (rdr.Read())
+					{
+						CutoverPassedDeals.Add(new R3CutoverResponsePassedDeals
+						{
+							Customer_Name = (IDX_Customer_Name2 < 0 || rdr.IsDBNull(IDX_Customer_Name2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Customer_Name2),
+							Deal_Id = (IDX_Deal_Id2 < 0 || rdr.IsDBNull(IDX_Deal_Id2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_Deal_Id2)
+						});
+					} // while
+
+				}
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return result;
+
+			return new ValidateVistexR3Wrapper(CutoverResults, CutoverPassedDeals);
         }
 
     }
