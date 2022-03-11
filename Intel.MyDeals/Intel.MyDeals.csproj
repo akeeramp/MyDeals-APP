@@ -775,6 +775,7 @@
     <Content Include="Client\src\app\admin\ruleOwner\admin.ruleOwner.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />
+    <Content Include="Client\src\app\admin\vistex\admin.vistex.component.html" />
     <Content Include="Client\src\app\admin\workflowStages\admin.workflowStages.component.html" />
     <Content Include="Client\src\app\admin\workFlow\admin.workFlow.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.directive.js" />
@@ -2137,6 +2138,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistex.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistex.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\workflowStages\admin.workflowStages.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\workflowStages\admin.workflowStages.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\workflowStages\admin.workflowStages.service.ts" />

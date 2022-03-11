@@ -21,6 +21,7 @@ import { adminWorkFlowComponent } from '../admin/workFlow/admin.workFlow.compone
 import { dropdownsComponent } from '../admin/dropdowns/admin.dropdowns.component';
 import { adminConsumptionCountryComponent } from '../admin/consumptionCountry/admin.consumptionCountry.component';
 import { adminPushDealsToVistexComponent } from '../admin/pushDealstoVistex/admin.pushDealstoVistex.component';
+import { adminVistexComponent } from '../admin/vistex/admin.vistex.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -46,5 +47,6 @@ export let adminComponents =[
     adminPushDealsToVistexComponent,
     adminWorkFlowComponent,
     dropdownsComponent,
-    adminConsumptionCountryComponent
+    adminConsumptionCountryComponent,
+    adminVistexComponent
 ]

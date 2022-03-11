@@ -286,7 +286,15 @@ angular
                     }
                 }
             })
-
+            .state("vistexTestApi", {
+                url: "/vistexTestApi",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-vistex></admin-vistex>'
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });
