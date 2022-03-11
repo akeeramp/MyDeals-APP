@@ -193,51 +193,56 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             var isEmptyDealEndCustomerRetail = false;
             var isSameGlobalandCtryId = false;
             var isCtrySame = false;
+            var mandatory = [];
             sheet.batch(function () {
                 for (var i = 0; i < vm.inValidUnifyDeals.length; i++) {
                     row = i + 1;
                     var rowMsg = "";                    
+                    mandatory = [];
                     if (vm.UnifyValidation.IsEmptyDealAvailable) {
                         if (vm.inValidUnifyDeals[i].DEAL_ID == "0") {
-                            rowMsg = rowMsg + "Deal ID is a mandatory numeric field|";
+                            mandatory.push("Deal ID");
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCustIdAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_ID == "0") {
-                            rowMsg = rowMsg + "Unified Customer ID is a mandatory numeric field|";
+                            mandatory.push("Unified Customer ID");
                             sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCustNameAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME == null || vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME == "") {
-                            rowMsg = rowMsg + "Unified Customer Name needs to be entered|";
+                            mandatory.push("Unified Customer Name");
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCountryIdAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_COUNTRY_CUST_ID == "0") {
-                            rowMsg = rowMsg + "Country/Region Customer ID is a mandatory numeric field|";
+                            mandatory.push("Country/Region Customer ID");
                             sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
                     if (vm.UnifyValidation.IsEmptyCountryAvailable) {
                         if (vm.inValidUnifyDeals[i].UCD_COUNTRY == null || vm.inValidUnifyDeals[i].UCD_COUNTRY == "") {
-                            rowMsg = rowMsg + "Unified Country/Region needs to be entered|";
+                            mandatory.push("Unified Country/Region");
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
                     if (vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == undefined || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == null
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL == '') {
                         isEmptyDealEndCustomerRetail = true;
-                        rowMsg = rowMsg + "End Customer Retail needs to be entered|";
+                        mandatory.push("End Customer Retail");
                         sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', false));
                     }
                     if (vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == undefined || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == null
                         || vm.inValidUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY == '') {
                         isEmptyDealEndCustomerCountry = true;
-                        rowMsg = rowMsg + "End Customer Country/Region needs to be entered|";
+                        mandatory.push("End Customer Country/Region");
                         sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
+                    if (mandatory.length > 0) {
+                        rowMsg = rowMsg + mandatory.join(", ") + " is a mandatory field|";
                     }
                     var validRows = vm.inValidUnifyDeals.filter(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "");
                     
@@ -314,7 +319,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
 
                     if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
                         if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.AlreadyUnifiedDeals) != -1) {
-                            rowMsg = rowMsg + "Deal ID is already Unified|"
+                            rowMsg = rowMsg + "Deal is already Unified|"
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
@@ -330,8 +335,28 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                     }
 
                     if (vm.UnifyValidation.InvalidDeals.length > 0) {
-                        if (jQuery.inArray(vm.inValidUnifyDeals[i].DEAL_ID, vm.UnifyValidation.InvalidDeals) != -1) {
+                        if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "count mismatch").length > 0) {
                             rowMsg = rowMsg + "End Customer - Country/Region combination is not a user entered value in the Deal|"
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "not exist").length > 0) {
+                            rowMsg = rowMsg + "Deal ID does not exists in MyDeals|"
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "cancelled").length > 0) {
+                            rowMsg = rowMsg + "Deal is in Cancelled Stage and cannot be unified|"
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "lost").length > 0) {
+                            rowMsg = rowMsg + "Deal is in Lost Stage and cannot be unified|"
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "deal expired").length > 0) {
+                            rowMsg = rowMsg + "Deal is in Expired Stage and cannot be unified|"
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "end cust obj not exists").length > 0) {
+                            rowMsg = rowMsg + "Deal is not having all end customer related informtion|"
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
@@ -350,7 +375,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         var arr = rowMsg.split('|');
                         var height = arr.length + 1;
                         var index = 1;
-                        var msg = "Please fix the below errors \n";
+                        var msg = "";
                         angular.forEach(arr, function (row) {
                             msg = msg + (index++) + ". " + row + "\n";
                             if (Math.ceil(row.length / 40) > 1)
@@ -362,27 +387,31 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         sheet.range("H" + row).verticalAlign("top");
                     }
                 }
-            });            
+            });
+            mandatory = [];
             if (vm.UnifyValidation.IsEmptyDealAvailable) {
-                strAlertMessage += "<li>Deal ID is a mandatory numeric field.</li>";
+                mandatory.push("Deal ID");
             }
             if (vm.UnifyValidation.IsEmptyCustIdAvailable) {
-                strAlertMessage += "<li>Unified Customer is a mandatory numeric field.</li>"
+                mandatory.push("Unified Customer ID");
             }
             if (vm.UnifyValidation.IsEmptyCustNameAvailable) {
-                strAlertMessage += "<li>Unified Customer Name needs to be entered.</li>"
+                mandatory.push("Unified Customer Name");
             }
             if (vm.UnifyValidation.IsEmptyCountryIdAvailable) {
-                strAlertMessage += "<li>Country/Region Customer ID is a mandatory numeric field.</li>"
+                mandatory.push("Country/Region Customer ID");
             }
             if (vm.UnifyValidation.IsEmptyCountryAvailable) {
-                strAlertMessage += "<li>Unified Country/Region needs to be entered.</li>"
+                mandatory.push("Unified Country/Region");
             }
             if (isEmptyDealEndCustomerRetail) {
-                strAlertMessage += "<li>End Customer Retail needs to be entered.</li>";
+                mandatory.push("End Customer Retail");
             }
             if (isEmptyDealEndCustomerCountry) {
-                strAlertMessage += "<li>End Customer Country/Region needs to be entered.</li>";
+                mandatory.push("End Customer Country/Region");
+            }
+            if (mandatory.length > 0) {
+                strAlertMessage += "<li>" + mandatory.join(", ") + " is a mandatory field</li>"
             }
             if (vm.UnifyValidation.DuplicateDealEntryCombination.length > 0) {
                 strAlertMessage += "<li>Duplicate rows found with same combinations for Deal ID, End Customer Retail and End Customer Country/Region.</li>";
@@ -418,10 +447,27 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 strAlertMessage += "<li>Incorrect values of End Customer Retail and End Customer Country/Region associated with the Deal ID.</li>"
             }
             if (vm.UnifyValidation.InvalidDeals.length > 0) {
-                strAlertMessage += "<li>End Customer - Country/Region combination is not a user entered value in the Deal.</li>"
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "count mismatch").length > 0) {
+                    strAlertMessage += "<li>End Customer - Country/Region combination is not a user entered value in the Deal.</li>"
+                }
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "not exist").length > 0) {
+                    strAlertMessage += "<li>Deal ID does not exist in My Deals.</li>";
+                }
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "cancelled").length > 0) {
+                    strAlertMessage += "<li>Deal is in Cancelled Stage and cannot be unified.</li>";
+                }
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "lost").length > 0) {
+                    strAlertMessage += "<li>Deal is in Lost stage and cannot be unified.</li>";                    
+                }
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "deal expired").length > 0) {
+                    strAlertMessage += "<li>Deal is in Expired Stage and cannot be unified.</li>";
+                }
+                if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "end cust obj not exists").length > 0) {
+                    strAlertMessage += "<li>Deal is not having all end customer related informtion.</li>";
+                }
             }
             if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
-                strAlertMessage += "<li>Deal ID is already Unified.</li>"
+                strAlertMessage += "<li>Deal is already Unified.</li>"
             }
             if (vm.UnifyValidation.UnifiedCombination.length > 0) {
                 strAlertMessage += "<li>End Customer Retail and End Customer Country/Region combination have already been unified.</li>"
@@ -495,11 +541,11 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 var newUnifyDeals = {};
                 newUnifyDeals.DEAL_ID = tempRange[i][0] != null ? ($.isNumeric(tempRange[i][0]) && parseInt(tempRange[i][0]) > 0 ? tempRange[i][0] : 0) : 0;
                 newUnifyDeals.UCD_GLOBAL_ID = tempRange[i][1] != null ? ($.isNumeric(tempRange[i][1]) && parseInt(tempRange[i][1]) > 0 ? tempRange[i][1] : 0) : 0;
-                newUnifyDeals.UCD_GLOBAL_NAME = tempRange[i][2] != null ? jQuery.trim(tempRange[i][2]) : "";
+                newUnifyDeals.UCD_GLOBAL_NAME = tempRange[i][2] != null ? tempRange[i][2].trimEnd() : "";
                 newUnifyDeals.UCD_COUNTRY_CUST_ID = tempRange[i][3] != null ? ($.isNumeric(tempRange[i][3]) && parseInt(tempRange[i][3]) > 0 ? tempRange[i][3] : 0) : 0;
-                newUnifyDeals.UCD_COUNTRY = tempRange[i][4] != null ? jQuery.trim(tempRange[i][4]) : "";
-                newUnifyDeals.DEAL_END_CUSTOMER_RETAIL = tempRange[i][5] != null ? jQuery.trim(tempRange[i][5]) : "";
-                newUnifyDeals.DEAL_END_CUSTOMER_COUNTRY = tempRange[i][6] != null ? jQuery.trim(tempRange[i][6]) : "";
+                newUnifyDeals.UCD_COUNTRY = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
+                newUnifyDeals.DEAL_END_CUSTOMER_RETAIL = tempRange[i][5] != null ? tempRange[i][5].trimEnd() : "";
+                newUnifyDeals.DEAL_END_CUSTOMER_COUNTRY = tempRange[i][6] != null ? tempRange[i][6].trimEnd() : "";
                 vm.inValidUnifyDeals.push(newUnifyDeals);
             }
         }
@@ -534,6 +580,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
         if (vm.inValidUnifyDeals.length > 0) {
             $('.modal-dialog').css("width", "1410px");
             $('#spreadsheetUnifyDeals').css("width", "1378px");
+            $('#endCustomerUnifyModal').css("height","500px");
             //Header
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");

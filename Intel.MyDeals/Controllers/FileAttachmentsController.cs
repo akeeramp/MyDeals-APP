@@ -159,10 +159,10 @@ namespace Intel.MyDeals.Controllers
                 lstUnifyDeals[i].DEAL_ID = dbDealId;
                 lstUnifyDeals[i].UCD_GLOBAL_ID = dbPrimCustId;
                 lstUnifyDeals[i].UCD_COUNTRY_CUST_ID = dbPrimLvlId;
-                lstUnifyDeals[i].UCD_GLOBAL_NAME = lstUnifyDeals[i].UCD_GLOBAL_NAME != null ? lstUnifyDeals[i].UCD_GLOBAL_NAME.Trim() : string.Empty;
-                lstUnifyDeals[i].UCD_COUNTRY = lstUnifyDeals[i].UCD_COUNTRY != null ? lstUnifyDeals[i].UCD_COUNTRY.Trim() : string.Empty;
-                lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL = lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL.Trim() : string.Empty;
-                lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY = lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY.Trim() : string.Empty;
+                lstUnifyDeals[i].UCD_GLOBAL_NAME = lstUnifyDeals[i].UCD_GLOBAL_NAME != null ? lstUnifyDeals[i].UCD_GLOBAL_NAME.TrimEnd() : string.Empty;
+                lstUnifyDeals[i].UCD_COUNTRY = lstUnifyDeals[i].UCD_COUNTRY != null ? lstUnifyDeals[i].UCD_COUNTRY.TrimEnd() : string.Empty;
+                lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL = lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL.TrimEnd() : string.Empty;
+                lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY = lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY.TrimEnd() : string.Empty;
             }
             var result = ValidateUnifyDeals(lstUnifyDeals);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -181,7 +181,7 @@ namespace Intel.MyDeals.Controllers
             unifyDealValidation.InValidUnifyDeals = new List<UnifyDeal>();
             unifyDealValidation.ValidUnifyDeals = new List<UnifyDeal>();
             unifyDealValidation.UnifiedCombination = new List<UnifyInvalidCombination>();
-            unifyDealValidation.InvalidDeals = new List<int>();
+            unifyDealValidation.InvalidDeals = new List<KeyValuePair<int, string>>();
             unifyDealValidation.AlreadyUnifiedDeals = new List<int>();
             unifyDealValidation.InValidCombination = new List<UnifyInvalidCombination>();
             var validRows = lstUnifyDeals.Where(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "").ToList();
@@ -281,7 +281,25 @@ namespace Intel.MyDeals.Controllers
                         dealData.DEAL_ID = data.OBJ_SID;
                         dealData.DEAL_END_CUSTOMER_COUNTRY = data.END_CUSTOMER_COUNTRY;
                         dealData.DEAL_END_CUSTOMER_RETAIL = data.END_CUSTOMER_RETAIL;
-                        if (data.COMMENTS.Trim().ToLower() == "already unified")
+                        if(data.COMMENTS.Trim().ToLower() == "not exist" || data.COMMENTS.Trim().ToLower() == "cancelled" 
+                            || data.COMMENTS.Trim().ToLower() == "lost" || data.COMMENTS.Trim().ToLower() == "deal expired" 
+                            || data.COMMENTS.Trim().ToLower() == "end cust obj not exists")
+                        {
+                            if (!unifyDealValidation.InvalidDeals.Any(x => x.Key == dealData.DEAL_ID))
+                            {
+                                unifyDealValidation.InvalidDeals.Add(new KeyValuePair<int, string>(dealData.DEAL_ID, data.COMMENTS.Trim().ToLower()));
+                                var invalidDataList = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).ToList();
+                                foreach (var invalidData in invalidDataList)
+                                {
+                                    if (!unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                                    {
+                                        unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                        unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                                    }
+                                }
+                            }
+                        }
+                        else if (data.COMMENTS.Trim().ToLower() == "already unified")
                         {
                             if (string.IsNullOrEmpty(data.END_CUSTOMER_COUNTRY) && string.IsNullOrEmpty(data.END_CUSTOMER_RETAIL))
                             {
@@ -308,16 +326,19 @@ namespace Intel.MyDeals.Controllers
                         }
                         else if (data.COMMENTS.Trim().ToLower() == "count mismatch")
                         {
-                            unifyDealValidation.InvalidDeals.Add(dealData.DEAL_ID);
-                            var invalidDataList = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).ToList();
-                            foreach(var invalidData in invalidDataList)
+                            if (!unifyDealValidation.InvalidDeals.Any(x => x.Key == dealData.DEAL_ID))
                             {
-                                if (!unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                                unifyDealValidation.InvalidDeals.Add(new KeyValuePair<int, string>(dealData.DEAL_ID, data.COMMENTS.Trim().ToLower()));
+                                var invalidDataList = unifyDealValidation.ValidUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).ToList();
+                                foreach (var invalidData in invalidDataList)
                                 {
-                                    unifyDealValidation.InValidUnifyDeals.Add(invalidData);
-                                    unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                                    if (!unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                                    {
+                                        unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                        unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                                    }
                                 }
-                            }                                
+                            }
                         }
                         else if (data.COMMENTS.Trim().ToLower() == "end customer and country mismatch")
                         {

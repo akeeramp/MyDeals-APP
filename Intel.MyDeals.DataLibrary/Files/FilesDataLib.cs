@@ -315,10 +315,10 @@ namespace Intel.MyDeals.DataLibrary
                                 int dbDealId = 0;
                                 int dbPrimCustId = 0;
                                 int dbPrimLvlId = 0;
-                                string ucdGlobalName = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().Trim() : string.Empty;
-                                string ucdCtry = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().Trim() : string.Empty;
-                                string dealEcRetail = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().Trim() : string.Empty;
-                                string dealEcCtry = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().Trim() : string.Empty;
+                                string ucdGlobalName = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().TrimEnd() : string.Empty;
+                                string ucdCtry = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
+                                string dealEcRetail = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
+                                string dealEcCtry = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
 
                                 int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
                                 int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
