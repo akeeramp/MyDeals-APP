@@ -4,6 +4,7 @@ import { LoadingPanelComponent } from '../core/loadingPanel/loadingpanel.compone
 import { notificationDockComponent } from '../core/notification/notificationDock.component';
 import { notificationsSettingsDialog } from '../core/notification/notificationsSettings.component';
 import { notificationsModalDialog } from '../core/notification/notificationsModal.component';
+import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
 
 export let coreComponents = [
     PingComponent,
@@ -11,5 +12,6 @@ export let coreComponents = [
     LoadingPanelComponent,
     notificationDockComponent,
     notificationsSettingsDialog,
-    notificationsModalDialog
+    notificationsModalDialog,
+    iconMctPctComponent
 ]
