@@ -4,8 +4,8 @@ import {downgradeComponent} from "@angular/upgrade/static";
 import Handsontable from 'handsontable-pro'
 import {HotTableRegisterer} from "@handsontable/angular";
 import {MatDialog} from '@angular/material/dialog';
-import {custEditor} from '../modalPopUp/custEditor';
-import {DialogOverviewExampleDialog} from '../../shared/modalPopUp/modal.component';
+import {DialogOverviewExampleDialog} from '../modalPopUp/modal.component';
+
 
 @Component({
   selector: "myHandonse",
@@ -13,10 +13,65 @@ import {DialogOverviewExampleDialog} from '../../shared/modalPopUp/modal.compone
   styleUrls:['Client/src/app/shared/handsone/spreadsheet.style.css']
 })
 
+
 export class SpreadComponent {
   constructor(protected dialog: MatDialog) {
-    let cstEdt = new custEditor(dialog,this.id);
-    this.CustomEditor=cstEdt.CustomEditor;
+    // let cstEdt = new custEditor(dialog,this.id);
+    // this.CustomEditor=cstEdt.CustomEditor;
+
+    this.CustomEditor=class custSelectEditor extends Handsontable.editors.TextEditor {
+      public TEXTAREA:any;
+      public BUTTON:any;
+      public buttonStyle:any;
+      public TEXTAREA_PARENT:any;
+      public textareaStyle:any
+      public textareaParentStyle:any
+      public instance:any;
+      public selectOptions:any;
+      private hotRegisterer = new HotTableRegisterer();
+      private id:string = "hotInstance";
+      constructor(props){
+          super(props);
+      }
+      createElements(){
+          super.createElements();
+          console.log('createElements*********************');
+          this.TEXTAREA.style.float = 'left'; 
+          this.createProductCellButton();
+          this.TEXTAREA_PARENT.appendChild(this.BUTTON);
+      }
+      createProductCellButton() {
+        this.BUTTON = document.createElement('button');
+        this.BUTTON.setAttribute('style', `position: absolute; float: right; margin-left: 0%; height: ` + 25 + `px; font-size: 0.8em;`);  // Float Right and Position Absolute allow the button to be next to the Cell
+        this.buttonStyle = this.BUTTON.style;
+        this.BUTTON.className = 'btn btn-sm btn-primary py-0';
+        this.BUTTON.innerText = '🔍';
+        this.BUTTON.addEventListener('mousedown', (event) => {
+          event.preventDefault();
+          this.openPopUp();
+          
+        });
+      }
+      openPopUp(value?:string){
+        let hotTable:any=this.hotRegisterer.getInstance(this.id);
+        if(hotTable.selCol && hotTable.selCol==2){
+          let selVal= this.hotRegisterer.getInstance(this.id).getDataAtCell(hotTable.selRow,hotTable.selCol);;
+          const dialogRef = dialog.open(DialogOverviewExampleDialog, {
+            width: '500px',
+            data: {name: "User", animal:selVal },
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            if(result){
+              console.log('The dialog was closed:: result::',result);
+              hotTable.setDataAtCell(hotTable.selRow,hotTable.selCol,result?.animal);
+              hotTable.selectCell(hotTable.selRow,hotTable.selCol);
+            }
+          });
+        }
+      }
+  
+     }
   }
 
   private hotRegisterer = new HotTableRegisterer();
@@ -26,44 +81,20 @@ export class SpreadComponent {
   private hot:any;
   private hotSettings: Handsontable.GridSettings;
   private hotSettings_1: Handsontable.GridSettings;
-  private selectedName:string;
   private CustomEditor:any 
   private custEditorVal:any;
 
-  private TEXTAREA:any;
-  private TEXTAREA_PARENT:any;
+  private TEXTAREA:HTMLTextAreaElement;
+  private TEXTAREA_PARENT:HTMLTextAreaElement;
   private button:any;
   private custTD:any;
   private textareaStyle:any
   private selRow:number=0;
   private selCol:number=0;
-
-  openPopUp(){
-    let hotTable:any=this.hotRegisterer.getInstance(this.id);
-    if(hotTable.selCol && hotTable.selCol==2){
-      let selVal= this.hotRegisterer.getInstance(this.id).getDataAtCell(hotTable.selRow,hotTable.selCol)
-      const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-        width: '500px',
-        data: {name: "User", animal:selVal },
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed:: result::',result);
-        this.hotRegisterer.getInstance(this.id).setDataAtCell(hotTable.selRow,hotTable.selCol,result?.animal);
-      });
-    }
-  
-  
-  }
+  private selValue:string="";
 
   afterCellChange(changes:any,source:any){
     console.log("on cell change**************",changes,'%%%%%%%%%%%%%%%%%%%%%%%%',source);
-  }
-  onSelectName(){
-   this.hotRegisterer.getInstance(this.id).setDataAtCell(
-   parseInt(localStorage.getItem('selRow')),
-   parseInt(localStorage.getItem('selCol')),
-   this.selectedName);
   }
   onAddRow(){
     let hot= this.hotRegisterer.getInstance(this.id);
@@ -90,16 +121,11 @@ export class SpreadComponent {
   onSubmit(){
     let hotData= this.hotRegisterer.getInstance(this.id).getData();
   }
-  afterOnCellMouseDown(event, coords, TD){
-    this.selRow=coords.row;
-    this.selCol=coords.col;
-   if(coords.col==1){
-     console.log('afterOnCellMouseDown******************',TD);
-     localStorage.setItem('selCol',coords.col);
-     localStorage.setItem('selRow',coords.row);
-    }
+  afterSelection(row:any, col:any){
+    this.selRow=row;
+    this.selCol=col;
    }
-  nameValidator(value, callback){
+  nameValidator(value:any, callback:any){
     if (/^[a-zA-Z ]{2,30}$/.test(value)) {
       callback(true);
 
@@ -107,7 +133,9 @@ export class SpreadComponent {
       callback(false);
     }
   }
+  
   ngOnInit() {
+    let vm=this;
     this.columns=[
       {
         data: 'id',
@@ -128,6 +156,7 @@ export class SpreadComponent {
         type: 'text',
         width: 200,
         allowEmpty: false,
+        editor:this.CustomEditor
 
        },
       {
@@ -152,6 +181,7 @@ export class SpreadComponent {
       },
       {
         data: 'geo',
+        
       },
       {
         data: 'Date',
@@ -165,7 +195,7 @@ export class SpreadComponent {
           firstDay: 1,
           showWeekNumber: true,
           numberOfMonths: 1,
-          licenseKey: 'non-commercial-and-evaluation',
+          licenseKey: '8cab5-12f1d-9a900-04238-a4819',
           // disableDayFn(date) {
           //   // Disable Sunday and Saturday
           //   return date.getDay() === 0 || date.getDay() === 6;
@@ -265,7 +295,7 @@ export class SpreadComponent {
         Date: "01/01/2020",
       },
       {
-        id: 10,
+        id: 9,
         name: "Jon Mil",
         address: "Kan Avenue",
         mobile: "456",
@@ -273,6 +303,66 @@ export class SpreadComponent {
         location: "OR",
         geo: "NAR",
         Date: "01/01/2020",
+      },
+      {
+        id: 10,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
+      },
+      {
+        id: 11,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
+      },
+      {
+        id: 12,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
+      },
+      {
+        id: 13,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
+      },
+      {
+        id: 14,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
+      },
+      {
+        id: 15,
+        name: "",
+        address: "",
+        mobile: "",
+        amount: "",
+        location: "",
+        geo: "",
+        Date: "",
       }
      
 
@@ -314,33 +404,11 @@ export class SpreadComponent {
         `<span style="color:blue;font-style: italic;">Geo</span>`,
         `<span style="color:blue;font-style: italic;">Date</span>`],
       ],
-      afterOnCellMouseDown:this.afterOnCellMouseDown,
+      afterSelection:this.afterSelection,
       afterChange:this.afterCellChange,
-      licenseKey: "non-commercial-and-evaluation",
+      licenseKey: "8cab5-12f1d-9a900-04238-a4819",
     }
-    this.hotSettings_1={
-      startRows: 50,
-      startCols: 7,
-      colHeaders: false,
-      rowHeaders: true,
-      rowHeaderWidth : 0,
-      fixedColumnsLeft: 1,
-      fixedRowsTop: 0,   
-      comments: true,
-      copyPaste: true,
-      nestedHeaders:[
-        ['A','B','C','D','E','F','G'],
-        [`<span style="color:blue;font-style: italic;">ID</span>`,
-        `<span style="color:blue;font-style: italic;">Name*</span>`,
-        `<span style="color:blue;font-style: italic;">Address*</span>`,
-        `<span style="color:blue;font-style: italic;">mobile</span>`,
-        `<span style="color:blue;font-style: italic;">Amount</span>`,
-        `<span style="color:blue;font-style: italic;">location</span>`,
-        `<span style="color:blue;font-style: italic;">Date</span>`],
-      ],
-      licenseKey: "non-commercial-and-evaluation",
    
-    }
   }
 }
 
