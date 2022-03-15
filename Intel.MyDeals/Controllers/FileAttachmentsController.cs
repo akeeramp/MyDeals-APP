@@ -163,6 +163,7 @@ namespace Intel.MyDeals.Controllers
                 lstUnifyDeals[i].UCD_COUNTRY = lstUnifyDeals[i].UCD_COUNTRY != null ? lstUnifyDeals[i].UCD_COUNTRY.TrimEnd() : string.Empty;
                 lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL = lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_RETAIL.TrimEnd() : string.Empty;
                 lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY = lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY != null ? lstUnifyDeals[i].DEAL_END_CUSTOMER_COUNTRY.TrimEnd() : string.Empty;
+                lstUnifyDeals[i].RPL_STS_CODE = lstUnifyDeals[i].RPL_STS_CODE != null ? lstUnifyDeals[i].RPL_STS_CODE.TrimEnd() : string.Empty;
             }
             var result = ValidateUnifyDeals(lstUnifyDeals);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -184,6 +185,7 @@ namespace Intel.MyDeals.Controllers
             unifyDealValidation.InvalidDeals = new List<KeyValuePair<int, string>>();
             unifyDealValidation.AlreadyUnifiedDeals = new List<int>();
             unifyDealValidation.InValidCombination = new List<UnifyInvalidCombination>();
+            unifyDealValidation.InvalidRPLStsCode = new List<UnifyDeal>();
             var validRows = lstUnifyDeals.Where(x => x.DEAL_ID != 0 && x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "" && x.UCD_COUNTRY_CUST_ID != 0 && x.UCD_COUNTRY != "").ToList();
             unifyDealValidation.DuplicateDealCombination = validRows.GroupBy(x => new { x.DEAL_ID, x.UCD_GLOBAL_ID,x.UCD_GLOBAL_NAME,x.UCD_COUNTRY_CUST_ID,x.UCD_COUNTRY})
                 .Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
@@ -209,7 +211,7 @@ namespace Intel.MyDeals.Controllers
                 }
             }
             unifyDealValidation.InValidCountries = lstUnifyDeals.Where(x => x.UCD_COUNTRY.Trim() != string.Empty).Select(x => x.UCD_COUNTRY.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();
-            if (lstUnifyDeals.Count > 0)
+             if (lstUnifyDeals.Count > 0)
             {
                 foreach (var row in lstUnifyDeals)
                 {
@@ -281,7 +283,7 @@ namespace Intel.MyDeals.Controllers
                         dealData.DEAL_ID = data.OBJ_SID;
                         dealData.DEAL_END_CUSTOMER_COUNTRY = data.END_CUSTOMER_COUNTRY;
                         dealData.DEAL_END_CUSTOMER_RETAIL = data.END_CUSTOMER_RETAIL;
-                        if(data.COMMENTS.Trim().ToLower() == "not exist" || data.COMMENTS.Trim().ToLower() == "cancelled" 
+                        if (data.COMMENTS.Trim().ToLower() == "not exist" || data.COMMENTS.Trim().ToLower() == "cancelled" 
                             || data.COMMENTS.Trim().ToLower() == "lost" || data.COMMENTS.Trim().ToLower() == "deal expired" 
                             || data.COMMENTS.Trim().ToLower() == "end cust obj not exists")
                         {
@@ -296,6 +298,25 @@ namespace Intel.MyDeals.Controllers
                                         unifyDealValidation.InValidUnifyDeals.Add(invalidData);
                                         unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
                                     }
+                                    
+                                }
+                            }
+                        }
+                        else if (data.COMMENTS.Trim().ToLower() == "invalid rpl status code")
+                        {
+                            if (!unifyDealValidation.InvalidDeals.Any(x => x.Key == dealData.DEAL_ID))
+                            {
+                                unifyDealValidation.InvalidDeals.Add(new KeyValuePair<int, string>(dealData.DEAL_ID, data.COMMENTS.Trim().ToLower()));
+                                var invalidDataList = lstUnifyDeals.Where(x => x.DEAL_ID == dealData.DEAL_ID).ToList();
+                                foreach (var invalidData in invalidDataList)
+                                {
+                                    if (!unifyDealValidation.InValidUnifyDeals.Contains(invalidData))
+                                    {
+                                      unifyDealValidation.InValidUnifyDeals.Add(invalidData);
+                                        
+                                      unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
+                                    }
+                                    unifyDealValidation.InvalidRPLStsCode.Add(invalidData);
                                 }
                             }
                         }
@@ -351,7 +372,7 @@ namespace Intel.MyDeals.Controllers
                                 unifyDealValidation.InValidUnifyDeals.Add(invalidData);
                                 unifyDealValidation.ValidUnifyDeals.Remove(invalidData);
                             }
-                        }                        
+                        }
                     }
                 }
             }

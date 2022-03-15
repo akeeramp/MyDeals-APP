@@ -21,6 +21,7 @@ namespace Intel.MyDeals.Entities
         public string DEAL_END_CUSTOMER_RETAIL { get; set; }
 
         public string DEAL_END_CUSTOMER_COUNTRY { get; set; }
+        public string RPL_STS_CODE { get; set; }
     }
 
     public class UnifyInvalidCombination
@@ -49,6 +50,7 @@ namespace Intel.MyDeals.Entities
         public List<UnifyDeal> InValidUnifyDeals { get; set; }
 
         public List<string> InValidCountries { get; set; }
+        public List<UnifyDeal> InvalidRPLStsCode { get; set; }
 
         public List<int> DuplicateDealCombination { get; set; }
 

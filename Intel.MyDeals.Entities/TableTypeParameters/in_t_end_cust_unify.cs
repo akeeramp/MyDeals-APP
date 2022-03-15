@@ -24,6 +24,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("UCD_COUNTRY", typeof(string));
             this.Columns.Add("DEAL_END_CUSTOMER_RETAIL", typeof(string));
             this.Columns.Add("DEAL_END_CUSTOMER_COUNTRY", typeof(string));
+            this.Columns.Add("RPL_STS_CODE", typeof(string));
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Intel.MyDeals.Entities
             r["UCD_COUNTRY"] = itm.UCD_COUNTRY;
             r["DEAL_END_CUSTOMER_RETAIL"] = itm.DEAL_END_CUSTOMER_RETAIL;
             r["DEAL_END_CUSTOMER_COUNTRY"] = itm.DEAL_END_CUSTOMER_COUNTRY;
+            r["RPL_STS_CODE"] = itm.RPL_STS_CODE;
             this.Rows.Add(r);
         }
 

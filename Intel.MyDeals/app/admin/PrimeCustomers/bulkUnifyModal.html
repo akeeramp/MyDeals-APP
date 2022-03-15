@@ -32,7 +32,9 @@
             </div>
             <div ng-if="vm.inValidUnifyDeals.length > 0">
                 <div class="col-md-11 notes">
-                    <span class="redbold">NOTE:</span><span>&nbsp;Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. Fix the validation errors.</span><br /><br />
+                    <span class="redbold">NOTE:</span>
+                        <span>&nbsp;Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. Fix the validation errors.</span><br />
+                        <span>&nbsp;&nbsp;&nbsp;The Possible Values for RPL Status code are EC,ECB,NOPAYIN,NOPAYOUT,NOSNCTN,NOTRDIN,NOTRDOUT,PAYCOND,REVIEWWIP,TRDCOND. Multiple RPL Status codes can be given seperated by comma</span><br /><br />
                 </div>
                 <kendo-spreadsheet id="spreadsheetUnifyDeals" style="width: 978px; height: 400px; float:left;" k-rows="vm.SpreadSheetRowsCount" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets" k-options="vm.SpreadSheetOptions"></kendo-spreadsheet>
             </div>
