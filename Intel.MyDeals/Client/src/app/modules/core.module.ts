@@ -7,6 +7,7 @@ import { notificationsModalDialog } from '../core/notification/notificationsModa
 import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
 import { gridStatusBoardComponent } from '../core/gridStatusBoard/gridStatusBoard.component';
 import { contractStatusBoardComponent } from '../core/gridStatusBoard/contractStatusBoard.component';
+import { AdminBannerComponent } from '../core/adminBanner/adminBanner.component';
 
 export let coreComponents = [
     PingComponent,
@@ -17,5 +18,6 @@ export let coreComponents = [
     notificationsModalDialog,
     iconMctPctComponent,
     gridStatusBoardComponent,
-    contractStatusBoardComponent
+    contractStatusBoardComponent,
+    AdminBannerComponent
 ]

@@ -19,6 +19,10 @@ object2Array.$inject = [];
 function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger, $templateRequest, $compile, dataService, $linq) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
+
+    //To retrieve localStorage.recents when migrating dashboard controller
+    //scope.recents = JSON.parse(localStorage.getItem('recents'));
+
     //using to set loader object
     $scope.isLoading = true;
     $scope.isInitializing = false;
