@@ -192,3 +192,7 @@
         min-width: 100%;
     }
 
+.mainBodyStyle {
+    top: 69px !important;
+}
+

@@ -5,6 +5,8 @@ import { notificationDockComponent } from '../core/notification/notificationDock
 import { notificationsSettingsDialog } from '../core/notification/notificationsSettings.component';
 import { notificationsModalDialog } from '../core/notification/notificationsModal.component';
 import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
+import { gridStatusBoardComponent } from '../core/gridStatusBoard/gridStatusBoard.component';
+import { contractStatusBoardComponent } from '../core/gridStatusBoard/contractStatusBoard.component';
 
 export let coreComponents = [
     PingComponent,
@@ -13,5 +15,7 @@ export let coreComponents = [
     notificationDockComponent,
     notificationsSettingsDialog,
     notificationsModalDialog,
-    iconMctPctComponent
+    iconMctPctComponent,
+    gridStatusBoardComponent,
+    contractStatusBoardComponent
 ]
