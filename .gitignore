@@ -348,5 +348,4 @@ MigrationBackup/
 # New Angular Changes
 Intel.MyDeals/Client/node_modules/
 Intel.MyDeals/dist/
-Intel.MyDeals/Client/src/dist/bundle.js
 
