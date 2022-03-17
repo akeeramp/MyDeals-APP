@@ -13,6 +13,8 @@ import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+//Gridster component
+import { GridsterModule } from 'angular-gridster2';
 //Added angular material for popup toggle
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -50,6 +52,8 @@ import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
+//*********************dashboard components *********************
+import { dashboardComponents } from './modules/dashboard.module';
 
 @NgModule({
     imports: [
@@ -84,6 +88,7 @@ import { adminComponents } from './modules/admin.module';
         MenusModule,
         DateInputsModule,
         OrderModule,
+        GridsterModule
         
      ],
      providers: [
@@ -105,14 +110,15 @@ import { adminComponents } from './modules/admin.module';
         ReportingComponent,
         sharedComponents,
         adminComponents,
-        coreComponents
+        coreComponents,
+        dashboardComponents
     ],
     entryComponents: [
-        
         ReportingComponent,
         sharedComponents,
         adminComponents,
-        coreComponents
+        coreComponents,
+        dashboardComponents
     ]
 })
 

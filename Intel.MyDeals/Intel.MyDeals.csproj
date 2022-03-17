@@ -796,6 +796,9 @@
     <Content Include="Client\src\app\core\notification\notificationDock.directive.js" />
     <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.html" />
     <Content Include="Client\src\app\core\trashcan\trashcan.component.css" />
+    <Content Include="Client\src\app\dashboard\addWidget.component.html" />
+    <Content Include="Client\src\app\dashboard\dashboard.component.html" />
+    <Content Include="Client\src\app\dashboard\dashboardWidget.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
@@ -2166,6 +2169,15 @@
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\addWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\contractStatusWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\dashboard.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\dashboardWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\newContractWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\openContractWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\recentsUrlWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\searchContractWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\widget.config.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\core.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />

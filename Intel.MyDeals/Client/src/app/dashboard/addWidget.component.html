@@ -1,0 +1,19 @@
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+
+<h1 mat-dialog-title>
+    {{data.name}}</h1>
+<div mat-dialog-content>
+    <kendo-dropdownlist [data]="listItems" [(ngModel)]="selWidget">
+    </kendo-dropdownlist>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="selWidget" cdkFocusInitial>Add</button>
+</div>
+
+
+<!-- Copyright 2021 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at https://angular.io/license -->

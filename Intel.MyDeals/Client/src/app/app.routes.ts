@@ -42,6 +42,15 @@ angular
                     }
                 }
             })
+            .state("mydashboard", {
+                url: "/mydashboard",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<app-dashboard></app-dashboard>'
+                    }
+                }
+            })
 
             //*****************poc items ends here*******************
             // Admin route  starts here 

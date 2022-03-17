@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
-import { arrayBuffer } from "stream/consumers";
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
 
