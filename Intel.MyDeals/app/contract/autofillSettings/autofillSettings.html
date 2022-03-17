@@ -48,35 +48,38 @@
                 </div>
                 <br />
                 <div ng-if="vm.autofillData.isVistexHybrid == '1' || vm.autofillData.DEALTYPE == 'FLEX'" class="autoFillOverarching">
-                    <!--<div ng-if="vm.autofillData.isVistexHybrid == '1' && vm.autofillData.DEALTYPE != 'VOL_TIER'"-->
-                    <div ng-if="vm.autofillData.isVistexHybrid == '1'"
-                         op-class="''"
-                         op-control-data-element
-                         ng-model="vm.autofillData.DEFAULT"
-                         op-cd="'REBATE_OA_MAX_VOL'"
-                         op-type="'NUMERIC'"
-                         op-label="'Overarching Maximum Volume'"
-                         op-min-value="0"
-                         op-is-form="true"
-                         op-style="'color:#1a3e6f;font-weight:bold'"
-                         op-max-value="99999999"
-                         op-ui-mode="'VERTICAL'">
+                    <div ng-if="vm.autofillData.isVistexHybrid == '1'" class="autoFillOverarchingTitle">
+                        Please fill out Max Volume or Amount if needed, not both.
                     </div>
                     <br />
-                    <div op-class="''"
-                         op-control-data-element
-                         ng-model="vm.autofillData.DEFAULT"
-                         op-cd="'REBATE_OA_MAX_AMT'"
-                         op-type="'NUMERIC'"
-                         op-label="'Overarching Maximum Dollar($)'"
-                         op-min-value="0"
-                         op-format="'c0'"
-                         op-is-form="true"
-                         op-style="'color:#1a3e6f;font-weight:bold'"
-                         op-max-value="999999999"
-                         op-ui-mode="'VERTICAL'">
+                    <div class="col-md-8 row">
+                        <div ng-if="vm.autofillData.isVistexHybrid == '1'"
+                             op-class="'md intel minPadding'"
+                             op-control-data-element
+                             ng-model="vm.autofillData.DEFAULT"
+                             op-cd="'REBATE_OA_MAX_VOL'"
+                             op-type="'NUMERIC'"
+                             op-label="'Overarching Maximum Volume:'"
+                             op-min-value="0"
+                             op-is-form="true"
+                             op-style="'color:#1a3e6f;font-weight:bold;width:375px;'"
+                             op-max-value="99999999"
+                             op-ui-mode="'HORIZONTAL'">
+                        </div>
+                        <div op-class="'md intel minPadding'"
+                             op-control-data-element
+                             ng-model="vm.autofillData.DEFAULT"
+                             op-cd="'REBATE_OA_MAX_AMT'"
+                             op-type="'NUMERIC'"
+                             op-label="'Overarching Maximum Dollar($):'"
+                             op-min-value="0"
+                             op-format="'c0'"
+                             op-is-form="true"
+                             op-style="'color:#1a3e6f;font-weight:bold;width:375px;'"
+                             op-max-value="999999999"
+                             op-ui-mode="'HORIZONTAL'">
+                        </div>
                     </div>
-                </div>
                 </div>
         </div>
     </div>
@@ -119,5 +122,19 @@
     }
     .autoFillOverarching .k-numerictextbox {
         padding: 0px;
+    }
+    .minPadding {
+        padding: 2px;
+    }
+    .autoFillOverarchingTitle {
+        color: darkslategray;
+        font-size: 14px !important;
+        font-weight: 600;
+        margin: -5px 0 -15px 0;
+    }
+    /*This "opUiContainer.md .opUiLabel" overrides site-wide CSS*/
+    .opUiContainer.md .opUiLabel {
+        font-size: 13px !important;
+        width: 203px;
     }
 </style>
