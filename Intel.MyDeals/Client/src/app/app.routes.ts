@@ -304,6 +304,15 @@ angular
                     }
                 }
             })
+            .state("iCostProducts", {
+                url: "/icostproducts",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<i-cost-products></i-cost-products>',
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });

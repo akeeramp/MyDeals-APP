@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { logger } from "../../../shared/logger/logger";
 import { distinct } from "@progress/kendo-data-query";
 import * as _ from "underscore";
@@ -129,16 +127,8 @@ export class pctQueryBuilderComponent {
                     return obj.VALUE;
                 }
             });
-            //this.origAttrValueList = this.attrValueList = _.sortBy(this.attrValueList, "VALUE");
         }
     }
 
 }
 
-angular.module("app").directive(
-    "pctQueryBuilderAngular",
-    downgradeComponent({
-        component: pctQueryBuilderComponent,
-        inputs: ['group', 'parent', 'form', 'operators', 'leftValues']
-    })
-);

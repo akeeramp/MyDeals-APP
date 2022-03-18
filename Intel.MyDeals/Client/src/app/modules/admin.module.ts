@@ -23,6 +23,7 @@ import { adminConsumptionCountryComponent } from '../admin/consumptionCountry/ad
 import { adminPushDealsToVistexComponent } from '../admin/pushDealstoVistex/admin.pushDealstoVistex.component';
 import { adminVistexComponent } from '../admin/vistex/admin.vistex.component';
 import { pctQueryBuilderComponent } from '../admin/iCostProducts/directive/pct.queryBuilder.component';
+import { iCostProductsComponent } from '../admin/iCostProducts/admin.iCostProducts.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -50,5 +51,6 @@ export let adminComponents =[
     dropdownsComponent,
     adminConsumptionCountryComponent,
     adminVistexComponent,
-    pctQueryBuilderComponent
+    pctQueryBuilderComponent,
+    iCostProductsComponent
 ]
