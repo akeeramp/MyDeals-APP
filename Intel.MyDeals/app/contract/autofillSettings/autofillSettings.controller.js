@@ -35,16 +35,28 @@
         vm.ok = function () {
             vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
             vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
-            if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null &&
+
+            if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && // Can't fill in both values
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "" &&
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null &&
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg =
-                    "Both Overarching Maximum Dollars and Overarching Maximum Volume cannot be fill out.  Pick one.";
+                    "Both Overarching Maximum Dollars and Overarching Maximum Volume cannot be filled out.  Pick only one.";
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg =
-                    "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be fill out.  Pick one.";
+                    "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be filled out.  Pick only one.";
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = true;
+            } else if (vm.autofillData.isVistexHybrid != null && // Hybrid must select one
+                vm.autofillData.isVistexHybrid === "1" &&
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" &&
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "") {
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg =
+                    "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg =
+                    "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
+                vm.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = true;
+            // And either value can't be $0
             } else if (vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = "Overarching Maximum Dollars must be blank or > 0";
                 vm.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = true;
