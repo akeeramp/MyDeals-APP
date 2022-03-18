@@ -762,6 +762,7 @@
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.html" />
     <Content Include="Client\src\app\admin\funFact\admin.funFact.component.html" />
+    <Content Include="Client\src\app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="Client\src\app\admin\kendo_grid.css" />
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
@@ -2123,6 +2124,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\funFact\admin.funFact.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\geo\admin.geo.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\iCostProducts\directive\pct.queryBuilder.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\productCategories\admin.productCategories.component.ts" />

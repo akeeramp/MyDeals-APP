@@ -1,0 +1,51 @@
+﻿<div class="alert alert-info alert-group">
+    <form name="qb.form" novalidate>
+        <div class="form-inline">
+            <kendo-dropdownlist [(ngModel)]="group.operator" [data]="operators" [ngModelOptions]="{standalone: true}" class="form-control input-sm"
+                                style="width: 100px; height: auto"
+                                textField="name" valueField="name" [valuePrimitive]="true">
+            </kendo-dropdownlist>
+            <button style="margin-left: 5px" (click)="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
+            <button style="margin-left: 5px" (click)="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
+            <button style="margin-left: 5px" (click)="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
+        </div>
+        <div class="group-conditions">
+            <div *ngFor="let rule of group.rules; let indx = index" class="condition">
+                <div [ngSwitch]="rule.hasOwnProperty('group')">
+                    <div *ngSwitchCase="true">
+                        <pct-query-builder-angular [group]="rule.group" [parent]="group" [form]="form" [operators]="operators" [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)"></pct-query-builder-angular>
+                    </div>
+                    <div *ngSwitchDefault>
+                        <div class="form-inline">
+                            <div>
+                                <kendo-combobox id="directiveDropdown" [(ngModel)]="rule.criteria" [data]="attrList" [ngModelOptions]="{standalone: true}" 
+                                                class="qb-field-core" title="Choose an attribute" placeholder="Select an attribute" 
+                                                [clearButton]="false" textField="DISPLAYNAME" valueField="ATRB_COL_NM" 
+                                                [valuePrimitive]="true" [required]="true"  [filterable]="true" (filterChange)="handleFilter($event,'attrList')" (valueChange)="attrListChange(rule)">
+                                </kendo-combobox>
+
+                                <kendo-dropdownlist [(ngModel)]="rule.condition" [data]="conditions" [ngModelOptions]="{standalone: true}" class="qb-field form-control input-sm"
+                                                    style="width: 100px; height: auto" textField="name" valueField="name" [valuePrimitive]="true">
+                                </kendo-dropdownlist>
+                                <span [ngSwitch]="rule.condition == 'LIKE'">
+                                    <span *ngSwitchCase="true">
+                                        <input name="value" type="text" [(ngModel)]="rule.data" [required]="true" placeholder="Enter the values" class="qb-field-core form-control input-sm" />
+                                    </span>
+                                    <span *ngSwitchDefault>
+                                        <kendo-combobox id="directiveDropdown" [(ngModel)]="rule.data" [required]="true" [filterable]="true" [data]="attrValueList | slice:0:20" [ngModelOptions]="{standalone: true}" class="qb-field-core"
+                                                        title="Choose a value" placeholder="Select a value" (open)="resetRightValues(rule)"
+                                                        [clearButton]="false" [disabled]="!rule.criteria"
+                                                        style="width: 200px; height: auto" textField="VALUE" valueField="VALUE" [valuePrimitive]="true"
+                                                        (valueChange)="enableSave(rule.data)" (filterChange)="handleFilter($event,'attrValueList')">
+                                        </kendo-combobox>
+                                    </span>
+                                </span>
+                                <button (click)="removeCondition(indx)" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

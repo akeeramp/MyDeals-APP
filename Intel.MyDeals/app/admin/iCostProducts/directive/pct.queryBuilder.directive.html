@@ -12,6 +12,10 @@
                     <div ng-switch-when="true">
                         <pct-query-builder group="rule.group" operators="operators" left-values="leftValues" form="form">
                         </pct-query-builder>
+
+                        <!--The below commented lines are for the directive which is migrated to Angular. -->
+                        <!--<pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group" [parent]="initial" [form]="form" [operators]="operators" [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
+                        </pct-query-builder-angular>-->
                     </div>
                     <div ng-switch-default="ng-switch-default">
                         <div class="form-inline">

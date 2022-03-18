@@ -67,6 +67,10 @@
                             </p>
                             <pct-query-builder group="vm.filter.group" form="vm.form" operators="vm.operators" left-values="vm.leftValues">
                             </pct-query-builder>
+
+                            <!--The below commented lines are for the directive which is migrated to Angular. -->
+                            <!--<pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group" [parent]="initial" [form]="form" [operators]="operators" [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
+                            </pct-query-builder-angular>-->
                         </div>
                     </div>
                 </div>

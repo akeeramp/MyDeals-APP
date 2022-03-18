@@ -42,7 +42,7 @@ export class nestedGridComponent  {
    
     removeGroup() {
         this.group.isRemove = true;
-        this.deleteGroup(this.parent);
+        if (JSON.stringify(this.parent) != '{}') { this.deleteGroup(this.parent); }
     }
 
     deleteGroup(group) {
