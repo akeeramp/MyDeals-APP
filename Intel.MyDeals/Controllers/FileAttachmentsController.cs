@@ -192,6 +192,7 @@ namespace Intel.MyDeals.Controllers
             unifyDealValidation.DuplicateDealEntryCombination = validRows.Where(x => x.DEAL_END_CUSTOMER_RETAIL != "" && x.DEAL_END_CUSTOMER_COUNTRY != "").ToList().
                 GroupBy(x => new { x.DEAL_ID, x.DEAL_END_CUSTOMER_COUNTRY, x.DEAL_END_CUSTOMER_RETAIL }).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
             var patt = @"^[\w\s.,'&:+-]*$";
+            var RPLStsPattern = @"^[A-Za-z\s,]*$";
             var validUcdRow = lstUnifyDeals.Where(x => x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "").ToList();
             foreach (var unify in validUcdRow)
             {
@@ -266,8 +267,20 @@ namespace Intel.MyDeals.Controllers
                     {
                         unifyDealValidation.InValidUnifyDeals.Add(row);
                     }
+                    else if (!Regex.IsMatch(row.RPL_STS_CODE, RPLStsPattern))
+                    {
+                        unifyDealValidation.InValidUnifyDeals.Add(row);
+                    }
                     else
                     {
+                        if(row.RPL_STS_CODE!=null || row.RPL_STS_CODE != "")
+                        {
+                            //To remove consecutive commas,spaces and duplicate values in the given RPL status code input
+                            var formattedRPLInput = row.RPL_STS_CODE.Split(',').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Select(x => x.ToLower()).Distinct();
+                            row.RPL_STS_CODE = string.Join(",", formattedRPLInput);
+
+                        }
+
                         unifyDealValidation.ValidUnifyDeals.Add(row);
                     }
                 }

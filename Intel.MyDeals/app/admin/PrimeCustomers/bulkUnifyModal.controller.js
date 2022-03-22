@@ -202,6 +202,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             var isSameGlobalandCtryId = false;
             var isCtrySame = false;
             var mandatory = [];
+            var invalidRPLStatusCode = [];
             sheet.batch(function () {
                 for (var i = 0; i < vm.inValidUnifyDeals.length; i++) {
                     row = i + 1;
@@ -364,7 +365,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                         else if (vm.UnifyValidation.InvalidDeals.filter(x => x.Key == vm.inValidUnifyDeals[i].DEAL_ID && x.Value == "end cust obj not exists").length > 0) {
-                            rowMsg = rowMsg + "Deal is not having all end customer related informtion|"
+                            rowMsg = rowMsg + "Deal is not having all end customer related information|"
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
@@ -378,19 +379,19 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
-                    var RPLStsCodepattern = new RegExp("^[A-Za-z\s,]*$");
-                    var RPLPatternCheck = RPLStsCodepattern.test(vm.inValidUnifyDeals[i].RPL_STS_CODE);
-                    if (!RPLPatternCheck) {
-                        rowMsg = rowMsg + "RPL Status code contains invalid characters |";
+                    var RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
+                    var isValidRPLSTSCode = RPLStsCodepattern.test(vm.inValidUnifyDeals[i].RPL_STS_CODE);
+                    if (!isValidRPLSTSCode) {
+                        invalidRPLStatusCode.push(vm.inValidUnifyDeals[i].DEAL_ID)
+                        rowMsg = rowMsg + "The RPL Status code contains invalid characters. Please remove spaces and special characters.|";
                         sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', false));
                     }
                     else if (vm.UnifyValidation.InvalidRPLStsCode.length > 0) {
                         if ((vm.UnifyValidation.InvalidRPLStsCode.filter(x => x.DEAL_ID == vm.inValidUnifyDeals[i].DEAL_ID).length > 0) && vm.inValidUnifyDeals[i].RPL_STS_CODE != "") {
-                            rowMsg = rowMsg + "Invalid RPL Status code|"
+                            rowMsg = rowMsg + "Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code.|"
                             sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', true));
                         }
                     }
-
                     if (rowMsg != '') {
                         var rowMsg = rowMsg.slice(0, -1);
                         var arr = rowMsg.split('|');
@@ -446,8 +447,11 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             if (vm.UnifyValidation.InValidCountries.length > 0) {
                 strAlertMessage += "<li>Unified Country/Region does not exist in My Deals.</li>"
             }
+            if (invalidRPLStatusCode.length>0) {
+                strAlertMessage += "<li>The RPL Status code contains invalid characters. Please remove spaces and special characters.</li>"
+            }
             if (vm.UnifyValidation.InvalidRPLStsCode.length > 0) {
-                strAlertMessage += "<li>Invaid RPL Status code</li>"
+                strAlertMessage += "<li>Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code.</li>"
             }
             if (isCtrySame) {
                 strAlertMessage += "<li>Unified Country/Region and End Customer Country/Region needs to be same.</li>"
@@ -487,7 +491,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                     strAlertMessage += "<li>Deal is in Expired Stage and cannot be unified.</li>";
                 }
                 if (vm.UnifyValidation.InvalidDeals.filter(x => x.Value == "end cust obj not exists").length > 0) {
-                    strAlertMessage += "<li>Deal is not having all end customer related informtion.</li>";
+                    strAlertMessage += "<li>Deal is not having all end customer related information.</li>";
                 }
             }
             if (vm.UnifyValidation.AlreadyUnifiedDeals.length > 0) {
@@ -515,7 +519,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                         var dealsHasErrors = data.filter(x => x.COMMENTS == "Deal(s) Cannot be Unified");
                    
-                        if ((data[0].COMMENTS == "Bulk Unified Deal(s)" || dealsUnifiedwithdifferntRPLSTS.length > 0) && dealsHasErrors != undefined && dealsHasErrors.length == 0) {
+                        if (data[0].COMMENTS == "Bulk Unified Deal(s)"  && dealsHasErrors != undefined && dealsHasErrors.length == 0) {
                             if (data[0].COMMENTS == "Bulk Unified Deal(s)") {
                                 var alertMsg = "<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified</b><br/>"
                             }
@@ -581,12 +585,12 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 newUnifyDeals.UCD_COUNTRY = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
                 newUnifyDeals.DEAL_END_CUSTOMER_RETAIL = tempRange[i][5] != null ? tempRange[i][5].trimEnd() : "";
                 newUnifyDeals.DEAL_END_CUSTOMER_COUNTRY = tempRange[i][6] != null ? tempRange[i][6].trimEnd() : "";
-                //To remove extra commas at the end of the input if any
-                if (tempRange[i][7].slice(-1) == ',') {
-                    tempRange[i][7] = tempRange[i][7].replace(/,+$/g, "");
+                //Added this check because if number is given in the RPL sts code column tempRange[i][7].trimEnd() present in the below line of code throws err.
+                if (typeof tempRange[i][7] != "string" && tempRange[i][7] != null) {
+                    tempRange[i][7] = tempRange[i][7].toString();
                 }
                 newUnifyDeals.RPL_STS_CODE = tempRange[i][7] != null ? tempRange[i][7].trimEnd() : "";
-
+                
                 vm.inValidUnifyDeals.push(newUnifyDeals);
             }
         }
@@ -622,7 +626,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
         if (vm.inValidUnifyDeals.length > 0) {
             $('.modal-dialog').css("width", "1530px");
             $('#spreadsheetUnifyDeals').css("width", "1500px");
-            $('#endCustomerUnifyModal').css("height","500px");
+            $('#endCustomerUnifyModal').css("max-height","500px");
             //Header
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
             $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");
