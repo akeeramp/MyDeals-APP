@@ -11,6 +11,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -636,6 +637,8 @@ namespace Intel.MyDeals.BusinessLogic
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
         {
             OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
+            contractAndStrategy.PricingTableRow = validateEndCustomerObject(contractAndStrategy.PricingTableRow);
+            contractAndStrategy.WipDeals = validateEndCustomerObject(contractAndStrategy.WipDeals);
 
             // Check to see if a translation from PTR to WIP or WIP to PTR is needed
             bool isPrcTblSource = contractAndStrategy.EventSource == OpDataElementType.PRC_TBL.ToString();
@@ -893,5 +896,59 @@ namespace Intel.MyDeals.BusinessLogic
             };
         }
 
+        private OpDataCollectorFlattenedList validateEndCustomerObject(OpDataCollectorFlattenedList dealList)
+        {
+            OpDataCollectorFlattenedList dealData = new OpDataCollectorFlattenedList();
+            
+            if (dealList.Count > 0)
+            {
+                foreach (var dealRow in dealList)
+                {
+                    if (dealRow.ContainsKey("_dirty") && Convert.ToBoolean(dealRow.ContainsKey("_dirty")))
+                    {
+                        if (dealRow.ContainsKey(AttributeCodes.END_CUST_OBJ))
+                        {
+                            var endCustObj = dealRow[AttributeCodes.END_CUST_OBJ].ToString();
+                            if (!string.IsNullOrEmpty(endCustObj))
+                            {
+                                IPrimeCustomersLib primeCustomersLib = new PrimeCustomersLib();
+                                var updatedEndCustObj = primeCustomersLib.ValidateEndCustomer(endCustObj);
+                                string endCustInfo = JsonConvert.SerializeObject(updatedEndCustObj);
+                                dealRow[AttributeCodes.END_CUST_OBJ] = endCustInfo;
+                                dealRow[AttributeCodes.IS_PRIMED_CUST] = updatedEndCustObj.Where(x => x.IS_PRIMED_CUST == "0").ToList().Count > 0 ? "0" : "1";
+                                dealRow[AttributeCodes.IS_RPL] = updatedEndCustObj.Where(x => x.IS_RPL == "1").ToList().Count > 0 ? "1" : "0";
+                                List<string> primCustNm = new List<string>();
+                                List<string> primCustId = new List<string>();
+                                foreach (var endCust in updatedEndCustObj)
+                                {
+                                    if (endCust.IS_PRIMED_CUST == "0")
+                                    {
+                                        primCustNm.Add("n/a");
+                                        primCustId.Add("n/a");
+                                    }
+                                    else if (endCust.PRIMED_CUST_NM.ToLower() == "any")
+                                    {
+                                        primCustNm.Add(endCust.PRIMED_CUST_NM);
+                                    }
+                                    else
+                                    {
+                                        primCustNm.Add(endCust.PRIMED_CUST_NM);
+                                        primCustId.Add(endCust.PRIMED_CUST_ID);
+                                    }
+                                }
+                                dealRow[AttributeCodes.PRIMED_CUST_NM] = string.Join(",", primCustNm);
+                                dealRow[AttributeCodes.PRIMED_CUST_ID] = string.Join(",", primCustId);
+                            }
+                        }
+                        dealData.Add(dealRow);
+                    }
+                }
+            }
+            if(dealData.Count > 0)
+            {
+                return dealData;
+            }
+            return dealList;
+        }
     }
 }
