@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    PushDealstoVistexcontroller.$inject = ['pushDealstoVistexService', '$scope', 'logger'];
+    PushDealstoVistexcontroller.$inject = ['pushDealstoVistexService', '$scope', 'logger', '$location'];
 
-    function PushDealstoVistexcontroller(pushDealstoVistexService, $scope, logger) {
+    function PushDealstoVistexcontroller(pushDealstoVistexService, $scope, logger, $location) {
 
         $scope.accessAllowed = true;
         if (!window.isDeveloper) {
@@ -24,6 +24,13 @@
         $scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
         $scope.ShowResults = false;
         $scope.VstxCustFlag = 1;
+
+        var initSearchValue = "";
+        var s = $location.search();
+        if (s["r3ValidDeals"] !== undefined) {
+            initSearchValue = s["r3ValidDeals"];
+            $scope.DealstoSend.DEAL_IDS = initSearchValue;
+        }
 
         $scope.ValidateAndSendDeals = function () {
             var data = {};

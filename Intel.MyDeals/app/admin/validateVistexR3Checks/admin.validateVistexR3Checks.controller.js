@@ -160,6 +160,12 @@
             }
         };
 
+        $scope.SendDealsToVistex = function () {
+            alert("Sending deals : " + $scope.GoodToSendDealIds);
+            var win = window.open("Admin#/pushDealstoVistex?r3ValidDeals=" + $scope.GoodToSendDealIds);
+            win.focus();
+        };
+
         function GetActiveColumns(runMode) {
             var ShowColumns = ["Deal_Id"];
             if (runMode === 1) {
@@ -195,7 +201,7 @@
             //else {
             //    ShowColumns = ["Deal"];
             //}
-            var grid = $("#Grid").data("kendoGrid");
+            var grid = $("#OutputGrid").data("kendoGrid");
 
             for (var key in grid.columns) {
                 if (ShowColumns.includes(grid.columns[key].field)) {
@@ -220,17 +226,17 @@
             },
             pageSize: 25
         });
-        //vm.dataSource.group([{ field: "Host_Geo" }, { field: "Customer_Name" }]);
-        //vm.dataSource.sort({ field: "COST_TEST_TYPE", dir: "asc" });
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
-            sortable: false,
-            selectable: true,
+            scrollable: true,
+            sortable: true,
+            //navigatable: true,
             resizable: true,
             reorderable: true,
-            columnMenu: true,
-            scrollable: true,
+            //selectable: true,
+            //columnMenu: true,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             pageable: {
@@ -238,13 +244,34 @@
                 pageSizes: gridConstants.pageSizes,
             },
             columns: [
-                { field: "Deal_Id", title: "Deal #", width: "100px", filterable: { multi: true, search: true } },
-                { field: "Customer_Name", title: "Customer Name", width: "150px", filterable: { multi: true, search: true }, hidden: false },
-                { field: "Geo", title: "Geo", width: "90px", filterable: { multi: true, search: true }, hidden: false },
+                {
+                    field: "Deal_Id",
+                    title: "Deal #",
+                    width: "120px",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "COMMENTS",
+                    width: "500px",
+                    template: "<span ng-model='dataItem' style='color:red;'>#= COMMENTS #</span>",
+                    headerTemplate: "<span style='color:red;'>Errors</span>"
+                },
+                {
+                    field: "Customer_Name",
+                    title: "Customer Name",
+                    width: "185px",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "Geo",
+                    title: "Geo",
+                    width: "105px",
+                    filterable: { multi: true, search: true }
+                },
                 { field: "Deal_Type", title: "Deal Type", width: "120px", filterable: { multi: true, search: true } },
                 { field: "Rebate_Type", title: "Rebate Type", width: "120px", filterable: { multi: true, search: true } },
-                { field: "Customer_Division", title: "Customer Division", width: "160px", filterable: { multi: true, search: true }, hidden: false },
-                { field: "Vertical", title: "Vertical", width: "100px", filterable: { multi: true, search: true }, hidden: false },
+                { field: "Customer_Division", title: "Customer Division", width: "160px", filterable: { multi: true, search: true } },
+                { field: "Vertical", title: "Vertical", width: "100px", filterable: { multi: true, search: true } },
                 { field: "Deal_Stage", title: "Deal Stage", width: "130px", filterable: { multi: true, search: true } },
                 { field: "Pricing_Strategy_Stage", title: "PS Stage", width: "120px", filterable: { multi: true, search: true } },
                 { field: "Expire_Deal_Flag", title: "Expire Deal Flag", width: "150px", filterable: { multi: true, search: true } },
@@ -252,16 +279,15 @@
                 { field: "Deal_End_Date", title: "Deal End Date", width: "150px", filterable: { multi: true, search: true } },
                 { field: "Payout_Based_On", title: "Payout Based On", width: "160px", filterable: { multi: true, search: true } },
                 { field: "Program_Payment", title: "Program Payment", width: "150px", filterable: { multi: true, search: true } },
-                { field: "Additive_Standalone", title: "Additive/Standalone", width: "100px", filterable: { multi: true, search: true } },
-                { field: "End_Customer_Retailer", title: "End Customer/Retailer", width: "160px", filterable: { multi: true, search: true } },
-                { field: "Request_Date", title: "Request Date", width: "130px", filterable: { multi: true, search: true } },
-                { field: "Requested_by", title: "Requested by", width: "130px", filterable: { multi: true, search: true } },
-                { field: "Request_Quarter", title: "Request Quarter", width: "130px", filterable: { multi: true, search: true } },
-                { field: "Division_Approved_Date", title: "Division Approved Date", width: "170px", filterable: { multi: true, search: true } },
-                { field: "Division_Approver", title: "Division Approver", width: "150px", filterable: { multi: true, search: true } },
-                { field: "Geo_Approver", title: "Geo Approver", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Additive_Standalone", title: "Group Type", width: "100px", filterable: { multi: true, search: true } },
+                { field: "Request_Date", title: "Request Date", width: "130px", filterable: { multi: true, search: true }, hidden: true },
+                { field: "Requested_by", title: "Requested by", width: "130px", filterable: { multi: true, search: true }, hidden: true },
+                { field: "Request_Quarter", title: "Request Quarter", width: "130px", filterable: { multi: true, search: true }, hidden: true },
+                { field: "Division_Approved_Date", title: "Division Approved Date", width: "170px", filterable: { multi: true, search: true }, hidden: true },
+                { field: "Division_Approver", title: "Division Approver", width: "150px", filterable: { multi: true, search: true }, hidden: true },
+                { field: "Geo_Approver", title: "Geo Approver", width: "150px", filterable: { multi: true, search: true }, hidden: true },
                 { field: "Market_Segment", title: "Market Segment", width: "150px", filterable: { multi: true, search: true } },
-                { field: "Deal_Description", title: "Deal Description", width: "150px", filterable: { multi: true, search: true } },
+                { field: "Deal_Description", title: "Deal Description", width: "150px", filterable: { multi: true, search: true }, hidden: true },
                 { field: "Ceiling_Limit_End_Volume_for_VT", title: "Ceiling Limit/End Volume (for VT)", width: "200px", filterable: { multi: true, search: true } },
                 { field: "Limit", title: "$ Limit", width: "100px", filterable: { multi: true, search: true } },
                 { field: "Consumption_Reason", title: "Consumption Reason", width: "150px", filterable: { multi: true, search: true } },
@@ -272,6 +298,7 @@
                 { field: "Consumption_Customer_Platform", title: "Consumption Customer Platform", width: "200px", filterable: { multi: true, search: true } },
                 { field: "Consumption_Customer_Segment", title: "Consumption Customer Segment", width: "200px", filterable: { multi: true, search: true } },
                 { field: "Consumption_Customer_Reported_Geo", title: "Consumption Customer Reported Geo", width: "220px", filterable: { multi: true, search: true } },
+                { field: "End_Customer_Retailer", title: "End Customer/Retailer", width: "160px", filterable: { multi: true, search: true } },
                 { field: "End_Customer", title: "End Customer", width: "150px", filterable: { multi: true, search: true } },
                 { field: "End_Customer_Country", title: "End Customer Country", width: "180px", filterable: { multi: true, search: true } },
                 { field: "Unified_Customer_ID", title: "Unified Customer ID", width: "170px", filterable: { multi: true, search: true } },
@@ -281,8 +308,7 @@
                 { field: "System_Configuration", title: "System Configuration", width: "180px", filterable: { multi: true, search: true } },
                 { field: "Settlement_Partner", title: "Settlement Partner", width: "170px", filterable: { multi: true, search: true } },
                 { field: "Reset_Per_Period", title: "Reset Per Period", width: "150px", filterable: { multi: true, search: true } },
-                { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } },
-                { field: "COMMENTS", title: "Comments", width: "500px", filterable: { multi: true, search: true } }
+                { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } }
             ]
         };
 
