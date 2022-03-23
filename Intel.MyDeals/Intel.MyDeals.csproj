@@ -799,7 +799,7 @@
     <Content Include="Client\src\app\core\notification\notificationDock.directive.js" />
     <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.html" />
     <Content Include="Client\src\app\core\trashcan\trashcan.component.css" />
-    <Content Include="Client\src\app\dashboard\addWidget.component.html" />
+    <Content Include="Client\src\app\dashboard\addWidget\addWidget.component.html" />
     <Content Include="Client\src\app\dashboard\dashboard.component.html" />
     <Content Include="Client\src\app\dashboard\dashboardWidget.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
@@ -1908,6 +1908,7 @@
     <Content Include="Client\tsconfig.json" />
     <Content Include="Client\yarn.lock" />
     <Content Include="Client\src\app\admin\geo\admin.geo.component.html" />
+    <Content Include="Client\src\app\dashboard\addWidget\addWidget.component.css" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
@@ -2175,7 +2176,7 @@
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\dashboard\addWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\addWidget\addWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\contractStatusWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\dashboard.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\dashboardWidget.component.ts" />

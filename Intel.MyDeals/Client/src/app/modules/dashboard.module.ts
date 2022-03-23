@@ -1,6 +1,6 @@
 
 import { DashboardComponent } from "../dashboard/dashboard.component";
-import { addWidgetComponent } from "../dashboard/addWidget.component";
+import { addWidgetComponent } from "../dashboard/addWidget/addWidget.component";
 import { DashboardWidgetComponent } from "../dashboard/dashboardWidget.component";
 import { ContractStatusWidgetComponent } from "../dashboard/contractStatusWidget.component";
 import { NewContractWidgetComponent } from "../dashboard/newContractWidget.component";

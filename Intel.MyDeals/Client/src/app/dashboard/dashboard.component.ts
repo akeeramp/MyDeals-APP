@@ -3,7 +3,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewEncapsulat
 import {DisplayGrid, GridsterConfig, GridsterItem, GridType,CompactType} from 'angular-gridster2';
 import { downgradeComponent } from "@angular/upgrade/static";
 import {MatDialog} from '@angular/material/dialog';
-import { addWidgetComponent } from "./addWidget.component";
+import { addWidgetComponent } from "./addWidget/addWidget.component";
 import { widgetConfig } from "./widget.config";
 import * as _ from "underscore";
 
@@ -30,16 +30,16 @@ export class DashboardComponent implements OnInit {
   }
   openPopUp(){
     let vm=this;
-    let widgets=_.pluck(this.dashboard,"type");
+      let widgets = this.dashboard;
     const dialogRef = this.dialog.open(addWidgetComponent, {
-      width: '250px',
-      data: {name: "Select Widget",widgets:widgets},
+        width: '600px',
+        data: { name: "Add a Widget",widgets:widgets},
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The widget was closed:: result::',result);
       if(result){
         let widget=_.findWhere(widgetConfig,{type:result});
-        vm.dashboard.push({cols:widget.position.col,rows:widget.position.row,y:widget.size.y,x:widget.size.x,type:widget.type,canRefresh:widget.canRefresh,canSetting:widget.canChangeSettings});
+        vm.dashboard.push({cols:widget.position.col,rows:widget.position.row,y:widget.size.y,x:widget.size.x,type:widget.type,canRefresh:widget.canRefresh,canSetting:widget.canChangeSettings,isAdded:widget.isAdded});
         vm.options.api.optionsChanged();
       }
     });
@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
     // };
     let dashboardItems=[];
     _.each(widgetConfig, item=>{
-      dashboardItems.push({cols:item.position.col,rows:item.position.row,y:item.size.y,x:item.size.x,type:item.type,canRefresh:item.canRefresh,canSetting:item.canChangeSettings});
+      dashboardItems.push({cols:item.position.col,rows:item.position.row,y:item.size.y,x:item.size.x,type:item.type,canRefresh:item.canRefresh,canSetting:item.canChangeSettings,isAdded:item.isAdded});
     });
 
     this.dashboard=dashboardItems;
