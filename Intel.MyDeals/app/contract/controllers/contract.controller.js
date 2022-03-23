@@ -2694,8 +2694,8 @@
                     else {
                         for (var index = 0; index < $scope.spreadDs.data().length; index++) {
                             sData.push($scope.spreadDs.data()[index]);
-                            if (sData[index]["dirty"])
-                            sData[index]["_dirty"] = sData[index]["dirty"];
+                            if ($scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"] != undefined && $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"])
+                                sData[index]["_dirty"] = $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"];
                         }
                     }
 
