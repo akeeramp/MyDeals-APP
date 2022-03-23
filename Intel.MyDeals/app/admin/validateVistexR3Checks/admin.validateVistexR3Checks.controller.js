@@ -161,7 +161,7 @@
         };
 
         $scope.SendDealsToVistex = function () {
-            alert("Sending deals : " + $scope.GoodToSendDealIds);
+            //alert("Sending deals : " + $scope.GoodToSendDealIds);
             var win = window.open("Admin#/pushDealstoVistex?r3ValidDeals=" + $scope.GoodToSendDealIds);
             win.focus();
         };
@@ -227,7 +227,19 @@
             pageSize: 25
         });
 
+        vm.exportToExcel = function () {
+            gridUtils.dsToExcelVistexR3(vm.gridOptions, vm.gridOptions.dataSource, "Vistex R3 Deal Review.xlsx", false);
+        }
+
+        vm.clearFilters = function () {
+            $("form.k-filter-menu button[type='reset']").trigger("click");
+        };
+
         vm.gridOptions = {
+            toolbar: [
+                { text: "", template: kendo.template($("#grid_toolbar_clearbutton").html()) },
+                { text: "", template: kendo.template($("#grid_toolbar_exportexcel").html()) }
+            ],
             dataSource: vm.dataSource,
             filterable: true,
             scrollable: true,

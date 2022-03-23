@@ -1,7 +1,7 @@
 ﻿<div class="contract-detail-form" style="overflow:auto">
     <div>
         <h2>Validate Deals for Vistex Push</h2>
-        <p style="color: #FC4C02">Use the tool below to validate existing deals against Vistex requirements prior to pushing them to Vistex.</p>
+        <p style="color: #FC4C02">Validate existing deals against Vistex R3 requirements prior to pushing them to the Vistex system.</p>
     </div>
     <div class="row">
         <div class="col-md-5">
@@ -48,7 +48,7 @@
 
             <button ng-click="ValidateForVistexR3()" class="btn btn-primary"> Run Validation </button>
             <span style="margin-left:15px;margin-top:10px;" ng-if="ShowResults == true">
-                <a style="text-decoration:underline"><b>Results:</b></a> Deals Sent: {{UpdCnt.sent}}, <i style="color:darkblue;">Returned: {{UpdCnt.returned}}</i>
+                <a style="text-decoration:underline"><b>Results:</b></a> Deals Sent: {{UpdCnt.sent}}, <i style="color:darkblue;">Errors Returned: {{UpdCnt.returned}}</i>
             </span>
 
             <div class="col-md-8 local-Padding-Top" ng-if="ShowResults == true && GoodToSendDealIds.length > 0">
@@ -65,6 +65,16 @@
     </div>
 
     </div>
+
+<script id="grid_toolbar_clearbutton" type="text/x-kendo-template">
+    <a role="button" class="k-button k-button-icontext" ng-click="vm.clearFilters()">
+        <span class="k-icon intelicon-cancel-filter-solid"></span>Clear Filters</a>
+</script>
+
+<script id="grid_toolbar_exportexcel" type="text/x-kendo-template">
+    <a role="button" class="k-button k-button-icontext k-grid-add" ng-click="vm.exportToExcel()">
+        <span class="intelicon-ms-excel-outlined" style="margin-right:5px"></span>Export Error Deals to Excel</a>
+</script>
 
 <style>
     /*TODO: If all pages need this we have to paste it in Global CSS and have to check the effect in all the pages*/

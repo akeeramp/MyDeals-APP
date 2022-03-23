@@ -1921,6 +1921,123 @@ gridUtils.dsToExcel = function (grid, ds, title, onlyVisible) {
 
 }
 
+gridUtils.dsToExcelVistexR3 = function (grid, ds, title, onlyVisible) {
+    var rows = [{ cells: [] }];
+    var rowsProd = [{ cells: [] }];
+    var gridColumns = grid.columns;
+    var colWidths = [""];
+    var colHidden = false;
+    if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
+    var forceHide = [];
+    var colList = [];
+
+    // Create element to generate templates in.
+    var elem = document.createElement('div');
+
+    for (var i = 0; i < gridColumns.length; i++) {
+        colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+        if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
+        if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+            var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
+                ? gridColumns[i].excelHeaderLabel
+                : gridColumns[i].title;
+
+            rows[0].cells.push({
+                value: colTitle,
+                textAlign: "left",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: false,
+                width: "230px"
+            });
+            colList.push(gridColumns[i].field);
+
+            colWidths.push({ autoWidth: true });
+        }
+    }
+
+    var titles = ["Deal_Id", "COMMENTS", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer_Retailer", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex"];
+    for (var t = 0; t < titles.length; t++) {
+        rowsProd[0].cells.push({
+            value: titles[t],
+            textAlign: "left",
+            background: "#0071C5",
+            color: "#ffffff",
+            wrap: true
+        });
+    }
+    var data = onlyVisible ? ds._data : ds._data;
+
+    for (var i = 0; i < data.length; i++) {
+        //push single row for every record
+        var dataItem = data[i];
+        if (dataItem !== undefined && dataItem !== null) {
+            var cells = [];
+            for (var c = 0; c < gridColumns.length; c++) {
+                colHidden = onlyVisible && gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
+                if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                    // get default value
+                    if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
+                        dataItem[gridColumns[c].field] = "";
+                    var val = dataItem[gridColumns[c].field];
+                    if (gridColumns[c].field != 'Id' && gridColumns[c].field != "" && gridColumns[c].field) {
+                        // now look for templates
+                        if (gridColumns[c].template || gridColumns[c].excelTemplate) {
+                            var templateHtml = gridColumns[c].excelTemplate !== undefined
+                                ? gridColumns[c].excelTemplate
+                                : gridColumns[c].template;
+
+                            templateHtml = "#=" + gridColumns[c].field + "#";
+                            var columnTemplate = kendo.template(templateHtml);
+                            // Generate the template content for the current cell.
+
+                            var newHtmlVal = columnTemplate(dataItem);
+                            newHtmlVal = newHtmlVal.replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            elem.innerHTML = newHtmlVal;
+
+                            // Output the text content of the templated cell into the exported cell.                                   
+                            val = (newHtmlVal).replace(/null/g, '').replace(/undefined/g, '')
+                                .replace(/LINEBREAKTOKEN/g, '\n');
+                            var regex = /<br\s*[\/]?>/gi;
+                            val = val.replace(regex, "\r");
+
+                        }
+
+                        // Replace special characters that are killers - do it here to catch templated items as well as normal ones.                               
+                        val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
+
+                        cells.push({
+                            value: val,
+                            wrap: true,
+                            width: "230px"
+                        });
+
+                    }
+                }
+            }
+            rows.push({
+                cells: cells
+            });
+        }
+    }
+     sheets
+    var sheets = [
+        {
+            columns: colWidths,
+            title: title,
+            frozenRows: 1,
+            rows: rows
+        }
+    ];
+    var workbook = new kendo.ooxml.Workbook({
+        sheets: sheets
+    });
+
+    //save the file as Excel file with extension xlsx
+    kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: title });
+}
+
 //Export to excel Legal exception
 gridUtils.dsToExcelLegalException = function (grid, ds, title, onlyVisible, dealListChk) {
 
