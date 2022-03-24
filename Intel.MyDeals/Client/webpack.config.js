@@ -3,16 +3,16 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = env => {
-    const mode = env.mode ;
-    if(mode =='development'){
+    const mode = env.mode;
+    if (mode == 'development') {
         return {
             mode: mode,
-            entry:{
+            entry: {
                 bundle: "./src/main.ts"
             },
             watch: false,
             output: {
-                path:path.resolve(__dirname,"src/dist"),
+                path: path.resolve(__dirname, "src/dist"),
                 filename: "[name].js"
             },
             resolve: {
@@ -21,39 +21,42 @@ module.exports = env => {
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
             module: {
-                rules :[{
-                        test: /\.tsx?$/,
-                        loader:"ts-loader"
-                    }]
-                }
-            }
-    }
-    else{
+                rules: [{
+                    test: /\.tsx?$/,
+                    loader: "ts-loader"
+                }]
+            },
+            //this will help to avoid sourcemap issue for chrome devtool to load
+            devtool: "eval-cheap-source-map"
+
+        }
+
+    } else {
         return {
             mode: 'production',
-            entry:{
+            entry: {
                 bundle: "./src/main.ts"
             },
             watch: false,
             output: {
-                path:path.resolve(__dirname,"src/dist"),
+                path: path.resolve(__dirname, "src/dist"),
                 filename: "[name].js"
             },
-            optimization:{
-                minimize:true,
+            optimization: {
+                minimize: true,
                 mangleWasmImports: false,
                 mangleExports: false,
                 minimizer: [
                     new TerserPlugin({
-                      terserOptions: {
-                        toplevel:true,
-                        sourceMap:false,
-                        compress: true,
-                        module: true,
-                        mangle:false,
-                      },
+                        terserOptions: {
+                            toplevel: true,
+                            sourceMap: false,
+                            compress: true,
+                            module: true,
+                            mangle: false,
+                        },
                     }),
-                  ],
+                ],
             },
             performance: {
                 hints: false,
@@ -66,13 +69,12 @@ module.exports = env => {
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
             module: {
-                rules :[{
-                        test: /\.tsx?$/,
-                        loader:"ts-loader"
-                        },
-                    ]
-                },
-            }
+                rules: [{
+                    test: /\.tsx?$/,
+                    loader: "ts-loader"
+                }, ]
+            },
+        }
     }
-    
+
 };
