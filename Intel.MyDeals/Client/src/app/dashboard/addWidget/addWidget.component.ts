@@ -38,6 +38,8 @@ export class addWidgetComponent {
     }
 
     add(widget) {
-        this.dialogRef.close(widget);
+        if (widget.isAdded == true) {
+            this.dialogRef.close(widget.type);
+        }
     }
 }
