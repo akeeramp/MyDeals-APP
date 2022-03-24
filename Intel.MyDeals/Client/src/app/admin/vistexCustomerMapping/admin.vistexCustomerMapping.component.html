@@ -27,22 +27,24 @@
                     Refresh
                 </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="100px" [headerClass]="{'headerClass':true}">
+            <kendo-grid-command-column title="Commands" width="150px" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <div class="text-center">
                         <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
                             <span class="k-icon k-i-edit k-icon-sm"></span>
                         </button>
-                     </div>
-                    <button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
-                        <span class="k-icon k-i-check k-icon-sm"></span>
-                    </button>
-                    <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
-                        <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
-                    </button>
+                    </div>
+                    <div class="text-center">
+                        <button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                            <span class="k-icon k-i-check k-icon-sm"></span>
+                        </button>
+                        <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
+                            <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
+                        </button>
+                    </div>
                 </ng-template>
             </kendo-grid-command-column>
-            <kendo-grid-column field="CUST_NM" title="Customer Name" width="230" [headerClass]="{'headerClass':true}" [editable]="false">
+            <kendo-grid-column field="CUST_NM" title="Customer Name" width="200" [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

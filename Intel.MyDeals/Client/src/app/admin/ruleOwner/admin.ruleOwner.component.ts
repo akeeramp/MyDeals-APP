@@ -69,7 +69,7 @@ export class RuleOwnerComponent {
 
     public state: State = {
         skip: 0,
-        take: 10,
+        take: 25,
         group: [],
         // Initial filter descriptor
         filter: {

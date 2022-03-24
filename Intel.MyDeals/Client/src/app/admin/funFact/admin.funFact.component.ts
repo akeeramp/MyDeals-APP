@@ -45,7 +45,7 @@ export class adminFunFactComponent {
     @ViewChild('fontAwesomeTooltip', { static: false }) fontAwesomeTooltip: NgbTooltip;
     public state: State = {
         skip: 0,
-        take: 10,
+        take: 25,
         group: [],
         sort:[],
         // Initial filter descriptor
@@ -148,7 +148,7 @@ export class adminFunFactComponent {
     clearFilterandSorting() {
         this.state={
             skip: 0,
-            take: 10,
+            take: 25,
             group: [],
             sort: [],
             filter: {

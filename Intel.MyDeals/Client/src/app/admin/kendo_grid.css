@@ -2,10 +2,162 @@ kendo-grid {
     height: 480px;
 }
 
+.k-grid td {
+    font-family: 'Intel Clear', 'Arial';
+    font-size: 14px;
+}
+
+label {
+    font-family: 'Intel Clear', 'Arial';
+    font-weight: normal;
+}
+
+.k-icon-sm {
+    font-size: 18px;
+}
+
+.k-grid tbody tr:hover {
+    background-color: #ecf8fb;
+}
+/*.k-button:focus,.k-button.k-state-focus, .k-button.k-state-focused {
+    box-shadow: 0px !important;
+}*/
+.k-button-primary, .k-button.k-primary {
+    border-color: #0071c5;
+    background-color: #0071c5;
+}
+
+    .k-button-primary:hover, .k-button.k-primary:hover {
+        background-color: #1187cd;
+    }
+/*Toggle button styling*/
+.mat-slide-toggle {
+    transform: scale(1.4);
+}
+/*.mat-slide-toggle-bar {*/
+/*border-radius: 0px !important;
+    width: 20px;*/
+/*background-color: #00aeef;*/
+/*}*/
+
+.mat-slide-toggle-thumb {
+    /*border-radius: 0px !important;
+    width: 8px;*/
+    background-color: #b1babf;
+    border-color: #b1babf;
+}
+
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb {
+    background-color: #00aeef;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after {
+    content: 'ON' !important;
+    font-size: 45% !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    position: absolute !important;
+    left: 4px !important;
+    top: -5px !important;
+}
+
+.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after {
+    content: 'OFF' !important;
+    font-size: 45% !important;
+    font-weight: 700 !important;
+    color: #212529 !important;
+    position: absolute !important;
+    left: 21px !important;
+    top: -5px !important;
+}
+
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+    background-color: #0071c5;
+}
+
+.mat-slide-toggle.mat-disabled .mat-slide-toggle-label, .mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container {
+    cursor: not-allowed;
+}
+
+/*columnMenu filter styling*/
+.k-columnmenu-item {
+    display: block;
+    padding: 1.071em;
+    line-height: 1.34em;
+}
+
+    .k-columnmenu-item:hover, .k-column-list-item:hover {
+        color: #fff;
+        background-color: #00aeef;
+        border-color: #00aeef;
+        background-image: none,linear-gradient(to bottom, #1891ee 0, #1891ee 100%);
+    }
+
+    .k-columnmenu-item:focus {
+        box-shadow: none;
+    }
+
+.k-grid-columnmenu-popup.k-popup {
+    padding: 0px;
+}
+/*to align filter content left*/
+.k-columnmenu-item-content {
+    left: 230px;
+    top: 105px;
+    position: absolute;
+    background-color: #fff;
+}
+
+/*Scroll styling*/
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #e8eaec;
+}
+
+*::-webkit-scrollbar-thumb {
+    /*height: 40px;*/
+    background-color: #00aeef !important;
+    border-radius: 5px;
+}
+
+/*Pagination styling*/
+.k-pager-numbers .k-link.k-state-selected {
+    border-color: #0071c5;
+    color: #fff !important;
+    background-color: #0071c5 !important;
+}
+
+.k-pager-numbers .k-link, .k-pager-nav.k-link, .k-pager-refresh {
+    /*border-color: #ffffff;*/
+    color: #0071c5 !important;
+    /*background-color: #ffffff;*/
+}
+
+    .k-pager-numbers .k-link:focus, .k-pager-numbers .k-link.k-state-focus {
+        box-shadow: none;
+    }
+
+.k-list > .k-state-selected.k-state-focused {
+    background-color: #0071c5 !important;
+}
+
+.k-icon:hover, .k-icon:focus {
+    color: #00aeef;
+}
+
+.k-pager-nav:hover {
+    background-color: #ecf8fb !important;
+}
+/*Toggle styling*/
+
 .k-header-alignment {
     padding-top: 50px;
     padding-left: 35px !important;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .k-column-title {
@@ -50,6 +202,10 @@ a {
     color: #1a3e6f;
     font-size: 14px !important;
     font-weight: bold;
+}
+
+.k-grid-header {
+    padding: 0px !important;
 }
 
 .k-grid-toolbar {
@@ -187,17 +343,17 @@ body {
     font-size: 16px !important;
 }
 
-table {
+/*table {
     padding-top: 7px;
 }
-
+*/
 .kendo-grid-buttons {
     position: relative !important;
     padding-left: 35px !important;
     padding-right: 25px !important;
     padding-top: 10px !important;
     width: 99% !important;
-    height: 200px !important;
+   /* height: 200px !important;*/
 }
 
 .k-button {

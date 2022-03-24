@@ -27,7 +27,7 @@ export class admindataQualityComponent {
     private color: ThemePalette = 'primary';
     private state: State = {
         skip: 0,
-        take: 10,
+        take: 25,
         group: [],
         // Initial filter descriptor
         filter: {
