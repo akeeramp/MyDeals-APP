@@ -802,6 +802,7 @@
     <Content Include="Client\src\app\dashboard\addWidget\addWidget.component.html" />
     <Content Include="Client\src\app\dashboard\dashboard.component.html" />
     <Content Include="Client\src\app\dashboard\dashboardWidget.component.html" />
+    <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
@@ -2185,8 +2186,10 @@
     <TypeScriptCompile Include="Client\src\app\dashboard\recentsUrlWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\searchContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\widget.config.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\core.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\dashboard.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.service.ts" />

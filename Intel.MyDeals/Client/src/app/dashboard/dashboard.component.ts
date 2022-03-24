@@ -4,6 +4,7 @@ import {DisplayGrid, GridsterConfig, GridsterItem, GridType,CompactType} from 'a
 import { downgradeComponent } from "@angular/upgrade/static";
 import {MatDialog} from '@angular/material/dialog';
 import { addWidgetComponent } from "./addWidget/addWidget.component";
+import { widgetSettingsComponent } from "./widgetSettings/widgetSettings.component";
 import { widgetConfig } from "./widget.config";
 import * as _ from "underscore";
 
@@ -27,7 +28,22 @@ export class DashboardComponent implements OnInit {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
-  }
+    }
+
+    openWidgetSettings(index) {
+        const dialogRef = this.dialog.open(widgetSettingsComponent, {
+            data: { 'renameItem': this.dashboard[index].name },
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.dashboard[index].name = result;
+                this.options.api.optionsChanged();
+            }
+        });
+
+    }
+
   openPopUp(){
     let vm=this;
       let widgets = this.dashboard;
@@ -39,7 +55,7 @@ export class DashboardComponent implements OnInit {
       console.log('The widget was closed:: result::',result);
       if(result){
         let widget=_.findWhere(widgetConfig,{type:result});
-        vm.dashboard.push({cols:widget.position.col,rows:widget.position.row,y:widget.size.y,x:widget.size.x,type:widget.type,canRefresh:widget.canRefresh,canSetting:widget.canChangeSettings,isAdded:widget.isAdded});
+        vm.dashboard.push({cols:widget.position.col,rows:widget.position.row,y:widget.size.y,x:widget.size.x,type:widget.type,canRefresh:widget.canRefresh,canSetting:widget.canChangeSettings,isAdded:widget.isAdded,name:widget.name});
         vm.options.api.optionsChanged();
       }
     });
@@ -60,7 +76,7 @@ export class DashboardComponent implements OnInit {
     // };
     let dashboardItems=[];
     _.each(widgetConfig, item=>{
-      dashboardItems.push({cols:item.position.col,rows:item.position.row,y:item.size.y,x:item.size.x,type:item.type,canRefresh:item.canRefresh,canSetting:item.canChangeSettings,isAdded:item.isAdded});
+      dashboardItems.push({cols:item.position.col,rows:item.position.row,y:item.size.y,x:item.size.x,type:item.type,canRefresh:item.canRefresh,canSetting:item.canChangeSettings,isAdded:item.isAdded,name:item.name});
     });
 
     this.dashboard=dashboardItems;

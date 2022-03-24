@@ -24,12 +24,15 @@
         <div class="col-md-12">
             <div style="width: 100vw; height: 100vh;">
                 <gridster [options]="options">
-                    <gridster-item [item]="item" *ngFor="let item of dashboard">
+                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <b>{{item.name}}</b>
+                            </div>
+                            <div class="col-md-6">
                                 <button (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="">Remove</button>
                                 <button [hidden]="!item.canRefresh" class="">Refresh</button>
-                                <button [hidden]="!item.canSetting" class="">Setting</button>
+                                <button [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class=""><i class="intelicon-settings-solid"></i><!---Setting--></button>
                             </div>
                         </div>
                         <div class="row">

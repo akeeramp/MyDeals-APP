@@ -1,0 +1,16 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+
+<kendo-dialog title="Widget Settings" (close)="cancelWidgetSetting()">
+    <label class="control-label col-lg-3 col-md-3">Name</label>
+    <div class="col-lg-9 col-md-9">
+        <input name="name" type="text" [(ngModel)]="data.renameItem"/>
+    </div>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="cancelWidgetSetting()">Cancel</button>
+        <button [disabled]="data.renameItem.trim().length == 0" class='k-button'  [mat-dialog-close]="data.renameItem">Save</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

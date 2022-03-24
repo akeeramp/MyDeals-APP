@@ -7,6 +7,7 @@ import { NewContractWidgetComponent } from "../dashboard/newContractWidget.compo
 import { openContractWidgetComponent } from "../dashboard/openContractWidget.component";
 import { RecentsUrlWidgetComponent } from "../dashboard/recentsUrlWidget.component";
 import { SearchContractWidgetComponent } from "../dashboard/searchContractWidget.component";
+import { widgetSettingsComponent } from '../dashboard/widgetSettings/widgetSettings.component';
 
 export let dashboardComponents =[
     DashboardComponent,
@@ -16,5 +17,6 @@ export let dashboardComponents =[
     NewContractWidgetComponent,
     openContractWidgetComponent,
     RecentsUrlWidgetComponent,
-    SearchContractWidgetComponent
+    SearchContractWidgetComponent,
+    widgetSettingsComponent
 ]
