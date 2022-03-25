@@ -42,7 +42,7 @@ export const widgetConfig = [
         desc: "Quickly Navigate to a contract by entering its Id",
         icon: "intelicon-tools",
         type: "opencontracts",
-        canChangeSettings: false,
+        canChangeSettings:true,
         canRefresh: true,
         canAdd: true,
         isAdded: true
@@ -54,7 +54,7 @@ export const widgetConfig = [
         desc: "Recently visited My deals contracts or deals",
         icon: "intelicon-time-outlined",
         type: "openrecents",
-        canChangeSettings: false,
+        canChangeSettings:true,
         canRefresh: true,
         canAdd: true,
         isAdded: true

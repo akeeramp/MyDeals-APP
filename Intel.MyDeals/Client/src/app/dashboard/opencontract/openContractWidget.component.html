@@ -1,0 +1,13 @@
+<div>{{widget.type}}</div>
+<div class="container-fluid widget-container" style="overflow: auto; text-align: center; display: table;">
+    <div style="vertical-align: middle; display: table-cell;">
+        <h2 aria-hidden="true"><i class="text-primary intelicon-search-stack-solid"></i></h2>
+        <div style="width: 100%; text-align: center;">
+            <div class="gridster-item-content">
+                <kendo-textbox [style.width.px]="200" [(ngModel)]="contractId" placeholder="Contract Number" [clearButton]="true" [autoClose]="true" triggers="manual" ngbTooltip="Please enter a contract number" #txtToolTip="ngbTooltip">
+                </kendo-textbox>
+                <button class="btn btn-default" (click)="openContract()">Open</button>
+            </div>
+        </div>
+    </div>
+</div>

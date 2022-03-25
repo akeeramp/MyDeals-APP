@@ -1,0 +1,5 @@
+div.overFlowWidRecent {
+    width: auto;
+    height: 265px !important;
+    overflow: auto !important;
+}

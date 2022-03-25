@@ -27,7 +27,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { OrderModule } from 'ngx-order-pipe';
-import { OrderByPipe } from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
 //spreadsheet component
 import { HotTableModule } from '@handsontable/angular';
 //******************shared components**************************
@@ -87,6 +87,7 @@ import { dashboardComponents } from './modules/dashboard.module';
         LayoutModule,
         MenusModule,
         DateInputsModule,
+        NgPipesModule,
         OrderModule,
         GridsterModule
         
@@ -106,7 +107,6 @@ import { dashboardComponents } from './modules/dashboard.module';
         }
     ],
     declarations: [
-        OrderByPipe,
         ReportingComponent,
         sharedComponents,
         adminComponents,

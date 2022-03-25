@@ -3,20 +3,23 @@ import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewEncapsulat
 import {DisplayGrid, GridsterConfig, GridsterItem, GridType,CompactType} from 'angular-gridster2';
 import { downgradeComponent } from "@angular/upgrade/static";
 import {MatDialog} from '@angular/material/dialog';
-import { addWidgetComponent } from "./addWidget/addWidget.component";
-import { widgetSettingsComponent } from "./widgetSettings/widgetSettings.component";
-import { widgetConfig } from "./widget.config";
+import { addWidgetComponent } from "../addWidget/addWidget.component";
+import { widgetSettingsComponent } from "../widgetSettings/widgetSettings.component";
+import { widgetConfig } from "../widget.config";
 import * as _ from "underscore";
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: 'Client/src/app/dashboard/dashboard.component.html',
+  templateUrl: 'Client/src/app/dashboard/dashboard/dashboard.component.html',
+  styleUrls:['Client/src/app/dashboard/dashboard/dashboard.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
   constructor(protected dialog: MatDialog){
-
+   //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+   $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+   $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
   }
   options: GridsterConfig;
   dashboard: GridsterItem[];
@@ -101,6 +104,11 @@ export class DashboardComponent implements OnInit {
         this.resizeEvent.emit(item);
       }
     };
+  }
+  ngOnDestroy() {
+    //The style removed are adding back
+    $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+    $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
   }
 }
 

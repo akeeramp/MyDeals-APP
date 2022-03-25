@@ -1,0 +1,5 @@
+div.overFlowWidget {
+    width: auto;
+    height: 720px !important;
+    overflow: auto !important;
+}
