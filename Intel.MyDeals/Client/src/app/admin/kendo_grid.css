@@ -17,7 +17,7 @@ label {
 }
 
 .k-grid tbody tr:hover {
-    background-color: #ecf8fb;
+    background-color: #ecf8fb!important;
 }
 /*.k-button:focus,.k-button.k-state-focus, .k-button.k-state-focused {
     box-shadow: 0px !important;
@@ -28,7 +28,7 @@ label {
 }
 
     .k-button-primary:hover, .k-button.k-primary:hover {
-        background-color: #1187cd;
+        background-color: #1187cd!important;
     }
 /*Toggle button styling*/
 .mat-slide-toggle {
@@ -65,7 +65,7 @@ label {
     content: 'OFF' !important;
     font-size: 45% !important;
     font-weight: 700 !important;
-    color: #212529 !important;
+    color: #fff !important;
     position: absolute !important;
     left: 21px !important;
     top: -5px !important;
@@ -101,12 +101,12 @@ label {
     padding: 0px;
 }
 /*to align filter content left*/
-.k-columnmenu-item-content {
+/*.k-columnmenu-item-content {
     left: 230px;
     top: 105px;
     position: absolute;
     background-color: #fff;
-}
+}*/
 
 /*Scroll styling*/
 *::-webkit-scrollbar {

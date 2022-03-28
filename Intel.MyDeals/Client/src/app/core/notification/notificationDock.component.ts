@@ -1,12 +1,14 @@
 ﻿import * as angular from 'angular';
-import { Input, Output, Component, OnInit, EventEmitter, Inject } from "@angular/core";
+import { Input, Output, Component, OnInit, EventEmitter } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { notificationsService } from './notificationDock.service';
 import { logger } from "../../shared/logger/logger";
 import * as _ from 'underscore';
-import { notificationsSettingsDialog } from './notificationsSettings.component';
-import { notificationsModalDialog } from './notificationsModal.component';
+import { notificationsSettingsDialog } from '../../admin/notification/notificationsSettings.component';
+import { notificationsModalDialog } from '../../admin/notification/notificationsModal.component';
 import { MatDialog } from "@angular/material/dialog";
+import { data } from 'jquery';
+import { Subscription} from 'rxjs';
 
 @Component({
     selector: 'notification-dock-angular',
@@ -15,47 +17,38 @@ import { MatDialog } from "@angular/material/dialog";
 })
 
 export class notificationDockComponent {
-    constructor(private notificationSvc: notificationsService, private loggerSvc: logger, public dialog: MatDialog) { }
-
-    public unreadMessages: number = 0;
+    constructor(public notificationSvc: notificationsService, private loggerSvc: logger, public dialog: MatDialog) { }
+    unreadMessagesCountSubscription: Subscription; 
     public notifications: Array<any>;
+    unreadMessagesCount: number;
 
-    //Notifications Settings Modal
-    gotoNotificationSettings(dataItem) {
-        /*this.dialog.openDialog();*/
+    //to open notification settings pop up
+    gotoNotificationSettings() {
         this.dialog.open(notificationsSettingsDialog, {
-            width: "500px",
+            width: "800px"
         });
     }
 
     //Open Message Modal
     openMessage(dataItem) {
         const dialogRef = this.dialog.open(notificationsModalDialog, {
-            width: "500px",
-        });
+            width: "900px",
+            data: dataItem
+        }
+        );
         dialogRef.afterClosed().subscribe(result => {
             dataItem.IS_READ_IND = true;
         });
     }
 
-    //get Notification
+    //get Notifications
     getNotification(mode) {
         this.notificationSvc.getNotification(mode).subscribe(
             (response: Array<any>) => {
                 this.notifications = response;
-            }, function (response) {
-                //logger.loggerSvc.error("Unable to get Notifications.", response, response.statusText);
-            })
-    }
-
-    //get Unread Notification Count
-    getUnreadNotification() {
-        this.notificationSvc.getUnreadNotificationCount().subscribe(
-            (response: number) => {
-                this.unreadMessages = response;
-            }, function (response) {
-                this.loggerSvc.error("Unable to get user unread messages.", response, response.statusText);
-            })
+            }, error => {
+                this.loggerSvc.error("notificationDockComponent::getNotification::Unable to get user unread messages.", error );
+               })
     }
 
     //See All Notifications template will be visible once Notifications component migrated
@@ -63,29 +56,25 @@ export class notificationDockComponent {
         window.open('/Admin#/notifications', '_blank');
     }
 
-
-    /*$scope.$on('refreshUnreadCount', function (event, data) {
-        debugger;
-        this.getUnreadNotification();
-    });*/
-
     ngOnInit() {
         //this.isFunFactEnabled = this.isShowFunFact == 'true' ? true : false;
-        this.getUnreadNotification();
+        this.notificationSvc.getUnreadNotification();
+        // subscription to the observable which is used to update the unreadMessagesCount
+        this.unreadMessagesCountSubscription = this.notificationSvc.getUnreadNotificationMsgsCount()
+            .subscribe((count) => {
+                this.unreadMessagesCount = count;
+            });
 
         // Fix some sloopy bug when we are trying to engage an old easter egg
+        //if (window.location.href.indexOf('Snow') < 0) {
+            //this.getUnreadNotification();
+        //}
 
-        if (window.location.href.indexOf('Snow') < 0) {
-            this.getUnreadNotification();
-        }
-
-        //_refreshUnreadCount$ BehaviorSubject yet to implement in NotificationModal & Notification components
-        /*this.notificationSvc._refreshUnreadCount$.subscribe(() => {
-            this.getUnreadNotification();
-        });*/
 
     }
-
+    ngOnDestroy() {
+        this.unreadMessagesCountSubscription.unsubscribe();
+    }
 }
 angular
     .module('app')

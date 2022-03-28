@@ -3,7 +3,7 @@ import { Injectable, Inject } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +11,20 @@ import { Observable } from 'rxjs';
 
 export class notificationsService {
     public apiBaseUrl: string = "api/Notifications/";
-
     constructor(private httpClient: HttpClient) {
+    }
+
+    //behaviour subject to hold the unRead Notification Count
+    private unReadNotificationCount = new BehaviorSubject<any>(0);
+    //unReadNotificationCount$ will have the updated count which is used in notification dock component to display the count
+    private unReadNotificationCount$: Observable<number> = this.unReadNotificationCount;
+
+    public getUnreadNotificationMsgsCount(): Observable<number> {
+        return this.unReadNotificationCount$;
+    }
+
+    private setUnreadNotificationMsgsCount(res) {
+        this.unReadNotificationCount.next(res);
     }
 
     public getUnreadNotificationCount(): Observable<any> {
@@ -20,9 +32,45 @@ export class notificationsService {
         return this.httpClient.get(apiUrl);
     }
 
+    //get Unread Notification Count
+    public getUnreadNotification() {
+        this.getUnreadNotificationCount().subscribe(
+            (response) => {
+                //to set the next value of the unReadNotificationCount behaviour subject with the response count
+                this.setUnreadNotificationMsgsCount(response);
+            }, function (response) {
+                this.loggerSvc.error("Unable to get user unread messages.", response, response.statusText);
+            })
+    }
+
+    public refreshUnreadCount() {
+        this.getUnreadNotification()
+    }
+
     public getNotification(mode): Observable<any> {
         let apiUrl: string = this.apiBaseUrl + 'GetNotification/' + mode;
         return this.httpClient.get(apiUrl);
     }
+
+
+    public manageNotifications(mode, isRead, ids): Observable<any>  {
+        let apiUrl: string = this.apiBaseUrl + 'manageNotifications/' + mode + '/' + isRead;
+        return this.httpClient.post(apiUrl,ids);
+    }
+
+    public getUserSubscriptions() {
+        let apiUrl: string = this.apiBaseUrl+ 'GetUserSubscriptions';
+        return this.httpClient.get(apiUrl );
+        }
+
+    public updateUserSubscriptions(subscriptions) {
+        let apiUrl: string = this.apiBaseUrl + 'UpdateUserSubscriptions';
+        return this.httpClient.post(apiUrl, subscriptions);
+        }
+
+    public getEmailBodyTemplateUI(id) {
+        let apiUrl: string = this.apiBaseUrl + 'GetEmailBodyTemplateUI/' + id;
+        return this.httpClient.get(apiUrl);
+        }
 
 }

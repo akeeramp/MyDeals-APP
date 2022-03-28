@@ -24,6 +24,8 @@ import { adminPushDealsToVistexComponent } from '../admin/pushDealstoVistex/admi
 import { adminVistexComponent } from '../admin/vistex/admin.vistex.component';
 import { pctQueryBuilderComponent } from '../admin/iCostProducts/directive/pct.queryBuilder.component';
 import { iCostProductsComponent } from '../admin/iCostProducts/admin.iCostProducts.component';
+import { notificationsSettingsDialog } from '../admin/notification/notificationsSettings.component';
+import { notificationsModalDialog } from '../admin/notification/notificationsModal.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -52,5 +54,7 @@ export let adminComponents =[
     adminConsumptionCountryComponent,
     adminVistexComponent,
     pctQueryBuilderComponent,
-    iCostProductsComponent
+    iCostProductsComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]

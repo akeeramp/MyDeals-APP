@@ -767,6 +767,9 @@
     <Content Include="Client\src\app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="Client\src\app\admin\kendo_grid.css" />
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
+    <Content Include="Client\src\app\admin\notification\notificationsModal.component.html" />
+    <Content Include="Client\src\app\admin\notification\notificationsSettings.component.css" />
+    <Content Include="Client\src\app\admin\notification\notificationsSettings.component.html" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.html" />
@@ -2135,6 +2138,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\iCostProducts\admin.iCostProduct.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\iCostProducts\admin.iCostProducts.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\iCostProducts\directive\pct.queryBuilder.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\notification\notificationsModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\notification\notificationsSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\oplog\admin.oplog.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\productCategories\admin.productCategories.component.ts" />
@@ -2173,8 +2178,6 @@
     <TypeScriptCompile Include="Client\src\app\core\index.ts" />
     <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\core\notification\notificationsModal.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\core\notification\notificationsSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\trashcan\trashcan.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.ts" />
