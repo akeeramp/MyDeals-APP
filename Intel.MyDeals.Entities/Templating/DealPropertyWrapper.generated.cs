@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/17/2022 3:33:15 PM
+File Updated: 3/28/2022 4:00:44 PM
 On: MHTIPPIN-MOBL
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -2742,7 +2742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
