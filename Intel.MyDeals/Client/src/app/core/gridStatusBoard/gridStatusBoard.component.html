@@ -5,9 +5,6 @@
 <link href="/Client/src/app/core/gridStatusBoard/gridStatusBoard.component.css" rel="stylesheet" />
 
 <div class="container-fluid widget-container" style="overflow: auto; height: 100%;">
-    <loading-panel-angular show="!isLoaded" header="'Loading contracts'" description="'Please wait while we load your contracts.'" msgType="'Info'" isShowFunFact="true">
-    </loading-panel-angular>
-
     <div class="horizontal-widget">
         <div class="left-pane-widget">
             <div class="inner">
@@ -35,8 +32,8 @@
 
         <div class="center-pane-widget">
             <div class="inner container-fluid overflow" kendo-tooltip k-options="toolTipOptions">
-                <kendo-grid [data]="contractDs" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,buttonCount:5}" [groupable]="false" [group]="state.group"
-                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard dashboard-grid " style="height: 100%;">
+                <kendo-grid [data]="contractDs" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,buttonCount:5}" [groupable]="false" [group]="state.group" filterable="menu"
+                    [navigable]="true" (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard dashboard-grid " style="height: 100%;">
                     <kendo-grid-column field="WF_STG_CD" title="&nbsp;" width="20px" [headerClass]="{'headerClass':true}" filterable="none">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="status Complete" title="Complete" *ngIf="dataItem.WF_STG_CD==='Complete'">
@@ -91,7 +88,11 @@
                     <kendo-grid-column class="gridCell" title="Notes" field="NOTES" width="170px" [headerClass]="{'headerClass':true}" [filterable]="true">
                     </kendo-grid-column>
                     <div *kendoGridDetailTemplate="let dataItem">
-                        <contract-status-board-angular [contractGrid]="dataItem"></contract-status-board-angular>
+                        <div *ngIf="!isLoaded">
+                            <div style="padding-top: 50px;">Retrieving Data. Please wait...</div>
+                            <img src="/images/032.gif" />
+                        </div>
+                        <contract-status-board-angular [contractObjSid]="dataItem.CNTRCT_OBJ_SID" (isCntrctDtlLoaded)="cntrctDtlLoadStatus($event)"></contract-status-board-angular>
                     </div>
                 </kendo-grid>
             </div>

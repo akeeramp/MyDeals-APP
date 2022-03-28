@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion> 
+    <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{82000E27-2C54-48BC-8226-001857E1A45D}</ProjectGuid>
@@ -796,6 +796,11 @@
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.css" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.html" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.js" />
+    <Content Include="Client\src\app\core\gridCell\iconMctPct\iconMctPct.component.html" />
+    <Content Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.css" />
+    <Content Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.html" />
+    <Content Include="Client\src\app\core\gridStatusBoard\gridStatusBoard.component.css" />
+    <Content Include="Client\src\app\core\gridStatusBoard\gridStatusBoard.component.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.component.css" />
     <Content Include="Client\src\app\core\notification\notificationDock.component.html" />
     <Content Include="Client\src\app\core\notification\notificationDock.directive.html" />
@@ -806,6 +811,7 @@
     <Content Include="Client\src\app\dashboard\dashboardWidget.component.html" />
     <Content Include="Client\src\app\dashboard\dashboard\dashboard.component.css" />
     <Content Include="Client\src\app\dashboard\dashboard\dashboard.component.html" />
+    <Content Include="Client\src\app\dashboard\dealDeskWidget\dealDeskWidget.component.html" />
     <Content Include="Client\src\app\dashboard\opencontract\openContractWidget.component.html" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.css" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.html" />
@@ -2174,7 +2180,14 @@
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />
     <TypeScriptCompile Include="Client\src\app\core\adminBanner\adminBanner.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\adminBanner\adminBanner.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\angular.constants.ts" />
     <TypeScriptCompile Include="Client\src\app\core\core.shared.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridCell\iconMctPct\iconMctPct.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\gridsStatusBoard.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\gridStatusBoard.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\gridStatusBoard.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\index.ts" />
     <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.service.ts" />
@@ -2185,9 +2198,10 @@
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.service.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\addWidget\addWidget.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\dashboard\contractStatusWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\contractStatusWidget.service.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\dashboardWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\dashboard\dashboard.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\dealDeskWidget\dealDeskWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\newContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\opencontract\openContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.ts" />

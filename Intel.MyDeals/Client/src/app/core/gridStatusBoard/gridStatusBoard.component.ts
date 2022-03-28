@@ -1,80 +1,83 @@
 ﻿import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Input, Component, ViewChild } from "@angular/core"; /*Output,, OnInit, AfterViewInit, ElementRef*/
-import { DataItem, PageChangeEvent, GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { Input, Component, ViewChild, OnInit, OnChanges, OnDestroy, SimpleChanges, EventEmitter, Output } from "@angular/core"
+import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { GridStatusBoardService } from "./gridStatusBoard.service";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
 import { DatePipe } from "@angular/common";
+import { DashboardComponent } from "../../dashboard/dashboard/dashboard.component";
+import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
 
 @Component({
-    providers: [GridStatusBoardService,DatePipe],
+    providers: [GridStatusBoardService, DatePipe],
     selector: "grid-status-board-angular",
     templateUrl: "Client/src/app/core/gridStatusBoard/gridStatusBoard.component.html"
 })
 
-export class gridStatusBoardComponent {
+export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild(GridComponent) grid: GridComponent;
 
     @Input() private custIds: string;
     @Input() private gridFilter: string;
-    @Input() private favContractIds: string ;
+    @Input() private favContractIds: string;
     @Input() private startDt: string;
     @Input() private endDt: string;
 
-    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe) {
+    @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
+
+    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
 
-    } 
+        this.cntrctWdgtSvc.isRefresh.subscribe(res => {
+            if (res) {
+                this.loadContractData();
+            }
+        });
+    }
 
-    public DontIncludeTenders: boolean=false;
-    //private includeTenders: boolean;
-
-    public isLoading: boolean = true;
-    public dataforfilter: any; //holds filters for data fetch -during API call
-    public gridResult: Array<any>;
-    //public gridData: GridDataResult;
+    private DontIncludeTenders: boolean = false;
+    private isLoaded: boolean = false;
+    private dataforfilter: any; //holds filters for data fetch -during API call
+    private gridResult: Array<any>;
 
     //Variable to hold the API response data and holding filter data
-    public contractDs: GridDataResult;
-    public gridresultFavorite: Array<any>;
-    public gridresultAlert: Array<any>;
-    public gridresultAllContract: Array<any>;
-    public gridresultCompletedContract: Array<any>;
-    public gridresultInCompleteContract: Array<any>
-    public gridresultAllTenders: Array<any>;
-    public gridresultCompletedTenders: Array<any>;
-    public gridresultIncompleteTenders: Array<any>;
-    public gridresultCancelledTenders: Array<any>;
+    private contractDs: GridDataResult;
+    private gridresultFavorite: Array<any>;
+    private gridresultAlert: Array<any>;
+    private gridresultAllContract: Array<any>;
+    private gridresultCompletedContract: Array<any>;
+    private gridresultInCompleteContract: Array<any>
+    private gridresultAllTenders: Array<any>;
+    private gridresultCompletedTenders: Array<any>;
+    private gridresultIncompleteTenders: Array<any>;
+    private gridresultCancelledTenders: Array<any>;
 
     //Variables to store the counts
-    public contractStages: Array<any> = []; 
-    public tenderStages: Array<any> = [];
-    public stages: Array<any>;
-    public contractStageCnt: number = 0;
-    public tenderStageCnt: number = 0;
-    public allStageCnt: number = 0;
-    public favCount: number = 0;
-    public alertCount: number = 0;
-    public contractComplete: number = 0;
-    public contractIncomplete: number = 0;
-    public tenderComplete: number = 0;
-    public tenderIncomplete: number = 0;
-    public tenderCancelled: number = 0;
+    private contractStageCnt: number = 0;
+    private tenderStageCnt: number = 0;
+    private allStageCnt: number = 0;
+    private favCount: number = 0;
+    private alertCount: number = 0;
+    private contractComplete: number = 0;
+    private contractIncomplete: number = 0;
+    private tenderComplete: number = 0;
+    private tenderIncomplete: number = 0;
+    private tenderCancelled: number = 0;
 
     //to store the favContractIds in Array format
-    public favContractsMap: Array<any> =[];
-    public activekey: string="all";
+    private favContractsMap: Array<any> = [];
+    private activekey: string = "all";
 
-    public activeFilter: string = "";
-    public toolTipOptions: string = "";
+    private activeFilter: string = "";
+    private toolTipOptions: string = "";
 
     //verifying the role
-    public jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
+    private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
 
-
+    private isInitialLoad: boolean = true;
     public state: State = {
         skip: 0,
         take: 25,
@@ -105,6 +108,12 @@ export class gridStatusBoardComponent {
         },
     ];
 
+    cntrctDtlLoadStatus(value: boolean) {
+        if (this.isLoaded !== value) {
+            this.isLoaded = value;
+        }
+    }
+
     public ngOnInit(): void {
 
         if (this.gridFilter == "" || this.gridFilter == undefined) {
@@ -112,30 +121,46 @@ export class gridStatusBoardComponent {
             this.activekey = "all";
         }
         else { this.activeFilter = this.gridFilter; }
-
-        this.favContractsMap = this.favContractIds.split(',');
-
+        this.favContractsMap = this.favContractIds == "" ? this.favContractsMap : this.favContractIds.split(',');
         //Get the contract Data
+        this.loadContractData();
+
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.isInitialLoad) {
+            this.isInitialLoad = false;
+            return;
+        }
+        //update input values and call loadContractData();
         this.loadContractData();
     }
 
     loadContractData() {
-        let dataforfilter:Array<any> =[];
-        let response: Array<any>;
-        let rtnContract: Array<any>=[];
-        let rtnTender: Array<any>=[];
-        let stages: Array<any> = [];
-
+        this.isGridLoading.emit(true);
+        let rtnContract: Array<any> = [];
+        let rtnTender: Array<any> = [];
         this.dataforfilter = {
             CustomerIds: JSON.parse(this.custIds),/*[]*/
-            StartDate: this.datepipe.transform(new Date(this.startDt), 'MM/dd/yyyy'), 
-            EndDate: this.datepipe.transform(new Date(this.endDt), 'MM/dd/yyyy'), 
+            StartDate: this.datepipe.transform(new Date(this.startDt), 'MM/dd/yyyy'),
+            EndDate: this.datepipe.transform(new Date(this.endDt), 'MM/dd/yyyy'),
             DontIncludeTenders: this.DontIncludeTenders
         };
 
         //calling API to fetch the contracts
         this.contractService.getContracts(this.dataforfilter)
             .subscribe((response) => {
+                //Initialising all counts from 0
+                this.contractStageCnt = 0;
+                this.tenderStageCnt = 0;
+                this.allStageCnt = 0;
+                this.favCount = 0;
+                this.alertCount = 0;
+                this.contractComplete = 0;
+                this.contractIncomplete = 0;
+                this.tenderComplete = 0;
+                this.tenderIncomplete = 0;
+                this.tenderCancelled = 0;
 
                 //adding a column IS_Favorite for setting the contract as favourite with the value coming from dashboard via directive Input
                 for (var i = 0; i < response.length; i++) {
@@ -146,7 +171,7 @@ export class gridStatusBoardComponent {
                                 response[i]["IS_FAVORITE"] = true;
                                 this.favCount++;
                             }
-                        }                        
+                        }
                     }
                 }
                 this.gridResult = response;
@@ -181,7 +206,7 @@ export class gridStatusBoardComponent {
                         }
                         else {
                             this.contractIncomplete++;
-                        }                        
+                        }
                     }
                     else {
                         if (rtnTender[response[i].WF_STG_CD] === undefined) {
@@ -207,18 +232,14 @@ export class gridStatusBoardComponent {
                         response[i].HAS_ALERT = false;
                     }
 
-                    
                     this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
                 }
-                
 
-                this.isLoading = false;
+                this.isGridLoading.emit(false);
             },
                 function (response) {
                     this.loggerSvc.error("Unable to load the Contracts", response, response.statusText);
                 });
-
-                 
     }
 
     distinctPrimitive(fieldName: string): any {
@@ -230,29 +251,32 @@ export class gridStatusBoardComponent {
         dataItem.IS_FAVORITE = !dataItem.IS_FAVORITE;
 
         if (!dataItem.IS_FAVORITE) {
-          delete this.favContractsMap[dataItem.CNTRCT_OBJ_SID];
-          this.favCount--;
-          dataItem.IS_FAVORITE = false;
-          if (this.activeFilter === "Favorites")
-            this.clkFilter("fltr_Favorites");
-          this.gridresultFavorite.forEach((value, index) => {
-            if (value.CNTRCT_OBJ_SID == dataItem.CNTRCT_OBJ_SID)
-              this.gridresultFavorite.splice(index, 1);
-          });
-          this.contractDs = process(this.gridresultFavorite, this.state);
+            delete this.favContractsMap[dataItem.CNTRCT_OBJ_SID];
+            this.favCount--;
+            dataItem.IS_FAVORITE = false;
+            if (this.activeFilter === "Favorites")
+                this.clkFilter("fltr_Favorites");
+            this.gridresultFavorite.forEach((value, index) => {
+                if (value.CNTRCT_OBJ_SID == dataItem.CNTRCT_OBJ_SID)
+                    this.gridresultFavorite.splice(index, 1);
+            });
+            this.contractDs = process(this.gridresultFavorite, this.state);
         } else {
-          this.favContractsMap.push[dataItem.CNTRCT_OBJ_SID];
-          dataItem.IS_FAVORITE = true;
-          this.favCount++;
-          this.gridresultFavorite.push(dataItem);
+            this.favContractsMap.push(dataItem.CNTRCT_OBJ_SID);
+            dataItem.IS_FAVORITE = true;
+            this.favCount++;
+            this.gridresultFavorite.push(dataItem);
         }
         this.favContractIds = this.favContractsMap.toString();
-        
-        //TO-BE-DONE when Dashboard controller is migrated to Angular for broadcasting the favContractChanged value to Dashboard controller
-        /*$rootScope.$broadcast('favContractChanged', { 'favContractIds': $scope.favContractIds });*/
+        let mySubConfig = {
+            favContractIds: this.favContractIds
+        }
+        this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);
+
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
+
         this.state = state;
         if (this.activekey == "fav") {
             this.contractDs = process(this.gridresultFavorite, this.state);
@@ -260,16 +284,13 @@ export class gridStatusBoardComponent {
         else if (this.activekey == "alert") {
             this.contractDs = process(this.gridresultAlert, this.state);
         }
-        else if (this.activekey == "allC")
-        {
+        else if (this.activekey == "allC") {
             this.contractDs = process(this.gridresultAllContract, this.state);
         }
-        else if (this.activekey == "CC")
-        {
+        else if (this.activekey == "CC") {
             this.contractDs = process(this.gridresultCompletedContract, this.state);
         }
-        else if (this.activekey == "ICC")
-        {
+        else if (this.activekey == "ICC") {
             this.contractDs = process(this.gridresultInCompleteContract, this.state);
         }
         else if (this.activekey == "allT") {
@@ -290,19 +311,19 @@ export class gridStatusBoardComponent {
     }
 
     clkFilter(filter) {
-        
+
         if (filter === undefined || filter === "")
             filter = "fltr_All";
-                
+
         this.state.skip = 0;
         switch (filter) {
             case "fltr_All":
                 this.activekey = "all";
-                this.contractDs=process(this.gridResult,this.state);
+                this.contractDs = process(this.gridResult, this.state);
                 break;
             case "fltr_Favorites":
                 this.activekey = "fav";
-                this.contractDs=process(this.gridresultFavorite,this.state);
+                this.contractDs = process(this.gridresultFavorite, this.state);
                 break;
             case "fltr_HasAlert":
                 this.activekey = "alert";
@@ -314,7 +335,7 @@ export class gridStatusBoardComponent {
                 break;
             case "fltr_Completed_Contract":
                 this.activekey = "CC";
-                this.contractDs =process(this.gridresultCompletedContract,this.state);
+                this.contractDs = process(this.gridresultCompletedContract, this.state);
                 break;
             case "fltr_InCompleted_Contract":
                 this.activekey = "ICC";
@@ -333,35 +354,18 @@ export class gridStatusBoardComponent {
                 this.contractDs = process(this.gridresultIncompleteTenders, this.state);
                 break;
             case "fltr_Cancelled_Tender":
-                this.activekey = "CT";
+                this.activekey = "CA";
                 this.contractDs = process(this.gridresultCancelledTenders, this.state);
         }
 
-        //TO-BE-DONE when Dashboard controller is migrated to Angular for broadcasting the gridFilterChanged value to Dashboard controller
-
         // Save only if there is value change in the filters and not default value (fltr_All)
-        //if (activeFilter !== filter) {
-        //    $rootScope.$broadcast('gridFilterChanged', { 'gridFilter': filter });
-        //}
-
+        if (this.activeFilter !== filter) {
+            let mySubConfig = {
+                gridFilter: filter
+            }
+            this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);
+        }
     }
-
-    //TO-BE-DONE when Dashboard controller is migrated to Angular for getting the values of argument braodcast
-
-    //$scope.$on('refresh', function(event, args) {
-    //    var scope = event.currentScope;
-    //    scope.custIds = args.custIds;
-    //    scope.startDt = args.startDate;
-    //    scope.endDt = args.endDate;
-    //    scope.includeTenders = true;
-    //    scope.initDsLoaded = false;
-    //    $scope.isLoaded = false;
-    //    scope.clkFilter('fltr_All');
-
-    //    $timeout(function () {
-    //        scope.contractDs.read();
-    //    }, 200);
-    //});
 
     ngOnDestroy() {
         //The style removed are adding back
@@ -374,7 +378,7 @@ angular.module("app").directive(
     "gridStatusBoardAngular",
     downgradeComponent({
         component: gridStatusBoardComponent,
-        inputs: ['custIds', 'gridFilter', 'favContractIds', 'startDt','endDt']
+        inputs: ['custIds', 'gridFilter', 'favContractIds', 'startDt', 'endDt']
     })
 );
 

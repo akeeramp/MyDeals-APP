@@ -1,5 +1,4 @@
-﻿
-path {
+﻿path {
     stroke: #666;
 }
 
@@ -38,17 +37,17 @@ path {
     white-space: nowrap;
 }
 
-    .crumb:before {
-        font-family: "FontAwesome";
-        content: "\f054";
-        padding: 0 4px;
-        color: #FFA300;
-    }
+.crumb:before {
+    font-family: "FontAwesome";
+    content: "\f054";
+    padding: 0 4px;
+    color: #FFA300;
+}
 
-    .crumb:first-child:before {
-        content: "";
-        padding: 0;
-    }
+.crumb:first-child:before {
+    content: "";
+    padding: 0;
+}
 
 .contract-board {
     font-family: "Intel Clear";
@@ -56,13 +55,13 @@ path {
     font-weight: 400;
 }
 
-    .contract-board svg {
-        margin-top: 9px;
-    }
+.contract-board svg {
+    margin-top: 9px;
+}
 
-    .contract-board .ttl {
-        font-size: 16px;
-    }
+.contract-board .ttl {
+    font-size: 16px;
+}
 
 .contract-board {
     margin-top: 0;
@@ -70,21 +69,28 @@ path {
     height: 200px;
 }
 
-    .contract-board .right-pane {
-        height: 100%;
-        float: right;
-        overflow: hidden;
-        width: 200px;
-        margin-right: -200px;
-        padding: 0;
-    }
+.contract-board .right-pane {
+    height: 100%;
+    float: right;
+    overflow: hidden;
+    width: 200px;
+    margin-right: -200px;
+    padding: 0;
+}
 
-    .contract-board .center-pane {
-        height: 100%;
-        overflow: auto;
-        width: 100%;
-    }
+.contract-board .center-pane {
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+}
 
 .medIcon {
     font-size: 22px;
+}
+
+.textDecoratorWrap {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    text-decoration: none !important;
 }

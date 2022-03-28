@@ -1,12 +1,9 @@
-﻿import { Component, Input, OnInit } from "@angular/core";
-import { Router } from '@angular/router';
-import { Observable } from "rxjs";
-import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
+﻿import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-
 
 @Component({
     selector: "contract-status-board-angular",
@@ -15,25 +12,21 @@ import { downgradeComponent } from "@angular/upgrade/static";
 })
 
 export class contractStatusBoardComponent implements OnInit {
-    /**
-   * The contract for which details are displayed
-   */
-    @Input() public contractGrid: any;
+    
+    // The contract for which details are displayed
+    @Input() public contractObjSid: any;
+    @Output() public isCntrctDtlLoaded :EventEmitter<boolean> = new EventEmitter();
 
-   
-    
-    
-    public gridData: GridDataResult;
-    public gridResult: Array<any>;
-    public isLoading: boolean = true;
-    public isLoaded: boolean = false;
-    public sbData: Array<any> = [];
-    public sbDataChildren: Array<any> = [];
-    public CAN_VIEW_COST_TEST: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-    public CAN_VIEW_MEET_COMP: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
-    public skip = 0;
-    public jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
-    public contractId : any;
+    private gridData: GridDataResult;
+    private gridResult: Array<any>;
+    private isLoaded: boolean = false;
+    private sbData: Array<any> = [];
+    private sbDataChildren: Array<any> = [];
+    private CAN_VIEW_COST_TEST: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
+    private CAN_VIEW_MEET_COMP: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
+    private skip = 0;
+    private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
+    private contractId : any;
     public state: State = {
         skip: 0,
         take: 10,
@@ -70,29 +63,18 @@ export class contractStatusBoardComponent implements OnInit {
     }
 
     getContractDataSource() {
-
-        this.contractDetailsService.readContractStatus(this.contractGrid.CNTRCT_OBJ_SID)
+        this.isLoaded = false;
+        this.isCntrctDtlLoaded.emit(false);
+        this.contractDetailsService.readContractStatus(this.contractObjSid)
             .subscribe((response) => {
 
-                this.contractId = this.contractGrid.CNTRCT_OBJ_SID;
+                this.contractId = this.contractObjSid;
                 this.sbData = this.init(response);
                 this.sbDataChildren = this.sbData["children"];
                 this.gridData = process(this.sbDataChildren, this.state);
                 this.isLoaded = true;
-                this.isLoading = true;
+                this.isCntrctDtlLoaded.emit(true);
             });
-    }
-
-    
-
-    gotoContractManager(id) {
-        let lnk: any = "/Contract#/manager/" + id;
-        if ((<any>window).usrRole === "DA") {
-            lnk = "/Contract#/manager/" + id + "/summary";
-        }
-
-        
-        window.open(lnk, '_blank');
     }
 
     recurCalcData(data: Array<any>, defStage: string) {

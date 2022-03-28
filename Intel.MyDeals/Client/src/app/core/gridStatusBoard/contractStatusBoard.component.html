@@ -2,13 +2,7 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 
-<div *ngIf="isLoaded===false">
-    <div style="padding-top: 50px;">Retrieving Data. Please wait...</div>
-    <img src="/images/032.gif" />
-</div>
-
-
-<div *ngIf="isLoaded===true">
+<div *ngIf="isLoaded">
     <div>
         <kendo-grid [data]="gridData" [navigable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [groupable]="false" [group]="state.group" scrollable="boolean" [sortable]="true" filterable="menu" [filter]="state.filter" (dataStateChange)="dataStateChange($event)"
             kendoGridFocusable [height]="300">
@@ -29,7 +23,7 @@
             </kendo-grid-column>
             <kendo-grid-column title="Strategy Name" field="name" width="200px" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <div>
+                    <div class="textDecoratorWrap">
                         <a href="/Contract\\#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" style="color: #FFA300;" title="Click to open the Contract in the Contract Editor">
                             <span style="color: #0071c5;">
                                 {{dataItem.name}}

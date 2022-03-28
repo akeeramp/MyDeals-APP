@@ -1,0 +1,3 @@
+<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading contracts'" [description]="'Please wait while we load your contracts.'" [msgType]="'Info'" [isShowFunFact]="true">
+</loading-panel-angular>
+<grid-status-board-angular style="height: 100%;" [custIds]="selectedCustomerIds" [gridFilter]="gridFltr" [favContractIds]="favCntrctIds" [startDt]="startDate" [endDt]="endDate" (isGridLoading)="changeLoadingStatus($event)"></grid-status-board-angular>

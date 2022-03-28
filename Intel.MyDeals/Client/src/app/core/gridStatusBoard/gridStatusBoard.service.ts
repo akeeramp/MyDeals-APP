@@ -1,10 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GridDataResult } from '@progress/kendo-angular-grid';
-import { State, toODataString } from '@progress/kendo-data-query';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { GridStatusBoard_Model } from './gridsStatusBoard.model';
 import * as _ from 'underscore';
 
 
