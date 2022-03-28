@@ -1,3 +1,11 @@
+    .btn-group-vertical > .btn, .btn-group-vertical > .btn-group, .btn-group-vertical > .btn-group > .btn {
+        float: left !important;
+        width: auto !important;
+    }
+    .widget-sm .btn-group div label {
+        width: 100% !important;
+    }
+    
     .clearboth {
         clear: both;
     }
