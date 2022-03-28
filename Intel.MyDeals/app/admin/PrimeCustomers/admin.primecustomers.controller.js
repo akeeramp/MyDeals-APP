@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    PrimeCustomersController.$inject = ['PrimeCustomersService', 'dataService', 'dropdownsService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$uibModal'];
+    PrimeCustomersController.$inject = ['PrimeCustomersService', 'dataService',  '$scope', 'logger', 'confirmationModal', 'gridConstants', '$uibModal'];
 
-    function PrimeCustomersController(PrimeCustomersService, dataService, dropdownsService, $scope, logger, confirmationModal, gridConstants, $uibModal) {
+    function PrimeCustomersController(PrimeCustomersService, dataService,  $scope, logger, confirmationModal, gridConstants, $uibModal) {
         $scope.accessAllowed = true;
         var vm = this;
         //RA/CA/SA/Developer can see the Screen..

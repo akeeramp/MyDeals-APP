@@ -7,9 +7,9 @@
         .run(SetRequestVerificationToken);
     SetRequestVerificationToken.$inject = ['$http'];
 
-    UnprimedealsController.$inject = ['PrimeCustomersService', 'dropdownsService', '$scope', 'logger', 'gridConstants', '$uibModal', 'objsetService'];
+    UnprimedealsController.$inject = ['PrimeCustomersService',  '$scope', 'logger', 'gridConstants', '$uibModal', 'objsetService'];
 
-    function UnprimedealsController(PrimeCustomersService, dropdownsService, $scope, logger, gridConstants, $uibModal, objsetService) {
+    function UnprimedealsController(PrimeCustomersService,  $scope, logger, gridConstants, $uibModal, objsetService) {
         $scope.accessAllowed = true;
         var vm = this;
         //GA/SA/Developer can see the Screen..

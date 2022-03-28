@@ -18,21 +18,6 @@ export class dropdownService {
 
     }
 
-    public getOpDataElements(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetOpDataElements';
-        return this.httpClient.get(apiUrl);
-    }
-
-    public getDropdown(strDropDownType): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + strDropDownType;
-        return this.httpClient.get(apiUrl);
-    }
-
-    public getVendorDropDown(getVendorDropDowntypeUrl): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + getVendorDropDowntypeUrl;
-        return this.httpClient.get(apiUrl);
-    }
-
     public getBasicDropdowns(isForceReGet): Observable<any> {
         let isGetViaAngularCache: boolean = true;
         if (isForceReGet) {

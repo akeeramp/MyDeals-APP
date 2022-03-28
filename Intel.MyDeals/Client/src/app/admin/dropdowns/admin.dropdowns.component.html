@@ -84,7 +84,7 @@
                     </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="CUST_NM." title="Customer" width="200" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="CUST_NM" title="Customer" width="200" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
