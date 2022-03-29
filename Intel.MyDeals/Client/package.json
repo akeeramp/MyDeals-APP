@@ -91,13 +91,16 @@
         "rxjs": "^6.5.5",
         "rxjs-compat": "^6.5.5",
         "terser-webpack-plugin": "^5.1.4",
-        "typescript": "^4.3.5",
+        "typescript": "^4.6.3",
         "underscore": "^1.13.1",
         "zone.js": "^0.11.3"
     },
     "devDependencies": {
         "@types/underscore": "^1.11.3",
+        "@typescript-eslint/eslint-plugin": "^5.17.0",
+        "@typescript-eslint/parser": "^5.17.0",
         "bower": "^1.8.12",
+        "eslint": "^8.12.0",
         "rimraf": "^3.0.2",
         "ts-loader": "^9.2.3",
         "webpack": "^5.44.0",
