@@ -10,11 +10,8 @@
         overflow: auto !important;
     }
 </style>
-    ﻿<!-- using for Angular loader while page load -->
-<cc-loader is-loading="{{isLoading}}"
-           message="{{loadMessage}}" module="{{moduleName}}" is-initializing="{{isInitializing}}">
-</cc-loader>
-
+    ﻿<!-- using for Angular loader while page load
+The  cc-loader component is revoked and moved to _layout.cshtml to solve loading time issue  -->
 
 <div id="horizontal-dashboard" class="overFlowDash" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" ng-show="!isLoading">
     <div id="center-pane-dashboard" class="fr">

@@ -286,6 +286,8 @@ function DashboardController($rootScope, $scope, $uibModalStack, $uibModal, $tim
             .then(function (response) {
                 //stopping the load page
                 $scope.isLoading = false;
+                //making the loading screen in _layout.cshtml to display none 
+                $('.loading-screen').css('display', 'none');
                 if (response.data && response.data.length > 0) {
                     // Get the saved widget settings for the specified key (user role).
                     var savedWidgetSettingsForSpecifiedRole = response.data.filter(function (obj) {

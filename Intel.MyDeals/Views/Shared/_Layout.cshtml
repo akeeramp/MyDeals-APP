@@ -21,6 +21,7 @@
     <link href="/css/select2.min.css" rel="stylesheet">
     <link href="/css/nv.d3.min.css" rel="stylesheet">
     <link href="/css/_report.css" rel="stylesheet">
+    <link href="/css/_contractManager.css" rel="stylesheet">
     <link href="/css/angular-gridster.css" rel="stylesheet">
     <link href="/css/bootstrap-switch.min.css" rel="stylesheet">
     <link href="/app/core/directives/dealPopup/dealPopup.directive.css" rel="stylesheet">
@@ -54,11 +55,29 @@
         myInvalidClass {
             background-color: red;
         }
-
+        .loading-screen{
+            top:20px !important;
+            height:400px !important;
+            margin-top:100px !important;
+        }
     </style>
+
 </head>
 
 <body @Html.RequestVerificationToken()>
+    @*Since Angular bundle size is increasing the overall loading time will incresing which cause delay in UI landing page to load.
+     To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
+    <div class="loading-screen">
+        <div class="fullHeight">
+            <div class="jumbotron ng-scope">
+                <div class="container">
+                    <h1><strong>My</strong> Deals </h1><p class="lead"> Dashboard. </p>
+                    <p>Dashboard is loading ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Html.Partial("_Header")
     <div id="modals"></div>
     <div id="bodyContent" class="mainBodyStyle" style="">
