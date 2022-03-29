@@ -3439,12 +3439,17 @@ namespace Intel.MyDeals.BusinessRules
             double prevEndVal = 0;
             for (int tierKey = 1; tierKey <= 10; tierKey++)
             {
-                if (!double.TryParse(startValDict[tierKey], out double currStartVal)) currStartVal = 0;
+                double currStartVal = 0;
                 double currEndVal = 0;
-                bool isEndVolANumber = double.TryParse(endValDict[tierKey], out currEndVal);
-                if (!isEndVolANumber && endValDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                bool isEndVolANumber = false;
+                if (startValDict.ContainsKey(tierKey) && !double.TryParse(startValDict[tierKey], out currStartVal)) currStartVal = 0;
+                if (endValDict.ContainsKey(tierKey))
                 {
-                    currEndVal = int.MaxValue;
+                    isEndVolANumber = double.TryParse(endValDict[tierKey], out currEndVal);
+                    if (!isEndVolANumber && endValDict[tierKey].ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        currEndVal = int.MaxValue;
+                    }
                 }
 
                 if (currStartVal == 0 && currEndVal == 0) continue; // Hit the end of populated values, skip these rows

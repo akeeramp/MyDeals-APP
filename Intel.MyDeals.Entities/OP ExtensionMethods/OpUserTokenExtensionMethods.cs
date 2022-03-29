@@ -50,6 +50,7 @@ namespace Intel.MyDeals.Entities
         //TODO: Saurav will Cache this in MT and remove user.GetGroups() call everytime..
         public static bool IsReportingUser(this OpUserToken opUserToken)
         {
+            //return true; // Local Env Workaround
             string userName = opUserToken.Usr.Idsid;
             UserPrincipal user = null;
             bool isReportingUser = false;
