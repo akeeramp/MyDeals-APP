@@ -34,7 +34,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var depth = 5;
             var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB", "DENSITY_BAND"];
-            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION', 'AVG_RPU'];
+            var atrbList = ['PS_WF_STG_CD', 'WF_STG_CD', 'HAS_TRACKER', 'IN_REDEAL', 'LAST_REDEAL_DT', 'TRKR_NBR', 'REBATE_BILLING_START', 'REBATE_BILLING_END', 'PASSED_VALIDATION', 'AVG_RPU', 'FRCST_VOL'];
 
             $scope.opRoleCanCopyDeals = (usrRole == 'FSE' || usrRole == 'GA');
             if ($scope.opName === undefined) $scope.opName = "DealEditor";

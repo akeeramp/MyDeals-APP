@@ -1006,6 +1006,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Default Forecast Volume to Max Tier volume if not set by user", // Tier-types with unit based volumes only
+                    ActionRule = MyDcActions.ForecastVolumeDefaulted,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
+                },
+
+                new MyOpRule
+                {
                     Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
                     ActionRule = MyDcActions.CheckTotalDollarAmount,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },

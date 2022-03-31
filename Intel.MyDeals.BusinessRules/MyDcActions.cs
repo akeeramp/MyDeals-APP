@@ -2398,6 +2398,27 @@ namespace Intel.MyDeals.BusinessRules
                 forecastVolume.IsRequired = true;  // Required for L1, optional if L2 or Exempt (except for Flex deals, L2 is required as well).
         }
 
+        public static void ForecastVolumeDefaulted(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string numberOfTiers = r.Dc.GetDataElementValue(AttributeCodes.NUM_OF_TIERS);
+
+            if (numberOfTiers == "") return; // If no value, bail out because rest will blow up.
+
+            IOpDataElement lastTierEndVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL && de.DimKey.HashPairs == "10:" + numberOfTiers).FirstOrDefault();
+            IOpDataElement forecastedVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.FRCST_VOL).FirstOrDefault();
+
+            // Two different Test cases - new elements force default is user didn't set, or existing element force default if changed and user didn't change both
+            if (lastTierEndVol != null && forecastedVol != null && 
+                ((forecastedVol.DcID < 0 && forecastedVol.AtrbValue.ToString() == "") || (lastTierEndVol.HasValueChanged && !forecastedVol.HasValueChanged)))
+            {
+                // 999999999 is the max volume for unit counts
+                forecastedVol.SetAtrbValue(lastTierEndVol.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase) ? "999999999" : lastTierEndVol.AtrbValue);
+            }
+        }
+
         public static void UserDefinedRpuRequired(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
