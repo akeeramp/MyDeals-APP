@@ -605,13 +605,14 @@ namespace Intel.MyDeals.BusinessRules
                     de.SetReadOnly();
                 }
             }
-            else // Is a non Vistex Customer, LOCK OUT Vistex Consumption fields
-            {
-                foreach (OpDataElement de in r.Dc.DataElements.Where(d => VistexConsumptionAtrbs.Contains(d.AtrbCd)))
-                {
-                    de.SetReadOnly();
-                }
-            }
+            // TWC3119-167 - Enable the Consumption parameters for non-Vistex Customers
+            //else // Is a non Vistex Customer, LOCK OUT Vistex Consumption fields
+            //{
+            //    foreach (OpDataElement de in r.Dc.DataElements.Where(d => VistexConsumptionAtrbs.Contains(d.AtrbCd)))
+            //    {
+            //        de.SetReadOnly();
+            //    }
+            //}
         }
 
         public static void SetCustDefaultValues(params object[] args)
