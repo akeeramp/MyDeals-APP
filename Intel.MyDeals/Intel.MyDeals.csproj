@@ -770,7 +770,6 @@
     <Content Include="Client\src\app\admin\notifications\admin.notifications.component.css" />
     <Content Include="Client\src\app\admin\notifications\admin.notifications.component.html" />
     <Content Include="Client\src\app\admin\notifications\admin.notificationsModal.component.html" />
-    <Content Include="Client\src\app\admin\notifications\admin.notificationsSettings.component.css" />
     <Content Include="Client\src\app\admin\notifications\admin.notificationsSettings.component.html" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
