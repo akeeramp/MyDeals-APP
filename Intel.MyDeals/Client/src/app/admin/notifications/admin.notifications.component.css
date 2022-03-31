@@ -1,0 +1,44 @@
+﻿/*Common CSS form notification Modal,Notification Settings and Notification Screen*/
+img {
+    margin-left: 25px;
+}
+
+#notificationModalBody {
+    margin: 15px;
+    overflow-x: auto;
+    min-height: 300px;
+}
+
+#matSlideToggle {
+    padding-bottom: 10px;
+}
+
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff;
+    z-index: 200;
+}
+
+.mat-dialog-container {
+    padding: 0px !important;
+}
+
+hr {
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+.unread {
+    color: #00AEEF !important;
+    font-weight: bold;
+}
+
+.modal-header {
+    display: block !important;
+}
+
+
+.unread {
+    color: #00AEEF !important;
+    font-weight: bold;
+}

@@ -1,11 +1,11 @@
 ﻿import * as angular from 'angular';
 import { Input, Output, Component, OnInit, EventEmitter } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { notificationsService } from './notificationDock.service';
+import { notificationsService } from '../../admin/notifications/admin.notifications.service';
 import { logger } from "../../shared/logger/logger";
 import * as _ from 'underscore';
-import { notificationsSettingsDialog } from '../../admin/notification/notificationsSettings.component';
-import { notificationsModalDialog } from '../../admin/notification/notificationsModal.component';
+import { notificationsSettingsDialog } from '../../admin/notifications/admin.notificationsSettings.component';
+import { notificationsModalDialog } from '../../admin/notifications/admin.notificationsModal.component';
 import { MatDialog } from "@angular/material/dialog";
 import { data } from 'jquery';
 import { Subscription} from 'rxjs';

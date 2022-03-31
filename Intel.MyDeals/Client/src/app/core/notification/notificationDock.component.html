@@ -13,7 +13,7 @@
                     </span>
                 </li>
                 <li (click)="openMessage(msg)" [ngClass]="{'unread':!msg.IS_READ_IND, 'read':msg.IS_READ_IND}" *ngFor="let msg of notifications">
-                    {{msg.NOTIF_SHR_DSC}}
+                    {{msg.NOTIF_SHR_DSC | shorten:74:"..."}}
                 </li>
                 <li class="read" *ngIf="notifications?.length === 0">
                     No messages

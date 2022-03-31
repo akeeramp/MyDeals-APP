@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
     providedIn: 'root'
 })
 
+//this is a shared service used by notifications,notificationModal and NotificationSettings components
 export class notificationsService {
     public apiBaseUrl: string = "api/Notifications/";
     constructor(private httpClient: HttpClient) {
@@ -53,24 +54,24 @@ export class notificationsService {
     }
 
 
-    public manageNotifications(mode, isRead, ids): Observable<any>  {
+    public manageNotifications(mode, isRead, ids): Observable<any> {
         let apiUrl: string = this.apiBaseUrl + 'manageNotifications/' + mode + '/' + isRead;
-        return this.httpClient.post(apiUrl,ids);
+        return this.httpClient.post(apiUrl, ids);
     }
 
     public getUserSubscriptions() {
-        let apiUrl: string = this.apiBaseUrl+ 'GetUserSubscriptions';
-        return this.httpClient.get(apiUrl );
-        }
+        let apiUrl: string = this.apiBaseUrl + 'GetUserSubscriptions';
+        return this.httpClient.get(apiUrl);
+    }
 
     public updateUserSubscriptions(subscriptions) {
         let apiUrl: string = this.apiBaseUrl + 'UpdateUserSubscriptions';
         return this.httpClient.post(apiUrl, subscriptions);
-        }
+    }
 
     public getEmailBodyTemplateUI(id) {
         let apiUrl: string = this.apiBaseUrl + 'GetEmailBodyTemplateUI/' + id;
         return this.httpClient.get(apiUrl);
-        }
+    }
 
 }

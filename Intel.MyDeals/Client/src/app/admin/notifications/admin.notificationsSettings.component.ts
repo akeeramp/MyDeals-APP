@@ -3,13 +3,13 @@ import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, Input, ViewEncapsulation} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { notificationsService } from '../../core/notification/notificationDock.service'
+import { notificationsService } from './admin.notifications.service';
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
     selector: "notificationsSettingsDialog",
-    templateUrl: "Client/src/app/admin/notification/notificationsSettings.component.html",
-    styleUrls: ['Client/src/app/admin/notification/notificationsSettings.component.css'],
+    templateUrl: "Client/src/app/admin/notifications/admin.notificationsSettings.component.html",
+    styleUrls: ['Client/src/app/admin/notifications/admin.notifications.component.css'],
     //Added the below line to remove padding for the default mat dialog class
     //To override the default css for the mat dialog and give our own css then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None 

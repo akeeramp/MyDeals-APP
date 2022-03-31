@@ -313,6 +313,15 @@ angular
                     }
                 }
             })
+            .state("notifications", {
+                url: "/notifications",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-notifications></admin-notifications>'
+                    }
+                }
+            })
             // Admin route  ends here 
 
     });

@@ -200,8 +200,12 @@ a {
 .k-grid-header .headerClass {
     background-color: #e7e7e8;
     color: #1a3e6f;
-    font-size: 14px !important;
+    /*font-size: 14px !important;*/
     font-weight: bold;
+}
+
+.k-grid .k-alt {
+    background-color: rgb(140 138 138 / 4%) !important;
 }
 
 .k-grid-header {
