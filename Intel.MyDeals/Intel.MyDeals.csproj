@@ -788,6 +788,13 @@
     <Content Include="Client\src\app\advanceSearch\globalSearch.directive.js" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults.directive.html" />
+	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.css" />
+	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.html" />
+	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.ts" />
+	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.ts" />
+	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.css" />
+	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.html" />
+	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.service.ts" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults.directive.js" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.css" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.html" />

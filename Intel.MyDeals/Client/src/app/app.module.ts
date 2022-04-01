@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatListModule} from '@angular/material/list';
 //Helper and utility modules
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -54,6 +55,8 @@ import { MenusModule } from '@progress/kendo-angular-menu';
 import { adminComponents } from './modules/admin.module';
 //*********************dashboard components *********************
 import { dashboardComponents } from './modules/dashboard.module';
+//*********************advance search components *********************
+import { advanceSearchComponents } from './modules/advanceSearch.module';
 
 @NgModule({
     imports: [
@@ -71,6 +74,7 @@ import { dashboardComponents } from './modules/dashboard.module';
         MatButtonToggleModule,
         MatSlideToggleModule,
         MatDialogModule,
+        MatListModule,
         DialogModule,
         WindowModule,
         DropDownListModule,
@@ -111,14 +115,16 @@ import { dashboardComponents } from './modules/dashboard.module';
         sharedComponents,
         adminComponents,
         coreComponents,
-        dashboardComponents
+        dashboardComponents,
+        advanceSearchComponents
     ],
     entryComponents: [
         ReportingComponent,
         sharedComponents,
         adminComponents,
         coreComponents,
-        dashboardComponents
+        dashboardComponents,
+        advanceSearchComponents
     ]
 })
 

@@ -1,0 +1,22 @@
+<div>
+    <a class="search intelicon-search" style="margin-right: 5px; float: left; font-size: 14px;"></a><input type="text" placeholder="Search for deal #, contract, or pricing strategy" class="globalSearchInpt" [(ngModel)]="searchText" (keypress)="enterPressed($event)">
+    <div class="btn-group" style="margin-right: 4px;"><button class="btn btn-xs btn-default" type="button" (click)="executeOnly('ALL')">in <b>All</b></button><button class="btn btn-xs btn-default dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+        <ul class="dropdown-menu dropdown-menu-right dropdown-search" role="menu">
+            <li><a (click)="executeOnly('CNTRCT')">in <b>Contracts</b></a></li>
+            <li><a (click)="executeOnly('PRC_ST')">in <b>Pricing Strategies</b></a></li>
+            <li><a (click)="executeOnly('PRC_TBL')">in <b>Pricing Tables</b></a></li>
+            <li><a (click)="executeOnly('WIP_DEAL')">in <b>Deals</b></a></li>
+            <li class="divider"></li>
+            <li><a (click)="executeOnly('ALL')">in <b>All</b></a></li>
+        </ul>
+    </div>
+</div>
+<kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+    <kendo-window-titlebar>
+        <div class="k-window-title">Search Results </div><button kendoWindowCloseAction></button></kendo-window-titlebar>
+    <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
+</kendo-window>
+<kendo-dialog *ngIf="searchDialogVisible" (close)="closeDialog()" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Please enter one of the following:<br/><br/>1) Contract / Pricing Strategy / Pricing Table Name or Number <br/>2) Deal Number. </p>
+    <kendo-dialog-actions><button kendoButton (click)="closeDialog()">OK</button></kendo-dialog-actions>
+</kendo-dialog>
