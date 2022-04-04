@@ -1,6 +1,7 @@
-﻿import * as angular from "angular";
+﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
+import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Input, Component, ViewChild, OnInit, OnChanges, OnDestroy, SimpleChanges, EventEmitter, Output } from "@angular/core"
+import { Input, Component, ViewChild, OnInit, OnChanges, OnDestroy, EventEmitter, Output } from "@angular/core"
 import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { GridStatusBoardService } from "./gridStatusBoard.service";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
@@ -33,6 +34,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.cntrctWdgtSvc.isRefresh.subscribe(res => {
             if (res) {
+                this.state.skip = 0;
                 this.loadContractData();
             }
         });
@@ -87,6 +89,10 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
             logic: "and",
             filters: [],
         },
+        sort: [{
+            "field": "CNTRCT_OBJ_SID",
+            "dir": "desc",
+            }],
     };
 
     public pageSizes: PageSizeItem[] = [
@@ -127,7 +133,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     }
 
-    ngOnChanges(changes: SimpleChanges) {
+    ngOnChanges() {
         if (this.isInitialLoad) {
             this.isInitialLoad = false;
             return;
@@ -138,8 +144,6 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     loadContractData() {
         this.isGridLoading.emit(true);
-        let rtnContract: Array<any> = [];
-        let rtnTender: Array<any> = [];
         this.dataforfilter = {
             CustomerIds: JSON.parse(this.custIds),/*[]*/
             StartDate: this.datepipe.transform(new Date(this.startDt), 'MM/dd/yyyy'),
@@ -162,17 +166,24 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                 this.tenderIncomplete = 0;
                 this.tenderCancelled = 0;
 
-                //adding a column IS_Favorite for setting the contract as favourite with the value coming from dashboard via directive Input
-                for (var i = 0; i < response.length; i++) {
-                    {
-                        response[i]["IS_FAVORITE"] = false;
-                        for (var j = 0; j < this.favContractsMap.length; j++) {
-                            if (response[i].CNTRCT_OBJ_SID === this.favContractsMap[j]) {
-                                response[i]["IS_FAVORITE"] = true;
-                                this.favCount++;
-                            }
+                //setting the favourite & alert contracts
+                for (let i = 0; i < response.length; i++) {
+                    //adding a column IS_Favorite for setting the favourite contracts
+                    response[i]["IS_FAVORITE"] = false;
+                    for (let j = 0; j < this.favContractsMap.length; j++) {
+                        if (response[i].CNTRCT_OBJ_SID === this.favContractsMap[j]) {
+                            response[i]["IS_FAVORITE"] = true;
+                            this.favCount++;
                         }
                     }
+                    //setting alert count & alerts
+                    if (response[i].HAS_ALERT && response[i].WF_STG_CD !== "Complete") {
+                        this.alertCount++;
+                    } else {
+                        response[i].HAS_ALERT = false;
+                    }
+
+                    this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
                 }
                 this.gridResult = response;
 
@@ -181,8 +192,8 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                 this.activekey = "all";
 
                 //Storing the filter response in variable to be used while filter
-                this.gridresultAlert = this.gridResult.filter(x => x.HAS_ALERT === "true");
-                this.gridresultFavorite = this.gridResult.filter(x => x.IS_FAVORITE === "true");
+                this.gridresultAlert = this.gridResult.filter(x => x.HAS_ALERT === true);
+                this.gridresultFavorite = this.gridResult.filter(x => x.IS_FAVORITE === true);
                 this.gridresultAllContract = this.gridResult.filter(x => x.IS_TENDER === 0);
                 this.gridresultAllTenders = this.gridResult.filter(x => x.IS_TENDER === 1);
                 this.gridresultCompletedContract = this.gridResult.filter(x => x.IS_TENDER === 0 && x.WF_STG_CD === "Complete");
@@ -193,47 +204,13 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
                 //Setting the counts
                 this.allStageCnt = response.length;
-                for (var i = 0; i < response.length; i++) {
-                    if (response[i].IS_TENDER == "0") {
-                        if (rtnContract[response[i].WF_STG_CD] === undefined) {
-                            rtnContract[response[i].WF_STG_CD] = 0;
-                        }
-                        rtnContract[response[i].WF_STG_CD]++;
-                        this.contractStageCnt++;
-
-                        if (response[i].WF_STG_CD == "Complete") {
-                            this.contractComplete++;
-                        }
-                        else {
-                            this.contractIncomplete++;
-                        }
-                    }
-                    else {
-                        if (rtnTender[response[i].WF_STG_CD] === undefined) {
-                            rtnTender[response[i].WF_STG_CD] = 0;
-                        }
-                        rtnTender[response[i].WF_STG_CD]++;
-                        this.tenderStageCnt++;
-
-                        if (response[i].WF_STG_CD == "Complete") {
-                            this.tenderComplete++;
-                        }
-                        else if (response[i].WF_STG_CD == "InComplete") {
-                            this.tenderIncomplete++;
-                        }
-                        else {
-                            this.tenderCancelled++;
-                        }
-                    }
-
-                    if (response[i].HAS_ALERT && response[i].WF_STG_CD !== "Complete") {
-                        this.alertCount++;
-                    } else {
-                        response[i].HAS_ALERT = false;
-                    }
-
-                    this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
-                }
+                this.contractStageCnt = this.gridresultAllContract.length;
+                this.tenderStageCnt = this.gridresultAllTenders.length;
+                this.contractComplete = this.gridresultCompletedContract.length;
+                this.contractIncomplete = this.gridresultInCompleteContract.length;
+                this.tenderComplete = this.gridresultCompletedTenders.length;
+                this.tenderIncomplete = this.gridresultIncompleteTenders.length;
+                this.tenderCancelled = this.gridresultCancelledTenders.length;
 
                 this.isGridLoading.emit(false);
             },
@@ -268,7 +245,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
             this.gridresultFavorite.push(dataItem);
         }
         this.favContractIds = this.favContractsMap.toString();
-        let mySubConfig = {
+        const mySubConfig = {
             favContractIds: this.favContractIds
         }
         this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);
@@ -299,7 +276,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         else if (this.activekey == "CT") {
             this.contractDs = process(this.gridresultCompletedTenders, this.state);
         }
-        else if (this.activekey = "ICT") {
+        else if (this.activekey == "ICT") {
             this.contractDs = process(this.gridresultIncompleteTenders, this.state);
         }
         else if (this.activekey == "CA") {
@@ -360,7 +337,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
         // Save only if there is value change in the filters and not default value (fltr_All)
         if (this.activeFilter !== filter) {
-            let mySubConfig = {
+            const mySubConfig = {
                 gridFilter: filter
             }
             this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);

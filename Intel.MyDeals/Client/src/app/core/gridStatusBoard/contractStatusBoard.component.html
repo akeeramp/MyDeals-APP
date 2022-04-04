@@ -9,7 +9,7 @@
             <kendo-grid-column width="50" [headerClass]="{'headerClass':true}" field="id" [sortable]="false" [filterable]="none" title="">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div>
-                        <a href="/Contract\\#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor">
+                        <a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor">
                             <span class="intelicon-frame-template">
                             </span>
                         </a>
@@ -24,7 +24,7 @@
             <kendo-grid-column title="Strategy Name" field="name" width="200px" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div class="textDecoratorWrap">
-                        <a href="/Contract\\#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" style="color: #FFA300;" title="Click to open the Contract in the Contract Editor">
+                        <a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" style="color: #FFA300;" title="Click to open the Contract in the Contract Editor">
                             <span style="color: #0071c5;">
                                 {{dataItem.name}}
                             </span>
