@@ -73,7 +73,7 @@
                     console.log('Template Retrieval Failed');
                 });
         }
-
+        
 
         $scope.showSearchFilters = true;
         $scope.ruleToRun = null;
@@ -1292,117 +1292,117 @@
                     searchText = searchText + "?$top=" + (take - 1);
                 }
                 toastr.clear();// Clear any sticky messages present
-                objsetService.searchTender(st, en, searchText)
-                    .then(function (response) {
-
-                        // For DA check if he has access to Product vertical //Mike's managetab code
-                        if (window.usrRole === "DA" && window.usrVerticals.length > 0) {
-                            var userVerticals = window.usrVerticals.split(",");
-                            for (var i = response.data.Items.length - 1; i >= 0; i--) {
-                                // For tender deals hide these columns
-                                var dataVerticals = response.data.Items[i].PRODUCT_CATEGORIES.split(",");
-                                if (!util.findOne(dataVerticals, userVerticals)) {
-                                    response.data.Items.splice(i, 1);
-                                }
-                            }
-                        }
-
-                        $scope.wipData = response.data.Items;
-                        $scope.dealType = $scope.ruleData[0].value;
-
-                        if ($scope.wipData.length == 0) {
-                            var message = window.usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
-                            $scope.setBusy("", "");
-                            kendo.alert(message);
-                        }
-
-                        if (response.data['Count'] > take) {
-                            var info = maxRecordCount.CNST_DESC != undefined ? maxRecordCount.CNST_DESC : "Your search options returned <b>" + response.data['Count'] + "</b> deals. Refine your search options"
-                            info = info.replace("**", response.data['Count']);
-                            logger.stickyInfo(info);
-                        }
-
-                        for (var w = 0; w < $scope.wipData.length; w++) {
-                            var item = $scope.wipData[w];
-
-                            // Get missing cap... but the message is too long and has line breaks... this will cause issues in the grid filter.
-                            // Could replace the \n with spaces, but the text for filtering probably only needs the first sentence... let's split on the first \n
-
-                            // -- first sentence version
-                            item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).split('\n')[0];
-                            // -- Replace break version
-                            //item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).replace(/(?:\r\n|\r|\n)/g, ' ');
-
-                            if (item._contractPublished !== undefined && item._contractPublished === 0) {
-                                for (var k in item) {
-                                    if (typeof item[k] !== 'function' && k[0] !== '_') {
-                                        item._behaviors.isReadOnly[k] = true;
-                                    }
-                                }
-                            }
-                        }
-
-                        //reset wip options
-                        $scope.wipOptions = {
-                            "default": {},
-                            "isLayoutConfigurable": true,
-                            //"isPricingTableEnabled": true,
-                            "isVisibleAdditionalDiscounts": true,
-                            "isExportable": true,
-                            "isEditable": true,
-                            "initSearchStr": "", //initSearchValue,
-                            "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
-                        };
-
-                        if ($scope.templates != undefined && $scope.templates.ModelTemplates != undefined && $scope.templates.ModelTemplates.WIP_DEAL != undefined) {
-                            loadWipOption();
-                        }
-                        else {
-                            templatesService.readTemplates()
-                                .then(function (response) {
-                                    $scope.templates = response.data;
-                                    $scope.addCustomToTemplates();
-                                    loadWipOption();
-                                })
-                                .catch(function (data) {
-                                    console.log('Template Retrieval Failed');
-                                });
-                        }
-
-                    }).catch(function (data) {
-                        $scope.setBusy("", "");
-                        kendo.alert("Tender Search Failed.  Please try again with more specific Search Options.");
-                        console.log('Tender Search Failed');
-                    });
+                if ($scope.templates != undefined && $scope.templates.ModelTemplates != undefined && $scope.templates.ModelTemplates.WIP_DEAL != undefined) {
+                    searchTenderDeals(st, en, searchText, take);
+                }
+                else {
+                    templatesService.readTemplates()
+                        .then(function (response) {
+                            $scope.templates = response.data;
+                            $scope.addCustomToTemplates();
+                            searchTenderDeals(st, en, searchText, take);
+                        })
+                        .catch(function (data) {
+                            console.log('Template Retrieval Failed');
+                        });                    
+                }
             } else {
                 $scope.setBusy("", "");
                 kendo.alert("Please specify a Tender Deal Type");
             }
         });
 
-        function loadWipOption() {
-            $scope.wipOptions.columns = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
-            for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
-                if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
-                    $scope.wipOptions.columns.splice(i, 1);
-                }
-                //if (opGridTemplate.requiredForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
-                //    break;
-                //    $scope.wipOptions.columns.splice(i, 1);
-                //}
-            }
+        function searchTenderDeals(st, en, searchText, take) {
+            objsetService.searchTender(st, en, searchText)
+                .then(function (response) {
 
-            $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);
+                    // For DA check if he has access to Product vertical //Mike's managetab code
+                    if (window.usrRole === "DA" && window.usrVerticals.length > 0) {
+                        var userVerticals = window.usrVerticals.split(",");
+                        for (var i = response.data.Items.length - 1; i >= 0; i--) {
+                            // For tender deals hide these columns
+                            var dataVerticals = response.data.Items[i].PRODUCT_CATEGORIES.split(",");
+                            if (!util.findOne(dataVerticals, userVerticals)) {
+                                response.data.Items.splice(i, 1);
+                            }
+                        }
+                    }
 
-            opGridTemplate.hideForTender.forEach(function (x) {
-                delete $scope.wipOptions.model.fields[x];
-            });
+                    $scope.wipData = response.data.Items;
+                    $scope.dealType = $scope.ruleData[0].value;
 
-            $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
-            $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
+                    if ($scope.wipData.length == 0) {
+                        var message = window.usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
+                        $scope.setBusy("", "");
+                        kendo.alert(message);
+                    }
 
-            $scope.wipOptions.groups = $scope.wipOptions.default.groups
-            $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
+                    if (response.data['Count'] > take) {
+                        var info = maxRecordCount.CNST_DESC != undefined ? maxRecordCount.CNST_DESC : "Your search options returned <b>" + response.data['Count'] + "</b> deals. Refine your search options"
+                        info = info.replace("**", response.data['Count']);
+                        logger.stickyInfo(info);
+                    }
+
+                    for (var w = 0; w < $scope.wipData.length; w++) {
+                        var item = $scope.wipData[w];
+
+                        // Get missing cap... but the message is too long and has line breaks... this will cause issues in the grid filter.
+                        // Could replace the \n with spaces, but the text for filtering probably only needs the first sentence... let's split on the first \n
+
+                        // -- first sentence version
+                        item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).split('\n')[0];
+                        // -- Replace break version
+                        //item["MISSING_CAP_COST_INFO"] = gridUtils.getMissingCostCapTitle(item).replace(/(?:\r\n|\r|\n)/g, ' ');
+
+                        if (item._contractPublished !== undefined && item._contractPublished === 0) {
+                            for (var k in item) {
+                                if (typeof item[k] !== 'function' && k[0] !== '_') {
+                                    item._behaviors.isReadOnly[k] = true;
+                                }
+                            }
+                        }
+                    }
+
+                    //reset wip options
+                    $scope.wipOptions = {
+                        "default": {},
+                        "isLayoutConfigurable": true,
+                        //"isPricingTableEnabled": true,
+                        "isVisibleAdditionalDiscounts": true,
+                        "isExportable": true,
+                        "isEditable": true,
+                        "initSearchStr": "", //initSearchValue,
+                        "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
+                    };
+
+                    $scope.wipOptions.columns = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
+                    for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
+                        if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                            $scope.wipOptions.columns.splice(i, 1);
+                        }
+                        //if (opGridTemplate.requiredForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                        //    break;
+                        //    $scope.wipOptions.columns.splice(i, 1);
+                        //}
+                    }
+
+                    $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);
+
+                    opGridTemplate.hideForTender.forEach(function (x) {
+                        delete $scope.wipOptions.model.fields[x];
+                    });
+
+                    $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
+                    $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
+
+                    $scope.wipOptions.groups = $scope.wipOptions.default.groups
+                    $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;                    
+
+                }).catch(function (data) {
+                    $scope.setBusy("", "");
+                    kendo.alert("Tender Search Failed.  Please try again with more specific Search Options.");
+                    console.log('Tender Search Failed');
+                });
         }
 
         $scope.$on('search-rules-updated', function (event, args) {
