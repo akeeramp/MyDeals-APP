@@ -17,7 +17,7 @@ export class openContractWidgetComponent implements OnInit, OnDestroy {
   resizeEvent: EventEmitter<GridsterItem>;
 
   resizeSub: Subscription;
-  private contractId:string='';
+  private contractId='';
 @ViewChild('txtToolTip', {static: false}) contractToolTip: NgbTooltip;
 
   openContract(){

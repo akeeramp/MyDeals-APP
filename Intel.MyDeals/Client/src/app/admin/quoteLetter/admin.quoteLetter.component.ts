@@ -4,7 +4,6 @@ import { quoteLetterService } from "./admin.quoteLetter.service";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { saveAs } from 'file-saver';
-import * as _ from "underscore";
 
 @Component({
     selector: "quoteLetter",
@@ -22,40 +21,38 @@ export class QuoteLetterComponent {
     }
 
     //created for Angular loader
-    public isLoading: string = 'true';
-    public loadMessage: string = "Quote Letter is Loading ...";
-    public moduleName: string = "Quote Letter Dashboard";
+    public isLoading = 'true';
+    public loadMessage = "Quote Letter is Loading ...";
+    public moduleName = "Quote Letter Dashboard";
 
     private menuItems: Array<any> = [];
     private menuItemsTemplate: Array<any> = [];
-    private isDropdownsLoaded: boolean = false;
+    private isDropdownsLoaded = false;
     private selectedTemplate: any = null;
-    private headerInfo: string = "";
-    private bodyInfo: string = "";
+    private headerInfo = "";
+    private bodyInfo = "";
 
     loadAdminTemplate() {
-        let vm = this;
-        //loader stops
-        vm.isLoading = 'false';
+        this.isLoading = 'false';
         if ((<any>window).usrRole != "Legal" && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            vm.quoteLetterSvc.adminGetTemplates()
+            this.quoteLetterSvc.adminGetTemplates()
                 .subscribe(response => {
-                    vm.menuItems = [];
+                    this.menuItems = [];
                     for (let d = 0; d < response.length; d++) {
                         if (response[d]["OBJ_SET_TYPE_CD"] !== "KIT" || response[d]["PROGRAM_PAYMENT"] !== "FRONTEND") {
-                            vm.menuItems.push(response[d]);
+                            this.menuItems.push(response[d]);
                         }
                     }
 
                     // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
-                    for (var i = 0; i < vm.menuItems.length; i++) {
-                        vm.menuItems[i].MenuText = vm.menuItems[i].OBJ_SET_TYPE_CD + "-" + vm.menuItems[i].PROGRAM_PAYMENT;
-                        vm.menuItemsTemplate.push(vm.menuItems[i].MenuText);
+                    for (let i = 0; i < this.menuItems.length; i++) {
+                        this.menuItems[i].MenuText = this.menuItems[i].OBJ_SET_TYPE_CD + "-" + this.menuItems[i].PROGRAM_PAYMENT;
+                        this.menuItemsTemplate.push(this.menuItems[i].MenuText);
                     }
-                    vm.isDropdownsLoaded = true;
+                    this.isDropdownsLoaded = true;
 
                 }, function (response) {
                     this.loggerSvc.error("Unable to get template data.", response, response.statusText);
@@ -73,10 +70,10 @@ export class QuoteLetterComponent {
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminSaveTemplate(this.selectedTemplate)
-            .subscribe(response => {
+            .subscribe(() => {
                 let selectedItemIndex;
-                // Sync vm.menuItems w/ the changes that were just saved, then rebind the templates combobox.
-                for (var i = 0; i < this.menuItems.length; i++) {
+                // Sync this.menuItems w/ the changes that were just saved, then rebind the templates combobox.
+                for (let i = 0; i < this.menuItems.length; i++) {
                     if (this.menuItems[i].TMPLT_SID == this.selectedTemplate.TMPLT_SID) {
                         this.menuItems[i] = this.selectedTemplate;
                         selectedItemIndex = i;
@@ -87,15 +84,15 @@ export class QuoteLetterComponent {
             }, function (response) {
                     this.loggerSvc.error("Unable to save changes.", response, response.statusText);
             });
-    };
+    }
 
     onGeneratePreviewClick() {
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminPreviewQuoteLetterTemplate(this.selectedTemplate)
             .subscribe(response => {
-                let contentDisposition = response.headers.get('content-disposition');
-                let filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+                const contentDisposition = response.headers.get('content-disposition');
+                const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
                 saveAs(response.body, filename);
 
                 this.loggerSvc.success("Successfully generated quote letter preview.");
@@ -104,7 +101,7 @@ export class QuoteLetterComponent {
                 this.loggerSvc.error("Unable to generate quote letter preview.", response, response.statusText);
             });
            
-    };  
+    }  
 
     ngOnInit() {
         this.loadAdminTemplate();

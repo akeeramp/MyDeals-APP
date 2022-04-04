@@ -3,7 +3,6 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/src/app/core/gridStatusBoard/gridStatusBoard.component.css" rel="stylesheet" />
-
 <div class="container-fluid widget-container" style="overflow: auto; height: 100%;">
     <div class="horizontal-widget">
         <div class="left-pane-widget">
@@ -29,7 +28,6 @@
                 </div>
             </div>
         </div>
-
         <div class="center-pane-widget">
             <div class="inner container-fluid overflow" kendo-tooltip k-options="toolTipOptions">
                 <kendo-grid [data]="contractDs" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,buttonCount:5}" [groupable]="false" [group]="state.group" filterable="menu"
@@ -98,5 +96,4 @@
             </div>
         </div>
     </div>
-
 </div>

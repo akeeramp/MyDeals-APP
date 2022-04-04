@@ -4,43 +4,35 @@ import { downgradeInjectable } from '@angular/upgrade/static';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
-
 @Injectable({
     providedIn: 'root'
 })
-
 export class constantsService {
-    public apiBaseUrl: string = "api/AdminConstants/v1/";
+    public apiBaseUrl = "api/AdminConstants/v1/";
 
     constructor(private httpClient: HttpClient) { }
 
     public getConstants(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetConstants/false';
+        const apiUrl: string = this.apiBaseUrl + 'GetConstants/false';
         return this.httpClient.get(apiUrl);
     }
-
     public updateConstants(data: any): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UpdateConstant';
+        const apiUrl: string = this.apiBaseUrl + 'UpdateConstant';
         return this.httpClient.post(apiUrl, data);
     }
-
     public insertConstants(data: any): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'CreateConstant';
+        const apiUrl: string = this.apiBaseUrl + 'CreateConstant';
         return this.httpClient.post(apiUrl, data);
     }
-
     public deleteConstants(data: any): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'DeleteConstant';
+        const apiUrl: string = this.apiBaseUrl + 'DeleteConstant';
         return this.httpClient.post(apiUrl, data);
     }
-
     public getConstantsByName(name: any): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetConstantsByName/' + name;
+        const apiUrl: string = this.apiBaseUrl + 'GetConstantsByName/' + name;
         return this.httpClient.get(apiUrl);
     }
 }
-
-
 angular
     .module('app')
     .factory('constantsService', downgradeInjectable(constantsService));

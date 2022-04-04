@@ -5,21 +5,8 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Vistex_Cust_Map } from "./admin.vistexCustomerMapping.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
-import {
-    GridDataResult,
-    PageChangeEvent,
-    DataStateChangeEvent,
-    PageSizeItem,
-} from "@progress/kendo-angular-grid";
-import {
-    process,
-    State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
-} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
     selector: "adminVistexCustomerMapping",
@@ -41,31 +28,31 @@ export class adminVistexCustomerMappingComponent {
     @ViewChild("settleDropDown") private settleDdl;
     @ViewChild("custRptGeoDropDown") private custGeoDdl;
 
-    private isLoading: boolean = true;
+    private isLoading = true;
     private errorMsg: string[] = [];
-    private isCombExists: boolean = false;
-    private dataSource: any;
-    private gridOptions: any;
-    private allowCustom: boolean = true;
+    private isCombExists = false;
+    private dataSource;
+    private gridOptions;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
-    public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
+    public gridResult = [];
+    public type = "numeric";
+    public info = true;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
 
-    public PeriodProfile: Array<any>;
-    public ARSettlementLevel: Array<any>;
-    public TenderARSettlementLevel: Array<any>;
-    public ARSettlementLevelData: Array<any>;
-    public TenderARSettlementLevelData: Array<any>;
-    public SettlementPartner: Array<any>;
-    public custRptGeo: Array<any>;
-    public SettlementPartnerData: Array<any>;
-    public PeriodProfileData: Array<any>;
-    public SelectedConsumptionReportedGeos: string = "";
+    public PeriodProfile = [];
+    public ARSettlementLevel = [];
+    public TenderARSettlementLevel = [];
+    public ARSettlementLevelData = [];
+    public TenderARSettlementLevelData = [];
+    public SettlementPartner = [];
+    public custRptGeo = [];
+    public SettlementPartnerData = [];
+    public PeriodProfileData = [];
+    public SelectedConsumptionReportedGeos = "";
 
     public state: State = {
         skip: 0,
@@ -98,7 +85,7 @@ export class adminVistexCustomerMappingComponent {
 
     public gridData: GridDataResult;
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -110,7 +97,7 @@ export class adminVistexCustomerMappingComponent {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    InitiateDropDowns(formGroup: any) {
+    InitiateDropDowns(formGroup) {
         this.customerMapSvc.getDropdown('GetDropdowns/PERIOD_PROFILE')
             .subscribe((response: Array<any>) => {
                 this.PeriodProfile = response;
@@ -138,15 +125,14 @@ export class adminVistexCustomerMappingComponent {
     }
 
     loadCustomerMapping() {
-        let vm = this;
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.customerMapSvc.getVistexCustomersMapList().subscribe(
+            this.customerMapSvc.getVistexCustomersMapList().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
 
                 function (response) {
@@ -160,27 +146,26 @@ export class adminVistexCustomerMappingComponent {
             );
         }
     }
-    IsValidCustomerMapping(model: any) {
-        let vm = this;
+    IsValidCustomerMapping(model) {
         let retCond = false;
 
         if (model.VISTEX_CUST_FLAG && (model.DFLT_PERD_PRFL == null || model.DFLT_PERD_PRFL == '')) {
             this.errorMsg.push("Default value of Period Profile cannot be empty for Vistex customer!");
             retCond = true;
         }
-        if (model.DFLT_PERD_PRFL != null && model.DFLT_PERD_PRFL != '' && vm.PeriodProfile.filter(x => x.DROP_DOWN === model.DFLT_PERD_PRFL).length == 0) {
+        if (model.DFLT_PERD_PRFL != null && model.DFLT_PERD_PRFL != '' && this.PeriodProfile.filter(x => x.DROP_DOWN === model.DFLT_PERD_PRFL).length == 0) {
             this.errorMsg.push("Please select a valid Period Profile");
             retCond = true;
         }
-        if (model.DFLT_AR_SETL_LVL != null && model.DFLT_AR_SETL_LVL != '' && vm.ARSettlementLevelData.filter(x => x.DROP_DOWN === model.DFLT_AR_SETL_LVL).length == 0) {
+        if (model.DFLT_AR_SETL_LVL != null && model.DFLT_AR_SETL_LVL != '' && this.ARSettlementLevelData.filter(x => x.DROP_DOWN === model.DFLT_AR_SETL_LVL).length == 0) {
             this.errorMsg.push("Please select a valid Non-Tenders Settlement Level");
             retCond = true;
         }
-        if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && vm.TenderARSettlementLevelData.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0) {
+        if (model.DFLT_TNDR_AR_SETL_LVL != null && model.DFLT_TNDR_AR_SETL_LVL != '' && this.TenderARSettlementLevelData.filter(x => x.DROP_DOWN === model.DFLT_TNDR_AR_SETL_LVL).length == 0) {
             this.errorMsg.push("Please select a valid Tenders Settlement Level");
             retCond = true;
         }
-        if (model.DFLT_SETTLEMENT_PARTNER != null && model.DFLT_SETTLEMENT_PARTNER != '' && vm.SettlementPartner.filter(x => x.toString() === model.DFLT_SETTLEMENT_PARTNER).length == 0) {
+        if (model.DFLT_SETTLEMENT_PARTNER != null && model.DFLT_SETTLEMENT_PARTNER != '' && this.SettlementPartner.filter(x => x.toString() === model.DFLT_SETTLEMENT_PARTNER).length == 0) {
             this.errorMsg.push("Please select a valid Settlement Partner");
             retCond = true;
         }
@@ -215,7 +200,7 @@ export class adminVistexCustomerMappingComponent {
             DFLT_SETTLEMENT_PARTNER: new FormControl(dataItem.DFLT_SETTLEMENT_PARTNER),
         });
         this.InitiateDropDowns(this.formGroup);
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -241,7 +226,7 @@ export class adminVistexCustomerMappingComponent {
             if (!this.isCombExists) {
                 this.isLoading = true;
                 this.customerMapSvc.UpdateVistexCustomer(cust_map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult[rowIndex] = cust_map;
                         this.gridResult.push(cust_map);
                         this.loadCustomerMapping();
@@ -258,13 +243,12 @@ export class adminVistexCustomerMappingComponent {
         sender.closeRow(rowIndex);
     }
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadCustomerMapping()
+        this.loadCustomerMapping()
     }
 
     ngOnInit() {

@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import {Injectable, Inject} from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import {downgradeInjectable} from '@angular/upgrade/static';
+﻿import {Injectable} from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 
@@ -10,24 +8,21 @@ import { Observable } from 'rxjs';
  })
 
 export class customerService { 
-    public apiBaseUrl: string = "api/Customers/";
+    public apiBaseUrl = "api/Customers/";
 
     constructor(private httpClient: HttpClient) {
       }
 
       public getCustomers():Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetCustomers/false';
+        const apiUrl: string = this.apiBaseUrl + 'GetCustomers/false';
         return this.httpClient.get(apiUrl);
     }
 
     public getMyCustomersNameInfo():Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'GetMyCustomersNameInfo';
+        const apiUrl: string = this.apiBaseUrl + 'GetMyCustomersNameInfo';
         return this.httpClient.get(apiUrl);
 
     }
 
 }
 
-angular
-    .module('app')
-    .service('customerService',downgradeInjectable(customerService));

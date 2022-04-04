@@ -5,21 +5,15 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { consumption_Country_Map } from "./admin.consumptionCountry.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
     distinct,
-    filterBy,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
@@ -40,24 +34,24 @@ export class adminConsumptionCountryComponent {
     @ViewChild("CNSMPTN_CTRY_NM_DropDown") private CNSMPTN_CTRY_NM_Ddl;
     @ViewChild("GEO_NM_DropDown") private GEO_NM_DropDownDdl;
 
-    private isLoading: boolean = true;
+    private isLoading = true;
     private dataSource: any;
     private gridOptions: any;
-    private allowCustom: boolean = true;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
-    public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
+    public gridResult: Array<any> = [];
+    public type = "numeric";
+    public info = true;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
-    private isCombExists: boolean = false;
+    public isFormChange = false;
+    private isCombExists = false;
     private errorMsg: string[] = [];
-    public Geo: Array<any>;
-    public Countries: Array<any>;
+    public Geo: Array<any> = [];
+    public Countries: Array<any> = [];
     private editedRowIndex: number;
-    public countriesData: Array<any>;
-    public GeoData: Array<any>;
+    public countriesData: Array<any> = [];
+    public GeoData: Array<any> = [];
 
     public state: State = {
         skip: 0,
@@ -103,16 +97,15 @@ export class adminConsumptionCountryComponent {
     }
 
     loadConsumptionCountry() {
-        let vm = this;
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.consumptionCountrySvc.getConsumptionCountry().subscribe(
+            this.consumptionCountrySvc.getConsumptionCountry().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
                     this.InitiateDropDowns(this.formGroup);
-                    vm.isLoading = false;
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -157,22 +150,21 @@ export class adminConsumptionCountryComponent {
     }
 
     IsValidConsumptionCountryMapping(model: any) {
-        let vm = this;
         let retCond = false;
 
-        if (model.GEO_NM == null || model.GEO_NM == '' || vm.Geo.filter(x => x.dropdownName == model.GEO_NM).length == 0) {
+        if (model.GEO_NM == null || model.GEO_NM == '' || this.Geo.filter(x => x.dropdownName == model.GEO_NM).length == 0) {
             this.errorMsg.push("Please Select Valid <strong>Geo</strong>.");
             retCond = true;
         }
-        if (model.CNSMPTN_CTRY_NM == null || model.CNSMPTN_CTRY_NM == '' || vm.Countries.filter(x => x.CTRY_NM == model.CNSMPTN_CTRY_NM).length == 0) {
+        if (model.CNSMPTN_CTRY_NM == null || model.CNSMPTN_CTRY_NM == '' || this.Countries.filter(x => x.CTRY_NM == model.CNSMPTN_CTRY_NM).length == 0) {
             this.errorMsg.push("Please Select Valid <strong>Consumption Country/Region</strong>.");
             retCond = true;
         }
-        if (vm.gridResult.filter(x => x.CNSMPTN_CTRY_NM == model.CNSMPTN_CTRY_NM && x.GEO_NM == model.GEO_NM).length != 0) {
+        if (this.gridResult.filter(x => x.CNSMPTN_CTRY_NM == model.CNSMPTN_CTRY_NM && x.GEO_NM == model.GEO_NM).length != 0) {
             this.errorMsg.push("The Combination of" + " <strong>" + model.GEO_NM + "</strong> " + "and" + " <strong>" + model.CNSMPTN_CTRY_NM + "</strong> " + "already exists.");
             retCond = true;
         }
-        if (vm.gridResult.filter(x => x.CNSMPTN_CTRY_NM == model.CNSMPTN_CTRY_NM).length != 0) {
+        if (this.gridResult.filter(x => x.CNSMPTN_CTRY_NM == model.CNSMPTN_CTRY_NM).length != 0) {
             this.errorMsg.push("<strong>" + model.CNSMPTN_CTRY_NM + "</strong> " + "already mapped.");
             retCond = true;
         }
@@ -186,7 +178,7 @@ export class adminConsumptionCountryComponent {
             GEO_NM: new FormControl("", Validators.required),
             CNSMPTN_CTRY_NM: new FormControl("", Validators.required)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
 
@@ -200,7 +192,7 @@ export class adminConsumptionCountryComponent {
             GEO_NM: new FormControl(dataItem.GEO_NM, Validators.required),
             CNSMPTN_CTRY_NM: new FormControl(dataItem.CNSMPTN_CTRY_NM, Validators.required)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -226,7 +218,7 @@ export class adminConsumptionCountryComponent {
                 if (isNew) {
                     this.isLoading = true;
                     this.consumptionCountrySvc.insertConsumptionCountry(consumption_Ctry_Map).subscribe(
-                        result => {
+                        () => {
                             this.gridResult.push(consumption_Ctry_Map);
                             this.loadConsumptionCountry();
                             this.loggerSvc.success("New Consumption Country/Region Added.");
@@ -240,7 +232,7 @@ export class adminConsumptionCountryComponent {
                 } else {
                     this.isLoading = true;
                     this.consumptionCountrySvc.updateConsumptionCountry(consumption_Ctry_Map).subscribe(
-                        result => {
+                        () => {
                             this.gridResult[rowIndex] = consumption_Ctry_Map;
                             this.gridResult.push(consumption_Ctry_Map);
                             this.loadConsumptionCountry();

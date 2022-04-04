@@ -1,45 +1,42 @@
 ﻿<link href="/Client/src/app/core/gridStatusBoard/contractStatusBoard.component.css" rel="stylesheet" />
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
-
 <div *ngIf="isLoaded">
     <div>
-        <kendo-grid [data]="gridData" [navigable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [groupable]="false" [group]="state.group" scrollable="boolean" [sortable]="true" filterable="menu" [filter]="state.filter" (dataStateChange)="dataStateChange($event)"
-            kendoGridFocusable [height]="300">
-            <kendo-grid-column width="50" [headerClass]="{'headerClass':true}" field="id" [sortable]="false" [filterable]="none" title="">
+        <kendo-grid [data]="gridData" [navigable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"
+            [groupable]="false" [group]="state.group" scrollable="boolean" [sortable]="true" filterable="menu"
+            [filter]="state.filter" (dataStateChange)="dataStateChange($event)" kendoGridFocusable [height]="300">
+            <kendo-grid-column width="50" [headerClass]="{'headerClass':true}" field="id" [sortable]="false"
+                [filterable]="none" title="">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div>
-                        <a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor">
-                            <span class="intelicon-frame-template">
-                            </span>
-                        </a>
-                    </div>
+                    <div><a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank"
+                            title="Click to open the Contract in the Contract Editor"><span
+                                class="intelicon-frame-template"></span></a></div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="stage" title="Strategy Stage" width="200" [headerClass]="{'headerClass':true}" [filterable]="true" [sortable]="true">
-                <ng-template kendoGridCellTemplate let-dataItem>
-                    <span><i class='intelicon-workflow-process-outlined' style='font-size: 20px;'></i> {{dataItem.stage}}</span>
-                </ng-template>
+            <kendo-grid-column field="stage" title="Strategy Stage" width="200" [headerClass]="{'headerClass':true}"
+                [filterable]="true" [sortable]="true">
+                <ng-template kendoGridCellTemplate let-dataItem><span><i class='intelicon-workflow-process-outlined'
+                            style='font-size: 20px;'></i>{{dataItem.stage}}</span></ng-template>
             </kendo-grid-column>
             <kendo-grid-column title="Strategy Name" field="name" width="200px" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <div class="textDecoratorWrap">
-                        <a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank" style="color: #FFA300;" title="Click to open the Contract in the Contract Editor">
-                            <span style="color: #0071c5;">
-                                {{dataItem.name}}
-                            </span>
-                        </a>
-                    </div>
+                    <div class="textDecoratorWrap"><a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}"
+                            target="_blank" style="color: #FFA300;"
+                            title="Click to open the Contract in the Contract Editor"><span
+                                style="color: #0071c5;">{{dataItem.name}} </span></a></div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="pct" title="Price Cost Test Results" width="200" [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_COST_TEST" [filterable]="true">
+            <kendo-grid-column field="pct" title="Price Cost Test Results" width="200"
+                [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_COST_TEST" [filterable]="true">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div>
                         <icon-mct-pct-angular [dataValue]='dataItem.pct' [iconClass]="medIcon"></icon-mct-pct-angular>
                     </div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="mct" title="Meet Comp Test Results" width="200" [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_MEET_COMP" [filterable]="true">
+            <kendo-grid-column field="mct" title="Meet Comp Test Results" width="200"
+                [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_MEET_COMP" [filterable]="true">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div>
                         <icon-mct-pct-angular [dataValue]='dataItem.mct' [iconClass]="medIcon"></icon-mct-pct-angular>

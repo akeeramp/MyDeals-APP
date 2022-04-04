@@ -56,11 +56,11 @@ export class pctQueryBuilderComponent {
 
     deleteGroup(group) {
         group.rules.filter(data => {
-            if (data.hasOwnProperty("group") && data["group"]["isRemove"] == true) {
-                let index = group.rules.findIndex(x => x === data);
+            if (Object.prototype.hasOwnProperty.call(data, 'group') && data["group"]["isRemove"] == true) {
+                const index = group.rules.findIndex(x => x === data);
                 group.rules.splice(index, 1);
             }
-            else if (data.hasOwnProperty("group") && data.group.rules.length != 0) {
+            else if (Object.prototype.hasOwnProperty.call(data, 'group') && data.group.rules.length != 0) {
                 this.deleteGroup(data.group);
             }
         })
@@ -91,7 +91,7 @@ export class pctQueryBuilderComponent {
         this.saveEnable.emit(event)
     }
 
-    enableSave(ruleData, index) {
+    enableSave(ruleData) {
         if (ruleData) {
             this.saveEnable.emit({ "isSaveEnabled": true });
         }
@@ -120,7 +120,7 @@ export class pctQueryBuilderComponent {
     ngOnInit() {
         if (this.group) {
             this.origAttrList = this.attrList = distinct(this.leftValues, "ATRB_COL_NM");
-            let ruleCriteria = this.group.rules.map(item => { if (item.criteria) return item.criteria }).filter(item => item != undefined)
+            const ruleCriteria = this.group.rules.map(item => { if (item.criteria) return item.criteria }).filter(item => item != undefined)
 
             this.origAttrValueList = this.attrValueList = this.leftValues.filter((obj: { ATRB_COL_NM: any; VALUE: any; }) => {
                 if (ruleCriteria.some(el => el === obj.ATRB_COL_NM)) {

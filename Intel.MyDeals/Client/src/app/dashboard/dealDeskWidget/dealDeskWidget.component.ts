@@ -23,10 +23,8 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
     favCntrctIds = "";
     gridFltr = "";
 
-    public isLoading: boolean = true;
+    public isLoading = true;
     resizeSub: Subscription;
-
-    constructor() { }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.startDt && changes.startDt.currentValue !== undefined) {
@@ -38,7 +36,7 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
             this.isLoading = true;
         }
         if (!!changes.custIds && changes.custIds.currentValue !== undefined) {
-            let myCustIds = changes.custIds.currentValue.map(function (obj) {
+            const myCustIds = changes.custIds.currentValue.map(function (obj) {
                 return obj.value;
             });
             this.selectedCustomerIds = JSON.stringify(myCustIds);

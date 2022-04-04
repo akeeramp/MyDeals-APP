@@ -8,17 +8,13 @@ import { ThemePalette } from "@angular/material/core";
 import * as _ from "underscore";
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
+    distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
@@ -40,28 +36,28 @@ export class adminCustomerVendorsComponent {
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
 
-    private isLoading: boolean = true;
-    private errorMsg: string = "";
-    private isCombExists: boolean = false;
+    private isLoading = true;
+    private errorMsg = "";
+    private isCombExists = false;
     private custsDataSource: any[] = [];
     private vendorsNamesinfo: any[] = [];
     private vendorsNamesId: any[] = [];
-    private selectedCUST_MBR_SID: number = 1;
-    private selectedVENDOR_SID: number = 0;
+    private selectedCUST_MBR_SID = 1;
+    private selectedVENDOR_SID = 0;
     private getCustomersData: any;
-    private OnlyActv_ind_chg: boolean = true;
+    private OnlyActv_ind_chg = true;
     private dataSource: any;
     private CustvendorsData: any;
     private customers: any;
     private vendorsNamesOptions: any;
     private vendorsIdsOptions: any;
     private gridOptions: any;
-    private allowCustom: boolean = true;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
     public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
+    public type = "numeric";
+    public info = true;
     public distinctPartner: Array<any>;
     public distinctCust: Array<any>;
     public custData: Array<any>;
@@ -69,7 +65,7 @@ export class adminCustomerVendorsComponent {
     public distinctPartId: Array<any>;
     public vendorDetails: Array<any>;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
 
     public state: State = {
@@ -140,7 +136,7 @@ export class adminCustomerVendorsComponent {
         })
     }
     partnerIDChange(value: any) {
-        let selPart = _.findWhere(this.vendorDetails, { VNDR_ID: value });
+        const selPart = _.findWhere(this.vendorDetails, { VNDR_ID: value });
         if (selPart) {
             this.formGroup.patchValue({
                 BUSNS_ORG_NM: selPart.BUSNS_ORG_NM,
@@ -156,7 +152,7 @@ export class adminCustomerVendorsComponent {
 
     }
     partnerNMChange(value: any) {
-        let selPart = _.findWhere(this.vendorDetails, { BUSNS_ORG_NM: value });
+        const selPart = _.findWhere(this.vendorDetails, { BUSNS_ORG_NM: value });
         if (selPart) {
             this.formGroup.patchValue({
                 BUSNS_ORG_NM: selPart.BUSNS_ORG_NM,
@@ -172,7 +168,6 @@ export class adminCustomerVendorsComponent {
     }
 
     loadCustomerVendors() {
-        let vm = this;
         if (
             !(<any>window).isCustomerAdmin &&
             (<any>window).usrRole != "SA" &&
@@ -181,14 +176,14 @@ export class adminCustomerVendorsComponent {
         ) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.customerVendSvc.getCustomerVendors().subscribe(
+            this.customerVendSvc.getCustomerVendors().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.distinctCountry = distinct(vm.gridResult, "CTRY_CD").map(
+                    this.gridResult = result;
+                    this.distinctCountry = distinct(this.gridResult, "CTRY_CD").map(
                         item => item.CTRY_CD
                     );
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -203,7 +198,7 @@ export class adminCustomerVendorsComponent {
 
     IsValidCombination(model: any, isNew: boolean) {
         let retCond = false;
-        let cond = this.gridResult.filter(
+        const cond = this.gridResult.filter(
             x => x.BUSNS_ORG_NM.trim() === model.BUSNS_ORG_NM.trim() &&
                 x.CUST_NM.trim() === model.CUST_NM.trim() &&
                 x.DROP_DOWN.toString().trim() === model.DROP_DOWN.toString().trim() &&
@@ -276,7 +271,7 @@ export class adminCustomerVendorsComponent {
             OBJ_SET_TYPE_SID: new FormControl(0),
             VNDR_ID: new FormControl(0),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
 
@@ -307,7 +302,7 @@ export class adminCustomerVendorsComponent {
             OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
             VNDR_ID: new FormControl(dataItem.VNDR_ID),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -322,7 +317,7 @@ export class adminCustomerVendorsComponent {
     }
     saveHandler({ sender, rowIndex, formGroup, isNew }) {
         const cust_map: Cust_Map = formGroup.value;
-        let filteredCust = this.custData.filter(x => x.CUST_NM === cust_map.CUST_NM);
+        const filteredCust = this.custData.filter(x => x.CUST_NM === cust_map.CUST_NM);
         if (filteredCust.length > 0) {
             cust_map.CUST_MBR_SID = filteredCust[0].CUST_SID;
         }
@@ -334,7 +329,7 @@ export class adminCustomerVendorsComponent {
                 if (isNew) {
                     this.isLoading = true;
                     this.customerVendSvc.insertCustomerVendor(cust_map).subscribe(
-                        result => {
+                        () => {
                             this.gridResult.push(cust_map);
                             this.loadCustomerVendors();
                             this.loggerSvc.success("New Customer Vendor Added.");
@@ -348,7 +343,7 @@ export class adminCustomerVendorsComponent {
                 } else {
                     this.isLoading = true;
                     this.customerVendSvc.updateCustomerVendor(cust_map).subscribe(
-                        result => {
+                        () => {
                             this.gridResult[rowIndex] = cust_map;
                             this.gridResult.push(cust_map);
                             this.loadCustomerVendors();
@@ -366,13 +361,12 @@ export class adminCustomerVendorsComponent {
         sender.closeRow(rowIndex);
     }
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadCustomerVendors()
+        this.loadCustomerVendors()
     }
 
     ngOnInit() {

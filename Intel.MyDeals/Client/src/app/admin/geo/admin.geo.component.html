@@ -2,55 +2,39 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<!-- using for Angular spinner while page load -->
-
 <div class="row">
-    <div class="col-md-12" style="height:50px">
-    </div>
+    <div class="col-md-12" style="height:50px"></div>
 </div>
-
 <div class="row">
     <div class="col-md-12" style="padding-left: 35px;">
         <h3>Geo</h3>
     </div>
     <div class="col-md-12">
-        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;">
-            <b><i class="intelicon-alert-solid icon-lg"></i> Note:</b> This admin screen is a <strong>Read-Only</strong> screen for viewing data.
-        </div>
+        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;"><b><i
+                    class="intelicon-alert-solid icon-lg"></i>Note:</b>This admin screen is a
+            <strong>Read-Only</strong>screen for viewing data. </div>
     </div>
     <div class="col-md-12 kendo-grid-buttons">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true" [group]="state.group"
-                    filterable="menu" (dataStateChange)="dataStateChange($event)">
-            <ng-template kendoGridToolbarTemplate>
-                <button (click)="clearFilter()" class="k-button clearButton">
-                    <span class="k-icon  k-i-filter-clear k-icon-md"></span>
-                    CLEAR FILTERS
-                </button>
-                <kendo-grid-spacer></kendo-grid-spacer>
-                <button (click)="refreshGrid()" class="k-button clearButton">
-                    <span class="k-icon k-i-reload k-icon-md"></span>
-                    Refresh
-                </button>
+        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+            [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
+            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+            <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
+                        class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button>
+                <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
+                    class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_MBR_SID" title="ID">
-            </kendo-grid-column>
-
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_NM" title="Name">
-            </kendo-grid-column>
-
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="RGN_NM" title="Region">
-            </kendo-grid-column>
-
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_MBR_SID" title="ID"></kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_NM" title="Name"></kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="RGN_NM" title="Region"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="CTRY_NM" title="Category">
             </kendo-grid-column>
-
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean" [style]="{'text-align':'center'}">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean"
+                [style]="{'text-align':'center'}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled>
-                    </mat-slide-toggle>
+                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
             </kendo-grid-column>
-
         </kendo-grid>
     </div>
 </div>

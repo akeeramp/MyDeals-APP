@@ -37,8 +37,8 @@ export class PingComponent {
     constructor(private pingSvc: pingService,private loggerSvc:logger) { }
 
     public pingTime: any = null;
-    public batchInProgress: boolean = false;
-    public pingCycle: number = 60000;
+    public batchInProgress = false;
+    public pingCycle = 60000;
     public pingValues: Array<number> = [];
 
     ngOnInit() {
@@ -60,9 +60,9 @@ export class PingComponent {
     }
 
     pingHost() {
-        var ping: Date = new Date();
+        const ping: Date = new Date();
         this.pingSvc.pingHost()
-            .subscribe((response: any) => {
+            .subscribe(() => {
                 this.pingTime = <any>new Date() - <any>ping;
                 this.pingValues.push(this.pingTime);
                 if (this.pingValues.length > 10) this.pingValues.shift();

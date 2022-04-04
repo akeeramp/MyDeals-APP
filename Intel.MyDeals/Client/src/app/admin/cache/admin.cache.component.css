@@ -7,33 +7,33 @@
     border-radius: 4px;
     border: 1px solid #666666;
     background-color: #ffffff;
-    padding: 8px;
+    padding: 8px
 }
 
-    #viewResultsContainer h5 {
-        margin-top: 0;
-    }
+#viewResultsContainer h5 {
+    margin-top: 0
+}
 
 #viewResults {
-    font-size: 9px;
+    font-size: 9px
 }
 
 .tblCache th {
     padding: 2px 5px;
-    font-size: 11px;
+    font-size: 11px
 }
 
 .tblCache td {
     padding: 2px 5px;
-    font-size: 11px;
+    font-size: 11px
 }
 
 #cacheContainer {
-    margin-top: 10px;
+    margin-top: 10px
 }
 
 #cacheList h5 {
-    margin-top: 0;
+    margin-top: 0
 }
 
 #cacheList {
@@ -42,18 +42,18 @@
     border: 1px solid #666666;
     background-color: #ffffff;
     padding: 8px;
-    overflow: auto;
+    overflow: auto
 }
 
 h1 {
-    margin-top: 10px;
+    margin-top: 10px
 }
 
 .iconLink {
     cursor: pointer;
-    color: #0071C5;
+    color: #0071C5
 }
 
-    .iconLink:hover {
-        color: #003C71;
-    }
+.iconLink:hover {
+    color: #003C71
+}

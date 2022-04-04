@@ -5,21 +5,16 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Workflow_Stages_Map } from "./admin.workflowStages.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
+    distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
@@ -43,25 +38,25 @@ export class adminWorkflowStagesComponent {
     @ViewChild('WFSTG_DESCTooltip', { static: false }) WFSTG_DESCTooltip: NgbTooltip;
     @ViewChild('WFSTG_ORDTooltip', { static: false }) WFSTG_ORDTooltip: NgbTooltip;
 
-    private isLoading: boolean = true;
-    private errorMsg: string = "";
+    private isLoading = true;
+    private errorMsg = "";
     private dataSource: any;
     private gridOptions: any;
-    private allowCustom: boolean = true;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
-    public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
+    public gridResult: Array<any> = [];
+    public type = "numeric";
+    public info = true;
     public wkflwStg_map: any;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
     private isDataValid: any;
     private isNew: boolean; rowIndex: number;
-    isDialogVisible: boolean = false;
-    public distinctRoleTierNm: Array<any>;
-    public distinctWfStgLoc: Array<any>;
+    isDialogVisible = false;
+    public distinctRoleTierNm: Array<any> = [];
+    public distinctWfStgLoc: Array<any> = [];
 
     public state: State = {
         skip: 0,
@@ -107,16 +102,15 @@ export class adminWorkflowStagesComponent {
     }
 
     loadWorkflowStages() {
-        let vm = this;
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.workflowStageSvc.GetWorkFlowStages().subscribe(
+            this.workflowStageSvc.GetWorkFlowStages().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
                     this.loadDDLValues();
-                    vm.isLoading = false;
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -142,15 +136,14 @@ export class adminWorkflowStagesComponent {
             });
     }
     loadDDLValuesss() {
-        let vm = this;
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.workflowStageSvc.GetWFStgDDLValues().subscribe(
+            this.workflowStageSvc.GetWFStgDDLValues().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -186,7 +179,7 @@ export class adminWorkflowStagesComponent {
             ALLW_REDEAL: new FormControl()
         });
         //this.InitiateDropDowns(this.formGroup);
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -205,7 +198,7 @@ export class adminWorkflowStagesComponent {
             WFSTG_ORD: new FormControl(Number(dataItem.WFSTG_ORD), Validators.required),
             ALLW_REDEAL: new FormControl(dataItem.ALLW_REDEAL)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -225,7 +218,7 @@ export class adminWorkflowStagesComponent {
 
     deleteOperation() {
         this.workflowStageSvc.DeleteWorkflowStages(this.wkflwStg_map).subscribe(
-            result => {
+            () => {
                 this.loadWorkflowStages();
                 this.loggerSvc.success("Workflow Stage Deleted.");
             },
@@ -262,7 +255,7 @@ export class adminWorkflowStagesComponent {
             if (isNew) {
                 this.isLoading = true;
                 this.workflowStageSvc.SetWorkflowStages(wkflwStg_map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult.push(wkflwStg_map);
                         this.loadWorkflowStages();
                         this.loggerSvc.success("New Workflow Stage successfully added.");
@@ -276,7 +269,7 @@ export class adminWorkflowStagesComponent {
             } else {
                 this.isLoading = true;
                 this.workflowStageSvc.UpdateWorkflowStages(wkflwStg_map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult[rowIndex] = wkflwStg_map;
                         this.gridResult.push(wkflwStg_map);
                         this.loadWorkflowStages();

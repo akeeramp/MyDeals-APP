@@ -6,20 +6,15 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from "underscore";
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
     distinct,
-    filterBy,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
@@ -45,20 +40,20 @@ export class adminWorkFlowComponent {
     @ViewChild('WFSTG_CD_DEST_DdlTooltip', { static: false }) WFSTG_CD_DEST_DdlTooltip: NgbTooltip;
 
 
-    private isLoading: boolean = true;
-    private errorMsg: string = ""
+    private isLoading = true;
+    private errorMsg = ""
     private color: ThemePalette = "primary";
-    public gridResult: Array<any>;
+    public gridResult: Array<any> = [];
     private editedRowIndex: number;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
-    public distinctRoleTierNm: Array<any>;
-    public distinctObjType: Array<any>;
-    public distinctObjSetTypeCd: Array<any>;
-    public distinctWFSTGActnNm: Array<any>;
-    public distinctWFSTGCdSrc: Array<any>;
-    public distinctWFSTGCdDest: Array<any>;
-    public isDialogVisible: boolean = false;
+    public isFormChange = false;
+    public distinctRoleTierNm: Array<any> = [];
+    public distinctObjType: Array<any> = [];
+    public distinctObjSetTypeCd: Array<any> = [];
+    public distinctWFSTGActnNm: Array<any> = [];
+    public distinctWFSTGCdSrc: Array<any> = [];
+    public distinctWFSTGCdDest: Array<any> = [];
+    public isDialogVisible = false;
     private isDataValid: any;
     public Work_Flow_Map: any;
     public state: State = {
@@ -104,16 +99,15 @@ export class adminWorkFlowComponent {
     }
 
     loadWorkflow() {
-        let vm = this;
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.workflowSvc.GetWorkFlowItems().subscribe(
+            this.workflowSvc.GetWorkFlowItems().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
                     this.loadDDLValues();
-                    vm.isLoading = false;
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -169,7 +163,7 @@ export class adminWorkFlowComponent {
             WFSTG_CD_DEST: new FormControl("", Validators.required),
             TRKR_NBR_UPD: new FormControl()
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -190,7 +184,7 @@ export class adminWorkFlowComponent {
             WFSTG_CD_DEST: new FormControl(dataItem.WFSTG_CD_DEST, Validators.required),
             TRKR_NBR_UPD: new FormControl(dataItem.TRKR_NBR_UPD)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -210,7 +204,7 @@ export class adminWorkFlowComponent {
 
     deleteOperation() {
         this.workflowSvc.DeleteWorkflow(this.Work_Flow_Map).subscribe(
-            result => {
+            () => {
                 this.loadWorkflow();
                 this.loggerSvc.success("Workflow Deleted.");
             },
@@ -246,7 +240,7 @@ export class adminWorkFlowComponent {
             if (isNew) {
                 this.isLoading = true;
                 this.workflowSvc.SetWorkFlows(Work_Flow_Map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult.push(Work_Flow_Map);
                         this.loadWorkflow();
                         this.loggerSvc.success("New Workflow successfully added.");
@@ -260,7 +254,7 @@ export class adminWorkFlowComponent {
             } else {
                 this.isLoading = true;
                 this.workflowSvc.UpdateWorkflow(Work_Flow_Map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult[rowIndex] = Work_Flow_Map;
                         this.gridResult.push(Work_Flow_Map);
                         this.loadWorkflow();

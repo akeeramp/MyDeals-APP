@@ -5,20 +5,15 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from "underscore";
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
     distinct,
-    filterBy,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
@@ -34,18 +29,18 @@ export class adminProductCategoriesComponent {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    private isLoading: boolean = true;
-    private loadMessage: string = "Admin Customer Loading..";
-    private type: string = "numeric";
-    private info: boolean = true;
+    private isLoading = true;
+    private loadMessage = "Admin Customer Loading..";
+    private type = "numeric";
+    private info = true;
     private gridResult: Array<any>;
     public productData: Array<any>;
     public gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
-    private isDataValid: boolean = false;
+    private isDataValid = false;
 
     @ViewChild('dealPdctTooltip', { static: false }) dealPdctTooltip: NgbTooltip;
     @ViewChild('pdctVerticalTooltip', { static: false }) pdctVerticalTooltip: NgbTooltip;
@@ -98,7 +93,7 @@ export class adminProductCategoriesComponent {
             this.productCategorySvc.getCategories()
                 .subscribe((response: Array<any>) => {
                     //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                    var data = response.map(function (x) {
+                    const data = response.map(function (x) {
                         x.CHG_DTM = new Date(x.CHG_DTM);
                         return x;
                     });
@@ -134,7 +129,7 @@ export class adminProductCategoriesComponent {
             CHG_DTM: new FormControl(dataItem.CHG_DTM),
             PRD_CAT_MAP_SID: new FormControl(dataItem.PRD_CAT_MAP_SID),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -161,7 +156,7 @@ export class adminProductCategoriesComponent {
     }
     saveHandler({ sender, rowIndex, formGroup }) {
         //As updateCategory method in the server side expects product category as a list, sending it as array object
-        let product_categories: Product_categories[]=[];
+        const product_categories: Product_categories[]=[];
         product_categories.push(formGroup.value);
         this.isDataValid = this.formGroup.valid;
         if (!this.isDataValid) {
@@ -172,7 +167,7 @@ export class adminProductCategoriesComponent {
             this.productCategorySvc.updateCategory(product_categories).subscribe(
                 result => {
                     //getting the index value of the grid result by comparing the edited row PRD_CAT_MAP_SID to the grid result PRD_CAT_MAP_SID. so that we can update the user edited/modified data to proper grid result index
-                    let index = this.gridResult.findIndex(x => product_categories[0].PRD_CAT_MAP_SID == x.PRD_CAT_MAP_SID);;
+                    const index = this.gridResult.findIndex(x => product_categories[0].PRD_CAT_MAP_SID == x.PRD_CAT_MAP_SID);
                     //In the below line of code result.length check is added because some times when user edit the data and if user saves it how it was previously there without any changes at that scenario, we are not receiving any data from this service call so at that case we set product_categories(grid row level data) data to the grid result.
                     this.gridResult[index] = (result.length > 0) ? result[0] : product_categories[0];
                     //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
@@ -193,13 +188,12 @@ export class adminProductCategoriesComponent {
     }
 
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadproductCategoriesData()
+        this.loadproductCategoriesData()
     }
 
     toolTipvalidationMsgs(data) {
@@ -217,7 +211,7 @@ export class adminProductCategoriesComponent {
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
-};
+}
 
 angular.module("app").directive(
     "adminProductCategories",

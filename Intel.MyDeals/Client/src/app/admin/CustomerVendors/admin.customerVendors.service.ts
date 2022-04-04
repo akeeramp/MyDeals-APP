@@ -1,6 +1,6 @@
 ﻿import * as angular from 'angular';
-import {Injectable, Inject} from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import {downgradeInjectable} from '@angular/upgrade/static';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
@@ -11,30 +11,30 @@ import 'rxjs/add/operator/toPromise';
 
 
 export class customerVendorService { 
-    public apiBaseUrl: string ="api/CustomerVendor/";
-    public dropdownUrl: string ="api/Customers/";
+    public apiBaseUrl ="api/CustomerVendor/";
+    public dropdownUrl ="api/Customers/";
 
     constructor(private httpClient: HttpClient) {
       
       }
       public getCustomerDropdowns():Observable<any> {
-        let apiUrl: string = this.dropdownUrl + 'GetMyCustomerNames';
+        const apiUrl: string = this.dropdownUrl + 'GetMyCustomerNames';
         return this.httpClient.get(apiUrl);
      }
      public updateCustomerVendor(dropdown:any):Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'UpdateCustomerVendor';
+        const apiUrl: string = this.apiBaseUrl + 'UpdateCustomerVendor';
         return this.httpClient.put(apiUrl,dropdown);
     }
     public insertCustomerVendor(dropdown:any):Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'InsertCustomerVendor';
+        const apiUrl: string = this.apiBaseUrl + 'InsertCustomerVendor';
         return this.httpClient.post(apiUrl,dropdown);
     }
     public getCustomerVendors():Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'GetCustomerVendors/0';
+        const apiUrl: string = this.apiBaseUrl + 'GetCustomerVendors/0';
         return this.httpClient.get(apiUrl);
     }
     public getVendorsData():Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'GetVendorsData';
+        const apiUrl: string = this.apiBaseUrl + 'GetVendorsData';
         return this.httpClient.get(apiUrl);
     }
     

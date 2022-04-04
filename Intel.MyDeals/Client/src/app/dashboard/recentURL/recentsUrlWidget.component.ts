@@ -20,7 +20,7 @@ export class RecentsUrlWidgetComponent implements OnInit, OnDestroy {
   private recentURLs:Array<any>=[];
 
   getRecentUrls(){
-    let recents= localStorage.getItem('recentsURLs');
+    const recents= localStorage.getItem('recentsURLs');
     if(recents !=null && recents !=undefined){
       this.recentURLs=recents.split(',');
     }

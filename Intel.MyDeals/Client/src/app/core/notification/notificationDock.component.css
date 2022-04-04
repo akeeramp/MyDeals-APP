@@ -2,41 +2,35 @@
     color: #00AEEF;
     padding: 2px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: bold
 }
-
 .notificationDock .read {
     color: #000;
     padding: 2px;
-    font-size: 12px;
+    font-size: 12px
 }
-
 ul {
     width: 500px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    width: 500px;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 500px
 }
-
 .notificationStyles {
     background-color: #0071C5;
     color: #fff;
     font-size: 18px;
     padding: 2px;
-    padding-bottom: 6px;
+    padding-bottom: 6px
 }
-
 .settingsStyles {
     padding-right: 9px;
-    font-size: 18px;
+    font-size: 18px
 }
-
 .seeAllNotificationsStyle {
     color: #0071C5;
-    height: 25px;
+    height: 25px
 }
 .modalBlueBody {
     background-color: #003C71;
-    color: #ffffff;
+    color: #ffffff
 }
-

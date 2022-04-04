@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 
@@ -18,12 +16,12 @@ export class dsaService {
     }
 
 
-    public sendVistexData(lstDealIds: any): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'SendVistexData/false';
+    public sendVistexData(lstDealIds): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'SendVistexData/false';
         return this.httpClient.post(apiUrl, lstDealIds);
     }
 
-    public callAPI(apiName: any, runMode: any) {
+    public callAPI(apiName, runMode) {
         let apiUrl: string;
         if ((runMode == "D") || (runMode == "E")) {
             apiUrl = this.vistexApiBase + apiName + '/VISTEX_DEALS/';

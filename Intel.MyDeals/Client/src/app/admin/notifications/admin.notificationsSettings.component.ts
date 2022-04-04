@@ -1,8 +1,8 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, Inject, Input, ViewEncapsulation} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component,ViewEncapsulation} from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { notificationsService } from './admin.notifications.service';
 import { ThemePalette } from '@angular/material/core';
 
@@ -29,7 +29,7 @@ export class notificationsSettingsDialog {
     public selectAllDefaults = { 'EMAIL_IND': false, 'IN_TOOL_IND': true };
 
    selectAll(type) {
-        for (var i = 0; i <= this.subScriptions.length - 1; i++) {
+        for (let i = 0; i <= this.subScriptions.length - 1; i++) {
             this.subScriptions[i][type] = this.selectAllDefaults[type];
         }
     }
@@ -37,7 +37,7 @@ export class notificationsSettingsDialog {
     // Close without saving data
     close() {
         this.dialogRef.close();
-    };
+    }
 
     getUserSubscription() {
         this.notificationsSvc.getUserSubscriptions().subscribe(response=>  {
@@ -51,29 +51,29 @@ export class notificationsSettingsDialog {
         );
     }
     setSelectAllValues() {
-        var emailON = this.subScriptions.filter(x => x.EMAIL_IND == true);
+        const emailON = this.subScriptions.filter(x => x.EMAIL_IND == true);
         this.selectAllDefaults.EMAIL_IND = emailON.length > 0;
 
-        var inToolON = this.subScriptions.filter(x => x.IN_TOOL_IND == true);
+        const inToolON = this.subScriptions.filter(x => x.IN_TOOL_IND == true);
         this.selectAllDefaults.IN_TOOL_IND = inToolON.length > 0;
     }
 
     setSubscription(i, event,input) {
             if (input == "EMAIL_IND") {
                 this.subScriptions[i].EMAIL_IND = event.checked? true:false;
-                var emailON = this.subScriptions.filter(x => x.EMAIL_IND == true);
+                const emailON = this.subScriptions.filter(x => x.EMAIL_IND == true);
                 this.selectAllDefaults.EMAIL_IND = emailON.length > 0;
             }
             else {
                 this.subScriptions[i].IN_TOOL_IND = event.checked ? true : false;
-                var inToolON = this.subScriptions.filter(x => x.IN_TOOL_IND == true);
+                const inToolON = this.subScriptions.filter(x => x.IN_TOOL_IND == true);
                 this.selectAllDefaults.IN_TOOL_IND = inToolON.length > 0;
             }
     }
 
      //Save data and close
     saveAndClose() {
-        this.notificationsSvc.updateUserSubscriptions(this.subScriptions).subscribe(response => 
+        this.notificationsSvc.updateUserSubscriptions(this.subScriptions).subscribe(() => 
         {
             this.dialogRef.close();
         },

@@ -1,9 +1,8 @@
 ﻿import * as angular from 'angular';
-import { Input, Output, Component, OnInit, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { adminBannerService } from './adminBanner.service';
 import { logger } from "../../shared/logger/logger";
-import * as _ from 'underscore';
 
 @Component({
     selector: 'admin-banner-angular',
@@ -13,17 +12,17 @@ export class AdminBannerComponent {
     constructor(private adminSvc: adminBannerService, private loggerSvc: logger) {
     }
 
-    private adminBannerMessage: string = "";
-    private adminMessage: string = "ADMIN_MESSAGE";
-    private bannerValue: any;
-    private userDismissed: boolean = false;
-    private dontAddTheseInRecents: string = 'portal';
-    private recents: Array<any> = [];
-    private distinctURL: Array<any> = [];
+    private adminBannerMessage = "";
+    private adminMessage = "ADMIN_MESSAGE";
+    private bannerValue;
+    private userDismissed = false;
+    private dontAddTheseInRecents = 'portal';
+    private recents = [];
+    private distinctURL = [];
 
     GetAdminMessage() {
         this.adminSvc.getConstantsByName(this.adminMessage).subscribe((result) => {
-            if (!!result) {
+            if (result) {
                 this.adminBannerMessage = result.CNST_VAL_TXT === 'NA'
                     ? "" : result.CNST_VAL_TXT;
 

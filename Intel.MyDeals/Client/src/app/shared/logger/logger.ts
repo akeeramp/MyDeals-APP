@@ -17,7 +17,7 @@ export class logger {
         positionClass: 'toast-bottom-right'
     });
   }
-   error(message : string ,title:string,data?:string ) :void {
+   error(message : string ,title:string ) :void {
     this.toastr.error(message, title,{
         closeButton: false,
         extendedTimeOut: 4000,

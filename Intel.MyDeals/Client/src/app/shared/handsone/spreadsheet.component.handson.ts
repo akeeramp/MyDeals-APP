@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import {Component, ViewChild, ElementRef, AfterViewInit, inject} from "@angular/core";
+import {Component} from "@angular/core";
 import {downgradeComponent} from "@angular/upgrade/static";
 import Handsontable from 'handsontable-pro'
 import {HotTableRegisterer} from "@handsontable/angular";
@@ -29,7 +29,7 @@ export class SpreadComponent {
       public instance:any;
       public selectOptions:any;
       private hotRegisterer = new HotTableRegisterer();
-      private id:string = "hotInstance";
+      private id = "hotInstance";
       constructor(props){
           super(props);
       }
@@ -52,10 +52,10 @@ export class SpreadComponent {
           
         });
       }
-      openPopUp(value?:string){
-        let hotTable:any=this.hotRegisterer.getInstance(this.id);
+      openPopUp(){
+        const hotTable:any=this.hotRegisterer.getInstance(this.id);
         if(hotTable.selCol && hotTable.selCol==2){
-          let selVal= this.hotRegisterer.getInstance(this.id).getDataAtCell(hotTable.selRow,hotTable.selCol);;
+          const selVal= this.hotRegisterer.getInstance(this.id).getDataAtCell(hotTable.selRow,hotTable.selCol);
           const dialogRef = dialog.open(DialogOverviewExampleDialog, {
             width: '500px',
             data: {name: "User", animal:selVal },
@@ -77,7 +77,7 @@ export class SpreadComponent {
   private hotRegisterer = new HotTableRegisterer();
   private dataset: any[];
   private columns: any[];
-  private id:string = "hotInstance";
+  private id = "hotInstance";
   private hot:any;
   private hotSettings: Handsontable.GridSettings;
   private hotSettings_1: Handsontable.GridSettings;
@@ -89,22 +89,22 @@ export class SpreadComponent {
   private button:any;
   private custTD:any;
   private textareaStyle:any
-  private selRow:number=0;
-  private selCol:number=0;
-  private selValue:string="";
+  private selRow=0;
+  private selCol=0;
+  private selValue="";
 
   afterCellChange(changes:any,source:any){
     console.log("on cell change**************",changes,'%%%%%%%%%%%%%%%%%%%%%%%%',source);
   }
   onAddRow(){
-    let hot= this.hotRegisterer.getInstance(this.id);
-    let row=hot.countRows();
+    const hot= this.hotRegisterer.getInstance(this.id);
+    const row=hot.countRows();
     hot.alter('insert_row', row);
     hot.setDataAtCell(row,0,row+1);
   }
   onAddRowMerge(){
-    let hot= this.hotRegisterer.getInstance(this.id);
-    let row=hot.countRows();
+    const hot= this.hotRegisterer.getInstance(this.id);
+    const row=hot.countRows();
     //first row
     hot.alter('insert_row', row);
     hot.setDataAtCell(row,0,row+1);
@@ -112,14 +112,14 @@ export class SpreadComponent {
    hot.alter('insert_row', row);
    hot.setDataAtCell(row+1,0,row);
 
-   let mergeCells:Handsontable.GridSettings=hot.getSettings().mergeCells;
+   const mergeCells:Handsontable.GridSettings=hot.getSettings().mergeCells;
    mergeCells.push({row:row,col:0,rowspan:2,colspan:1});
    mergeCells.push({row:row,col:1,rowspan:2,colspan:1});
    //update the hot table for mergecells
    hot.updateSettings({mergeCells:mergeCells});
   }
   onSubmit(){
-    let hotData= this.hotRegisterer.getInstance(this.id).getData();
+      const hotData = this.hotRegisterer.getInstance(this.id).getData();
   }
   afterSelection(row:any, col:any){
     this.selRow=row;
@@ -135,7 +135,6 @@ export class SpreadComponent {
   }
   
   ngOnInit() {
-    let vm=this;
     this.columns=[
       {
         data: 'id',

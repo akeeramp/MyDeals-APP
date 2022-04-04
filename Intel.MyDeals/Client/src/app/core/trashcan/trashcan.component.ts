@@ -12,9 +12,6 @@ import { Component } from "@angular/core";
 })
 
 export class TrashcanComponent {
-    constructor() {
-
-    }
 }
 
 angular.module("app").directive(

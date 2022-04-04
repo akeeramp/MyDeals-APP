@@ -3,8 +3,8 @@ import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { geoService } from "./admin.geo.service";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 
 
@@ -19,11 +19,11 @@ export class geoComponent {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    private isLoading: boolean = true;
-    private loadMessage: string = "Admin Customer Loading..";
-    private type: string = "numeric";
-    private info: boolean = true;
-    private gridResult: Array<any>;
+    private isLoading = true;
+    private loadMessage = "Admin Customer Loading..";
+    private type = "numeric";
+    private info = true;
+    private gridResult = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     private state: State = {
@@ -109,7 +109,7 @@ export class geoComponent {
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
-};
+}
 
 angular.module("app").directive(
     "adminGeo",

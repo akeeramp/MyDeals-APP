@@ -2,7 +2,6 @@
 import { logger } from "../../shared/logger/logger";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import * as _ from "underscore";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { pushDealsToVistexService } from "./admin.pushDealstoVistex.service";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
@@ -23,10 +22,10 @@ export class adminPushDealsToVistexComponent {
     }
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
-    private loadMessage: string = "Admin Customer Loading..";
+    private loadMessage = "Admin Customer Loading..";
     private Results = [];
     private UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
-    private showResults: boolean = false;
+    private showResults = false;
     public gridData: GridDataResult;
     public state: State = {
         group: [],

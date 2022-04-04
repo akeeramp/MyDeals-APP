@@ -8,19 +8,15 @@ import { ThemePalette } from "@angular/material/core";
 import * as _ from "underscore";
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
     distinct,
-    filterBy,
 } from "@progress/kendo-data-query";
-import { FormGroup, FormControl, Validators, AbstractControl } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
     selector: "dropdowns",
@@ -44,14 +40,14 @@ export class dropdownsComponent {
     @ViewChild("custDropDown") private custDdl;
 
     //Private Varibales
-    private isLoading: boolean = true;
+    private isLoading = true;
     private editedRowIndex: number;
-    private deleteItem: any;
-    private deleteATRB_CDItem: any;
-    private deleteDROP_DOWNItem: any;
-    private isModelvalid: boolean = false;
-    private errorMsg: string = "";
-    private isDialogVisible: boolean = false;
+    private deleteItem: string;
+    private deleteATRB_CDItem: string;
+    private deleteDROP_DOWNItem: string;
+    private isModelvalid = false;
+    private errorMsg = "";
+    private isDialogVisible = false;
     private selectedInheritanceGroup: string;
     private color: ThemePalette = "primary";
 
@@ -59,7 +55,7 @@ export class dropdownsComponent {
     public gridResult: Array<any>;
     public formGroup: FormGroup;
     public gridData: GridDataResult;
-    public isFormChange: boolean = false;
+    public isFormChange= false;
     public DealTypeData: Array<any>;
     public allDealTypeData: Array<any>;
     public distinctSetTypeCd: Array<any>;
@@ -69,9 +65,6 @@ export class dropdownsComponent {
     public CustomerData: Array<any>;
     public distinctCustomerName: Array<any>;
     public nonCorpInheritableValues: Array<any> = [];
-    public selectedDealType: any = null;
-    public selectedGroup: any = null;
-    public selectedCustomer: any = null;
     public COMP_ATRB_SIDS: Array<any> = [];
 
 
@@ -131,7 +124,7 @@ export class dropdownsComponent {
     }
 
     getGroupsDataSource() {
-        let checkrestrictionflag: boolean = false;
+        let checkrestrictionflag = false;
         this.dropdownSvc.getDropdownGroups(true)
             .subscribe((response: Array<any>) => {
                 response = response.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
@@ -160,10 +153,9 @@ export class dropdownsComponent {
     }
 
     loadUIDropdown() {
-        let vm = this;
-        vm.COMP_ATRB_SIDS.push([3456, 3457, 3458, 3464, 3454]);
-        vm.selectedInheritanceGroup = "";
-        let checkrestrictionflag: boolean = false;
+        this.COMP_ATRB_SIDS.push([3456, 3457, 3458, 3464, 3454]);
+        this.selectedInheritanceGroup = "";
+        let checkrestrictionflag = false;
         if (
             !(<any>window).isCustomerAdmin &&
             (<any>window).usrRole != "SA" &&
@@ -171,15 +163,15 @@ export class dropdownsComponent {
         ) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.dropdownSvc.getBasicDropdowns(true).subscribe(
+            this.dropdownSvc.getBasicDropdowns(true).subscribe(
                 (result: Array<any>) => {
-                    vm.setNonCorpInheritableValues(result);
+                    this.setNonCorpInheritableValues(result);
                     result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
-                    checkrestrictionflag = vm.checkRestrictions(result);
+                    checkrestrictionflag = this.checkRestrictions(result);
                     if (checkrestrictionflag) {
-                        vm.gridResult = result;
-                        vm.gridData = process(vm.gridResult, this.state);
-                        vm.isLoading = false;
+                        this.gridResult = result;
+                        this.gridData = process(this.gridResult, this.state);
+                        this.isLoading = false;
                     }
                 },
                 function (response) {
@@ -198,7 +190,7 @@ export class dropdownsComponent {
     }
 
     setNonCorpInheritableValues(data: Array<any>) {
-        for (var i = 0; i <= data.length; i++) {
+        for (let i = 0; i <= data.length; i++) {
             if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG_COMBINED") {
                 this.nonCorpInheritableValues.push(data[i].DROP_DOWN);
             }
@@ -206,10 +198,10 @@ export class dropdownsComponent {
     }
 
     checkRestrictions(dataItem): any {
-        var Id: number;
-        var restrictToConsumptionOnly: boolean;
-        var restrictedGroupList: Array<any>;
-        for (var i = 0; i < dataItem.length; i++) {
+        let Id: number;
+        let restrictToConsumptionOnly: boolean;
+        let restrictedGroupList: Array<any>;
+        for (let i = 0; i < dataItem.length; i++) {
             Id = (dataItem[i].dropdownID === undefined) ? dataItem[i].ATRB_SID : dataItem[i].dropdownID;
             restrictToConsumptionOnly = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper);
             restrictedGroupList = [3456, 3457, 3458, 3454];
@@ -224,7 +216,7 @@ export class dropdownsComponent {
 
     checkModelvalid(model: any, isNew: boolean) {
         let IS_MODEL_VALID = true;
-        let cond = this.gridResult.filter(
+        const cond = this.gridResult.filter(
             x => x.OBJ_SET_TYPE_CD.trim() === model.OBJ_SET_TYPE_CD.trim() &&
                 x.ATRB_CD.trim() === model.ATRB_CD.trim() &&
                 x.DROP_DOWN.toString().trim() === model.DROP_DOWN.toString().trim() &&
@@ -305,7 +297,7 @@ export class dropdownsComponent {
             ORD: new FormControl()
         });
         this.distinctSetTypeCd = this.fullDistinctSetTypeCd;
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
 
@@ -328,7 +320,7 @@ export class dropdownsComponent {
             ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
             ORD: new FormControl(dataItem.ORD)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -343,17 +335,17 @@ export class dropdownsComponent {
         const ui_dropdown: ui_dropdown = formGroup.getRawValue();
 
         //for disabled formgroup, using the dropdown datasource to get the ID value as in dataItem the value coming as null
-        let filteredDropdown = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === ui_dropdown.OBJ_SET_TYPE_CD);
+        const filteredDropdown = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === ui_dropdown.OBJ_SET_TYPE_CD);
         if (filteredDropdown.length > 0) {
             ui_dropdown.OBJ_SET_TYPE_SID = filteredDropdown[0].OBJ_SET_TYPE_SID;
         }
 
         if (isNew) {
-            let GroupSID = this.GroupData.filter(x => x.dropdownName == ui_dropdown.ATRB_CD)
+            const GroupSID = this.GroupData.filter(x => x.dropdownName == ui_dropdown.ATRB_CD)
             if (GroupSID.length > 0) {
                 ui_dropdown.ATRB_SID = GroupSID[0]["dropdownID"];
             }
-            let customerSID = this.CustomerData.filter(x => x.dropdownName == ui_dropdown.CUST_NM)
+            const customerSID = this.CustomerData.filter(x => x.dropdownName == ui_dropdown.CUST_NM)
             if (customerSID.length > 0) {
                 ui_dropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
             }
@@ -388,7 +380,7 @@ export class dropdownsComponent {
                 } else {
                     this.isLoading = true;
                     this.dropdownSvc.updateBasicDropdowns(ui_dropdown).subscribe(
-                        result => {
+                        () => {
                             this.gridResult[rowIndex] = ui_dropdown;
                             this.gridResult.push(ui_dropdown);
                             this.loadUIDropdown();
@@ -438,13 +430,12 @@ export class dropdownsComponent {
     }
 
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadUIDropdown();
+        this.loadUIDropdown();
     }
 
     closeEditor(grid, rowIndex = this.editedRowIndex) {
@@ -462,10 +453,9 @@ export class dropdownsComponent {
         this.isDialogVisible = false;
         this.dropdownSvc.deleteBasicDropdowns(this.deleteItem)
             .subscribe(
-                (result: Array<any>) => {
-                    //for (var i = 0; i < result.length; i++) {
+                () => {
                     if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {
-                        var indx = this.nonCorpInheritableValues.indexOf(this.deleteDROP_DOWNItem);
+                        const indx = this.nonCorpInheritableValues.indexOf(this.deleteDROP_DOWNItem);
                         if (indx > -1) {
                             this.nonCorpInheritableValues.splice(indx, 1);
                         }

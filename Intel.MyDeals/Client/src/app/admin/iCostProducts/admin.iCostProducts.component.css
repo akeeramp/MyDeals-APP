@@ -1,15 +1,15 @@
-﻿
-.btn-primary {
+﻿.btn-primary {
     margin: 5px;
     align-items: center;
 }
-.btn-primary[disabled] {
-    background-color: #edeff0 !important;
-    color: #7e868b !important;
-    border-color: #b1babf !important;
-    cursor: not-allowed !important;
-    pointer-events: all !important;
-}
+
+    .btn-primary[disabled] {
+        background-color: #edeff0 !important;
+        color: #7e868b !important;
+        border-color: #b1babf !important;
+        cursor: not-allowed !important;
+        pointer-events: all !important;
+    }
 
 .commentbar {
     margin-top: 35px;
@@ -20,9 +20,9 @@
     height: 40px;
 }
 
-.commentbar span {
-    color: #a9bc2b;
-}
+    .commentbar span {
+        color: #a9bc2b;
+    }
 
 #productDropdown {
     min-width: 100%;

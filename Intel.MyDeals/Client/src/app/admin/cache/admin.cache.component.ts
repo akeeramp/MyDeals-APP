@@ -1,11 +1,10 @@
 ﻿import * as angular from "angular";
 import { utils } from "../../shared/util/util";
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 //import { logger } from "src/app/shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { cacheService } from "./admin.cache.service";
-import { List } from "linqts";
 
 @Component({
     selector: "cache",
@@ -16,13 +15,13 @@ import { List } from "linqts";
 export class CacheComponent {
     constructor(private cacheSvc: cacheService,private loggerSvc:logger) { }
 
-    private title: string = "Cache Manager";
-    private cacheData: Array<any> = [];
-    private currentCacheDetails: string = "";
-    private divCacheListHt: any;
-    private divViewResultHt: any;
-    private divViewResultWidth: any;
-    private apiCacheData: any;
+    private title = "Cache Manager";
+    private cacheData = [];
+    private currentCacheDetails = "";
+    private divCacheListHt;
+    private divViewResultHt;
+    private divViewResultWidth;
+    private apiCacheData;
 
     loadCache() {
         this.title = "Cache Manager";
@@ -38,7 +37,7 @@ export class CacheComponent {
     loadCacheByName(data) {
         data.loading = true;
         this.currentCacheDetails = "";
-        this.cacheSvc.loadStaticCacheByName(data).subscribe(res => {
+        this.cacheSvc.loadStaticCacheByName(data).subscribe(() => {
             this.loadCache();
         }, err => {
             this.loggerSvc.error("Unable to load cache.", err);
@@ -50,7 +49,7 @@ export class CacheComponent {
     clearCacheByName(data) {
         data.loading = true;
         this.currentCacheDetails = "";
-        this.cacheSvc.clearStaticCacheByName(data).subscribe(res => {
+        this.cacheSvc.clearStaticCacheByName(data).subscribe(() => {
             this.loggerSvc.success("Deleted successfully", "Done")
             this.loadCache();
         }, err =>  {
@@ -66,7 +65,7 @@ export class CacheComponent {
         this.cacheSvc.viewStaticCacheByName(data).subscribe(res => {
             this.currentCacheDetails =utils.isNull(res) ? "<< no data found >>" : JSON.stringify(res);
             data.loading = false;
-        }, function (e) {
+        }, function () {
             //op.notifyError(e.statusText, "Unable to retrieve cache details.");
             data.loading = false;
         });
@@ -76,7 +75,7 @@ export class CacheComponent {
     clearAll() {
         console.log("clearall");
         this.resetCache();
-        this.cacheSvc.clearStaticCache().subscribe(res => {
+        this.cacheSvc.clearStaticCache().subscribe(() => {
             this.loggerSvc.success("Deleted successfully.", "Done");
             this.loadCache();
         }, function (e) {
@@ -88,7 +87,7 @@ export class CacheComponent {
     reloadAll() {
         console.log("reloadAll");
         this.resetCache();
-        this.cacheSvc.reloadAllStaticCache().subscribe(res => {
+        this.cacheSvc.reloadAllStaticCache().subscribe(() => {
             this.loadCache();
         }, function (e) {
                 this.loggerSvc.error("Unable to Load Cache Status", e);
@@ -129,13 +128,13 @@ export class CacheComponent {
     }
 
     defaultStatus() {
-        for (var i = 0; i < this.cacheData.length; i++) {
+        for (let i = 0; i < this.cacheData.length; i++) {
             this.cacheData[i]["loading"] = false;
         }
     }
 
     loadingStatus() {
-        for (var i = 0; i < this.cacheData.length; i++) {
+        for (let i = 0; i < this.cacheData.length; i++) {
             this.cacheData[i]["loading"] = true;
         }
     }
@@ -146,7 +145,7 @@ export class CacheComponent {
     }
 
     onResize() {
-        var divCacheListWidth = document.getElementById("cacheList").clientWidth;
+        const divCacheListWidth = document.getElementById("cacheList").clientWidth;
         this.divCacheListHt = window.innerHeight - 200;
         this.divViewResultHt = window.innerHeight - 200;
         this.divViewResultWidth = window.innerWidth - divCacheListWidth - 120;

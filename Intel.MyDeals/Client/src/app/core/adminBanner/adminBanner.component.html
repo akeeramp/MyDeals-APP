@@ -1,14 +1,11 @@
 ﻿<link href="/Client/src/app/core/adminBanner/adminBanner.component.css" rel="stylesheet" />
-
 <div *ngIf="adminBannerMessage" class="col-md-6">
-    <div *ngIf="userDismissed == false" class="alert alert-dismissible adminBanner"
-         role="alert" style="position: absolute; right: 120px">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="top: 3px; right: 5px; color: red;" (click)="close(true)">
-            <span aria-hidden="true" class="intelicon-close-solid"></span>
-        </button>
+    <div *ngIf="userDismissed==false" class="alert alert-dismissible adminBanner" role="alert"
+        style="position: absolute; right: 120px"><button type="button" class="close" data-dismiss="alert"
+            aria-label="Close" style="top: 3px; right: 5px; color: red;" (click)="close(true)"><span aria-hidden="true"
+                class="intelicon-close-solid"></span></button>
         <p [innerHTML]="adminBannerMessage" style="line-height: 1.1em; padding-right: 8px;"></p>
     </div>
-    <div *ngIf="userDismissed == true" class="text-center adminBannerIcon" style="position: absolute; right: 50px">
-        <i role="button" class='intelicon-email-message-solid' (click)="close(false)"></i>
-    </div>
+    <div *ngIf="userDismissed==true" class="text-center adminBannerIcon" style="position: absolute; right: 50px"><i
+            role="button" class='intelicon-email-message-solid' (click)="close(false)"></i></div>
 </div>

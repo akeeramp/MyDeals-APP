@@ -23,11 +23,11 @@ export class LoadingPanelComponent implements OnInit {
   @Input() private isShowFunFact: string;
 
   private funfactsList: Array<any> = [];
-  private funFactTitle: string = "";
-  private funFactDesc: string = "";
-  private funFactIcon: string = "";
-  private isFunFactEnabled: boolean = true;
-  private currFunFact: any = null;
+  private funFactTitle = "";
+  private funFactDesc = "";
+  private funFactIcon = "";
+  private isFunFactEnabled = true;
+  private currFunFact = null;
 
   GetRandomFact() {
     if (this.funfactsList == null || this.funfactsList.length == 0) {

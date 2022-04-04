@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 
@@ -10,14 +8,14 @@ import { Observable } from 'rxjs';
 })
 
 export class geoService {
-    public apiBaseUrl: string = "api/Geos/";
+    public apiBaseUrl = "api/Geos/";
 
     constructor(private httpClient: HttpClient) {
     }
 
     public getGeos(): Observable<any> {
         // We do not want show Cached data in Admin screen, thus passing getCachedResults = 'false'
-        let apiUrl: string = this.apiBaseUrl + 'GetGeos/false';
+        const apiUrl: string = this.apiBaseUrl + 'GetGeos/false';
         return this.httpClient.get(apiUrl);
     }
 

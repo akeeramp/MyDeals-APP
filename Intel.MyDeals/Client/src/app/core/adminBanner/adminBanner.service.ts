@@ -1,5 +1,5 @@
-﻿import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 
@@ -8,13 +8,13 @@ import { Observable } from 'rxjs';
 })
 
 export class adminBannerService {
-    public apiBaseUrl: string = "api/AdminConstants/v1/";
+    public apiBaseUrl = "api/AdminConstants/v1/";
 
     constructor(private httpClient: HttpClient) {
     }
 
     public getConstantsByName(data): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetConstantsByName/' + data;
+        const apiUrl: string = this.apiBaseUrl + 'GetConstantsByName/' + data;
         return this.httpClient.get(apiUrl);
     }
 }

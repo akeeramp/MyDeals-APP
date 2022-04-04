@@ -1,17 +1,14 @@
 ﻿.section {
-    margin-top: 18px;
+    margin-top: 18px
 }
-
 .textarea-disabled {
-    opacity: .25;
+    opacity: .25
 }
-
 .btn-lg {
-    min-width: 190px;
+    min-width: 190px
 }
-
-    .btn-lg:disabled {
-        background-color: #edeff0 !important;
-        color: #b1babf !important;
-        border-color: #b1babf !important;
-    }
+.btn-lg:disabled {
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important
+}

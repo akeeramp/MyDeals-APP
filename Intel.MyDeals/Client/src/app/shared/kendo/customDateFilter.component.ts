@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FilterService, SinglePopupService, PopupCloseEvent } from '@progress/kendo-angular-grid';
-import { addDays } from '@progress/kendo-date-math';
 
 
 const closest = (node: any, predicate: any): any => {
@@ -58,10 +57,10 @@ export class CustomDateFilterComponent implements OnInit, OnDestroy {
         { text: "Is before or equal", value: 'lte' },
         
       ];
-    public selectedValue:String = "gte";
+    public selectedValue = "gte";
 
     public ngOnInit(): void {
-        let filter= this.findValue();
+        const filter= this.findValue();
         if(filter){
             this.start=filter.value;
             this.selectedValue=filter.operator;

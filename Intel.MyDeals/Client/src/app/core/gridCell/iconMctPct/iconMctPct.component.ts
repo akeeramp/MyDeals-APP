@@ -18,8 +18,6 @@ export class iconMctPctComponent implements OnInit {
     @Input() public iconStyle: string;
     @Input() public notRunMsg: string;
 
-    constructor() { }
-
     ngOnInit(): void {
         if (this.canEdit === undefined) this.canEdit = false;
         if (!this.canView) this.canView = true;
@@ -31,18 +29,18 @@ export class iconMctPctComponent implements OnInit {
     }
 
     titleCase(str: string): string {
-        let firstLetterRx = /(^|\s)[a-z]/g;
+        const firstLetterRx = /(^|\s)[a-z]/g;
         return str.toLowerCase().replace(firstLetterRx, this.upperCase);
     }
 
     showTitle(): string {
-        let postMsg = this.canEdit ? "\nCtrl-Click to open in a new tab" : "";
+        const postMsg = this.canEdit ? "\nCtrl-Click to open in a new tab" : "";
         return this.dataValue === "Not Run Yet" ? this.notRunMsg : this.dataValue + postMsg;
     }
 
     getIconClass(): string {
-        if (this.dataValue === undefined) { return "intelicon-help-solid" };
-        let c = this.titleCase(this.dataValue);
+        if (this.dataValue === undefined) { return "intelicon-help-solid" }
+        const c = this.titleCase(this.dataValue);
         if (c.toUpperCase() === "PASS") return "intelicon-passed-completed-solid";
         if (c.toUpperCase() === "FAIL") return "intelicon-alert-solid";
         if (c.toUpperCase() === "NA") return "intelicon-information-solid";
@@ -51,7 +49,7 @@ export class iconMctPctComponent implements OnInit {
     }
 
     getColor(k: string, c: string): string {
-        if (c === undefined) { return "#aaaaaa" };
+        if (c === undefined) { return "#aaaaaa" }
         c = this.titleCase(c);
         if (c === "Incomplete") c = "InComplete"; // It should all be upper case now, but, just in case...
         if (c === "Na") c = "NA"; // It should all be upper case now, but, just in case...

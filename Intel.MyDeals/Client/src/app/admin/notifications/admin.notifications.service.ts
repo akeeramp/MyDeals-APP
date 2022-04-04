@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -11,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 //this is a shared service used by notifications,notificationModal and NotificationSettings components
 export class notificationsService {
-    public apiBaseUrl: string = "api/Notifications/";
+    public apiBaseUrl = "api/Notifications/";
     constructor(private httpClient: HttpClient) {
     }
 
@@ -29,7 +27,7 @@ export class notificationsService {
     }
 
     public getUnreadNotificationCount(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetUnreadNotificationCount';
+        const apiUrl = this.apiBaseUrl + 'GetUnreadNotificationCount';
         return this.httpClient.get(apiUrl);
     }
 
@@ -49,28 +47,28 @@ export class notificationsService {
     }
 
     public getNotification(mode): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetNotification/' + mode;
+        const apiUrl: string = this.apiBaseUrl + 'GetNotification/' + mode;
         return this.httpClient.get(apiUrl);
     }
 
 
     public manageNotifications(mode, isRead, ids): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'manageNotifications/' + mode + '/' + isRead;
+        const apiUrl: string = this.apiBaseUrl + 'manageNotifications/' + mode + '/' + isRead;
         return this.httpClient.post(apiUrl, ids);
     }
 
     public getUserSubscriptions() {
-        let apiUrl: string = this.apiBaseUrl + 'GetUserSubscriptions';
+        const apiUrl: string = this.apiBaseUrl + 'GetUserSubscriptions';
         return this.httpClient.get(apiUrl);
     }
 
     public updateUserSubscriptions(subscriptions) {
-        let apiUrl: string = this.apiBaseUrl + 'UpdateUserSubscriptions';
+        const apiUrl: string = this.apiBaseUrl + 'UpdateUserSubscriptions';
         return this.httpClient.post(apiUrl, subscriptions);
     }
 
     public getEmailBodyTemplateUI(id) {
-        let apiUrl: string = this.apiBaseUrl + 'GetEmailBodyTemplateUI/' + id;
+        const apiUrl: string = this.apiBaseUrl + 'GetEmailBodyTemplateUI/' + id;
         return this.httpClient.get(apiUrl);
     }
 

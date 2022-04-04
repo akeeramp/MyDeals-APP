@@ -1,57 +1,55 @@
-    .reportLink {
-        font-size:13px;
-    }
-    .filterInfo {
-        width: 450px;
-        background: rgba(0, 0, 0, 0.69);
-        border: 2px solid #8c8c8c;
-        position: fixed;
-        top: 100px;
-        height: 120px;
-        color: #fff;
-        padding: 5px;
-    }
-    .showMore {
-        padding: 3px;
-        background: #2196f3;
-        float: left;
-        margin-top: 10px;
-        cursor: pointer;
-        color: #FFF;
-    }
-    .tableHeader > thead:first-child > tr:first-child > th {
-        background: #FFFFFF;
-        border-right: 1px solid #f2f2f2;
-        border-bottom: 3px solid #2196F3;        
-    }
-    .tableHeader {
-        border: 1px solid #f2f2f2;
-    }
-
-    .mainBodyStyle {
-        position: absolute;
-        top: 84px;
-        bottom: 15px;
-        left: 0;
-        right: 0;
-        overflow: scroll !important;
-    }
-    /*this stop manage scrollbar input dashboard*/
-    div.overFlowDash {
-    width: auto;
-    height: 720px !important;
-    overflow: auto !important;
-    }
-    .k-chart-tooltip-wrapper .k-animation-container {
-      position: absolute !important;
-      top: 0 !important;
-      width: 100px;
-      border: red solid 2px;
-      background-color: yellow;
-      color: blue;
-  }
-  .kendocontainer {
-    width: 100%;
-    height: 100%;
-    transform: perspective(100px);
-  }
+ .reportLink {
+     font-size: 13px
+ }
+ .filterInfo {
+     width: 450px;
+     background: rgba(0, 0, 0, .69);
+     border: 2px solid #8c8c8c;
+     position: fixed;
+     top: 100px;
+     height: 120px;
+     color: #fff;
+     padding: 5px
+ }
+ .showMore {
+     padding: 3px;
+     background: #2196f3;
+     float: left;
+     margin-top: 10px;
+     cursor: pointer;
+     color: #FFF
+ }
+ .tableHeader>thead:first-child>tr:first-child>th {
+     background: #FFFFFF;
+     border-right: 1px solid #f2f2f2;
+     border-bottom: 3px solid #2196F3
+ }
+ .tableHeader {
+     border: 1px solid #f2f2f2
+ }
+ .mainBodyStyle {
+     position: absolute;
+     top: 84px;
+     bottom: 15px;
+     left: 0;
+     right: 0;
+     overflow: scroll !important
+ }
+ div.overFlowDash {
+     width: auto;
+     height: 720px !important;
+     overflow: auto !important
+ }
+ .k-chart-tooltip-wrapper .k-animation-container {
+     position: absolute !important;
+     top: 0 !important;
+     width: 100px;
+     border: red solid 2px;
+     background-color: yellow;
+     color: blue
+ }
+ .kendocontainer {
+     width: 100%;
+     height: 100%;
+     transform: perspective(100px)
+ }

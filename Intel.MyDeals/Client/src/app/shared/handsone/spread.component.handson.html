@@ -1,21 +1,13 @@
-<script src="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/pikaday.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/pikaday.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday@1.8.2/css/pikaday.css">
 <link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
-<link href="/Client/src/app/shared/handsone/spreadsheet.style.css" rel="stylesheet" />
-
-<br/>
+<link href="/Client/src/app/shared/handsone/spreadsheet.style.css" rel="stylesheet" /><br />
 <div class="row">
-    <div class="col-md-12">
-        <input type="text" [(ngModel)]="selectedName">
-        <button (click)="onSelectName()">Select</button>
-        <button (click)="onAddRow()">AddRow</button>
-        <button (click)="onAddRowMerge()">AddRowMerge</button>
-        <button (click)="openPopUp()">openPopUp</button>
-    </div>
-</div>
-<br/>
+    <div class="col-md-12"><input type="text" [(ngModel)]="selectedName"><button
+            (click)="onSelectName()">Select</button><button (click)="onAddRow()">AddRow</button><button
+            (click)="onAddRowMerge()">AddRowMerge</button><button (click)="openPopUp()">openPopUp</button></div>
+</div><br />
 <div class="row">
     <div class="col-md-12">
         <div class="overFlowSpread">
@@ -23,16 +15,6 @@
         </div>
     </div>
 </div>
-<!-- <div class="row">
-    <div class="col-md-12">
-        <hot-table [hotId]="id" [settings]="hotSettings_1"></hot-table>
-
-    </div>
-</div> -->
 <div class="row">
-    <div class="col-md-12">
-
-        <button (click)="onSubmit()">submit</button>
-
-    </div>
+    <div class="col-md-12"><button (click)="onSubmit()">submit</button></div>
 </div>

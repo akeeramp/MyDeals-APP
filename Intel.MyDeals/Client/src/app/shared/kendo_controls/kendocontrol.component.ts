@@ -1,11 +1,9 @@
 import * as angular from "angular";
-import {Observable, Subject} from "rxjs";
+import {Observable} from "rxjs";
 import {
   Component,
   ViewChild,
   ElementRef,
-  AfterViewInit,
-  inject,
 } from "@angular/core";
 import {downgradeComponent} from "@angular/upgrade/static";
 import {SelectEvent} from "@progress/kendo-angular-layout";
@@ -15,7 +13,6 @@ import {TooltipDirective} from "@progress/kendo-angular-tooltip";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {saveAs} from "file-saver";
 import { kendoControlService } from "./kendocontrol.service";
-import * as _ from "underscore";
 
 interface Item {
   text: string;
@@ -46,7 +43,7 @@ export class KendoControlComponent {
         { text: "XLarge", value: 4 },
         { text: "XXLarge", value: 5 },
     ];
-    public editValue: string = `<p>
+    public editValue = `<p>
     The Kendo UI Angular Editor allows your users to edit HTML in a familiar, user-friendly way.<br />
     In this version, the Editor provides the core HTML editing engine which includes basic text formatting, hyperlinks, and lists.
     The widget <strong>outputs identical HTML</strong> across all major browsers, follows
@@ -62,7 +59,7 @@ export class KendoControlComponent {
     </div>`;
     public selectedItems: Item[] = [this.listItems[1]];
     public selectedValue = 2;
-    public opened: boolean = false;
+    public opened = false;
     public autoList: Array<string> = [
         "Abhilash",
         "Arun",
@@ -71,11 +68,11 @@ export class KendoControlComponent {
         "Abhishek",
     ];
     public autoData: Array<string>;
-    public selAuto: string = "Abhilash";
-    public selNumeric: number = 5;
-    public isChecked: boolean = false;
-    public isCollapsed: boolean = false;
-    public obsObj: string = "Abhilash";
+    public selAuto = "Abhilash";
+    public selNumeric = 5;
+    public isChecked = false;
+    public isCollapsed = false;
+    public obsObj = "Abhilash";
     public objObserv: Observable<string>;
     public gridData: any[] = [
         {
@@ -108,12 +105,12 @@ export class KendoControlComponent {
     ];
     public windowWidth: any = 600;
     public windowHeight: any = 500;
-    public windowOpened: boolean = false;
-    public isTooltip: string = "none";
-    public minSlide: number = 1;
-    maxSlide: number = 4;
-    stepSlide: number = 1;
-    sliderValue: number = 2;
+    public windowOpened = false;
+    public isTooltip = "none";
+    public minSlide = 1;
+    maxSlide = 4;
+    stepSlide = 1;
+    sliderValue = 2;
     @ViewChild(TooltipDirective) public tooltipDir: TooltipDirective;
     @ViewChild("toolTip1") public toolElm1: ElementRef;
     @ViewChild("txtTool1", { static: false }) mytooltip1: NgbTooltip;
@@ -169,13 +166,13 @@ export class KendoControlComponent {
     if (elem.id && elem.id == "start") {
       this.conditionArray = elem.item;
     } else {
-      let i = 0;
+      const i = 0;
       this.updateGroup(this.conditionArray.groups, elem, i);
     }
   }
 
   updateGroup(group: any, elem: any, i: any) {
-    let count = elem.id.split("_");
+    const count = elem.id.split("_");
     //identifying selectd group
     if (
       group[parseInt(count[i])].id &&
@@ -248,7 +245,7 @@ export class KendoControlComponent {
     });
   }
   observeClick() {
-    let value = this.obsObj == "Abhilash" ? "Abhilash Keerampara" : "Abhilash";
+    const value = this.obsObj == "Abhilash" ? "Abhilash Keerampara" : "Abhilash";
     this.objObserv = new Observable(observer => {
       observer.next(value);
       console.log("observeClick******************");
@@ -266,8 +263,8 @@ export class KendoControlComponent {
   downloadClick() {
     this.kendoSVC.downloadFile().subscribe(
       response => {
-        let contentDisposition = response.headers.get("content-disposition");
-        let filename = contentDisposition
+        const contentDisposition = response.headers.get("content-disposition");
+        const filename = contentDisposition
           .split(";")[1]
           .split("filename")[1]
           .split("=")[1]

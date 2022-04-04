@@ -1,12 +1,8 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { ThemePalette } from "@angular/material/core";
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from "underscore";
-import { warn } from "console";
 
 @Component({
     selector: "vistexTestApi",
@@ -73,11 +69,11 @@ export class adminVistexComponent {
     //Call the API
     callAPI(mode) {
         this.isLoading = true;
-        var startTime = new Date();
+        const startTime = new Date();
         
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
             this.isLoading = false;            
-            var endTime = new Date();            
+            const endTime = new Date();            
             result["START_TIME"] = startTime;
             result["END_TIME"] = endTime;
             this.responseData.unshift(result);            
@@ -88,7 +84,6 @@ export class adminVistexComponent {
 
 
     loadVistexTestApi() {
-        let vm = this;
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }        

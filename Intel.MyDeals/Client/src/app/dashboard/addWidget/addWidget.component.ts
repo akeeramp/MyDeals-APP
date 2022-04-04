@@ -29,7 +29,7 @@ export class addWidgetComponent {
     ngOnInit() {
         this.finalItems = widgetConfig;
         _.each(this.finalItems, item => {
-            let currentWidget = this.data.widgets.filter(o1 => o1["type"] === item.type);
+            const currentWidget = this.data.widgets.filter(o1 => o1["type"] === item.type);
             if (currentWidget.length==0) {
                 item.isAdded = true;
             }

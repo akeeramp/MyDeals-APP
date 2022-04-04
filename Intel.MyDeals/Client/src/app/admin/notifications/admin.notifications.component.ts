@@ -1,24 +1,18 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import * as _ from "underscore";
 import { MatDialog } from "@angular/material/dialog";
 import { notificationsModalDialog } from '../../admin/notifications/admin.notificationsModal.component';
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
-    PageSizeItem,
-    SelectableSettings,
+    PageSizeItem
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
+    distinct
 } from "@progress/kendo-data-query";
 import { notificationsService } from './admin.notifications.service';
 
@@ -38,7 +32,7 @@ export class adminNotificationsComponent {
     public gridData: GridDataResult;
     //variable to hold the selected ID's (rows which are selected using check box)
     public mySelection: number[] = [];
-    private isLoading: boolean = true;
+    private isLoading = true;
     public gridResult: Array<any>;
     public state: State = {
         skip: 0,
@@ -83,20 +77,19 @@ export class adminNotificationsComponent {
     }
 
     loadNotifications() {
-        let vm = this;
         this.mySelection = [];
         this.notificationsSvc.getNotification('SELECT ALL').subscribe(
             (response: Array<any>) => {
                 //as we get the CRE_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                var result = response.map(function (x) {
+                const result = response.map(function (x) {
                     x.CRE_DTM = new Date(x.CRE_DTM);
                     return x;
                 });
-                vm.gridResult = result;
-                vm.gridData = process(vm.gridResult, vm.state);
-                vm.isLoading = false;
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
                 // Below call is to update the notification count on the notification icon
-                vm.notificationsSvc.refreshUnreadCount();
+                this.notificationsSvc.refreshUnreadCount();
             },
             (error)=> {
                 this.loggerSvc.error("adminNotificationsComponent::getNotification::Unable to get Notifications.", error);
@@ -106,23 +99,21 @@ export class adminNotificationsComponent {
     }
 
     markAsRead() {
-        var ids = this.mySelection;
-        var vm = this;
+        const ids = this.mySelection;
         this.notificationsSvc.manageNotifications("UPDATE", true, ids).subscribe(
-            res=> {
-                vm.loadNotifications();
+            ()=> {
+                this.loadNotifications();
             },
             (error) => {
-                vm.loggerSvc.error("adminNotificationsComponent::manageNotifications::Unable to Update Notifications.", error);
+                this.loggerSvc.error("adminNotificationsComponent::manageNotifications::Unable to Update Notifications.", error);
             });
     }
 
     markAsUnRead() {
-        var ids = this.mySelection;
-        var vm = this;
+        const ids = this.mySelection;
         this.notificationsSvc.manageNotifications("UPDATE", false, ids).subscribe(
-            res=> {
-                vm.loadNotifications();
+            ()=> {
+                this.loadNotifications();
             },
             (error) => {
                 this.loggerSvc.error("adminNotificationsComponent::manageNotifications::Unable to Update Notifications.", error);
@@ -130,11 +121,10 @@ export class adminNotificationsComponent {
     }
 
     delete() {
-        var ids = this.mySelection;
-        var vm = this;
+        const ids = this.mySelection;
         this.notificationsSvc.manageNotifications("DELETE", false, ids).subscribe(
-            res=> {
-                vm.loadNotifications();
+            ()=> {
+                this.loadNotifications();
             });
     }
 
@@ -146,7 +136,7 @@ export class adminNotificationsComponent {
                 data: dataItem
             }
             );
-            dialogRef.afterClosed().subscribe(result => {
+            dialogRef.afterClosed().subscribe(() => {
                 dataItem.IS_READ_IND = true;
             });
         }

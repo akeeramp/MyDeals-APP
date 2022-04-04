@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
 
@@ -10,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 })
 
 export class primeCustomerService {
-    public apiBaseUrl: string = "api/PrimeCustomers/";
+    public apiBaseUrl = "api/PrimeCustomers/";
     public apiUnifyFileUrl = "/FileAttachments/";
 
     constructor(private httpClient: HttpClient) {
@@ -18,72 +16,72 @@ export class primeCustomerService {
     }
 
     public GetPrimeCustomerDetails(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetails';
+        const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomerDetails';
         return this.httpClient.get(apiUrl);
     }
 
     public UpdatePrimeCustomer(data): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UpdatePrimeCustomer';
+        const apiUrl: string = this.apiBaseUrl + 'UpdatePrimeCustomer';
         return this.httpClient.post(apiUrl, data);
     }
 
     public SetPrimeCustomers(data): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'SetPrimeCustomers';
+        const apiUrl: string = this.apiBaseUrl + 'SetPrimeCustomers';
         return this.httpClient.post(apiUrl, data);
     }
 
     public DeletePrimeCustomer(data): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'DeletePrimeCustomer';
+        const apiUrl: string = this.apiBaseUrl + 'DeletePrimeCustomer';
         return this.httpClient.post(apiUrl, data);
     }
 
     public getCountries(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetCountries';
+        const apiUrl: string = this.apiBaseUrl + 'GetCountries';
         return this.httpClient.get(apiUrl);
     }
 
     public getPrimeCustomers(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomers';
+        const apiUrl: string = this.apiBaseUrl + 'GetPrimeCustomers';
         return this.httpClient.get(apiUrl);
     }
 
     public getUnmappedPrimeCustomerDeals(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetUnPrimeDeals';
+        const apiUrl: string = this.apiBaseUrl + 'GetUnPrimeDeals';
         return this.httpClient.get(apiUrl);
     }
 
     public getEndCustomerData(endCustomerData): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetEndCustomerData';
+        const apiUrl: string = this.apiBaseUrl + 'GetEndCustomerData';
         return this.httpClient.get(apiUrl, endCustomerData);
     }
 
     public UpdateUnPrimeDeals(dealId, endCustData): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId;
+        const apiUrl: string = this.apiBaseUrl + 'UpdateUnPrimeDeals/' + dealId;
         return this.httpClient.post(apiUrl, endCustData);
     }
 
     public validateEndCustomer(endCustomerData): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'ValidateEndCustomer';
+        const apiUrl: string = this.apiBaseUrl + 'ValidateEndCustomer';
         return this.httpClient.post(apiUrl, endCustomerData);
     }
 
     public ValidateUnifyDeals(lstUnifyDeals): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'ValidateBulkUnifyDeals';
+        const apiUrl: string = this.apiBaseUrl + 'ValidateBulkUnifyDeals';
         return this.httpClient.post(apiUrl, lstUnifyDeals);
     }
 
     public updateBulkUnifyDeals(lstUnifyDeals): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UploadBulkUnifyDeals';
+        const apiUrl: string = this.apiBaseUrl + 'UploadBulkUnifyDeals';
         return this.httpClient.post(apiUrl, lstUnifyDeals);
     }
 
     public UnPrimeDealsLogs(dealId, endCustData): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UnPrimeDealsLogs/' + dealId;
+        const apiUrl: string = this.apiBaseUrl + 'UnPrimeDealsLogs/' + dealId;
         return this.httpClient.post(apiUrl, endCustData);
     }
 
     public getRplStatusCodes(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetRplStatusCodes';
+        const apiUrl: string = this.apiBaseUrl + 'GetRplStatusCodes';
         return this.httpClient.get(apiUrl);
     }
 

@@ -1,56 +1,45 @@
-﻿
-.tblCache th {
-    padding: 2px 5px;
-    font-size: 11px;
-}
-
-.tblCache td {
-    padding: 2px 5px;
-    font-size: 11px;
-}
-
-h2 {
-    margin-top: 30px;
-    margin-bottom: 0;
-}
-
-
-a:hover {
-    color: #003C71 !important;
-    text-decoration: underline !important;
-}
-
-a {
-    color: #0071c5 !important;
-}
-
-#cacheList {
-    -ms-border-radius: 4px;
-    border-radius: 4px;
-    border: 1px solid #666666;
-    background-color: #ffffff;
-    padding: 8px;
-    overflow: auto;
-}
-
-#cacheContainer {
-    margin-top: 10px;
-}
-
-#cacheList h5 {
-    margin-top: 0;
-}
-
-#refreshAllLog {
-    margin-left: 10px;
-    background-color: #00aeef;
-    border-color: #00aeef;
-    color: #fff;
-}
-
-#refreshAllLog:hover {
-    color: #fff;
-    border-color: #0071c5;
-    background-color: #0071c5;
-    margin-left: 10px;
-}
+﻿ .tblCache th {
+     padding: 2px 5px;
+     font-size: 11px
+ }
+ .tblCache td {
+     padding: 2px 5px;
+     font-size: 11px
+ }
+ h2 {
+     margin-top: 30px;
+     margin-bottom: 0
+ }
+ a:hover {
+     color: #003C71 !important;
+     text-decoration: underline !important
+ }
+ a {
+     color: #0071c5 !important
+ }
+ #cacheList {
+     -ms-border-radius: 4px;
+     border-radius: 4px;
+     border: 1px solid #666666;
+     background-color: #ffffff;
+     padding: 8px;
+     overflow: auto
+ }
+ #cacheContainer {
+     margin-top: 10px
+ }
+ #cacheList h5 {
+     margin-top: 0
+ }
+ #refreshAllLog {
+     margin-left: 10px;
+     background-color: #00aeef;
+     border-color: #00aeef;
+     color: #fff
+ }
+ #refreshAllLog:hover {
+     color: #fff;
+     border-color: #0071c5;
+     background-color: #0071c5;
+     margin-left: 10px
+ }

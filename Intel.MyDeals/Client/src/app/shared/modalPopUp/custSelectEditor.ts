@@ -1,6 +1,5 @@
 import Handsontable from 'handsontable-pro'
-import {HotTableRegisterer} from "@handsontable/angular";
-const {addClass, removeClass, hasClass} = Handsontable.dom
+const {addClass} = Handsontable.dom
 
 export class custSelectEditor extends Handsontable.editors.TextEditor {
     public TEXTAREA:any;
@@ -28,14 +27,14 @@ export class custSelectEditor extends Handsontable.editors.TextEditor {
       getValue() {
         console.log('getValue*********************');
       }
-      setValue(value) {
+      setValue() {
         console.log('setValue*********************');
       }
       open() {
         super.refreshDimensions();
         this.textareaParentStyle.display = 'block';
-        for (var i=0;i<this.selectOptions;i++){
-            let option=document.createElement('select');
+        for (let i=0;i<this.selectOptions;i++){
+            const option=document.createElement('select');
             option.setAttribute("value",this.selectOptions[i]);
             this.TEXTAREA.appendChild(option);
         }

@@ -1,7 +1,6 @@
 import * as angular from 'angular';
-import { Input,Output, Component, OnInit,EventEmitter } from "@angular/core";
+import { Input, Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ccLoader',
@@ -20,9 +19,7 @@ import { NgIf } from '@angular/common';
   </div>`
 })
 export class LoaderComponent  {
-  constructor() {
-
-   }
+   
   // Where ever loader is using the booler values are also giving in string format ,
   //  for some reason the values are not identifying as expected thats the reason conditiong with 
   //  NgIf

@@ -70,17 +70,16 @@ export class DashboardComponent implements OnInit {
     }
 
     openPopUp() {
-        let vm = this;
-        let widgets = this.dashboard;
+        const widgets = this.dashboard;
         const dialogRef = this.dialog.open(addWidgetComponent, {
             width: '600px',
             data: { name: "Add a Widget", widgets: widgets },
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                let widget = _.findWhere(widgetConfig, { type: result });
-                vm.dashboard.push({ cols: widget.position.col, rows: widget.position.row, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
-                vm.options.api.optionsChanged();
+                const widget = _.findWhere(widgetConfig, { type: result });
+                this.dashboard.push({ cols: widget.position.col, rows: widget.position.row, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                this.options.api.optionsChanged();
             }
         });
     }

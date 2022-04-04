@@ -11,12 +11,12 @@ export class ContractStatusBoardService {
 
     constructor(private httpClient: HttpClient) { }
 
-    public apiBaseContractUrl: string = "/api/Contracts/v1/";
+    public apiBaseContractUrl = "/api/Contracts/v1/";
     public securityAttributes = null;
     public securityMasks = null;
 
     public readContractStatus(id): Observable<any> {
-        let apiUrl: string = this.apiBaseContractUrl + 'GetContractStatus/' + id;
+        const apiUrl: string = this.apiBaseContractUrl + 'GetContractStatus/' + id;
         return this.httpClient.get(apiUrl);
     }
 
@@ -28,7 +28,7 @@ export class ContractStatusBoardService {
     }
 
     convertHexToBin(hex) {
-        let base = "0000000000000000";
+        const base = "0000000000000000";
         let convertBase = (num) => {
             return {
                 from: (baseFrom) => {
@@ -41,13 +41,13 @@ export class ContractStatusBoardService {
             };
         };
 
-        let val = convertBase(hex).from(16).to(2);
+        const val = convertBase(hex).from(16).to(2);
         return (base + val).slice(-1 * base.length);
     }
 
     chkAtrbRules(action, role, itemType, itemSetType, stage, attrb): boolean {
         this.getSecurityDataFromSession();
-        var itemTypeId = 0;
+        let itemTypeId = 0;
         if (!!itemType) itemType = itemType.replace(/ /g, '_');
         if (!!itemSetType) itemSetType = itemSetType.replace(/ /g, '_');
         // need a better way of doing this, but for now we will stick it here
@@ -60,12 +60,12 @@ export class ContractStatusBoardService {
         if (itemType === 'DEAL') itemTypeId = 6;
         if (!itemSetType) itemSetType = 'ALL_TYPES';
         if (!stage) stage = 'All WF Stages';
-        let secActionObj = this.securityAttributes.filter((item) => {
+        const secActionObj = this.securityAttributes.filter((item) => {
             return ((item.ATRB_CD === undefined || item.ATRB_CD === null) ? "" : item.ATRB_CD.trim().toUpperCase()) === ((attrb === undefined || attrb === null) ? "ACTIVE" : attrb.trim().toUpperCase());
         });
         if (secActionObj === undefined || secActionObj === null || secActionObj.length <= 0) return false;
 
-        let localSecurityMasks = this.securityMasks.filter((item) => {
+        const localSecurityMasks = this.securityMasks.filter((item) => {
             return item.ACTN_NM === action
                 && (role === null || item.ROLE_NM === null || item.ROLE_NM.trim().toUpperCase() === role.trim().toUpperCase())
                 && (stage === null || item.WFSTG_NM === null || item.WFSTG_NM.trim().toUpperCase() === stage.trim().toUpperCase())
@@ -76,12 +76,12 @@ export class ContractStatusBoardService {
         if (localSecurityMasks.length === 0) return false;
 
         for (let f = 0; f < localSecurityMasks.length; f++) {
-            let reverseSecurityMask = localSecurityMasks[f].PERMISSION_MASK.split('.').reverse();
-            if (reverseSecurityMask.length < secActionObj[0].ATRB_MAGNITUDE) { return false };
-            let binVal = this.convertHexToBin(reverseSecurityMask[secActionObj[0].ATRB_MAGNITUDE]);
-            let revBinVal = binVal.split('').reverse();
-            if (revBinVal.length < secActionObj[0].ATRB_BIT) { return false };
-            if (revBinVal[secActionObj[0].ATRB_BIT] === '1') { return true };
+            const reverseSecurityMask = localSecurityMasks[f].PERMISSION_MASK.split('.').reverse();
+            if (reverseSecurityMask.length < secActionObj[0].ATRB_MAGNITUDE) { return false }
+            const binVal = this.convertHexToBin(reverseSecurityMask[secActionObj[0].ATRB_MAGNITUDE]);
+            const revBinVal = binVal.split('').reverse();
+            if (revBinVal.length < secActionObj[0].ATRB_BIT) { return false }
+            if (revBinVal[secActionObj[0].ATRB_BIT] === '1') { return true }
         }
         return false;
     }

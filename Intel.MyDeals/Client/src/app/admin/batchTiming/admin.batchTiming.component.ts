@@ -2,8 +2,8 @@
 import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { batchTimingService } from "./admin.batchTiming.service";
 
@@ -21,13 +21,12 @@ export class batchTimingComponent {
     }
 
     // Variables
-    private selectedItem: any = null;
-    private isButtonDisabled: boolean = true;
+    private isButtonDisabled = true;
 
-    private isLoading: boolean = true;
-    private loadMessage: string = "Batch Job Details Loading..";
-    private type: string = "numeric";
-    private info: boolean = true;
+    private isLoading = true;
+    private loadMessage = "Batch Job Details Loading..";
+    private type = "numeric";
+    private info = true;
     private gridResult: Array<any>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';

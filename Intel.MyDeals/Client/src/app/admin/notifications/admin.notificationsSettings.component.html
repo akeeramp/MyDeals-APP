@@ -1,49 +1,40 @@
 ﻿<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
- <div class="modal-header modalBlueBody">
-        <h5 class="modal-title" id="modal-title">Notification Settings - {{role}}<img *ngIf="loading" src="/Images/loadingSmall.gif"/>
-        <i role="button" title="Close" class="intelicon-close-max fr" (click)="close()"></i></h5>
- </div>
-
- <div class="modal-body modalBlueBody" id="modal-body">
-     <div class="row">
-         <div class="col-md-offset-7 col-md-2 text-center">Email</div>
-         <div class="col-md-2 text-center">In Tool</div>
-     </div>
-     <div class="row">
-         <div class="col-md-7">SELECT ALL</div>
-         <div class="col-md-2 text-center">
-             <mat-slide-toggle [(ngModel)]="selectAllDefaults.EMAIL_IND"
-                               (change)="selectAll('EMAIL_IND')"
-                               [color]="color">
-             </mat-slide-toggle>
-         </div>
-         <div class="col-md-2 text-center">
-             <mat-slide-toggle [(ngModel)]="selectAllDefaults.IN_TOOL_IND"
-                               (change)="selectAll('IN_TOOL_IND')" [color]="color">
-             </mat-slide-toggle>
-         </div>
-     </div>
-     <hr/>
-     <div class="row" *ngFor="let s of subScriptions; let i = index" id="matSlideToggle">
-         <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{s.NOTIF_NM}}</div>
-         <div class="col-md-2 text-center">
-             <mat-slide-toggle [checked]="s.EMAIL_IND"
-                               (change)="setSubscription( i , $event,'EMAIL_IND' )"
-                               [color]="color">
-             </mat-slide-toggle>
-         </div>
-         <div class="col-md-2 text-center">
-             <mat-slide-toggle [checked]="s.IN_TOOL_IND"
-                               (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
-                               [color]="color">
-             </mat-slide-toggle>
-         </div>
-     </div>
-    <br />
+<div class="modal-header modalBlueBody">
+    <h5 class="modal-title" id="modal-title">Notification Settings -{{role}}<img *ngIf="loading"
+            src="/Images/loadingSmall.gif" /><i role="button" title="Close" class="intelicon-close-max fr"
+            (click)="close()"></i></h5>
+</div>
+<div class="modal-body modalBlueBody" id="modal-body">
     <div class="row">
-        <div class="col-md-12">
-            <button class="btn btn-primary" type="button" style="width: 100%;" (click)="saveAndClose()">Save and Close</button>
+        <div class="col-md-offset-7 col-md-2 text-center">Email</div>
+        <div class="col-md-2 text-center">In Tool</div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">SELECT ALL</div>
+        <div class="col-md-2 text-center">
+            <mat-slide-toggle [(ngModel)]="selectAllDefaults.EMAIL_IND" (change)="selectAll('EMAIL_IND')"
+                [color]="color"></mat-slide-toggle>
+        </div>
+        <div class="col-md-2 text-center">
+            <mat-slide-toggle [(ngModel)]="selectAllDefaults.IN_TOOL_IND" (change)="selectAll('IN_TOOL_IND')"
+                [color]="color"></mat-slide-toggle>
         </div>
     </div>
- </div>
+    <hr />
+    <div class="row" *ngFor="let s of subScriptions; let i=index" id="matSlideToggle">
+        <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{s.NOTIF_NM}}</div>
+        <div class="col-md-2 text-center">
+            <mat-slide-toggle [checked]="s.EMAIL_IND" (change)="setSubscription( i , $event,'EMAIL_IND' )"
+                [color]="color"></mat-slide-toggle>
+        </div>
+        <div class="col-md-2 text-center">
+            <mat-slide-toggle [checked]="s.IN_TOOL_IND" (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
+                [color]="color"></mat-slide-toggle>
+        </div>
+    </div><br />
+    <div class="row">
+        <div class="col-md-12"><button class="btn btn-primary" type="button" style="width: 100%;"
+                (click)="saveAndClose()">Save and Close</button></div>
+    </div>
+</div>

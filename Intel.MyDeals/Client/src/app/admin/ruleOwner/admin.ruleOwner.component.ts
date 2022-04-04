@@ -4,7 +4,6 @@ import { ruleOwnerService } from "./admin.ruleOwner.service";
 import { constantsService } from "../constants/admin.constants.service";
 import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import * as _ from "underscore";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 
@@ -20,8 +19,6 @@ import {
     distinct,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { any } from "underscore";
-
 
 @Component({
     selector: "ruleOwner",
@@ -49,13 +46,13 @@ export class RuleOwnerComponent {
     public RuleConfig: Array<any> = [];
     public SelectedOwnerId = null;
     public EditedRuleId = 0;
-    public isBusyShowFunFact: boolean = true;
-    public isElligibleForApproval: boolean = false;
+    public isBusyShowFunFact = true;
+    public isElligibleForApproval = false;
     public IsReadOnlyAccess = (<any>window).usrRole === "DA" ? false : true;
-    public IsSecurityCheckDone: boolean = false;
+    public IsSecurityCheckDone = false;
 
     public gridResult: Array<any>;
-    private isLoading: boolean = true;
+    private isLoading = true;
     public ownerNameData: Array<any> = [];
     public generatedOwnerData: Array<any> = [];
     public dropdownResult: Array<any> = [];
@@ -64,7 +61,7 @@ export class RuleOwnerComponent {
      
 
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
 
     public state: State = {
@@ -128,7 +125,7 @@ export class RuleOwnerComponent {
             Name: new FormControl({ value: dataItem.Name, disabled: true }, Validators.required),
             OwnerName: new FormControl(dataItem.OwnerName, Validators.required),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -136,9 +133,9 @@ export class RuleOwnerComponent {
         this.selectedOwner = { "EMP_WWID": dataItem.OwnerId };
     }
 
-    saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
+    saveHandler({ sender, rowIndex, formGroup, dataItem }) {
         this.isLoading = true;
-        var priceRuleCriteria = {
+        const priceRuleCriteria = {
             Id: dataItem.Id,
             OwnerId: formGroup.value.OwnerName.EMP_WWID
         }
@@ -160,13 +157,12 @@ export class RuleOwnerComponent {
     }
 
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.getConstant()
+        this.getConstant()
     }
 
     initiateRuleOwners() {
@@ -177,7 +173,7 @@ export class RuleOwnerComponent {
                 
                 this.dropdownResult = distinct(this.ownerNameData, "EMP_WWID");
 
-                for (var i = 0; i < this.dropdownResult.length; i++) {
+                for (let i = 0; i < this.dropdownResult.length; i++) {
                     this.dropdownResult[i].displayText = this.ownerNameData[i].NAME + (this.ownerNameData[i].EMAIL_ADDR ? (" - " + this.ownerNameData[i].EMAIL_ADDR) : "")
                 }
               
@@ -197,7 +193,7 @@ export class RuleOwnerComponent {
             }, function (error) {
                 this.loggerSvc.error("Operation failed", error);
         });
-    };
+    }
 
     ownerNMChange(value) {
         this.selectedOwner = value;
@@ -214,38 +210,35 @@ export class RuleOwnerComponent {
     }
 
     getConstant() {
-
-        let vm = this;
-        
         this.constantsSvc.getConstantsByName("PRC_RULE_EMAIL")
             .subscribe(data => {
-            if (!!data) {
-                var adminEmailIDs = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
-                vm.isElligibleForApproval = adminEmailIDs.indexOf((<any>window).usrEmail) > -1 ? true : false;
-                vm.IsSecurityCheckDone = true;
-                if (vm.isElligibleForApproval) {
-                    vm.initiateRuleOwners();
+            if (data) {
+                const adminEmailIDs = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+                this.isElligibleForApproval = adminEmailIDs.indexOf((<any>window).usrEmail) > -1 ? true : false;
+                this.IsSecurityCheckDone = true;
+                if (this.isElligibleForApproval) {
+                    this.initiateRuleOwners();
                 }
             }
 
-                if (vm.isElligibleForApproval == false && (<any>window).usrRole !== "DA") {
+                if (this.isElligibleForApproval == false && (<any>window).usrRole !== "DA") {
                 this.constantsSvc.getConstantsByName("PRC_RULE_READ_ACCESS")
                     .subscribe(data => {
-                    if (!!data) {
-                        var prcAccess = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
-                        vm.IsReadOnlyAccess = prcAccess.indexOf((<any>window).usrRole) > -1;
-                        vm.IsSecurityCheckDone = true;
-                        if (vm.IsReadOnlyAccess) {
-                            vm.initiateRuleOwners();
+                    if (data) {
+                        const prcAccess = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+                        this.IsReadOnlyAccess = prcAccess.indexOf((<any>window).usrRole) > -1;
+                        this.IsSecurityCheckDone = true;
+                        if (this.IsReadOnlyAccess) {
+                            this.initiateRuleOwners();
                         } else {
                             document.location.href = "/Dashboard#/portal";
                         }
                     } else {
-                        vm.IsSecurityCheckDone = true;
+                        this.IsSecurityCheckDone = true;
                     }
                 });
             } else {
-                vm.IsSecurityCheckDone = true;
+                    this.IsSecurityCheckDone = true;
             }
         });
     }

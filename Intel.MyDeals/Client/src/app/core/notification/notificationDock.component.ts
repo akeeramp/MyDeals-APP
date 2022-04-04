@@ -1,13 +1,11 @@
 ﻿import * as angular from 'angular';
-import { Input, Output, Component, OnInit, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { notificationsService } from '../../admin/notifications/admin.notifications.service';
 import { logger } from "../../shared/logger/logger";
-import * as _ from 'underscore';
 import { notificationsSettingsDialog } from '../../admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../../admin/notifications/admin.notificationsModal.component';
 import { MatDialog } from "@angular/material/dialog";
-import { data } from 'jquery';
 import { Subscription} from 'rxjs';
 
 @Component({
@@ -36,7 +34,7 @@ export class notificationDockComponent {
             data: dataItem
         }
         );
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe(() => {
             dataItem.IS_READ_IND = true;
         });
     }

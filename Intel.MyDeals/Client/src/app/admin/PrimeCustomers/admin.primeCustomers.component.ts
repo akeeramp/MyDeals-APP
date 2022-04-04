@@ -5,24 +5,18 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { PrimeCust_Map } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
-
-import * as _ from "underscore";
 import {
     GridDataResult,
-    PageChangeEvent,
     DataStateChangeEvent,
     PageSizeItem,
 } from "@progress/kendo-angular-grid";
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
+    distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { data } from "jquery";
+
 
 @Component({
     selector: "adminPrimeCustomers",
@@ -45,10 +39,10 @@ export class adminPrimeCustomersComponent {
     @ViewChild("primeCtryDropDown") private primeCtryDdl;
     @ViewChild("rplStsCdDropDown") private rplStsCdDdl;
 
-    private isLoading: boolean = true;
-    private loadMessage: string = "Admin Customer Loading..";
-    private type: string = "numeric";
-    private info: boolean = true;
+    private isLoading = true;
+    private loadMessage = "Admin Customer Loading..";
+    private type = "numeric";
+    private info = true;
     private gridResult: Array<any>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
@@ -60,15 +54,15 @@ export class adminPrimeCustomersComponent {
     public primeCustData: Array<any>;
     public formGroup: FormGroup;
     private editedRowIndex: number;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     public distinctCountry: Array<any>;
-    public errorMsg: string = "";
-    public allowCustom: boolean = true;
-    public editAccess: boolean = true;
-    private isNew: boolean; primeCust_map: any; rowIndex: number; saveAction: string = "Active";
-    isCombExists: boolean = false; isDialogVisible: boolean = false; cancelConfirm: boolean = false;
-    public isUnifiedIdEditable: boolean = false; isPrimCustNmEditable: boolean = false;
-    isPrimLvlIdEditable: boolean = false; isPrimCustCtryEditable: boolean = false; isRplStsDdEditable: boolean = false;
+    public errorMsg = "";
+    public allowCustom = true;
+    public editAccess = true;
+    private isNew: boolean; primeCust_map: any; rowIndex: number; saveAction = "Active";
+    isCombExists = false; isDialogVisible = false; cancelConfirm = false;
+    public isUnifiedIdEditable = false; isPrimCustNmEditable = false;
+    isPrimLvlIdEditable = false; isPrimCustCtryEditable = false; isRplStsDdEditable = false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -268,71 +262,71 @@ export class adminPrimeCustomersComponent {
     }
 
 
-    IsValidCombination(model: any, isNew: boolean) {
+    IsValidCombination(model: any) {
         let retCond = false;
-        let isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
-        let vm = this;
+        const isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
+        
 
         this.gridResult.map(
-            function getDuplicate(x) {
-                let x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
-                let model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
-                let patt = new RegExp("^[\\w .,:'\&-]*$");
-                let res = patt.test(model_Cust_Nm);
+            (x)=> {
+                const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
+                const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
+                const patt = new RegExp("^[\\w .,:'&-]*$");
+                const res = patt.test(model_Cust_Nm);
 
                 if (!res) {
-                    vm.errorMsg = "Invalid Character identified in Unified Customer Name. Please remove it and Save.";
+                    this.errorMsg = "Invalid Character identified in Unified Customer Name. Please remove it and Save.";
                     retCond = true;
                 }
                 else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
                     if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null && x.IS_ACTV == true) {
-                        vm.errorMsg = "Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active";
+                        this.errorMsg = "Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active";
                         retCond = true;
                     }
                     if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY != model.PRIM_CUST_CTRY && x.IS_ACTV) {
-                        vm.errorMsg = "For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status";
+                        this.errorMsg = "For this combination of Unified Id \"" + model.PRIM_CUST_ID + "\" and Unified Customer Name \"" + model.PRIM_CUST_NM + "\" this Level 2 ID already exists in active status";
                         retCond = true;
                     }
                     if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID == model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY) {
-                        vm.errorMsg = "This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists";
+                        this.errorMsg = "This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists";
                         retCond = true;
                     }
                     else if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY && x.IS_ACTV) {
-                        vm.errorMsg = "This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status";
+                        this.errorMsg = "This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status";
                         retCond = true;
                     }
                     if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && isPrimeIdexist.length == 1 && model.PRIM_SID !== "" && x.IS_ACTV) {
-                        vm.errorMsg = "\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active";
+                        this.errorMsg = "\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active";
                         retCond = true;
                     }
                 }
                 else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
-                    vm.errorMsg = "\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active";
+                    this.errorMsg = "\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active";
                     retCond = true;
                 }
             }
         );
 
         if (model.PRIM_CUST_ID == null || model.PRIM_CUST_ID == '') {
-            vm.errorMsg = "Please provide Valid Unified ID";
+            this.errorMsg = "Please provide Valid Unified ID";
             retCond = true;
         }
         if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '') {
-            vm.errorMsg = "Please Provide Valid Unified Customer Name";
+            this.errorMsg = "Please Provide Valid Unified Customer Name";
             retCond = true;
         }
         else if (model.PRIM_CUST_NM.length > 65) {
-            vm.errorMsg = "Unified Customer Name Length should not be greater than 65 characters";
+            this.errorMsg = "Unified Customer Name Length should not be greater than 65 characters";
             retCond = true;
         }
 
         if (model.PRIM_LVL_ID == null || model.PRIM_LVL_ID == '') {
-            vm.errorMsg = "Please Provide Valid Level 2 ID";
+            this.errorMsg = "Please Provide Valid Level 2 ID";
             retCond = true;
         }
 
         if (model.PRIM_CUST_CTRY == null || model.PRIM_CUST_CTRY == '' || this.distinctprimeCtry.filter(x => x === model.PRIM_CUST_CTRY).length == 0) {
-            vm.errorMsg = "Please Select Valid Country.";
+            this.errorMsg = "Please Select Valid Country.";
             retCond = true;
         }
 
@@ -344,7 +338,7 @@ export class adminPrimeCustomersComponent {
             if (isNew) {
                 this.isLoading = true;
                 this.primeCustSvc.SetPrimeCustomers(primeCust_map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
                         this.loggerSvc.success("New Unified Customer Added.");
@@ -358,7 +352,7 @@ export class adminPrimeCustomersComponent {
             } else {
                 this.isLoading = true;
                 this.primeCustSvc.UpdatePrimeCustomer(primeCust_map).subscribe(
-                    result => {
+                    () => {
                         this.gridResult[rowIndex] = primeCust_map;
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
@@ -380,15 +374,15 @@ export class adminPrimeCustomersComponent {
         this.isPrimLvlIdEditable = false;
         this.isPrimCustCtryEditable = false;
         this.isRplStsDdEditable = false;
-        let primeCust_map: PrimeCust_Map = formGroup.getRawValue();
+        const primeCust_map: PrimeCust_Map = formGroup.getRawValue();
         if (primeCust_map.RPL_STS_CD) {
             primeCust_map.RPL_STS_CD = primeCust_map.RPL_STS_CD.join();
         }
 
         //check the combination exists
         if (this.isFormChange) {
-            this.isCombExists = this.IsValidCombination(primeCust_map, isNew);
-            let updatedData = this.gridResult.filter(x => x.PRIM_CUST_ID == primeCust_map.PRIM_CUST_ID && x.PRIM_CUST_NM == primeCust_map.PRIM_CUST_NM &&
+            this.isCombExists = this.IsValidCombination(primeCust_map);
+            const updatedData = this.gridResult.filter(x => x.PRIM_CUST_ID == primeCust_map.PRIM_CUST_ID && x.PRIM_CUST_NM == primeCust_map.PRIM_CUST_NM &&
                 x.PRIM_LVL_ID == primeCust_map.PRIM_LVL_ID && x.PRIM_LVL_NM == primeCust_map.PRIM_LVL_NM);
             if (!this.isCombExists) {
                 //giving validation message if user inactive a customer

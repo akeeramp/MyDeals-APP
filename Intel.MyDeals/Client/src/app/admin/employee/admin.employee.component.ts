@@ -22,21 +22,21 @@ export class EmployeeComponent {
     private roles: Array<any>;
 
     save() {
-        var data = {
+        const data = {
             "roleTypeId": this.roleTypeId,
             "isDeveloper": this.isDeveloper ? 1 : 0,
             "isTester": this.isTester ? 1 : 0,
             "isSuper": this.isSuper ? 1 : 0
         }
         this.employeeSvc.setEmployees(data)
-            .subscribe(response => {
+            .subscribe(() => {
                 this.loggerSvc.success("Role was changed", "Done");
                 (<any>window).clearSessionData('/error/ResetMyCache');
                 document.location.href = "/error/ResetMyCache";
             }, err => {
                 this.loggerSvc.error("Unable to set User Roles.", err);
             });
-    };
+    }
 
     onChange(roleId: any) {
         this.roleTypeId = roleId;

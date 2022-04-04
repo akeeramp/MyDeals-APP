@@ -1,6 +1,6 @@
 
-import {Injectable, Inject} from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {Injectable} from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { Observable } from 'rxjs';
 
@@ -9,15 +9,15 @@ import { Observable } from 'rxjs';
  })
 
 export class kendoControlService { 
-    public apiBaseUrl: string = "api/QuoteLetter/";
+    public apiBaseUrl = "api/QuoteLetter/";
 
     constructor(private httpClient: HttpClient) {
       }
 
 
     public downloadFile():Observable<any>  {
-        let apiUrl: string = this.apiBaseUrl + 'GetDealQuoteLetterPreview';
-        let data = {"BODY_INFO":"BODY_INFO",
+        const apiUrl: string = this.apiBaseUrl + 'GetDealQuoteLetterPreview';
+        const data = {"BODY_INFO":"BODY_INFO",
         "HDR_INFO":"HDR_INFO",
         "MenuText":"ECAP-FRONTEND",
         "OBJ_SET_TYPE_CD":"ECAP",

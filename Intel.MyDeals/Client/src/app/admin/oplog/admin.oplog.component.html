@@ -2,66 +2,50 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-
-
-<!-- using for Angular spinner while page load -->
-<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false"
-          [message]="loadMessage">
-</ccLoader>
-
+<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
 <div [hidden]="isLoading=='true'" style="margin:20px;">
     <div class="fl" style="width:100%">
-        <div class="col-md-3" style="margin-left:-15px"><h2>{{title}}</h2></div>
+        <div class="col-md-3" style="margin-left:-15px">
+            <h2>{{title}}</h2>
+        </div>
         <div class="col-md-5"></div>
-        <div class="col-md-4">
-            <button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10" style="margin-left:10px; margin-top:20px;">Reload</button>
+        <div class="col-md-4"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog"
+                class="k-primary fr margin10" style="margin-left:10px; margin-top:20px;">Reload</button>
             <kendo-dialog *ngIf="dateRangeInvalid" [minWidth]="250" [width]="450">
-                <p style="margin: 30px; text-align: center;">
-                    Please Check Dates. Log can be fetched for maximum 30 days...
-                </p>
-                <kendo-dialog-actions>
-                    <button kendoButton (click)="close()">OK</button>
-                </kendo-dialog-actions>
+                <p style="margin: 30px; text-align: center;">Please Check Dates. Log can be fetched for maximum 30
+                    days... </p>
+                <kendo-dialog-actions><button kendoButton (click)="close()">OK</button></kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="endDate"
-                              type="date" data-role="datepicker" role="combobox"
-                              calendarType="classic" style="width: 130px; margin-top: 20px;">
-            </kendo-datepicker>
+            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="endDate" type="date" data-role="datepicker"
+                role="combobox" calendarType="classic" style="width: 130px; margin-top: 20px;"></kendo-datepicker>
             <div class="fr margin10" style="margin-top: 25px;margin-left: 5px;margin-right: 5px;">-</div>
-            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="startDate"
-                              type="date" data-role="datepicker" role="combobox"
-                              calendarType="classic" style="width: 130px; margin-top: 20px;">
-            </kendo-datepicker>
-
+            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="startDate" type="date" data-role="datepicker"
+                role="combobox" calendarType="classic" style="width: 130px; margin-top: 20px;"></kendo-datepicker>
             <h5 class="fr" style="font-size: 16px; margin-top: 28px">Date Range:&nbsp;</h5>
-
         </div>
     </div>
-    <p style="font-size: 10px;">
-        The Log Viewer will show Log captured in temp folder.
-    </p>
-
+    <p style="font-size: 10px;">The Log Viewer will show Log captured in temp folder. </p>
     <div id="cacheContainer" resize-containers>
         <div id="cacheList" class="col-md-3" style="height:auto !important">
             <h5>Log Files </h5>
-
             <table class="tblCache" ui-auto="tblLog">
                 <tr>
                     <th class="text-left">File Name</th>
                     <th class="text-right">Created Date</th>
                 </tr>
-
                 <tr *ngFor="let data of opLogData | orderBy: 'creationDate':true">
-                    <td id="lbl{{data.fileName}}" title="{{data.fileName}}" style="width:250px"><a role="button" (click)='getDetailsOpaqueLog(data)'>{{data.fileName | slice : 0:40 }}</a></td>
-                    <td id="lbl{{data.creationDate}}" title="{{data.modifiedDate}}" style="width:200px" class="text-right">{{getDateFormat(data.creationDate) | date:'yyyy-MM-dd'}}</td>
+                    <td id="lbl{{data.fileName}}" title="{{data.fileName}}" style="width:250px"><a role="button"
+                            (click)='getDetailsOpaqueLog(data)'>{{data.fileName | slice : 0:40}}</a></td>
+                    <td id="lbl{{data.creationDate}}" title="{{data.modifiedDate}}" style="width:200px"
+                        class="text-right">{{getDateFormat(data.creationDate) | date:'yyyy-MM-dd'}}</td>
                 </tr>
             </table>
         </div>
         <div id="LogResult" class="col-md-9" style="height:calc(85vh - 56px); overflow:hidden">
-            <h5 style="margin-top: 0px;">Log Info <span style="font-size: 12px;" id="logDetails"></span></h5>
-            <textarea id="logViewResult" ui-auto="divResults" style="height:92%; width:90%;border: none;">{{logDetails}}</textarea>
+            <h5 style="margin-top: 0px;">Log Info <span style="font-size: 12px;" id="logDetails"></span></h5><textarea
+                id="logViewResult" ui-auto="divResults"
+                style="height:92%; width:90%;border: none;">{{logDetails}}</textarea>
         </div>
-
     </div>
 </div>
 <style>

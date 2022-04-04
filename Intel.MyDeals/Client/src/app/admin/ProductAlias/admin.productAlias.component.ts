@@ -5,21 +5,8 @@ import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Product_Alias_Map } from "./admin.productAlias.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
-import {
-    GridDataResult,
-    PageChangeEvent,
-    DataStateChangeEvent,
-    PageSizeItem,
-} from "@progress/kendo-angular-grid";
-import {
-    process,
-    State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
-} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
@@ -40,22 +27,22 @@ export class adminProductAliasComponent {
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
 
-    private isLoading: boolean = true;
-    private errorMsg: string = "";
-    private dataSource: any;
-    private gridOptions: any;
-    private allowCustom: boolean = true;
+    private isLoading = true;
+    private errorMsg = "";
+    private dataSource;
+    private gridOptions;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
-    public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
-    public product_map: any;
+    public gridResult = [];
+    public type = "numeric";
+    public info = true;
+    public product_map;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
-    private isNew: boolean; rowIndex: number; isCombExists: boolean = false;
-    isDialogVisible: boolean = false; cancelConfirm: boolean = false; isDelete: boolean = false; isOk: boolean = false;
+    private isNew: boolean; rowIndex: number; isCombExists = false;
+    isDialogVisible = false; cancelConfirm = false; isDelete = false; isOk = false;
 
     public state: State = {
         skip: 0,
@@ -88,7 +75,7 @@ export class adminProductAliasComponent {
 
     public gridData: GridDataResult;
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -101,15 +88,14 @@ export class adminProductAliasComponent {
     }
 
     loadProductAlias() {
-        let vm = this;
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.productAliasSvc.GetProductsFromAlias().subscribe(
+            this.productAliasSvc.GetProductsFromAlias().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -122,9 +108,9 @@ export class adminProductAliasComponent {
         }
     }
 
-    IsValidCombination(model: any, isNew: boolean) {
+    IsValidCombination(model, isNew: boolean) {
         let retCond = false;
-        let cond = this.gridResult.filter(x => x.PRD_ALS_NM == model.PRD_ALS_NM);
+        const cond = this.gridResult.filter(x => x.PRD_ALS_NM == model.PRD_ALS_NM);
         if (isNew && cond.length > 0) {
             this.errorMsg = "This Combination of Product Alias name already exists.";
             retCond = true;
@@ -157,7 +143,7 @@ export class adminProductAliasComponent {
             PRD_NM: new FormControl("", Validators.required),
             PRD_ALS_NM: new FormControl("", Validators.required),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
 
@@ -172,7 +158,7 @@ export class adminProductAliasComponent {
             PRD_NM: new FormControl(dataItem.PRD_NM, Validators.required),
             PRD_ALS_NM: new FormControl(dataItem.PRD_ALS_NM, Validators.required),
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -194,7 +180,7 @@ export class adminProductAliasComponent {
 
     deleteOperation() {
         this.productAliasSvc.DeleteProductAlias(this.product_map).subscribe(
-            result => {
+            () => {
                 this.loadProductAlias();
                 this.loggerSvc.success("Product Alias Deleted.");
                 /*sender.closeRow(rowIndex);*/
@@ -224,7 +210,7 @@ export class adminProductAliasComponent {
         if (isNew) {
             this.isLoading = true;
             this.productAliasSvc.CreateProductAlias(product_map).subscribe(
-                result => {
+                () => {
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
                     this.loggerSvc.success("Product Alias Mapping successfully added.");
@@ -241,7 +227,7 @@ export class adminProductAliasComponent {
         } else {
             this.isLoading = true;
             this.productAliasSvc.UpdateProductAlias(product_map).subscribe(
-                result => {
+                () => {
                     this.gridResult[rowIndex] = product_map;
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
@@ -279,13 +265,12 @@ export class adminProductAliasComponent {
         sender.closeRow(rowIndex);
     }
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadProductAlias()
+        this.loadProductAlias()
     }
 
     ngOnInit() {

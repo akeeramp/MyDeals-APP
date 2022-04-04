@@ -13,12 +13,11 @@ export class custEditor {
     public hotRegisterer = new HotTableRegisterer();
 
     initCustomEditor(){
-        let vm=this;
         this.CustomEditor = Handsontable.editors.BaseEditor.prototype.extend();
      
         this.CustomEditor.prototype.open = function () {
-           let anim=vm.hotRegisterer.getInstance(vm.id).getDataAtCell(this.row,this.col);
-           const dialogRef = vm.dialog.open(DialogOverviewExampleDialog, {
+           const anim=this.hotRegisterer.getInstance(this.id).getDataAtCell(this.row,this.col);
+           const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
              width: '500px',
              data: {name: "User", animal: anim},
            });
@@ -26,21 +25,12 @@ export class custEditor {
            dialogRef.afterClosed().subscribe(result => {
              if(result){
                console.log('The dialog was closed:: result::',result);
-               vm.hotRegisterer.getInstance(vm.id).setDataAtCell(this.row,this.col,result?.animal);
+               this.hotRegisterer.getInstance(this.id).setDataAtCell(this.row,this.col,result?.animal);
              }
             });
          };
          this.CustomEditor.prototype.getValue = function () {
-            return vm.hotRegisterer.getInstance(vm.id).getDataAtCell(this.row,this.col)
-          }
-          this.CustomEditor.prototype.setValue = function () {
-    
-          }
-          this.CustomEditor.prototype.focus = function () {
-            
-          }
-          this.CustomEditor.prototype.close = function () {
-            
+            return this.hotRegisterer.getInstance(this.id).getDataAtCell(this.row,this.col)
           }
     }
 }

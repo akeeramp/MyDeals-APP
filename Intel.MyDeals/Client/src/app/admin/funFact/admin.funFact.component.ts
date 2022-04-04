@@ -3,19 +3,15 @@ import { Component, ViewChild  } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { funFactService } from "./admin.funFact.service";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import * as _ from "underscore";
 import { Fun_Facts } from './admin.funFact.model';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
     process,
     State,
-    GroupDescriptor,
-    CompositeFilterDescriptor,
-    distinct,
-    filterBy,
+    distinct
 } from "@progress/kendo-data-query";
 
 @Component({
@@ -29,17 +25,17 @@ export class adminFunFactComponent {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    private isLoading: boolean = true;
-    private loadMessage: string = "Admin Customer Loading..";
-    private type: string = "numeric";
-    private info: boolean = true;
+    private isLoading = true;
+    private loadMessage = "Admin Customer Loading..";
+    private type = "numeric";
+    private info = true;
     private gridResult: Array<any>;
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
-    private isNew: boolean; rowIndex: number; isDataValid: boolean = false;
+    private isNew: boolean; rowIndex: number; isDataValid = false;
     @ViewChild('funFactTooltip', { static: false }) funFactTooltip: NgbTooltip;
     @ViewChild('headerTooltip', { static: false }) headerTooltip: NgbTooltip;
     @ViewChild('fontAwesomeTooltip', { static: false }) fontAwesomeTooltip: NgbTooltip;
@@ -111,7 +107,7 @@ export class adminFunFactComponent {
                 this.funFactSvc.updateFunFact(fun_facts).subscribe(
                     result => {
                         //getting the index value of the grid result by comparing the edited row FACT_SID to the grid result FACT_SID. so that we can update the user edited/modified data to proper grid result index
-                        let index = this.gridResult.findIndex(x => fun_facts.FACT_SID == x.FACT_SID);  
+                        const index = this.gridResult.findIndex(x => fun_facts.FACT_SID == x.FACT_SID);  
                         this.gridResult[index] = result[0];
                         this.gridData = process(this.gridResult, this.state);
                         this.isLoading = false;
@@ -195,7 +191,7 @@ export class adminFunFactComponent {
             FACT_SRC: new FormControl(""),
             ACTV_IND: new FormControl(false)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             // sending isNew as true for the toolTipvalidationMsgs function as it is add action
             this.toolTipvalidationMsgs(this.formGroup.controls,true);
@@ -214,7 +210,7 @@ export class adminFunFactComponent {
             FACT_SRC: new FormControl(dataItem.FACT_SRC),
             ACTV_IND: new FormControl(dataItem.ACTV_IND)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -247,7 +243,7 @@ export class adminFunFactComponent {
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
-};
+}
 
 angular.module("app").directive(
     "adminFunFact",

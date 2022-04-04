@@ -2,12 +2,8 @@
 import { logger } from "../../shared/logger/logger";
 import { iCostProductService } from "./admin.iCostProduct.service";
 import { Component } from "@angular/core";
-import { Routes, RouterModule } from '@angular/router'
 import { downgradeComponent } from "@angular/upgrade/static";
-import { pctQueryBuilderComponent } from "../iCostProducts/directive/pct.queryBuilder.component";
-import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 import {
     GridDataResult,
@@ -20,7 +16,6 @@ import {
     State,
     distinct,
 } from "@progress/kendo-data-query";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 
 @Component({
@@ -39,17 +34,17 @@ export class iCostProductsComponent {
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
 
-    public validationMessage: string = "";
-    public isRuleInvalid: boolean = false;
-    public manageRules: boolean = false;
-    public addNewRules: boolean = true;
-    public isButtonDisabled: boolean = true;
-    private isLoading: boolean = true;
-    private isDeleteClick: boolean = false;
-    private showQueryBuilder: boolean = false;
+    public validationMessage = "";
+    public isRuleInvalid = false;
+    public manageRules = false;
+    public addNewRules = true;
+    public isButtonDisabled = true;
+    private isLoading = true;
+    private isDeleteClick = false;
+    private showQueryBuilder = false;
     private deleteItemData: any = {};
     private editItemData: any = {};
-    private EditMode: boolean = false;
+    private EditMode = false;
 
     public gridResult: Array<any>;
     public gridData: GridDataResult;
@@ -85,13 +80,13 @@ export class iCostProductsComponent {
     ];
 
     public form = { 'isValid': false };
-    private gridPopulated: boolean = true;
+    private gridPopulated = true;
     private ProductType: Array<any> = [];
     private distinctProductType: any = [];
     private origDistinctProductType: any = [];
     private ProductVertical: any = [];
     private origProductVertical: any = [];
-    private selectedVertical: string = '';
+    private selectedVertical = '';
     private defaultVertical = { VERTICAL: "", VERTICAL_SID: "" };
     private costTestProductType = [{ 'name': 'L1' }, { 'name': 'L2' }];
     private conditionCriteria = [{ 'name': 'Include' }, { 'name': 'Exclude' }];
@@ -103,7 +98,7 @@ export class iCostProductsComponent {
         'PRD_CAT_NM_SID': null,
         'JSON_TXT': ''
     };
-    private showCommentbar: boolean = false;
+    private showCommentbar = false;
     private isAttributeLoaded: Promise<boolean> = Promise.resolve(false);
     public filter: any = { "group": { "operator": "AND", "rules": [] } };
     public leftValues: Array<any> = [];
@@ -120,16 +115,15 @@ export class iCostProductsComponent {
     }
 
     loadLegalClassification() {
-        let vm = this;
         if ((<any>window).usrRole != 'Legal' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            vm.iCostProductSvc.getProductCostTestRules()
+            this.iCostProductSvc.getProductCostTestRules()
                 .subscribe((result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
                     function (error) {
                         this.loggerSvc.error(
@@ -145,15 +139,15 @@ export class iCostProductsComponent {
             this.validationMessage = "Product Cost Test Rule exists for selected Product Type, Vertical and Level"
             this.isRuleInvalid = false;
             return;
-        };
+        }
 
         this.pctRule.JSON_TXT = JSON.stringify(this.filter);
-        let conditionOutput = this.computed(this.filter.group)
+        const conditionOutput = this.computed(this.filter.group)
         this.pctRule.CONDITION = conditionOutput == '()' ? "" : conditionOutput ;
 
         if (this.EditMode) {
             this.iCostProductSvc.updatePCTRule(this.pctRule)
-                .subscribe(result => {
+                .subscribe(() => {
                     this.loggerSvc.success("iCostProductsComponent::updatePCTRules::Update successful.");
                     this.cancel();
                     this.loadLegalClassification();
@@ -164,7 +158,7 @@ export class iCostProductsComponent {
         }
         else {
             this.iCostProductSvc.createPCTRules(this.pctRule)
-                .subscribe(result => {
+                .subscribe(() => {
                     this.loggerSvc.success("iCostProductsComponent::createPCTRules::Save successful.");
                     this.cancel();
                     this.loadLegalClassification();
@@ -176,14 +170,13 @@ export class iCostProductsComponent {
     }
 
     ruleExists() {
-        var count = 0;
+        let count = 0;
         this.isRuleInvalid = false
         this.gridResult.filter(rows => {
             if (rows.DEAL_PRD_TYPE_SID == this.pctRule.DEAL_PRD_TYPE_SID && rows.PRD_CAT_NM_SID == this.pctRule.PRD_CAT_NM_SID && rows.COST_TEST_TYPE == this.pctRule.COST_TEST_TYPE) {
                 count = count + 1;
             }
         })
-        let editMode = this.EditMode ? 1 : 0;
 
         if (count == 0 || (this.EditMode && this.pctRule.DEAL_PRD_TYPE_SID == this.editItemData.DEAL_PRD_TYPE_SID
                                          && this.pctRule.DEAL_PRD_TYPE_SID == this.editItemData.DEAL_PRD_TYPE_SID
@@ -199,10 +192,9 @@ export class iCostProductsComponent {
     }
 
     computed(group) {
-        var test = JSON.stringify(group);
-
+        let str, i;
         if (!group) return "";
-        for (var str = "(", i = 0; i < group.rules.length; i++) {
+        for (str = "(", i = 0; i < group.rules.length; i++) {
             i > 0 && (str += " " + group.operator + " ");
             str += group.rules[i].group ?
                 this.computed(group.rules[i].group) :
@@ -214,26 +206,13 @@ export class iCostProductsComponent {
 
     getFormatedValue(condition, value) {
         if (value == "") return "";
-        var formatedValue = "";
+        let formatedValue = "";
         if (condition == 'LIKE') {
             formatedValue = "\'%" + value + "%\'";
         } else {
             formatedValue = "\'" + value + "\'";
         }
         return formatedValue;
-    }
-
-    updateGroup(group: any, elem: any, i: any) {
-        let count = elem.id.split("_");
-        //identifying selectd group
-        if (
-            group[parseInt(count[i])].id &&
-            group[parseInt(count[i])].id == elem.id
-        ) {
-            group[parseInt(count[i])] = elem.item;
-        } else {
-            this.updateGroup(group[parseInt(count[i])].groups, elem, i++);
-        }
     }
 
     getProductTypeMapping() {
@@ -278,7 +257,7 @@ export class iCostProductsComponent {
     }
 
     dealPrdTypeNm() {
-        let found = this.ProductType.filter(obj => {
+        const found = this.ProductType.filter(obj => {
             if (obj.PRD_TYPE_SID == this.pctRule.DEAL_PRD_TYPE_SID) {
                 return obj.PRD_TYPE;
             }
@@ -293,7 +272,7 @@ export class iCostProductsComponent {
         this.showQueryBuilder = this.showCommentbar = Boolean(this.pctRule.DEAL_PRD_TYPE_SID && this.pctRule.PRD_CAT_NM_SID);
         this.form.isValid = Boolean(this.pctRule.DEAL_PRD_TYPE_SID
             && this.pctRule.PRD_CAT_NM_SID && this.gridPopulated);
-        let found = this.ProductType.filter(obj => {
+        const found = this.ProductType.filter(obj => {
             if (obj.VERTICAL_SID == this.pctRule.PRD_CAT_NM_SID) {
                 return obj.VERTICAL;
             }
@@ -310,7 +289,7 @@ export class iCostProductsComponent {
         }
         this.iCostProductSvc.getProductAttributeValues(verticalId)
             .subscribe(response => {
-                for (var i = 0; i < response.length; i++) {
+                for (let i = 0; i < response.length; i++) {
                     response[i]['idx'] = i;
                 }
                 this.leftValues = response;
@@ -318,12 +297,12 @@ export class iCostProductsComponent {
         });
     }
 
-    editHandler({ sender, rowIndex, dataItem }) {
+    editHandler() {
         this.manageRules = true; // hide the rules grid to replace with edit grid
         this.addNewRules = false;
     }
 
-    editClick({ sender, rowIndex, dataItem }) {
+    editClick({ dataItem }) {
         this.isButtonDisabled = false;
         Object.assign(this.editItemData, dataItem)
         Object.assign(this.deleteItemData, dataItem)
@@ -350,7 +329,7 @@ export class iCostProductsComponent {
         this.isLoading = true;
 
         this.iCostProductSvc.deletePCTRule(this.deleteItemData)
-            .subscribe(result => {
+            .subscribe(() => {
                 this.isButtonDisabled = true;
                 this.loggerSvc.success("iCostProductsComponent::removeHandler::Delete successful.");
                 this.loadLegalClassification();
@@ -392,8 +371,8 @@ export class iCostProductsComponent {
     }
 
     isSaveEnabled(element) {
-        for (let item of element.group.rules) {
-            if (!item.hasOwnProperty('group')) {
+        for (const item of element.group.rules) {
+            if (!(Object.hasOwnProperty.call(item,'group'))) {
                 let isFormComplete = Object.values(item).some(itemElem => (!itemElem || (itemElem.toString()).length == 0))
                 if (isFormComplete) {
                     isFormComplete = false;
@@ -409,13 +388,12 @@ export class iCostProductsComponent {
 
 
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadLegalClassification()
+        this.loadLegalClassification()
     }
 
     handleFilter(value, type) {

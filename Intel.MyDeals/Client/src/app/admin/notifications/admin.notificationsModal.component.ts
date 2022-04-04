@@ -1,6 +1,6 @@
 ﻿import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, Inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { notificationsService } from './admin.notifications.service';
 import { logger } from "../../shared/logger/logger";
@@ -25,10 +25,10 @@ export class notificationsModalDialog {
     public emailTable:any="<b>Loading...</b>";
 
     public markAsRead(dataItem) {
-        var ids = [dataItem.NLT_ID];
+        const ids = [dataItem.NLT_ID];
         // If unread mark as read
         if (!dataItem.IS_READ_IND) {
-            this.notificationsSvc.manageNotifications("UPDATE", true, ids).subscribe(response => {
+            this.notificationsSvc.manageNotifications("UPDATE", true, ids).subscribe(() => {
                 //to update the notification count on the notification icon
                 this.notificationsSvc.refreshUnreadCount();
             },
@@ -41,7 +41,7 @@ export class notificationsModalDialog {
 
     close(): void {
         this.dialogRef.close();
-    };
+    }
 
     loadEmailBody(dataItem) {
         this.notificationsSvc.getEmailBodyTemplateUI(dataItem.NLT_ID).subscribe(response => {

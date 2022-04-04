@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import {Component, ComponentFactoryResolver} from "@angular/core";
+import {Component} from "@angular/core";
 import {downgradeComponent} from "@angular/upgrade/static";
 import {LoadingSpinnerService} from "./loadingspinner.service";
 import {logger} from "../logger/logger";
@@ -11,8 +11,8 @@ import * as _ from "underscore";
     "Client/src/app/shared/loadingSpinner/loadingspinner.component.html",
 })
 export class LoadingSpinnerComponent {
-  private isLoading: boolean = true;
-  private dontAddTheseInRecents: string = "portal";
+  private isLoading = true;
+  private dontAddTheseInRecents = "portal";
   private recents: Array<any> = [];
   private distinctURL: Array<any> = [];
 
@@ -35,7 +35,7 @@ export class LoadingSpinnerComponent {
     );
   }
   setRecentURLs() {
-    let recentsUrls = localStorage.getItem("recentsURLs");
+    const recentsUrls = localStorage.getItem("recentsURLs");
     if (recentsUrls != null && recentsUrls != undefined) {
       let recentArray = recentsUrls.split(",");
       //check for the Url present in Array
@@ -51,7 +51,7 @@ export class LoadingSpinnerComponent {
     }
 
   }
-  ngOnInit() {}
+  
 }
 angular.module("app").directive(
   "appLoader",

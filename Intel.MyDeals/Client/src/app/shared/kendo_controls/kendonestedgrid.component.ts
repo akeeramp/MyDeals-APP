@@ -1,16 +1,13 @@
 import * as angular from 'angular';
-import { Input,Output, Component, OnInit,EventEmitter } from "@angular/core";
+import { Input, Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'nested-grid-directive',
     templateUrl:'Client/src/app/shared/kendo_controls/kendonestedgrid.component.html' 
 })
 export class nestedGridComponent  {
-    constructor() {
-
-   }
+    
     @Input() private group: any;
     @Input() private parent: any;
     @Input() private form: any;
@@ -50,8 +47,8 @@ export class nestedGridComponent  {
         parentGroup = group.rules;
         
         parentGroup.filter(data => {
-            if (data.hasOwnProperty("group") && data["group"]["isRemove"] == true) {
-                let index = parentGroup.findIndex(x => x === data);
+            if (Object.hasOwnProperty.call(data,"group") && data["group"]["isRemove"] == true) {
+                const index = parentGroup.findIndex(x => x === data);
                 //let index = group.rules.indexOf(data);
                 group.rules.splice(index, 1);
             }

@@ -2,8 +2,7 @@
     <form name="qb.form" novalidate>
         <div class="form-inline">
             <kendo-dropdownlist [(ngModel)]="group.operator" [data]="operators" [ngModelOptions]="{standalone: true}" class="form-control input-sm"
-                                style="width: 100px; height: auto"
-                                textField="name" valueField="name" [valuePrimitive]="true">
+                                style="width: 100px; height: auto" textField="name" valueField="name" [valuePrimitive]="true">
             </kendo-dropdownlist>
             <button style="margin-left: 5px" (click)="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
             <button style="margin-left: 5px" (click)="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>

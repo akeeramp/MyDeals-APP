@@ -19,7 +19,7 @@ export class contractStatusBoardComponent implements OnInit {
 
     private gridData: GridDataResult;
     private gridResult: Array<any>;
-    private isLoaded: boolean = false;
+    private isLoaded = false;
     private sbData: Array<any> = [];
     private sbDataChildren: Array<any> = [];
     private CAN_VIEW_COST_TEST: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -83,13 +83,13 @@ export class contractStatusBoardComponent implements OnInit {
         let next = "";
         for (let i = 0; i < data.length; i++) {
             //vaet next = "";r results = ["Pass", "Fail", "InComplete", "NA"];
-            let titleCd = "TITLE";
+            const titleCd = "TITLE";
 
             if (data[i]["dc_type"] === "CNTRCT") {
                 next = "PRC_ST";
                 defStage = "InComplete";
             }
-            var stg = !data[i]["WF_STG_CD"] ? defStage : data[i]["WF_STG_CD"];
+            const stg = !data[i]["WF_STG_CD"] ? defStage : data[i]["WF_STG_CD"];
             ret.push({
                 "id": data[i]["DC_ID"],
                 "name": data[i][titleCd],

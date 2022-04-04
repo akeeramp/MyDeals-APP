@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable, Inject } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
 
@@ -10,33 +8,33 @@ import 'rxjs/add/operator/toPromise';
 })
 
 export class consumptionCountryService {
-    public apiBaseUrl: string = "api/ConsumptionCountry/";
-    public ctryNmDropdownUrl: string = "api/PrimeCustomers/";
-    public dropdownUrl: string = "api/Dropdown/";
+    public apiBaseUrl = "api/ConsumptionCountry/";
+    public ctryNmDropdownUrl = "api/PrimeCustomers/";
+    public dropdownUrl = "api/Dropdown/";
 
     constructor(private httpClient: HttpClient) {
 
     }
     public getConsumptionCountry(): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'GetConsumptionCountry/false';
+        const apiUrl: string = this.apiBaseUrl + 'GetConsumptionCountry/false';
         return this.httpClient.get(apiUrl);
     }
     public getCountryList(): Observable<any> {
-        let apiUrl: string = this.ctryNmDropdownUrl + 'GetCountries';
+        const apiUrl: string = this.ctryNmDropdownUrl + 'GetCountries';
         return this.httpClient.get(apiUrl);
     }
 
     public getDropdown(): Observable<any> {
-        let apiUrl: string = this.dropdownUrl + 'GetGeosDropdowns';
+        const apiUrl: string = this.dropdownUrl + 'GetGeosDropdowns';
         return this.httpClient.get(apiUrl);
     }
 
     public updateConsumptionCountry(dropdown): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'UpdateConsumptionCountry';
+        const apiUrl: string = this.apiBaseUrl + 'UpdateConsumptionCountry';
         return this.httpClient.put(apiUrl, dropdown);
     }
     public insertConsumptionCountry(dropdown): Observable<any> {
-        let apiUrl: string = this.apiBaseUrl + 'InsertConsumptionCountry';
+        const apiUrl: string = this.apiBaseUrl + 'InsertConsumptionCountry';
         return this.httpClient.post(apiUrl, dropdown);
     }
 

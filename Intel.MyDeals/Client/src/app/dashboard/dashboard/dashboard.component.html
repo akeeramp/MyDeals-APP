@@ -1,7 +1,6 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-
 <div class="overFlowWidget">
     <div class="container-fluid ">
         <div class="row" style="height: 20px;">
@@ -55,7 +54,7 @@
                                 <div class="col-md-6">
                                     <button (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="">Remove</button>
                                     <button [hidden]="!item.canRefresh" class="" (click)="refreshWidget(item)">Refresh</button>
-                                    <button [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class=""><i class="intelicon-settings-solid"></i><!---Setting--></button>
+                                    <button [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class=""><i class="intelicon-settings-solid"></i></button>
                                 </div>
                             </div>
                             <div class="row" style="height:100%; width:100%">

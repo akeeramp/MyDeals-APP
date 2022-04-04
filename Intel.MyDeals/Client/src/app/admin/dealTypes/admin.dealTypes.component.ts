@@ -1,13 +1,12 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
 import { dealTypesService } from "./admin.dealTypes.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
-import { GridDataResult, PageChangeEvent, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, GroupDescriptor, CompositeFilterDescriptor, distinct, filterBy } from "@progress/kendo-data-query";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
+import { FormGroup } from "@angular/forms";
 
 @Component({
     selector: "adminDealTypes",
@@ -20,18 +19,18 @@ export class adminDealTypesComponent {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    private isLoading: boolean = true;
-    private errorMsg: string = "";
-    private dataSource: any;
-    private gridOptions: any;
-    private allowCustom: boolean = true;
+    private isLoading = true;
+    private errorMsg = "";
+    private dataSource;
+    private gridOptions;
+    private allowCustom = true;
     private color: ThemePalette = "primary";
 
-    public gridResult: Array<any>;
-    public type: string = "numeric";
-    public info: boolean = true;
+    public gridResult = [];
+    public type = "numeric";
+    public info = true;
     public formGroup: FormGroup;
-    public isFormChange: boolean = false;
+    public isFormChange = false;
     private editedRowIndex: number;
 
     public state: State = {
@@ -65,7 +64,7 @@ export class adminDealTypesComponent {
 
     public gridData: GridDataResult;
 
-    distinctPrimitive(fieldName: string): any {
+    distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
@@ -78,15 +77,14 @@ export class adminDealTypesComponent {
     }
 
     loadDealTypes() {
-        let vm = this;
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            vm.dealTypesSvc.getDealTypes().subscribe(
+            this.dealTypesSvc.getDealTypes().subscribe(
                 (result: Array<any>) => {
-                    vm.gridResult = result;
-                    vm.gridData = process(vm.gridResult, this.state);
-                    vm.isLoading = false;
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error(
@@ -105,13 +103,12 @@ export class adminDealTypesComponent {
     }
 
     refreshGrid() {
-        let vm = this;
-        vm.isLoading = true;
-        vm.state.filter = {
+        this.isLoading = true;
+        this.state.filter = {
             logic: "and",
             filters: [],
         };
-        vm.loadDealTypes()
+        this.loadDealTypes()
     }
 
     ngOnInit() {

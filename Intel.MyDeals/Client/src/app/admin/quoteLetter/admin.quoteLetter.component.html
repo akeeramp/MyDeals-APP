@@ -2,23 +2,14 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-
-<!-- using for Angular spinner while page load -->
-<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false"
-          [message]="loadMessage">
-</ccLoader>
-
+<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
 <div class="form-horizontal" [hidden]="isLoading=='true'" style="margin: 20px;">
-
-    <div class="section">
-        <label>Template: </label>
+    <div class="section"><label>Template: </label>
         <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems"
-                            textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate"
-                            (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded">
-        </kendo-dropdownlist>
+            textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate"
+            (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded"></kendo-dropdownlist>
     </div>
-    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate == null}">
-        <label>Upper Content Block </label>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label>Upper Content Block </label>
         <kendo-editor style="width: 1390px" [(ngModel)]="headerInfo">
             <kendo-toolbar>
                 <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
@@ -45,8 +36,7 @@
             </kendo-toolbar>
         </kendo-editor>
     </div>
-    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate == null}">
-        <label>Lower Content Block</label>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label>Lower Content Block</label>
         <kendo-editor style="width: 1390px" [(ngModel)]="bodyInfo">
             <kendo-toolbar>
                 <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
@@ -73,9 +63,8 @@
             </kendo-toolbar>
         </kendo-editor>
     </div>
-
-    <div class="pull-right section">
-        <button class="btn btn-default btn-lg" [disabled]="selectedTemplate == null" (click)="onGeneratePreviewClick()">Generate Preview</button>
-        <button class="btn btn-primary btn-lg" [disabled]="selectedTemplate == null" (click)="onSaveChangesClick($event)" style="margin-left:5px">Save Changes</button>
-    </div>
+    <div class="pull-right section"><button class="btn btn-default btn-lg" [disabled]="selectedTemplate==null"
+            (click)="onGeneratePreviewClick()">Generate Preview</button><button class="btn btn-primary btn-lg"
+            [disabled]="selectedTemplate==null" (click)="onSaveChangesClick($event)" style="margin-left:5px">Save
+            Changes</button></div>
 </div>

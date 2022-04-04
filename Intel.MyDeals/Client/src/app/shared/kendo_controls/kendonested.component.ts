@@ -1,16 +1,13 @@
 import * as angular from 'angular';
-import { Input,Output, Component, OnInit,EventEmitter } from "@angular/core";
+import { Input,Output, Component,EventEmitter } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'nested-loader',
   templateUrl:'Client/src/app/shared/kendo_controls/kendonested.component.html' 
 })
 export class nestedLoaderComponent  {
-  constructor() {
-
-   }
+  
    @Input() private items: any;
    @Output() getId = new EventEmitter<any>();
    

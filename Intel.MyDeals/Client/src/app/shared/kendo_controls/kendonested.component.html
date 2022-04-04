@@ -3,26 +3,19 @@
         <div class="col-sm">
             <p>{{item.id}} </p>
         </div>
-        <div class="col-sm">
-            <button (click)="onAddCond(item.id,ind)">Add Cond</button>
-        </div>
-        <div class="col-sm">
-            <button (click)="onAdd(item.id,ind)">Add Group</button>
-        </div>
-        <div class="col-sm">
-            <button (click)="onRemove(ind)">Remove Grop</button>
-        </div>
+        <div class="col-sm"><button (click)="onAddCond(item.id,ind)">Add Cond</button></div>
+        <div class="col-sm"><button (click)="onAdd(item.id,ind)">Add Group</button></div>
+        <div class="col-sm"><button (click)="onRemove(ind)">Remove Grop</button></div>
     </div>
-    <div class="row" *ngFor="let itm of item.conditions;let in=index" style="border: solid green 1px;width:98%;margin: 5px;">
+    <div class="row" *ngFor="let itm of item.conditions;let in=index"
+        style="border: solid green 1px;width:98%;margin: 5px;">
         <div class="col-sm">
             <p>{{itm.name}} </p>
         </div>
         <div class="col-sm">
             <p>{{itm.operator}} </p>
         </div>
-        <div class="col-sm">
-            <button (click)="onRemoveCond(ind,in)">Remove Cond</button>
-        </div>
+        <div class="col-sm"><button (click)="onRemoveCond(ind,in)">Remove Cond</button></div>
     </div>
     <div *ngIf="item.groups?.length>0" style="width:98%;margin: 5px;">
         <nested-loader [items]="item" (getId)="getElem($event)"></nested-loader>

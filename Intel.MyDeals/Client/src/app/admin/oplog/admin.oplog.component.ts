@@ -3,7 +3,6 @@ import { logger } from "../../shared/logger/logger";
 import { opLogService } from "./admin.oplog.service";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import * as _ from "underscore";
 
 @Component({
     selector: "opLog",
@@ -17,20 +16,20 @@ export class OpLogComponent {
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
 
-    private title: string = "Opaque Log Watcher";
+    private title = "Opaque Log Watcher";
     public opLogData: Array<any> = [];
-    public logDetails: string = '';
+    public logDetails = '';
     public stDate: Date = new Date();
     public enDate: Date = new Date();
     private test: number = this.enDate.setDate(this.enDate.getDate() - 30);
     private startDate: Date = this.enDate;
     private endDate: Date = this.stDate;
-    private dateRangeInvalid: boolean = false;
+    private dateRangeInvalid = false;
 
     //created for Angular loader
-    public isLoading: string = 'true';
-    public loadMessage: string = "Log Viewer is Loading ...";
-    public moduleName: string = "Log Viewer Dashboard";
+    public isLoading = 'true';
+    public loadMessage = "Log Viewer is Loading ...";
+    public moduleName = "Log Viewer Dashboard";
 
 
     getDateFormat(timestamp) {
@@ -38,14 +37,13 @@ export class OpLogComponent {
     }
 
     getOpaqueLog(startDate, endDate) {
-        let vm = this;
-        vm.isLoading = 'false';
+        this.isLoading = 'false';
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
         else {
             
-            let logDate = {
+            const logDate = {
                 'startDate': startDate,
                 'endDate': endDate
             }
@@ -63,7 +61,7 @@ export class OpLogComponent {
         this.logDetails = '';
         this.opLogSvc.getDetailsOpaqueLog(data.fileName.substring(0, data.fileName.length - 4))
             .subscribe( response => {
-                let entityMap = {
+                const entityMap = {
                     "&": "&amp;",
                     "<": "&lt;",
                     ">": "&gt;",
@@ -84,10 +82,10 @@ export class OpLogComponent {
         this.getOpaqueLog(this.startDate, this.endDate);
     }
 
-    refreshAllLog (mode) {
-        let one_day = 1000 * 60 * 60 * 24;
-        let dateDifference = <any> new Date(this.endDate) - <any> new Date(this.startDate);
-        let noOfDays = dateDifference / one_day;
+    refreshAllLog () {
+        const one_day = 1000 * 60 * 60 * 24;
+        const dateDifference = <any> new Date(this.endDate) - <any> new Date(this.startDate);
+        const noOfDays = dateDifference / one_day;
         this.dateRangeInvalid = false;
 
         if (noOfDays <= 30 && noOfDays > 0) {
