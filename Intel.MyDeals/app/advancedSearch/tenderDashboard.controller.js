@@ -63,14 +63,16 @@
             });
         }
 
-        templatesService.readTemplates()
-            .then(function (response) {
-                $scope.templates = response.data;
-                $scope.addCustomToTemplates();
-            })
-            .catch(function (data) {
-                console.log('Template Retrieval Failed');
-            });
+        if ($scope.templates.length == 0) {
+            templatesService.readTemplates()
+                .then(function (response) {
+                    $scope.templates = response.data;
+                    $scope.addCustomToTemplates();
+                })
+                .catch(function (data) {
+                    console.log('Template Retrieval Failed');
+                });
+        }
 
 
         $scope.showSearchFilters = true;
@@ -1352,28 +1354,20 @@
                             "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
                         };
 
-                        $scope.wipOptions.columns = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
-                        for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
-                            if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
-                                $scope.wipOptions.columns.splice(i, 1);
-                            }
-                            //if (opGridTemplate.requiredForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
-                            //    break;
-                            //    $scope.wipOptions.columns.splice(i, 1);
-                            //}
+                        if ($scope.templates != undefined && $scope.templates.ModelTemplates != undefined && $scope.templates.ModelTemplates.WIP_DEAL != undefined) {
+                            loadWipOption();
                         }
-
-                        $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);
-
-                        opGridTemplate.hideForTender.forEach(function (x) {
-                            delete $scope.wipOptions.model.fields[x];
-                        });
-
-                        $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
-                        $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
-
-                        $scope.wipOptions.groups = $scope.wipOptions.default.groups
-                        $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
+                        else {
+                            templatesService.readTemplates()
+                                .then(function (response) {
+                                    $scope.templates = response.data;
+                                    $scope.addCustomToTemplates();
+                                    loadWipOption();
+                                })
+                                .catch(function (data) {
+                                    console.log('Template Retrieval Failed');
+                                });
+                        }
 
                     }).catch(function (data) {
                         $scope.setBusy("", "");
@@ -1385,6 +1379,31 @@
                 kendo.alert("Please specify a Tender Deal Type");
             }
         });
+
+        function loadWipOption() {
+            $scope.wipOptions.columns = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].columns);
+            for (var i = $scope.wipOptions.columns.length - 1; i >= 0; i--) {
+                if (opGridTemplate.hideForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                    $scope.wipOptions.columns.splice(i, 1);
+                }
+                //if (opGridTemplate.requiredForTender.indexOf($scope.wipOptions.columns[i].field) !== -1) {
+                //    break;
+                //    $scope.wipOptions.columns.splice(i, 1);
+                //}
+            }
+
+            $scope.wipOptions.model = angular.copy($scope.templates.ModelTemplates.WIP_DEAL[$scope.dealType].model);
+
+            opGridTemplate.hideForTender.forEach(function (x) {
+                delete $scope.wipOptions.model.fields[x];
+            });
+
+            $scope.wipOptions.default.groups = angular.copy(opGridTemplate.groups[$scope.dealType]);
+            $scope.wipOptions.default.groupColumns = angular.copy(opGridTemplate.templates[$scope.dealType]);
+
+            $scope.wipOptions.groups = $scope.wipOptions.default.groups
+            $scope.wipOptions.groupColumns = $scope.wipOptions.default.groupColumns;
+        }
 
         $scope.$on('search-rules-updated', function (event, args) {
             $scope.$broadcast('reload-search-rules', args);
