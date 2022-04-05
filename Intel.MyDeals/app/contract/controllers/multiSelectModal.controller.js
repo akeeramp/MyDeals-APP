@@ -13,8 +13,8 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     var geo = "GEO_COMBINED";
     var mrktSeg = "MRKT_SEG";
     var corp = "CUST_ACCNT_DIV";
-    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG","DEAL_SOLD_TO_ID"];
-    var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO","DEAL_SOLD_TO_ID"];
+    var consumptionFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DEAL_SOLD_TO_ID"];
+    var filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO", "DEAL_SOLD_TO_ID"];
 
     $ctrl.multiSelectPopUpModal = items;
     $ctrl.popupResult = [];
@@ -26,7 +26,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
     $ctrl.isCorp = (colName === corp);
     $ctrl.isGeoBlend = isBlendedGeo;
     $ctrl.isEmptyList = false; // Set to false for non-consumption by default - proper set in $uibModalInstance.rendered.then for consumption
-    $ctrl.isFilterEnabled = filterableFields.indexOf(colName) > -1;    
+    $ctrl.isFilterEnabled = filterableFields.indexOf(colName) > -1;
 
     $ctrl.EnterPressed = function (event) {
         // KeyCode 13 is 'Enter'
@@ -91,27 +91,26 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
         $('#MultiSelectSelections input[type="checkbox"]:checked').click();
     }
 
-    $uibModalInstance.rendered.then(function ()
-    {
-        if (consumptionFields.contains($ctrl.colName))
-        {
+    $uibModalInstance.rendered.then(function () {
+        if (consumptionFields.contains($ctrl.colName)) {
             $ctrl.msg = false;
             var multiSelectData = $("#MultiSelectSelections").data("kendoTreeView");
-                                       
-            if (multiSelectData !== undefined && multiSelectData.dataSource != undefined)
-            {
-                    $ctrl.isEmptyList = (multiSelectData.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
-                    //var chkSoldToID = multiSelectData.$angular_scope.opLookupUrl; //check for Sold_To_Id Field                                 
-                    //if (chkSoldToID.contains("/api/Dropdown/GetSoldToIds")) {
-                    var chkSoldToID = multiSelectData.$angular_scope.opLookupText; //check for Sold_To_Id Field  
-                    if (chkSoldToID =="subAtrbCd") {
-                        $ctrl.msg = true
-                    }
-                    else
-                    {
-                        $ctrl.msg = false;
-                    }
-                                 
+
+            if (multiSelectData !== undefined && multiSelectData.dataSource != undefined) {
+                $ctrl.isEmptyList = (multiSelectData.dataSource._data.length == 0); // Post Admin Message if dropdown length = 0
+                //var chkSoldToID = multiSelectData.$angular_scope.opLookupUrl; //check for Sold_To_Id Field                                 
+                //if (chkSoldToID.contains("/api/Dropdown/GetSoldToIds")) {
+                var chkSoldToID = multiSelectData.$angular_scope.opLookupText; //check for Sold_To_Id Field  
+                if (chkSoldToID == "subAtrbCd") {
+                    $ctrl.msg = true
+                }
+                else {
+                    $ctrl.msg = false;
+                }
+                //set all items as selected for Sold To ID column
+                if ($ctrl.colName == "DEAL_SOLD_TO_ID" && $ctrl.popupResult.MultiSelectSelections[0] == ['']) {
+                    $('#MultiSelectSelections input[type="checkbox"]:not(:checked)').click();
+                }
             }
         }
     });
