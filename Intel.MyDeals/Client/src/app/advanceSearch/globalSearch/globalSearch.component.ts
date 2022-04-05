@@ -26,7 +26,6 @@ export class GlobalSearchComponent  {
         //opening kendo window
          this.setWindowWidth();
          this.windowOpened=true;
-         
       }
       if(event.keyCode === 13 && this.searchText == ""){
         this.searchDialogVisible=true;
@@ -48,8 +47,11 @@ export class GlobalSearchComponent  {
          //opening kendo window
         this.opType=opType;
         this.setWindowWidth();
-        this.GlobalSearchResults.onOpTypeChange(this.opType);
-        this.windowOpened=true;
+        //this condition is required since this should work only id kendo window is open 
+        if(this.GlobalSearchResults){
+          this.GlobalSearchResults.onOpTypeChange(this.opType);
+          this.windowOpened=true;
+        }
      }
     }
     windowClose() {

@@ -1,8 +1,9 @@
 import * as angular from "angular";
-import {Component,EventEmitter,Input, Output} from "@angular/core";
+import {Component,ElementRef,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
 import {downgradeComponent} from "@angular/upgrade/static";
 import {globalSearchResultsService} from "./globalSearchResults.service";
 import {logger} from "../../shared/logger/logger";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "global-search-results-angular",
@@ -11,7 +12,7 @@ import {logger} from "../../shared/logger/logger";
 })
 
 export class GlobalSearchResultsComponent  {
-    constructor(protected globalSearchSVC:globalSearchResultsService,private loggerSvc:logger) {
+    constructor(protected globalSearchSVC:globalSearchResultsService,private loggerSvc:logger,private ref:ChangeDetectorRef) {
     
     }
     //these are input coming from gloablsearch component
@@ -54,8 +55,10 @@ export class GlobalSearchResultsComponent  {
       this.objTypes[type].loading=true;
       this.objTypes[type].viewMore=false;
       this.globalSearchSVC.getObjectType(this.searchText,this.resultTake,type).subscribe(Result =>{
-        this.objTypes[type].result=Result;
-        this.objTypes[type].loading=false;
+          this.objTypes[type].result=Result;
+          this.objTypes[type].loading=false;
+          //this method is added for UI to render proper. without this line the UI databinding is not happening from dashboard search screen but it will work fine for header search
+          this.ref.detectChanges();
         if(this.objTypes[type].result.length==5){
           this.objTypes[type].viewMore=true;
         }
@@ -127,8 +130,9 @@ export class GlobalSearchResultsComponent  {
       this.getObjectTypeResult(opType);
     }
     ngOnInit() {
-      this.getObjectTypeResult(this.opType);
-  }
+        this.getObjectTypeResult(this.opType);
+   }
+   
 }
 
 angular.module("app").directive(

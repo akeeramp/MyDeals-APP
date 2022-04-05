@@ -5,7 +5,7 @@ import { DashboardWidgetComponent } from "../dashboard/dashboardWidget.component
 import { NewContractWidgetComponent } from "../dashboard/newContractWidget.component";
 import { openContractWidgetComponent } from "../dashboard/opencontract/openContractWidget.component";
 import { RecentsUrlWidgetComponent } from "../dashboard/recentURL/recentsUrlWidget.component";
-import { SearchContractWidgetComponent } from "../dashboard/searchContractWidget.component";
+import { SearchContractWidgetComponent } from "../dashboard/searchContract/searchContractWidget.component";
 import { widgetSettingsComponent } from '../dashboard/widgetSettings/widgetSettings.component';
 import {DealDeskWidgetComponent} from  "../dashboard/dealDeskWidget/dealDeskWidget.component"
 

@@ -790,8 +790,8 @@
     <Content Include="Client\src\app\advanceSearch\globalSearchResults.directive.html" />
 	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.css" />
 	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.html" />
-	<Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.ts" />
-	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.ts" />
+	<TypeScriptCompile Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.ts" />
+	<TypeScriptCompile Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.ts" />
 	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.css" />
 	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.html" />
 	<Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.service.ts" />
@@ -824,6 +824,8 @@
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.css" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.html" />
     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.html" />
+	<Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.css" />
+    <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
@@ -2214,7 +2216,7 @@
     <TypeScriptCompile Include="Client\src\app\dashboard\newContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\opencontract\openContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\dashboard\searchContractWidget.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\widget.config.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />

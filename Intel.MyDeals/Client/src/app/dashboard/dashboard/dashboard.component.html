@@ -69,3 +69,13 @@
         </div>
     </div>
 </div>
+<kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+    <kendo-window-titlebar>
+        <div class="k-window-title">Search Results </div><button kendoWindowCloseAction></button>
+    </kendo-window-titlebar>
+    <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
+</kendo-window>
+<kendo-dialog *ngIf="searchDialogVisible" (close)="closeDialog()" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Please enter one of the following:<br /><br />1) Contract / Pricing Strategy / Pricing Table Name or Number <br />2) Deal Number. </p>
+    <kendo-dialog-actions><button kendoButton (click)="closeDialog()">OK</button></kendo-dialog-actions>
+</kendo-dialog>
