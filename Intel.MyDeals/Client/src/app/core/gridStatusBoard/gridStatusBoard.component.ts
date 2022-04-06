@@ -228,16 +228,19 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         dataItem.IS_FAVORITE = !dataItem.IS_FAVORITE;
 
         if (!dataItem.IS_FAVORITE) {
-            delete this.favContractsMap[dataItem.CNTRCT_OBJ_SID];
+            const favIdIndex = this.favContractsMap.indexOf(dataItem.CNTRCT_OBJ_SID);
+            if (favIdIndex !== -1) {
+                this.favContractsMap.splice(favIdIndex, 1);
+            }
             this.favCount--;
             dataItem.IS_FAVORITE = false;
-            if (this.activeFilter === "Favorites")
-                this.clkFilter("fltr_Favorites");
             this.gridresultFavorite.forEach((value, index) => {
                 if (value.CNTRCT_OBJ_SID == dataItem.CNTRCT_OBJ_SID)
                     this.gridresultFavorite.splice(index, 1);
             });
-            this.contractDs = process(this.gridresultFavorite, this.state);
+            if (this.activeFilter === "Favorites"){
+                this.clkFilter("fltr_Favorites");
+            } 
         } else {
             this.favContractsMap.push(dataItem.CNTRCT_OBJ_SID);
             dataItem.IS_FAVORITE = true;
