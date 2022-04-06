@@ -179,8 +179,8 @@ export class iCostProductsComponent {
         })
 
         if (count == 0 || (this.EditMode && this.pctRule.DEAL_PRD_TYPE_SID == this.editItemData.DEAL_PRD_TYPE_SID
-                                         && this.pctRule.DEAL_PRD_TYPE_SID == this.editItemData.DEAL_PRD_TYPE_SID
-                                         && this.pctRule.DEAL_PRD_TYPE_SID == this.editItemData.DEAL_PRD_TYPE_SID))
+                                         && this.pctRule.PRD_CAT_NM_SID == this.editItemData.PRD_CAT_NM_SID
+                                         && this.pctRule.COST_TEST_TYPE == this.editItemData.COST_TEST_TYPE))
         {
             this.isRuleInvalid = false;
         }

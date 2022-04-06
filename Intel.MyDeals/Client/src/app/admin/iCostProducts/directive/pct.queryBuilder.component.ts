@@ -72,6 +72,8 @@ export class pctQueryBuilderComponent {
     }
 
     resetRightValues(rule) {
+        /*On expanding dropdown, resetting attrValueList based on attribute selected on left hand side. 
+         * It ensures each dropdown has value associated to it's left attribute value */
         this.getRightValues(rule);
     }
 
@@ -115,6 +117,10 @@ export class pctQueryBuilderComponent {
 
     attrListChange(rule) {
         rule.data = '';
+    }
+
+    ngAfterViewChecked() {
+        this.attrValueList = (this.attrValueList).slice(0, 20)
     }
 
     ngOnInit() {

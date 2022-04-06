@@ -31,7 +31,7 @@
                                         <input name="value" type="text" [(ngModel)]="rule.data" [required]="true" placeholder="Enter the values" class="qb-field-core form-control input-sm" />
                                     </span>
                                     <span *ngSwitchDefault>
-                                        <kendo-combobox id="directiveDropdown" [(ngModel)]="rule.data" [required]="true" [filterable]="true" [data]="attrValueList | slice:0:20" [ngModelOptions]="{standalone: true}" class="qb-field-core"
+                                        <kendo-combobox id="directiveDropdown" [(ngModel)]="rule.data" [required]="true" [filterable]="true" [data]="attrValueList" [ngModelOptions]="{standalone: true}" class="qb-field-core"
                                                         title="Choose a value" placeholder="Select a value" (open)="resetRightValues(rule)"
                                                         [clearButton]="false" [disabled]="!rule.criteria"
                                                         style="width: 200px; height: auto" textField="VALUE" valueField="VALUE" [valuePrimitive]="true"
