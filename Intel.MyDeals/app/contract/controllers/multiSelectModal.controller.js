@@ -107,10 +107,10 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, mrktSegMultiSelectServi
                 else {
                     $ctrl.msg = false;
                 }
-                //set all items as selected for Sold To ID column
-                if ($ctrl.colName == "DEAL_SOLD_TO_ID" && $ctrl.popupResult.MultiSelectSelections[0] == ['']) {
-                    $('#MultiSelectSelections input[type="checkbox"]:not(:checked)').click();
-                }
+                //set all items as selected for Sold To ID column (Removed since this forces an auto selection only when field is empty and user edits - not restricted to FE deals)
+                //if ($ctrl.colName == "DEAL_SOLD_TO_ID" && $ctrl.popupResult.MultiSelectSelections[0] == ['']) {
+                //    $('#MultiSelectSelections input[type="checkbox"]:not(:checked)').click();
+                //}
             }
         }
     });

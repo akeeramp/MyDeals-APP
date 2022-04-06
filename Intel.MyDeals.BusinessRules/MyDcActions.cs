@@ -1662,6 +1662,29 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ForceSelectSoldTos(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; 
+            string selectedDivs = r.Dc.GetDataElementValue(AttributeCodes.CUST_ACCNT_DIV);
+            IOpDataElement deSoldTos = r.Dc.GetDataElement(AttributeCodes.DEAL_SOLD_TO_ID);
+            string programPaymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT); // For checking FE deals only via safety breakout below
+
+            // If no customer or divisions are selected, or is not a new deal, or this is not a FE deal, bail out.
+            if (custMbrSid == 0 || selectedDivs == "" || deSoldTos == null || deSoldTos.DcID > 0 || programPaymentType == "Backend") return; 
+
+            string[] selectedDivsArry = selectedDivs.Split('/');
+            List<string> validSoldTos = new DataCollectionsDataLib().GetSoldToIdList().Where(st => st.CUST_NM_SID == custMbrSid && selectedDivsArry.Contains(st.CUST_DIV_NM) && 
+                st.ACTV_IND).Select(st => st.SOLD_TO_ID).ToList(); 
+
+            if (deSoldTos.AtrbValue.ToString() == "") // If this is a new item and the user didn't set a value, force it to select all.
+            {
+                deSoldTos.AtrbValue = String.Join(",", validSoldTos); // Sold to list is comma concatonated string.
+            }
+        }
+
         public static void CheckTenderConsumption(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

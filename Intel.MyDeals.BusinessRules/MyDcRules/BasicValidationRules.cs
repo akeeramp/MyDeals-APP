@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
@@ -640,6 +641,16 @@ namespace Intel.MyDeals.BusinessRules
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
+                    Title="Force New Frontend with Divisions to select all Sold-To values",
+                    ActionRule = MyDcActions.ForceSelectSoldTos,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()
+                        && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
                 },
 
                 new MyOpRule
