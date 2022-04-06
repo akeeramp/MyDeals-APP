@@ -3142,7 +3142,7 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-    public static void ValidateVistexKITPayoutBasedOn(params object[] args)
+        public static void ValidateVistexKITPayoutBasedOn(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
@@ -3157,6 +3157,19 @@ namespace Intel.MyDeals.BusinessRules
             if (payoutBasedOn == "BILLINGS" && cust.VISTEX_CUST_FLAG)
             {
                 dePayoutValue.AddMessage("Billings based KIT cannot be created for Vistex Customer");
+            }
+        }
+
+        public static void DefaultResetPeroidValue(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement resetOnPeriod = r.Dc.GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD);
+
+            if (resetOnPeriod != null && resetOnPeriod.AtrbValue.ToString() != "Yes")
+            {
+                resetOnPeriod.AtrbValue = "Yes";
             }
         }
 

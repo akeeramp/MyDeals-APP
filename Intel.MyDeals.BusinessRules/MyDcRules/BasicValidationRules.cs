@@ -868,6 +868,15 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title = "'Reset Per Period' should default to 'Yes' for Revteir and Density Pricing Strategies",
+                    ActionRule = MyDcActions.DefaultResetPeroidValue,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    InObjSetType = new List<string> { OpDataElementSetType.DENSITY.ToString(), OpDataElementSetType.REV_TIER.ToString() },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.CheckGeos,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave }
