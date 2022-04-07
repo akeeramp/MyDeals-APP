@@ -2071,10 +2071,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var rootUrl = window.location.protocol + "//" + window.location.host;
                 var gridDs = $scope.contractDs.data();
                 var dealIds = [];
+                var iqrDeals = [];
                 for (var i = 0; i <= gridDs.length - 1; i++) {
-                    if (gridDs[i].isLinked) {
+                    if (gridDs[i].isLinked && gridDs[i].SALESFORCE_ID == "") {
                         dealIds.push(gridDs[i].DC_ID);
                     }
+                    else if (gridDs[i].isLinked && gridDs[i].SALESFORCE_ID != "") {
+                        iqrDeals.push(gridDs[i].DC_ID);
+                    }
+                }
+                if (dealIds.length == 0 && iqrDeals.length > 0) {
+                    kendo.alert("The selected deals are created by IQR and it cannot be copied.");
+                    return;
+                }
+                else if (dealIds.length > 0 && iqrDeals.length > 0) {
+                    kendo.alert("Following selected deals will not be copied. Since these deals are created by IQR.<br/><br/>" + iqrDeals.join(", "));
                 }
                 $rootScope.$broadcast('copy-tender-deals', dealIds);
             }
