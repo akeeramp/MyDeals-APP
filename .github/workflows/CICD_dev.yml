@@ -1,0 +1,43 @@
+name: MyDeals GitHub Development 
+on:
+  push:
+     branches: [development]
+env:
+  SERVER: DEV
+  NUGET_PATH: C:\NuGet\nuget.exe
+  MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+  DEV_DEPLOY_PATH: \\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals
+  DEV_DEPLOY_SERVER: HF2DEVMYDLW01.amr.corp.intel.com
+
+jobs:
+  Restore-packages:
+     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+     runs-on: [self-hosted,mydeals-runner01]
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Restore NUGET Packages 
+         run: |
+            echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
+            ./scripts/build.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+
+  Build:
+    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    runs-on: [self-hosted,mydeals-runner01]
+    needs: Restore-packages
+    steps:
+       - name: MS build publish
+         run: |
+            ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
+
+  Deploy:
+    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Build
+    steps:
+       - name:  Move Publish Site 
+         run: |
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.DEV_DEPLOY_SERVER}}' '${{env.SERVER}}' '${{env.DEV_DEPLOY_PATH}}'
+       - name:  IIS Restart
+         run: |
+            ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.DEV_DEPLOY_SERVER}}' '${{env.SERVER}}' '${{env.DEV_DEPLOY_PATH}}'
