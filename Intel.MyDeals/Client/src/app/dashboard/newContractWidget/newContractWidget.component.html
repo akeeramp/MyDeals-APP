@@ -1,0 +1,49 @@
+﻿<div class="container-fluid widget-container widget-new-contract new-contract-parent">
+    <div>
+        <div class="custom-padding">
+            <div class="fl icon-parent"><i class="intelicon-new-document-solid text-warning"></i></div>
+            <div class="fl btn-mock" *ngIf="C_CREATE_CONTRACT">
+                <div class="btn-ttl" *ngIf="(isTender!==undefined && isTender===true) ; else nonTenderTemplate"><a class="link-color" href="/Contract#/manager/0/details?tender=1">{{createContractText}}</a></div>
+                <ng-template #nonTenderTemplate>
+                    <div class="btn-ttl"><a class="link-color" href="/Contract#/manager/0/details">{{createContractText}}</a></div>
+                </ng-template>
+            </div>
+            <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">{{createContractText}}</div>
+            </div>
+            <div class="clearboth"></div>
+            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT">To get started, first create a My Deals contract
+            </div>
+            <div class="btn-desc text-detail" *ngIf="!C_CREATE_CONTRACT">You <b>do not</b>have access to Create Contracts
+            </div>
+        </div>
+        <div class="custom-padding">
+            <div class="fl icon-parent"><i class="intelicon-copy-solid text-warning"></i></div>
+            <div class="fl btn-mock" (click)="openCopyCntrctDlg()" *ngIf="C_CREATE_CONTRACT">
+                <div class="btn-ttl">{{copyContractText}}</div>
+            </div>
+            <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">{{copyContractText}}</div>
+            </div>
+            <div class="clearboth"></div>
+            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT">Or, create a My Deals contract from an existing one
+            </div>
+            <div class="btn-desc text-detail" *ngIf="!C_CREATE_CONTRACT">You <b>do not</b>have access to Create Contracts
+            </div>
+        </div>
+        <div class="custom-padding">
+            <div class="fl icon-parent"><i class="intelicon-new-document-solid text-warning"></i></div>
+            <div class="fl btn-mock" (click)="openTenderFolioDialog()" *ngIf="C_CREATE_CONTRACT">
+                <div class="btn-ttl">{{createTenderFolioText}}</div>
+            </div>
+            <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT">
+                <div class="btn-ttl">{{createTenderFolioText}}</div>
+            </div>
+            <div class="clearboth"></div>
+            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT">Create a place for entering OEM tender deals
+            </div>
+            <div class="btn-desc text-detail" *ngIf="!C_CREATE_CONTRACT">You <b>do not</b>have access to Create Tender Folios
+            </div>
+        </div>
+    </div>
+</div>

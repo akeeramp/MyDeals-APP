@@ -1,0 +1,52 @@
+﻿.new-contract-parent {
+    overflow: auto;
+    text-align: center;
+    display: table
+}
+
+.btn-mock {
+    cursor: pointer;
+    text-align: left
+}
+
+.btn-mock-no-click {
+    text-align: left
+}
+
+.btn-mock:hover .btn-ttl {
+    color: #003C71!important
+}
+
+.btn-ttl {
+    color: #00AEEF!important;
+    font-size: 20px;
+    line-height: 1em
+}
+
+.btn-desc {
+    font-size: 12px;
+    line-height: 1em
+}
+
+.icon-parent {
+    font-size: 30px;
+    margin: -5px 10px 0 0;
+    height: 20px
+}
+
+.text-detail {
+    text-align: left;
+    margin-left: 40px
+}
+
+.custom-padding {
+    padding: 25px 0 0 10px
+}
+
+.link-color {
+    color: #00AEEF!important
+}
+
+.link-color:hover {
+    color: #003C71!important
+}
