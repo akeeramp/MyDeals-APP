@@ -713,12 +713,13 @@
         }
 
         $scope.$storage = $localStorage.$default({
-            startDate: moment().subtract(6, 'months').format("MM/DD/YYYY"),
+            //even though start date is overrided to 7 years here it is not reflecting in UI so set seperately using $localStorage.startDate
+            //startDate: moment().subtract(7, 'years').format("MM/DD/YYYY"),
             endDate: moment().add(6, 'months').format("MM/DD/YYYY")
         });
-
-        // init dashboard
-        $scope.startDt = $scope.$storage.startDate;
+        // this line is added for testing performance in DEV/ITT if start date is set 7 years back(2015) compared to the current date
+        $localStorage.startDate = moment().subtract(7, 'years').format("MM/DD/YYYY");
+        $scope.startDt = $localStorage.startDate;
         $scope.endDt = $scope.$storage.endDate;
         $scope.customers = []; //$scope.$storage.selectedCustomerIds;
         $scope.searchText = "";
