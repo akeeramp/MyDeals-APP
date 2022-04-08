@@ -1667,21 +1667,31 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; 
-            string selectedDivs = r.Dc.GetDataElementValue(AttributeCodes.CUST_ACCNT_DIV);
-            IOpDataElement deSoldTos = r.Dc.GetDataElement(AttributeCodes.DEAL_SOLD_TO_ID);
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0;
             string programPaymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT); // For checking FE deals only via safety breakout below
+            IOpDataElement deSoldTos = r.Dc.GetDataElement(AttributeCodes.DEAL_SOLD_TO_ID);
+            IOpDataElement deCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
-            // If no customer or divisions are selected, or is not a new deal, or this is not a FE deal, bail out.
-            if (custMbrSid == 0 || selectedDivs == "" || deSoldTos == null || deSoldTos.DcID > 0 || programPaymentType == "Backend") return; 
+            // Check for elements existing and cut out if Backend of if cistomer divisions has not been touched
+            if (custMbrSid == 0 || deCustDivs == null || deSoldTos == null || programPaymentType == "Backend" || deCustDivs.State == OpDataElementState.Unchanged) return;
 
-            string[] selectedDivsArry = selectedDivs.Split('/');
-            List<string> validSoldTos = new DataCollectionsDataLib().GetSoldToIdList().Where(st => st.CUST_NM_SID == custMbrSid && selectedDivsArry.Contains(st.CUST_DIV_NM) && 
-                st.ACTV_IND).Select(st => st.SOLD_TO_ID).ToList(); 
+            // As a note, this process is divisions based, so if the user selected the customer corporate level, then no sold to values are force selected.
+            string[] oldDivs = deCustDivs.OrigAtrbValue.ToString().Split('/'); // Previous Divs on record
+            string[] currDivs = deCustDivs.AtrbValue.ToString().Split('/'); // Currently selected Divs
+            string[] newAddedDivs = currDivs.Except(oldDivs).ToArray(); // Only new items added - Difference list
+            string[] oldRemovedDivs = oldDivs.Except(currDivs).ToArray(); // Items removed - Difference list
 
-            if (deSoldTos.AtrbValue.ToString() == "") // If this is a new item and the user didn't set a value, force it to select all.
+            string[] currSoldTos = deSoldTos.AtrbValue.ToString().Split(','); // Current list of selected Sold To values
+
+            List<SoldToIds> allCustSoldTos = new DataCollectionsDataLib().GetSoldToIdList().Where(st => st.CUST_NM_SID == custMbrSid && st.ACTV_IND).ToList(); // All potential sold tos for customer
+            string[] removeSoldToList = allCustSoldTos.Where(st => oldRemovedDivs.Contains(st.CUST_DIV_NM)).Select(st => st.SOLD_TO_ID).ToArray(); // pulled values to remove
+            string[] addSoldToList = allCustSoldTos.Where(st => newAddedDivs.Contains(st.CUST_DIV_NM)).Select(st => st.SOLD_TO_ID).ToArray(); // pulled values to add for new divisions
+
+            string[] workingSoldTosList = currSoldTos.Except(removeSoldToList).Union(addSoldToList).ToArray(); // Remove pulled values, add new values, preserve existing
+
+            if (deCustDivs.State == OpDataElementState.Modified || deCustDivs.State == OpDataElementState.Deleted) // If the user altered the divisions list, update the sold to list - PTR drives divisions loading so user can't edit sold to list at same time.
             {
-                deSoldTos.AtrbValue = String.Join(",", validSoldTos); // Sold to list is comma concatonated string.
+                deSoldTos.AtrbValue = String.Join(",", workingSoldTosList.Where(x => !string.IsNullOrEmpty(x)).ToArray());
             }
         }
 
