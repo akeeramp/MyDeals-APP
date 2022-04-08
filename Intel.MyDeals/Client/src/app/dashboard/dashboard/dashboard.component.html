@@ -3,42 +3,45 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="overFlowWidget">
     <div class="container-fluid ">
-        <div class="row" style="height: 20px;">
+        <div class="row" style="height: 25px;">
             <div class="col-md-12">
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-8 left-inner-container" style="width: 100%">
-                <div style="padding: 10px; margin-left: 700px" class="fl">
-                    <table>
-                        <tr>
-                            <td>
-                                <label>Customers: <i class="intelicon-find-a-person-solid" style="font-size: 20px;"></i></label>
-                            </td>
-                            <td>
-                                <kendo-multiselect style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custNameList" textField="text" valueField="value" [(ngModel)]="selectedCustNames" style="width: 200px;height: 33px;">
-                                </kendo-multiselect>
-                            </td>
-                            &nbsp;
-                            <td>
-                                <label>Date Range:</label>
-                            </td>
-                            <td>
-                                <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue">
-                                </kendo-datepicker>
-                            </td>
-                            &nbsp;
-                            <td>-</td> &nbsp;
-                            <td>
-                                <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue">
-                                </kendo-datepicker>
-                            </td>
-                            &nbsp;
-                            <td>
-                                <button (click)="openPopUp()" class="fr btn btn-default btn-sm intelicon-plus-max" title="Add Widget"></button>
-                            </td>
-                        </tr>
-                    </table>
+        <div class="row dashboard-header">
+            <div class="col-md-8 left-inner-container" style="width: 100%;">
+                <div class="fr row fl" style="width:100%">
+                    <!--<div class="row">-->
+                    <div class="col-md-2" style="width:30%"></div>
+                    <div class="fr col-md-2" style="width: 17%; margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 15px; ">
+                        Customers: <i class="intelicon-find-a-person-solid"></i>
+                    </div>
+                    <div class="fr col-md-2" style="width:10%">
+                        <kendo-multiselect class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custNameList" textField="text" valueField="value" [(ngModel)]="selectedCustNames">
+                        </kendo-multiselect>
+                    </div>
+                    <div class="fr col-md-3" style="width: 30%; color: #aaaaaa; font-size:15px">
+                        Date Range:
+                        <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue">
+                        </kendo-datepicker>
+
+                        -
+
+                        <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue">
+                        </kendo-datepicker>
+                    </div>
+                    <div class="fr col-md-1" style="width:1%">
+                        <button (click)="refreshAllWidgets()" class="fr btn btn-default btn-sm intelicon-refresh" style="padding: 4px 6px;font-size:18px" title="Refresh Dashboard"></button>
+                    </div>
+                    <div class="fr col-md-1" style="width:1%">
+                        <button (click)="openPopUp()" class="fr btn btn-default btn-sm intelicon-plus-max" style="padding: 4px 6px; font-size: 18px" title="Add Widget"></button>
+                    </div>
+                    <div class="fr col-md-1" style="width:2%">
+                        <button (click)="defaultLayout()" class="fr btn btn-default btn-sm intelicon-dashboard-solid" style="padding: 4px 6px; font-size: 18px" title="Default Layout"></button>
+                    </div>
+                    <div class="fr col-md-1" style="width:3%">
+                        <button (click)="showHelpTopic();" class="fr helpBtn intelicon-help" style="font-size: 30px !important; margin-left: 15px " title="Help"></button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -47,19 +50,22 @@
                 <div style="width: 100vw; height: 100vh;">
                     <gridster [options]="options">
                         <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <b>{{item.name}}</b>
+                            <div class="widgetFull">
+                                <div class="row widgetHeader">
+                                    <div class="col-md-10">
+                                        <b>{{item.name}}</b>
+                                    </div>
+                                    <div class="col-md-2 text-center">
+                                        <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons"><i
+                                            class="intelicon-trash-outlined"></i></a>
+                                        <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)"><i class="intelicon-refresh"></i></a>
+                                        <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons"><i class="intelicon-settings-solid"></i></a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <button (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="">Remove</button>
-                                    <button [hidden]="!item.canRefresh" class="" (click)="refreshWidget(item)">Refresh</button>
-                                    <button [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class=""><i class="intelicon-settings-solid"></i></button>
-                                </div>
-                            </div>
-                            <div class="row" style="height:100%; width:100%">
-                                <div class="col-md-12" style="height:100%; width:100%">
-                                    <app-dashboard-widget [widget]="item" [resizeEvent]="resizeEvent" [custIds]="selectedCustNames" [startDt]="startDateValue" [endDt]="endDateValue"></app-dashboard-widget>
+                                <div class="row" style="height:100%; width:100%">
+                                    <div class="col-md-12" style="height:100%; width:100%">
+                                        <app-dashboard-widget [widget]="item" [resizeEvent]="resizeEvent" [custIds]="selectedCustNames" [startDt]="startDateValue" [endDt]="endDateValue"></app-dashboard-widget>
+                                    </div>
                                 </div>
                             </div>
                         </gridster-item>

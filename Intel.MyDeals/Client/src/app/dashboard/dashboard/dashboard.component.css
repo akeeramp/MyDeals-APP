@@ -3,3 +3,57 @@ div.overFlowWidget {
     height: 720px !important;
     overflow: auto !important;
 }
+
+.dashboard-header {
+    border-bottom: 1px solid #eee !important;
+    padding: 2px !important;
+    font-size: 18px !important;
+    font-family: "Intel Clear" !important;
+    font-weight: 200 !important;
+    font-style: normal !important;
+    background-color: #fafafa !important;
+}
+
+.widgetHeader {
+    border-bottom: 1px solid #cdd2d2;
+    color: #0071c5;
+}
+
+.widgetFull {
+    height: 100% !important;
+}
+
+.widgetFull:hover {
+    border: 1px solid #0071c5 !important;
+}
+
+.widgetFull:hover .widgetHeader {
+    background-color: #0071c5 !important;
+    color: white;
+}
+
+.widgetFull:hover .btn-icons {
+    color: white !important;
+}
+
+
+/* .widgetFull:hover {
+    height: 100% !important;
+    border: 1px solid #0071c5 !important;
+} */
+
+.btn-icons {
+    color: white;
+    padding: 2px !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+}
+
+
+/* gridster-item:hover {
+    border: 1px solid #0071c5 !important;
+} */
+
+gridster {
+    background: white !important;
+}

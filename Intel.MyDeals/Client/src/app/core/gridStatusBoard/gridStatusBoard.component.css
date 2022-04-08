@@ -1,64 +1,83 @@
 ﻿.dashboard-grid.k-grid .k-grid-content td {
     padding: 0;
     height: 34px;
-    border-bottom: 1px solid #efefef !important
+    border-bottom: 1px solid #efefef!important
 }
+
 .dashboard-grid.k-grid .k-hierarchy-cell {
     text-align: center
 }
-.dashboard-grid.k-grid .k-detail-row, .dashboard-grid.k-grid .k-detail-cell {
+
+.dashboard-grid.k-grid .k-detail-row,
+.dashboard-grid.k-grid .k-detail-cell {
     height: 200px;
-    background-color: #fafafa !important;
+    background-color: #fafafa!important;
     padding: 0
 }
+
 .dashboard-grid.k-grid .k-hierarchy-cell {
-    background-color: transparent !important
+    background-color: transparent!important
 }
+
 .dashboard-grid.k-grid .k-grid-content td a:hover {
     border-bottom: 1px dotted #00AEEF;
     text-decoration: none
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div:first-child {
     padding: 6px
 }
+
 .dashboard-grid.k-grid .k-grid-content td>span:first-child {
     padding: 6px
 }
+
 .dashboard-grid.k-grid td {
     white-space: nowrap
 }
+
 .dashboard-grid.k-grid tr.k-alt {
     background-color: transparent
 }
-.dashboard-grid.k-grid tr.k-alt:hover, .dashboard-grid.k-grid tr:hover {
+
+.dashboard-grid.k-grid tr.k-alt:hover,
+.dashboard-grid.k-grid tr:hover {
     background-color: rgba(0, 174, 239, .05)
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.status {
     font-weight: 600;
     text-align: center
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.Complete {
     background-color: #C4D600
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.InComplete {
     background-color: #f3D54E
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.Archived {
     background-color: #d8dddf
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.Tender {
     background-color: #a2dce8
 }
+
 .dashboard-grid.k-grid .k-grid-content td>div.Contract {
     background-color: #c6c6c6
 }
+
 .horizontal-widget {
-    margin-top: 0;
+    margin-top: 7px!important;
     border: 0 solid transparent;
     margin-left: 180px;
     height: 100%;
     font-size: 12px
 }
+
 .left-pane-widget {
     height: inherit;
     float: left;
@@ -67,6 +86,7 @@
     margin-left: -180px;
     padding: 0 0 25px 5px
 }
+
 .left-pane-widget .inner {
     height: fit-content;
     border-top: 1px solid #e6e6e6;
@@ -74,6 +94,7 @@
     border-bottom: 1px solid #e6e6e6;
     padding: 5px 0
 }
+
 .left-pane-widget .stgLnk {
     font-size: 16px;
     margin: 0;
@@ -82,119 +103,160 @@
     padding-left: 8px;
     cursor: pointer
 }
+
 .left-pane-widget .stgLnk i {
     color: #aaaaaa
 }
+
 .left-pane-widget .stgLnk:hover {
     background-color: #f5f5f5
 }
+
 .left-pane-widget .stgLnk.active {
     background-color: #00AEEF;
     color: #ffffff
 }
+
 .left-pane-widget .stgLnk.active i {
     color: #ffffff
 }
+
 .left-pane-widget .stgLnkBox {
     margin-top: 15px
 }
+
 .inner h6 {
     margin-top: 6px;
     margin-left: 6px;
     font-size: 16px;
     font-weight: bold
 }
+
 .center-pane-widget {
     height: 97%;
     overflow: auto;
     width: 100%
 }
+
 .center-pane-widget .inner {
     height: 100%;
     padding: 5px 0
 }
-.opUiContainer.dashboard .k-grid-header, .opUiContainer.dashboard .k-grid-header .k-header, .opUiContainer.dashboard .k-pager-wrap, .opUiContainer.dashboard .k-pager-numbers .k-state-selected, .opUiContainer.dashboard .k-grid-footer, .opUiContainer.dashboard .k-grid-footer td, .opUiContainer.dashboard .k-scheduler-header, .opUiContainer.dashboard .km-pane-wrapper .k-grid-header .k-header {
+
+.opUiContainer.dashboard .k-grid-header,
+.opUiContainer.dashboard .k-grid-header .k-header,
+.opUiContainer.dashboard .k-pager-wrap,
+.opUiContainer.dashboard .k-pager-numbers .k-state-selected,
+.opUiContainer.dashboard .k-grid-footer,
+.opUiContainer.dashboard .k-grid-footer td,
+.opUiContainer.dashboard .k-scheduler-header,
+.opUiContainer.dashboard .km-pane-wrapper .k-grid-header .k-header {
     background-color: #fafafa
 }
+
 .stgLnkBox .badge {
     font-size: 10px;
     margin-left: 5px;
     background-color: #0071C5;
     margin-bottom: 4px
 }
+
 .stgLnk.active .badge {
     color: #0071C5;
     background-color: #ffffff
 }
+
 .stgLnkBox .intelicon-favorite-rating-solid {
-    color: #0071C5 !important
+    color: #0071C5!important
 }
+
 .stgLnk.active .intelicon-favorite-rating-solid {
-    color: #ffffff !important
+    color: #ffffff!important
 }
+
 .k-grid .intelicon-favorite-rating-solid {
     font-size: 22px;
     color: #ddd
 }
+
 .k-grid .intelicon-favorite-rating-solid.active {
     font-size: 22px;
     color: #0071C5
 }
+
 .status {
     font-weight: 600;
     text-align: center
 }
+
 .Complete {
     background-color: #C4D600
 }
+
 .InComplete {
     background-color: #f3D54E
 }
+
 .Tender {
     background-color: #a2dce8
 }
+
 .Contract {
     background-color: #c6c6c6
 }
+
 .intelicon-favorite-rating-solid-active {
     font-size: 22px;
     color: #0071C5
 }
+
 .intelicon-favorite-rating-solid {
     font-size: 22px;
     color: #ddd
 }
+
 .headerClass {
     background-color: #e7e7e8;
     color: #1a3e6f;
-    font-size: 14px !important;
+    font-size: 14px!important;
     font-weight: bold
 }
+
 .gridCell {
-    padding: 0 6px 0 6px !important;
-    border-style: none !important
+    padding: 0 6px 0 6px!important;
+    border-style: none!important
 }
+
 .textDecoratorWrap {
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    text-decoration: none !important
+    white-space: nowrap!important;
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    text-decoration: none!important
 }
+
 .k-grid-content>.k-grid-table-wrap>.k-grid-table {
-    padding: 0 !important
+    padding: 0!important
 }
-.k-widget .k-icon.k-i-expand, .k-widget .k-icon.k-i-collapse {
-    cursor: pointer !important
+
+.k-widget .k-icon.k-i-expand,
+.k-widget .k-icon.k-i-collapse {
+    cursor: pointer!important
 }
-.k-i-plus:before, .k-plus:before {
-    content: "\E11E" !important
+
+.k-i-plus:before,
+.k-plus:before {
+    content: "\E11E"!important
 }
-.k-i-minus:before, .k-minus:before {
-    content: "\E121" !important
+
+.k-i-minus:before,
+.k-minus:before {
+    content: "\E121"!important
 }
+
 .k-pager-numbers .k-link.k-state-selected {
-    background-color: #0d6efd !important
+    background-color: #0d6efd!important
 }
+
 .k-grid td {
     padding: 0;
     height: 50px;
@@ -202,6 +264,7 @@
     font-weight: 500;
     font-size: 14px
 }
+
 .k-link {
-    font-size: 13px !important
+    font-size: 13px!important
 }

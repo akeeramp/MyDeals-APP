@@ -51,6 +51,8 @@ export class DashboardComponent implements OnInit {
         { text: "HP", value: 1774 },
     ];
     public selectedCustNames: Item[];
+    public selectedCustomerIds = [];
+    public includeTenders = true;
 
     addItem(): void {
         this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
@@ -105,6 +107,35 @@ export class DashboardComponent implements OnInit {
         //Refresh logic of gridstatusboard is migrated and handled here
         if (item.type === "contractstatus") {
             this.cntrctWdgtSvc.isRefresh.next(true);
+        }
+    }
+    refreshAllWidgets() {
+        this.refreshtoDashboardDefault();
+        // Loop through all current (visible) widgets and if the widget has a canRefresh enabled, refresh it.
+        for (var i = 0; i < this.dashboard.length; i++) {
+            if (this.dashboard[i]["canRefresh"] == true)
+                this.refreshWidget(this.dashboard[i]);
+        }
+    }
+
+    refreshtoDashboardDefault() {
+        this.startDateValue = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
+        this.endDateValue = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+
+        this.selectedCustomerIds = [];
+        this.includeTenders = true;
+    }
+
+    defaultLayout() {
+        //to be done during dashboard integration 
+    }
+
+    showHelpTopic() {
+        const helpTopic = "Filtering+Dashboard";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
         }
     }
      //********************* search widget functions*************************
@@ -172,12 +203,14 @@ export class DashboardComponent implements OnInit {
             pushItems: false,
             swap: true,
             margin:5,
+            maxCols:20,
             swapWhileDragging: false,
             draggable: {
                 enabled: true
             },
             resizable: {
-                enabled: true
+                enabled: true,
+              
             },
             itemResizeCallback: (item) => {
                 // update DB with new size
