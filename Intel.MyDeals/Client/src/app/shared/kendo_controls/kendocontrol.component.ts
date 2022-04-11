@@ -153,6 +153,11 @@ export class KendoControlComponent {
     public initial: any = {};
 
   public conditionArray = null;
+  public contextItems: any[] = [{text:'one'},{text:'two'},{text:'three'}];
+
+  onContextSelect(event:any){
+    console.log('onContextSelect******************',event);
+  }
   checkElement() {
     console.log("checkElement**************", this.conditionArray);
     }
