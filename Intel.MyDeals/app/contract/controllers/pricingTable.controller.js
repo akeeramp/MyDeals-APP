@@ -1743,9 +1743,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             else if (paymentValue != null && paymentValue !== '' && paymentValue === "Backend" && (!hasTracker || hasTracker.length == 0)) {
                 // Re-enable RESET_VOLS_ON_PERIOD when Backend is selected
-                if (resetPrdIndex != undefined) {
+                if (resetPrdIndex != undefined
+                    && !($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY")) {
                     sheet.range(resetPrdIndex + (i + pteHeaderIndex)).enable(true);
                     sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background(null);
+
                     if (sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value() === '') {
                         sheet.range(resetPrdIndex + (i + pteHeaderIndex)).value("No");
                     }
@@ -2266,8 +2268,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         if ($scope.$parent.$parent.curPricingTable.PROGRAM_PAYMENT === "Backend") {
                             if (data[r]["RESET_VOLS_ON_PERIOD"] === "") {
-                                data[r]["RESET_VOLS_ON_PERIOD"] = "No";
-                            }
+                                // Default RESET_VOLS_ON_PERIOD in Backend to 'Yes' and set to Read-Only when REV_TEIR or DENSITY pricing strategy
+                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
+                                    data[r]["RESET_VOLS_ON_PERIOD"] = "Yes";
+
+                                    // Set RESET_VOLS_ON_PERIOD cell to read-only
+                                    if (!data[r]._behaviors) {
+                                        data[r]._behaviors = {};
+                                    }
+                                    if (!data[r]._behaviors.isReadOnly) {
+                                        data[r]._behaviors.isReadOnly = {}
+                                    }
+                                    data[r]["RESET_VOLS_ON_PERIOD"].editable = false;
+                                    data[r]._behaviors.isReadOnly["RESET_VOLS_ON_PERIOD"] = true;
+                                } else {
+                                    data[r]["RESET_VOLS_ON_PERIOD"] = "No";
+                                }
+                            }                            
                         }
 
                         if (!root.curPricingTable || root.isPivotable()) {
@@ -2593,7 +2610,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 range.enable(false);
                                 range.background("#f5f5f5");
                             }
-                        }
+                        } 
                         //Disable overarching fields when FLEX row type is Draining
                         if (data[dataIndex].FLEX_ROW_TYPE == "Draining") {
                             //REBATE_OA_MAX_AMT
