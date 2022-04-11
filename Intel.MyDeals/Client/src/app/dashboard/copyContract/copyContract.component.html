@@ -1,0 +1,52 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div id="copyCntrctDlg">
+    <!--<loading-panel-angular [show]="!isCopyCntrctListLoaded" [header]="'Loading contracts'" [description]="'Please wait while we load your contracts.'">
+    </loading-panel-angular>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div>
+                    <label>Customers: </label> {{copyCntrctCustomerName}}
+                </div>
+                <div>
+                    <label>Date Range: </label> {{copyCntrctStartDate}} - {{copyCntrctEndDate}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="inner-addon right-addon" style="width:375px; margin-top:20px">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" class="form-control" style="height:30px" maxlength="40" [ngModelOptions]="{ debounce: 500 }" (input)="onCopyCntrctSearchTextChanged($event.target.value)" [(ngModel)]="copyCntrctSearchText" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div>
+        <kendo-grid id="copyCntrctGrid" [loading]="!isCopyCntrctListLoaded" [data]="gridData" [skip]="state.skip" [height]="345"
+                    [sortable]="true" [group]="state.group" [navigable]="true" [resizable]="true"
+                    [selectable]="true" (selectionChange)="rowSelectionChange($event)">
+            <kendo-grid-column field="CNTRCT_OBJ_SID" title="Contract ID" width="35" [headerClass]="{'headerClass':true}">
+            </kendo-grid-column>
+            <kendo-grid-column field="TITLE" title="Contract Title" width="140" [headerClass]="{'headerClass':true}">
+            </kendo-grid-column>
+            <kendo-grid-column field="STRT_DTM" title="Start Date" width="50" [headerClass]="{'headerClass':true}">
+            </kendo-grid-column>
+            <kendo-grid-column field="END_DTM" title="End Date" width="50" [headerClass]="{'headerClass':true}">
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
+
+    <kendo-dialog-actions>
+        <div align="right" style="margin-top:15px">
+            <button class="btn btn-secondary" type="button" style="min-width:110px" (click)="onCopyCntrctCancelClick()">Cancel</button>
+            <button class="btn btn-primary" type="button" style="min-width:110px" (click)="onCopyCntrctCreateClick()" [disabled]="isCreateDisabled">Create</button>
+        </div>
+    </kendo-dialog-actions>
+</div> 

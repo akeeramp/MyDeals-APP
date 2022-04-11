@@ -1,0 +1,77 @@
+﻿
+#copyCntrctDlg {
+    padding: 0px !important;
+    height: 566px;
+    overflow: hidden;
+}
+
+#copyCntrctGrid td {
+    cursor: pointer !important;
+}
+
+.k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
+    border: none;
+    background-color: #00AEEF !important;
+    color: white !important;
+}
+
+.k-grid > td {
+    padding: 0px;
+}
+
+.k-grid td {
+    cursor: pointer;
+}
+
+/* enable absolute positioning */
+.inner-addon {
+    position: relative;
+}
+
+    /* style icon */
+    .inner-addon .glyphicon {
+        position: absolute;
+        padding: 7px;
+        pointer-events: none;
+    }
+
+/* align icon */
+.left-addon .glyphicon {
+    left: 0px;
+}
+
+.right-addon .glyphicon {
+    right: 5px;
+}
+
+.ss-loading-panel {
+    margin-top: 5% !important;
+    margin-left: 50% !important;
+}
+
+.form-control {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border-color: #d2d6de !important;
+}
+
+.btn {
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.btn-primary[disabled], .btn-primary[disabled]:hover {
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}
+
+.btn-secondary {
+    color: #0071c5 !important;
+    background: #fff !important;
+    border-color: #b1babf !important;
+}
