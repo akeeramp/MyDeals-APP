@@ -796,6 +796,8 @@
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.service.ts" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults.directive.js" />
+    <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
+    <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.css" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.html" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.directive.html" />
@@ -2194,6 +2196,8 @@
     <TypeScriptCompile Include="Client\src\app\app.main.ts" />
     <TypeScriptCompile Include="Client\src\app\app.module.ts" />
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\adminBanner\adminBanner.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\adminBanner\adminBanner.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\angular.constants.ts" />

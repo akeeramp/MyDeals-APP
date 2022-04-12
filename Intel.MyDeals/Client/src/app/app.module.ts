@@ -57,7 +57,8 @@ import { adminComponents } from './modules/admin.module';
 import { dashboardComponents } from './modules/dashboard.module';
 //*********************advance search components *********************
 import { advanceSearchComponents } from './modules/advanceSearch.module';
-
+//*********************contract components *********************
+import {contractComponents} from './modules/contract.module'
 @NgModule({
     imports: [
         CommonModule,
@@ -116,7 +117,8 @@ import { advanceSearchComponents } from './modules/advanceSearch.module';
         adminComponents,
         coreComponents,
         dashboardComponents,
-        advanceSearchComponents
+        advanceSearchComponents,
+        contractComponents
     ],
     entryComponents: [
         ReportingComponent,
@@ -124,7 +126,8 @@ import { advanceSearchComponents } from './modules/advanceSearch.module';
         adminComponents,
         coreComponents,
         dashboardComponents,
-        advanceSearchComponents
+        advanceSearchComponents,
+        contractComponents
     ]
 })
 

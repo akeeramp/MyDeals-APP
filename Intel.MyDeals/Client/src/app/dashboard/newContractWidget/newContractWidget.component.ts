@@ -4,7 +4,7 @@ import { GridsterItem } from 'angular-gridster2';
 import { NewContractWidgetService } from "./newContractWidget.service"
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CopyContractComponent } from '../copyContract/copyContract.component';
-
+import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.component";
 @Component({
     selector: 'app-widget-newcontract',
     templateUrl: "Client/src/app/dashboard/newContractWidget/newContractWidget.component.html",
@@ -40,6 +40,19 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
 
     openTenderFolioDialog() {
         //Tender folio component needs to be called and opened from here as a modal
+        const dialogRef = this.dialog.open(TenderFolioComponent, {
+            panelClass: 'tender-folio-dialog',
+            width: '600px',
+            height: '380px',
+            disableClose: true,
+            data: { name: "Tender Folio Details" },
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                console.log("tender folio is closed!");
+
+            }
+        });
     }
     openCopyCntrctDlg() {
         const dialogref = this.dialog.open(CopyContractComponent, {
