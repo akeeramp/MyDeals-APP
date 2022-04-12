@@ -9,6 +9,9 @@
     padding: 2px;
     font-size: 12px
 }
+.dropdown-menu {
+    position: absolute !important;
+}
 ul {
     width: 500px;
     padding-top: 0;

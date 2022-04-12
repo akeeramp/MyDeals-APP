@@ -233,7 +233,7 @@
                                 @*<li><a href="Admin#/cache">Cache Manager</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="admincache">Cache Manager</a></li>
                                 @*<li><a href="Admin#/oplog">Log Viewer</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="oplog">Log Viewer</a></li>
+                                <li ui-sref-active="active"><a ui-sref="opLog">Log Viewer</a></li>
                                 @*<li><a href="Admin#/constants">Constants</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="constants">Constants</a></li>
                                 @*<li><a href="Admin#/batchTiming">Batch Job Details</a></li>*@
@@ -251,15 +251,16 @@
                                     @*<li><a href="Admin#/customers">Customer</a></li>*@
                                     <li ui-sref-active="active"><a ui-sref="customers">Customer</a></li>
                                     @*<li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="vistexCustomerMapping">Customer Mapping</a></li>
+                                    <li ui-sref-active="active"><a ui-sref="VistexCustomerMapping">Customer Mapping</a></li>
                                     @*<li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="customervendors">Customer - Vendors</a></li>
+                                    <li ui-sref-active="active"><a ui-sref="CustomerVendors">Customer - Vendors</a></li>
                                     @*<li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="primeCustomers">Unified Customer Admin</a></li>
+                                    <li ui-sref-active="active"><a ui-sref="UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 @if (usrRole == "RA" && !isDeveloper)
                                 {
-                                    <li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>
+                                    @*<li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>*@
+                                    <li ui-sref-active="active"><a ui-sref="UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 <li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>
                             </ul>
@@ -270,9 +271,9 @@
                     @if (isRealSA || isDeveloper) // All SA users allowed
                     {
                         @*<li><a href="Admin#/geo">Geo</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="geo">Geo</a></li>
+                        <li ui-sref-active="active"><a ui-sref="adminGeo">Geo</a></li>
                         @*<li><a href="Admin#/funfact">Fun Facts</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="funFact">Fun Facts</a></li>
+                        <li ui-sref-active="active"><a ui-sref="funfact">Fun Facts</a></li>
                     }
 
                     @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
@@ -305,7 +306,7 @@
                             <a tabindex="-1">Legal Configurations</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="iCostProducts">Legal Classification</a></li>
+                                <li ui-sref-active="active"><a ui-sref="icostproducts">Legal Classification</a></li>
                                 <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
                                 @*<li><a href="Admin#/quoteLetter">Quote Letter</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="quoteLetter">Quote Letter</a></li>

@@ -1,8 +1,13 @@
-﻿<link href="/Client/src/app/admin/kendo_nongrid.css" rel="stylesheet" />
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div>
     <h2>{{title}}</h2>
-    <p style="font-size: 10px;">The Cache Manager will show which cache containers are loaded and display their count.
-        You can clear the cache, reload the cache or even view the cache contents. </p>
+    <p style="font-size: 10px;">
+        The Cache Manager will show which cache containers are loaded and display their count.
+        You can clear the cache, reload the cache or even view the cache contents.
+    </p>
 </div>
 <div id="cacheContainer" (window:resize)="onResize()">
     <div>
@@ -20,22 +25,28 @@
                     <td id="lbl{{data.CacheCount}}" class="text-right">{{data.CacheCount}}</td>
                     <td>
                         <div class="iconLink" (click)="loadCacheByName(data)" id="btnLoadCache{{data.CacheName}}"
-                            title="Load Cache"><i class="fa fa-upload" aria-hidden="true"></i></div>
+                             title="Load Cache"><i class="fa fa-upload" aria-hidden="true"></i></div>
                     </td>
                     <td>
                         <div class="iconLink" (click)="clearCacheByName(data)" id="btnClear{{data.CacheName}}"
-                            title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                             title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                     </td>
                     <td>
                         <div class="iconLink" (click)="viewCacheByName(data)" id="btnView{{data.CacheName}}"
-                            title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div>
+                             title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div>
                     </td>
                     <td *ngIf="data.loading==true"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
                 </tr>
             </table>
-            <div style="margin-top: 15px; text-align: center;"><button (click)="clearAll()" id="btnClearAll"
-                    class="k-primary" style="margin-right: 5px;">Clear All</button><button (click)="reloadAll()"
-                    id="btnReloadAllCache" class="k-primary">Reload All Cache</button></div>
+            <div style="margin-top: 15px; text-align: center;">
+                <button (click)="clearAll()" id="btnClearAll"
+                        class="k-primary" style="margin-right: 5px;">
+                    Clear All
+                </button><button (click)="reloadAll()"
+                                 id="btnReloadAllCache" class="k-primary">
+                    Reload All Cache
+                </button>
+            </div>
             <hr />
             <h5>Api Cache Status</h5>
             <table class="tblCache">
@@ -50,20 +61,24 @@
                     <td style="text-align: right;">{{dat.CacheCount}}</td>
                     <td>
                         <div class="iconLink" (click)="clearApiCacheByName(data)" id="btnClearApiCacheByName"
-                            title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
+                             title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div>
                     </td>
                     <td>
                         <div class="iconLink" [attr.disabled]="true" (click)="viewApiCacheByName(data)"
-                            title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div>
+                             title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div>
                     </td>
                     <td *ngIf="dat.loading==true"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
                 </tr>
             </table>
-            <div style="margin-top: 15px; text-align: left;"><button (click)="vm.clearAllApiCache()"
-                    id="btnClearApiCache" class="k-primary">Clear All</button></div>
+            <div style="margin-top: 15px; text-align: left;">
+                <button (click)="vm.clearAllApiCache()"
+                        id="btnClearApiCache" class="k-primary">
+                    Clear All
+                </button>
+            </div>
         </div>
         <div id="viewResultsContainer" class="fl" [style.height.px]="divViewResultHt"
-            [style.width.px]="divViewResultWidth">
+             [style.width.px]="divViewResultWidth">
             <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
             <div id="viewResults" ui-auto="divResults">{{currentCacheDetails}}</div>
         </div>

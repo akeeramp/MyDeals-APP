@@ -51,9 +51,18 @@ angular
                     }
                 }
             })
-
+            // .state("portal", {
+            //     url: "/portal",
+            //     abstract: false,
+            //     views: {
+            //         mainView: {
+            //             template: '<app-dashboard></app-dashboard>'
+            //         }
+            //     }
+            // })
+     
             //*****************poc items ends here*******************
-            // Admin route  starts here 
+            //*****************Admin route  starts here*******************  
             .state("adminemployeedashboard", {
                 url: "/adminemployeedashboard",
                 abstract: false,
@@ -93,7 +102,7 @@ angular
                     }
                 }
             })
-            .state("customervendors", {
+            .state("CustomerVendors", {
                 url: "/CustomerVendors",
                 abstract: false,
                 views: {
@@ -104,7 +113,7 @@ angular
                     }
                 }
             })
-            .state("oplog", {
+            .state("opLog", {
                 url: "/opLog",
                 abstract: false,
                 views: {
@@ -126,7 +135,7 @@ angular
                     }
                 }
             })
-            .state("vistexCustomerMapping", {
+            .state("VistexCustomerMapping", {
                 url: "/VistexCustomerMapping",
                 abstract: false,
                 views: {
@@ -137,7 +146,7 @@ angular
                     }
                 }
             })
-            .state("primeCustomers", {
+            .state("UnifiedCustomerAdmin", {
                 url: "/UnifiedCustomerAdmin",
                 abstract: false,
                 views: {
@@ -146,7 +155,7 @@ angular
                     }
                 }
             })
-            .state("geo", {
+            .state("adminGeo", {
                 url: "/adminGeo",
                 abstract: false,
                 views: {
@@ -197,7 +206,7 @@ angular
                     }
                 }
             })
-            .state("funFact", {
+            .state("funfact", {
                 url: "/funfact",
                 abstract: false,
                 views: {
@@ -304,7 +313,7 @@ angular
                     }
                 }
             })
-            .state("iCostProducts", {
+            .state("icostproducts", {
                 url: "/icostproducts",
                 abstract: false,
                 views: {
@@ -322,6 +331,6 @@ angular
                     }
                 }
             })
-            // Admin route  ends here 
+            //********************* Admin route  ends here **************
 
     });
