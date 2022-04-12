@@ -141,6 +141,32 @@ namespace Intel.MyDeals.VistexService
 
             return retRecord;
         }
+
+        public static async Task<VistexDFDataResponseObject> SentVistexClaimData(string packetType,string runMode) //VTX_OBJ: Vertical
+        {
+            VistexCommonLogging.WriteToLog("Data Access Layer - SentVistexClaimData - Initiated");
+            VistexDFDataResponseObject retRecord = new VistexDFDataResponseObject();
+            var xmlRecords = string.Empty;
+            try
+            {
+                var fetchVistexDFData = vistexController + "SentVistexClaimData/" + packetType + "/"+ runMode;
+                HttpResponseMessage response = await MyDealsClient.GetAsync(fetchVistexDFData);
+                if (response.IsSuccessStatusCode)
+                {
+                    xmlRecords = await response.Content.ReadAsStringAsync();
+                    VistexCommonLogging.WriteToLog("Data Access Layer - SentVistexClaimData - Success");
+                }
+
+                retRecord = JsonConvert.DeserializeObject<VistexDFDataResponseObject>(xmlRecords);
+            }
+            catch (Exception ex)
+            {
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SentVistexClaimData - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Data Access Layer - SentVistexClaimData - Completed");
+            }
+
+            return retRecord;
+        }
         #endregion MyDeals Data Fetch Calls
 
         /// Tender Return

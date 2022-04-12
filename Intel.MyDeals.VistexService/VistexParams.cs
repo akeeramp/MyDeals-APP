@@ -18,7 +18,8 @@ namespace Intel.MyDeals.VistexService
         TenderReturn,
         SendErrorDealsVistex,
         SendFailProductsVistex,
-        SendConsumptionLoad
+        SendConsumptionLoad,
+        TenderClaimData
         
     }
 
@@ -34,6 +35,7 @@ namespace Intel.MyDeals.VistexService
         public const char SendErrorDealsVistex = 'E';
         public const char SendFailProductsVistex = 'F';
         public const char SendConsumptionLoad = 'M';
+        public const char TenderClaimData = 'L';
     }
 
     public class VistexParams
@@ -285,7 +287,14 @@ namespace Intel.MyDeals.VistexService
                             jobMode = JobMode.SendFailProductsVistex;
                             jobType = JobModeCode.SendFailProductsVistex;
                             break;
-                            
+
+                        case "tenderClaimData":
+                        case "cd":
+                            displayHelpOnly = false;
+                            jobMode = JobMode.TenderClaimData;
+                            jobType = JobModeCode.TenderClaimData;
+                            break;
+
                         default:
                             errorMessages.Add(String.Format("Invalid Mode: {0}", arr[1]));
                             break;

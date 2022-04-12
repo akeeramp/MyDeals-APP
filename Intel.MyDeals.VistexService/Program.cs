@@ -223,7 +223,12 @@ namespace Intel.MyDeals.VistexService
                     //Console.WriteLine(".................................................");
                     //Console.WriteLine("Completed: Testing Connection to Vistex SAP PO...");
                     break;
-
+                case JobMode.TenderClaimData:
+                    Console.WriteLine("Processing Tender Claim Data in My Deals...");
+                    VistexCommonLogging.WriteToLog("Initiated - Processing Tender Claim Data in My Deals...");
+                    await SendTenderClaimData("L");
+                    VistexCommonLogging.WriteToLog("Completed - Processing Tender Claim Data in My Deals...");
+                    break;
                 default:
                     Console.WriteLine("Invalid Operation...");
                     VistexCommonLogging.WriteToLog("Invalid Operation...");                    

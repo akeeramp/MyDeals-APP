@@ -190,5 +190,43 @@ namespace Intel.MyDeals.VistexService
                 VistexCommonLogging.HandleException(ex, true, "ConsumptionLoad");
             }
         }
+
+        private static async Task SendTenderClaimData(string runMode)
+        {
+            try
+            {
+                List<string> lstStatus = new List<string>();
+                VistexCommonLogging.WriteToLog("Business Flow - SendTenderClaimData - Initiated");
+                VistexDFDataResponseObject dataRecord = new VistexDFDataResponseObject();
+                while (true)
+                {
+                    dataRecord = await DataAccessLayer.SentVistexClaimData("IQR_CLM_DATA", runMode);
+                    VistexCommonLogging.WriteToLog("Batch ID: " + dataRecord.BatchId);
+                    VistexCommonLogging.WriteToLog("Batch Status: " + dataRecord.BatchStatus);
+                    if (dataRecord.BatchId == "0" || dataRecord.BatchId == null)
+                    {
+                        Console.WriteLine("There is no outbound data to push..");
+                        VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
+                        VistexCommonLogging.WriteToLog("Business Flow - SendTenderClaimData - Success");
+                        VistexCommonLogging.SendMail("IQR_CLM_DATA", dataRecord, lstStatus);
+                        break;
+                    }
+                    else if (dataRecord.BatchStatus.ToLower() == "processed")
+                    {
+                        Console.WriteLine("Batch Id: " + dataRecord.BatchId + "  " + "Status: " + dataRecord.BatchStatus + " " + "Message: " + dataRecord.BatchMessage);
+                        lstStatus.Add("Batch ID: " + dataRecord.BatchId);
+                        lstStatus.Add("Batch Status: " + dataRecord.MessageLog);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                //Additional Logging
+                VistexCommonLogging.WriteToLog("Exception Received: " + "Thrown from: SendTenderClaimData - Vistex Business Flow Error: " + ex.Message + " |Innerexception: " + ex.InnerException + " | Stack Trace: " + ex.StackTrace);
+                VistexCommonLogging.WriteToLog("Business Flow - SendTenderClaimData - Exception");
+                VistexCommonLogging.HandleException(ex, true, "TenderClaimData");
+            }
+        }
     }
 }

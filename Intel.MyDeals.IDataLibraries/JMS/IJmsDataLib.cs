@@ -28,6 +28,7 @@ namespace Intel.MyDeals.IDataLibrary
         void InsertExceptionData(DateTime exceptionDatetime, string exceptionType, string exceptionMessage, string exceptionSource, string exceptionStackTrace);
 
         bool PublishBackToSfTenders(string data);
+        VistexDFDataResponseObject PublishClaimDataToSfTenders(string data, VistexDFDataResponseObject responseObj, string runMode);
 
         bool ReTriggerMulePacket(string xid);
 

@@ -17,10 +17,16 @@ namespace Intel.MyDeals.BusinessLogic
     public class VistexServiceLib : IVistexServiceLib
     {
         private readonly IVistexServiceDataLib _vistexServiceDataLib;
+        private readonly IJmsDataLib _jmsDataLib;
 
-        public VistexServiceLib(IVistexServiceDataLib vistexServiceDataLib)
+        public VistexServiceLib(IVistexServiceDataLib vistexServiceDataLib, IJmsDataLib jmsDataLib)
         {
             _vistexServiceDataLib = vistexServiceDataLib;
+            _jmsDataLib = jmsDataLib;
+        }
+        public VistexServiceLib()
+        {
+           
         }
 
         // Start actual functions here
@@ -38,6 +44,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // Construct the send JSON from the list of bodies we got
                 if (dataRecords.Count > 0)
                 {
+
                     string jsonData = "";                    
                     for (int indx = 0; indx < dataRecords.Count; indx++)
                     {
@@ -45,16 +52,30 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     
                     jsonData = jsonData.Remove(0, 1);
-                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
-                    responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords, runMode);
+                    if (runMode == "L")
+                    {
+                        responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Initiated ") + Environment.NewLine);
+                        responseObj = _jmsDataLib.PublishClaimDataToSfTenders(jsonData, responseObj, runMode);
+                        if (responseObj.BatchStatus == "PROCESSED")
+                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Success ") + Environment.NewLine);
+                        else
+                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Failed while publishing Claim Data to APIGEE ") + Environment.NewLine);
+                    }
+                    else
+                    {
+                        responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
+                        responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords, runMode);
+                        responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
+                    }
                     responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
-                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
+                    //obj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
 
                     jsonData = "";
                 }
                 else
                 {
-                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEALS";
+                    //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEALS";
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : "VISTEX_DEALS";
                     responseObj.BatchId = "0";
                     responseObj.BatchMessage = "No data to be Uploaded";
                     responseObj.BatchStatus = "PROCESSED";
@@ -64,7 +85,8 @@ namespace Intel.MyDeals.BusinessLogic
             }
             catch (Exception ex)
             {
-                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "DEALS";
+                //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "DEALS";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : "DEALS";
                 responseObj.BatchId = "-1";
                 responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObj.BatchStatus = "Exception";
@@ -296,6 +318,6 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _vistexServiceDataLib.PublishSapPo(url, jsonDatab.ToString());
         }
-
+        
     }
 }
