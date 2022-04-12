@@ -455,7 +455,7 @@ namespace Intel.MyDeals.DataLibrary
             
             //TO BE MODIFIED WHEN apiGeeURL integration will be done. 
             //Currently hardcoding the Success response.
-            responseObj.BatchId = Guid.NewGuid().ToString();
+            //responseObj.BatchId = Guid.NewGuid().ToString();
             responseObj.BatchName = "IQR_CLM_DATA";
             responseObj.BatchStatus = "PROCESSED";
             responseObj.BatchMessage = " Claim Data successfully sent to JMS.";

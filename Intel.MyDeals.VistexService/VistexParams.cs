@@ -41,8 +41,8 @@ namespace Intel.MyDeals.VistexService
     public class VistexParams
     {
         public int sleepSeconds = 0;
-        public JobMode jobMode = JobMode.SendConsumptionLoad;
-        public char jobType = JobModeCode.SendConsumptionLoad; // Default to run as SendDealsVistex is nothing is passed
+        public JobMode jobMode = JobMode.TenderClaimData;
+        public char jobType = JobModeCode.TenderClaimData; // Default to run as SendDealsVistex is nothing is passed
         public bool pauseOnEnd = false;
         public bool displayHelpOnly = false;
         public bool outputLogging = true;
