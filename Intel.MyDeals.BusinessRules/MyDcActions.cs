@@ -2025,11 +2025,13 @@ namespace Intel.MyDeals.BusinessRules
                     MyDealsAttribute atrb = onChangeWrongWayItems.FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                     if (atrb == null) continue;
 
-                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
-                        ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
-                        : atrb.DATA_TYPE_CD == "MONEY"
-                            ? $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}"
-                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME" ?
+                        $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}" // A date change
+                        : atrb.DATA_TYPE_CD == "MONEY" ?
+                            atrb.ATRB_COL_NM != AttributeCodes.INCENTIVE_RATE ?
+                                $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}" // A Money value
+                                : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue}% to {de.AtrbValue}%" // An Incentive Rate percentage
+                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}"); // Any other normal value change
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
@@ -2129,11 +2131,13 @@ namespace Intel.MyDeals.BusinessRules
                     MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                     if (atrb == null) continue;
 
-                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME"
-                        ? $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}"
-                        : atrb.DATA_TYPE_CD == "MONEY"
-                            ? $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}"
-                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}");
+                    reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME" ? 
+                        $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy}" // A date change
+                        : atrb.DATA_TYPE_CD == "MONEY" ? 
+                            atrb.ATRB_COL_NM != AttributeCodes.INCENTIVE_RATE ? 
+                                $"{atrb.ATRB_LBL} changed from ${de.OrigAtrbValue} to ${de.AtrbValue}" // A Money value
+                                : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue}% to {de.AtrbValue}%" // An Incentive Rate percentage
+                            : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}"); // Any other normal value change
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
             }
