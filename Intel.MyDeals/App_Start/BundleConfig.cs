@@ -249,6 +249,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/managerOverlapping.controller.js"
                 , "~/app/contract/controllers/managerPct.controller.js"
                 , "~/app/contract/controllers/managerTimeline.controller.js"
+                , "~/app/contract/controllers/missingCapCostModal.controller.js"
                 , "~/app/contract/controllers/mrktSegMultiSelect.service.js"
                 , "~/app/contract/controllers/multiSelectModal.controller.js"
                 , "~/app/contract/controllers/systemPricePointModal.controller.js"

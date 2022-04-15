@@ -1,0 +1,66 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" msg-type="isBusyType" is-show-fun-fact="isBusyShowFunFact" ng-show="isBusy"></loading-panel>
+
+<nav class="navbar navbar-default" style="margin-bottom: 0px;">
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+        <div class="navbar-header">
+            <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px; color: white;"></i>
+            <a class="navbar-brand" href="#">Deal {{dealId}} Missing Cap and Cost </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="" ng-click="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
+        </ul>
+    </div>
+</nav>
+
+<div id="secBasicContainerWrapper" style="padding:2px;min-height:200px">
+    <div class="row">
+        <div class="col-md-12">
+            <kendo-grid options="gridOptions" class="grid-dealproducts k-grid" id="missingCapCostGrid"></kendo-grid>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-skyblue, .btn-skyblue:hover, .btn-skyblue:focus, .btn-skyblue.focus {
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+
+    .grid-dealproducts.k-grid {
+        height: 250px;
+    }
+
+    .grid-dealproducts.k-grid tbody tr {
+        height: 28px;
+    }
+
+    .grid-dealproducts.k-grid th {
+        font-size: 11px;
+    }
+
+    .grid-dealproducts.k-grid td {
+        font-size: 11px;
+        padding: 0 8px;
+        height: 28px;
+    }
+
+    .excelText {
+        line-height: 1.2em;
+        font-size: 12px;
+        float: right;
+    }
+
+    .excelText span {
+        text-align: left;
+    }
+
+    .k-grid-excel {
+        font-size: 11px !important;
+    }
+
+    .tenderFolio-modal-window .modal-dialog {
+        width: 800px;
+        margin: auto;
+        MIN-HEIGHT: 200PX;
+    }
+</style>

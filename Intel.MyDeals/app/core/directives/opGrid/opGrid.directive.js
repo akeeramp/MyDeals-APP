@@ -222,6 +222,33 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             }
 
+            $scope.openMissingCapCostScreen = function (dataItem) {
+                $scope.context = dataItem;
+
+                //objsetService.getMissingCapCost(dataItem.DC_ID, 5, dataItem.CUST_MBR_SID).then(function (data) {
+                    //$scope.contractData = data.data[0];
+
+                var modalInstance = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/missingCapCostModal.html',
+                    controller: 'missingCapCostModalCtrl', 
+                    controllerAs: '$ctrl',
+                    size: 'lg',
+                    windowClass: 'tenderPctFolio-modal-window',
+                    resolve: {
+                        //testData: function () {
+                        //    return $scope.contractData;
+                        //},
+                        dataItem: function () {
+                            return dataItem;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () { }, function () { });
+                //});
+            }
+
             // This method is used for tender approvel Submitted to Offer stage change
             // Run PCT before stage change call
             $scope.$on('TenderRunPCTBeforeApproval', function (e, arg) {

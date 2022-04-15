@@ -19,6 +19,7 @@ function objsetService($http, dataService, logger, $q, $location) {
     var apiBaseSearchUrl = "/api/Search/";
     var customerVendorApiBaseUrl = "api/CustomerVendor/";
     var apiBaseConstantsUrl = "api/AdminConstants/v1/";
+    var apiBaseProductsUrl = "/api/Products/";
 
     var service = {
         createTenderContract: createTenderContract,
@@ -90,7 +91,7 @@ function objsetService($http, dataService, logger, $q, $location) {
         updateOverlappingDeals: updateOverlappingDeals,
         //getDealQuoteLetter: getDealQuoteLetter,
         constantsService: constantsService,
-
+        getMissingCapCost: getMissingCapCost,
         getDefaultValuesForTenderKit: getDefaultValuesForTenderKit,
         getCustomerVendorDropDown: getCustomerVendorDropDown
     }
@@ -333,6 +334,11 @@ function objsetService($http, dataService, logger, $q, $location) {
 
     function constantsService(name) {
         return dataService.get(apiBaseConstantsUrl + 'GetConstantsByName/' + name);
+    }
+
+    // #### Get Missing CAP/COST from Products
+    function getMissingCapCost(dealId, objLvl, custId) {
+        return dataService.get(apiBaseProductsUrl + 'GetDealProducts/' + dealId + '/' + objLvl + '/' + custId);
     }
 
     // #### Get Default Values for KIT - TENDER

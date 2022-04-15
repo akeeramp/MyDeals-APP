@@ -213,7 +213,7 @@ gridUtils.getMissingCostCapIcon = function (data) {
 
     // if title is empty send blank, this implies cost or cap is not missing
     if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
-    return '<div class="text-center uiControlDiv isReadOnlyCell"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
+    return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMissingCapCostScreen(dataItem)"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
 }
 
 gridUtils.booleanDisplay = function (passedData, field) {

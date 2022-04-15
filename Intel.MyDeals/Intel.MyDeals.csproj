@@ -526,6 +526,7 @@
     <Content Include="app\contract\controllers\managerExcludeGroups.controller.js" />
     <Content Include="app\contract\controllers\managerTimeline.controller.js" />
     <Content Include="app\contract\controllers\excludeDealGroupMultiSelect.controller.js" />
+    <Content Include="app\contract\controllers\missingCapCostModal.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModal.controller.js" />
     <Content Include="app\contract\controllers\allDeals.controller.js" />
     <Content Include="app\contract\controllers\actionSummaryModal.controller.js" />
@@ -547,6 +548,7 @@
     <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\meetCompTab.html" />
     <Content Include="app\contract\partials\ptModals\endCustomerRetailModal.html" />
+    <Content Include="app\contract\partials\ptModals\missingCapCostModal.html" />
     <Content Include="app\contract\partials\ptModals\managerPctModal.html" />
     <Content Include="app\contract\partials\ptModals\groupExclusionModal.html" />
     <Content Include="app\contract\partials\ptModals\meetCompModal.html" />
