@@ -456,61 +456,69 @@ namespace Intel.MyDeals.DataLibrary
             //TO BE MODIFIED WHEN apiGeeURL integration will be done. 
             //Currently hardcoding the Success response.
             //responseObj.BatchId = Guid.NewGuid().ToString();
-            responseObj.BatchName = "IQR_CLM_DATA";
-            responseObj.BatchStatus = "PROCESSED";
-            responseObj.BatchMessage = " Claim Data successfully sent to JMS.";
-            responseObj.RunMode = runMode;
-            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Publishing Claim Data Completed ") + Environment.NewLine);
+            //responseObj.BatchName = "IQR_CLM_DATA";
+            //responseObj.BatchStatus = "PROCESSED";
+            //responseObj.BatchMessage = " Claim Data successfully sent to JMS.";
+            //responseObj.RunMode = runMode;
+            //responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Publishing Claim Data Completed ") + Environment.NewLine);
 
-            //bool sendSuccess = false;
+            bool sendSuccess = false;
             //Get APIGEE Token to send Payload
-            //string accessToken = GetApiGeeToken();
-            //if (accessToken.Length > 0)
-            //{
-            //    string apiGeeResponseURL = jmsEnvs.ContainsKey("apiGeeResponseURL") ? jmsEnvs["apiGeeResponseURL"] : "";
-            //    HttpWebRequest APIReq = WebRequest.Create(apiGeeResponseURL) as HttpWebRequest;
-            //    APIReq.Method = "POST";
-            //    APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
-            //    APIReq.Method = "POST"; // Set the Method property of the request to POST. 
-            //    APIReq.KeepAlive = false;
-            //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            //    byte[] byteArray = Encoding.UTF8.GetBytes(data);
-            //    APIReq.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
-            //    APIReq.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
-            //    APIReq.Proxy = new WebProxy("proxy-chain.intel.com", 911);
-            //    Stream dataStream = APIReq.GetRequestStream();
-            //    dataStream.Write(byteArray, 0, byteArray.Length);
-            //    dataStream.Close();
+            string accessToken = GetApiGeeToken();
+            if (accessToken.Length > 0)
+            {
+                string apiGeeResponseURL = jmsEnvs.ContainsKey("apiGeeClaimUrl") ? jmsEnvs["apiGeeClaimUrl"] : "";
+                HttpWebRequest APIReq = WebRequest.Create(apiGeeResponseURL) as HttpWebRequest;
+                APIReq.Method = "POST";
+                APIReq.Headers.Add("Authorization", "Bearer " + accessToken);
+                APIReq.Method = "POST"; // Set the Method property of the request to POST. 
+                APIReq.KeepAlive = false;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                byte[] byteArray = Encoding.UTF8.GetBytes(data);
+                APIReq.ContentType = "application/json"; // "application/x-www-form-urlencoded"; // Set the ContentType property of the WebRequest.  
+                APIReq.ContentLength = byteArray.Length; // Set the ContentLength property of the WebRequest.  
+                APIReq.Proxy = new WebProxy("proxy-chain.intel.com", 911);
+                Stream dataStream = APIReq.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                
+                Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            //    Dictionary<string, string> responseObjectDictionary = new Dictionary<string, string>();
-            //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                try
+                {
+                    WebResponse response = APIReq.GetResponse(); // Get the response.
+                    responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Received response from APIGeeClaim Call. ") + Environment.NewLine);
+                    // The using block ensures the stream is automatically closed.
+                    using (dataStream = response.GetResponseStream())
+                    {
+                        StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream());
+                        string result = responseReader.ReadToEnd();
+                        // Get the stream containing content returned by the server.  
+                        SfApiGeeResponseObj ApiGeeResponse = JsonConvert.DeserializeObject<SfApiGeeResponseObj>(result);
+                        // Open the stream using a StreamReader for easy access.
+                        responseObjectDictionary["Data"] = result;
+                        //Logging
+                        if (ApiGeeResponse.IsSuccess.ToLower() == "true")
+                        {
+                            //sendSuccess = true;
+                            responseObj.BatchStatus = ((HttpWebResponse)response).StatusDescription == "OK" ? "PROCESSED" : "FAILED";
+                            responseObj.BatchMessage = "Tender Claim Data published";
+                        }
+                        OpLog.Log("JMS - Publish Tender Claim Data Completed: " + result.ToString());
+                        responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Publish Tender Claim Data Completed. ") + Environment.NewLine);
+                    }
 
-            //    try
-            //    {
-            //        WebResponse response = APIReq.GetResponse(); // Get the response.
-            //        responseObjectDictionary["Status"] = ((HttpWebResponse)response).StatusDescription;
-
-            //        // The using block ensures the stream is automatically closed.
-            //        using (dataStream = response.GetResponseStream())
-            //        {
-            //            StreamReader responseReader = new StreamReader(APIReq.GetResponse().GetResponseStream());
-            //            string result = responseReader.ReadToEnd();
-            //            // Get the stream containing content returned by the server.  
-            //            SfApiGeeResponseObj ApiGeeResponse = JsonConvert.DeserializeObject<SfApiGeeResponseObj>(result);
-            //            // Open the stream using a StreamReader for easy access.
-            //            responseObjectDictionary["Data"] = result;
-            //            //Logging
-            //            if (ApiGeeResponse.IsSuccess.ToLower() == "true") sendSuccess = true;
-            //            OpLog.Log("JMS - Publish to SF Tenders Completed: " + result.ToString());
-            //        }
-
-            //        response.Close();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        OpLogPerf.Log("JMS - Publish to SF Tenders ERROR: " + ex);
-            //    }
-            //}
+                    response.Close();
+                }
+                catch (Exception ex)
+                {
+                    OpLogPerf.Log("JMS - Publishing Tender Claim Data ERROR: " + ex);
+                    responseObj.BatchMessage = "Tender Claim Data publishing failed.";
+                    responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,Publishing Tender Claim Data ERROR : " +ex.InnerException) + Environment.NewLine);
+                }
+            }
 
             //return sendSuccess;
             return responseObj;

@@ -68,7 +68,8 @@ namespace Intel.MyDeals.BusinessLogic
                         responseObj = sendDealdataToSapPo(jsonData, responseObj, dataRecords, runMode);
                         responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
                     }
-                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
+                    //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLM_DATA" : responseObj.BatchName;
                     //obj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
 
                     jsonData = "";
@@ -106,14 +107,15 @@ namespace Intel.MyDeals.BusinessLogic
                 string header = "";
                 string footer = "";
 
-                header = "{\"Header\":{\"xid\":"+BatchId+ ",\"TargetSystem\":\"Tender\",\"SourceSystem\":\"MyDeals\",\"Action\":\"UpdateClaims\"},";
+                header = "{\"Header\":{\"xid\":\""+BatchId+ "\",\"TargetSystem\":\"Tender\",\"SourceSystem\":\"MyDeals\",\"Action\":\"UpdateClaims\"},";
                 //Footer item
-                footer = "}}";
+                footer = "}";
 
                 var finalJSON = header + jsonData + footer;
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Initiated ") + Environment.NewLine);
                 //Sending to SAP PO                
-                responseObj = _jmsDataLib.PublishClaimDataToSfTenders(jsonData, responseObj, runMode);
+                //responseObj = _jmsDataLib.PublishClaimDataToSfTenders(jsonData, responseObj, runMode);
+                responseObj = _jmsDataLib.PublishClaimDataToSfTenders(finalJSON, responseObj, runMode);
                 responseObj.BatchId = BatchId.ToString();
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Success ") + Environment.NewLine);
                 SetVistexDealOutBoundStageV(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "PO_Error_Rollback", responseObj.BatchMessage);

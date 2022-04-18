@@ -54,9 +54,14 @@
             if (apiName.indexOf())
                 if ((runMode == "D") || (runMode == "E")) {
                 return dataService.get(vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode);
-                } else if ((runMode == "M")) {
+                }
+                else if ((runMode == "M")) {
                     return dataService.get(vistexApiBase + apiName + '/CNSMPTN_LD/' + runMode);
-                } else if (runMode == "R") {
+                }
+                else if ((runMode == "L")) {
+                    return dataService.get(vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode);
+                }
+                else if (runMode == "R") {
                 return dataService.get(tenderApiBase + apiName);
             }
             else {
