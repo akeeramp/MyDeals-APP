@@ -1,65 +1,61 @@
-﻿
-#copyCntrctDlg {
-    padding: 0px !important;
+﻿#copyCntrctDlg {
+    padding: 0 !important;
     height: 566px;
-    overflow: hidden;
+    overflow: hidden
 }
 
 #copyCntrctGrid td {
-    cursor: pointer !important;
+    cursor: pointer !important
 }
 
 .k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
     border: none;
     background-color: #00AEEF !important;
-    color: white !important;
+    color: white !important
 }
 
 .k-grid > td {
-    padding: 0px;
+    padding: 0
 }
 
 .k-grid td {
-    cursor: pointer;
+    cursor: pointer
 }
 
-/* enable absolute positioning */
 .inner-addon {
-    position: relative;
+    position: relative
 }
 
-    /* style icon */
     .inner-addon .glyphicon {
         position: absolute;
         padding: 7px;
-        pointer-events: none;
+        pointer-events: none
     }
 
-/* align icon */
 .left-addon .glyphicon {
-    left: 0px;
+    left: 0
 }
 
 .right-addon .glyphicon {
-    right: 5px;
+    right: 5px
 }
 
 .ss-loading-panel {
     margin-top: 5% !important;
-    margin-left: 50% !important;
+    margin-left: 50% !important
 }
 
 .form-control {
     border-radius: 0 !important;
     box-shadow: none !important;
-    border-color: #d2d6de !important;
+    border-color: #d2d6de !important
 }
 
 .btn {
     border-radius: 3px;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border: 1px solid transparent;
+    border: 1px solid transparent
 }
 
 .btn-primary[disabled], .btn-primary[disabled]:hover {
@@ -67,11 +63,17 @@
     color: #b1babf !important;
     border-color: #b1babf !important;
     cursor: not-allowed !important;
-    pointer-events: all !important;
+    pointer-events: all !important
 }
 
 .btn-secondary {
     color: #0071c5 !important;
     background: #fff !important;
-    border-color: #b1babf !important;
+    border-color: #b1babf !important
 }
+
+    .btn-secondary:hover, .btn-secondary:focus, .btn-secondary.focus {
+        color: #0071c5 !important;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important
+    }

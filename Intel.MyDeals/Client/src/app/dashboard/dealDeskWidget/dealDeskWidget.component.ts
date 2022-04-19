@@ -37,7 +37,7 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
         }
         if (!!changes.custIds && changes.custIds.currentValue !== undefined) {
             const myCustIds = changes.custIds.currentValue.map(function (obj) {
-                return obj.value;
+                return obj.CUST_SID;
             });
             this.selectedCustomerIds = JSON.stringify(myCustIds);
             this.isLoading = true;

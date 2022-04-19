@@ -31,17 +31,17 @@ export class DashboardComponent implements OnInit {
     options: GridsterConfig;
     dashboard: GridsterItem[];
     resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
-    @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent; 
+    @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent;
     @Output() refreshEvent = new EventEmitter<any>();
 
     private startDateValue: Date = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
     //using for kendo-window  search option
-    private searchText="";
-    private opType="ALL";
+    private searchText = "";
+    private opType = "ALL";
     private windowOpened = false;
-    private windowTop = 220;windowLeft = 370;windowWidth = 950;windowHeight = 500;windowMinWidth = 100;
-    private searchDialogVisible=false;
+    private windowTop = 220; windowLeft = 370; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
+    private searchDialogVisible = false;
 
     public custNameList: Array<any> = [
         { text: "Apple", value: 5758 },
@@ -50,9 +50,12 @@ export class DashboardComponent implements OnInit {
         { text: "Dell", value: 2 },
         { text: "HP", value: 1774 },
     ];
+
+    public custData: any;
     public selectedCustNames: Item[];
     public selectedCustomerIds = [];
     public includeTenders = true;
+
 
     addItem(): void {
         this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
@@ -138,55 +141,55 @@ export class DashboardComponent implements OnInit {
             window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
         }
     }
-     //********************* search widget functions*************************
-    enterPressed(event:any,searchText:any) {
-        this.searchText=searchText;
+    //********************* search widget functions*************************
+    enterPressed(event: any, searchText: any) {
+        this.searchText = searchText;
         //KeyCode 13 is 'Enter'
         if (event.keyCode === 13 && this.searchText != "") {
-          //opening kendo window
-           this.setWindowWidth();
-           this.windowOpened=true;
+            //opening kendo window
+            this.setWindowWidth();
+            this.windowOpened = true;
         }
-        if(event.keyCode === 13 && this.searchText == ""){
-          this.searchDialogVisible=true;
+        if (event.keyCode === 13 && this.searchText == "") {
+            this.searchDialogVisible = true;
         }
-      }
-    setWindowWidth(){
-    if(this.opType=="ALL"){
-        this.windowWidth=1000;
     }
-    else{
-        this.windowWidth=600;
+    setWindowWidth() {
+        if (this.opType == "ALL") {
+            this.windowWidth = 1000;
+        }
+        else {
+            this.windowWidth = 600;
+        }
     }
-    }
-    closeDialog(){
-    this.searchDialogVisible=false;
+    closeDialog() {
+        this.searchDialogVisible = false;
     }
     windowClose() {
-    this.windowOpened = false;
+        this.windowOpened = false;
     }
     //these methond is an output method from globaslsearchresult component
-    getWindowWidth($event:number){
-    this.windowWidth=$event;
+    getWindowWidth($event: number) {
+        this.windowWidth = $event;
     }
-    isWindowOpen($event:boolean){
-    this.windowOpened=$event;
+    isWindowOpen($event: boolean) {
+        this.windowOpened = $event;
     }
-    onOpChange(opType:string,searchText:string){
-        this.searchText=searchText;
+    onOpChange(opType: string, searchText: string) {
+        this.searchText = searchText;
         if (this.searchText != "") {
-           //opening kendo window
-          this.opType=opType;
-          this.setWindowWidth();
-          //this condition is required since this should work only id kendo window is open 
-          if(this.GlobalSearchResults){
-            this.GlobalSearchResults.onOpTypeChange(this.opType);
-            this.windowOpened=true;
-          }
-         
-       }
-      }
-   //********************* search widget functions*************************
+            //opening kendo window
+            this.opType = opType;
+            this.setWindowWidth();
+            //this condition is required since this should work only id kendo window is open 
+            if (this.GlobalSearchResults) {
+                this.GlobalSearchResults.onOpTypeChange(this.opType);
+                this.windowOpened = true;
+            }
+
+        }
+    }
+    //********************* search widget functions*************************
     ngOnInit(): void {
         const dashboardItems = [];
         _.each(widgetConfig, item => {
@@ -197,20 +200,20 @@ export class DashboardComponent implements OnInit {
 
         this.options = {
             gridType: GridType.Fit,
-            allowMultiLayer:true,
+            allowMultiLayer: true,
             compactType: CompactType.CompactLeftAndUp,
             displayGrid: DisplayGrid.Always,
             pushItems: false,
             swap: true,
-            margin:5,
-            maxCols:20,
+            margin: 5,
+            maxCols: 20,
             swapWhileDragging: false,
             draggable: {
                 enabled: true
             },
             resizable: {
                 enabled: true,
-              
+
             },
             itemResizeCallback: (item) => {
                 // update DB with new size
@@ -218,10 +221,18 @@ export class DashboardComponent implements OnInit {
                 this.resizeEvent.emit(item);
             }
         };
+
+        this.cntrctWdgtSvc.getCustomerDropdowns()
+            .subscribe((response: Array<any>) => {
+                this.custData = response;
+            }, function (error) {
+                this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
+            });
     }
-    ngAfterViewInit(){
-      //this functionality will enable when dashboard landing to this page
-     document.getElementsByClassName('loading-screen')[0].setAttribute('style','display:none');
+
+    ngAfterViewInit() {
+        //this functionality will enable when dashboard landing to this page
+        document.getElementsByClassName('loading-screen')[0].setAttribute('style', 'display:none');
     }
 
     ngOnDestroy() {

@@ -5,10 +5,12 @@ import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import * as moment from 'moment';
+import { contractStatusWidgetService } from '../contractStatusWidget.service';
 
 export interface DialogData {
     startDate: string;
     endDate: string;
+    selectedCustIds: any;
 }
 
 
@@ -22,21 +24,19 @@ export interface DialogData {
 
 export class CopyContractComponent {
     constructor(public dialogRef: MatDialogRef<CopyContractComponent>, private loggerSvc: logger,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData, private dataService: GridStatusBoardService) {
+        @Inject(MAT_DIALOG_DATA) public data: DialogData, private dataService: GridStatusBoardService, private ctrctWdgtSvc: contractStatusWidgetService) {
 
     }
 
     private isCopyCntrctListLoaded = false;
-    private copyCntrctCustomerName: string = '<All>';
+    private copyCntrctCustomerName = '<All>';
     private copyCntrctSelectedItem = {};
-    private copyCntrctSearchText: string = "";
     private copyCntrctStartDate = moment(this.data.startDate).format("MM/DD/YYYY");
     private copyCntrctEndDate = moment(this.data.endDate).format("MM/DD/YYYY");
     private includeTenders = true;
     private selectedCustomerIds: Array<any> = [];
     private copyCntrctList: any;
 
-    private isLoading = true;
     public gridData: GridDataResult;
     public orgGridData: GridDataResult;
     private isCreateDisabled = true;
@@ -50,10 +50,6 @@ export class CopyContractComponent {
         this.dialogRef.close();
     }
 
-    onCopyCntrctCreateClick(): void {
-
-    }
-
     onCopyCntrctSearchTextChanged(searchValue): void {
         this.gridData['data'] = this.orgGridData['data'].filter(
             item => (item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
@@ -65,8 +61,34 @@ export class CopyContractComponent {
         this.isCreateDisabled = false;
     }
 
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
+        this.gridData = process(this.copyCntrctList, this.state);
+    }
+
     loadCopyContract() {
-        let postData = {
+        if (this.data.selectedCustIds) {
+            this.selectedCustomerIds = this.data.selectedCustIds.map(obj => {
+                return obj['CUST_SID'];
+            })
+        }
+
+        this.ctrctWdgtSvc.getCustomerDropdowns()
+            .subscribe(response => {
+                let custNms = [];
+                for (let i = 0; i < response.length; i++) {
+                    if (this.selectedCustomerIds.indexOf(response[i].CUST_SID) >= 0) {
+                        custNms.push(response[i].CUST_NM);
+                    }
+                }
+                this.copyCntrctCustomerName = custNms.length === 0
+                    ? "All" : custNms.length > 4 ? custNms.length + " customers selected" : custNms.join(", ");
+            },
+                function (error) {
+                    this.logger.error("CopContract::loadCopyContract::Unable to GetMyCustomerNames.", error);
+                });
+
+        const postData = {
             "CustomerIds": this.selectedCustomerIds,
             "StartDate": this.copyCntrctStartDate,
             "EndDate": this.copyCntrctEndDate,
@@ -77,7 +99,6 @@ export class CopyContractComponent {
                 this.copyCntrctList = response;
                 this.gridData = process(this.copyCntrctList, this.state);
                 this.orgGridData = process(this.copyCntrctList, this.state);
-                this.isLoading = false;
                 this.isCopyCntrctListLoaded = true;
             }, (error) => {
                 this.loggerSvc.error("copyContract::ngOnInit::Unable to GetDashboardContractSummary.", error);
@@ -90,10 +111,5 @@ export class CopyContractComponent {
 
     ngOnInit(): void {
         this.loadCopyContract();
-    }
-
-
-    ngOnDestroy() {
-
     }
 }

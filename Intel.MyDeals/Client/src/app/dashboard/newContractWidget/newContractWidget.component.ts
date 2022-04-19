@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core
 import { Subscription } from 'rxjs';
 import { GridsterItem } from 'angular-gridster2';
 import { NewContractWidgetService } from "./newContractWidget.service"
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { CopyContractComponent } from '../copyContract/copyContract.component';
 import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.component";
 @Component({
@@ -16,6 +16,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     @Input() resizeEvent: EventEmitter<GridsterItem>;
     @Input() private startDt: string;
     @Input() private endDt: string;
+    @Input() private custIds: any;
 
     resizeSub: Subscription;
     isTender = false;
@@ -58,10 +59,17 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         const dialogref = this.dialog.open(CopyContractComponent, {
             width: "800px",
             height: "620px",
+            disableClose: true,
             data: {
                 'startDate': this.startDt,
-                'endDate': this.endDt
+                'endDate': this.endDt,
+                'selectedCustIds': this.custIds
             },
+        });
+        dialogref.afterClosed().subscribe(result => {
+            if (result) {
+                document.location.href = "/Contract#/manager/0/details?copycid=" + result.CNTRCT_OBJ_SID;
+            }
         });
     }
 
