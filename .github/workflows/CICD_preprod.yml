@@ -1,0 +1,89 @@
+name: MyDeals pre-prod manual 
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: 'ENV'
+        required: true
+        default: 'ITT'
+        type: choice
+        options:
+          - 'DEV'
+          - 'ITT'
+          - 'DAY1'
+          - 'UTT1'
+          - 'UTT2'
+          - 'CONS1'
+          - 'CONS2'
+          - 'CIAR'
+          - 'PERF'
+      Move_Latest:
+        description: 'Move latest code deployed'
+        required: true
+        type: choice
+        default: 'yes'
+        options:
+          - 'yes'
+          - 'no'
+env:
+  NUGET_PATH: C:\NuGet\nuget.exe
+  MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+jobs:
+  Verify-environement:
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+     runs-on: [self-hosted,mydeals-runner01]
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Verify environement 
+         run: |
+            echo "RUN Verify command for ${{github.event.inputs.ENV}}"
+             ./scripts/deploy.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+
+  Restore-packages:
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+     runs-on: [self-hosted,mydeals-runner01]
+     needs:  Verify-environement
+     steps:
+       - name: Restore NUGET Packages 
+         run: |
+            echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
+            ./scripts/build.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+
+  Build:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && ( github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    runs-on: [self-hosted,mydeals-runner01]
+    needs: Restore-packages
+    steps:
+       - name: MS build publish
+         run: |
+            ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
+
+  Deploy:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Build
+    steps:
+       - name:  Move Publish Site 
+         run: |
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}' 
+           npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
+       - name:  Copy Publish Site to latest folder
+         run: |
+           ./scripts/deploy.ps1 'copy_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'  
+       - name:  IIS Restart
+         run: |
+            ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
+
+  Deploy_Latest:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Verify-environement
+    steps:
+       - name:  Move Publish Site from latest
+         run: |
+           ./scripts/deploy.ps1 'Deploy_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}' 
+           npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
+       - name:  IIS Restart
+         run: |
+            ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'  

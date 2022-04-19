@@ -7,7 +7,6 @@ try {
     elseif ($Operation -eq 'MSBuild' ){
      & $PATH /p:OutDir="$DIR/output" /p:TransformConfigFiles=true /p:Configuration=Release /p:Platform="Any CPU" /p:GenerateSerializationAssemblies=Off;
     }
-  
     else {
         Write-Host "Please provide correct values" -BackgroundColor DarkRed
         EXIT 1

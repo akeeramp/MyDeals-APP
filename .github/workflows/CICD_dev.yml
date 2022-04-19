@@ -1,4 +1,4 @@
-name: MyDeals GitHub Development 
+name: MyDeals development automate
 on:
   push:
      branches: [development]
@@ -6,8 +6,6 @@ env:
   SERVER: DEV
   NUGET_PATH: C:\NuGet\nuget.exe
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
-  DEV_DEPLOY_PATH: \\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals
-  DEV_DEPLOY_SERVER: HF2DEVMYDLW01.amr.corp.intel.com
 
 jobs:
   Restore-packages:
@@ -37,7 +35,12 @@ jobs:
     steps:
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.DEV_DEPLOY_SERVER}}' '${{env.SERVER}}' '${{env.DEV_DEPLOY_PATH}}'
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}' 
+           npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{env.SERVER}}
+       - name:  Copy Publish Site to latest folder
+         run: |
+           ./scripts/deploy.ps1 'copy_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}' 
        - name:  IIS Restart
          run: |
-            ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.DEV_DEPLOY_SERVER}}' '${{env.SERVER}}' '${{env.DEV_DEPLOY_PATH}}'
+            ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}' 
+            
