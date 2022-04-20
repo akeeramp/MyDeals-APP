@@ -16,17 +16,18 @@
                         Customers: <i class="intelicon-find-a-person-solid"></i>
                     </div>
                     <div class="fr col-md-2" style="width:10%">
-                        <kendo-multiselect class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" [(ngModel)]="selectedCustNames">
+                        <kendo-multiselect class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" 
+                                           [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)">
                         </kendo-multiselect>
                     </div>
                     <div class="fr col-md-3" style="width: 30%; color: #aaaaaa; font-size:15px">
                         Date Range:
-                        <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue">
+                        <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')">
                         </kendo-datepicker>
 
                         -
 
-                        <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue">
+                        <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')">
                         </kendo-datepicker>
                     </div>
                     <div class="fr col-md-1" style="width:1%">

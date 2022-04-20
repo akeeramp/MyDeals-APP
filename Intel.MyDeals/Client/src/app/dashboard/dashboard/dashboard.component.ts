@@ -43,14 +43,6 @@ export class DashboardComponent implements OnInit {
     private windowTop = 220; windowLeft = 370; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
     private searchDialogVisible = false;
 
-    public custNameList: Array<any> = [
-        { text: "Apple", value: 5758 },
-        { text: "Acer", value: 2348 },
-        { text: "Lenovo", value: 4006 },
-        { text: "Dell", value: 2 },
-        { text: "HP", value: 1774 },
-    ];
-
     public custData: any;
     public selectedCustNames: Item[];
     public selectedCustomerIds = [];
@@ -65,6 +57,19 @@ export class DashboardComponent implements OnInit {
         $event.preventDefault();
         $event.stopPropagation();
         this.dashboard.splice(this.dashboard.indexOf(item), 1);
+    }
+
+    onCustomerChange(custData) {
+        window.localStorage.selectedCustNames = JSON.stringify(custData);
+    }
+
+    onDateChange(value, dateChanged) {
+        if (dateChanged == "startDateChange") {
+            window.localStorage.startDateValue = value;
+        }
+        else if (dateChanged == "endDateChange") {
+            window.localStorage.endDateValue = value;
+        }
     }
 
     openWidgetSettings(index) {
@@ -192,6 +197,11 @@ export class DashboardComponent implements OnInit {
     //********************* search widget functions*************************
     ngOnInit(): void {
         const dashboardItems = [];
+
+        this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
+        this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
+        this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
+
         _.each(widgetConfig, item => {
             dashboardItems.push({ cols: item.position.col, rows: item.position.row, y: item.size.y, x: item.size.x, type: item.type, canRefresh: item.canRefresh, canSetting: item.canChangeSettings, isAdded: item.isAdded, name: item.name });
         });
