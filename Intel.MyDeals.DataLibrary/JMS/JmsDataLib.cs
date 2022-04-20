@@ -453,15 +453,6 @@ namespace Intel.MyDeals.DataLibrary
             OpLog.Log("JMS - Publishing Claim Data Tenders");
             responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Initiated ") + Environment.NewLine);
             
-            //TO BE MODIFIED WHEN apiGeeURL integration will be done. 
-            //Currently hardcoding the Success response.
-            //responseObj.BatchId = Guid.NewGuid().ToString();
-            //responseObj.BatchName = "IQR_CLM_DATA";
-            //responseObj.BatchStatus = "PROCESSED";
-            //responseObj.BatchMessage = " Claim Data successfully sent to JMS.";
-            //responseObj.RunMode = runMode;
-            //responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Publishing Claim Data Completed ") + Environment.NewLine);
-
             bool sendSuccess = false;
             //Get APIGEE Token to send Payload
             string accessToken = GetApiGeeToken();
@@ -503,10 +494,17 @@ namespace Intel.MyDeals.DataLibrary
                         if (ApiGeeResponse.IsSuccess.ToLower() == "true")
                         {
                             //sendSuccess = true;
-                            responseObj.BatchStatus = ((HttpWebResponse)response).StatusDescription == "OK" ? "PROCESSED" : "FAILED";
-                            responseObj.BatchMessage = "Tender Claim Data published";
+                            if(((HttpWebResponse)response).StatusDescription.ToLower() == "ok" || ((HttpWebResponse)response).StatusDescription.ToLower() == "accepted")
+                            { responseObj.BatchStatus = "PROCESSED";
+                                responseObj.BatchMessage = "Tender Claim Data published";
+                                OpLog.Log("JMS - Publish Tender Claim Data Completed: " + result.ToString());
+                            }
+                            else { responseObj.BatchStatus = "FAILED";
+                                responseObj.BatchMessage = "Tender Claim Data publish failed in APIGeeClaimURL";
+                                OpLog.Log("JMS - Publish Tender Claim Data failed: " + result.ToString());
+                            }                            
                         }
-                        OpLog.Log("JMS - Publish Tender Claim Data Completed: " + result.ToString());
+                        
                         responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,JMS - Publish Tender Claim Data Completed. ") + Environment.NewLine);
                     }
 
@@ -515,6 +513,7 @@ namespace Intel.MyDeals.DataLibrary
                 catch (Exception ex)
                 {
                     OpLogPerf.Log("JMS - Publishing Tender Claim Data ERROR: " + ex);
+                    responseObj.BatchStatus = "FAILED";
                     responseObj.BatchMessage = "Tender Claim Data publishing failed.";
                     responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders ,Publishing Tender Claim Data ERROR : " +ex.InnerException) + Environment.NewLine);
                 }

@@ -30,7 +30,7 @@ env:
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
 jobs:
   Verify-environement:
-     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
      runs-on: [self-hosted,mydeals-runner01]
      steps:
        - name: Checkout Directory
@@ -41,7 +41,7 @@ jobs:
              ./scripts/deploy.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
 
   Restore-packages:
-     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
      runs-on: [self-hosted,mydeals-runner01]
      needs:  Verify-environement
      steps:
@@ -51,7 +51,7 @@ jobs:
             ./scripts/build.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
 
   Build:
-    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && ( github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && ( github.event.inputs.Move_Latest == 'no')
     runs-on: [self-hosted,mydeals-runner01]
     needs: Restore-packages
     steps:
@@ -60,7 +60,7 @@ jobs:
             ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
 
   Deploy:
-    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
     runs-on: [self-hosted, mydeals-runner01]
     needs: Build
     steps:
@@ -76,7 +76,7 @@ jobs:
             ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
 
   Deploy_Latest:
-    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes') && (github.ref=='refs/heads/master' || github.ref=='refs/heads/development' || github.ref=='refs/heads/release' || github.ref=='refs/heads/feature')
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
     runs-on: [self-hosted, mydeals-runner01]
     needs: Verify-environement
     steps:
