@@ -77,3 +77,10 @@
         background-color: #edeff0 !important;
         border-color: #b1babf !important
     }
+
+label {
+    display: inline-block !important;
+    max-width: 100% !important;
+    margin-bottom: 5px !important;
+    font-weight: bold !important;
+}

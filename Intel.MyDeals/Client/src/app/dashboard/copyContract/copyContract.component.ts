@@ -52,7 +52,8 @@ export class CopyContractComponent {
 
     onCopyCntrctSearchTextChanged(searchValue): void {
         this.gridData['data'] = this.orgGridData['data'].filter(
-            item => (item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
+            item => ((item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
+                || (item.CNTRCT_OBJ_SID.toString()).includes(searchValue))
         )
     }
 
