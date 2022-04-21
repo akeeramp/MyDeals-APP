@@ -36,9 +36,9 @@ variables:
   CIAR_DEPLOY_PATH:     '\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals'
   PERF_DEPLOY_PATH:     '\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals'
   CINR_DEPLOY_PATH:     '\\HF2CINMYDLW01.amr.corp.intel.com\MyDeals'
-  DR_DEPLOY_PATH:       '\\CH2DRMYD2W01.amr.corp.intel.com\MyDeals'
-  PROD1_DEPLOY_PATH:    '\\FM1PRDMYD2W01.amr.corp.intel.com\MyDeals'
-  PROD2_DEPLOY_PATH:    '\\FM1PRDMYD2W02.amr.corp.intel.com\MyDeals'
+  DR_DEPLOY_PATH:       '\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals'
+  PROD1_DEPLOY_PATH:    '\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals'
+  PROD2_DEPLOY_PATH:    '\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals'
 
 stages:
  - Restore
