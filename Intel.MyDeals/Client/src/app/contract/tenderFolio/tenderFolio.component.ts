@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from "underscore";
 import { TenderFolioService } from '../tenderFolio/tenderFolio.service';
 import {logger} from '../../shared/logger/logger'
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 @Component({
     providers: [TenderFolioService],
@@ -141,6 +142,10 @@ export class TenderFolioComponent {
         }
         this.saveContractTender();
     }
+    public filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "startsWith",
+    };
     ngOnInit() {
         this.getAllCustomers();
     }

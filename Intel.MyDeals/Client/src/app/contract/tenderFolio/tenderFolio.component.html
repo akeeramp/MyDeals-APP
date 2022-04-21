@@ -27,7 +27,8 @@
                         </div>
                         <div class="col-md-11 row rmv-padding"><label class="rmv-mrgn-btm"><span
                                     class="red-color">* </span><span class="label-font">Customer:</span></label><br />
-                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [data]="contractData" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngModelOptions]="{standalone: true}">
+                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="contractData" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
+                                [ngModelOptions]="{standalone: true}">
                             </kendo-combobox>
                             <div *ngIf="isCustSelected" class="err-Control pdng-lft">Please select a valid customer</div>
                             <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245">
@@ -38,7 +39,7 @@
                             </kendo-dialog>
                         </div>
                         <div *ngIf="isCustDiv" class="col-md-11 row rmv-padding"><label class="rmv-mrgn-btm"><span>Division:</span></label><br />
-                            <kendo-multiselect class="division-name" #cmbmulti [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_SID" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}"></kendo-multiselect>
+                            <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_SID" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}"></kendo-multiselect>
                             <div class="description">Blank means that ALL divisions are included</div>
                         </div>
                         <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">* </span><span
