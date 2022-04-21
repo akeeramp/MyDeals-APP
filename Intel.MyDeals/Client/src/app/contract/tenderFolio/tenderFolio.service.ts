@@ -10,6 +10,7 @@ import 'rxjs/add/operator/toPromise';
 export class TenderFolioService {
     
     public dropdownUrl ="api/Customers/";
+    public apiBaseContractUrl = "/api/Contracts/v1/";
 
     constructor(private httpClient: HttpClient) {}
 
@@ -17,9 +18,11 @@ export class TenderFolioService {
         const apiUrl: string = this.dropdownUrl + 'GetMyCustomerNames';
         return this.httpClient.get(apiUrl);
     }
-
     public getCustDivBySID(custSID): Observable<any> {
         const apiUrl: string = this.dropdownUrl + 'GetMyCustomerDivsByCustNmSid/' + custSID;
         return this.httpClient.get(apiUrl)
+    }
+    public isDuplicateContractTitle(dcId, title): Observable<any> {
+        return this.httpClient.post(this.apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId, [title]);
     }
 }

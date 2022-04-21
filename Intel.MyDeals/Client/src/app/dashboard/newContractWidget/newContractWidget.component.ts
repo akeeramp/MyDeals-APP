@@ -44,14 +44,15 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(TenderFolioComponent, {
             panelClass: 'tender-folio-dialog',
             width: '600px',
-            height: '380px',
+            height: '400px',
             disableClose: true,
             data: { name: "Tender Folio Details" },
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                console.log("tender folio is closed!");
-
+                console.log(result);
+                //Redirect to contract detail screen for tender creation
+                // document.location.href = "/Contract#/manager/0/details?tender=1";
             }
         });
     }

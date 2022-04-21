@@ -1,102 +1,8 @@
 .tender-folio-dialog .mat-dialog-container {
-    padding: 0px !important;
-    overflow: hidden !important;
-    border-radius: 0px !important;
-    margin-top: 50px;
-}
-
-.rmv-padding {
-    padding: 0px !important;
-}
-
-.navbar-logo {
-    padding: 10px 5px !important;
-    font-size: 25px;
-    color: white;
-}
-
-#secContainer {
-    overflow: auto !important;
-}
-
-.infospan {
-    margin-top: -135px !important;
-    margin-left: 200px !important;
-    width: 220px !important;
-    background-color: #f2f2f2;
-    color: #322122;
-    padding: 8px 16px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    z-index: 99999;
-    position: fixed;
-    opacity: 0.86;
-}
-
-.combobox, .inputtext {
-    width: 100% !important;
-    padding: 0px !important;
-    margin-left: 10px !important
-}
-
-.contract-detail-form {
-    padding: 2px 20px 0px 20px !important;
-}
-
-.label-font {
-    font-weight: bold !important;
-    font-size: 14px !important;
-}
-
-.red-color {
-    color: #e32;
-}
-
-.ss-loading-panel {
-    background-color: #ffffff;
-    margin-top: 150px !important;
-    margin-left: 150px !important;
-    position: absolute !important;
-}
-
-.circleWithText:hover {
-    color: #FFA300;
-}
-
-    .circleWithText:hover .textCircle {
-        background-color: #FFA300;
-    }
-
-.activeCircle {
-    background-color: #FFA300;
-}
-
-.activeText {
-    color: #FFA300 !important;
-}
-
-.blueBg {
-    margin-top: 3px;
-}
-
-.circleWithText {
-    height: 28px !important;
-    padding-left: 10px;
-}
-
-    .circleWithText:hover {
-        color: #FFA300;
-    }
-
-.textName {
-    color: #00AEEF
-}
-
-.ptLnavTitle {
-    margin: -15px !important;
-    font-weight: bold;
-    font-size: 14px;
+    padding: 0!important;
+    overflow: hidden!important;
+    border-radius: 0!important;
+    margin-top: -55px
 }
 
 .modal-content {
@@ -104,76 +10,220 @@
     border-top: none
 }
 
-.k-numeric-wrap {
-    width: 100%;
+.tenderFolio-modal-window .modal-dialog {
+    width: 600px;
+    margin: auto
+}
+
+.ss-loading-panel {
+    background-color: #ffffff;
+    margin-top: 150px!important;
+    margin-left: 150px!important;
+    position: absolute!important
+}
+
+.rmv-padding {
+    padding: 0!important
+}
+
+.navbar-logo {
+    padding: 10px 5px!important;
+    font-size: 25px;
+    color: white
+}
+
+#secContainer {
+    overflow: auto!important
+}
+
+.infospan {
+    margin-top: -135px!important;
+    margin-left: 200px!important;
+    width: 220px!important;
+    background-color: #f2f2f2;
+    color: #322122;
+    padding: 8px 16px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: fixed;
+    opacity: .86
+}
+
+.contract-detail-form {
+    padding: 2px 20px 0 20px!important
+}
+
+.red-color {
+    color: #e32
+}
+
+.label-font {
+    font-weight: bold!important;
+    font-size: 14px!important
+}
+
+.width-height {
+    width: 470px!important;
+    max-width: none!important;
+    height: 39px!important
+}
+
+.width-style {
+    width: 515px!important;
+    max-width: none!important
+}
+
+.combobox,
+.inputtext {
+    padding: 0!important
 }
 
 .combobox {
-    margin-left: 13px !important;
+    margin-left: 13px!important;
+    border-radius: 0!important
+}
+
+.k-combobox {
+    border-color: #f0f0f0!important;
+    border-bottom: 2px solid #0071c5!important;
+    border-radius: 0!important
 }
 
 .inputtext {
-    margin-left: 0px !important;
+    margin-left: 0!important;
+    max-width: none!important;
+    border-radius: 0!important;
+    border-color: #f0f0f0!important;
+    border-bottom: 2px solid #0071c5!important
 }
 
-.tenderFolio-modal-window .modal-dialog {
-    width: 600px;
-    margin: auto;
+.kendoAlert {
+    padding: 1.4em!important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif!important
 }
 
-#copyCntrctDlg {
-    padding: 0px !important
+li.k-button {
+    border-radius: 1.071em;
+    position: relative;
+    color: #444444;
+    border-color: #fafafa;
+    background-color: #fafafa;
+    font-weight: normal!important;
+    font-size: 16px
 }
 
-
-
-.padTop30 {
-    padding-top: 30px;
+li.k-button:hover {
+    border-color: #ebebeb;
+    background-color: #ebebeb
 }
 
-.k-dialog .promptUserDialog {
-    text-align: center;
-    padding: 10px 0 0 0;
+.division-name {
+    box-shadow: none!important;
+    max-width: none!important;
+    border-radius: 0!important;
+    width: 495px!important
 }
 
-    .k-dialog .promptUserDialog h4 {
-        color: #003C71;
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 0;
-    }
-
-    .k-dialog .promptUserDialog p {
-        font-size: 12px;
-        padding: 10px 20px;
-    }
-
-.delete-attach-icon {
-    font-size: 16px;
-    cursor: pointer;
+.combobox:hover,
+.inputtext:hover,
+.division-name:hover {
+    background-color: #ffffff;
+    border-color: #f5f5f5;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
-    .delete-attach-icon:hover {
-        text-decoration: none;
-    }
-
-
-.hint-collapse {
-    display: none;
+.k-window {
+    border-radius: 0!important;
+    text-align: center!important
 }
 
-@media (max-width: 1000px) {
-    .hint-collapse {
-        background-color: #f3D54E;
-        color: #ffffff;
-        display: inherit;
-    }
-
-    .no-hint-collapse {
-        display: none;
-    }
+.k-window-content {
+    width: max-content!important;
+    overflow: hidden!important
 }
 
-.disabled-section {
-    background-color: #f2f2f2;
+.k-dialog-buttongroup {
+    padding: 0!important;
+    height: 63px;
+    background-color: #fafafa;
+    border-color: #fafafa!important;
+    cursor: pointer
+}
+
+.k-dialog-buttongroup:hover {
+    background-color: #e8eaec
+}
+
+.tenderFolioAlert {
+    border: .5px solid #ed1c24!important
+}
+
+.k-multiselect-wrap {
+    border-radius: 0!important;
+    border-color: #f0f0f0!important;
+    border-bottom: 2px solid #0071c5!important
+}
+
+.circleWithText:hover {
+    color: #FFA300
+}
+
+.circleWithText:hover .textCircle {
+    background-color: #FFA300
+}
+
+.activeCircle {
+    background-color: #FFA300
+}
+
+.activeText {
+    color: #FFA300!important
+}
+
+.blueBg {
+    margin-top: 3px
+}
+
+.circleWithText {
+    height: 28px!important;
+    padding-left: 10px
+}
+
+.circleWithText:hover {
+    color: #FFA300
+}
+
+.textName {
+    color: #00AEEF
+}
+
+.secBasicContainerWrapper {
+    height: 280px
+}
+
+.rmv-mrgn-btm {
+    margin-bottom: 0!important
+}
+
+.tndr-btn {
+    margin-left: 30px;
+    background-color: #00AEFF!important;
+    border-color: #367fa9!important
+}
+
+.pdng-lft {
+    padding-left: 15px!important
+}
+
+.kendo-alrt-btn {
+    padding: 1.4em
+}
+
+.mdl-cntnt-height {
+    height: 280px
+}
+
+.pdng-btm {
+    margin: 0 0 5px 0!important
 }
