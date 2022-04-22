@@ -26,6 +26,14 @@ namespace Intel.MyDeals.Entities
             {
                 public string CountryName { get; set; }
             }
+            [JsonProperty("AccountRequestReferences")]
+            public List<AccountRequestReferences> accountrequestreferences { get; set; }
+            public class AccountRequestReferences
+            {
+                public string Name { get; set; }
+                public string Value { get; set; }
+            }
+            public string ParentBusinessPartyIdentifierReference { get; set; }
         }
     }
 

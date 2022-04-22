@@ -263,7 +263,8 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         var UCDReqData = new UCDRequest.AccountRequests
                         {
-                            addresses = new List<UCDRequest.AccountRequests.Addresses>()
+                            addresses = new List<UCDRequest.AccountRequests.Addresses>(),
+                            accountrequestreferences = new List<UCDRequest.AccountRequests.AccountRequestReferences>()
                         };
                         List<string> County = new List<string>();
                         County.Add(Customer.PRIMED_CUST_CNTRY);
@@ -278,9 +279,14 @@ namespace Intel.MyDeals.BusinessLogic
 
                             CountryName = Customer.PRIMED_CUST_CNTRY
                         };
-
                         UCDReqData.addresses.Add(newAddressess);
-
+                        var newAccountRequestReferences = new UCDRequest.AccountRequests.AccountRequestReferences
+                        {
+                            Name = "DealId",
+                            Value = dealId.ToString()
+                        };
+                        UCDReqData.accountrequestreferences.Add(newAccountRequestReferences);
+                        UCDReqData.ParentBusinessPartyIdentifierReference = string.IsNullOrEmpty(Customer.PRIMED_CUST_ID.ToString()) || Customer.PRIMED_CUST_ID == 0 ? "" : Customer.PRIMED_CUST_ID.ToString() ;
                         UCDReqDataList.accountRequests.Add(UCDReqData);
                         String UCDJson = JsonConvert.SerializeObject(UCDReqData);
 
