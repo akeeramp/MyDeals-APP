@@ -208,15 +208,15 @@ namespace Intel.MyDeals.VistexService
                         Console.WriteLine("There is no outbound data to push..");
                         VistexCommonLogging.WriteToLogObject(dataRecord.MessageLog);
                         VistexCommonLogging.WriteToLog("Business Flow - SendTenderClaimData - Success");
-                        VistexCommonLogging.SendMail("IQR_CLM_DATA", dataRecord, lstStatus);
                         break;
                     }
-                    else if (dataRecord.BatchStatus.ToLower() == "processed")
+                    else if (dataRecord.BatchStatus.ToLower() == "processed" || dataRecord.BatchStatus.ToLower() =="failed")
                     {
                         Console.WriteLine("Batch Id: " + dataRecord.BatchId + "  " + "Status: " + dataRecord.BatchStatus + " " + "Message: " + dataRecord.BatchMessage);
                         lstStatus.Add("Batch ID: " + dataRecord.BatchId);
                         lstStatus.Add("Batch Status: " + dataRecord.MessageLog);
                     }
+                    VistexCommonLogging.SendMail("IQR_CLM_DATA", dataRecord, lstStatus);
                 }
             }
             catch (Exception ex)

@@ -82,6 +82,7 @@ namespace Intel.MyDeals.Entities
         TENDER_DEALS = 2,
         PROD_VERT_RULES = 3,
         CNSMPTN_LD = 4,
-        TENDER_DEALS_RESPONSE = 5
+        TENDER_DEALS_RESPONSE = 5,
+        IQR_CLM_DATA=6
     }
 }
