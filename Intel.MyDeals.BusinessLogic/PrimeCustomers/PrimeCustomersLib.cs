@@ -286,10 +286,13 @@ namespace Intel.MyDeals.BusinessLogic
                             Value = dealId.ToString()
                         };
                         UCDReqData.accountrequestreferences.Add(newAccountRequestReferences);
-                        UCDReqData.ParentBusinessPartyIdentifierReference = string.IsNullOrEmpty(Customer.PRIMED_CUST_ID.ToString()) || Customer.PRIMED_CUST_ID == 0 ? "" : Customer.PRIMED_CUST_ID.ToString() ;
+                        if (!string.IsNullOrEmpty(Customer.PRIMED_CUST_ID.ToString()) && Customer.PRIMED_CUST_ID != 0)
+                        {
+                            UCDReqData.ParentBusinessPartyIdentifierReference = Customer.PRIMED_CUST_ID.ToString();
+                        }
                         UCDReqDataList.accountRequests.Add(UCDReqData);
-                        String UCDJson = JsonConvert.SerializeObject(UCDReqData);
-
+                        String UCDJson = JsonConvert.SerializeObject(UCDReqData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                        
                         if ((Customer.END_CUSTOMER_RETAIL != null && Customer.END_CUSTOMER_RETAIL != "") &&
                             (Customer.PRIMED_CUST_CNTRY != null && Customer.PRIMED_CUST_CNTRY != "") && dealId != 0)
                         {
