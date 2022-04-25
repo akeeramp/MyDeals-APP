@@ -315,7 +315,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
 
 
-                    String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList);
+                    String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                     var tempFolder = ConfigurationManager.AppSettings["ucdLogPath"];
                     tempFolder = Path.Combine(tempFolder, "UCD Requests");
                     if (!Directory.Exists(tempFolder))
