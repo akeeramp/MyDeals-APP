@@ -1,19 +1,48 @@
 .boderClass {
-    border: solid .05px gray!important;
+    /*border: solid .05px gray !important;*/
+    border: 1px solid #eeeeee !important;
+    margin: 0 4px;
+    padding: 5px;
+    overflow: auto;
     height: 250px;
-    overflow-y: auto
+    /*overflow-y: auto*/
 }
 
 .search-result-item {
     border-bottom: 1px solid #eeeeee;
+    /*padding: 5px;*/
+    color: #00AEEF;
+    font-size: 12px;
+    /*cursor: pointer;*/
+}
+.mat-list-base .mat-list-item {
+    font-size: 12px !important;
+    font-family: "Intel Clear" !important;
+    height: auto !important;
+}
+
+.mat-list-base {
+    padding-top: 0px !important;
+}
+
+mat-list-item.mat-list-item.mat-focus-indicator {
+    border-bottom: 1px solid #eeeeee;
     padding: 5px;
     color: #00AEEF;
-    cursor: pointer
+    cursor: pointer;
+}
+
+mat-list-item:hover {
+    background-color: #e8eaec !important;
+}
+
+.mat-divider {
+    border-top-color: rgba(0,0,0,0) !important;
 }
 
 .btn-primary {
-    background-color: #3c8dbc!important;
-    border-color: #367fa9!important
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important
 }
 
 .mat-button-toggle-checked.mat-button-toggle-appearance-standard {

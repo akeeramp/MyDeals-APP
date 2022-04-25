@@ -259,6 +259,7 @@ a {
 
 .container-fluid {
     margin-top: -6px !important;
+    padding-right: 1px !important;
 }
 
 .alert {

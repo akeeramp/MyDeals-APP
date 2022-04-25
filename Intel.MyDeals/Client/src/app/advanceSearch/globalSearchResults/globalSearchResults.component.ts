@@ -129,6 +129,13 @@ export class GlobalSearchResultsComponent  {
       this.resultTake=50;
       this.getObjectTypeResult(opType);
     }
+    //yet to migrate Advance Search Screen
+    gotoAdvanced() {
+        //$("#winGlobalSearchResults").data("kendoWindow").close();
+        //let force = (window.location.href.indexOf("advancedSearch#") >= 0);
+        window.location.href = "/advancedSearch#/attributeSearch";
+        //if (force) window.location.reload(true);
+    }
     ngOnInit() {
         this.getObjectTypeResult(this.opType);
    }

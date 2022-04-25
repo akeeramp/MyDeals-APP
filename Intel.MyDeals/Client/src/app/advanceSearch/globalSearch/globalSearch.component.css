@@ -22,3 +22,25 @@
 .dropdown-search li {
     cursor: pointer
 }
+
+.k-window-title {
+    right: 1.143em !important;
+    left: 1.143em !important;
+    position: absolute !important;
+}
+
+.k-button-icon {
+    left: 63em !important;
+    padding-top: 0.45em !important;
+}
+
+.k-window-titlebar {
+    background-color: #0071c5 !important;
+    color: #fff !important;
+    padding: 0rem !important;
+    margin-top: -40px !important;
+}
+
+.dashboard-header {
+    margin-top: 48px !important;
+}

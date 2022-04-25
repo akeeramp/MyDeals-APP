@@ -15,3 +15,21 @@
     font-weight: normal!important;
     padding: 0 12px!important
 }
+
+
+.k-window-title {
+    right: 1.143em !important;
+    left: 1.143em !important;
+    position: absolute !important;
+}
+
+.k-button-icon {
+    left: 63em !important;
+    padding-top: 0.45em !important;
+}
+
+.k-window-titlebar {
+    background-color: #0071c5 !important;
+    color: #fff !important;
+    padding: 0rem !important;
+}

@@ -1,81 +1,79 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="overFlowWidget">
-    <div class="container-fluid ">
-        <div class="row" style="height: 25px;">
-            <div class="col-md-12">
+
+<div class="container-fluid ">
+
+    <div class="row dashboard-header">
+        <div class="col-md-8 left-inner-container" style="width: 100%;">
+            <div class="fr helpBtn" style="margin-left: 15px">
+                <i (click)="showHelpTopic();" class="intelicon-help" style="font-size: 30px !important;" title="Help"></i>
             </div>
-        </div>
-        <div class="row dashboard-header">
-            <div class="col-md-8 left-inner-container" style="width: 100%;">
-                <div class="fr row fl" style="width:100%">
-                    <!--<div class="row">-->
-                    <div class="col-md-2" style="width:30%"></div>
-                    <div class="fr col-md-2" style="width: 17%; margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 15px; ">
-                        Customers: <i class="intelicon-find-a-person-solid"></i>
-                    </div>
-                    <div class="fr col-md-2" style="width:10%">
-                        <kendo-multiselect class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" 
-                                           [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)">
-                        </kendo-multiselect>
-                    </div>
-                    <div class="fr col-md-3" style="width: 30%; color: #aaaaaa; font-size:15px">
-                        Date Range:
-                        <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')">
-                        </kendo-datepicker>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
+                <i (click)="defaultLayout()" class="intelicon-dashboard-solid" style="font-size: 18px" title="Default Layout"></i>
+            </a>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
+                <i (click)="openPopUp()" class="intelicon-plus-max" style="font-size: 18px" title="Add Widget"></i>
+            </a>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
+                <i (click)="refreshAllWidgets()" class="intelicon-refresh" style="font-size:18px" title="Refresh Dashboard"></i>
+            </a>
 
-                        -
-
-                        <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')">
-                        </kendo-datepicker>
-                    </div>
-                    <div class="fr col-md-1" style="width:1%">
-                        <button (click)="refreshAllWidgets()" class="fr btn btn-default btn-sm intelicon-refresh" style="padding: 4px 6px;font-size:18px" title="Refresh Dashboard"></button>
-                    </div>
-                    <div class="fr col-md-1" style="width:1%">
-                        <button (click)="openPopUp()" class="fr btn btn-default btn-sm intelicon-plus-max" style="padding: 4px 6px; font-size: 18px" title="Add Widget"></button>
-                    </div>
-                    <div class="fr col-md-1" style="width:2%">
-                        <button (click)="defaultLayout()" class="fr btn btn-default btn-sm intelicon-dashboard-solid" style="padding: 4px 6px; font-size: 18px" title="Default Layout"></button>
-                    </div>
-                    <div class="fr col-md-1" style="width:3%">
-                        <button (click)="showHelpTopic();" class="fr helpBtn intelicon-help" style="font-size: 30px !important; margin-left: 15px " title="Help"></button>
-                    </div>
-
+            <div class="fr">
+                <div class="fr">
+                    <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width:110px;">
+                    </kendo-datepicker>
+                    -
+                    <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width:110px;">
+                    </kendo-datepicker>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div style="width: 100vw; height: 100vh;">
-                    <gridster [options]="options">
-                        <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index">
-                            <div class="widgetFull">
-                                <div class="row widgetHeader">
-                                    <div class="col-md-10">
-                                        <b>{{item.name}}</b>
-                                    </div>
-                                    <div class="col-md-2 text-center">
-                                        <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons"><i
-                                            class="intelicon-trash-outlined"></i></a>
-                                        <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)"><i class="intelicon-refresh"></i></a>
-                                        <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons"><i class="intelicon-settings-solid"></i></a>
-                                    </div>
-                                </div>
-                                <div class="row" style="height:100%; width:100%">
-                                    <div class="col-md-12" style="height:100%; width:100%">
-                                        <app-dashboard-widget [widget]="item" [resizeEvent]="resizeEvent" [custIds]="selectedCustNames" [startDt]="startDateValue" [endDt]="endDateValue"></app-dashboard-widget>
-                                    </div>
-                                </div>
-                            </div>
-                        </gridster-item>
-                    </gridster>
+                <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
+
+                <div class="fr" style="width:254px">
+                    <kendo-multiselect [placeholder]="'Select Customers...'" class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
+                                       [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)"></kendo-multiselect>
+                </div>
+
+                <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px; ">
+                    Customers: <i class="intelicon-find-a-person-solid" style="font-size:24px;"></i>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class=" overFlowWidget">
+        <div class="row" style="overflow-x: hidden;">
+            <div style="width: 100vw; height: 100vh;">
+                <gridster [options]="options">
+                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index">
+                        <div class="widgetFull">
+                            <div class="row widgetHeader">
+                                <div class="col-md-10">
+                                    <span>{{item.name}}</span>
+                                </div>
+                                <div class="col-md-2 widgetHeaderBtns">
+                                    <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)"><i class="intelicon-refresh"></i></a>
+                                    <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons"><i class="intelicon-settings-solid"></i></a>
+                                    <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons">
+                                        <i class="intelicon-trash-outlined"></i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="row" style="height:100%; width:100%">
+                                <div class="col-md-12" style="height:100%; width:100%">
+                                    <app-dashboard-widget [widget]="item" [resizeEvent]="resizeEvent" [custIds]="selectedCustNames" [startDt]="startDateValue" [endDt]="endDateValue"></app-dashboard-widget>
+                                </div>
+                            </div>
+                        </div>
+                    </gridster-item>
+                </gridster>
+            </div>
+        </div>
+    </div>
 </div>
+
 <kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
     <kendo-window-titlebar>
         <div class="k-window-title">Search Results </div><button kendoWindowCloseAction></button>

@@ -1,11 +1,11 @@
 <div class="overFlowWidRecent">
     <div class="gridster-item-content">
         <div class="container-fluid widget-container" style="overflow: auto; text-align: left; display: table;">
-            <div class="row">
+            <!--<div class="row">
                 <div class="col-md">
                     <div>{{widget.type}}</div>
                 </div>
-            </div>
+            </div>-->
             <div class="row" *ngFor="let url of recentURLs">
                 <div class="col-md" style="margin:2px;font-size:14px"><a title="{{url}}" href="{{url}}">{{url | shorten:
                         50: '...'}}</a></div>
