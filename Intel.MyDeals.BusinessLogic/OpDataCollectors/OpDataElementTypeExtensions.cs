@@ -103,8 +103,7 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                     Attributes.CUST_MBR_SID.ATRB_SID,
                     Attributes.TITLE.ATRB_SID,
-                    Attributes.TENDER_PUBLISHED.ATRB_SID,
-                    Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                    Attributes.TENDER_PUBLISHED.ATRB_SID
                 });
 
             if (!myDealsData.ContainsKey(opDataElementType) ||
