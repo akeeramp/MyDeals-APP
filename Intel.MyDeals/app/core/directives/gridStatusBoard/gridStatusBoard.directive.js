@@ -201,7 +201,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         title: "Contract Title",
                         field: "TITLE",
                         width: "200px",
-                        template: '<span><a href="/Contract\\#/manager/#:CNTRCT_OBJ_SID#' + $scope.jumptoSummary + '" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: \\#FFA300;">[#:CNTRCT_OBJ_SID#]</span> #:TITLE#</a></span>'
+                        template: '<span><a href="/Contract\\#/contractmanager/#:CNTRCT_OBJ_SID#' + $scope.jumptoSummary + '" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: \\#FFA300;">[#:CNTRCT_OBJ_SID#]</span> #:TITLE#</a></span>'
                     }, {
                         title: "Customer",
                         field: "CUST_NM",

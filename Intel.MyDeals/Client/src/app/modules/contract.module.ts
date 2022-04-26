@@ -1,5 +1,17 @@
-import {TenderFolioComponent} from "../contract/tenderFolio/tenderFolio.component"
+//import { contractComponent } from "../contract/contract.component";
+import { contractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
+import { lnavComponent } from "../contract/lnav/lnav.component";
+import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";
+import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
+import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
+import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
 
-export let contractComponents =[
-    TenderFolioComponent
+
+export let contractComponents = [
+    contractDetailsComponent,
+    lnavComponent,
+    pricingTableComponent,
+    pricingTableEditorComponent,
+    TenderFolioComponent,
+    tenderManagerComponent
 ]

@@ -53,6 +53,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
                 console.log(result);
                 //Redirect to contract detail screen for tender creation
                 // document.location.href = "/Contract#/manager/0/details?tender=1";
+                window.location.href = "#tendermanager/" + result;
             }
         });
     }
@@ -69,7 +70,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         });
         dialogref.afterClosed().subscribe(result => {
             if (result) {
-                document.location.href = "/Contract#/manager/0/details?copycid=" + result.CNTRCT_OBJ_SID;
+                document.location.href = "#contractdetails/copycid=" + result.CNTRCT_OBJ_SID;
             }
         });
     }

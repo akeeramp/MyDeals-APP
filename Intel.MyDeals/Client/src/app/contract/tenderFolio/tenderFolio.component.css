@@ -1,7 +1,7 @@
 .tender-folio-dialog .mat-dialog-container {
-    padding: 0!important;
-    overflow: hidden!important;
-    border-radius: 0!important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
     margin-top: -55px
 }
 
@@ -17,13 +17,13 @@
 
 .ss-loading-panel {
     background-color: #ffffff;
-    margin-top: 150px!important;
-    margin-left: 150px!important;
-    position: absolute!important
+    margin-top: 150px !important;
+    margin-left: 150px !important;
+    position: absolute !important
 }
 
 .rmv-padding {
-    padding: 0!important
+    padding: 0 !important
 }
 
 .navbar-logo {
@@ -33,7 +33,7 @@
 }
 
 #secContainer {
-    overflow: auto!important
+    overflow: auto !important
 }
 
 .infospan {
@@ -51,7 +51,7 @@
 }
 
 .contract-detail-form {
-    padding: 2px 20px 0 20px!important
+    padding: 2px 20px 0 20px !important
 }
 
 .red-color {
@@ -59,48 +59,48 @@
 }
 
 .label-font {
-    font-weight: bold!important;
-    font-size: 14px!important
+    font-weight: bold !important;
+    font-size: 14px !important
 }
 
 .width-height {
-    width: 470px!important;
-    max-width: none!important;
-    height: 39px!important
+    width: 470px !important;
+    max-width: none !important;
+    height: 39px !important
 }
 
 .width-style {
-    width: 515px!important;
-    max-width: none!important
+    width: 515px !important;
+    max-width: none !important
 }
 
 .combobox,
 .inputtext {
-    padding: 0!important
+    padding: 0 !important
 }
 
 .combobox {
-    margin-left: 13px!important;
-    border-radius: 0!important
+    margin-left: 13px !important;
+    border-radius: 0 !important
 }
 
 .k-combobox {
-    border-color: #f0f0f0!important;
-    border-bottom: 2px solid #0071c5!important;
-    border-radius: 0!important
+    border-color: #f0f0f0 !important;
+    border-bottom: 2px solid #0071c5 !important;
+    border-radius: 0 !important
 }
 
 .inputtext {
-    margin-left: 0!important;
-    max-width: none!important;
-    border-radius: 0!important;
-    border-color: #f0f0f0!important;
-    border-bottom: 2px solid #0071c5!important
+    margin-left: 0 !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    border-color: #f0f0f0 !important;
+    border-bottom: 2px solid #0071c5 !important
 }
 
 .kendoAlert {
-    padding: 1.4em!important;
-    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif!important
+    padding: 1.4em !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important
 }
 
 li.k-button {
@@ -109,21 +109,14 @@ li.k-button {
     color: #444444;
     border-color: #fafafa;
     background-color: #fafafa;
-    font-weight: normal!important;
+    font-weight: normal !important;
     font-size: 16px
 }
 
-li.k-button:hover {
-    border-color: #ebebeb;
-    background-color: #ebebeb
-}
-
-.division-name {
-    box-shadow: none!important;
-    max-width: none!important;
-    border-radius: 0!important;
-    width: 495px!important
-}
+    li.k-button:hover {
+        border-color: #ebebeb;
+        background-color: #ebebeb
+    }
 
 .combobox:hover,
 .inputtext:hover,

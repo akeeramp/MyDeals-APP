@@ -1,0 +1,109 @@
+﻿#secBasicContainerWrapper {
+    height: 100%;
+    padding: 2px 0 50px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#secContainer {
+    overflow: auto !important;
+    height: 656px;
+    line-height: 1.5;
+}
+
+.isReqField {
+    color: red;
+}
+
+.contract-detail-form .opUiLabel {
+    font-size: 14px;
+    width: 160px;
+    font-weight: bold;
+}
+
+.padTop30 {
+    padding-top: 30px;
+}
+
+.k-dialog .promptUserDialog {
+    text-align: center;
+    padding: 10px 0 0 0;
+}
+
+.k-dialog .promptUserDialog h4 {
+    color: #003C71;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.k-dialog .promptUserDialog p {
+    font-size: 12px;
+    padding: 10px 20px;
+}
+
+.delete-attach-icon {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete-attach-icon:hover {
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #00AEFF;
+}
+
+.hint-collapse {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .hint-collapse {
+        background-color: #f3D54E;
+        color: #ffffff;
+        display: inherit;
+    }
+    .no-hint-collapse {
+        display: none;
+    }
+}
+
+.disabled-section {
+    background-color: #f2f2f2;
+}
+
+.row Contract {
+    height: calc(100vh - 24px - 40px) !important;
+    overflow: scroll !important;
+}
+
+#secFooter {
+    margin: 0 0 -50px 0;
+    height: 50px;
+    border-top: 1px solid #eeeeee;
+    padding: 7px 10px;
+    text-align: right;
+    font-size: 14px;
+    background-color: #fafafa;
+    width: 100%;
+    position: fixed;
+    right: 0px;
+    bottom: 64.5px !important;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+#contractHeading {
+    padding: 0px;
+}
+
+.contract-detail-form .opUiLabel {
+    font-size: 14px;
+    width: 160px;
+    font-weight: bold;
+}

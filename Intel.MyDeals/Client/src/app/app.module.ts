@@ -51,14 +51,16 @@ import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 import { EditorModule } from "@progress/kendo-angular-editor";
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
+import { UploadModule } from '@progress/kendo-angular-upload';
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
 //*********************dashboard components *********************
 import { dashboardComponents } from './modules/dashboard.module';
 //*********************advance search components *********************
 import { advanceSearchComponents } from './modules/advanceSearch.module';
-//*********************contract components *********************
-import {contractComponents} from './modules/contract.module'
+//*********************Contract components *********************
+import { contractComponents } from './modules/contract.module';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -94,7 +96,8 @@ import {contractComponents} from './modules/contract.module'
         DateInputsModule,
         NgPipesModule,
         OrderModule,
-        GridsterModule
+        GridsterModule,
+        UploadModule
         
      ],
      providers: [

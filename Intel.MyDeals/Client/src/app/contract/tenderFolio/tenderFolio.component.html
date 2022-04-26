@@ -6,7 +6,9 @@
 </loading-panel-angular>
 <nav class="navbar navbar-default rmv-padding">
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
-        <div class="navbar-header"><i class="intelicon-dashboard-solid navbar-logo"></i><a class="navbar-brand" href="#">Tender Folio Details</a>
+        <div class="navbar-header">
+            <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px;    color: white;"></i>
+            <a class="navbar-brand" href="#">Tender Folio Details</a>
         </div>
         <ul class="nav navbar-nav navbar-right" style="margin-right: -15px !important;">
             <li><a href="" (click)="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
@@ -15,20 +17,22 @@
 </nav>
 <div class="secBasicContainerWrapper rmv-padding mdl-cntnt-height">
     <div id="secContainer">
-        <div class="row"><span class="col-md-3 infospan"><span>* </span>Indicates Required fields</span>
+        <div class="row">
+            <span class="col-md-3 infospan"><span> * </span>Indicates Required fields</span>
         </div>
         <form class="contract-detail-form">
             <div class="container-fluid">
                 <div class="row ">
                     <div class="col-md-12">
                         <div class="col-md-12 row">
-                            <h6 class="pdng-btm width-style">{{contractType}} Information
-                            </h6>
+                            <h6 class="rmv-padding">{{contractType}} Information</h6>
                         </div>
-                        <div class="col-md-11 row rmv-padding"><label class="rmv-mrgn-btm"><span
-                                    class="red-color">* </span><span class="label-font">Customer:</span></label><br />
-                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="contractData" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
-                                [ngModelOptions]="{standalone: true}">
+                        <div class="col-md-11 row rmv-padding">
+                            <label class="rmv-mrgn-btm">
+                                <span class="red-color">* </span><span class="label-font">Customer:</span>
+                            </label><br />
+                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
+                                            [ngModelOptions]="{standalone: true}">
                             </kendo-combobox>
                             <div *ngIf="isCustSelected" class="err-Control pdng-lft">Please select a valid customer</div>
                             <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245">
@@ -38,20 +42,25 @@
                                 </kendo-dialog-actions>
                             </kendo-dialog>
                         </div>
-                        <div *ngIf="isCustDiv" class="col-md-11 row rmv-padding"><label class="rmv-mrgn-btm"><span>Division:</span></label><br />
+                        <div *ngIf="isCustDiv" class="col-md-11 row rmv-padding">
+                            <label class="rmv-mrgn-btm"><span>Division:</span></label><br />
                             <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_SID" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}"></kendo-multiselect>
                             <div class="description">Blank means that ALL divisions are included</div>
                         </div>
-                        <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">* </span><span
-                                    class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text" kendoTextBox
-                                [ngModelOptions]="{standalone: true}" />
+                        <div class="col-md-11 row">
+                            <label class="rmv-padding rmv-mrgn-btm">
+                                <span class="red-color">* </span><span class="label-font">Tender Folio Name:</span>
+                            </label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text" kendoTextBox
+                                                 [ngModelOptions]="{standalone: true}" />
                             <div class="err-Control" *ngIf="isTitleError">{{titleErrorMsg}}</div>
                         </div>
-                        <div *ngFor="let value of filterDealTypes()">
-                            <div id="btnSel{{value.name}}" class="fl circleWithText" (click)="selectPtTemplateIcon(value.name)" [ngClass]="{active: value._custom._active}">
-                                <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">{{ value._custom.ltr}}
+                        <div *ngFor="let value of PtDealTypes">
+                            <div id="btnSel{{value.name}}" class="fl circleWithText" (click)="selectPtTemplateIcon(value)" [ngClass]="{active: value._custom._active}">
+                                <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">
+                                    {{ value._custom.ltr}}
                                 </div>
-                                <div class="fl textName" [ngClass]="{activeText: value._custom._active}">{{value.name}}
+                                <div class="fl textName" [ngClass]="{activeText: value._custom._active}">
+                                    {{value.name}}
                                 </div>
                                 <div class="clearboth"></div>
                             </div>

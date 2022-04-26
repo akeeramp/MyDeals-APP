@@ -9,12 +9,17 @@
 }
 
 .search-result-item {
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 0 !important;
     /*padding: 5px;*/
     color: #00AEEF;
     font-size: 12px;
     /*cursor: pointer;*/
 }
+
+.search-result-item:hover {
+    background-color: transparent !important;
+}
+
 .mat-list-base .mat-list-item {
     font-size: 12px !important;
     font-family: "Intel Clear" !important;
@@ -37,7 +42,7 @@ mat-list-item:hover {
 }
 
 .mat-divider {
-    border-top-color: rgba(0,0,0,0) !important;
+    border-top-color: rgba(0, 0, 0, 0) !important;
 }
 
 .btn-primary {

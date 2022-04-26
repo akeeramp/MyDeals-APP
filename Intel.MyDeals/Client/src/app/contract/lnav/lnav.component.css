@@ -1,0 +1,56 @@
+﻿.wht {
+    color: #ffffff;
+}
+
+.red {
+    color: #FC4C02;
+}
+
+.yel {
+    color: #f3D54E;
+}
+
+.orng {
+    color: #FFA300;
+}
+
+.font-med {
+    font-size: 14px;
+}
+
+.flowBtn {
+    background-color: #003C71;
+    padding: 9px 2px;
+    font-size: 12px;
+    font-weight: 600;
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    cursor: default;
+}
+
+.flowBtn.disabled,
+.flowBtn.disabled:hover {
+    background-color: #cccccc !important;
+    color: #999999;
+    cursor: default;
+}
+
+.flowBtn.inactive {
+    background-color: #00AEEF;
+    cursor: pointer;
+}
+
+.flowBtn.inactive:hover {
+    background-color: #003C71;
+}
+
+.flowBtn.disabled {
+    cursor: not-allowed !important;
+}
+
+.isErrorWrapper .k-state-default.k-picker-wrap,
+.isErrorWrapper .k-state-default.k-numeric-wrap,
+.isErrorWrapper .k-state-default.k-dropdown-wrap {
+    border: 1px solid #ed8282;
+}

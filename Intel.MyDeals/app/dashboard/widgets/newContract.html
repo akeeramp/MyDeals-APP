@@ -118,7 +118,7 @@
     function newCntrct(isTender) {
         document.location.href = (isTender !== undefined && isTender === true)
             ? "/Contract#/manager/0/details?tender=1"
-            : "/Contract#/manager/0/details";
+            : "/Contract#/contractdetails/0";
     }
     function dismissPopup() {
         var el = document.getElementById("createNewContract") // main page

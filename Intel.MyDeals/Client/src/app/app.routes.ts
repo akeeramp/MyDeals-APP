@@ -67,7 +67,7 @@ angular
                 url: "/adminemployeedashboard",
                 abstract: false,
                 views: {
-                    dashboardView: {
+                    mainView: {
                         template: '<employee-dashboard></employee-dashboard>'
                         // templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
                         // controller: "ReportingDashboardController as vm"
@@ -333,4 +333,36 @@ angular
             })
             //********************* Admin route  ends here **************
 
+            // ********************* Contract route  starts here ************** 
+            .state("contractdetails", {
+                url: "/contractdetails/:cid",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<contract-details></contract-details>',
+                    }
+                }
+            })
+
+            .state("contractmanager", {
+                url: "/contractmanager/:cid",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<pricing-table></pricing-table>',
+                    }
+                }
+            })
+
+            .state("tendermanager", {
+                url: "/tendermanager/:cid",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<tender-manager></tender-manager>',
+                    }
+                }
+            })
+
+             //// ********************* Contract route  ends here  **************  
     });
