@@ -243,6 +243,8 @@
     <Folder Include="Views\ValidateVistexR3Checks\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Client\node_modules\**" />
+    <Compile Remove="Client\node_modules\**" />
     <Compile Include="ActionFilters\ApiAuthorizeAttribute.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
