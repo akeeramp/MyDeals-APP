@@ -107,3 +107,15 @@
     width: 160px;
     font-weight: bold;
 }
+
+.radioControl {
+    cursor: pointer !important;
+}
+
+.radioButtonGroup {
+    display: inline-flex !important;
+}
+
+.contract-detail-form{
+    padding-bottom:150px !important;
+}

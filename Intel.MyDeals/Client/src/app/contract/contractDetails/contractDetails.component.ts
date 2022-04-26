@@ -362,7 +362,8 @@ export class contractDetailsComponent {
                     this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
                     this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
-
+                    // below line of code is to set default value for contract type dropdown.
+                    this.CONTRACT_TYPE = CONTRACT_TYPE[0];
                     let url = window.location.href.split("/");
                     let qString = url[url.length - 1];
                     if (qString.indexOf("=") != -1) {

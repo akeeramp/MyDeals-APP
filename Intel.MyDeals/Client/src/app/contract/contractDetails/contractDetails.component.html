@@ -89,13 +89,18 @@
                                     <h6>Customer Acceptance of Contract is...</h6>
                                 </div>
                                 <div class="col-md-1" [hidden]="isTenderContract">
-                                    <div class="fr helpBtn" title="Help"><i class="intelicon-help" style="font-size:30px !important"></i></div>
-                                </div>
+                                    <div class="fr helpBtn" title="Help">
+                                    <a href="https://wiki.ith.intel.com/display/Handbook/Contract+Details" target="_blank"><i class="intelicon-help" style="font-size:30px !important"></i></a></div>
+                                    </div>
                                 <div class="col-md-11 row">
                                     <div *ngFor="let data of dropDownsData?.CUST_ACCPT; let idx=index">
                                         <div>
                                             <div class="col-md-12" style="margin-bottom:10px; border-bottom:1px solid #eeeeee"></div>
-                                            <div class="col-md-4"><input type="radio" [name]="data.DROP_DOWN" [value]="data.DROP_DOWN" [(ngModel)]="selectedCUST_ACCPT" [checked]="(idx===0)" /><label for="{{data.DROP_DOWN}}" class="radioControl">&nbsp;{{data.DROP_DOWN}}</label>
+                                            <div class="col-md-4">
+                                                <div class="radioButtonGroup">
+                                                    <input type="radio" id="{{data.DROP_DOWN}}" [name]="data.DROP_DOWN" [value]="data.DROP_DOWN" [(ngModel)]="selectedCUST_ACCPT" [checked]="(idx === 0)" />
+                                                    <label for="{{data.DROP_DOWN}}" class="radioControl">&nbsp;{{data.DROP_DOWN}}</label>
+                                                </div>
                                                 <div class="lookupDesc" *ngIf="data.DROP_DOWN==selectedCUST_ACCPT">{{data.ATRB_LKUP_DESC}} </div>
                                             </div>
                                             <div class="col-md-8" style="overflow-wrap:break-word"><span [innerHTML]="data.ATRB_LKUP_TTIP"></span></div>
@@ -130,7 +135,7 @@
                                     <div class="col-md-12">
                                         <h6 class="noBottemBorder">Notes</h6>
                                     </div>
-                                    <div class="col-md-11">
+                                    <div class="col-md-12">
                                         <kendo-textarea style="width:100%" resizable="vertical" [rows]="5"></kendo-textarea>
                                     </div>
                                 </div>
