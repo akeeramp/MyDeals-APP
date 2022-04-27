@@ -5,6 +5,7 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { ContractUtil } from "../contract.util";
+import { templatesService } from "../../shared/services/templates.service";
 
 export interface contractIds {
     Model: string;
@@ -20,7 +21,7 @@ export interface contractIds {
 })
 
 export class pricingTableComponent {
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice) { }
+    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice,private templatesSvc: templatesService) { }
 
     public curPricingStrategy: any = {};
     public pricingTableData: any = {};
@@ -31,6 +32,9 @@ export class pricingTableComponent {
     private isDETab: boolean = false;
     private selLnav: string = 'PTE';
     private isPTEEnable: boolean = false;
+    private isLNavEnable: boolean = false;
+    public contractData:any=null;
+    public UItemplate:any=null
 
     loadModel(contractModel: contractIds) {
         this.selLnav = contractModel.Model
@@ -59,9 +63,24 @@ export class pricingTableComponent {
     onTabSelect(e: SelectEvent) {
         console.log("onTabSelect  ***********", e);
     }
+    loadAllContractDetails() {
+        this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
+            this.contractData = response[0];
+            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+                this.UItemplate = response;
+                this.isLNavEnable=true;
+            },(error) => {
+                this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
+            })
+        },(error) => {
+            this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
+        })
+     
+    }
     ngOnInit() {
         let url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
+        this.loadAllContractDetails();
     }
 }
 angular.module("app").directive(

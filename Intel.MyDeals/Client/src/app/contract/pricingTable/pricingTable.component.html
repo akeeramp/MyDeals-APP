@@ -11,13 +11,13 @@
                     </div>
                     <div *ngIf="isPTEEnable==true">
                         <kendo-tabstrip (tabSelect)="onTabSelect($event)">
-                            <kendo-tabstrip-tab  title="Pricing Table Editor" [selected]="isPTETab==true">
+                            <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
                                     <p>pricing Editor</p>
-                                    <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id"></pricingTableEditor>
+                                    <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></pricingTableEditor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
-                            <kendo-tabstrip-tab  title="Deal Editor" [selected]="isDETab==true">
+                            <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true">
                                 <ng-template kendoTabContent>
                                     <p>Deal Editor</p>
                                 </ng-template>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div *ngIf="selLnav=='MeetComp'">
-                    <p>MeetComp screen</p>
+                    <p>Meet Comp</p>
                 </div>
                 <div *ngIf="selLnav=='Manage'">
                     <p>Manage screen</p>
@@ -89,7 +89,7 @@
             </div>
         </div>
     </div>
-    <div id="left-pane">
-        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)"></lnavView>
+    <div id="left-pane" *ngIf="isLNavEnable">
+        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
     </div>
 </div>

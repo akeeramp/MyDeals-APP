@@ -6,6 +6,7 @@ import { pricingTableEditorService } from './pricingTableEditor.service'
 import Handsontable from 'handsontable';
 import * as _ from 'underscore';
 import { templatesService } from '../../shared/services/templates.service';
+import { ContractUtil } from '../contract.util';
 
 /**
  * http://localhost:55490/Dashboard#/contractmanager/26006
@@ -16,7 +17,7 @@ import { templatesService } from '../../shared/services/templates.service';
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html',
     styleUrls: ['Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css']
 })
-export class pricingTableEditorComponent implements OnChanges, OnInit {
+export class pricingTableEditorComponent implements OnInit {
 
     constructor(private pteService: pricingTableEditorService,
                 private templateService: templatesService,
@@ -25,104 +26,302 @@ export class pricingTableEditorComponent implements OnChanges, OnInit {
     @Input() in_Cid: any;
     @Input() in_Ps_Id: any;
     @Input() in_Pt_Id: any;
-    public contractData: Array<any>;
-    public curPricingStrategy: any = {};
-    public pricingTableData: any = {};
-    public pricingTableTemplates: any = {};  // Contains templates for All Deal Types
+    @Input() contractData: any;
+    @Input() UItemplate: any;
+
+    private curPricingStrategy: any = {};
+    private curPricingTable:any={};
+    private pricingTableData: any = {};
+    private pricingTableTemplates: any = {};  // Contains templates for All Deal Types
 
     // Handsontable Variables
     private hotSettings: Handsontable.GridSettings;
-    private dataset: unknown[];
+    private dataset: any[]=null;
+    private columns: Array<any>=null;
     private columnTitles: string[];
     // private columnTuples: ColumnTuple[];
     private id = "pricingTableInstance";
 
-    ngOnChanges() {
-        let vm= this;
+
+    getTemplateDetails(){
         // Get the Contract and Current Pricing Strategy Data
-        vm.pteService.readContract(vm.in_Cid).subscribe((response) => {
-            vm.contractData = response[0];
-            vm.curPricingStrategy = vm.findInArray(vm.contractData["PRC_ST"], vm.in_Ps_Id);
-               // Get the Current Pricing Table data
-                vm.pteService.readPricingTable(vm.in_Pt_Id).subscribe((response) => {
-                    vm.pricingTableData = response;
-                    // Get Pricing Table Templates
-                    vm.templateService.readTemplates().subscribe((response) => {
-                        vm.pricingTableTemplates = (response["ModelTemplates"])["PRC_TBL"];
-                          // Set columns from Pricing Table Template
-                        vm.columnTitles = vm.getColumns(vm.getCurrentPricingTableTemplate());
-                        // vm.hotSettings.colHeaders = vm.columnTitles;
-                        vm.hotSettings = {
-                            licenseKey: 'non-commercial-and-evaluation',
-                            colHeaders: vm.columnTitles,
-                            data: Handsontable.helper.createSpreadsheetData()
-                        }
-                    }, (error) => {
-                        this.loggerService.error('pricingTableEditorComponent::getPricingTableTemplates::readTemplates:: service', error);
-                    });
+        this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+        // Get the Current Pricing Table data
+        this.curPricingTable = ContractUtil.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+        // Get template for the selected PT
+        this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
-                  
-                });
+    }
+    getPTRDetails(){
+        let vm= this;
+        vm.pteService.readPricingTable(vm.in_Pt_Id).subscribe((response) => {
+            vm.pricingTableData = response;
+            vm.getTemplateDetails();
+        }, (error) => {
+            this.loggerService.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', error);
         });
+    }
+  
      
-    }
-
     ngOnInit(): void {
-        // this.hotSettings = {
-        //     licenseKey: 'non-commercial-and-evaluation',
-        //     colHeaders: true,
-        //     data: Handsontable.helper.createSpreadsheetData()
-        // }
-    }
-
-    private findInArray(input, id) {
-        const len = input.length;
-        for (let i = 0; i < len; i++) {
-            if (+input[i].DC_ID === +id) {
-                return input[i];
+        this.getPTRDetails();
+        // vm.hotSettings.colHeaders = vm.columnTitles;
+        this.columns=[
+          {
+            data: 'id',
+            type: 'numeric',
+            width: 50,
+            readOnly: true,
+          },
+          {
+            data: 'name',
+            type: 'text',
+            width: 100,
+            allowEmpty: false,
+            allowInvalid: false
+          },
+          {
+            data: 'address',
+            type: 'text',
+            width: 200,
+            allowEmpty: false,
+    
+           },
+          {
+            data: 'mobile',
+            type: 'numeric',
+            width: 100
+          },
+          {
+            data: 'amount',
+            type: 'numeric',
+            numericFormat: {
+              pattern: '$0,0.00',
+              culture: 'en-US' // this is the default culture, set up for USD
+            },
+            allowEmpty: false
+          },
+          {
+            data: 'location',
+            type: 'dropdown',
+            source: ['HF', 'FM', 'IN', 'OR'],
+            allowInvalid: false
+          },
+          {
+            data: 'geo',
+            
+          },
+          {
+            data: 'Date',
+            type: 'date',
+            defaultDate: '01/01/2020',
+            dateFormat: 'MM/DD/YYYY',
+            correctFormat: true,
+            allowInvalid: false,
+            datePickerConfig: {
+              // First day of the week (0: Sunday, 1: Monday, etc)
+              firstDay: 1,
+              showWeekNumber: true,
+              numberOfMonths: 1,
+              licenseKey: '8cab5-12f1d-9a900-04238-a4819',
+              // disableDayFn(date) {
+              //   // Disable Sunday and Saturday
+              //   return date.getDay() === 0 || date.getDay() === 6;
+              // }
             }
+          }
+        ];
+        this.dataset = [
+          {
+            id: 1,
+            name: "Ted Right",
+            address: "Wall Street",
+            mobile: "123",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 2,
+            name: "Frank Honest",
+            address: "Pennsylvania Avenue",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "LAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 3,
+            name: "Joan Well",
+            address: "Broadway",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 3,
+            name: "Joan Well",
+            address: "Banglore",
+            mobile: "489",
+            amount: "222",
+            location: "OR",
+            geo: "NAR",
+            Date: "02/02/2020",
+          },
+          {
+            id: 4,
+            name: "Gail Polite",
+            address: "Bourbon Street",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 5,
+            name: "Michael Fair",
+            address: "Lombard Street",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 6,
+            name: "Mia Fair",
+            address: "Rodeo Drive",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 7,
+            name: "Cora Fair",
+            address: "Sunset Boulevard",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 8,
+            name: "Jack Right",
+            address: "Michigan Avenue",
+            mobile: "456",
+            amount: "1111",
+            location: "HF",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 9,
+            name: "Jon Mil",
+            address: "Kan Avenue",
+            mobile: "456",
+            amount: "4856",
+            location: "OR",
+            geo: "NAR",
+            Date: "01/01/2020",
+          },
+          {
+            id: 10,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          },
+          {
+            id: 11,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          },
+          {
+            id: 12,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          },
+          {
+            id: 13,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          },
+          {
+            id: 14,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          },
+          {
+            id: 15,
+            name: "",
+            address: "",
+            mobile: "",
+            amount: "",
+            location: "",
+            geo: "",
+            Date: "",
+          }
+         
+    
+        ];
+        this.hotSettings={
+          colHeaders: false,
+          rowHeaders: true,
+          rowHeaderWidth : 0,
+          fixedColumnsLeft: 1,
+          fixedRowsTop: 0,
+          height: 350,
+          width:350,
+          maxRows:20,
+          maxCols:20,
+          comments: true,
+          columns:this.columns,
+          copyPaste: true,
+          nestedHeaders:[
+            ['A','B','C','D','E','F','G','H'],
+            [`<span style="color:blue;font-style: italic;">ID</span>`,
+            `<span style="color:blue;font-style: italic;">Name*</span>`,
+            `<span style="color:blue;font-style: italic;">Address*</span>`,
+            `<span style="color:blue;font-style: italic;">mobile</span>`,
+            `<span style="color:blue;font-style: italic;">Amount</span>`,
+            `<span style="color:blue;font-style: italic;">location</span>`,
+            `<span style="color:blue;font-style: italic;">Geo</span>`,
+            `<span style="color:blue;font-style: italic;">Date</span>`],
+          ],
+          licenseKey: "8cab5-12f1d-9a900-04238-a4819",
         }
-        return null;
-    }
-
-    private getPricingTableTemplates() {
-        if (_.isEmpty(this.pricingTableTemplates)) {
-            // For PTE Column Templates
-            // PTR Template: PRC_TBL > use `columns` in deal type
-            // Possibly add Caching since this response shouldn't change 
-            this.templateService.readTemplates().subscribe((response) => {
-                this.pricingTableTemplates = (response["ModelTemplates"])["PRC_TBL"];
-            }, (error) => {
-                this.loggerService.error('pricingTableEditorComponent::getPricingTableTemplates::readTemplates:: service', error);
-            });
-        }
-    }
-
-    private getCurrentPricingTableTemplate() {
-        if (!_.isEmpty(this.curPricingStrategy)) {
-            const pricingStrategyType = (this.curPricingStrategy.PRC_TBL[0].OBJ_SET_TYPE_CD);
-            const pricingStrategyTemplate = this.pricingTableTemplates[pricingStrategyType];
-            console.log(pricingStrategyTemplate);
-
-            return pricingStrategyTemplate;
-        }
-    }
-
-    getColumns(pricingStrategyTemplate) {
-        let columns: string[] = [];
-        // let columns: ColumnTuple[] = [];
-        // let columnLetterCounter = 0;
-
-        if (!_.isEmpty(pricingStrategyTemplate) && pricingStrategyTemplate) {
-            pricingStrategyTemplate.columns.forEach(currentColumn => {
-                columns.push(currentColumn.title);
-                // columns.push(new ColumnTuple(columnLetterCounter, currentColumn.title));
-                // columnLetterCounter += 1;
-            });
-        }
-
-        return columns;
-    }
+  }
 
 }
 

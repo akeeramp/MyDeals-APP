@@ -74,7 +74,7 @@
                 <div class="ptLnavTitle">
                     Select Pricing Table Deal Type
                 </div>
-                <div class="ptLnavtmpltContainer">
+                <div class="ptLnavtmpltContainer" style="border:red;">
                     <div *ngFor="let DealType of PtDealTypes">
                         <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)">
                             <div class="fl textCircle blueBg">{{ DealType._custom.ltr }}</div>

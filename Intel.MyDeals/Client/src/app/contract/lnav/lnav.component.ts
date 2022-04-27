@@ -1,10 +1,11 @@
 ﻿import * as angular from "angular";
-import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core";
+import { Component, ViewChild, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { templatesService } from "../../shared/services/templates.service";
 import { lnavService } from "../lnav/lnav.service";
 import { MenusModule } from "@progress/kendo-angular-menu";
+import { pricingTableComponent } from "../pricingTable/pricingTable.component";
 
 export interface contractIds {
      Model:string;
@@ -19,15 +20,15 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css']
 })
 
-export class lnavComponent {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService,) { }
+export class lnavComponent  {
+    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService,private pricingTableComp:pricingTableComponent) { }
     @Input() contractId: number;
-    @Input() isNewContract: boolean;
+    @Input() contractData: any;
+    @Input() UItemplate: any;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>(); 
 
  
     public psTITLE: string = "";
-    public templates: any;
     public newStrategy: any = {};
     public PtDealTypes: any;
     public ptTITLE: string = "";
@@ -39,7 +40,6 @@ export class lnavComponent {
     public isAddPricingTableHidden: boolean = true;
     public renameMapping = {};
     public curPricingStrategyId: any;
-    private contractData: any;
 
     //Output Emitter to load the Pricing table data
     loadPTE(psId:any, ptId:any) {
@@ -61,23 +61,6 @@ export class lnavComponent {
         };
         this.modelChange.emit(contractId_Map);
     }
-
-    loadtemplates() {
-        this.lnavSvc.readContract(this.contractId).subscribe((response: Array<any>) => {
-            this.contractData = response[0];
-            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
-                this.templates = response;
-                this.newStrategy = response["ObjectTemplates"].PRC_ST.ALL_TYPES;
-                this.filterDealTypes();
-            },(error) => {
-                this.loggerSvc.error('lnavComponent::readTemplates:: service', error);
-            })
-        },(error) => {
-            this.loggerSvc.error('lnavComponent::readContract:: service', error);
-        })
-     
-    }
-
     /* PRICING STRATEGY */
     customAddPsValidate() {
         let isvalid = true;
@@ -102,7 +85,7 @@ export class lnavComponent {
         var ct = this.contractData;
         var custId = this.contractData.CUST_MBR_SID;
         var contractId = this.contractData.DC_ID
-        var ps = this.templates["ObjectTemplates"].PRC_ST.ALL_TYPES;
+        var ps = this.UItemplate["ObjectTemplates"].PRC_ST.ALL_TYPES;
         ps.DC_ID = -100;
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
@@ -132,7 +115,7 @@ export class lnavComponent {
     filterDealTypes() {
         var result = {};
         var dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
-        var items = this.templates["ModelTemplates"].PRC_TBL;
+        var items = this.UItemplate["ModelTemplates"].PRC_TBL;
         angular.forEach(items, function (value, key) {
             if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {
                 value._custom = {
@@ -152,7 +135,7 @@ export class lnavComponent {
 
     selectPtTemplateIcon(DealType) {
         var Title = this.ptTITLE;
-        this.newPricingTable = this.templates.ObjectTemplates.PRC_TBL[DealType.name];
+        this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL[DealType.name];
         this.newPricingTable["TITLE"] = Title;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = DealType.name;
         this.newPricingTable["_extraAtrbs"] = DealType.extraAtrbs;
@@ -215,7 +198,7 @@ export class lnavComponent {
         }
     }
     addPricingTable() {
-        var pt = this.templates["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
+        var pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
             //.addTableDisabled = false;
             this.loggerSvc.error("Could not create the Pricing Table.", "Error");
@@ -259,7 +242,7 @@ export class lnavComponent {
         //    function (value, key) {
         //        value._custom._active = false;
         //    });
-        this.newPricingTable = this.templates.ObjectTemplates.PRC_TBL.ECAP;
+        this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
 
@@ -300,10 +283,9 @@ export class lnavComponent {
     }
     
     ngOnInit() {
-        this.loadtemplates();
+        this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
+        this.filterDealTypes();
     }
-
-
 
 }
 

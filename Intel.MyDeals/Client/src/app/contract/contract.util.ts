@@ -17,6 +17,4 @@ export class ContractUtil {
         }
         return null;
     }
-  
-   
 }
