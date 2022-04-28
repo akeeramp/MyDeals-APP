@@ -1,22 +1,16 @@
-name: MyDeals pre-prod manual 
+name: MyDeals prod manual 
 on:
   workflow_dispatch:
     inputs:
       ENV:
         description: 'ENV'
         required: true
-        default: 'ITT'
+        default: 'DR'
         type: choice
         options:
-          - 'DEV'
-          - 'ITT'
-          - 'DAY1'
-          - 'UTT1'
-          - 'UTT2'
-          - 'CONS1'
-          - 'CONS2'
-          - 'CIAR'
-          - 'PERF'
+          - 'DR'
+          - 'PROD1'
+          - 'PROD2'
       Move_Latest:
         description: 'Move latest code deployed'
         required: true
@@ -30,7 +24,7 @@ env:
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
 jobs:
   Verify-environement:
-     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
      runs-on: [self-hosted,mydeals-runner01]
      steps:
        - name: Checkout Directory
@@ -41,7 +35,7 @@ jobs:
              ./scripts/deploy.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
 
   Restore-packages:
-     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
      runs-on: [self-hosted,mydeals-runner01]
      needs:  Verify-environement
      steps:
@@ -60,7 +54,7 @@ jobs:
             ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
 
   Deploy:
-    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
     runs-on: [self-hosted, mydeals-runner01]
     needs: Build
     environment:

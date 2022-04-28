@@ -12,6 +12,9 @@ try {
        [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
        [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
        [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYD2W01.amr.corp.intel.com'}
+       [pscustomobject]@{env='DR';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\d$\Abhilash\DR';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
+       [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\d$\Abhilash\PROD1';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
+       [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\d$\Abhilash\PROD2';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $ENV;
@@ -19,20 +22,6 @@ try {
             Write-Host "Please provide correct values for environment" -BackgroundColor DarkRed
             EXIT 1
         }
-    }
-   elseif ($Operation -eq 'Deploy' ){
-     $result =  $ENV_DATA | Where env -eq $ENV;
-     if($result -eq $null){
-            Write-Host "Please provide correct values for environment" -BackgroundColor DarkRed
-            EXIT 1
-        }
-        else{
-            & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
-            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
-            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-        }
-   
     }
     elseif ($Operation -eq 'Deploy' ){
      $result =  $ENV_DATA | Where env -eq $ENV;
