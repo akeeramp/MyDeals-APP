@@ -138,7 +138,7 @@ export class ConstantsComponent {
             CNST_NM: new FormControl("", Validators.required),
             CNST_DESC: new FormControl("", Validators.required),
             CNST_VAL_TXT: new FormControl("", Validators.required),
-            UI_UPD_FLG: new FormControl(true, Validators.required),
+            UI_UPD_FLG: new FormControl(false, Validators.required),
         });
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
