@@ -107,7 +107,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string header = "";
                 string footer = "";
 
-                header = "{\"Header\":{\"xid\":\""+BatchId+ "\",\"TargetSystem\":\"Tender\",\"SourceSystem\":\"MyDeals\",\"Action\":\"UpdateClaims\"},";
+                header = "{\"Header\":{\"xid\":\""+BatchId+ "\",\"target_system\":\"Tender\",\"source_system\":\"MyDeals\",\"action\":\"UpdateClaims\"},";
                 //Footer item
                 //footer = "}";
 
