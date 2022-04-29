@@ -9,9 +9,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-	DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender', 'isOEM'];
+	DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate', 'contractIsTender', 'isOEM', 'isConsumption'];
 
-	function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender, isOEM) {
+	function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate, contractIsTender, isOEM, isConsumption) {
     var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
     $ctrl.placeholderText = "Click to Select...";
@@ -50,10 +50,15 @@
 
 			$ctrl.isValidDate = true;
 			$ctrl.isDateOverlap = false;
+			$ctrl.isConsumption = isConsumption;
+			$ctrl.validMsg = "";
 
 			//check following validations are only for Start Date and End Date
 			if (colName == "START_DT" || colName == "END_DT") {
 				// date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
+				if ($ctrl.errorMsg != undefined) { // Put in to clear out old error messages
+					$ctrl.errorMsg = undefined;
+                }
 				if ($ctrl.isStartDate && value > new Date(contractEndDate) && contractIsTender !== "1") {
 					$ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 					$ctrl.isValidDate = false;
@@ -66,6 +71,9 @@
 					$ctrl.errorMsg = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'Add To Grid', if you want to proceed.";
 					$ctrl.isDateOverlap = true;
 				}
+				if (isConsumption) {
+					$ctrl.validMsg = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.  Validate Billings Start/End Dates with the Contract.";
+                }
 			}
 			if (isOEM)
 			{

@@ -4642,6 +4642,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
+            var isConsumption = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row-1].PAYOUT_BASED_ON === "Consumption";
 
             var isOEM = colName === "OEM_PLTFRM_LNCH_DT" || colName === "OEM_PLTFRM_EOL_DT"; // Remove message if it is one of thexse cols
 
@@ -4675,6 +4676,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     },
                     isOEM: function () {
                         return isOEM;
+                    },
+                    isConsumption: function () {
+                        return isConsumption;
                     }
                 }
             });

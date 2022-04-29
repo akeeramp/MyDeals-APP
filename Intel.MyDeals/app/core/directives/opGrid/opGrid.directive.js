@@ -2283,6 +2283,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
 
+                if (col == "START_DT" || col == "END_DT") {
+                    if (model.PAYOUT_BASED_ON != null && model.PAYOUT_BASED_ON != undefined && model.PAYOUT_BASED_ON === "Consumption") {
+                        kendo.alert("Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.<br>Validate Billings Start/End Dates with the Contract.");
+                    }
+                }
+
                 $scope.root.saveCell(model, col, $scope, newVal);
 
                 if (model.isLinked !== undefined && model.isLinked) {

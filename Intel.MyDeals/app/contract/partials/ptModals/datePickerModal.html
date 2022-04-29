@@ -11,13 +11,16 @@
 				<input kendo-date-picker
 					   ng-class="{'isErrorWrapper': !$ctrl.isValidDate }"
 					   id="datePickerPopup"
-                       ng-keypress="$ctrl.EnterPressed($event)"
+					   ng-keypress="$ctrl.EnterPressed($event)"
 					   ng-model="$ctrl.popupResult"
 					   k-placeholder="$ctrl.placeholderText"
 					   k-options="$ctrl.datepickerOptions"
 					   style="width: 100%;" />
 				<p ng-show="!$ctrl.isValidDate || $ctrl.isDateOverlap" class="err-Control" style="font-size:large">
 					{{$ctrl.errorMsg }}
+				</p>
+				<p ng-show="$ctrl.isConsumption" class="validation-Control" style="font-size:large">
+					{{$ctrl.validMsg }}
 				</p>
 			</div>
 		</div>

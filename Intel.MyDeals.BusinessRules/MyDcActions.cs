@@ -1480,10 +1480,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        /// <summary>
-        /// Check billing start and end date for deals
-        /// </summary>
-        /// <param name="args"></param>
         public static void CheckBillingDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -1497,10 +1493,6 @@ namespace Intel.MyDeals.BusinessRules
             string rebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             string paymentType = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
 
-            // Take Intel Calendar only for the billing start date check (dexxxx).  Line for customer specific is left in if needed down the road.
-            //if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out int custMbrSid)) custMbrSid = 0; // Default to no cust if not found, which defaults to Intel anyhow
-            int custMbrSid = 0;
-
             if (paymentType.Contains("Frontend")) return;  // Bail out of this check for Front End deals since they might have overlap crush which doesn't reset billings end dates
 
             // For front end YCS2 do not check for billing dates
@@ -1513,26 +1505,30 @@ namespace Intel.MyDeals.BusinessRules
 
             if (dtSt == DateTime.MinValue || dtEn == DateTime.MinValue) return;
 
-            // changed billing start date to equal deal start date as part of US705342
-            // if payout based on is Consumption, push the billing start date to one year prior to deal start date and 
-            // End date =  Billing End date
+            // If the start date has changed and the billing date is original, check if it needs to flex outward with the start date preserving avoidance of Bllg Start > Deal Start raised message
             if (deStart.HasValueChanged && !deBllgStart.HasValueChanged)
             {
-                if (payoutBasedOn.Equals("Billings", StringComparison.InvariantCultureIgnoreCase) || rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase))
+                if (!DateTime.TryParse(deBllgStart.AtrbValue.ToString(), out DateTime bllgStartDt)) bllgStartDt = DateTime.MinValue;
+                if (!DateTime.TryParse(deStart.OrigAtrbValue.ToString(), out DateTime origDealStartDt)) origDealStartDt = DateTime.MinValue; // Must use original to force locking
+                // bllgStartDt == origDealStartDt (Billing was previously locked to deal start, keep it so locked)
+                // dtSt < bllgStartDt (User pushed out the start date to a time before the billing start date, so force the move)
+                if (bllgStartDt == origDealStartDt || dtSt < bllgStartDt || bllgStartDt == DateTime.MinValue)
                 {
                     deBllgStart.SetAtrbValue(dtSt.ToString("MM/dd/yyyy"));
-                } 
-                else
-                {              
-                    // Consumption deal- billing start date set it same as Deal start date when deal start date is modified  (Odd that it is this way, they are both the same)
-                    deBllgStart.SetAtrbValue(dtSt.ToString("MM/dd/yyyy"));
                 }
-                
             }
 
+            // If the end date has changed and the billing date is original, check if it needs to flex outward with the end date preserving avoidance of Bllg End > Deal End raised message
             if (deEnd.HasValueChanged && !deBllgEnd.HasValueChanged)
             {
-                deBllgEnd.SetAtrbValue(dtEn.ToString("MM/dd/yyyy"));
+                if (!DateTime.TryParse(deBllgEnd.AtrbValue.ToString(), out DateTime bllgEndDt)) bllgEndDt = DateTime.MinValue;
+                if (!DateTime.TryParse(deEnd.OrigAtrbValue.ToString(), out DateTime origDealEnDt)) origDealEnDt = DateTime.MinValue; // Must use original to force locking
+                // bllgEndDt == origDealEnDt (Billing was previously locked to deal end, keep it so locked)
+                // bllgEndDt > dtEn (User pulled in the end date to a time before billing end date, so force the move)
+                if (bllgEndDt == origDealEnDt || bllgEndDt > dtEn || bllgEndDt == DateTime.MinValue)
+                {
+                    deBllgEnd.SetAtrbValue(dtEn.ToString("MM/dd/yyyy"));
+                }
             }
 
             if (!DateTime.TryParse(deBllgStart.AtrbValue.ToString(), out DateTime dtBllgStart)) dtBllgStart = DateTime.MinValue;
@@ -1559,7 +1555,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             else // Apply old rules to old tenders before break off point
             {
-                if (dtBllgStart < dtSt.AddYears(-1) && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1)
+                if (dtBllgStart < dtSt.AddYears(-1) && rebateType.Equals("TENDER", StringComparison.InvariantCultureIgnoreCase)) //AddYears(-1) - normal calendar years, not Intel WW
                 {
                     deBllgStart.AddMessage("Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date.");
                 }

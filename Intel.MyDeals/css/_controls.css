@@ -130,6 +130,12 @@
         padding-left: 1px !important;
         padding-top: 2px !important;
     }
+    .validation-Control {
+        color: #0066ff;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
+    }
 
     /*.elOnBlue .k-textbox.isError
     {
