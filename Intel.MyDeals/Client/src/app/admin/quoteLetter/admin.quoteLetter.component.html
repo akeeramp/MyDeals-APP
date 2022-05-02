@@ -4,12 +4,12 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
 <div class="form-horizontal" [hidden]="isLoading=='true'" style="margin: 20px;">
-    <div class="section"><label>Template: </label>
+    <div class="section"><label> <b>Template: </b> </label>
         <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems"
             textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate"
             (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded"></kendo-dropdownlist>
     </div>
-    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label>Upper Content Block </label>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label><b>Upper Content Block </b></label>
         <kendo-editor style="width: 1390px" [(ngModel)]="headerInfo">
             <kendo-toolbar>
                 <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
@@ -36,7 +36,7 @@
             </kendo-toolbar>
         </kendo-editor>
     </div>
-    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label>Lower Content Block</label>
+    <div class="section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label><b>Lower Content Block</b></label>
         <kendo-editor style="width: 1390px" [(ngModel)]="bodyInfo">
             <kendo-toolbar>
                 <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>

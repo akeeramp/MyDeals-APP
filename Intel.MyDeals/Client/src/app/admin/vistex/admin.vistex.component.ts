@@ -24,7 +24,7 @@ export class adminVistexComponent {
     private isBusyShowFunFact = true;
     private isLoading = false;
     private selectedApiID = 1;
-    private selectedApiCD = "C";
+    private selectedApiCD = "";
     private apiList = [
         { API_ID: 1, API_NM: "Customer ", API_CD: "C" },
         { API_ID: 2, API_NM: "Deal ", API_CD: "D" },
@@ -34,6 +34,13 @@ export class adminVistexComponent {
         { API_ID: 7, API_NM: "Prod Vertical Failed", API_CD: "F" },
         { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" }
     ];
+
+    public defaultItem = { API_ID: null, API_NM: "Select an API..." };
+
+    public itemDisabled(itemArgs: { dataItem: any, index: number }) {
+        return itemArgs.dataItem.API_ID === null;
+    }
+
     private apiSelectedCD = "";
     private responseData = [];
     private numberOfRecrods = 10;
@@ -41,14 +48,14 @@ export class adminVistexComponent {
 
     //API KEY Value Pair
     private apiPair = {
-            "C": 'GetVistexDFStageData',
-            "D": 'GetVistexDealOutBoundData',
-            "P": 'GetVistexDFStageData',
-            "V": 'GetVistexDFStageData',
-            "R": 'ReturnSalesForceTenderResults',
-            "E": 'GetVistexDealOutBoundData',
-            "F": 'GetVistexDealOutBoundData',
-            "M": 'GetVistexDealOutBoundData'
+        "C": 'GetVistexDFStageData',
+        "D": 'GetVistexDealOutBoundData',
+        "P": 'GetVistexDFStageData',
+        "V": 'GetVistexDFStageData',
+        "R": 'ReturnSalesForceTenderResults',
+        "E": 'GetVistexDealOutBoundData',
+        "F": 'GetVistexDealOutBoundData',
+        "M": 'GetVistexDealOutBoundData'
     };
 
     vistexApiNameChange(value) {
@@ -58,8 +65,8 @@ export class adminVistexComponent {
     //run API
     runApi() {
         console.log(this.selectedApiCD);
-        if (this.selectedApiCD == "") {            
-            this.loggerSvc.info('Please select an API to run Simulator...',"");
+        if (this.selectedApiCD == "") {
+            this.loggerSvc.info('Please select an API to run Simulator...', "");
         }
         else {
             this.callAPI(this.selectedApiCD);
@@ -70,13 +77,13 @@ export class adminVistexComponent {
     callAPI(mode) {
         this.isLoading = true;
         const startTime = new Date();
-        
+
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
-            this.isLoading = false;            
-            const endTime = new Date();            
+            this.isLoading = false;
+            const endTime = new Date();
             result["START_TIME"] = startTime;
             result["END_TIME"] = endTime;
-            this.responseData.unshift(result);            
+            this.responseData.unshift(result);
         }, (error) => {
             this.loggerSvc.error('Unable to run API', error);
         });
@@ -86,13 +93,13 @@ export class adminVistexComponent {
     loadVistexTestApi() {
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
-        }        
+        }
     }
 
     ngOnInit() {
         this.loadVistexTestApi();
     }
-    
+
 
     ngOnDestroy() {
         //The style removed are adding back
