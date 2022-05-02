@@ -254,7 +254,8 @@
 }
 
 .k-pager-numbers .k-link.k-state-selected {
-    background-color: #0d6efd!important
+    border-color: #0071c5;
+    background-color: #0071c5 !important;
 }
 
 .k-grid td {

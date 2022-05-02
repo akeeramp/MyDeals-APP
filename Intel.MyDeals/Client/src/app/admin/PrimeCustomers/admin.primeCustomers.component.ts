@@ -205,15 +205,14 @@ export class adminPrimeCustomersComponent {
                 this.loggerSvc.error("Unable to get Unified Customers.", response, response.statusText);
             });
 
-        /*Hiding the column temporarily as part of UCD Development.This might be enabled in future(functionality is implemented)*/
-        /*this.primeCustSvc.getRplStatusCodes()
+        this.primeCustSvc.getRplStatusCodes()
             .subscribe((response: Array<any>) => {
                 this.distinctRplCd = distinct(response, "RPL_STS_CD").map(
                     item => item.RPL_STS_CD
                 );
             }, function (response) {
                     this.loggerSvc.error("Unable to get RPL status code.", response, response.statusText);
-            });*/
+            });
         this.primeCustSvc.getCountries()
             .subscribe((response: Array<any>) => {
                 this.distinctprimeCtry = distinct(response, "CTRY_NM").map(

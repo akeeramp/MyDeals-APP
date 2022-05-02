@@ -110,9 +110,9 @@
                         [formControl]="formGroup.get('PRIM_CUST_CTRY')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
-            <!--Hiding the column temporarily as part of UCD Development. This might be enabled in future (functionality is implemented)-->
+
             <kendo-grid-column Current field="RPL_STS_CD" title="RPL Status Code" width="100"
-                [headerClass]="{'headerClass':true}" [hidden]="true" [editable]="isRplStsDdEditable">
+                [headerClass]="{'headerClass':true}" [editable]="isRplStsDdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                     let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

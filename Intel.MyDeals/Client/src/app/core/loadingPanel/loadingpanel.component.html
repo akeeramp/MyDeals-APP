@@ -1,5 +1,5 @@
 <div *ngIf="show" class="ss-loading-overlay">
-    <div class="ss-loading-panel ss-{{msgType}}" style="text-align: center; margin:auto">
+    <div class="ss-loading-panel ss-{{msgType}}" style="text-align: center; margin: auto; height: 400px;">
         <div *ngIf="msgType !='Success' && msgType !='Error'" class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
@@ -15,10 +15,10 @@
         <div *ngIf="isFunFactEnabled && currFunFact" class="ss-funfact-container">
             <p class="col-md-12 ss-funfact-title"><i class="fa{{ funFactIcon}} ss-funfact-icon"></i>{{ funFactTitle}}
             </p>
-            <div class="row">
+            <!--<div class="row">-->
                 <div class="col-md-12 ss-funfact-description" style="text-align: left; white-space: pre-line;">{{
                     funFactDesc}} </div>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </div>
