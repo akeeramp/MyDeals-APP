@@ -6,9 +6,27 @@
     box-sizing: border-box;
 }
 
+
+#contractContainerWrapper {
+    margin-top: 33px !important;
+}
+
+.dialog {
+    display: flex;
+}
+
+.dialogbutton {
+    flex-grow: 1;
+}
+
+.dialogmsg {
+    margin: 30px;
+    text-align: center;
+}
+
 #secContainer {
     overflow: auto !important;
-    height: 656px;
+    height: 73vh;
     line-height: 1.5;
 }
 
@@ -31,26 +49,26 @@
     padding: 10px 0 0 0;
 }
 
-.k-dialog .promptUserDialog h4 {
-    color: #003C71;
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 0;
-}
+    .k-dialog .promptUserDialog h4 {
+        color: #003C71;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0;
+    }
 
-.k-dialog .promptUserDialog p {
-    font-size: 12px;
-    padding: 10px 20px;
-}
+    .k-dialog .promptUserDialog p {
+        font-size: 12px;
+        padding: 10px 20px;
+    }
 
 .delete-attach-icon {
     font-size: 16px;
     cursor: pointer;
 }
 
-.delete-attach-icon:hover {
-    text-decoration: none;
-}
+    .delete-attach-icon:hover {
+        text-decoration: none;
+    }
 
 .btn-primary {
     background-color: #00AEFF;
@@ -66,6 +84,7 @@
         color: #ffffff;
         display: inherit;
     }
+
     .no-hint-collapse {
         display: none;
     }
@@ -75,9 +94,8 @@
     background-color: #f2f2f2;
 }
 
-.row Contract {
-    height: calc(100vh - 24px - 40px) !important;
-    overflow: scroll !important;
+.slidermbottom {
+    margin-bottom: 21px;
 }
 
 #secFooter {
@@ -110,12 +128,54 @@
 
 .radioControl {
     cursor: pointer !important;
+    font-weight: normal !important;
 }
 
 .radioButtonGroup {
     display: inline-flex !important;
 }
 
-.contract-detail-form{
-    padding-bottom:150px !important;
+.contract-detail-form {
+    padding-bottom: 85px !important;
+}
+
+.display {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 0px;
+}
+
+.top {
+    margin-top: 20px;
+}
+
+.displayblock {
+    flex-flow: wrap;
+}
+
+.row {
+    margin-bottom: 20px !important;
+    padding: 0px !important;
+}
+
+kendo-dropdownlist, .inlineDisplay {
+    flex-grow: 1;
+}
+
+kendo-dropdownlist {
+    opacity: 0.6;
+}
+
+.opUiLabel {
+    width: 200px;
+}
+
+.fl.opUiLabel {
+    padding-left: 0px;
+}
+
+.contract-detail-form .C2ALabel .opUiLabel {
+    font-weight: bold;
+    font-size: 14px;
+    width: 200px;
 }
