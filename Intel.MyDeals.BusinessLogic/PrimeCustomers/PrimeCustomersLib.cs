@@ -282,7 +282,7 @@ namespace Intel.MyDeals.BusinessLogic
                         UCDReqData.addresses.Add(newAddressess);
                         var newAccountRequestReferences = new UCDRequest.AccountRequests.AccountRequestReferences
                         {
-                            Name = "DealId",
+                            Name = "Deal",
                             Value = dealId.ToString()
                         };
                         UCDReqData.accountrequestreferences.Add(newAccountRequestReferences);
