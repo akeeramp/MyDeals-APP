@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from "underscore";
-import { widgetConfig } from '../widget.config';
+import { configWidgets } from '../widget.config';
 
 export interface DialogData {
     name: string;
@@ -27,7 +27,7 @@ export class addWidgetComponent {
     }
 
     ngOnInit() {
-        this.finalItems = widgetConfig;
+        this.finalItems = configWidgets;
         _.each(this.finalItems, item => {
             const currentWidget = this.data.widgets.filter(o1 => o1["type"] === item.type);
             if (currentWidget.length==0) {
