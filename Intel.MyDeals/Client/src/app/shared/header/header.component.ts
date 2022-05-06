@@ -163,12 +163,12 @@ export class HeaderComponent {
     const cookies = document.cookie;
 
     if (cookies !== "") {
-      for (let i = 0; i < cookies.split(";").length; ++i) {
-        const myCookie = cookies[i];
-        const pos = myCookie.indexOf("=");
-        const name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-      }
+        for (let i = 0; i < cookies.split(";").length; ++i) {
+            const myCookie = cookies.split(";")[i];
+            const pos = myCookie.indexOf("=");
+            const name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
     }
 
     window.location = newPath;
