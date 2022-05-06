@@ -1041,16 +1041,19 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (myDealsData[objKey].GetChanges().AllDataElements.Any())
                 {
-                    myDealsData[objKey].AddSaveActions();
-                    if (objKey == OpDataElementType.PRC_ST)
+                    if (objKey != OpDataElementType.WIP_DEAL)// To Add save action for Non-WIP packets
+                    {
+                        myDealsData[objKey].AddSaveActions();
+                    }
+                    if (objKey == OpDataElementType.PRC_ST)// Append Audit Actions for Pricing Startegy
                     {
                         List<int> auditIds = myDealsData[objKey].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
                         if (auditIds.Any()) myDealsData[objKey].AddAuditActions(auditIds);
                     }
-                    if (objKey == OpDataElementType.WIP_DEAL)
+                    if (objKey == OpDataElementType.WIP_DEAL) // Execute normal save Actions with Attributes for additionl Sync
                     {
                         List<int> possibleIds = myDealsData[objKey].AllDataCollectors.Where(d => d.DcID > 0).Select(d => d.DcID).ToList();
-                        myDealsData[objKey].AddSyncActions(null, possibleIds, DataCollections.GetAttributeData());
+                        myDealsData[objKey].AddSaveActions(null, possibleIds, DataCollections.GetAttributeData());
                     }
                 }
             }
