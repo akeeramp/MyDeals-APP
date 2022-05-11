@@ -1,21 +1,21 @@
 ﻿.wht {
-    color: #ffffff;
+    color: #ffffff
 }
 
 .red {
-    color: #FC4C02;
+    color: #FC4C02
 }
 
 .yel {
-    color: #f3D54E;
+    color: #f3D54E
 }
 
 .orng {
-    color: #FFA300;
+    color: #FFA300
 }
 
 .font-med {
-    font-size: 14px;
+    font-size: 14px
 }
 
 .flowBtn {
@@ -26,31 +26,101 @@
     width: 100%;
     color: #ffffff;
     text-align: center;
-    cursor: default;
+    cursor: default
 }
 
 .flowBtn.disabled,
 .flowBtn.disabled:hover {
     background-color: #cccccc !important;
     color: #999999;
-    cursor: default;
+    cursor: default
 }
 
 .flowBtn.inactive {
     background-color: #00AEEF;
-    cursor: pointer;
+    cursor: pointer
 }
 
 .flowBtn.inactive:hover {
-    background-color: #003C71;
+    background-color: #003C71
 }
 
 .flowBtn.disabled {
-    cursor: not-allowed !important;
+    cursor: not-allowed !important
 }
 
 .isErrorWrapper .k-state-default.k-picker-wrap,
 .isErrorWrapper .k-state-default.k-numeric-wrap,
 .isErrorWrapper .k-state-default.k-dropdown-wrap {
-    border: 1px solid #ed8282;
+    border: 1px solid #ed8282
+}
+
+.lnavContainerWrapper {
+    height: 100% ;
+    padding: 112px 0 0 0 ;
+    -webkit-box-sizing: border-box ;
+    -moz-box-sizing: border-box ;
+    box-sizing: border-box ;
+    overflow: hidden ;
+    background-color: #123b70 ;
+}
+
+.lnavHeader {
+    height: 112px ;
+    margin-top: -112px ;
+    padding: 0 ;
+    font-size: 14px ;
+    font-family: "Intel Clear";
+    font-weight: 200 ;
+    font-style: normal ;
+    background-color: #ffffff ;
+    color: #00AEEF ;
+}
+
+.lnavMenuContainer {
+    color: #ffffff ;
+    /*background-color: #0071C5;*/
+}
+
+.lnavMenuOption {
+    background-color: #0071C5;
+    padding: 6px;
+}
+
+.lnavContainer {
+    height: 100% !important;
+    overflow: auto !important;
+    color: #ffffff !important;
+    background-color: #003C71 !important;
+}
+
+.fr {
+    margin-left: auto;
+    height: max-content;
+}
+
+.fl {
+    float: left;
+}
+
+.contract-status-bar {
+    color: #000000;
+    padding: 1px 10px 0 6px;
+    font-size: 10px;
+    font-family: arial;
+    text-transform: uppercase;
+    height: 16px;
+}
+
+.contract-title-container {
+    padding: 0px 8px 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 26px;
+    white-space: nowrap;
+    width: 300px;
+}
+
+.contractHeaderId {
+    color: #00aeef !important;
 }

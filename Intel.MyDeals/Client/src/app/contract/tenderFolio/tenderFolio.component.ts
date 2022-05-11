@@ -1,6 +1,5 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as _ from "underscore";
 import { TenderFolioService } from '../tenderFolio/tenderFolio.service';
 import { templatesService } from "../../shared/services/templates.service";
 import { logger } from '../../shared/logger/logger'
@@ -28,15 +27,15 @@ export class TenderFolioComponent {
     ) { }
 
     private isLoading = true;
-    public templateData: any;
+    public templateData;
     private tenderName;
     private contractType = "Tender Folio";
-    private contractData: any;
-    private selectedData: any;
+    private contractData;
+    private selectedData;
     private isCustDiv = false;
     private isCustSelected = false;
-    private custSIDObj: any;
-    private CUST_NM_DIV: any;
+    private custSIDObj;
+    private CUST_NM_DIV;
     private showKendoAlert = false;
     private isTitleError = false;
     private titleErrorMsg: string;
@@ -49,11 +48,10 @@ export class TenderFolioComponent {
         name: "KIT",
         _custom: { ltr: 'K', _active: false }
     }];
-    public Customers: any;
+    public Customers;
     private uid = -100;
-    private PtDealTypes: any;
-    private newPricingTable: any;
-
+    private PtDealTypes;
+    private newPricingTable;
 
     dismissPopup(): void {
         this.dialogRef.close();
@@ -67,7 +65,7 @@ export class TenderFolioComponent {
                 deal._custom._active = false;
             }
         }
-        let title = this.newPricingTable["TITLE"];
+        const title = this.newPricingTable["TITLE"];
         this.newPricingTable = this.templateData.ObjectTemplates.PRC_TBL[dealType.name];
         this.newPricingTable["TITLE"] = title;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = dealType.name;
@@ -76,9 +74,9 @@ export class TenderFolioComponent {
         this.defaultAttribs();
     }
     filterDealTypes() {
-        var result = {};
-        var dealDisplayOrder = ["ECAP", "KIT"];
-        var items = this.templateData["ModelTemplates"].PRC_TBL;
+        let result = {};
+        const dealDisplayOrder = ["ECAP", "KIT"];
+        const items = this.templateData["ModelTemplates"].PRC_TBL;
         angular.forEach(items, function (value, key) {
             if (value.name !== 'ALL_TYPES') {
                 value._custom = {
@@ -98,12 +96,12 @@ export class TenderFolioComponent {
     }
     onKeySearch(event) {
         clearTimeout(this.timeout);
-        const vm = this;
-        this.timeout = setTimeout(function () {
+        this.timeout = setTimeout(() => {
             if (event.keyCode != 13 && event.keyCode != 9) {
-                vm.isDuplicateContractTitle(event.target.value);
+                this.isDuplicateContractTitle(event.target.value);
             }
         }, 800);
+
     }
     // Contract name validation
     isDuplicateContractTitle(title: string) {
@@ -166,26 +164,25 @@ export class TenderFolioComponent {
         this.contractData.displayTitle = this.tenderName;
 
         //Cloning PS
-        var ps = this.templateData.ObjectTemplates.PRC_ST.ALL_TYPES;
+        const ps = this.templateData.ObjectTemplates.PRC_ST.ALL_TYPES;
         ps.DC_ID = this.uid--;
         ps.DC_PARENT_ID = this.contractData.DC_ID;
         ps.PRC_TBL = [];
 
         // Clone base model and populate changes
-        var pt = this.templateData.ObjectTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
+        const pt = this.templateData.ObjectTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         pt.DC_ID = this.uid--;
         pt.DC_PARENT_ID = undefined;
         pt.OBJ_SET_TYPE_CD = this.newPricingTable.OBJ_SET_TYPE_CD;
 
-        for (var atrb in this.newPricingTable._extraAtrbs) {
-            if (this.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
+        for (const atrb in this.newPricingTable._extraAtrbs) {
+            if (this.newPricingTable._extraAtrbs['atrb'] === undefined && pt['atrb'] === undefined) {
                 //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
                 pt[atrb] = this.newPricingTable._extraAtrbs[atrb].value;
             }
         }
-        for (var atrb in this.newPricingTable._defaultAtrbs) {
-            if (this.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) &&
-                pt.hasOwnProperty(atrb)) {
+        for (const atrb in this.newPricingTable._defaultAtrbs) {
+            if (this.newPricingTable._defaultAtrbs['atrb'] === undefined && pt['atrb'] === undefined) {
                 //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
                 if (Array.isArray(this.newPricingTable._defaultAtrbs[atrb].value)) {
                     //Array, Middle Tier expects a comma separated string
@@ -196,13 +193,12 @@ export class TenderFolioComponent {
                 }
             }
         }
-
         this.createTenderContract(ps, pt);
     }
 
     createTenderContract(ps, pt) {
-        let ct = this.contractData;
-        var data = {
+        const ct = this.contractData;
+        const data = {
             "Contract": [ct],
             "PricingStrategy": [ps],
             "PricingTable": [pt],
@@ -221,28 +217,28 @@ export class TenderFolioComponent {
     }
 
     defaultAttribs() {
-        var dealType = this.newPricingTable.OBJ_SET_TYPE_CD;
-        var marketSegment = "Corp";
+        const dealType = this.newPricingTable.OBJ_SET_TYPE_CD;
+        const marketSegment = "Corp";
 
-        if (!!this.newPricingTable["_defaultAtrbs"].REBATE_TYPE) this.newPricingTable["_defaultAtrbs"].REBATE_TYPE.value = "TENDER";
-        if (!!this.newPricingTable["_defaultAtrbs"].MRKT_SEG) this.newPricingTable["_defaultAtrbs"].MRKT_SEG.value = marketSegment;
-        if (!!this.newPricingTable["_defaultAtrbs"].GEO_COMBINED) this.newPricingTable["_defaultAtrbs"].GEO_COMBINED.value = ["Worldwide"];
-        if (!!this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Billings" : this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Consumption";
-        if (!!this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT) this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT.value = "Backend";
-        if (!!this.newPricingTable["_defaultAtrbs"].PROD_INCLDS) this.newPricingTable["_defaultAtrbs"].PROD_INCLDS.value = "Tray";
-        if (!!this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE) this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE.value = "Accrual";
-        if (!!this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
+        if (this.newPricingTable["_defaultAtrbs"].REBATE_TYPE) this.newPricingTable["_defaultAtrbs"].REBATE_TYPE.value = "TENDER";
+        if (this.newPricingTable["_defaultAtrbs"].MRKT_SEG) this.newPricingTable["_defaultAtrbs"].MRKT_SEG.value = marketSegment;
+        if (this.newPricingTable["_defaultAtrbs"].GEO_COMBINED) this.newPricingTable["_defaultAtrbs"].GEO_COMBINED.value = ["Worldwide"];
+        if (this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Billings" : this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Consumption";
+        if (this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT) this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT.value = "Backend";
+        if (this.newPricingTable["_defaultAtrbs"].PROD_INCLDS) this.newPricingTable["_defaultAtrbs"].PROD_INCLDS.value = "Tray";
+        if (this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE) this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE.value = "Accrual";
+        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
         if (dealType != "KIT") {
-            if (!!this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE && dealType != 'KIT') this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE.value = "";
+            if (this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE && dealType != 'KIT') this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE.value = "";
         }
-        if (!!this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS) this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS.value = "1";
-        if (!!this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
+        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS) this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS.value = "1";
+        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
         // Tenders come in without a customer defined immediately
         // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
-        if (!!this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE) this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE.value = "Yearly";
-        if (!!this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL) this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL.value = ""; // Old value "Issue Credit to Billing Sold To"
-        if (!!this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL.value = "";
-        if (!!this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT.value = "";
+        if (this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE) this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE.value = "Yearly";
+        if (this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL) this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL.value = ""; // Old value "Issue Credit to Billing Sold To"
+        if (this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL.value = "";
+        if (this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT.value = "";
     }
 
     ValidateTender() {
@@ -270,10 +266,10 @@ export class TenderFolioComponent {
     }
 
     getCurrentQuarterDetails() {
-        let customerMemberSid = this.contractData.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
-        var isDate = null;
-        var qtrValue = "4";
-        var yearValue = new Date().getFullYear();
+        const customerMemberSid = this.contractData.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
+        const isDate = null;
+        const qtrValue = "4";
+        const yearValue = new Date().getFullYear();
         this.dataService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).subscribe((response: Array<any>) => {
             if (moment(response["QTR_END"]) < moment(new Date())) {
                 response["QTR_END"] = moment(response["QTR_END"]).add(365, 'days').format('l');
@@ -292,7 +288,7 @@ export class TenderFolioComponent {
         this.contractData.DC_ID = this.uid--;
         this.contractData.IS_TENDER = "1";
         this.contractData.TENDER_PUBLISHED = 0;
-        let today = moment().format("l");
+        const today = moment().format("l");
         // Set dates Max and Min Values for numeric text box
         // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
         this.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;

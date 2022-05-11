@@ -1,4 +1,3 @@
-
 import {Injectable} from "@angular/core";
 
 @Injectable({
@@ -6,11 +5,10 @@ import {Injectable} from "@angular/core";
  })
 
 export class ContractUtil {
-    constructor() {}
 
-   static findInArray (input:any, id:any) {
-        var len = input.length;
-        for (var i = 0; i < len; i++) {
+   static findInArray (input, id) {
+       const len = input.length;
+        for (let i = 0; i < len; i++) {
             if (+input[i].DC_ID === +id) {
                 return input[i];
             }

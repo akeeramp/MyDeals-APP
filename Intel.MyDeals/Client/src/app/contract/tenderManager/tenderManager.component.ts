@@ -1,6 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component, Input } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
@@ -12,7 +11,7 @@ export class tenderManagerComponent {
     public c_Id: number;
 
     ngOnInit() {
-        let url = window.location.href.split('/');
+        const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
     }
 }

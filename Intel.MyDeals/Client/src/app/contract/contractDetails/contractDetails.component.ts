@@ -1,9 +1,9 @@
 ﻿import * as angular from "angular";
-import { Component, ViewChild, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { logger } from "../../shared/logger/logger";
 import { contractDetailsService } from "./contractDetails.service";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { templatesService } from "../../shared/services/templates.service";
 import * as _moment from "moment";
 import { forkJoin } from "rxjs";
@@ -23,41 +23,41 @@ export class contractDetailsComponent {
         private contractDetailsSvc: contractDetailsService,
         private loggerSvc: logger
     ) { }
-    private Customer: any;
-    CUST_NM_DIV: any;
-    CUST_NM: any;
-    TITLE: string = "";
-    START_DT: any;
-    START_QTR: any;
-    START_YR: any;
-    END_DT: any;
-    END_QTR: any;
-    END_YR: any;
-    NO_END_DT: boolean = false;
-    NO_END_DT_RSN: any;
-    BACK_DATE_RSN: any;
-    CONTRACT_TYPE: any;
+    private Customer;
+    CUST_NM_DIV;
+    CUST_NM;
+    TITLE = "";
+    START_DT;
+    START_QTR;
+    START_YR;
+    END_DT;
+    END_QTR;
+    END_YR;
+    NO_END_DT = false;
+    NO_END_DT_RSN;
+    BACK_DATE_RSN;
+    CONTRACT_TYPE;
     public c_Id: number;
-    public templateData: any;
+    public templateData;
     public Customers: Array<any>;
     public Customer_Divs: Array<any>;
     public ContractDataForm: FormGroup;
-    public contractData: any;
-    private timeout: any = null;
+    public contractData;
+    private timeout = null;
     private C2A_DATA_C2A_ID = "";
-    public uid: number = -100;
+    public uid = -100;
     public custId: number;
     public contractId: number;
     public renameMapping = {};
     public curPricingTable = {};
-    public isCustomerSelected: boolean = false;
-    public initialEndDateReadOnly: boolean = false;
-    public isTitleError: boolean = false;
-    public isCustomerDivHidden: boolean = false;
-    custAccptData: any;
+    public isCustomerSelected = false;
+    public initialEndDateReadOnly = false;
+    public isTitleError = false;
+    public isCustomerDivHidden = false;
+    public custAccptData;
     public dropDownsData = {};
     public titleErrorMsg: string;
-    public isTender: boolean = false;
+    public isTender = false;
     public today: string = moment().format("l");
     public MinYear: number;
     public MaxYear: number;
@@ -66,10 +66,10 @@ export class contractDetailsComponent {
     public format = "#";
     public selectedCUST_ACCPT = "Pending";
 
-    public copyContractData: any;
-    public isCopyContract: boolean = false;
-    public isBackdatepopupopend: boolean = false;
-    public isBackDate: boolean = false;
+    public copyContractData;
+    public isCopyContract = false;
+    public isBackdatepopupopend = false;
+    public isBackDate = false;
 
     public saveBtnName: string;
 
@@ -140,12 +140,11 @@ export class contractDetailsComponent {
 
     onKeySearch(event: any) {
         clearTimeout(this.timeout);
-        let vm = this;
-        vm.timeout = setTimeout(function () {
+        this.timeout = setTimeout(() => {
             if (event.keyCode != 13 && event.keyCode != 9) {
-                vm.isDuplicateContractTitle(event.target.value);
+                this.isDuplicateContractTitle(event.target.value);
             }
-        }, 1000);
+        }, 800);
     }
     // Contract name validation
     isDuplicateContractTitle(title: string) {
@@ -169,7 +168,7 @@ export class contractDetailsComponent {
         this.contractDetailsSvc.getMyCustomerDivsByCustNmSid(custID).subscribe(
             (response: Array<any>) => {
                 this.Customer_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
-                if ((this.Customer_Divs[0].PRC_GRP_CD = "")) {
+                if ((this.Customer_Divs[0].PRC_GRP_CD == "")) {
                     alert("Missing Price Group Code");
                 }
                 if (this.Customer_Divs.length <= 1) {
@@ -189,8 +188,8 @@ export class contractDetailsComponent {
     }
 
     customContractValidate() {
-        let isValid = true;
-        let ct = this.contractData;
+        const isValid = true;
+        const ct = this.contractData;
         if (!ct.TITLE) {
             this.isTitleError = true;
             this.titleErrorMsg = "* field is required";
@@ -223,7 +222,7 @@ export class contractDetailsComponent {
         this.contractData["START_YR"] = this.START_YR;
 
         // Contract Data
-        let ct = this.contractData;
+        const ct = this.contractData;
         this.custId = this.contractData["CUST_SID"];
         this.contractId = -100;
         if (ct["DC_ID"] <= 0) ct["DC_ID"] = this.uid;
@@ -239,13 +238,13 @@ export class contractDetailsComponent {
     }
 
     getCurrentQuarterDetails() {
-        let customerMemberSid =
+        const customerMemberSid =
             this.contractData.CUST_MBR_SID == ""
                 ? null
                 : this.contractData.CUST_MBR_SID;
-        let isDate = this.isTender == true ? null : new Date();
-        let qtrValue = this.isTender == true ? "4" : null;
-        let yearValue = this.isTender == true ? new Date().getFullYear() : null;
+        const isDate = this.isTender == true ? null : new Date();
+        const qtrValue = this.isTender == true ? "4" : null;
+        const yearValue = this.isTender == true ? new Date().getFullYear() : null;
         this.contractDetailsSvc
             .getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
             .subscribe((response: Array<any>) => {
@@ -270,8 +269,8 @@ export class contractDetailsComponent {
                             : moment(response["QTR_STRT"]).format("l");
 
                 this.contractData.END_DT = moment(response["QTR_END"]).format("l");
-                let enDate = new Date(this.contractData.END_DT);
-                let stDate = new Date(this.contractData.START_DT);
+                const enDate = new Date(this.contractData.END_DT);
+                const stDate = new Date(this.contractData.START_DT);
                 this.END_DT = enDate;
                 this.START_QTR = response["QTR_NBR"];
                 this.START_YR = response["YR_NBR"];
@@ -283,7 +282,7 @@ export class contractDetailsComponent {
 
     initContract() {
         // New contract template
-        let c = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
+        const c = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
         // contract exists
         if (this.contractData !== null && this.contractData !== undefined) {
             if (this.contractData.data[0] !== undefined) {
@@ -295,7 +294,7 @@ export class contractDetailsComponent {
     }
 
     pastDateConfirm = function (newDate, oldDate) {
-        let today = moment().format("l");
+        const today = moment().format("l");
         if (moment(newDate).isBefore(today)) {
             this.isBackdatepopupopend = true;
         } else {
@@ -309,7 +308,7 @@ export class contractDetailsComponent {
     };
 
     applyTodayDate = function () {
-        let today = moment().format("l");
+        const today = moment().format("l");
         this.START_DT = new Date(
             moment(this.contractData.START_DT).isBefore(today)
                 ? today
@@ -328,7 +327,7 @@ export class contractDetailsComponent {
 
     copyContract() {
         // Contract Data
-        let ct = this.contractData;
+        const ct = this.contractData;
         // check for NEW contract
         if (ct.DC_ID <= 0) ct.DC_ID = this.uid--;
         this.contractDetailsSvc
@@ -364,10 +363,10 @@ export class contractDetailsComponent {
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
                     // below line of code is to set default value for contract type dropdown.
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
-                    let url = window.location.href.split("/");
-                    let qString = url[url.length - 1];
+                    const url = window.location.href.split("/");
+                    const qString = url[url.length - 1];
                     if (qString.indexOf("=") != -1) {
-                        var copyCid = qString.split("=");
+                        const copyCid = qString.split("=");
                         this.c_Id = Number(copyCid[copyCid.length - 1]);
                         this.isCopyContract = true;
                         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {

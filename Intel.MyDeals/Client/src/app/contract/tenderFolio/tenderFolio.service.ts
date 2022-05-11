@@ -1,5 +1,5 @@
-import { Injectable, Inject  } from "@angular/core";
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
 
@@ -27,13 +27,13 @@ export class TenderFolioService {
         return this.httpClient.post(this.apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId, [title]);
     }
     public getCustomerCalendar(custMbrSid, dayInQuarter, quater, year) {
-        var dto = { 'CustomerMemberSid': custMbrSid, "DayInQuarter": dayInQuarter, "QuarterNo": quater, "Year": year };
-        let apiUrl: string = this.apiBaseCustomerCalenderUrl + 'GetCustomerQuarterDetails';
+        const dto = { 'CustomerMemberSid': custMbrSid, "DayInQuarter": dayInQuarter, "QuarterNo": quater, "Year": year };
+        const apiUrl: string = this.apiBaseCustomerCalenderUrl + 'GetCustomerQuarterDetails';
         return this.httpClient.post(apiUrl, dto);
     }
 
     public createTenderContract(custId, contractId, upperContractData): Observable<any> {
-        let apiUrl: string = this.apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId;
+        const apiUrl: string = this.apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, upperContractData);
     }
 }

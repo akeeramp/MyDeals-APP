@@ -27,7 +27,7 @@
 }
 
 .navbar-logo {
-    padding: 10px 5px!important;
+    padding: 10px 5px !important;
     font-size: 25px;
     color: white
 }
@@ -37,9 +37,9 @@
 }
 
 .infospan {
-    margin-top: -135px!important;
-    margin-left: 200px!important;
-    width: 220px!important;
+    margin-top: -135px !important;
+    margin-left: 200px !important;
+    width: 220px !important;
     background-color: #f2f2f2;
     color: #322122;
     padding: 8px 16px;
@@ -113,10 +113,10 @@ li.k-button {
     font-size: 16px
 }
 
-    li.k-button:hover {
-        border-color: #ebebeb;
-        background-color: #ebebeb
-    }
+li.k-button:hover {
+    border-color: #ebebeb;
+    background-color: #ebebeb
+}
 
 .combobox:hover,
 .inputtext:hover,
@@ -127,20 +127,20 @@ li.k-button {
 }
 
 .k-window {
-    border-radius: 0!important;
-    text-align: center!important
+    border-radius: 0 !important;
+    text-align: center !important
 }
 
 .k-window-content {
-    width: max-content!important;
-    overflow: hidden!important
+    width: max-content !important;
+    overflow: hidden !important
 }
 
 .k-dialog-buttongroup {
-    padding: 0!important;
+    padding: 0 !important;
     height: 63px;
     background-color: #fafafa;
-    border-color: #fafafa!important;
+    border-color: #fafafa !important;
     cursor: pointer
 }
 
@@ -149,13 +149,13 @@ li.k-button {
 }
 
 .tenderFolioAlert {
-    border: .5px solid #ed1c24!important
+    border: .5px solid #ed1c24 !important
 }
 
 .k-multiselect-wrap {
-    border-radius: 0!important;
-    border-color: #f0f0f0!important;
-    border-bottom: 2px solid #0071c5!important
+    border-radius: 0 !important;
+    border-color: #f0f0f0 !important;
+    border-bottom: 2px solid #0071c5 !important
 }
 
 .circleWithText:hover {
@@ -171,7 +171,7 @@ li.k-button {
 }
 
 .activeText {
-    color: #FFA300!important
+    color: #FFA300 !important
 }
 
 .blueBg {
@@ -179,7 +179,7 @@ li.k-button {
 }
 
 .circleWithText {
-    height: 28px!important;
+    height: 28px !important;
     padding-left: 10px
 }
 
@@ -196,17 +196,17 @@ li.k-button {
 }
 
 .rmv-mrgn-btm {
-    margin-bottom: 0!important
+    margin-bottom: 0 !important
 }
 
 .tndr-btn {
     margin-left: 30px;
-    background-color: #00AEFF!important;
-    border-color: #367fa9!important
+    background-color: #00AEFF !important;
+    border-color: #367fa9 !important
 }
 
 .pdng-lft {
-    padding-left: 15px!important
+    padding-left: 15px !important
 }
 
 .kendo-alrt-btn {
@@ -218,5 +218,5 @@ li.k-button {
 }
 
 .pdng-btm {
-    margin: 0 0 5px 0!important
+    margin: 0 0 5px 0 !important
 }

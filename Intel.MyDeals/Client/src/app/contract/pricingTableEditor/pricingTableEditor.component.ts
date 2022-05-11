@@ -1,16 +1,11 @@
 ﻿import * as angular from 'angular';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { pricingTableEditorService } from './pricingTableEditor.service'
 import Handsontable from 'handsontable';
-import * as _ from 'underscore';
 import { templatesService } from '../../shared/services/templates.service';
 import { ContractUtil } from '../contract.util';
-
-/**
- * http://localhost:55490/Dashboard#/contractmanager/26006
- */
 
 @Component({
     selector: 'pricingTableEditor',
@@ -19,15 +14,14 @@ import { ContractUtil } from '../contract.util';
 })
 export class pricingTableEditorComponent implements OnInit {
 
-    constructor(private pteService: pricingTableEditorService,
-                private templateService: templatesService,
+    constructor(private pteService: pricingTableEditorService, private templateService: templatesService,
                 private loggerService: logger) { }
 
-    @Input() in_Cid: any;
-    @Input() in_Ps_Id: any;
-    @Input() in_Pt_Id: any;
-    @Input() contractData: any;
-    @Input() UItemplate: any;
+    @Input() in_Cid;
+    @Input() in_Ps_Id;
+    @Input() in_Pt_Id;
+    @Input() contractData;
+    @Input() UItemplate;
 
     private curPricingStrategy: any = {};
     private curPricingTable:any={};
@@ -42,7 +36,6 @@ export class pricingTableEditorComponent implements OnInit {
     // private columnTuples: ColumnTuple[];
     private id = "pricingTableInstance";
 
-
     getTemplateDetails(){
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -53,16 +46,14 @@ export class pricingTableEditorComponent implements OnInit {
 
     }
     getPTRDetails(){
-        let vm= this;
-        vm.pteService.readPricingTable(vm.in_Pt_Id).subscribe((response) => {
-            vm.pricingTableData = response;
-            vm.getTemplateDetails();
+        this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response) => {
+            this.pricingTableData = response;
+            this.getTemplateDetails();
         }, (error) => {
             this.loggerService.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', error);
         });
     }
   
-     
     ngOnInit(): void {
         this.getPTRDetails();
         // vm.hotSettings.colHeaders = vm.columnTitles;
@@ -331,25 +322,3 @@ angular.module("app").directive(
         component: pricingTableEditorComponent,
     })
 );
-
-// class ColumnTuple {
-//     public letter: string;
-//     public title: string;
-
-//     constructor(letterOrder: number, title: string) {
-//         this.setLetter(letterOrder);
-//         this.setTitle(title);
-//     }
-
-//     public setLetter(order: number) {
-//         if (order >= 0) {
-
-
-//             // this.letter = letter;
-//         }
-//     }
-
-//     public setTitle(title: string) {
-//         this.title = title;
-//     }
-// }

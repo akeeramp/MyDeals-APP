@@ -15,6 +15,7 @@ export class SecurityService {
     public apiBaseUrl = "/api/SecurityAttributes/";
     public securityAttributes = null;
     public securityMasks = null;
+    public sessionComparisonHash = null;
 
     getSecurityData(): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'GetMySecurityMasks';
@@ -38,8 +39,10 @@ export class SecurityService {
     getSecurityDataFromSession(): void {
         this.securityAttributes = sessionStorage.getItem('securityAttributes');
         this.securityMasks = sessionStorage.getItem('securityMasks');
+        this.sessionComparisonHash = sessionStorage.getItem('sessionComparisonHash');
         this.securityAttributes = this.securityAttributes == null ? [] : JSON.parse(this.securityAttributes);
         this.securityMasks = this.securityMasks == null ? [] : JSON.parse(this.securityMasks);
+        this.sessionComparisonHash = this.securityMasks == null ? [] : JSON.parse(this.sessionComparisonHash);
     }
 
     convertHexToBin(hex) {
@@ -99,5 +102,19 @@ export class SecurityService {
             if (revBinVal[secActionObj[0].ATRB_BIT] === '1') { return true }
         }
         return false;
+    }
+
+    loadSecurityData() {
+        this.getSecurityDataFromSession();
+        this.getSecurityData().subscribe((response) => {
+            if (response) {
+                this.securityAttributes = response.SecurityAttributes;
+                this.securityMasks = response.SecurityMasks;
+
+                sessionStorage.setItem('securityAttributes', JSON.stringify(this.securityAttributes));
+                sessionStorage.setItem('securityMasks', JSON.stringify(this.securityMasks));
+            }
+            return true;
+        });
     }
 }

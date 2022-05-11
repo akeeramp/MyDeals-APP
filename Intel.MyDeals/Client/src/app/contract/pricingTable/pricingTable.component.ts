@@ -1,10 +1,9 @@
 ﻿import * as angular from "angular";
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { ContractUtil } from "../contract.util";
 import { templatesService } from "../../shared/services/templates.service";
 
 export interface contractIds {
@@ -23,18 +22,18 @@ export interface contractIds {
 export class pricingTableComponent {
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice,private templatesSvc: templatesService) { }
 
-    public curPricingStrategy: any = {};
-    public pricingTableData: any = {};
+    public curPricingStrategy = {};
+    public pricingTableData = {};
     public c_Id: number;
     public ps_Id: number;
     public pt_Id: number;
-    private isPTETab: boolean = true;
-    private isDETab: boolean = false;
-    private selLnav: string = 'PTE';
-    private isPTEEnable: boolean = false;
-    private isLNavEnable: boolean = false;
-    public contractData:any=null;
-    public UItemplate:any=null
+    private isPTETab = true;
+    private isDETab = false;
+    private selLnav = 'PTE';
+    private isPTEEnable = false;
+    private isLNavEnable = false;
+    public contractData = null;
+    public UItemplate = null
 
     loadModel(contractModel: contractIds) {
         this.selLnav = contractModel.Model
@@ -49,7 +48,6 @@ export class pricingTableComponent {
             else {
                 this.isPTEEnable = false;
             }
-
         }
         else if (this.selLnav == 'MeetComp') {
             console.log('Enable Meetcomp');
@@ -57,7 +55,6 @@ export class pricingTableComponent {
         else {
             console.log('Manage');
         }
-
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
     onTabSelect(e: SelectEvent) {
@@ -78,7 +75,7 @@ export class pricingTableComponent {
      
     }
     ngOnInit() {
-        let url = window.location.href.split('/');
+        const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
         this.loadAllContractDetails();
     }
