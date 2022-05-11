@@ -53,8 +53,8 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #custDropDown [data]="distinctCust" [formControl]="formGroup.get('CUST_NM')"
-                        [allowCustom]="allowCustom"></kendo-combobox>
+                    <kendo-combobox #custDropDown [data]="distinctCust" [placeholder]="'Select Customer..'"
+                        [formControl]="formGroup.get('CUST_NM')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="BUSNS_ORG_NM" title="Settlement Partner Name" width="200"
@@ -65,8 +65,9 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #catDropDown [data]="distinctPartner" [formControl]="formGroup.get('BUSNS_ORG_NM')"
-                        [allowCustom]="allowCustom" (valueChange)="partnerNMChange($event)"></kendo-combobox>
+                    <kendo-combobox #catDropDown [data]="distinctPartner" [placeholder]="'Select Vendor by Name..'"
+                        [formControl]="formGroup.get('BUSNS_ORG_NM')" [allowCustom]="allowCustom"
+                        (valueChange)="partnerNMChange($event)"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DROP_DOWN" title="Settlement Partner ID" width="100"
@@ -78,7 +79,8 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #partDropDown [data]="distinctPartId" [formControl]="formGroup.get('DROP_DOWN')"
-                        [allowCustom]="allowCustom" (valueChange)="partnerIDChange($event)"></kendo-combobox>
+                        [placeholder]="'Select Vendor by ID..'" [allowCustom]="allowCustom"
+                        (valueChange)="partnerIDChange($event)"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="CTRY_CD" title="Country/Region" width="100" [headerClass]="{'headerClass':true}"

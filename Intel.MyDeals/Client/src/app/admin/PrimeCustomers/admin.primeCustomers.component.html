@@ -75,7 +75,7 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #primeCustNmDropDown [data]="distinctPrimeCustNm"
+                    <kendo-combobox #primeCustNmDropDown [data]="distinctPrimeCustNm" [placeholder]="'Enter Customer Name..'"
                         [formControl]="formGroup.get('PRIM_CUST_NM')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>

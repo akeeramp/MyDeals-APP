@@ -22,7 +22,13 @@ export class contractDetailsComponent {
         private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService,
         private loggerSvc: logger
-    ) { }
+    ) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $(
+            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
+        ).remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
     private Customer;
     CUST_NM_DIV;
     CUST_NM;

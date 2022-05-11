@@ -12,7 +12,7 @@
     <div class="col-md-12">
         <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;"><b><i
                     class="intelicon-alert-solid icon-lg"></i>Note:</b>This admin screen is a
-            <strong>Read-Only</strong>screen for viewing data. </div>
+            <strong>Read-Only</strong> screen for viewing data. </div>
     </div>
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
@@ -24,7 +24,7 @@
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_MBR_SID" title="ID"></kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_MBR_SID" title="Id"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_PRD_TYPE" title="Type">
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CATGRY_NM" title="Category">

@@ -41,7 +41,7 @@ export class GlobalSearchResultsComponent  {
       },
       {
           value: "WIP_DEAL",
-          label: "DEALS"
+          label: "Deals"
       }
     ]
     private objTypes:any={

@@ -40,7 +40,7 @@ constructor(private DashboardComp:DashboardComponent){
     },
     {
         value: "WIP_DEAL",
-        label: "DEALS"
+        label: "Deals"
     }
   ]
 

@@ -1,3 +1,8 @@
+a.navbar-brand, a.navbar-brand:hover {
+    outline-color: #0071C5 !important;
+    outline: #0071C5 !important;
+}
+
 .tender-folio-dialog .mat-dialog-container {
     padding: 0 !important;
     overflow: hidden !important;

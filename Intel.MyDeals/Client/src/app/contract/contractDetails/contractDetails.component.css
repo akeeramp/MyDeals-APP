@@ -66,12 +66,16 @@
     cursor: pointer;
 }
 
-    .delete-attach-icon:hover {
-        text-decoration: none;
-    }
+.delete-attach-icon:hover {
+    text-decoration: none;
+}
 
 .btn-primary {
     background-color: #00AEFF;
+}
+
+a {
+    color: #00aeef !important;
 }
 
 .hint-collapse {

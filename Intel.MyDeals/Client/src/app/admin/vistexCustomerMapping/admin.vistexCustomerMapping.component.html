@@ -76,7 +76,7 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #profileDropDown [data]="PeriodProfileData"
+                    <kendo-combobox #profileDropDown [data]="PeriodProfileData" [placeholder]="'Select default period profile..'"
                         [formControl]="formGroup.get('DFLT_PERD_PRFL')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
@@ -88,7 +88,7 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #tenderDropDown [data]="TenderARSettlementLevel"
+                    <kendo-combobox #tenderDropDown [data]="TenderARSettlementLevel" [placeholder]="'Select Tender Settlement Level'"
                         [formControl]="formGroup.get('DFLT_TNDR_AR_SETL_LVL')" [allowCustom]="allowCustom">
                     </kendo-combobox>
                 </ng-template>
@@ -101,7 +101,7 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #nonTenderDropDown [data]="ARSettlementLevel"
+                    <kendo-combobox #nonTenderDropDown [data]="ARSettlementLevel" [placeholder]="'Select Settlement Level'"
                         [formControl]="formGroup.get('DFLT_AR_SETL_LVL')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>

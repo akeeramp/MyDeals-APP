@@ -43,7 +43,7 @@ export const configWidgets = [
         id: '8',
         size: { x: 1, y: 1 },
         position: { rows: 1, cols: 1 },
-        name: "Search My Deals Contracts",
+        name: "Search My Deals Report(s)",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
         type: "searchcontracts",

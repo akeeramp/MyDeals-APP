@@ -24,9 +24,10 @@
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_MBR_SID" title="ID"></kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_MBR_SID" title="Id"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="GEO_NM" title="Name"></kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="RGN_NM" title="Geography"></kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="RGN_NM" title="Geography">
+            </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="CTRY_NM" title="Country/Region">
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean"
