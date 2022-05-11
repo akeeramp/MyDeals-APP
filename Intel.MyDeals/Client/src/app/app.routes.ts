@@ -331,6 +331,15 @@ angular
                     }
                 }
             })
+            .state("dealmassupdate", {
+                url: "/dealmassupdate",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<deal-mass-update></deal-mass-update>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

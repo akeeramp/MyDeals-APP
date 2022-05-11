@@ -763,6 +763,9 @@
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
     <Content Include="Client\src\app\admin\dataQuality\admin.dataQuality.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.ts" />
+    <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
     <Content Include="Client\src\app\admin\dealTypes\admin.dealTypes.component.html" />
     <Content Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />

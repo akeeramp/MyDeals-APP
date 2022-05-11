@@ -1,0 +1,226 @@
+﻿import * as angular from "angular";
+import { Component } from "@angular/core";
+import { logger } from "../../shared/logger/logger";
+import { downgradeComponent } from "@angular/upgrade/static";
+import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
+import { ThemePalette } from '@angular/material/core';
+import { dealMassUpdateService } from "./admin.dealMassUpdate.service";
+
+@Component({
+    selector: "dealMassUpdate",
+    templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html"
+})
+
+export class dealMassUpdateComponent {
+    constructor(private dealMassUpdateSvc: dealMassUpdateService, private loggerSvc: logger) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
+
+    private color: ThemePalette = "primary";
+    private attr = [];
+    private attrValues = [];
+    private gridResult: GridDataResult;
+    private updateResponse: any;
+    private massUpdateData: any = {};
+    private resultCount: any = {};
+    private isError: any = {};
+    private errorMsg: any = {};
+    private showNumeric = false;
+    private showTextBox = false;
+    private showDropDown = false;
+    private showMultiSelect = false;
+    private showResults = false;
+    private isDataValid = true;
+    private MaxNumericValue: number;
+    private NumericAtrbIds = [3352, 3355, 3461, 3708];
+    private TextBoxAtrbIds = [3349, 3350, 3351, 3453, 3464, 3568];
+    private NumericIdTo1 = [3352, 3355, 3708];
+    private NumericIdTo24 = [3461];
+    private SingleValueDropdownAtrbIds = [57, 3009, 3717, 3719, 3465];
+    public state: State = {
+        skip: 0,
+        group: []
+    };
+
+    loadAttributes() {
+        if (!(<any>window).isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
+        //Setting ngModel values to null initially
+        this.massUpdateData.sendVistexFlag = false;
+        this.massUpdateData.DealIds = null;
+        this.massUpdateData.field = null;
+        this.massUpdateData.textValue = null;
+
+        this.dealMassUpdateSvc.GetUpdateAttributes(0)
+            .subscribe((result: Array<any>) => {
+                this.attr = result
+            }, (error) => {
+                this.loggerSvc.error('dealMassUpdateComponent::GetUpdteAttributes::', error);
+            });
+
+    }
+
+    atrbChange(value) {
+        //Resetting error messages
+        this.isError = {};
+        this.errorMsg = {};
+        this.isDataValid = true;
+
+        //Resetting ngModel values
+        this.massUpdateData.textValue = null;
+        this.massUpdateData.numericValue = null;
+        this.massUpdateData.multiSelectValue = null;
+        this.massUpdateData.dropdownValue = null;
+
+        if (this.NumericAtrbIds.includes(value.ATRB_SID)) {
+            this.showTextBox = this.showMultiSelect = this.showDropDown = false;
+            this.showNumeric = true;
+
+            if (this.NumericIdTo1.includes(value.ATRB_SID)) {
+                this.MaxNumericValue = 1;
+            }
+            else if (this.NumericIdTo24.includes(value.ATRB_SID)) {
+                this.MaxNumericValue = 24;
+            }
+            else {
+                this.MaxNumericValue = 999999999;
+            }
+        }
+        else {
+
+            this.dealMassUpdateSvc.GetUpdateAttributes(value.ATRB_SID)
+                .subscribe((result: Array<any>) => {
+                    this.attrValues = result;
+                }, (error) => {
+                    this.loggerSvc.error('dealMassUpdateComponent::atrbChange::Unable to get Attribute List::', error);
+                });
+
+            if (this.TextBoxAtrbIds.includes(value.ATRB_SID)) {
+                this.showNumeric = this.showMultiSelect = this.showDropDown = false;
+                this.showTextBox = true;
+            }
+            else if (this.SingleValueDropdownAtrbIds.includes(value.ATRB_SID)) {
+                this.showNumeric = this.showMultiSelect = this.showTextBox = false;
+                this.showDropDown = true;
+            }
+            else {
+                this.showNumeric = this.showDropDown = this.showTextBox = false;
+                this.showMultiSelect = true;
+            }
+
+        }
+
+    }
+
+    updateValues() {
+        //Resetting error messages
+        this.isError = {};
+        this.errorMsg = {};
+        this.validateData();
+
+
+        if (this.isDataValid) {
+
+            const finalData = {
+                "DEAL_IDS": this.massUpdateData.DealIds,
+                "ATRB_SID": this.massUpdateData.field.ATRB_SID,
+                "SEND_VSTX_FLG": this.massUpdateData.sendVistexFlag
+            }
+            if (this.showMultiSelect) {
+                finalData["UPD_VAL"] = (this.massUpdateData.multiSelectValue).join(",")
+            }
+            else if (this.showDropDown) {
+                finalData["UPD_VAL"] = this.massUpdateData.dropdownValue
+            }
+            else if (this.showNumeric) {
+                finalData["UPD_VAL"] = this.massUpdateData.numericValue
+            }
+            else if (this.showTextBox) {
+                finalData["UPD_VAL"] = this.massUpdateData.textValue
+            }
+
+            this.dealMassUpdateSvc.UpdateDealsAttrbValue(finalData)
+                .subscribe((result: Array<any>) => {
+            this.updateResponse = result;
+            this.gridResult = process(result, this.state);
+            this.resultCount['all'] = result.length;
+            this.resultCount['success'] = result.filter(i => i.ERR_FLAG == 0).length;
+            this.resultCount['error'] = result.filter(i => i.ERR_FLAG == 1).length;
+
+            this.showResults = true;
+
+            this.loggerSvc.success("Please Check The Results.");
+                }, (error) => {
+                    this.loggerSvc.error('dealMassUpdateComponent::udpateValues::', error);
+            });
+        }
+        else {
+            this.loggerSvc.warn('Please fix validation errors', 'Warning');
+        }
+    }
+
+    validateData() {
+        this.isDataValid = true;
+        const reg = new RegExp(/^[0-9,]+$/);
+
+        //Validate Deals Ids
+        if (this.massUpdateData.DealIds != undefined) {
+            this.massUpdateData.DealIds = this.massUpdateData.DealIds.replace(/\s/g, "");
+            if (this.massUpdateData.DealIds.slice(-1) == ',') {
+                this.massUpdateData.DealIds = this.massUpdateData.DealIds.replace(/,+$/g, "");
+            }
+        }
+        if (this.massUpdateData.DealIds == undefined || this.massUpdateData.DealIds == '' || !reg.test(this.massUpdateData.DealIds)) {
+            this.isError["Deal_Ids"] = true;
+            this.errorMsg["Deal_Ids"] = "Please enter valid Deal Ids";
+            this.isDataValid = false;
+        }
+
+        //Validate "Field to Update"/Attribute list dropdown 
+        if (!this.massUpdateData.field) {
+            this.isError["field"] = true;
+            this.errorMsg["field"] = "Please Select Valid Attribute";
+            this.isDataValid = false;
+        }
+
+        //Validate dropdown Value
+        if (this.showDropDown && !this.massUpdateData.dropdownValue) {
+            this.isError["dropdownValue"] = true;
+            this.errorMsg["dropdownValue"] = "Please Select Valid Values";
+            this.isDataValid = false;
+        }
+
+        //Validate multiselect Value
+        if (this.showMultiSelect && !this.massUpdateData.multiSelectValue) {
+            this.isError["multiSelectValue"] = true;
+            this.errorMsg["multiSelectValue"] = "Please Select Valid Values";
+            this.isDataValid = false;
+        }
+    }
+
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
+        this.gridResult = process(this.updateResponse, this.state);
+    }
+
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
+
+    ngOnInit() {
+        this.loadAttributes();
+    }
+}
+
+angular.module("app").directive(
+    "dealMassUpdate",
+    downgradeComponent({
+        component: dealMassUpdateComponent,
+    })
+);

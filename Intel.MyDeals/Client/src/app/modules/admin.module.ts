@@ -27,6 +27,7 @@ import { iCostProductsComponent } from '../admin/iCostProducts/admin.iCostProduc
 import { notificationsSettingsDialog } from '../admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../admin/notifications/admin.notificationsModal.component';
 import { adminNotificationsComponent } from '../admin/notifications/admin.notifications.component';
+import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassUpdate.component'
 
 export let adminComponents =[
     EmployeeComponent,
@@ -58,5 +59,6 @@ export let adminComponents =[
     iCostProductsComponent,
     notificationsSettingsDialog,
     notificationsModalDialog,
-    adminNotificationsComponent
+    adminNotificationsComponent,
+    dealMassUpdateComponent
 ]

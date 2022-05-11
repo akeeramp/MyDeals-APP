@@ -361,11 +361,13 @@
                             {
                                 <li><a href="Admin#/AdminTools">Support Scripts</a></li>
                                 <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
-                                <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
+                                @*<li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>*@
+                                <li ui-sref-active="active"><a ui-sref="dealmassupdate">Deal Mass Update</a></li>
+                                
                                 <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li>
                                 <li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
-                                 @*<li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>*@
-                                 <li ui-sref-active="active"><a ui-sref="pushDealstoVistex">Push Deals to Vistex</a></li>
+                                @*<li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>*@
+                                <li ui-sref-active="active"><a ui-sref="pushDealstoVistex">Push Deals to Vistex</a></li>
                             }
                             @if (isRealSA || isDeveloper)
                             {
