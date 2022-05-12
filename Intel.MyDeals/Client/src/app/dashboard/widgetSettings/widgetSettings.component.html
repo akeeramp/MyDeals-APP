@@ -4,21 +4,20 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <kendo-dialog (close)="cancelWidgetSetting()" [width]="600">
     <div class="modal-header">
-        <h5 class="fl" style="margin-top: 2px !important;">Widget Settings</h5><button type="button" class="close fr"
+        <h5 class="fl" style="margin-top: 2px !important; font-size: 20px !important; font-weight: 500 !important">Widget Settings</h5><button type="button" class="close fr"
             (click)="cancelWidgetSetting()" aria-hidden="true">×</button>
         <div class="clearboth"></div>
     </div>
     <div class="modal-body">
-        <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px">Name</label>
-            <div class="col-lg-9 col-md-9"><input name="name" type="text" [(ngModel)]="data.renameItem"
-                    style="width:100%;" /></div>
+        <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px; font-size:15px; font-weight:bold">Name</label>
+            <div class="col-lg-9 col-md-9"><input name="name" type="text" [(ngModel)]="data.renameItem" class="form-control" style="box-shadow:none"/></div>
             <div class="clearboth"></div>
         </div>
     </div>
     <div class="modal-footer">
-        <kendo-dialog-actions><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
-                    class="glyphicon glyphicon-remove"></i>Cancel</button><button
+        <kendo-dialog-actions style="border: hidden"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
+                    class="glyphicon glyphicon-remove" style="padding-right:5px"></i>Cancel</button><button
                 [disabled]="data.renameItem.trim().length==0" class='btn btn-primary'
-                [mat-dialog-close]="data.renameItem"><i class="glyphicon glyphicon-ok"></i>Save </button>
+                [mat-dialog-close]="data.renameItem"><i class="glyphicon glyphicon-ok" style="padding-right:5px"></i>Save </button>
         </kendo-dialog-actions>
     </div>
