@@ -153,10 +153,15 @@ export class DashboardComponent implements OnInit {
     initDashboard(key, useSavedWidgetSettings) {
 
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
-            //var widgetLayoutArr = defLayout.widgets;
+            let widgetPositions = JSON.parse(window.localStorage.getItem("widgetpositions"));
             for (var i = 0; i < this.savedWidgetSettings.length; i++) {
                 const widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
-                this.dashboard.push({ cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                let locStgPosition = _.findWhere(widgetPositions, { item: widget.type });//JSON.parse(window.localStorage.getItem(widget.type));                
+                if (locStgPosition == null) {
+                    this.dashboard.push({ cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                } else {
+                    this.dashboard.push({ cols: locStgPosition.pos.cols, rows: locStgPosition.pos.rows, y: locStgPosition.pos.y, x: locStgPosition.pos.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                }
                 this.options.api.optionsChanged();
             }
         }
@@ -236,6 +241,16 @@ export class DashboardComponent implements OnInit {
         this.getSavedWidgetSettings(key, useSavedWidgetSettings);
     }
 
+    saveWidgetPositions(e, ui, $widget) {
+        let grids = ui.gridster.grid;
+        let widgetPositions = [];
+        for (var i = 0; i < grids.length; i++) {
+            let item = grids[i].$item;
+            widgetPositions.push({ item: grids[i].item.type, pos:item})
+        }
+        window.localStorage.setItem("widgetpositions", JSON.stringify(widgetPositions));
+    }
+
     //********************* search widget functions*************************
     ngOnInit(): void {        
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
@@ -253,7 +268,9 @@ export class DashboardComponent implements OnInit {
             maxCols: 20,
             swapWhileDragging: false,
             draggable: {
-                enabled: true
+                enabled: true,
+                stop: this.saveWidgetPositions                                        
+                
             },
             resizable: {
                 enabled: true,
