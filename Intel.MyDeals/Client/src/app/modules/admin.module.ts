@@ -28,6 +28,7 @@ import { notificationsSettingsDialog } from '../admin/notifications/admin.notifi
 import { notificationsModalDialog } from '../admin/notifications/admin.notificationsModal.component';
 import { adminNotificationsComponent } from '../admin/notifications/admin.notifications.component';
 import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassUpdate.component'
+import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks/admin.validateVistexR3Checks.component'
 
 export let adminComponents =[
     EmployeeComponent,
@@ -60,5 +61,6 @@ export let adminComponents =[
     notificationsSettingsDialog,
     notificationsModalDialog,
     adminNotificationsComponent,
-    dealMassUpdateComponent
+    dealMassUpdateComponent,
+    ValidateVistexR3ChecksComponent
 ]

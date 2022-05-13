@@ -340,6 +340,15 @@ angular
                     }
                 }
             })
+            .state("validateVistexR3Checks", {
+                url: '/validateVistexR3Checks',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<validate-vistex-checks></validate-vistex-checks>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

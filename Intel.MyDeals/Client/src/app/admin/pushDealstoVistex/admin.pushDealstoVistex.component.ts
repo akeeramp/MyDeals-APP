@@ -68,14 +68,28 @@ export class adminPushDealsToVistexComponent {
         );
           
     }
+    bindPathQueryParam() {
+        let url = window.location.href.split("/");
+        let qString = url[url.length - 1];
+        let dealIds = '';
+        if (qString.indexOf("=") != -1) {
+            var queryParam = qString.split("=");
+            dealIds = (queryParam[queryParam.length - 1]).toString();
+        }
+        return dealIds;
+    }
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.Results, this.state);
     }
     ngOnInit() {
         this.securityCheck();
+        //this is useful when validateVistexR3Checks screen redirects to this 'Push Deals to Vistex' page
+        let dealIdString = this.bindPathQueryParam();
+
         this.pushDealsToVistexForm = this.formBuilder.group({
-            DEAL_IDS: ['', Validators.required],
+            DEAL_IDS: [dealIdString, Validators.required],
             VSTX_CUST_FLAG:true
         });
     }
