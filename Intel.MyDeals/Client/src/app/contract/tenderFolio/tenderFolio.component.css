@@ -1,4 +1,5 @@
-a.navbar-brand, a.navbar-brand:hover {
+a.navbar-brand,
+a.navbar-brand:hover {
     outline-color: #0071C5 !important;
     outline: #0071C5 !important;
 }
@@ -47,7 +48,7 @@ a.navbar-brand, a.navbar-brand:hover {
     width: 220px !important;
     background-color: #f2f2f2;
     color: #322122;
-    padding: 8px 16px;
+    padding: 8px 16px !important;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -85,7 +86,6 @@ a.navbar-brand, a.navbar-brand:hover {
 }
 
 .combobox {
-    margin-left: 13px !important;
     border-radius: 0 !important
 }
 
@@ -206,8 +206,14 @@ li.k-button:hover {
 
 .tndr-btn {
     margin-left: 30px;
-    background-color: #00AEFF !important;
-    border-color: #367fa9 !important
+    background-color: #00AEFF!important;
+    border-color: #367fa9!important;
+    color: #fff !important;
+}
+
+.tndr-btn:hover {
+    background-color: #367fa9 !important;
+    border-color: #00aeef !important;
 }
 
 .pdng-lft {

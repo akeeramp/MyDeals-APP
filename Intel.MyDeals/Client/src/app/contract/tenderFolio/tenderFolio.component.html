@@ -2,13 +2,11 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading contracts'"
-    [description]="'Please wait while we load your contracts.'" [msgType]="'Info'" [isShowFunFact]="true">
+<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading contracts'" [description]="'Please wait while we load your contracts.'" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
 <nav class="navbar navbar-default rmv-padding">
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
-        <div class="navbar-header"><i class="intelicon-dashboard-solid navbar-logo"
-                style="font-size: 25px; color: white;"></i><a class="navbar-brand" href="#">Tender Folio Details</a>
+        <div class="navbar-header"><i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px; color: white;"></i><a class="navbar-brand" href="#">Tender Folio Details</a>
         </div>
         <ul class="nav navbar-nav navbar-right" style="margin-right: -15px !important;">
             <li><a href="" (click)="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
@@ -17,7 +15,8 @@
 </nav>
 <div class="secBasicContainerWrapper rmv-padding mdl-cntnt-height">
     <div id="secContainer">
-        <div class="row"><span class="col-md-3 infospan"><span>* </span>Indicates Required fields</span></div>
+        <div class="row"><span class="col-md-3 infospan"><span>* </span>Indicates Required fields</span>
+        </div>
         <form class="contract-detail-form">
             <div class="container-fluid">
                 <div class="row ">
@@ -25,42 +24,32 @@
                         <div class="col-md-12 row">
                             <h6 class="rmv-padding">{{contractType}} Information</h6>
                         </div>
-                        <div class="col-md-11 row rmv-padding"><label class="rmv-mrgn-btm"><span class="red-color">*
+                        <div class="col-md-11 row"><label class="rmv-mrgn-btm"><span class="red-color">*
                                 </span><span class="label-font">Customer:</span></label><br />
-                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj"
-                                [kendoDropDownFilter]="filterSettings" [data]="Customers"
-                                [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)"
-                                textField="CUST_NM" valueField="CUST_SID" [ngModelOptions]="{standalone: true}">
+                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
+                                [ngModelOptions]="{standalone: true}">
                             </kendo-combobox>
-                            <div *ngIf="isCustSelected" class="err-Control pdng-lft">Please select a valid customer
+                            <div *ngIf="isCustSelected" class="err-Control">Please select a valid customer
                             </div>
-                            <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155"
-                                [width]="245">
+                            <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245">
                                 <div class="kendoAlert">Missing Price Group Code</div>
                                 <kendo-dialog-actions>
                                     <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
                                 </kendo-dialog-actions>
                             </kendo-dialog>
                         </div>
-                        <div *ngIf="isCustDiv" class="col-md-11 row rmv-padding"><label
-                                class="rmv-mrgn-btm"><span>Division:</span></label><br />
-                            <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings"
-                                [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_SID"
-                                [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}"></kendo-multiselect>
+                        <div *ngIf="isCustDiv" class="col-md-11 row"><label class="rmv-mrgn-btm"><span>Division:</span></label><br />
+                            <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_SID" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}"></kendo-multiselect>
                             <div class="description">Blank means that ALL divisions are included</div>
                         </div>
                         <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">*
-                                </span><span class="label-font">Tender Folio Name:</span></label><br /><input
-                                class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}"
-                                [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text" kendoTextBox
-                                [ngModelOptions]="{standalone: true}" />
+                                </span><span class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text"
+                                kendoTextBox [ngModelOptions]="{standalone: true}" />
                             <div class="err-Control" *ngIf="isTitleError">{{titleErrorMsg}}</div>
                         </div>
-                        <div *ngFor="let value of PtDealTypes">
-                            <div id="btnSel{{value.name}}" class="fl circleWithText"
-                                (click)="selectPtTemplateIcon(value)" [ngClass]="{active: value._custom._active}">
-                                <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">{{
-                                    value._custom.ltr}} </div>
+                        <div *ngFor="let value of PtDealTypes" class="pdng-lft">
+                            <div id="btnSel{{value.name}}" class="fl circleWithText" (click)="selectPtTemplateIcon(value)" [ngClass]="{active: value._custom._active}">
+                                <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">{{ value._custom.ltr}} </div>
                                 <div class="fl textName" [ngClass]="{activeText: value._custom._active}">{{value.name}}
                                 </div>
                                 <div class="clearboth"></div>
@@ -72,5 +61,5 @@
         </form>
     </div>
 </div>
-<div id="secFooter"><button class="btn btn-primary tndr-btn" type="button" (click)="ValidateTender()"><span>Create
+<div id="secFooter"><button class="tndr-btn btn" type="button" (click)="ValidateTender()" [disabled]="!dealTypeButtonsLoaded"><span>Create
             Tender Folio</span></button></div>

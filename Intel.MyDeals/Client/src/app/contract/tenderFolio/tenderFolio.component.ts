@@ -40,24 +40,16 @@ export class TenderFolioComponent {
     private isTitleError = false;
     private titleErrorMsg: string;
     private timeout = null;
-    private selectedDealType = "KIT";
-    private dealTypes = [{
-        name: "ECAP",
-        _custom: { ltr: 'E', _active: true }
-    }, {
-        name: "KIT",
-        _custom: { ltr: 'K', _active: false }
-    }];
     public Customers;
     private uid = -100;
     private PtDealTypes;
     private newPricingTable;
+    private dealTypeButtonsLoaded = false;
 
     dismissPopup(): void {
         this.dialogRef.close();
     }
     selectPtTemplateIcon(dealType) {
-        this.selectedDealType = dealType;
         for (const deal of this.PtDealTypes) {
             if (deal.name == dealType.name) {
                 deal._custom._active = true;
@@ -88,6 +80,8 @@ export class TenderFolioComponent {
         });
         result = dealDisplayOrder.map((object) => result[object]).filter(obj => obj !== undefined);
         this.PtDealTypes = result;
+        this.PtDealTypes[0]['_custom']['_active'] = true;
+        this.dealTypeButtonsLoaded = true;
         //Eventually it will use contractdetail page for getting deal types,for now hardcoded with ecap and kit for tender folio  
         return this.PtDealTypes;
     }
@@ -148,16 +142,6 @@ export class TenderFolioComponent {
         })
     }
     saveContractTender() {
-        let selectedCustDivs = [];
-        if (this.CUST_NM_DIV) {
-            selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_SID);
-        }
-        const createTndrFolioObj = {
-            dealType: this.selectedDealType,
-            tenderName: this.tenderName,
-            custDivisons: selectedCustDivs,
-            cust_sid: this.custSIDObj?.CUST_SID
-        }
         this.contractData.Customer = this.custSIDObj;
         this.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.contractData.TITLE = this.tenderName;
@@ -208,7 +192,7 @@ export class TenderFolioComponent {
             "Errors": {}
         }
 
-        this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).subscribe((response:any) => {
+        this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).subscribe((response) => {
             if (response.CNTRCT && response.CNTRCT.length > 0) {
                   //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
                 this.dialogRef.close(response.CNTRCT[1]["DC_ID"]);
@@ -288,7 +272,6 @@ export class TenderFolioComponent {
         this.contractData.DC_ID = this.uid--;
         this.contractData.IS_TENDER = "1";
         this.contractData.TENDER_PUBLISHED = 0;
-        const today = moment().format("l");
         // Set dates Max and Min Values for numeric text box
         // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
         this.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;
