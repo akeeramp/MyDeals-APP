@@ -3,19 +3,19 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <kendo-dialog (close)="cancelWidgetSetting()" [width]="600">
-    <div class="modal-header">
-        <h5 class="fl" style="margin-top: 2px !important; font-size: 20px !important; font-weight: 500 !important">Widget Settings</h5><button type="button" class="close fr"
-            (click)="cancelWidgetSetting()" aria-hidden="true">×</button>
+    <div class="modal-header" style="height:55px;padding:0px">
+        <h5 class="fl" style="font-size: 23px !important; font-weight: 500 !important">Widget Settings</h5><button type="button" class="close fr"
+            (click)="cancelWidgetSetting()" aria-hidden="true" style="font-weight:900">×</button>
         <div class="clearboth"></div>
     </div>
-    <div class="modal-body">
-        <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px; font-size:15px; font-weight:bold">Name</label>
-            <div class="col-lg-9 col-md-9"><input name="name" type="text" [(ngModel)]="data.renameItem" class="form-control" style="box-shadow:none"/></div>
+    <div class="modal-body" style="height:80px">
+        <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px; font-size:17px; font-weight:bold; margin-top:12px">Name</label>
+            <div class="col-lg-9 col-md-9"><input name="name" type="text" [(ngModel)]="data.renameItem" class="form-control" style="box-shadow:none; width:400px; margin-top:6px"/></div>
             <div class="clearboth"></div>
         </div>
     </div>
-    <div class="modal-footer">
-        <kendo-dialog-actions style="border: hidden"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
+    <div class="modal-footer" style="height:55px;padding:0px">
+        <kendo-dialog-actions style="border: hidden; padding: 13px 0px"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
                     class="glyphicon glyphicon-remove" style="padding-right:5px"></i>Cancel</button><button
                 [disabled]="data.renameItem.trim().length==0" class='btn btn-primary'
                 [mat-dialog-close]="data.renameItem"><i class="glyphicon glyphicon-ok" style="padding-right:5px"></i>Save </button>
