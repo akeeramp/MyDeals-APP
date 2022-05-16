@@ -1,8 +1,10 @@
 ﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /><br />
-<div id="horizontal"
-    [ngClass]="{'collapsed': isLnavHidden || isTenderContract==true, 'expanded': !isLnavHidden && isTenderContract !=true, 'hideLnav': isTenderContract==true}">
+
+
+<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden || isTenderContract==true, 'expanded': !isLnavHidden && isTenderContract !=true, 'hideLnav': isTenderContract==true}">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight">
@@ -12,9 +14,7 @@
                         <kendo-tabstrip (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
-                                    <p>pricing Editor</p>
-                                    <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id"
-                                        [contractData]="contractData" [UItemplate]="UItemplate"></pricingTableEditor>
+                                    <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></pricingTableEditor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                             <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true">
@@ -70,17 +70,13 @@
                                     <div class="head">Navigator Menus</div>
                                     <div class="body">
                                         <div style="padding-left: 20px; padding-top: 5px;">
-                                            <p>Click for access to the menus for both test & test management</p><img
-                                                src="/images/learning101menu_v2.png"
-                                                style="margin-bottom: 5px;height: 100%; width: 100%" />
-                                            <p><span style="color: #FC4C02;">**</span>Please note menus will display
-                                                actions based off of role type &/or rules </p>
+                                            <p>Click for access to the menus for both test & test management</p><img src="/images/learning101menu_v2.png" style="margin-bottom: 5px;height: 100%; width: 100%" />
+                                            <p><span style="color: #FC4C02;">**</span>Please note menus will display actions based off of role type &/or rules </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6"><img src="/images/instructions.png"
-                                    style="margin-top: 10px;height: 100%; width: 100%" /></div>
+                            <div class="col-md-6"><img src="/images/instructions.png" style="margin-top: 10px;height: 100%; width: 100%" /></div>
                         </div>
                     </div>
                 </div>
@@ -94,7 +90,6 @@
         </div>
     </div>
     <div id="left-pane" *ngIf="isLNavEnable">
-        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [contractData]="contractData"
-            [UItemplate]="UItemplate"></lnavView>
+        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
     </div>
 </div>

@@ -1,0 +1,9 @@
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<h1 mat-dialog-title>Hi{{data.name}}</h1>
+<div mat-dialog-content>
+    <p>Type Product</p>
+    <mat-form-field appearance="fill">
+        <mat-label>Make your entry</mat-label><input matInput [(ngModel)]="data.animal">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions><button mat-button (click)="onNoClick()">No Thanks</button><button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button></div>

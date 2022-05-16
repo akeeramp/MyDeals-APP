@@ -1,12 +1,13 @@
 ﻿<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
 <link href="/Client/src/app/shared/handsone/spreadsheet.style.css" rel="stylesheet" />
+<link href="/Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css" rel="stylesheet" />
 
-<h3>Pricing Table {{in_Pt_Id}} Loaded</h3>
 <div class="container-fluid overflow">
     <div class="row">
         <div class="col">
-            <hot-table [hotId]="id" [settings]="hotSettings" [data]="dataset"></hot-table>
+            <!-- <div id="spreadsheet"></div> -->
+            <hot-table [hotId]="hotId" [settings]="hotSettings"></hot-table>
         </div>
     </div>
 </div>
