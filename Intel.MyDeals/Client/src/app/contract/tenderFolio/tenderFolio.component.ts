@@ -44,7 +44,6 @@ export class TenderFolioComponent {
     private uid = -100;
     private PtDealTypes;
     private newPricingTable;
-    private dealTypeButtonsLoaded = false;
 
     dismissPopup(): void {
         this.dialogRef.close();
@@ -81,7 +80,6 @@ export class TenderFolioComponent {
         result = dealDisplayOrder.map((object) => result[object]).filter(obj => obj !== undefined);
         this.PtDealTypes = result;
         this.PtDealTypes[0]['_custom']['_active'] = true;
-        this.dealTypeButtonsLoaded = true;
         //Eventually it will use contractdetail page for getting deal types,for now hardcoded with ecap and kit for tender folio  
         return this.PtDealTypes;
     }
@@ -297,8 +295,8 @@ export class TenderFolioComponent {
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
-            this.initializeTenderData();
             this.filterDealTypes();
+            this.initializeTenderData();
             this.newPricingTable = this.templateData.ObjectTemplates.PRC_TBL.ECAP;
             this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
         })
