@@ -59,7 +59,7 @@ export class dealMassUpdateComponent {
             .subscribe((result: Array<any>) => {
                 this.attr = result
             }, (error) => {
-                this.loggerSvc.error('dealMassUpdateComponent::GetUpdteAttributes::', error);
+                this.loggerSvc.error('Unable to get Attribute List', '', 'dealMassUpdateComponent::GetUpdateAttributes::' + JSON.stringify(error));
             });
 
     }
@@ -96,7 +96,7 @@ export class dealMassUpdateComponent {
                 .subscribe((result: Array<any>) => {
                     this.attrValues = result;
                 }, (error) => {
-                    this.loggerSvc.error('dealMassUpdateComponent::atrbChange::Unable to get Attribute List::', error);
+                    this.loggerSvc.error('Unable to get Attribute List', '', 'dealMassUpdateComponent::atrbChange::' + JSON.stringify(error));
                 });
 
             if (this.TextBoxAtrbIds.includes(value.ATRB_SID)) {
@@ -155,7 +155,7 @@ export class dealMassUpdateComponent {
 
             this.loggerSvc.success("Please Check The Results.");
                 }, (error) => {
-                    this.loggerSvc.error('dealMassUpdateComponent::udpateValues::', error);
+                    this.loggerSvc.error('Unable to Update deal(s)', '', 'dealMassUpdateComponent::updateValues::' + JSON.stringify(error));
             });
         }
         else {
