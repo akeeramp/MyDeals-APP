@@ -3,103 +3,131 @@
     padding: 2px 0 50px 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    box-sizing: border-box
 }
 
+.inputReqerror {
+    border: 1px solid red
+}
+
+.inputWidth {
+    width: 100%
+}
+
+.kendoInput {
+    width: 100%;
+    padding: 0px
+}
+
+.blockdisplay {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 0;
+    width: 100%
+}
+
+.margindisplay {
+    margin-top: 10px
+}
 
 #contractContainerWrapper {
-    margin-top: 33px !important;
+    margin-top: 33px !important
 }
 
 .dialog {
-    display: flex;
+    display: flex
 }
 
 .dialogbutton {
-    flex-grow: 1;
+    flex-grow: 1
 }
 
 .dialogmsg {
     margin: 30px;
-    text-align: center;
+    text-align: center
+}
+
+.mleft {
+    margin-left: 30px;
 }
 
 #secContainer {
     overflow: auto !important;
     height: 73vh;
-    line-height: 1.5;
+    line-height: 1.5
 }
 
 .isReqField {
-    color: red;
+    color: red
 }
 
 .contract-detail-form .opUiLabel {
     font-size: 14px;
     width: 160px;
-    font-weight: bold;
+    font-weight: bold
 }
 
 .padTop30 {
-    padding-top: 30px;
+    padding-top: 30px
 }
 
 .k-dialog .promptUserDialog {
     text-align: center;
-    padding: 10px 0 0 0;
+    padding: 10px 0 0 0
 }
 
-    .k-dialog .promptUserDialog h4 {
-        color: #003C71;
-        font-size: 18px;
-        font-weight: 600;
-        margin-top: 0;
-    }
+.k-dialog .promptUserDialog h4 {
+    color: #003C71;
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0
+}
 
-    .k-dialog .promptUserDialog p {
-        font-size: 12px;
-        padding: 10px 20px;
-    }
+.k-dialog .promptUserDialog p {
+    font-size: 12px;
+    padding: 10px 20px
+}
 
 .delete-attach-icon {
     font-size: 16px;
-    cursor: pointer;
+    cursor: pointer
 }
 
 .delete-attach-icon:hover {
-    text-decoration: none;
+    text-decoration: none
 }
 
 .btn-primary {
-    background-color: #00AEFF;
+    background-color: #00AEFF !important
 }
 
 a {
-    color: #00aeef !important;
+    color: #00aeef !important
 }
 
 .hint-collapse {
-    display: none;
+    display: none
 }
 
-@media (max-width: 1000px) {
+@media (max-width:1000px) {
     .hint-collapse {
         background-color: #f3D54E;
         color: #ffffff;
-        display: inherit;
+        display: inherit
     }
 
     .no-hint-collapse {
-        display: none;
+        display: none
     }
 }
 
 .disabled-section {
-    background-color: #f2f2f2;
+    background-color: #f2f2f2
 }
 
 .slidermbottom {
-    margin-bottom: 21px;
+    margin-bottom: 21px
 }
 
 #secFooter {
@@ -112,74 +140,76 @@ a {
     background-color: #fafafa;
     width: 100%;
     position: fixed;
-    right: 0px;
-    bottom: 64.5px !important;
+    right: 0;
+    bottom: 64.5px !important
 }
 
 .fullHeight {
-    height: 100%;
+    height: 100%
 }
 
 #contractHeading {
-    padding: 0px;
+    padding: 0
 }
 
 .contract-detail-form .opUiLabel {
     font-size: 14px;
     width: 160px;
-    font-weight: bold;
+    font-weight: bold
 }
 
 .radioControl {
     cursor: pointer !important;
-    font-weight: normal !important;
+    font-weight: normal !important
 }
 
 .radioButtonGroup {
-    display: inline-flex !important;
+    display: inline-flex !important
 }
 
 .contract-detail-form {
-    padding-bottom: 85px !important;
+    padding-bottom: 85px !important
 }
 
 .display {
+    margin-top: 20px;
     display: flex;
-    margin-bottom: 20px;
-    padding: 0px;
+    padding: 0;
+    width: 100%
 }
 
 .top {
-    margin-top: 20px;
+    margin-top: 20px
 }
 
 .displayblock {
-    flex-flow: wrap;
+    flex-flow: wrap
 }
 
 .row {
     margin-bottom: 20px !important;
-    padding: 0px !important;
+    padding: 0 !important
 }
 
-kendo-dropdownlist, .inlineDisplay {
-    flex-grow: 1;
+kendo-dropdownlist,
+.inlineDisplay {
+    flex-grow: 1
 }
 
-kendo-dropdownlist {
-    opacity: 0.6;
-}
+/*kendo-dropdownlist {
+    opacity: .6
+}*/
 
 .opUiLabel {
-    width: 200px;
+    width: 200px
 }
 
 .fl.opUiLabel {
-    padding-left: 0px;
+    padding-left: 0
 }
 
 .contract-detail-form .C2ALabel .opUiLabel {
     font-weight: bold;
     font-size: 14px;
-    width: 200px;
+    width: 200px
 }

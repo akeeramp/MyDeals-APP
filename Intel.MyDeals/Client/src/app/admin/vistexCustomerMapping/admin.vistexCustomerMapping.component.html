@@ -154,8 +154,8 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #settleDropDown [data]="SettlementPartner"
-                        [formControl]="formGroup.get('DFLT_SETTLEMENT_PARTNER')" [allowCustom]="allowCustom">
+                    <kendo-combobox #settleDropDown [data]="SettlementPartner" [placeholder]="'No Settlement Partners are mapped'"
+                        [formControl]="formGroup.get('DFLT_SETTLEMENT_PARTNER')" [allowCustom]="allowCustom" >
                     </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
