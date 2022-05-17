@@ -35,7 +35,7 @@
     </div>
     <div class="col-md-6" *ngIf="showResults">
         <div class="row">
-            <div class="results"><label>Results:</label>Deals Processed:{{UpdCnt.all}}, <i>Errors:{{UpdCnt.error}}</i>,
+            <div class="results"><label><b>Results:</b></label> Deals Processed:{{UpdCnt.all}}, <i>Errors:{{UpdCnt.error}}</i>,
                 Successful Updated:{{UpdCnt.success}} </div>
             <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" [sort]="state.sort"
                 (dataStateChange)="dataStateChange($event)">

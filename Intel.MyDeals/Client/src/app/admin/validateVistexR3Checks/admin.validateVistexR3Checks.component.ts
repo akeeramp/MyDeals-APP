@@ -184,9 +184,8 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
                 this.ShowResults = true;
                 this.GetActiveColumns(this.selectedApiID.OPT_ID);
                 this.loggerSvc.success("Please Check The Results.");
-            }, function (error) {
-                this.loggerSvc.error("Unable to Send deal(s) to Vistex", error);
-                this.setBusy("", "");
+            }, (error) => {
+                this.loggerSvc.error('Unable to Send deal(s) to Vistex', '', 'validateVistexR3ChecksComponent::getVistexCustomersMapList::' + JSON.stringify(error));
             });
         } else if (!isValidMode) {
             this.ShowResults = false;
