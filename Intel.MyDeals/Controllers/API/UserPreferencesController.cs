@@ -1,6 +1,7 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.DataLibrary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -59,26 +60,47 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => new EmployeesLib().SetOpUserToken(data)
                 , $"Unable to set UserOpToken");
         }
+        // Once Mydeals_migration branch moved to development branch, GetAngularUserPreferences and UpdateAngularUserPreferences needs to be removed
+        [Authorize]
+        [Route("GetAngularUserPreferences/{category}/{subCategory}")]
+        [HttpGet]
+        public List<UserPreferences> GetAngularUserPreferences(string category, string subCategory)
+        {
+            return SafeExecutor(() => DataCollections.GetUserPrefrences(category, subCategory)
+                , $"Unable to get UserPreferences"
+            );
+        }
+
+        [Authorize]
+        [Route("UpdateAngularUserPreferences/{category}/{subCategory}/{key}")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public List<UserPreferences> UpdateAngularUserPreferences(string category, string subCategory, string key, [FromBody] dynamic bodyParam)
+        {
+            return SafeExecutor(() => DataCollections.UpdateUserPrefrences(category, subCategory, key, (string)bodyParam.value)
+                , $"Unable to update UserPreferences"
+            );
+        }
 
         #region Manager User Calls
 
         [Authorize]
-		[Route("GetManageUserData/{wwid}")]
-		public List<ManageUsersInfo> GetManageUserData(int wwid)
-		{
-			return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
-				, $"Unable to GetManageUserData");
-		}
+        [Route("GetManageUserData/{wwid}")]
+        public List<ManageUsersInfo> GetManageUserData(int wwid)
+        {
+            return SafeExecutor(() => new EmployeesLib().GetManageUserData(wwid)
+                , $"Unable to GetManageUserData");
+        }
 
-		[Authorize]
-		[Route("GetManageUserGeos/{wwid}")]
-		public List<string> GetManageUserGeos(int wwid)
-		{
-			return SafeExecutor(() =>  new EmployeesLib().GetManageUserData(wwid).FirstOrDefault(x => x.EMP_WWID == wwid)?.USR_GEOS.Split(',').ToList()				
-				, $"Unable to GetManageUserGeos");
-		}
+        [Authorize]
+        [Route("GetManageUserGeos/{wwid}")]
+        public List<string> GetManageUserGeos(int wwid)
+        {
+            return SafeExecutor(() =>  new EmployeesLib().GetManageUserData(wwid).FirstOrDefault(x => x.EMP_WWID == wwid)?.USR_GEOS.Split(',').ToList()
+                , $"Unable to GetManageUserGeos");
+        }
 
-		[Authorize]
+        [Authorize]
         [Route("GetManageUserDataGetCustomers/{getCachedResult:bool?}")]
         public IEnumerable<CustomerDivision> GetManageUserDataGetCustomers(bool getCachedResult = true)
         {

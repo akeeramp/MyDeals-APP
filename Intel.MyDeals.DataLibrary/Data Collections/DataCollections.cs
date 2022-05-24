@@ -773,5 +773,62 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<Countires> _countries;
+        // Once Mydeals_migration branch moved to development branch, '_userPreferences' static variable and 'GetUserPrefrences and UpdateUserPrefrences' methods needs to be removed
+        public static List<UserPreferences> GetUserPrefrences(string category, string subCategory)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_userPreferences != null && _userPreferences.Count > 0 && _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID).Any())
+                {
+                    return _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID && x.PRFR_CAT == category && x.PRFR_SUB_CAT == subCategory).ToList();
+                }
+                else
+                {
+                    _userPreferences = new List<UserPreferences>();
+                    var userPrfr = new UserPreferences();
+                    userPrfr.CHG_DTM = DateTime.Now;
+                    userPrfr.CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.CRE_DTM = DateTime.Now;
+                    userPrfr.CRE_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.PRFR_CAT = category;
+                    userPrfr.PRFR_KEY = "1";
+                    userPrfr.PRFR_SUB_CAT = subCategory;
+                    userPrfr.PRFR_VAL = "[{\"id\":\"6\",\"size\":{\"x\":0,\"y\":0},\"position\":{\"rows\":1,\"cols\":1},\"name\":\"NewMyDealsContracts\",\"desc\":\"Linktoaddanewcontract\",\"icon\":\"intelicon-tools\",\"type\":\"newContract\",\"canChangeSettings\":true,\"canRefresh\":false,\"canAdd\":true,\"template\":\"app/dashboard/widgets/newContract.html\",\"subConfig\":{},\"widgetConfig\":{\"options\":{},\"data\":[],\"api\":{}},\"$$hashKey\":\"object:47\"},{\"id\":\"7\",\"size\":{\"x\":2,\"y\":0},\"position\":{\"rows\":2,\"cols\":2},\"name\":\"DealDesk\",\"desc\":\"Quickviewofstatusboard\",\"icon\":\"intelicon-grid\",\"type\":\"contractStatusBoard\",\"canChangeSettings\":true,\"canRefresh\":true,\"canAdd\":true,\"template\":\"app/dashboard/widgets/contractStatusBoard.html\",\"widgetConfig\":{},\"subConfig\":{\"favContractIds\":\"\",\"gridFilter\":\"\"},\"$$hashKey\":\"object:48\"},{\"id\":\"8\",\"size\":{\"x\":1,\"y\":1},\"position\":{\"rows\":1,\"cols\":1},\"name\":\"SearchMyDealsContracts\",\"desc\":\"Searchforcontracts,pricingstrategies,orpricingtablesbyenteringanameorid\",\"icon\":\"intelicon-tools\",\"type\":\"searchContracts\",\"canChangeSettings\":true,\"canRefresh\":false,\"canAdd\":true,\"template\":\"app/dashboard/widgets/searchContract.html\",\"subConfig\":{},\"widgetConfig\":{\"options\":{},\"data\":[],\"api\":{}},\"$$hashKey\":\"object:49\"}]";
+                    _userPreferences.Add(userPrfr);
+                    return _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID && x.PRFR_CAT == category && x.PRFR_SUB_CAT == subCategory).ToList();
+                }
+            }
+        }
+
+        public static List<UserPreferences> UpdateUserPrefrences(string category, string subCategory, string key, string value)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID).Any())
+                {
+                    _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID && x.PRFR_CAT == category && x.PRFR_SUB_CAT == subCategory && x.PRFR_KEY == key).ToList().ForEach(s => s.PRFR_VAL = value);
+                    return _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID && x.PRFR_CAT == category && x.PRFR_SUB_CAT == subCategory).ToList();
+                }
+                else
+                {
+                    _userPreferences = new List<UserPreferences>();
+                    var userPrfr = new UserPreferences();
+                    userPrfr.CHG_DTM = DateTime.Now;
+                    userPrfr.CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.CRE_DTM = DateTime.Now;
+                    userPrfr.CRE_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID;
+                    userPrfr.PRFR_CAT = category;
+                    userPrfr.PRFR_KEY = "1";
+                    userPrfr.PRFR_SUB_CAT = subCategory;
+                    userPrfr.PRFR_VAL = "[{\"id\":\"6\",\"size\":{\"x\":0,\"y\":0},\"position\":{\"rows\":1,\"cols\":1},\"name\":\"NewMyDealsContracts\",\"desc\":\"Linktoaddanewcontract\",\"icon\":\"intelicon-tools\",\"type\":\"newContract\",\"canChangeSettings\":true,\"canRefresh\":false,\"canAdd\":true,\"template\":\"app/dashboard/widgets/newContract.html\",\"subConfig\":{},\"widgetConfig\":{\"options\":{},\"data\":[],\"api\":{}},\"$$hashKey\":\"object:47\"},{\"id\":\"7\",\"size\":{\"x\":2,\"y\":0},\"position\":{\"rows\":2,\"cols\":2},\"name\":\"DealDesk\",\"desc\":\"Quickviewofstatusboard\",\"icon\":\"intelicon-grid\",\"type\":\"contractStatusBoard\",\"canChangeSettings\":true,\"canRefresh\":true,\"canAdd\":true,\"template\":\"app/dashboard/widgets/contractStatusBoard.html\",\"widgetConfig\":{},\"subConfig\":{\"favContractIds\":\"\",\"gridFilter\":\"\"},\"$$hashKey\":\"object:48\"},{\"id\":\"8\",\"size\":{\"x\":1,\"y\":1},\"position\":{\"rows\":1,\"cols\":1},\"name\":\"SearchMyDealsContracts\",\"desc\":\"Searchforcontracts,pricingstrategies,orpricingtablesbyenteringanameorid\",\"icon\":\"intelicon-tools\",\"type\":\"searchContracts\",\"canChangeSettings\":true,\"canRefresh\":false,\"canAdd\":true,\"template\":\"app/dashboard/widgets/searchContract.html\",\"subConfig\":{},\"widgetConfig\":{\"options\":{},\"data\":[],\"api\":{}},\"$$hashKey\":\"object:49\"}]";
+                    _userPreferences.Add(userPrfr);
+                    return _userPreferences.Where(x => x.EMP_WWID == OpUserStack.MyOpUserToken.Usr.WWID && x.PRFR_CAT == category && x.PRFR_SUB_CAT == subCategory).ToList();
+                }
+            }
+        }
+
+        private static List<UserPreferences> _userPreferences;
     }
 }

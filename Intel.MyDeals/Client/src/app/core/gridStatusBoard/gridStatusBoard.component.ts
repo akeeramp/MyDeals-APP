@@ -34,6 +34,9 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
         this.cntrctWdgtSvc.isRefresh.subscribe(res => {
             if (res) {
+                this.activeFilter = "fltr_All";
+                this.activekey = "all";
+                this.isLoaded = false;
                 this.state.skip = 0;
                 this.loadContractData();
             }
@@ -71,7 +74,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     //to store the favContractIds in Array format
     private favContractsMap: Array<any> = [];
-    private activekey: string = "all";
+    private activekey: string = "";
 
     private activeFilter: string = "";
     private toolTipOptions: string = "";
@@ -92,7 +95,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         sort: [{
             "field": "CNTRCT_OBJ_SID",
             "dir": "desc",
-            }],
+        }],
     };
 
     public pageSizes: PageSizeItem[] = [
@@ -121,12 +124,56 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit(): void {
+        for (var i = 0; i < this.dashboardParent.dashboard.length; i++) {
+            if (!!this.dashboardParent.dashboard[i].subConfig) {
+                if (this.dashboardParent.dashboard[i].subConfig.favContractIds !== undefined &&
+                    this.dashboardParent.dashboard[i].subConfig.favContractIds != "") {
+                    this.favContractsMap = this.dashboardParent.dashboard[i].subConfig.favContractIds.split(',');
+                }
+                if (this.dashboardParent.dashboard[i].subConfig.gridFilter !== undefined && this.dashboardParent.dashboard[i].subConfig.gridFilter != "") {
+                    this.gridFilter = this.dashboardParent.dashboard[i].subConfig.gridFilter;
+                }
+            }
+        }
 
         if (this.gridFilter == "" || this.gridFilter == undefined) {
             this.activeFilter = "fltr_All";
             this.activekey = "all";
         }
-        else { this.activeFilter = this.gridFilter; }
+        else {
+            this.activeFilter = this.gridFilter;
+            switch (this.gridFilter) {
+                case "fltr_All":
+                    this.activekey = "all";
+                    break;
+                case "fltr_Favorites":
+                    this.activekey = "fav";
+                    break;
+                case "fltr_HasAlert":
+                    this.activekey = "alert";
+                    break;
+                case "fltr_All_Contract":
+                    this.activekey = "allC";
+                    break;
+                case "fltr_Completed_Contract":
+                    this.activekey = "CC";
+                    break;
+                case "fltr_InCompleted_Contract":
+                    this.activekey = "ICC";
+                    break;
+                case "fltr_All_Tender":
+                    this.activekey = "allT";
+                    break;
+                case "fltr_Complete_Tender":
+                    this.activekey = "CT";
+                    break;
+                case "fltr_InComplete_Tender":
+                    this.activekey = "ICT";
+                    break;
+                case "fltr_Cancelled_Tender":
+                    this.activekey = "CA";
+            }
+        }
         this.favContractsMap = this.favContractIds == "" ? this.favContractsMap : this.favContractIds.split(',');
         //Get the contract Data
         this.loadContractData();
@@ -171,7 +218,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                     //adding a column IS_Favorite for setting the favourite contracts
                     response[i]["IS_FAVORITE"] = false;
                     for (let j = 0; j < this.favContractsMap.length; j++) {
-                        if (response[i].CNTRCT_OBJ_SID === this.favContractsMap[j]) {
+                        if (response[i].CNTRCT_OBJ_SID === parseInt(this.favContractsMap[j])) {
                             response[i]["IS_FAVORITE"] = true;
                             this.favCount++;
                         }
@@ -186,11 +233,6 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                     this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
                 }
                 this.gridResult = response;
-
-                //binding the response to the kendogrid
-                this.contractDs = process(this.gridResult, this.state);
-                this.activekey = "all";
-
                 //Storing the filter response in variable to be used while filter
                 this.gridresultAlert = this.gridResult.filter(x => x.HAS_ALERT === true);
                 this.gridresultFavorite = this.gridResult.filter(x => x.IS_FAVORITE === true);
@@ -201,6 +243,42 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                 this.gridresultInCompleteContract = this.gridResult.filter(x => x.IS_TENDER === 0 && x.WF_STG_CD === "InComplete");
                 this.gridresultIncompleteTenders = this.gridResult.filter(x => x.IS_TENDER === 1 && x.WF_STG_CD === "InComplete");
                 this.gridresultCancelledTenders = this.gridResult.filter(x => x.IS_TENDER === 1 && x.WF_STG_CD === "Cancelled");
+
+                switch (this.activekey) {
+                    case "all":
+                        this.gridResult = response;
+                        break;
+                    case "fav":
+                        this.gridResult = this.gridresultFavorite;
+                        break;
+                    case "alert":
+                        this.gridResult = this.gridresultAlert;
+                        break;
+                    case "allC":
+                        this.gridResult = this.gridresultAllContract;
+                        break;
+                    case "CC":
+                        this.gridResult = this.gridresultCompletedContract;
+                        break;
+                    case "ICC":
+                        this.gridResult = this.gridresultInCompleteContract;
+                        break;
+                    case "allT":
+                        this.gridResult = this.gridresultAllTenders;
+                        break;
+                    case "CT":
+                        this.gridResult = this.gridresultCompletedTenders;
+                        break;
+                    case "ICT":
+                        this.gridResult = this.gridresultIncompleteTenders;
+                        break;
+                    case "CA":
+                        this.gridResult = this.gridresultCancelledTenders;
+                        break;
+                }
+
+                //binding the response to the kendogrid
+                this.contractDs = process(this.gridResult, this.state);
 
                 //Setting the counts
                 this.allStageCnt = response.length;
@@ -228,7 +306,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         dataItem.IS_FAVORITE = !dataItem.IS_FAVORITE;
 
         if (!dataItem.IS_FAVORITE) {
-            const favIdIndex = this.favContractsMap.indexOf(dataItem.CNTRCT_OBJ_SID);
+            const favIdIndex = this.favContractsMap.indexOf(dataItem.CNTRCT_OBJ_SID.toString());
             if (favIdIndex !== -1) {
                 this.favContractsMap.splice(favIdIndex, 1);
             }
@@ -240,9 +318,9 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
             });
             if (this.activeFilter === "Favorites"){
                 this.clkFilter("fltr_Favorites");
-            } 
+            }
         } else {
-            this.favContractsMap.push(dataItem.CNTRCT_OBJ_SID);
+            this.favContractsMap.push(dataItem.CNTRCT_OBJ_SID.toString());
             dataItem.IS_FAVORITE = true;
             this.favCount++;
             this.gridresultFavorite.push(dataItem);
@@ -251,8 +329,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         const mySubConfig = {
             favContractIds: this.favContractIds
         }
-        this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);
-
+        this.dashboardParent.favContractChanged(this.favContractIds);
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
@@ -337,13 +414,13 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                 this.activekey = "CA";
                 this.contractDs = process(this.gridresultCancelledTenders, this.state);
         }
-
         // Save only if there is value change in the filters and not default value (fltr_All)
         if (this.activeFilter !== filter) {
+            this.activeFilter = filter;
+            this.dashboardParent.gridFilterChanged(filter);
             const mySubConfig = {
                 gridFilter: filter
             }
-            this.dashboardParent.saveWidgetConfig('contractStatusBoard', mySubConfig);
         }
     }
 

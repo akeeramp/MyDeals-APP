@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
+import { logger } from "../../shared/logger/logger";
 
 interface Item {
     text: string;
@@ -24,7 +25,7 @@ interface Item {
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
-    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService) {
+    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, protected loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -43,6 +44,7 @@ export class DashboardComponent implements OnInit {
     private windowOpened = false;
     private windowTop = 220; windowLeft = 370; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
     private searchDialogVisible = false;
+    private selectedDashboardId;
 
     public custData: any;
     public selectedCustNames: Item[];
@@ -59,6 +61,7 @@ export class DashboardComponent implements OnInit {
         $event.preventDefault();
         $event.stopPropagation();
         this.dashboard.splice(this.dashboard.indexOf(item), 1);
+        this.saveLayout();
     }
 
     onCustomerChange(custData) {
@@ -81,8 +84,11 @@ export class DashboardComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.dashboard[index].name = result;
-                this.options.api.optionsChanged();
+                if (this.dashboard[index].name !== result) {
+                    this.dashboard[index].name = result;
+                    this.saveLayout();
+                    this.options.api.optionsChanged();
+                }
             }
         });
 
@@ -97,21 +103,16 @@ export class DashboardComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 const widget = _.findWhere(configWidgets, { type: result });
-                this.dashboard.push({ cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                if (widget.canAdd) {
+                    // Don't set a position, so that the widget will be added "smartly" wherever space is available.
+                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                    this.saveLayout();
+                }
                 this.options.api.optionsChanged();
             }
         });
     }
 
-    //get dashboard config details api
-    public getWidgetConfig() {
-        //will be implemented once dashboard component ready 
-    }
-
-    //update api
-    public saveWidgetConfig(type: string, config: any) {
-        console.log("SaveWidgetConfig :", type, config);
-    }
 
     refreshWidget(item: any) {
         //Refresh logic of gridstatusboard is migrated and handled here
@@ -128,39 +129,72 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    refreshtoDashboardDefault() {
-        this.startDateValue = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
-        this.endDateValue = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
 
-        this.selectedCustomerIds = [];
-        this.includeTenders = true;
+    refreshtoDashboardDefault() {
+        window.localStorage.startDateValue = this.startDateValue;
+        window.localStorage.endDateValue = this.endDateValue;
+        window.localStorage.selectedDashboardId = this.selectedDashboardId;
     }
 
     getSavedWidgetSettings(key, useSavedWidgetSettings) {
-        this.usrPrfrncssvc.getActions("Dashboard", "Widgets").subscribe((response : Array < any>)=> {
-            if (response) {
-                var savedWidgetSettingsForSpecifiedRole = response.filter(function (obj) {
-                    return obj.PRFR_KEY == key;
-                });
-                if (savedWidgetSettingsForSpecifiedRole && savedWidgetSettingsForSpecifiedRole.length > 0) {
-                     this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole[0].PRFR_VAL);
+        this.usrPrfrncssvc.getActions("Dashboard", "Widgets").subscribe((response: any) => {
+            if (response && response.length > 0) {
+                var savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
+                if (savedWidgetSettingsForSpecifiedRole) {
+                    this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole.PRFR_VAL);
                 }
                 this.initDashboard(key, useSavedWidgetSettings);
             }
         })
     }
 
+    saveLayout() {
+        this.usrPrfrncssvc.updateActions("Dashboard", "Widgets", this.selectedDashboardId,
+            this.dashboard).subscribe((response: any) => { },
+                (error) => {
+                    this.loggerSvc.error("Unable to update User Preferences.", error, error.statusText);
+                });
+    }
+    // this function is triggered from gridStatusBoard.component.ts 'onFavChange'
+    favContractChanged(favContractIds) {
+        for (var i = 0; i < this.dashboard.length; i++) {
+            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds !== undefined) {
+                this.dashboard[i].subConfig.favContractIds = favContractIds;
+            }
+        }
+        this.saveLayout();
+    }
+    // this function is triggered from gridStatusBoard.Component.ts 'clkFilter()'
+    gridFilterChanged(gridFilter) {
+        for (var i = 0; i < this.dashboard.length; i++) {
+            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.gridFilter !== undefined) {
+                this.dashboard[i].subConfig.gridFilter = gridFilter;
+            }
+        }
+        this.saveLayout();
+    }
+
     initDashboard(key, useSavedWidgetSettings) {
 
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
-            let widgetPositions = JSON.parse(window.localStorage.getItem("widgetpositions"));
             for (var i = 0; i < this.savedWidgetSettings.length; i++) {
-                const widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
-                let locStgPosition = _.findWhere(widgetPositions, { item: widget.type });//JSON.parse(window.localStorage.getItem(widget.type));                
-                if (locStgPosition == null) {
-                    this.dashboard.push({ cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
-                } else {
-                    this.dashboard.push({ cols: locStgPosition.pos.cols, rows: locStgPosition.pos.rows, y: locStgPosition.pos.y, x: locStgPosition.pos.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                var widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
+                if (widget) {
+                    widget.name = this.savedWidgetSettings[i].name;
+                    widget.size = this.savedWidgetSettings[i].size;
+                    widget.position = this.savedWidgetSettings[i].position;
+                    if (!!widget.subConfig) {
+                        widget.subConfig = this.savedWidgetSettings[i].subConfig;
+                    }
+                    if (!!widget.widgetConfig) {
+                        widget.widgetConfig = this.savedWidgetSettings[i].widgetConfig;
+                    }
+                }
+                if (widget.position == null) {
+                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                }
+                else {
+                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                 }
                 this.options.api.optionsChanged();
             }
@@ -170,7 +204,7 @@ export class DashboardComponent implements OnInit {
             var defWidget = defLayout.widgets;
             for (var i = 0; i < defWidget.length; i++) {
                 const widget = _.findWhere(configWidgets, { id: defWidget[i].id });
-                this.dashboard.push({ cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, type: widget.type, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, name: widget.name });
+                this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                 this.options.api.optionsChanged();
             }
         }
@@ -178,6 +212,7 @@ export class DashboardComponent implements OnInit {
 
     defaultLayout() {
         this.addWidgetByKey('1', false);
+        this.saveLayout();
     }
 
     showHelpTopic() {
@@ -241,22 +276,37 @@ export class DashboardComponent implements OnInit {
         this.getSavedWidgetSettings(key, useSavedWidgetSettings);
     }
 
-    saveWidgetPositions(e, ui, $widget) {
+    saveWidgetPositions(ui, field) {
         let grids = ui.gridster.grid;
-        let widgetPositions = [];
         for (var i = 0; i < grids.length; i++) {
             let item = grids[i].$item;
-            widgetPositions.push({ item: grids[i].item.type, pos:item})
+            for (var j = 0; j < this.dashboard.length; j++) {
+                if (this.dashboard[j].type == grids[i].item.type) {
+                    if (field === 'position') {
+                        this.dashboard[i].position = { cols: item.cols, rows: item.rows };
+                        this.dashboard[i].cols = item.cols;
+                        this.dashboard[i].rows = item.rows;
+                    }
+                    else if (field === 'size') {
+                        this.dashboard[i].size = { x: item.x, y: item.y };
+                        this.dashboard[i].x = item.x;
+                        this.dashboard[i].y = item.y;
+                    }
+                }
+            }
         }
-        window.localStorage.setItem("widgetpositions", JSON.stringify(widgetPositions));
+        this.saveLayout();
     }
 
     //********************* search widget functions*************************
-    ngOnInit(): void {        
+    ngOnInit(): void {
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.addWidgetByKey('1', true);
+        window.localStorage.selectedDashboardId = "1";
+        this.selectedDashboardId = window.localStorage.selectedDashboardId ? window.localStorage.selectedDashboardId : "1";
+
         this.options = {
             gridType: GridType.Fit,
             allowMultiLayer: true,
@@ -269,11 +319,16 @@ export class DashboardComponent implements OnInit {
             swapWhileDragging: false,
             draggable: {
                 enabled: true,
-                stop: this.saveWidgetPositions                                        
-                
+                stop: (e, ui, $widget) => {
+                    this.saveWidgetPositions(ui, 'size');
+                }
+
             },
             resizable: {
                 enabled: true,
+                stop: (e, ui, $widget) => {
+                    this.saveWidgetPositions(ui, 'position');
+                }
 
             },
             itemResizeCallback: (item) => {
