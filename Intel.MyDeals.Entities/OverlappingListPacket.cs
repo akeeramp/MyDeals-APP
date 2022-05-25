@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Intel.MyDeals.Entities
 {
@@ -13,4 +14,13 @@ namespace Intel.MyDeals.Entities
         public List<Overlapping> Data { get; set; }
         public List<PerformanceTime> PerformanceTimes { get; set; }
     }
+
+    public class OverlappingTenders
+    {
+        public int DealId { get; set; }
+        public string StartDt { get; set; }
+        public string EndDt { get; set; }
+        public string Stage { get; set; }
+    }
+
 }

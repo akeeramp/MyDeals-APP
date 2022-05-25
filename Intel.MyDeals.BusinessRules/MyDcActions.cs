@@ -1714,6 +1714,41 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckTenderOverlaps(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || r.Dc.DcID < 0) return; // bail out if this is a new deal creation because PRODUCT_FILTER is not settled out at deal level on PTR entry
+
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            if (!(deDealTypeValue == "ECAP" && deRebateTypeValue == "TENDER")) return; // Safety block to prevent this being applied to non-tender ECAP deals
+
+            DateTime dealStartDate;
+            DateTime dealEndDate;
+            DateTime dtNow = DateTime.Now;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStartDate)) dealStartDate = dtNow;
+            if (!DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEndDate)) dealEndDate = dtNow;
+
+            string projectName = r.Dc.GetDataElementValue(AttributeCodes.QLTR_PROJECT);
+            string endCustomer = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
+
+            int custId = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
+            int myPrdMbrSid = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
+
+            IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+
+            OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+
+            if (overlapsCheckDeals.Count > 0)
+            {
+                string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
+                deEndCustomer.AddMessage("This tender deal overlaps with other Tender Deal(s) [" + overlaps + "].  Please correct overlap.");
+            }
+
+        }
+
         public static void CheckCeilingVolume(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

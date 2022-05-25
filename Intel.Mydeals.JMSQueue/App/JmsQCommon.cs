@@ -315,6 +315,7 @@ namespace Intel.MyDeals.JMSQueueApp
                     myMail.Subject = subject;
                     myMail.Body = sb.ToString();
                     myMail.IsBodyHtml = false;
+                    myMail.From = new MailAddress("rdms.ktbr@intel.com");
 
                     client.UseDefaultCredentials = false;
                     client.Credentials = new NetworkCredential("SYS_SYSSYSBOSEMAILS", StringEncrypter.StringDecrypt("04601922222300Qa16209320615603P1506sQ2P9321303605Z151C00324514325202h913400z212924320G530930U02521307e20c24025eF21l20uZ1FO1O13620402315204H3917g21242130F091f", "Smtp_Password"));

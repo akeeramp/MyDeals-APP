@@ -498,14 +498,26 @@ namespace Intel.MyDeals.BusinessLogic
 
             #endregion Product Check
 
-            #region Deal Stability Check
+            #region Deal Stability and Overlapping Check
             if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null ||
                 dealType == "" || groupType == "" || marketSegment == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error: failed to create the Tender Deal due to missing expected fields {Fields}", "Missing expected fields"));
                 return initWipId;
             }
-            #endregion Deal Stability Check
+
+            // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
+            OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(initWipId, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+
+            if (overlapsCheckDeals.Count > 0)
+            {
+                string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(708, "Deal Error: failed to create the Tender Deal due to Overlapping Deal(s) [" + overlaps + "] already existing.", "Deal Overlaps Detected"));
+                return initWipId;
+            }
+
+            #endregion Deal Stability and Overlapping Check
 
             //Prime Customer Information 
             if (endCustomer != null && endCustomer != "") customer = endCustomer;
@@ -1262,6 +1274,20 @@ namespace Intel.MyDeals.BusinessLogic
             //Set any forced constant attributes brought in as part of R2/R3 to their defaults
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.RESET_VOLS_ON_PERIOD), "No");
+
+            #region Overlapping Check
+            // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
+            int myPrdMbrSid = int.TryParse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid) ? myPrdMbrSid : 0;
+            OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(dealId, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+
+            if (overlapsCheckDeals.Count > 0)
+            {
+                string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(741, "Update Error: failed to update the deal due to changes Overlapping other Tender Deal(s) [" + overlaps + "].", "Deal Overlaps Detected"));
+            }
+
+            #endregion Overlapping Check
 
             // Conduct staging push if needed - support only requested to submitted at this point - re-deal cycles will be rougher.
             // Offer and Lost/Won deals would need to verify a right way major change prior to re-setting the WF Stage.  Best to let re-deal take care.

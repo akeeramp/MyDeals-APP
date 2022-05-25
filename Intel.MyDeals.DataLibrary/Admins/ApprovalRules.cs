@@ -257,6 +257,7 @@ namespace Intel.MyDeals.DataLibrary
             ruleConfig.DefaultEndDate = DateTime.Now.AddYears(10);
             return ruleConfig;
         }
+
         public List<string> GetSuggestion(string strCategory, string strSearchKey)
         {
             List<string> lstRtn = new List<string>();
@@ -277,5 +278,6 @@ namespace Intel.MyDeals.DataLibrary
             }
             return lstRtn;
         }
+
     }
 }

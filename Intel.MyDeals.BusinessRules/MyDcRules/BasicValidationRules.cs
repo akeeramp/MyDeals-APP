@@ -662,7 +662,18 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
                 },
-                
+
+                new MyOpRule
+                {
+                    Title="No Tender deal overlappings - ECAP deals only",
+                    ActionRule = MyDcActions.CheckTenderOverlaps,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.REBATE_TYPE) && de.AtrbValue != null
+                        && !String.Equals(de.AtrbValue.ToString(),"TENDER", StringComparison.OrdinalIgnoreCase)).Any(),
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString() },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
                 new MyOpRule
                 {
                     Title="Deal End Date can't be greater than twenty years from Start Date",
