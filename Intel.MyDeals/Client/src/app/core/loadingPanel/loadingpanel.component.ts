@@ -69,7 +69,7 @@ export class LoadingPanelComponent implements OnInit {
   }
 
   ngOnInit() {    
-    if(!!this.isShowFunFact){
+    if(this.isShowFunFact){
       this.isFunFactEnabled = String(this.isShowFunFact) == 'true' ? true : false;
       if (this.isFunFactEnabled === true) {
         this.GetRandomFact();

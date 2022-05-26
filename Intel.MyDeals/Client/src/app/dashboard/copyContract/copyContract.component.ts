@@ -76,7 +76,7 @@ export class CopyContractComponent {
 
         this.ctrctWdgtSvc.getCustomerDropdowns()
             .subscribe(response => {
-                let custNms = [];
+                const custNms = [];
                 for (let i = 0; i < response.length; i++) {
                     if (this.selectedCustomerIds.indexOf(response[i].CUST_SID) >= 0) {
                         custNms.push(response[i].CUST_NM);

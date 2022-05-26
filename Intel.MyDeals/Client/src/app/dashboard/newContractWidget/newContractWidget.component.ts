@@ -27,6 +27,9 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     copyContractText = 'Copy Contract';
     createTenderFolioText = 'Create Tender Folio';
 
+    //To load angular Contract details page change value to true, will be removed once contract details migration is done
+    public angularEnabled = false;
+
     constructor(private newContractWidgetService: NewContractWidgetService, protected dialog: MatDialog) { }
 
     ngOnInit(): void {
@@ -34,7 +37,6 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         this.resizeSub = this.resizeEvent.subscribe((widget) => {
             if (widget === this.widget) { // or check id , type or whatever you have there
                 // resize your widget, chart, map , etc.
-                console.log('WidgetComponent**********', widget);
             }
         });
     }
@@ -50,7 +52,6 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                console.log(result);
                 //Redirect to contract detail screen for tender creation
                 // document.location.href = "/Contract#/manager/0/details?tender=1";
                 window.location.href = "#tendermanager/" + result;

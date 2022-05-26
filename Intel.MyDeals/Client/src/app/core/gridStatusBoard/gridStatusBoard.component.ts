@@ -27,6 +27,9 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
 
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
+    //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
+    public angularJSEnabled = true;
+
     constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -124,8 +127,8 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit(): void {
-        for (var i = 0; i < this.dashboardParent.dashboard.length; i++) {
-            if (!!this.dashboardParent.dashboard[i].subConfig) {
+        for (let i = 0; i < this.dashboardParent.dashboard.length; i++) {
+            if (this.dashboardParent.dashboard[i].subConfig) {
                 if (this.dashboardParent.dashboard[i].subConfig.favContractIds !== undefined &&
                     this.dashboardParent.dashboard[i].subConfig.favContractIds != "") {
                     this.favContractsMap = this.dashboardParent.dashboard[i].subConfig.favContractIds.split(',');

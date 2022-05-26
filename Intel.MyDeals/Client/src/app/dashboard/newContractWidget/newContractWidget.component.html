@@ -5,7 +5,14 @@
             <div class="fl btn-mock" *ngIf="C_CREATE_CONTRACT">
                 <div class="btn-ttl" *ngIf="(isTender!==undefined && isTender===true) ; else nonTenderTemplate"><a class="link-color" href="/Contract#/manager/0/details?tender=1">{{createContractText}}</a></div>
                 <ng-template #nonTenderTemplate>
-                    <div class="btn-ttl"><a class="link-color" href="#contractdetails/0">{{createContractText}}</a></div>
+                    <div class="btn-ttl" *ngIf="angularEnabled; else nonTenderJS">
+                        <a class="link-color" href="#contractdetails/0">{{createContractText}}</a>
+                    </div>
+                    <ng-template #nonTenderJS>
+                        <div class="btn-ttl">
+                            <a class="link-color" href="/Contract#/manager/0/details">{{createContractText}}</a>
+                        </div>
+                    </ng-template>
                 </ng-template>
             </div>
             <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT">

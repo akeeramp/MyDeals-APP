@@ -79,7 +79,7 @@ export class contractStatusBoardComponent implements OnInit {
 
     recurCalcData(data: Array<any>, defStage: string) {
 
-        let ret = [];
+        const ret = [];
         let next = "";
         for (let i = 0; i < data.length; i++) {
             //vaet next = "";r results = ["Pass", "Fail", "InComplete", "NA"];
@@ -128,7 +128,7 @@ export class contractStatusBoardComponent implements OnInit {
     }
 
     refreshGrid(d) {
-        let d1 = [];
+        const d1 = [];
         if (d.children !== undefined) {
             for (let i = 0; i < d.children.length; i++) {
                 d1.push({

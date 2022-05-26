@@ -22,7 +22,7 @@ import * as angular from 'angular';
    /*     'app.reporting',*/
         'app.contract',
         'app.costtest',
-        'app.dashboard',
+        /*'app.dashboard',*/
         'app.tenderManager',
         'app.testCases'
     ]);

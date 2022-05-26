@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit {
     refreshAllWidgets() {
         this.refreshtoDashboardDefault();
         // Loop through all current (visible) widgets and if the widget has a canRefresh enabled, refresh it.
-        for (var i = 0; i < this.dashboard.length; i++) {
+        for (let i = 0; i < this.dashboard.length; i++) {
             if (this.dashboard[i]["canRefresh"] == true)
                 this.refreshWidget(this.dashboard[i]);
         }
@@ -139,7 +139,7 @@ export class DashboardComponent implements OnInit {
     getSavedWidgetSettings(key, useSavedWidgetSettings) {
         this.usrPrfrncssvc.getActions("Dashboard", "Widgets").subscribe((response: any) => {
             if (response && response.length > 0) {
-                var savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
+                const savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
                 if (savedWidgetSettingsForSpecifiedRole) {
                     this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole.PRFR_VAL);
                 }
@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
     }
     // this function is triggered from gridStatusBoard.component.ts 'onFavChange'
     favContractChanged(favContractIds) {
-        for (var i = 0; i < this.dashboard.length; i++) {
+        for (let i = 0; i < this.dashboard.length; i++) {
             if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds !== undefined) {
                 this.dashboard[i].subConfig.favContractIds = favContractIds;
             }
@@ -166,7 +166,7 @@ export class DashboardComponent implements OnInit {
     }
     // this function is triggered from gridStatusBoard.Component.ts 'clkFilter()'
     gridFilterChanged(gridFilter) {
-        for (var i = 0; i < this.dashboard.length; i++) {
+        for (let i = 0; i < this.dashboard.length; i++) {
             if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.gridFilter !== undefined) {
                 this.dashboard[i].subConfig.gridFilter = gridFilter;
             }
@@ -177,16 +177,16 @@ export class DashboardComponent implements OnInit {
     initDashboard(key, useSavedWidgetSettings) {
 
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
-            for (var i = 0; i < this.savedWidgetSettings.length; i++) {
-                var widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
+            for (let i = 0; i < this.savedWidgetSettings.length; i++) {
+                const widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
                 if (widget) {
                     widget.name = this.savedWidgetSettings[i].name;
                     widget.size = this.savedWidgetSettings[i].size;
                     widget.position = this.savedWidgetSettings[i].position;
-                    if (!!widget.subConfig) {
+                    if (widget.subConfig) {
                         widget.subConfig = this.savedWidgetSettings[i].subConfig;
                     }
-                    if (!!widget.widgetConfig) {
+                    if (widget.widgetConfig) {
                         widget.widgetConfig = this.savedWidgetSettings[i].widgetConfig;
                     }
                 }
@@ -200,9 +200,9 @@ export class DashboardComponent implements OnInit {
             }
         }
         else {
-            var defLayout = _.findWhere(configLayouts, { id: key });
-            var defWidget = defLayout.widgets;
-            for (var i = 0; i < defWidget.length; i++) {
+            const defLayout = _.findWhere(configLayouts, { id: key });
+            const defWidget = defLayout.widgets;
+            for (let i = 0; i < defWidget.length; i++) {
                 const widget = _.findWhere(configWidgets, { id: defWidget[i].id });
                 this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                 this.options.api.optionsChanged();
@@ -277,10 +277,10 @@ export class DashboardComponent implements OnInit {
     }
 
     saveWidgetPositions(ui, field) {
-        let grids = ui.gridster.grid;
-        for (var i = 0; i < grids.length; i++) {
-            let item = grids[i].$item;
-            for (var j = 0; j < this.dashboard.length; j++) {
+        const grids = ui.gridster.grid;
+        for (let i = 0; i < grids.length; i++) {
+            const item = grids[i].$item;
+            for (let j = 0; j < this.dashboard.length; j++) {
                 if (this.dashboard[j].type == grids[i].item.type) {
                     if (field === 'position') {
                         this.dashboard[i].position = { cols: item.cols, rows: item.rows };

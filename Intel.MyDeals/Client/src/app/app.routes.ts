@@ -51,15 +51,20 @@ angular
                     }
                 }
             })
-            // .state("portal", {
-            //     url: "/portal",
-            //     abstract: false,
-            //     views: {
-            //         mainView: {
-            //             template: '<app-dashboard></app-dashboard>'
-            //         }
-            //     }
-            // })
+             .state("portal", {
+                 url: "/portal",
+                 abstract: false,
+                 views: {
+                     mainView: {
+                         template: '<app-dashboard></app-dashboard>'
+                     }
+                 },
+                 resolve: {
+                     securityLoaded: ['securityService', function (securityService) {
+                         return securityService.loadSecurityData();
+                     }],
+                 }
+             })
      
             //*****************poc items ends here*******************
             //*****************Admin route  starts here*******************  
