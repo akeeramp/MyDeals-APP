@@ -1733,8 +1733,10 @@ namespace Intel.MyDeals.BusinessRules
             string projectName = r.Dc.GetDataElementValue(AttributeCodes.QLTR_PROJECT);
             string endCustomer = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
 
-            int custId = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID));
-            int myPrdMbrSid = int.Parse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER));
+            int custId;
+            int myPrdMbrSid;
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId)) return; // Return on any item that isn't fully populated
+            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid)) return; // Return on any item that isn't fully populated
 
             IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
 
