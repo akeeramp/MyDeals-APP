@@ -767,6 +767,9 @@
     <Content Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.html" />
+    <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.css" />
+    <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.html" />
+    <Content Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.html" />
     <Content Include="Client\src\app\admin\funFact\admin.funFact.component.html" />
     <Content Include="Client\src\app\admin\iCostProducts\admin.iCostProducts.component.css" />
     <Content Include="Client\src\app\admin\iCostProducts\admin.iCostProducts.component.html" />
@@ -788,6 +791,13 @@
     <Content Include="Client\src\app\admin\ruleOwner\admin.ruleOwner.component.html" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployee.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.ts" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
@@ -2171,8 +2181,6 @@
     <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dropdowns\admin.dropdowns.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\funFact\admin.funFact.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\funFact\admin.funFact.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\funFact\admin.funFact.service.ts" />

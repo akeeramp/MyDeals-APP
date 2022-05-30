@@ -354,6 +354,15 @@ angular
                     }
                 }
             })
+            .state("manageEmployee", {
+                url: '/manageEmployee',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<manage-employee></manage-employee>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

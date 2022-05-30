@@ -220,7 +220,8 @@
 
 
                         <li *ngIf="(usrRole=='DA' || isRealSA || isDeveloper || isCustomerAdmin)">
-                            <a href="Admin#/manageEmployee">User Accounts Administration</a>
+                            <!--<a href="Admin#/manageEmployee">User Accounts Administration</a>-->
+                            <a ui-sref="manageEmployee">User Accounts Administration</a>
                         </li>
                         <li *ngIf="(usrRole=='DA' || usrRole=='GA' || isRealSA || isDeveloper)" class="dropdown-submenu">
 

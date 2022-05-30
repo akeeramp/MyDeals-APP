@@ -27,8 +27,10 @@ import { iCostProductsComponent } from '../admin/iCostProducts/admin.iCostProduc
 import { notificationsSettingsDialog } from '../admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../admin/notifications/admin.notificationsModal.component';
 import { adminNotificationsComponent } from '../admin/notifications/admin.notifications.component';
-import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassUpdate.component'
-import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks/admin.validateVistexR3Checks.component'
+import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassUpdate.component';
+import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks/admin.validateVistexR3Checks.component';
+import { manageEmployeeComponent } from '../admin/employee/admin.manageEmployee.component';
+import { ManageEmployeeModalComponent } from "../admin/employee/admin.manageEmployeeModal.component";
 
 export let adminComponents =[
     EmployeeComponent,
@@ -62,5 +64,7 @@ export let adminComponents =[
     notificationsModalDialog,
     adminNotificationsComponent,
     dealMassUpdateComponent,
-    ValidateVistexR3ChecksComponent
+    ValidateVistexR3ChecksComponent,
+    manageEmployeeComponent,
+    ManageEmployeeModalComponent
 ]
