@@ -267,13 +267,24 @@ namespace Intel.MyDeals.DataLibrary
         /// <summary>
         /// Get Unify excel template
         /// </summary>
-        public FileAttachmentData GetBulkUnifyTemplateFile()
+        public FileAttachmentData GetBulkUnifyTemplateFile(string fileType)
         {
             FileAttachmentData fileAttachmentData = new FileAttachmentData();
-            fileAttachmentData.FILE_NM = "BulkUnifyDeals.xlsx";
             fileAttachmentData.IS_COMPRS = false;
-            string strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status code"));
-            string[][] arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            string strTemplateContent;
+            string[][] arrTemplate;
+            if (fileType == "BulkUnify")
+            {
+                fileAttachmentData.FILE_NM = "BulkUnifyDeals.xlsx";
+                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status code"));
+                arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            }
+            else
+            {
+                fileAttachmentData.FILE_NM = "DealRecon.xlsx";
+                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status code"));
+                arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            }
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
                 ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets.Add("UnifyDeals");
@@ -337,6 +348,68 @@ namespace Intel.MyDeals.DataLibrary
                                         RPL_STS_CODE= dealRplStsCode
                                     });
                                 }                                
+                            }
+                        }
+
+                    }
+                }
+            }
+            return lstRtn;
+        }
+
+        public List<DealRecon> ExtractDealReconFile(byte[] fileData)
+        {
+            List<DealRecon> lstRtn = new List<DealRecon>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
+
+                        if (iRows >= 2 && iColumns >= 9)
+                        {
+                            // loop through the worksheet rows and columns 
+                            for (int i = 2; i <= iRows; i++)
+                            {
+                                int dbDealId = 0;
+                                int dbPrimCustId = 0;
+                                int dbPrimLvlId = 0;
+                                int toBeDbPrimCustId = 0;
+                                int toBeDbPrimLvlId = 0;
+                                string ucdGlobalName = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().TrimEnd() : string.Empty;
+                                string ucdCtry = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
+                                string toBeucdGlobalName = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
+                                string toBeCtry = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
+                                string dealRplStsCode = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+                                int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
+                                int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
+                                int.TryParse(worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().Trim() : "0", out toBeDbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().Trim() : "0", out toBeDbPrimLvlId);
+                                if (!(dbDealId == 0 && dbPrimCustId == 0 && dbPrimLvlId == 0 && toBeDbPrimCustId == 0 && toBeDbPrimLvlId == 0
+                                    && string.IsNullOrEmpty(ucdGlobalName) && string.IsNullOrEmpty(ucdCtry)
+                                    && string.IsNullOrEmpty(toBeucdGlobalName) && string.IsNullOrEmpty(toBeCtry)))
+                                {
+                                    lstRtn.Add(new DealRecon
+                                    {
+                                        Deal_ID = dbDealId,
+                                        Unified_Customer_ID = dbPrimCustId,
+                                        Unified_Customer_Name = ucdGlobalName,
+                                        Country_Region_Customer_ID = dbPrimLvlId,
+                                        Unified_Country_Region = ucdCtry,
+                                        To_be_Unified_Customer_ID = toBeDbPrimCustId,
+                                        To_be_Unified_Customer_Name = toBeucdGlobalName,
+                                        To_be_Country_Region_Customer_ID = toBeDbPrimLvlId,
+                                        To_be_Unified_Country_Region =toBeCtry,
+                                        Rpl_Status_Code = dealRplStsCode
+                                    });
+                                }
                             }
                         }
 

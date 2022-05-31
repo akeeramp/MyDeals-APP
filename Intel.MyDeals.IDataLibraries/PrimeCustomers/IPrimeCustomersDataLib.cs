@@ -36,5 +36,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<DealIdEcJsonDetails> SaveUcdRequestData(string endCustomerName, string primeCustomerCountry, int dealId, string request, string response, string accId, string status);
 
         List<RplStatusCode> GetRplStatusCodes();
+
+        void updateDealRecon(List<DealRecon> lstDealRecon);
     }
 }

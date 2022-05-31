@@ -132,12 +132,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [HttpGet]
-        [Route("GetBulkUnifyTemplateFile")]
-        public HttpResponseMessage GetBulkUnifyTemplateFile()
+        [Route("GetBulkUnifyTemplateFile/{fileType}")]
+        public HttpResponseMessage GetBulkUnifyTemplateFile(string fileType)
         {
             byte[] fileBodyFinalBytes = null;
 
-            var fileAttahment = SafeExecutor(() => _filesLib.GetBulkUnifyTemplateFile(), $"Unable to get open template for Bulk Unify");
+            var fileAttahment = SafeExecutor(() => _filesLib.GetBulkUnifyTemplateFile(fileType), $"Unable to get open template for Bulk Unify");
 
             if (fileAttahment.FILE_DATA.Length > 0)
             {

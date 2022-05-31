@@ -89,6 +89,7 @@
     <Compile Include="DcPathTitle.cs" />
     <Compile Include="DealIdEcJsonDetails.cs" />
     <Compile Include="DealMassUpdate.cs" />
+    <Compile Include="DealRecon.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />
@@ -186,6 +187,9 @@
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="TableTypeParameters\in_dsa_rspn_log.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\T_DEAL_RECON.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TableTypeParameters\in_t_lgl_excpt_dwnld.cs">

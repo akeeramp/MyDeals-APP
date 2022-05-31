@@ -3,10 +3,24 @@
     <div class="modal-content" id="endCustomerUnifyModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
             <i id="btnClose" class="intelicon-close" ng-click="vm.CloseWindow()" title="Close this window"></i>
-            <h3 id="modalTitle">Bulk Unify - Deals</h3>
+            <h3 id="modalTitle">{{vm.screenTitle}}</h3>
         </div>
         <div id="modalBodyDiv" class="modal-body" ng-if="vm.HasBulkUploadAccess">
-            <div id="extractUnify" ng-if="vm.inValidUnifyDeals.length <= 0">
+            <div id="extractUnify" ng-if="vm.inValidUnifyDeals.length <= 0 && (vm.dealReconValidationSummary.inValidRecords == undefined  || vm.dealReconValidationSummary.inValidRecords.length <=0)">                
+                <div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-2" style="left:40px;font-size:medium">
+                        <b>File Type&nbsp;:</b> 
+                    </div>
+                    <div class="col-md-3" style="left:15px;">
+                        <toggle size="btn-sm" ng-model="vm.isBulkUnify"
+                                off="Deal Recon"
+                                on="Bulk Unify"
+                                ng-click="vm.toggleType(vm.isBulkUnify)">
+                        </toggle>
+                    </div>
+                </div>
+                <div class="col-md-11">&nbsp;</div>
                 <div class="col-md-11 notes">
                     <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
                 </div>
@@ -23,14 +37,14 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-md-8">
-                        <a download target="_blank" href="/api/FileAttachments/GetBulkUnifyTemplateFile">Click here to download the template</a>
+                        <a download target="_blank" href={{vm.fileURL}}>Click here to download the template</a>
                     </div>
                     <div class="col-md-3" style="padding-left:2px;">
                         <button ng-click="vm.uploadFile()" class="btn btn-primary">Upload Unified Data</button>
                     </div>
                 </div>
             </div>
-            <div ng-if="vm.inValidUnifyDeals.length > 0">
+            <div ng-if="(vm.isBulkUnify && vm.inValidUnifyDeals.length > 0) || (!vm.isBulkUnify && vm.dealReconValidationSummary.inValidRecords.length > 0)">
                 <div class="col-md-11 notes">
                     <span class="redbold">NOTE:</span>
                         <span>&nbsp;Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. Fix the validation errors.</span><br />
@@ -39,7 +53,7 @@
                 <kendo-spreadsheet id="spreadsheetUnifyDeals" style="width: 978px; height: 400px; float:left;" k-rows="vm.SpreadSheetRowsCount" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets" k-options="vm.SpreadSheetOptions"></kendo-spreadsheet>
             </div>
         </div>
-        <div class="modal-footer" ng-if="vm.inValidUnifyDeals.length > 0">
+        <div class="modal-footer" ng-if="(vm.isBulkUnify && vm.inValidUnifyDeals.length > 0) || (!vm.isBulkUnify && vm.dealReconValidationSummary.inValidRecords.length > 0)">
             <div class="form-group row action_btns">
                 <div class="col-md-12">
                     <button ng-click="vm.ValidateUnifyDeals()" class="btn btn-primary" style="margin-left: 15px">Save and Validate</button>
@@ -375,5 +389,15 @@
         padding: 3px;
         font-size: 22px;
         cursor: pointer;
+    }
+    .btn-default.active:hover {
+        color: #fff !important;
+        background-color: #367fa9 !important;
+        border-color: #00aeef !important;
+    }
+    .btn-default.active {
+        color: #fff !important;
+        background-color: #00AEEF !important;
+        border-color: #367fa9 !important;
     }
 </style>

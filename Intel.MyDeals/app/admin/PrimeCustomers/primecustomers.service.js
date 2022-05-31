@@ -26,7 +26,9 @@
             ValidateUnifyDeals: ValidateUnifyDeals,
             updateBulkUnifyDeals: updateBulkUnifyDeals,
             UnPrimeDealsLogs: UnPrimeDealsLogs,
-            getRplStatusCodes: getRplStatusCodes
+            getRplStatusCodes: getRplStatusCodes,
+            ValidateDealReconRecords: ValidateDealReconRecords,
+            updateDealRecon: updateDealRecon
         }
 
         return service;
@@ -85,6 +87,14 @@
 
         function getRplStatusCodes() {
             return dataService.get(apiBaseUrl + 'GetRplStatusCodes');
+        }
+
+        function ValidateDealReconRecords(lstDealRecon) {
+            return dataService.post(apiUnifyFileUrl + 'ValidateDealReconRecords', lstDealRecon);
+        }
+
+        function updateDealRecon(lstDealRecon) {
+            return dataService.post(apiBaseUrl + 'updateDealRecon', lstDealRecon);
         }
     }
 

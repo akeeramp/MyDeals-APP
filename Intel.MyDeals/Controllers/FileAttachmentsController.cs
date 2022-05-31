@@ -169,6 +169,67 @@ namespace Intel.MyDeals.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize]
+        public ActionResult ExtractDealReconFile(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<DealRecon> lstDealRecons = new List<DealRecon>();
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    using (StreamReader reader = new StreamReader(file.InputStream))
+                    {
+                        byte[] textBytes = new byte[file.InputStream.Length];
+                        file.InputStream.Read(textBytes, 0, textBytes.Length);
+                        lstDealRecons.AddRange(_filesLib.ExtractDealReconFile(textBytes));
+                    }
+                }
+            }
+            if (lstDealRecons.Count > 0)
+            {
+                var dealReconValidation = ValidateDealRecon(lstDealRecons);
+                var jsonResult = Json(dealReconValidation, JsonRequestBehavior.AllowGet);
+                if (dealReconValidation.inValidRecords.Count > 5000)
+                    jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            else
+                return Json(string.Empty);
+        }
+
+        [Authorize]
+        [Route("ValidateDealReconRecords")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public ActionResult ValidateDealReconRecords(List<DealRecon> lstDealRecons)
+        {
+            for (var i = 0; i < lstDealRecons.Count; i++)
+            {
+                int dbDealId = 0;
+                int dbPrimCustId = 0;
+                int dbPrimLvlId = 0;
+                int dbToBePrimCustId = 0;
+                int dbToBePrimLvlId = 0;
+                int.TryParse(lstDealRecons[i].Deal_ID != null ? lstDealRecons[i].Deal_ID.ToString().Trim() : "0", out dbDealId);
+                int.TryParse(lstDealRecons[i].Unified_Customer_ID != null ? lstDealRecons[i].Unified_Customer_ID.ToString().Trim() : "0", out dbPrimCustId);
+                int.TryParse(lstDealRecons[i].Country_Region_Customer_ID != null ? lstDealRecons[i].Country_Region_Customer_ID.ToString().Trim() : "0", out dbPrimLvlId);
+                int.TryParse(lstDealRecons[i].To_be_Unified_Customer_ID != null ? lstDealRecons[i].To_be_Unified_Customer_ID.ToString().Trim() : "0", out dbToBePrimCustId);
+                int.TryParse(lstDealRecons[i].To_be_Country_Region_Customer_ID != null ? lstDealRecons[i].To_be_Country_Region_Customer_ID.ToString().Trim() : "0", out dbToBePrimLvlId);
+                lstDealRecons[i].Deal_ID = dbDealId;
+                lstDealRecons[i].Unified_Customer_ID = dbPrimCustId;
+                lstDealRecons[i].Country_Region_Customer_ID = dbPrimLvlId;
+                lstDealRecons[i].To_be_Unified_Customer_ID = dbToBePrimCustId;
+                lstDealRecons[i].To_be_Country_Region_Customer_ID = dbToBePrimLvlId;
+                lstDealRecons[i].Unified_Customer_Name = lstDealRecons[i].Unified_Customer_Name != null ? lstDealRecons[i].Unified_Customer_Name.TrimEnd() : string.Empty;
+                lstDealRecons[i].Unified_Country_Region = lstDealRecons[i].Unified_Country_Region != null ? lstDealRecons[i].Unified_Country_Region.TrimEnd() : string.Empty;
+                lstDealRecons[i].To_be_Unified_Customer_Name = lstDealRecons[i].To_be_Unified_Customer_Name != null ? lstDealRecons[i].To_be_Unified_Customer_Name.TrimEnd() : string.Empty;
+                lstDealRecons[i].To_be_Unified_Country_Region = lstDealRecons[i].To_be_Unified_Country_Region != null ? lstDealRecons[i].To_be_Unified_Country_Region.TrimEnd() : string.Empty;
+                lstDealRecons[i].Rpl_Status_Code = lstDealRecons[i].Rpl_Status_Code != null ? lstDealRecons[i].Rpl_Status_Code.TrimEnd() : string.Empty;
+            }
+            var result = ValidateDealRecon(lstDealRecons);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private UnifyDealValidation ValidateUnifyDeals(List<UnifyDeal> lstUnifyDeals)
         {
             UnifyDealValidation unifyDealValidation = new UnifyDealValidation();
@@ -392,6 +453,234 @@ namespace Intel.MyDeals.Controllers
             if(unifyDealValidation.InValidUnifyDeals.Count >0)
                 unifyDealValidation.InValidUnifyDeals = unifyDealValidation.InValidUnifyDeals.OrderBy(x => x.DEAL_ID).ToList();
             return unifyDealValidation;
+        }
+
+        private DealReconValidationSummary ValidateDealRecon(List<DealRecon> lstDealRecons)
+        {
+            var validationSummary = new DealReconValidationSummary();
+            validationSummary.validRecords = new List<DealRecon>();
+            validationSummary.inValidRecords = new List<DealRecon>();
+            validationSummary.invalidCountries = new List<string>();
+            validationSummary.toBeInvalidCountries = new List<string>();
+            validationSummary.duplicateDealCombination = new List<int>();
+            validationSummary.duplicateCustIds = new List<int>();
+            validationSummary.duplicateCustNames = new List<string>();
+            validationSummary.duplicateCtryIds = new List<CustomerCountryDetail>();
+            validationSummary.duplicateCtryNms = new List<CustomerCountryDetail>();
+            validationSummary.duplicateToBeCustNames = new List<string>();
+            validationSummary.duplicateToBeCustIds = new List<int>();
+            validationSummary.duplicateToBeCtryIds = new List<CustomerCountryDetail>();
+            validationSummary.duplicateToBeCtryNms = new List<CustomerCountryDetail>();
+            validationSummary.invalidRplStatusCodes = new List<string>();
+            var rplStatcusCodeList = _primeCustomersLib.GetRplStatusCodes().Select(y =>y.RPL_STS_CD).ToList();
+            var patt = @"^[\w\s.,'&:+-]*$";
+            var RPLStsPattern = @"^[A-Za-z\s,]*$";
+            validationSummary.invalidCountries = lstDealRecons.Where(x => x.Unified_Country_Region.Trim() != string.Empty).Select(x => x.Unified_Country_Region.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();
+            validationSummary.toBeInvalidCountries = lstDealRecons.Where(x => x.To_be_Unified_Country_Region.Trim() != string.Empty).Select(x => x.To_be_Unified_Country_Region.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();
+            var validRows = lstDealRecons.Where(x => x.Deal_ID != 0 && x.Unified_Customer_ID != 0 && !string.IsNullOrEmpty(x.Unified_Customer_Name)
+            && x.Country_Region_Customer_ID != 0 && !string.IsNullOrEmpty(x.Unified_Country_Region)).ToList();
+            validationSummary.duplicateDealCombination = validRows.GroupBy(x => new { x.Deal_ID, x.Unified_Customer_ID, x.Unified_Customer_Name, x.Country_Region_Customer_ID, x.Unified_Country_Region })
+                .Where(grp => grp.Count() > 1).Select(y => y.Key.Deal_ID).ToList();
+            var validRecord = lstDealRecons.Where(x => x.Unified_Customer_ID != 0 && !string.IsNullOrEmpty(x.Unified_Customer_Name)
+            && x.Country_Region_Customer_ID != 0 && !string.IsNullOrEmpty(x.Unified_Country_Region)).ToList();
+            foreach (var unify in validRecord)
+            {
+                var ctryId = validRecord.Where(x => x.Unified_Customer_ID == unify.Unified_Customer_ID && x.Unified_Customer_Name == unify.Unified_Customer_Name
+                && x.Country_Region_Customer_ID == unify.Country_Region_Customer_ID).Select(y => y.Unified_Country_Region).Distinct().ToList();
+                var duplicateComb = new CustomerCountryDetail
+                {
+                    cust_Id = unify.Unified_Customer_ID,
+                    cust_Nm = unify.Unified_Customer_Name,
+                    ctry_Id = unify.Country_Region_Customer_ID,
+                    ctry_Nm = unify.Unified_Country_Region
+                };
+                if (ctryId.Count > 1 && !validationSummary.duplicateCtryIds.Contains(duplicateComb))
+                {
+                    validationSummary.duplicateCtryIds.Add(duplicateComb);
+                }
+
+                var ctryName = validRecord.Where(x => x.Unified_Customer_Name == unify.Unified_Customer_Name
+                    && x.Unified_Customer_ID == unify.Unified_Customer_ID && x.Unified_Country_Region == unify.Unified_Country_Region)
+                        .Select(y => y.Country_Region_Customer_ID).Distinct().ToList();
+                if (ctryName.Count > 1 && !validationSummary.duplicateCtryNms.Contains(duplicateComb))
+                {
+                    validationSummary.duplicateCtryNms.Add(duplicateComb);
+                }
+            }
+            var validToBeRows = lstDealRecons.Where(x => x.To_be_Unified_Customer_ID != 0 && !string.IsNullOrEmpty(x.To_be_Unified_Customer_Name)
+            && x.To_be_Country_Region_Customer_ID != 0 && !string.IsNullOrEmpty(x.To_be_Unified_Country_Region)).ToList();
+            foreach (var unify in validToBeRows)
+            {
+                var ctryId = validToBeRows.Where(x => x.To_be_Unified_Customer_ID == unify.To_be_Unified_Customer_ID && x.To_be_Unified_Customer_Name == unify.To_be_Unified_Customer_Name
+                && x.To_be_Country_Region_Customer_ID == unify.To_be_Country_Region_Customer_ID).Select(y => y.To_be_Unified_Country_Region).Distinct().ToList();
+                var duplicateComb = new CustomerCountryDetail
+                {
+                    cust_Id = unify.To_be_Unified_Customer_ID,
+                    cust_Nm = unify.To_be_Unified_Customer_Name,
+                    ctry_Id = unify.To_be_Country_Region_Customer_ID,
+                    ctry_Nm = unify.To_be_Unified_Country_Region
+                };
+                if (ctryId.Count > 1 && !validationSummary.duplicateToBeCtryIds.Contains(duplicateComb))
+                {
+                    validationSummary.duplicateToBeCtryIds.Add(duplicateComb);
+                }
+
+                var ctryName = validToBeRows.Where(x => x.To_be_Unified_Customer_Name == unify.To_be_Unified_Customer_Name
+                    && x.To_be_Unified_Customer_ID == unify.To_be_Unified_Customer_ID && x.To_be_Unified_Country_Region == unify.To_be_Unified_Country_Region)
+                        .Select(y => y.To_be_Country_Region_Customer_ID).Distinct().ToList();
+                if (ctryName.Count > 1 && !validationSummary.duplicateToBeCtryNms.Contains(duplicateComb))
+                {
+                    validationSummary.duplicateToBeCtryNms.Add(duplicateComb);
+                }
+            }
+            var validUcdRow = lstDealRecons.Where(x => x.Unified_Customer_ID != 0 && x.Unified_Customer_Name != "").ToList();
+            foreach (var unify in validUcdRow)
+            {
+                var globalid = validUcdRow.Where(x => x.Unified_Customer_ID == unify.Unified_Customer_ID && x.Unified_Customer_ID != 0)
+                        .Select(y => y.Unified_Customer_Name).Distinct().ToList();
+                if (globalid.Count > 1 && !validationSummary.duplicateCustIds.Contains(unify.Unified_Customer_ID))
+                {
+                    validationSummary.duplicateCustIds.Add(unify.Unified_Customer_ID);
+                }
+
+                var globalName = validUcdRow.Where(x => x.Unified_Customer_Name == unify.Unified_Customer_Name
+                    && !string.IsNullOrEmpty(x.Unified_Customer_Name) && x.Unified_Customer_Name.ToLower() != "any" && x.Unified_Customer_Name.ToLower() != "null")
+                        .Select(y => y.Unified_Customer_ID).Distinct().ToList();
+                if (globalName.Count > 1 && !validationSummary.duplicateCustNames.Contains(unify.Unified_Customer_Name))
+                {
+                    validationSummary.duplicateCustNames.Add(unify.Unified_Customer_Name);
+                }
+            }
+            validUcdRow = lstDealRecons.Where(x => x.To_be_Unified_Customer_ID != 0 && x.To_be_Unified_Customer_Name != "").ToList();
+            foreach (var unify in validUcdRow)
+            {
+                var globalid = validUcdRow.Where(x => x.To_be_Unified_Customer_ID == unify.To_be_Unified_Customer_ID && x.To_be_Unified_Customer_ID != 0)
+                        .Select(y => y.To_be_Unified_Customer_Name).Distinct().ToList();
+                if (globalid.Count > 1 && !validationSummary.duplicateToBeCustIds.Contains(unify.To_be_Unified_Customer_ID))
+                {
+                    validationSummary.duplicateToBeCustIds.Add(unify.To_be_Unified_Customer_ID);
+                }
+
+                var globalName = validUcdRow.Where(x => x.To_be_Unified_Customer_Name == unify.To_be_Unified_Customer_Name
+                    && !string.IsNullOrEmpty(x.To_be_Unified_Customer_Name) && x.To_be_Unified_Customer_Name.ToLower() != "any" && x.To_be_Unified_Customer_Name.ToLower() != "null")
+                        .Select(y => y.To_be_Unified_Customer_ID).Distinct().ToList();
+                if (globalName.Count > 1 && !validationSummary.duplicateToBeCustNames.Contains(unify.To_be_Unified_Customer_Name))
+                {
+                    validationSummary.duplicateToBeCustNames.Add(unify.To_be_Unified_Customer_Name);
+                }
+            }
+            if (lstDealRecons.Count > 0)
+            {
+                foreach (var row in lstDealRecons)
+                {
+                    var list = new List<string>();
+                    if (!string.IsNullOrEmpty(row.Rpl_Status_Code))
+                    {
+                        //To remove consecutive commas,spaces and duplicate values in the given RPL status code input
+                        var formattedRPLInput = row.Rpl_Status_Code.Split(',').Select(x => x.Trim()).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Select(x => x.ToUpper()).Distinct();
+                        row.Rpl_Status_Code = string.Join(",", formattedRPLInput);
+                        list = row.Rpl_Status_Code.Split(',').ToList();
+                        if (list.Except(rplStatcusCodeList).ToList().Count > 0)
+                            validationSummary.invalidRplStatusCodes.Add(row.Rpl_Status_Code);
+                    }
+                    if (row.Deal_ID == 0 || row.Unified_Customer_ID == 0 || string.IsNullOrEmpty(row.Unified_Customer_Name)
+                        || row.Country_Region_Customer_ID == 0 || string.IsNullOrEmpty(row.Unified_Country_Region)
+                        || row.To_be_Unified_Customer_ID == 0 || string.IsNullOrEmpty(row.To_be_Unified_Customer_Name)
+                        || row.To_be_Country_Region_Customer_ID == 0 || string.IsNullOrEmpty(row.To_be_Unified_Country_Region))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (!Regex.IsMatch(row.Unified_Customer_Name, patt) || row.Unified_Customer_Name.Length > 65
+                        || !Regex.IsMatch(row.To_be_Unified_Customer_Name, patt) || row.To_be_Unified_Customer_Name.Length > 65)
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (row.Unified_Customer_Name.ToLower() == "any" || row.Unified_Customer_Name.ToLower() == "null" ||
+                        row.To_be_Unified_Customer_Name.ToLower() == "any" || row.To_be_Unified_Customer_Name.ToLower() == "null")
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (!Regex.IsMatch(row.Rpl_Status_Code, RPLStsPattern))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if ((validationSummary.invalidCountries.Count > 0 && validationSummary.invalidCountries.Contains(row.Unified_Country_Region.ToLower()))
+                        || validationSummary.toBeInvalidCountries.Count > 0 && validationSummary.toBeInvalidCountries.Contains(row.To_be_Unified_Country_Region.ToLower()))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if ((row.To_be_Unified_Customer_ID != 0 && row.To_be_Country_Region_Customer_ID != 0 && row.To_be_Unified_Customer_ID == row.To_be_Country_Region_Customer_ID)
+                        || (row.Unified_Customer_ID != 0 && row.Country_Region_Customer_ID != 0 && row.Country_Region_Customer_ID == row.Unified_Customer_ID))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateDealCombination.Count > 0
+                        && validationSummary.duplicateDealCombination.Contains(row.Deal_ID) &&
+                        validRows.Where(x => x.Deal_ID == row.Deal_ID && x.Unified_Customer_ID == row.Unified_Customer_ID 
+                        && x.Unified_Customer_Name == row.Unified_Customer_Name && x.Country_Region_Customer_ID == row.Country_Region_Customer_ID 
+                        && x.Unified_Country_Region == row.Unified_Country_Region).ToList().Count > 1)
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateCustIds.Count > 0
+                        && validationSummary.duplicateCustIds.Contains(row.Unified_Customer_ID))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateCustNames.Count > 0
+                        && validationSummary.duplicateCustNames.Contains(row.Unified_Customer_Name))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateCtryIds.Count > 0
+                        && validationSummary.duplicateCtryIds.Where(x => x.cust_Id == row.Unified_Customer_ID
+                        && x.cust_Nm == row.Unified_Customer_Name && x.ctry_Nm == row.Unified_Country_Region 
+                        && x.ctry_Id == row.Country_Region_Customer_ID).Any())
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateCtryNms.Count > 0
+                        && validationSummary.duplicateCtryNms.Where(x => x.cust_Id == row.Unified_Customer_ID
+                        && x.cust_Nm == row.Unified_Customer_Name && x.ctry_Id == row.Country_Region_Customer_ID
+                        && x.ctry_Nm == row.Unified_Country_Region).Any())
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateToBeCtryIds.Count > 0
+                        && validationSummary.duplicateToBeCtryIds.Where(x => x.cust_Id == row.To_be_Unified_Customer_ID
+                        && x.cust_Nm == row.To_be_Unified_Customer_Name && x.ctry_Nm == row.To_be_Unified_Country_Region
+                        && x.ctry_Id == row.To_be_Country_Region_Customer_ID).Any())
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateToBeCtryNms.Count > 0
+                        && validationSummary.duplicateToBeCtryNms.Where(x => x.cust_Id == row.To_be_Unified_Customer_ID
+                        && x.cust_Nm == row.To_be_Unified_Customer_Name && x.ctry_Id == row.To_be_Country_Region_Customer_ID
+                        && x.ctry_Nm == row.To_be_Unified_Country_Region).Any())
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateToBeCustIds.Count > 0
+                        && validationSummary.duplicateToBeCustIds.Contains(row.To_be_Unified_Customer_ID))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (validationSummary.duplicateToBeCustNames.Count > 0
+                        && validationSummary.duplicateToBeCustNames.Contains(row.To_be_Unified_Customer_Name))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else if (!string.IsNullOrEmpty(row.Rpl_Status_Code) && validationSummary.invalidRplStatusCodes.Contains(row.Rpl_Status_Code))
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
+                    else
+                    {
+                        validationSummary.validRecords.Add(row);
+                    }
+                }
+            }
+            return validationSummary;
         }
     }
 }

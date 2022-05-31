@@ -16506,6 +16506,42 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_ZMIGRATE_USERS]";
 			}
 		}
+
+		///<summary>
+		/// ID: 370972548
+		/// Modified: 5/25/2022 10:03:26 PM
+		/// Parameters: 2
+		///</summary>
+		public partial class PR_MYDL_DEAL_RECON : SP
+		{
+			public PR_MYDL_DEAL_RECON()
+			{
+				DatabaseName = "MyDeals";
+				StoredProdedureName = "[dbo].[PR_MYDL_DEAL_RECON]";
+			}
+
+			///<summary>
+			/// DataType: table type
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+			public SqlTableValueParameterBase deal_recon_input_data
+			{
+				set { SetParmeter("deal_recon_input_data", value); }
+				get { return (SqlTableValueParameterBase)GetParameter("deal_recon_input_data"); }
+			}
+
+			///<summary>
+			/// DataType: int
+			/// Mode: IN
+			///</summary>
+			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+			public Int32 in_emp_wwid
+			{
+				set { SetParmeter("in_emp_wwid", value); }
+				get { return (Int32)GetParameter("in_emp_wwid"); }
+			}
+		}
 	}
 
 

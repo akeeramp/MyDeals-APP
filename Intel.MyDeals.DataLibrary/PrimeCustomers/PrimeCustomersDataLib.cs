@@ -641,5 +641,27 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        public void updateDealRecon(List<DealRecon> lstDealRecon)
+        {
+            T_DEAL_RECON dt = new T_DEAL_RECON();
+            lstDealRecon.ForEach(x =>
+            dt.AddRow(x)
+            );
+            var cmd = new Procs.dbo.PR_MYDL_DEAL_RECON()
+            {
+                @deal_recon_input_data = dt,
+                @in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+            };
+            try
+            {
+                DataAccess.ExecuteReader(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
     }
 }

@@ -104,14 +104,19 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.Save(contractToken);
         }
 
-        public FileAttachmentData GetBulkUnifyTemplateFile()
+        public FileAttachmentData GetBulkUnifyTemplateFile(string fileType)
         {
-            return _filesDataLib.GetBulkUnifyTemplateFile();
+            return _filesDataLib.GetBulkUnifyTemplateFile(fileType);
         }
 
         public List<UnifyDeal> ExtractBulkUnifyFile(byte[] fileData)
         {
             return _filesDataLib.ExtractBulkUnifyFile(fileData);
+        }
+
+        public List<DealRecon> ExtractDealReconFile(byte[] fileData)
+        {
+            return _filesDataLib.ExtractDealReconFile(fileData);
         }
     }
 }

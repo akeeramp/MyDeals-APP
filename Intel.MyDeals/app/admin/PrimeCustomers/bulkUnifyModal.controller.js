@@ -9,6 +9,9 @@ BulkUnifyModelController.$inject = ["$rootScope", "$location", "PrimeCustomersSe
 
 function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, $scope, $stateParams, logger, $timeout, gridConstants, $uibModalInstance) {
     var vm = this;
+    vm.isBulkUnify = true;
+    //vm.isUpdateAllDeals = !vm.isBulkUnify;
+    vm.screenTitle = "Bulk Unify - Deals";
     vm.spinnerMessageHeader = "Bulk Upload Unify Deals";
     vm.spinnerMessageDescription = "Please wait while we importing unification deal data..";
     vm.isBusyShowFunFact = true;
@@ -24,7 +27,18 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
     var hasFiles = false;
     var uploadSuccessCount = 0;
     var uploadErrorCount = 0;
-
+    vm.dealReconValidationSummary = [];
+    
+    vm.toggleType = function (e) {
+        if (e) {
+            vm.fileURL = "/api/FileAttachments/GetBulkUnifyTemplateFile/BulkUnify";
+            vm.screenTitle = "Bulk Unify - Deals";
+        }
+        else {
+            vm.fileURL = "/api/FileAttachments/GetBulkUnifyTemplateFile/DealRecon";
+            vm.screenTitle = "Deal Reconciliation";
+        }
+    }
     vm.fileUploadOptions = {
         async: {
             saveUrl: '/FileAttachments/ExtractBulkUnifyFile',
@@ -43,7 +57,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             }
         }
     };
-
+        
     vm.onFileSelect = function (e) {
         // Hide default kendo upload and clear buttons as contract is not generated at this point. Upload files after contract id is generated.
         // TODO: Do we want to show them in edit scenario ?
@@ -60,6 +74,11 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
     vm.filePostAddParams = function (e) {
         uploadSuccessCount = 0;
         uploadErrorCount = 0;
+        if (vm.isBulkUnify)
+            e.sender.options.async.saveUrl = '/FileAttachments/ExtractBulkUnifyFile'
+        else {
+            e.sender.options.async.saveUrl = '/FileAttachments/ExtractDealReconFile'
+        }
     };
 
     vm.onSuccess = function (e) {
@@ -71,67 +90,79 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
             return;
         }
         uploadSuccessCount++;
-        vm.UnifyValidation = e.response;
-        vm.validUnifyDeals = e.response.ValidUnifyDeals;
-        vm.inValidUnifyDeals = e.response.InValidUnifyDeals;
-        vm.duplicateGlobalIds = e.response.DuplicateGlobalIds;
-        vm.duplicateGlobalNames = e.response.DuplicateGlobalNames;
-        if (vm.validUnifyDeals.length == 0 && vm.inValidUnifyDeals.length == 0)
-            kendo.alert('There is no Unify Data in the file to upload!');
-        else if (vm.inValidUnifyDeals.length == 0 && vm.validUnifyDeals.length > 0) {
-            PrimeCustomersService.updateBulkUnifyDeals(vm.validUnifyDeals).then(function (response) {
-                var data = response.data;
-                if (data != null && data != undefined) {
-                    var warningmsg = " deal(s) got Unified. Please make ensure all other deals associated to the same pricing table having same End customer Combination"
-                    var ecapdealdata = data.filter(x => x.COMMENTS == "ECAP Hybrid Deal(s)");
-                    if (ecapdealdata != undefined && ecapdealdata.length > 0) {
-                        kendo.alert("Following ECAP hybrid " + ecapdealdata[0].Deal_No + warningmsg);
-                    }
-                    var hybDealdata = data.filter(x => x.COMMENTS == "Voltier Hybrid Deal(s)");
-                    if (hybDealdata != undefined && hybDealdata.length > 0) {
-                        kendo.alert("Following Vol_Tier hybrid " + hybDealdata[0].Deal_No + warningmsg);
-                    }
-                    var dealsHasErrors = data.filter(x => x.COMMENTS == "Deal(s) Cannot be Unified");
-                    if (data[0].COMMENTS == "Bulk Unified Deal(s)" && dealsHasErrors != undefined && dealsHasErrors.length == 0) {
-                        if (data[0].COMMENTS == "Bulk Unified Deal(s)") {
-                            var alertMsg = "<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified</b><br/>"
+        if (vm.isBulkUnify) {
+            vm.UnifyValidation = e.response;
+            vm.validUnifyDeals = e.response.ValidUnifyDeals;
+            vm.inValidUnifyDeals = e.response.InValidUnifyDeals;
+            vm.duplicateGlobalIds = e.response.DuplicateGlobalIds;
+            vm.duplicateGlobalNames = e.response.DuplicateGlobalNames;
+            if (vm.validUnifyDeals.length == 0 && vm.inValidUnifyDeals.length == 0)
+                kendo.alert('There is no Unify Data in the file to upload!');
+            else if (vm.inValidUnifyDeals.length == 0 && vm.validUnifyDeals.length > 0) {
+                PrimeCustomersService.updateBulkUnifyDeals(vm.validUnifyDeals).then(function (response) {
+                    var data = response.data;
+                    if (data != null && data != undefined) {
+                        var warningmsg = " deal(s) got Unified. Please make ensure all other deals associated to the same pricing table having same End customer Combination"
+                        var ecapdealdata = data.filter(x => x.COMMENTS == "ECAP Hybrid Deal(s)");
+                        if (ecapdealdata != undefined && ecapdealdata.length > 0) {
+                            kendo.alert("Following ECAP hybrid " + ecapdealdata[0].Deal_No + warningmsg);
                         }
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].COMMENTS == "Deal(s) unified with already mapped RPL Status code") {
-                                alertMsg += "<br/><li><span>" + data[i].No_Of_Deals + " " + data[i].COMMENTS + " : " + data[i].Deal_No + "</span></li>";
+                        var hybDealdata = data.filter(x => x.COMMENTS == "Voltier Hybrid Deal(s)");
+                        if (hybDealdata != undefined && hybDealdata.length > 0) {
+                            kendo.alert("Following Vol_Tier hybrid " + hybDealdata[0].Deal_No + warningmsg);
+                        }
+                        var dealsHasErrors = data.filter(x => x.COMMENTS == "Deal(s) Cannot be Unified");
+                        if (data[0].COMMENTS == "Bulk Unified Deal(s)" && dealsHasErrors != undefined && dealsHasErrors.length == 0) {
+                            if (data[0].COMMENTS == "Bulk Unified Deal(s)") {
+                                var alertMsg = "<b>" + data[0].No_Of_Deals + " Deal(s) are successfully unified</b><br/>"
                             }
-                        }
-                        kendo.alert(alertMsg);
-                    }
-                    else {
-                        var failedDealsCount = 0;
-                        if (data[0].COMMENTS == "Deal(s) Cannot be Unified") {
-                            failedDealsCount = data[0].No_Of_Deals;
-                        }
-                        else if (data[1].COMMENTS == "Deal(s) Cannot be Unified") {
-                            failedDealsCount = data[1].No_Of_Deals;
-                        }
-                        var msg = "<b>" + failedDealsCount + " deal(s) cannot be to unified</b>.<br/><br/>Following are the validation messages<br/><ul>";
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].COMMENTS != "Bulk Unified Deal(s)" && data[i].COMMENTS != "ECAP Hybrid Deal(s)" && data[i].COMMENTS != "Voltier Hybrid Deal(s)")
-                                msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
-                            else if (data[i].COMMENTS == "Bulk Unified Deal(s)") {
-                                msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].COMMENTS == "Deal(s) unified with already mapped RPL Status code") {
+                                    alertMsg += "<br/><li><span>" + data[i].No_Of_Deals + " " + data[i].COMMENTS + " : " + data[i].Deal_No + "</span></li>";
+                                }
                             }
+                            kendo.alert(alertMsg);
                         }
-                        msg += "</ul>"
-                        kendo.alert(msg);
+                        else {
+                            var failedDealsCount = 0;
+                            if (data[0].COMMENTS == "Deal(s) Cannot be Unified") {
+                                failedDealsCount = data[0].No_Of_Deals;
+                            }
+                            else if (data[1].COMMENTS == "Deal(s) Cannot be Unified") {
+                                failedDealsCount = data[1].No_Of_Deals;
+                            }
+                            var msg = "<b>" + failedDealsCount + " deal(s) cannot be to unified</b>.<br/><br/>Following are the validation messages<br/><ul>";
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i].COMMENTS != "Bulk Unified Deal(s)" && data[i].COMMENTS != "ECAP Hybrid Deal(s)" && data[i].COMMENTS != "Voltier Hybrid Deal(s)")
+                                    msg += "<br/><li><div style='word-wrap: break-word;'>" + data[i].COMMENTS + " : " + data[i].Deal_No + "</div></li>";
+                                else if (data[i].COMMENTS == "Bulk Unified Deal(s)") {
+                                    msg = "<b>Successfully Unified " + data[i].No_Of_Deals + " deal(s)</b><br/><br/>" + msg;
+                                }
+                            }
+                            msg += "</ul>"
+                            kendo.alert(msg);
+                        }
                     }
-                }
-                vm.validUnifyDeals = [];
-                vm.inValidUnifyDeals = [];
-                vm.CloseWindow();
-            }, function (response) {
-                logger.error("Operation failed");
-            });
+                    vm.validUnifyDeals = [];
+                    vm.inValidUnifyDeals = [];
+                    vm.CloseWindow();
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            }
+            else {
+                vm.SpreadSheetRowsCount = vm.inValidUnifyDeals.length + vm.validUnifyDeals.length + 1;//With header
+            }
         }
         else {
-            vm.SpreadSheetRowsCount = vm.inValidUnifyDeals.length + vm.validUnifyDeals.length + 1;//With header
+            vm.dealReconValidationSummary = e.response;
+            if (vm.dealReconValidationSummary.validRecords.length == 0 && vm.dealReconValidationSummary.inValidRecords.length == 0)
+                kendo.alert('There is no Deal Recon Data in the file to upload!');
+            else if (vm.dealReconValidationSummary.validRecords.length > 0 && vm.dealReconValidationSummary.inValidRecords.length == 0)
+                vm.ValidateDealReconSheet();
+            else {
+                vm.SpreadSheetRowsCount = vm.dealReconValidationSummary.validRecords.length + vm.dealReconValidationSummary.inValidRecords.length + 1;//With header
+            }
         }
     }
 
@@ -158,25 +189,44 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
     }
 
     vm.ValidateUnifyDeals = function () {
-        vm.generateUnifyDeals();
-        if (vm.validUnifyDeals.length > 0)
-            vm.inValidUnifyDeals = $.merge(vm.inValidUnifyDeals, vm.validUnifyDeals);
-        if (vm.inValidUnifyDeals.length > 0) {
-            vm.spinnerMessageDescription = "Please wait while validating deal unification data..";
-            PrimeCustomersService.ValidateUnifyDeals(vm.inValidUnifyDeals).then(function (e) {
-                vm.UnifyValidation = e.data;
-                vm.validUnifyDeals = e.data.ValidUnifyDeals;
-                vm.inValidUnifyDeals = e.data.InValidUnifyDeals;
-                vm.duplicateGlobalIds = e.data.DuplicateGlobalIds;
-                vm.duplicateGlobalNames = e.data.DuplicateGlobalNames;
-                vm.SpreadSheetRowsCount = vm.inValidUnifyDeals.length + vm.validUnifyDeals.length + 1;
-                //vm.LoadDataToSpreadsheet();
-                vm.ValidateSheet();
-            }, function (response) {
-                logger.error("Operation failed");
-            });
-        } else
-            kendo.alert("There is no data to validate");
+        if (vm.isBulkUnify) {
+            vm.generateUnifyDeals();
+            if (vm.validUnifyDeals.length > 0)
+                vm.inValidUnifyDeals = $.merge(vm.inValidUnifyDeals, vm.validUnifyDeals);
+            if (vm.inValidUnifyDeals.length > 0) {
+                vm.spinnerMessageDescription = "Please wait while validating deal unification data..";
+                PrimeCustomersService.ValidateUnifyDeals(vm.inValidUnifyDeals).then(function (e) {
+                    vm.UnifyValidation = e.data;
+                    vm.validUnifyDeals = e.data.ValidUnifyDeals;
+                    vm.inValidUnifyDeals = e.data.InValidUnifyDeals;
+                    vm.duplicateGlobalIds = e.data.DuplicateGlobalIds;
+                    vm.duplicateGlobalNames = e.data.DuplicateGlobalNames;
+                    vm.SpreadSheetRowsCount = vm.inValidUnifyDeals.length + vm.validUnifyDeals.length + 1;
+                    vm.ValidateSheet();
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            } else
+                kendo.alert("There is no data to validate");
+        }
+        else {
+            vm.generateDealReconRecords();
+            if (vm.dealReconValidationSummary.validRecords.length > 0)
+                vm.dealReconValidationSummary.inValidRecords = $.merge(vm.dealReconValidationSummary.inValidRecords, vm.dealReconValidationSummary.validRecords);
+            if (vm.dealReconValidationSummary.inValidRecords.length > 0) {
+                vm.spinnerMessageDescription = "Please wait while validating deal unification data..";
+                PrimeCustomersService.ValidateDealReconRecords(vm.dealReconValidationSummary.inValidRecords).then(function (e) {
+                    vm.dealReconValidationSummary = e.data;
+                    vm.SpreadSheetRowsCount = vm.dealReconValidationSummary.inValidRecords.length + vm.dealReconValidationSummary.validRecords.length + 1;
+                    vm.ValidateDealReconSheet();
+                }, function (response) {
+                    logger.error("Operation failed");
+                });
+            }
+            else {
+                kendo.alert("There is no data to validate");
+            }
+        }
     };
 
     $scope.UnifiedDealValidation = function (isError, msg, isReq) {
@@ -528,7 +578,6 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                                     alertMsg += "<br/><li><span>" + data[i].No_Of_Deals + " " + data[i].COMMENTS + " : " + data[i].Deal_No + "</span></li>";
                                 }
                             }
-                            //alertMsg += "</ul>";
                             kendo.alert(alertMsg);
                         }
 
@@ -597,6 +646,36 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
         vm.SpreadSheetRowsCount = vm.inValidUnifyDeals.length + 1;
     }
 
+    vm.generateDealReconRecords = function () {
+        var sheet = vm.spreadsheet.activeSheet();
+        var count = vm.dealReconValidationSummary.inValidRecords.length;
+        vm.dealReconValidationSummary.inValidRecords = [];
+        var tempRange = sheet.range("A1:J" + count).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null));
+        if (tempRange.length > 0) {
+            vm.spinnerMessageDescription = "Please wait while reading Unification data..";
+            for (var i = 0; i < tempRange.length; i++) {
+                var newDealReconRecord = {};
+                newDealReconRecord.Deal_ID = tempRange[i][0] != null ? ($.isNumeric(tempRange[i][0]) && parseInt(tempRange[i][0]) > 0 ? tempRange[i][0] : 0) : 0;
+                newDealReconRecord.Unified_Customer_ID = tempRange[i][1] != null ? ($.isNumeric(tempRange[i][1]) && parseInt(tempRange[i][1]) > 0 ? tempRange[i][1] : 0) : 0;
+                newDealReconRecord.Unified_Customer_Name = tempRange[i][2] != null ? tempRange[i][2].trimEnd() : "";
+                newDealReconRecord.Country_Region_Customer_ID = tempRange[i][3] != null ? ($.isNumeric(tempRange[i][3]) && parseInt(tempRange[i][3]) > 0 ? tempRange[i][3] : 0) : 0;
+                newDealReconRecord.Unified_Country_Region = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
+                newDealReconRecord.To_be_Unified_Customer_ID = tempRange[i][5] != null ? ($.isNumeric(tempRange[i][5]) && parseInt(tempRange[i][5]) > 0 ? tempRange[i][5] : 0) : 0;
+                newDealReconRecord.To_be_Unified_Customer_Name = tempRange[i][6] != null ? tempRange[i][6].trimEnd() : "";
+                newDealReconRecord.To_be_Country_Region_Customer_ID = tempRange[i][7] != null ? ($.isNumeric(tempRange[i][7]) && parseInt(tempRange[i][7]) > 0 ? tempRange[i][7] : 0) : 0;
+                newDealReconRecord.To_be_Unified_Country_Region = tempRange[i][8] != null ? tempRange[i][8].trimEnd() : "";
+                //Added this check because if number is given in the RPL sts code column tempRange[i][7].trimEnd() present in the below line of code throws err.
+                if (typeof tempRange[i][9] != "string" && tempRange[i][9] != null) {
+                    tempRange[i][9] = tempRange[i][9].toString();
+                }
+                newDealReconRecord.Rpl_Status_Code = tempRange[i][9] != null ? tempRange[i][9].trimEnd() : "";
+
+                vm.dealReconValidationSummary.inValidRecords.push(newDealReconRecord);
+            }
+        }
+        vm.SpreadSheetRowsCount = vm.dealReconValidationSummary.inValidRecords.length + 1;
+    }
+
     vm.sheets = [{ name: "Sheet1" }];
     $scope.$on("kendoWidgetCreated", function (event, widget) {
         // the event is emitted for every widget; if we have multiple
@@ -604,52 +683,444 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
         // is for the one we're interested in.
         if (widget === vm.spreadsheet) {
             var sheets = vm.spreadsheet.sheets();
+            var index = 0;
             vm.spreadsheet.activeSheet(sheets[0]);
             var sheet = vm.spreadsheet.activeSheet();
-            sheet.columnWidth(0, 100);
-            sheet.columnWidth(1, 130);
-            sheet.columnWidth(2, 180);
-            sheet.columnWidth(3, 130);
-            sheet.columnWidth(4, 180);
-            sheet.columnWidth(5, 180);
-            sheet.columnWidth(6, 180);
-            sheet.columnWidth(7, 180);
-            sheet.columnWidth(8, 260);
-            for (var i = 9; i < 50; i++)
+            if (vm.isBulkUnify) {
+                sheet.columnWidth(0, 100);
+                sheet.columnWidth(1, 130);
+                sheet.columnWidth(2, 180);
+                sheet.columnWidth(3, 130);
+                sheet.columnWidth(4, 180);
+                sheet.columnWidth(5, 180);
+                sheet.columnWidth(6, 180);
+                sheet.columnWidth(7, 180);
+                sheet.columnWidth(8, 260);
+                index = 9;
+            }
+            else {
+                sheet.columnWidth(0, 70);
+                sheet.columnWidth(1, 100);
+                sheet.columnWidth(2, 150);
+                sheet.columnWidth(3, 100);
+                sheet.columnWidth(4, 150);
+                sheet.columnWidth(5, 150);
+                sheet.columnWidth(6, 120);
+                sheet.columnWidth(7, 150);
+                sheet.columnWidth(8, 120);
+                sheet.columnWidth(9, 150);
+                sheet.columnWidth(10, 260);
+                index = 11;
+            }
+
+            for (var i = index; i < 50; i++)
                 sheet.hideColumn(i);
+
             vm.LoadDataToSpreadsheet();
-            vm.ValidateSheet();
+            if (vm.isBulkUnify)
+                vm.ValidateSheet();
+            else
+                vm.ValidateDealReconSheet();
         }
     });
 
     vm.LoadDataToSpreadsheet = function () {
-        if (vm.inValidUnifyDeals.length > 0) {
-            $('.modal-dialog').css("width", "1530px");
-            $('#spreadsheetUnifyDeals').css("width", "1500px");
-            $('#endCustomerUnifyModal').css("max-height","500px");
-            //Header
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("Unified Customer Name");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Country/Region Customer ID");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Unified Country/Region");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("End Customer Retail");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("End Customer Country/Region");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[14]).find("div").html("RPL Status Code");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[16]).find("div").html("Error Messages");
+        if (vm.isBulkUnify) {
+            if (vm.inValidUnifyDeals.length > 0) {
+                $('.modal-dialog').css("width", "1530px");
+                $('#spreadsheetUnifyDeals').css("width", "1500px");
+                $('#endCustomerUnifyModal').css("max-height", "500px");
+                //Header
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("Unified Customer Name");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Country/Region Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Unified Country/Region");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("End Customer Retail");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("End Customer Country/Region");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[14]).find("div").html("RPL Status Code");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[16]).find("div").html("Error Messages");
 
 
-            var sheet = vm.spreadsheet.activeSheet();
-            sheet.range(kendo.spreadsheet.SHEETREF).clear();
-            sheet.range("H1:I" + vm.SpreadSheetRowsCount).wrap(true);
-            sheet.setDataSource(vm.inValidUnifyDeals, ["DEAL_ID", "UCD_GLOBAL_ID", "UCD_GLOBAL_NAME", "UCD_COUNTRY_CUST_ID", "UCD_COUNTRY", "DEAL_END_CUSTOMER_RETAIL", "DEAL_END_CUSTOMER_COUNTRY", "RPL_STS_CODE"]);
-            //Auto header will be created as 1st row. This is not actual data
-            sheet.deleteRow(0);
-            sheet._rows._count = vm.inValidUnifyDeals.length;
+                var sheet = vm.spreadsheet.activeSheet();
+                sheet.range(kendo.spreadsheet.SHEETREF).clear();
+                sheet.range("H1:I" + vm.SpreadSheetRowsCount).wrap(true);
+                sheet.setDataSource(vm.inValidUnifyDeals, ["DEAL_ID", "UCD_GLOBAL_ID", "UCD_GLOBAL_NAME", "UCD_COUNTRY_CUST_ID", "UCD_COUNTRY", "DEAL_END_CUSTOMER_RETAIL", "DEAL_END_CUSTOMER_COUNTRY", "RPL_STS_CODE"]);
+                //Auto header will be created as 1st row. This is not actual data
+                sheet.deleteRow(0);
+                sheet._rows._count = vm.inValidUnifyDeals.length;
+            }
+        }
+        else {
+            if (vm.dealReconValidationSummary.inValidRecords.length > 0) {
+                $('.modal-dialog').css("width", "1530px");
+                $('#spreadsheetUnifyDeals').css("width", "1500px");
+                $('#endCustomerUnifyModal').css("max-height", "500px");
+                
+                var sheet = vm.spreadsheet.activeSheet();
+                sheet.range(kendo.spreadsheet.SHEETREF).clear();
+                sheet.range("A1:K" + vm.SpreadSheetRowsCount).wrap(true);
+                sheet.setDataSource(vm.dealReconValidationSummary.inValidRecords, ["Deal_ID", "Unified_Customer_ID", "Unified_Customer_Name", "Country_Region_Customer_ID", "Unified_Country_Region", "To_be_Unified_Customer_ID", "To_be_Unified_Customer_Name", "To_be_Country_Region_Customer_ID", "To_be_Unified_Country_Region", "Rpl_Status_Code"]);
+                //Auto header will be created as 1st row. This is not actual data
+                sheet.deleteRow(0);
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Unified Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("Unified Customer Name");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Country/Region Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Unified Country/Region");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("To Be Unified Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("To Be Unified Customer Name");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[14]).find("div").html("To Be Country/Region Customer ID");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[16]).find("div").html("To Be Unified Country/Region");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[18]).find("div").html("RPL Status Code");
+                $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[20]).find("div").html("Error Messages");
+
+                sheet._rows._count = vm.dealReconValidationSummary.inValidRecords.length;
+            }
         }
     }
 
-
+    vm.ValidateDealReconSheet = function () {
+        if (vm.dealReconValidationSummary.inValidRecords.length > 0) {
+            var sheet = vm.spreadsheet.activeSheet();
+            sheet.range("A1:K" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
+            vm.LoadDataToSpreadsheet();
+            var strAlertMessage = "";
+            var isEmptyDealId = false;
+            var isEmptyGlobalId = false;
+            var isEmptyGlobalName = false;
+            var isEmptyCtryId = false;
+            var isEmptyCtryName = false;
+            var isEmptyToBeGlobalId = false;
+            var isEmptyToBeGlobalName = false;
+            var isEmptyToBeCtryId = false;
+            var isEmptyToBeCtryName = false;
+            var isGlobalContainsAny = false;
+            var isGlobalContainsNull = false;
+            var isInvalidGlobalName = false;
+            var isToBeGlobalContainsAny = false;
+            var isToBeGlobalContainsNull = false;
+            var isInvalidToBeGlobalName = false;
+            var isSameGlobalandCtryId = false;
+            var isSameToBeGlobalandToBeCtryId = false;
+            var invalidRPLStatusCode = [];
+            var row = 0;
+            if (vm.dealReconValidationSummary != undefined && vm.dealReconValidationSummary.inValidRecords != undefined
+                && vm.dealReconValidationSummary.inValidRecords.length > 0) {
+                sheet.batch(function () {
+                    for (var i = 0; i < vm.dealReconValidationSummary.inValidRecords.length; i++) {
+                        row = i + 1;
+                        var rowMsg = "";
+                        mandatory = [];
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Deal_ID == "0") {
+                            isEmptyDealId = true;
+                            mandatory.push("Deal ID");
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID == "0") {
+                            isEmptyGlobalId = true;
+                            mandatory.push("Unified Customer ID");
+                            sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name == null || vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name == "") {
+                            isEmptyGlobalName = true;
+                            mandatory.push("Unified Customer Name");
+                            sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID == "0") {
+                            isEmptyCtryId = true;
+                            mandatory.push("Country Region Customer ID");
+                            sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region == null || vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region == "") {
+                            isEmptyCtryName = true;
+                            mandatory.push("Unified Country Region");
+                            sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID == "0") {
+                            isEmptyToBeGlobalId = true;
+                            mandatory.push("To be Unified Customer ID");
+                            sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name == null || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name == "") {
+                            isEmptyToBeGlobalName = true;
+                            mandatory.push("To be Unified Customer Name");
+                            sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Country_Region_Customer_ID == "0") {
+                            isEmptyToBeCtryId = true;
+                            mandatory.push("To be Country Region Customer ID");
+                            sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region == null || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region == "") {
+                            isEmptyToBeCtryName = true;
+                            mandatory.push("To be Unified Country Region");
+                            sheet.range("I" + row + ":I" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (mandatory.length > 0) {
+                            rowMsg = rowMsg + mandatory.join(", ") + " is a mandatory field|";
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name != null && vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name != "") {
+                            if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name.toLowerCase() == "any") {
+                                isGlobalContainsAny = true;
+                                rowMsg = rowMsg + "'ANY' cannot be used as Unified Customer Name|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                            if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name.toLowerCase() == "null") {
+                                isGlobalContainsNull = true;
+                                rowMsg = rowMsg + "NULL cannot be used as Unified Customer Name|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                            var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                            var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
+                            if (!res || vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name.length > 65) {
+                                isInvalidGlobalName = true;
+                                rowMsg = rowMsg + "Unified Customer Name either contains more than 65 characters or invalid characters|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != null && vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != "") {
+                            if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "any") {
+                                isToBeGlobalContainsAny = true;
+                                rowMsg = rowMsg + "'ANY' cannot be used as 'To Be Unified Customer Name'|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                            if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "null") {
+                                isToBeGlobalContainsNull = true;
+                                rowMsg = rowMsg + "NULL cannot be used as 'To Be Unified Customer Name'|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                            var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                            var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
+                            if (!res || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.length > 65) {
+                                isToBeInvalidGlobalName = true;
+                                rowMsg = rowMsg + "Unified Customer Name either contains more than 65 characters or invalid characters|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID != 0
+                            && vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID != 0 &&
+                            vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID == vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID) {
+                            rowMsg = rowMsg + "Unified Customer ID and Country/Region Customer ID cannot be same|";
+                            isSameGlobalandCtryId = true;
+                            sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID != 0
+                            && vm.dealReconValidationSummary.inValidRecords[i].To_be_Country_Region_Customer_ID != 0 &&
+                            vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID == vm.dealReconValidationSummary.inValidRecords[i].To_be_Country_Region_Customer_ID) {
+                            rowMsg = rowMsg + "'To Be Unified Customer ID' and 'To Be Country/Region Customer ID' cannot be same|";
+                            isSameToBeGlobalandToBeCtryId = true;
+                            sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        if (vm.dealReconValidationSummary.invalidCountries.length > 0) {
+                            if (jQuery.inArray(jQuery.trim(vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region).toLowerCase(), vm.dealReconValidationSummary.invalidCountries) != -1) {
+                                rowMsg = rowMsg + "Unified Country/Region does not exist in My Deals|";
+                                sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.toBeInvalidCountries.length > 0) {
+                            if (jQuery.inArray(jQuery.trim(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region).toLowerCase(), vm.dealReconValidationSummary.toBeInvalidCountries) != -1) {
+                                rowMsg = rowMsg + "'To Be Unified Country/Region' does not exist in My Deals|";
+                                sheet.range("I" + row + ":I" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        var validRows = vm.dealReconValidationSummary.inValidRecords.filter(x => x.Deal_ID != 0 && x.Unified_Customer_ID != 0 && x.Unified_Customer_Name != "" && x.Country_Region_Customer_ID != 0 && x.Unified_Country_Region != "");
+                        if (vm.dealReconValidationSummary.duplicateDealCombination.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].Deal_ID, vm.dealReconValidationSummary.duplicateDealCombination) != -1
+                                && validRows.filter(x => x.Deal_ID == vm.dealReconValidationSummary.inValidRecords[i].Deal_ID
+                                    && x.Unified_Customer_ID == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
+                                    && x.Unified_Customer_Name == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name
+                                    && x.Country_Region_Customer_ID == vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID
+                                    && x.Unified_Country_Region == vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region).length > 1) {
+                                rowMsg = rowMsg + "Duplicate rows found with same combinations for Deal ID, Unified Customer ID, Unified Customer Name, Country/Region Customer ID and Unified Country/Region|";
+                                sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateCustIds.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID, vm.dealReconValidationSummary.duplicateCustIds) != -1) {
+                                rowMsg = rowMsg + "Same Unified Customer ID cannot be associated with multiple Unified Customer Names|";
+                                sheet.range("B" + row + ":B" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateCustNames.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name, vm.dealReconValidationSummary.duplicateCustNames) != -1) {
+                                rowMsg = rowMsg + "Same Unified Customer Name cannot be associated with multiple Unified Customer IDs|";
+                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateCtryIds.length > 0) {
+                            if (vm.dealReconValidationSummary.duplicateCtryIds.filter(x => x.cust_Id == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
+                                && x.cust_Nm == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name
+                                && x.ctry_Id == vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID).length > 0) {
+                                rowMsg = rowMsg + "Same Country/Region Customer ID cannot be associated with multiple Unified Country/Regions|";
+                                sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateCtryNms.length > 0) {
+                            if (vm.dealReconValidationSummary.duplicateCtryNms.filter(x => x.cust_Id == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
+                                && x.cust_Nm == vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name
+                                && x.ctry_Nm == vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region
+                                && x.ctry_Id == vm.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID).length > 0) {
+                                rowMsg = rowMsg + "Same Unified Country/Regions cannot be associated with multiple Country/Region Customer ID|";
+                                sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateToBeCustIds.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID, vm.dealReconValidationSummary.duplicateToBeCustIds) != -1) {
+                                rowMsg = rowMsg + "Same 'To Be Unified Customer ID' cannot be associated with multiple 'To Be Unified Customer Names'|";
+                                sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateToBeCustNames.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name, vm.dealReconValidationSummary.duplicateToBeCustNames) != -1) {
+                                rowMsg = rowMsg + "Same 'To Be Unified Customer Name' cannot be associated with multiple 'To Be Unified Customer IDs'|";
+                                sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateToBeCtryIds.length > 0) {
+                            if (vm.dealReconValidationSummary.duplicateToBeCtryIds.filter(x => x.cust_Id == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID
+                                && x.cust_Nm == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name
+                                && x.ctry_Nm == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region
+                                && x.ctry_Id == vm.dealReconValidationSummary.inValidRecords[i].To_be_Country_Region_Customer_ID).length > 0) {
+                                rowMsg = rowMsg + "Same 'To Be Country/Region Customer ID' cannot be associated with multiple 'To Be Unified Country/Region'|";
+                                sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (vm.dealReconValidationSummary.duplicateToBeCtryNms.length > 0) {
+                            if (vm.dealReconValidationSummary.duplicateToBeCtryNms.filter(x => x.cust_Id == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID
+                                && x.cust_Nm == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name
+                                && x.ctry_Nm == vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region
+                                && x.ctry_Id == vm.dealReconValidationSummary.inValidRecords[i].To_be_Country_Region_Customer_ID).length > 0) {
+                                rowMsg = rowMsg + "Same 'To Be Unified Country/Region' cannot be associated with multiple 'To Be Country/Region Customer ID'|";
+                                sheet.range("I" + row + ":I" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            }
+                        }
+                        var RPLStsCodepattern = new RegExp("^[A-Za-z\\s,]*$");
+                        var isValidRPLSTSCode = RPLStsCodepattern.test(vm.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code);
+                        if (!isValidRPLSTSCode) {
+                            invalidRPLStatusCode.push(vm.dealReconValidationSummary.inValidRecords[i].Deal_ID)
+                            rowMsg = rowMsg + "The RPL Status code contains invalid characters. Please remove spaces and special characters.|";
+                            sheet.range("J" + row + ":J" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        else if (vm.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
+                            if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code, vm.dealReconValidationSummary.invalidRplStatusCodes) != -1) {
+                                rowMsg = rowMsg + "Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code.|"
+                                sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                            }
+                        }
+                        if (rowMsg != '') {
+                            var rowMsg = rowMsg.slice(0, -1);
+                            var arr = rowMsg.split('|');
+                            var height = arr.length + 1;
+                            var index = 1;
+                            var msg = "";
+                            angular.forEach(arr, function (row) {
+                                msg = msg + (index++) + ". " + row + "\n";
+                                if (Math.ceil(row.length / 40) > 1)
+                                    height = height + Math.ceil(row.length / 40) - 1;
+                            });
+                            var rowht = height > 1 ? height * 15 : 30;
+                            sheet.rowHeight(i, rowht);
+                            sheet.range("K" + row).value(msg);
+                            sheet.range("K" + row).verticalAlign("top");
+                        }
+                    }
+                });
+                var mandatoryFields = [];
+                if (isEmptyDealId)
+                    mandatoryFields.push("Deal ID");
+                if (isEmptyGlobalId)
+                    mandatoryFields.push("Unified Customer ID");
+                if (isEmptyGlobalName)
+                    mandatoryFields.push("Unified Customer Name");
+                if (isEmptyCtryId)
+                    mandatoryFields.push("Country Region Customer ID");
+                if (isEmptyCtryName)
+                    mandatoryFields.push("Unified Country Region");
+                if (isEmptyToBeGlobalId)
+                    mandatoryFields.push("To be Unified Customer ID");
+                if (isEmptyToBeGlobalName)
+                    mandatoryFields.push("To be Unified Customer Name");
+                if (isEmptyToBeCtryId)
+                    mandatoryFields.push("To be Country Region Customer ID");
+                if (isEmptyToBeCtryName)
+                    mandatoryFields.push("To be Unified Country Region");
+                if (mandatoryFields.length > 0) {
+                    strAlertMessage += "<li>" + mandatoryFields.join(", ") + " is a mandatory field</li>"
+                }
+                if (isGlobalContainsAny)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'ANY' cannot be used as Unified Customer Name</li>";
+                if (isGlobalContainsNull)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>NULL cannot be used as Unified Customer Name</li>";
+                if (isToBeGlobalContainsAny)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'ANY' cannot be used as 'To Be Unified Customer Name'</li>";
+                if (isToBeGlobalContainsNull)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>NULL cannot be used as 'To Be Unified Customer Name'</li>";
+                if (isInvalidGlobalName)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Unified Customer Name either contains more than 65 characters or invalid characters</li>";
+                if (isInvalidToBeGlobalName)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'To Be Unified Customer Name' either contains more than 65 characters or invalid characters</li>";
+                if (isSameGlobalandCtryId)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Unified Customer ID and Country/Region Customer ID cannot be same</li>";
+                if (isSameToBeGlobalandToBeCtryId)
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'To Be Unified Customer ID' and 'To Be Country/Region Customer ID' cannot be same</li>"
+                if (vm.dealReconValidationSummary.invalidCountries.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Unified Country/Region does not exist in My Deals</li>";
+                }
+                if (vm.dealReconValidationSummary.toBeInvalidCountries.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'To Be Unified Country/Region' does not exist in My Deals</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateDealCombination.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Duplicate rows found with same combinations for Deal ID, Unified Customer ID, Unified Customer Name, Country/Region Customer ID and Unified Country/Region</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateCustIds.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same Unified Customer ID cannot be associated with multiple Unified Customer Names</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateCustNames.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same Unified Customer Name cannot be associated with multiple Unified Customer IDs</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateCtryIds.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same Country/Region Customer ID cannot be associated with multiple Unified Country/Regions</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateCtryNms.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same Unified Country/Regions cannot be associated with multiple Country/Region Customer ID</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateToBeCustIds.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same 'To Be Unified Customer ID' cannot be associated with multiple 'To Be Unified Customer Names'</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateToBeCustNames.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same 'To Be Unified Customer Name' cannot be associated with multiple 'To Be Unified Customer IDs'</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateToBeCtryIds.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same 'To Be Country/Region Customer ID' cannot be associated with multiple 'To Be Unified Country/Region'</li>";
+                }
+                if (vm.dealReconValidationSummary.duplicateToBeCtryNms.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Same 'To Be Unified Country/Region' cannot be associated with multiple 'To Be Country/Region Customer ID'</li>";
+                }
+                if (invalidRPLStatusCode.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>The RPL Status code contains invalid characters. Please remove spaces and special characters</li>";
+                }
+                if (vm.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code.</li>"
+                }
+                if (strAlertMessage != "") {
+                    strAlertMessage = "<span style='word-wrap: break-word;'><b>The highlighted row(s) in the excel have not been updated in the MyDeals because of the following error(s).</b></span></br>" + strAlertMessage;
+                    kendo.alert(jQuery.trim(strAlertMessage));
+                }
+            }
+        }
+        else if (vm.dealReconValidationSummary.inValidRecords.length == 0 && vm.dealReconValidationSummary.validRecords.length > 0) {
+            PrimeCustomersService.updateDealRecon(vm.dealReconValidationSummary.validRecords).then(function (response) {
+                kendo.alert("Updated Successfully");
+                vm.dealReconValidationSummary = [];
+                vm.CloseWindow();
+            }, function (response) {
+                logger.error("Operation failed");
+            });
+        }
+    }
     vm.CloseWindow = function () {
         $uibModalInstance.close();
     };

@@ -32,5 +32,7 @@ namespace Intel.MyDeals.IBusinessLogic
         void saveAMQResponse(string amqResponse);
 
         List<RplStatusCode> GetRplStatusCodes();
+
+        void updateDealRecon(List<DealRecon> lstDealRecon);
     }
 }

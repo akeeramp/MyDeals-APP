@@ -621,5 +621,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _primeCustomersDataLib.GetRplStatusCodes();
         }
+
+        public void updateDealRecon(List<DealRecon> lstDealRecons)
+        {
+            _primeCustomersDataLib.updateDealRecon(lstDealRecons);
+        }
     }
 }

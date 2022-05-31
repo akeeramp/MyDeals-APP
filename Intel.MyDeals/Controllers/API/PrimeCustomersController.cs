@@ -149,6 +149,12 @@ namespace Intel.MyDeals.Controllers.API
                 $"Unable to Get Rpl Status Code");
         }
 
-
+        [Authorize]
+        [HttpPost]
+        [Route("updateDealRecon")]
+        public void updateDealRecon(List<DealRecon> lstDealRecon)
+        {
+            _primeCustomersLib.updateDealRecon(lstDealRecon);
+        }
     }
 }
