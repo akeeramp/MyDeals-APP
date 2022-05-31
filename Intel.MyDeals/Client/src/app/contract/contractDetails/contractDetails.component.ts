@@ -99,7 +99,7 @@ export class contractDetailsComponent {
     onFileRemove() {
         this.selectedFileCount--;
         if (this.selectedFileCount <= 0 && !this.isTenderContract) {
-            this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = true;
+            if (this.selectedCUST_ACCPT.toLowerCase() != "pending") { this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = true; }
             this.hasUnSavedFiles = false;
         }
     }
@@ -311,6 +311,11 @@ export class contractDetailsComponent {
             this.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
             this.contractData._behaviors.isError["C2A_DATA_C2A_ID"] = false;
         }
+        Object.entries(this.contractData).forEach(([key]) => {
+            if (ct._behaviors.validMsg[key] !== "" && ct._behaviors.validMsg[key] !== undefined) {
+                this.isValid = false;
+            }
+        });
         this.contractData._behaviors.isError["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.isError["CUST_ACCNT_DIV"];
         this.contractData._behaviors.validMsg["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.validMsg["CUST_ACCNT_DIV"];
        if (this.isValid && ctrctFormData.valid) {
@@ -350,7 +355,10 @@ export class contractDetailsComponent {
                     this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
-                    } 
+                    }
+                    else {
+                        window.location.href = "#contractmanager/" + this.contractData["DC_ID"];
+                    }
                     }
             });
     }
@@ -542,7 +550,7 @@ export class contractDetailsComponent {
         this.contractDetailsSvc.copyContract(this.contractData["CUST_MBR_SID"],this.contractData.DC_ID,this.copyContractData.DC_ID,ct)
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
-                    let idCheck = response.CNTRCT.length ==2 ? response.CNTRCT[1].DC_ID : response.CNTRCT[0].DC_ID;
+                    let idCheck = response.CNTRCT.length ==2 ? response.CNTRCT[1]?.DC_ID : response.CNTRCT[0]?.DC_ID;
                     if (idCheck <= 0) {
                         this.isValid = false;
                         this.titleErrorMsg = "Title already exists in system";
@@ -553,6 +561,8 @@ export class contractDetailsComponent {
                         this.contractData.DC_ID = response.CNTRCT[1].DC_ID;
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
+                        } else {
+                            window.location.href = "#contractmanager/" + this.contractData["DC_ID"];
                         }
                     }
                 }
