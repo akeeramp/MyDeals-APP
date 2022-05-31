@@ -16,4 +16,11 @@ export class pricingTableEditorService {
         return this.httpClient.get(apiUrl);
     }
 
+    public readDropdownEndpoint(lookupUrl: string) {
+        if (lookupUrl.toLowerCase().includes('api/Dropdown'.toLowerCase())) {
+            const apiUrl: string = lookupUrl;
+            return this.httpClient.get(apiUrl);    
+        }
+    }
+
 }

@@ -6,3 +6,13 @@ td.custom-cell {
     background-color: red !important;
     color: white !important;
 }
+
+.htSelectEditor {
+    /*
+     * This hack enables to change <select> dimensions in WebKit browsers
+     */
+    -webkit-appearance: menulist-button !important;
+    position: absolute;
+    width: auto;
+    z-index: 300;
+}

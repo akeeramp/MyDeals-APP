@@ -1,20 +1,21 @@
-export interface handsoneColumn {
-    data: string,
-    title?:string,
-    type?: string,
-    width?: number,
-    editor?:any,
-    readOnly?: boolean,
-    allowEmpty?: boolean,
-    allowInvalid?: boolean,
-    numericFormat?: any,
-    datePickerConfig?:any,
-    source?:Array<any>,
-    defaultDate?:string
-    dateFormat?:string
-    correctFormat?:boolean
-}
-export const sheetObj ={
+// export class handsoneColumn extends ColumnSettings {
+//     data?: string | number | Handsontable.default.ColumnDataGetterSetterFunction;
+//     title?: string;
+//     type?: CellType | string;
+//     width?: number | string | (() => number | string);
+//     editor?: EditorType | typeof Handsontable.default._editors.Base | boolean | string | Handsontable.default;
+//     readOnly?: boolean;
+//     allowEmpty?: boolean;
+//     allowInvalid?: boolean;
+//     numericFormat?: Handsontable.default.NumericFormatOptions;
+//     datePickerConfig?: PikadayOptions;
+//     source?: string[] | number[] | ((this: CellProperties, query: string, callback: (items: string[]) => void) => void);
+//     defaultDate?: string;
+//     dateFormat?: string;
+//     correctFormat?: boolean;
+// }
+
+export const sheetObj = {
     0:"A",
     1:"B",
     2:"C",
@@ -39,7 +40,7 @@ export const sheetObj ={
     21:"V",
     22:"W",
     23:"X",
-    24:"y",
+    24:"Y",
     25:"Z",
     26:"AA",
     27:"AB",
@@ -60,4 +61,57 @@ export const sheetObj ={
     42:"AQ",
     43:"AR",
     44:"AS"
+}
+
+// Pricing Table Template Response
+export interface PRC_TBL_Model_Field {
+    editable: boolean;  // Disable / Enable cell
+    field: string;  // Field Name / Key Name
+    format?: string;    // Formatting Style (i.e. integer, string, money) {0} string, {0:d} decimal number
+    label: string;  // Display title / name
+    nullable: boolean;  // Can be empty
+    opLookupUrl?: string;   // Data API
+    opLookupText?: string;  // variable from API response to use as text
+    opLookupValue?: string;  // variable from API response to use as value
+    uiType?: string;    // UI Element
+    type: string;   // JS Type
+    validMsg?: string;  // Validation messages attatched to attribute
+    values?: string;    // Variable from row element to get value data
+    valuesText?: string;    // Variable from row element to get value text
+    valuesValue?: string;    // Variable from row element to get value data
+}
+
+export interface PRC_TBL_Model_Column {
+    field: string;  // Field Name / Key Name
+    title: string;  // Display title
+    width: number;  // Cell width
+    template?: string;  // CSS Template
+    bypassExport: boolean;  // ??? (Potentially for export to XLS)
+    hidden: boolean;    // Column should be hidden from view
+    uiType?: string;    // UI Element Type (CSS Selector)
+    isDimKey: boolean;  // Expects dimensionalized information from object key
+    isRequired: boolean;    // Show `*` and cell needs to contain a value
+    sortable: boolean;      // Allow sortable column type
+    filterable: boolean;    // Add Filter option
+    headerTemplate?: string;    // Header Column Title should be replaced with this HTML
+    mjrMnrChg?: string; // ??? Defined type of change, may need to return with element
+    lookupUrl?: string; // Lookup data API
+    lookupText?: string;    // variable from API response to use as text
+    lookupValue?: string;   // variable from API response to use as value
+    locked: boolean;    // ??? Column does not scroll right
+    lockable: boolean;  // ??? Column can be set to locked state
+}
+
+export interface PRC_TBL_Model_Attributes {
+    value?: string;
+    label: string;
+    type: string;
+    isRequired: boolean;
+    isError: boolean;   // Failed with validation / error message
+    isHidden: boolean;
+    opLookupUrl?: string;   // Dropdown API Endpoint
+    opLookupText?: string;  // Variable from API response
+    opLookupValue?: string; // Variable from API response
+    validMsg?: string;  // Validation messages attatched to attribute
+    helpMsg?: string;   // Help popup text from attribute
 }
