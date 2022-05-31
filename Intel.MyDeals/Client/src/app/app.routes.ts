@@ -48,6 +48,10 @@ angular
                 views: {
                     mainView: {
                         template: '<app-dashboard></app-dashboard>'
+                    }, resolve: {
+                        securityLoaded: ['securityService', function (securityService) {
+                            return securityService.loadSecurityData();
+                        }],
                     }
                 }
             })

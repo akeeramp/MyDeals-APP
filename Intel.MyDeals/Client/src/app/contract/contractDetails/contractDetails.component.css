@@ -6,7 +6,7 @@
     box-sizing: border-box
 }
 
-.inputReqerror {
+.input-error {
     border: 1px solid red
 }
 
@@ -191,14 +191,20 @@ a {
     padding: 0 !important
 }
 
+.k-button-icon {
+    left: 0px !important;
+    padding-top:0px !important;
+}
+
 kendo-dropdownlist,
 .inlineDisplay {
     flex-grow: 1
 }
 
-/*kendo-dropdownlist {
-    opacity: .6
-}*/
+
+kendo-upload-action-buttons{
+    display:none!important;
+}
 
 .opUiLabel {
     width: 200px

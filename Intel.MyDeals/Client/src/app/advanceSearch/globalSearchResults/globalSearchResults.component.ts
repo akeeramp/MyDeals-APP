@@ -112,7 +112,9 @@ export class GlobalSearchResultsComponent  {
     }
     gotoOBJ(DCID:any,opType:string){
      this.isWindowOpen.emit(false);
-     if(opType=='CNTRCT'){
+      if (opType == 'CNTRCT') {
+      //need to update this route when contract manager migration is completed
+      //window.location.href = "/Contract#/contractmanager/" + DCID;
       window.location.href = "/Contract#/manager/" + DCID;
      }
      else if(opType=='PRC_ST'){

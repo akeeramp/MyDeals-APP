@@ -9,233 +9,279 @@
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight">
                 <div id="secBasicContainerWrapper">
-                    <div id="secContainer" class="contract-detail-form">
-                        <div class="row">
-                            <h4 class="col-md-3 ">Contract Details</h4><span class="col-md-2 infospan"><span>*
-                                </span>Indicates Required fields</span>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="col-md-11 display">
-                                    <h6 style="width:100%">Contract Information</h6>
-                                </div>
-                                <div class="col-md-11 display displayblock">
-                                    <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
-                                    <kendo-combobox #CUST_MBR_SID_Combo [data]="Customers"
-                                                    class="kendoInput" textField="CUST_NM" valueField="CUST_SID"
-                                                 #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
-                                    </kendo-combobox>
-                                    <div *ngIf="!isCustomerSelected && ((!customer?.valid && (customer?.dirty || customer?.touched)) || isSubmitted)" class="err-Control">
-                                        Please select a valid customer
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display displayblock">
-                                    <div *ngIf="!isCustomerDivHidden" class="inputWidth">
-                                        <div class="fl opUiLabel">Division:</div>
-                                        <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput" [data]="Customer_Divs"
-                                                           [(ngModel)]="CUST_NM_DIV"
-                                                           textField="CUST_DIV_NM" valueField="CUST_DIV_NM"></kendo-multiselect>
-                                        <div class="description">Blank means that ALL divisions are included</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display displayblock">
-                                    <div class="fl opUiLabel"><span class="isReqField">* </span>Contract Name:</div>
-                                    <kendo-textbox triggers="manual" class="kendoInput" [clearButton]="true"
-                                        [(ngModel)]="TITLE" (keyup)="onKeySearch($event)" required></kendo-textbox>
-                                    <div *ngIf="isTitleError" class="err-Control">{{titleErrorMsg}}</div>
-                                </div>
-                                <div class="col-md-11 display top" >
-                                    <h6 style="width:100%">Dates&nbsp; <span kendoTooltip
-                                            class="opElementHelpIcon intelicon-information-outlined"
-                                            title="Date ranges are based on customer selections above."
-                                            position="right"></span></h6>
-                                </div>
-                                <div class="col-md-11 display">
-                                    <div class="fl opUiLabel"><span class="isReqField">* </span>Select Start Date:</div>
-                                    <div class="inlineDisplay">
-                                        <div class="blockdisplay">
-                                            <kendo-datepicker #picker class="fl opUiElement" calendarType="classic"
-                                                [(ngModel)]="START_DT"
-                                                (valueChange)="getCurrentQuarterDetails('START_DT')"></kendo-datepicker>
-                                            <div class="err-Control">{{contractData?._behaviors?.validMsg?.START_DT}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearboth orLabel" [hidden]="initialStartDateReadOnly">OR</div>
-                                <div class="row" [hidden]="initialStartDateReadOnly">
-                                    <div class="col-md-3 dateRangeLabel margindisplay">Select Quarter Range </div>
-                                    <div class="col-md-4 slidermbottom">
-                                        <kendo-slider [min]="1" [max]="4" [largeStep]="1" [showButtons]="true"
-                                            [vertical]="false" [(ngModel)]="START_QTR"
-                                            (valueChange)="getCurrentQuarterDetails('START_QTR')"></kendo-slider>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <kendo-numerictextbox [min]="contractData?.MinYear"
-                                            [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
-                                            [(ngModel)]="START_YR" (valueChange)="getCurrentQuarterDetails('START_YR')">
-                                        </kendo-numerictextbox>
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display">
-                                    <div class="fl opUiLabel"><span class="isReqField">* </span>Select End Date:</div>
-                                    <div class="inlineDisplay">
-                                        <div class="blockdisplay">
-                                            <kendo-datepicker #picker class="fl opUiElement" calendarType="classic"
-                                                [(ngModel)]="END_DT" [disabled]="NO_END_DT"
-                                                (valueChange)="getCurrentQuarterDetails('END_DT')"></kendo-datepicker>
-                                            <div class="err-Control">{{contractData?._behaviors?.validMsg?.END_DT}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearboth orLabel" [hidden]="initialStartDateReadOnly">OR</div>
-                                <div class="row" [hidden]="initialStartDateReadOnly">
-                                    <div class="col-md-3 dateRangeLabel margindisplay">Select Quarter Range </div>
-                                    <div class="col-md-4 slidermbottom">
-                                        <kendo-slider [min]="1" [max]="4" [largeStep]="1" [showButtons]="true"
-                                            [vertical]="false" [(ngModel)]="END_QTR" [disabled]="NO_END_DT"
-                                            (valueChange)="getCurrentQuarterDetails('END_QTR')"></kendo-slider>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <kendo-numerictextbox [min]="contractData?.MinYear"
-                                            [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
-                                            [(ngModel)]="END_YR" [disabled]="NO_END_DT"
-                                            (valueChange)="getCurrentQuarterDetails('END_YR')"></kendo-numerictextbox>
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display slidermbottom" ><label class="fl opUiLabel"
-                                        style="font-weight:normal" for="noenddate">No end date:</label><input
-                                        style="margin-top:10px" type="checkbox" id="noenddate" name="noenddate"
-                                        [(ngModel)]="NO_END_DT" title="This will set the End Date to +20 years"
-                                        (change)="noEndDate()" /></div>
-                                <div class="col-md-11 display top"  *ngIf="NO_END_DT">
-                                    <div class="fl opUiLabel" style="width:200px"><span class="isReqField">* </span>No
-                                        end date reason:</div>
-                                    <div class="blockdisplay">
-                                        <kendo-dropdownlist [data]="dropDownsData?.NO_END_DT_RSN" textField="DROP_DOWN"
-                                                            valueField="DROP_DOWN" [(ngModel)]="NO_END_DT_RSN" class="inputWidth" #noEndDateRsn>
-                                        </kendo-dropdownlist>
-                                        <div *ngIf="(!NO_END_DT_RSN && isSubmitted)" class="err-Control">* field is required</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display"  [hidden]="!isBackDate">
-                                    <div class="fl opUiLabel" style="width:200px"><span class="isReqField">* </span>Back
-                                        Date Reason:</div>
-                                    <div class="blockdisplay">
-                                        <kendo-dropdownlist [data]="dropDownsData?.BACK_DATE_RSN" textField="DROP_DOWN"
-                                                         #backDateRsn="ngModel"   valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth" [required]="isBackDate" >
-                                        </kendo-dropdownlist>
-                                        <div *ngIf="!backDateRsn?.valid" class="err-Control">* field is required</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-11 display">
-                                    <div class="fl opUiLabel" style="width:200px"><span class="isReqField">*
-                                        </span>Contract Type:</div>
-                                    <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
-                                        valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth">
-                                    </kendo-dropdownlist>
-                                </div>
+                    <form #contractDetailsForm="ngForm">
+                        <div id="secContainer" class="contract-detail-form">
+                            <div class="row">
+                                <h4 class="col-md-3 ">Contract Details</h4><span class="col-md-2 infospan">
+                                    <span>*</span>Indicates Required fields
+                                </span>
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-11 display">
-                                    <h6 class="inputWidth">Customer Acceptance of Contract is...</h6>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-11 display">
+                                        <h6 style="width:100%">Contract Information</h6>
+                                    </div>
+                                    <div class="col-md-11 display displayblock">
+                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
+                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="Customers"
+                                                        class="kendoInput" textField="CUST_NM" valueField="CUST_SID"
+                                                        name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
+                                        </kendo-combobox>
+                                        <kendo-formerror *ngIf="contractDetailsForm.controls.Customer?.errors?.required && contractDetailsForm.controls.Customer?.touched">
+                                            Please select a valid customer
+                                        </kendo-formerror>
+                                    </div>
+                                    <div class="col-md-11 display displayblock">
+                                        <div *ngIf="!isCustomerDivHidden" class="inputWidth">
+                                            <div class="fl opUiLabel">Division:</div>
+                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput" [data]="Customer_Divs"
+                                                               [(ngModel)]="CUST_NM_DIV"
+                                                               name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM"></kendo-multiselect>
+                                            <div class="description">Blank means that ALL divisions are included</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 display displayblock">
+                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Contract Name:</div>
+                                        <kendo-textbox triggers="manual" class="kendoInput" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}"
+                                                       [(ngModel)]="TITLE" (keyup)="onKeySearch($event,'TITLE')" required></kendo-textbox>
+
+                                        <kendo-formerror *ngIf="(contractDetailsForm.controls.TITLE?.errors?.required && contractDetailsForm.controls.TITLE?.touched);else otherMsg">
+                                            {{isRequiredMsg}}
+                                        </kendo-formerror>
+                                        <ng-template #otherMsg>
+                                            <kendo-formerror *ngIf="isTitleError">{{titleErrorMsg}}</kendo-formerror>
+                                        </ng-template>
+                                    </div>
+                                    <div class="col-md-11 display top">
+                                        <h6 style="width:100%">
+                                            Dates&nbsp; <span kendoTooltip
+                                                              class="opElementHelpIcon intelicon-information-outlined"
+                                                              title="Date ranges are based on customer selections above."
+                                                              position="right"></span>
+                                        </h6>
+                                    </div>
+                                    <div class="col-md-11 display">
+                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Select Start Date:</div>
+                                        <div class="inlineDisplay">
+                                            <div class="blockdisplay">
+                                                <kendo-datepicker #picker class="fl opUiElement" calendarType="classic"
+                                                                  [(ngModel)]="START_DT" name="START_DT" (valueChange)="getCurrentQuarterDetails('START_DT')" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}"
+                                                                  required></kendo-datepicker>
+                                                <kendo-formerror>
+                                                    {{contractData?._behaviors?.validMsg?.START_DT}}
+                                                </kendo-formerror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearboth orLabel" [hidden]="initialStartDateReadOnly">OR</div>
+                                    <div class="row" [hidden]="initialStartDateReadOnly">
+                                        <div class="col-md-3 dateRangeLabel margindisplay">Select Quarter Range </div>
+                                        <div class="col-md-4 slidermbottom">
+                                            <kendo-slider [min]="1" [max]="4" [largeStep]="1" [showButtons]="true"
+                                                          [vertical]="false" [(ngModel)]="START_QTR" name="START_QTR"
+                                                          (valueChange)="getCurrentQuarterDetails('START_QTR')"></kendo-slider>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <kendo-numerictextbox [min]="contractData?.MinYear"
+                                                                  [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
+                                                                  [(ngModel)]="START_YR" name="START_YR" (valueChange)="onKeySearch($event,'START_YR')" required>
+                                            </kendo-numerictextbox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 display">
+                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Select End Date:</div>
+                                        <div class="inlineDisplay">
+                                            <div class="blockdisplay">
+                                                <kendo-datepicker #picker class="fl opUiElement" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
+                                                                  [(ngModel)]="END_DT" [disabled]="NO_END_DT" name="END_DT"
+                                                                  (valueChange)="getCurrentQuarterDetails('END_DT')" required></kendo-datepicker>
+                                                <kendo-formerror>
+                                                    {{contractData?._behaviors?.validMsg?.END_DT}}
+                                                </kendo-formerror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearboth orLabel" [hidden]="initialStartDateReadOnly">OR</div>
+                                    <div class="row" [hidden]="initialStartDateReadOnly">
+                                        <div class="col-md-3 dateRangeLabel margindisplay">Select Quarter Range </div>
+                                        <div class="col-md-4 slidermbottom">
+                                            <kendo-slider [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true"
+                                                          [vertical]="false" [(ngModel)]="END_QTR" [disabled]="NO_END_DT" name="END_QTR"
+                                                          (valueChange)="getCurrentQuarterDetails('END_QTR')"></kendo-slider>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <kendo-numerictextbox [min]="contractData?.MinYear"
+                                                                  [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
+                                                                  [(ngModel)]="END_YR" [disabled]="NO_END_DT" name="END_YR" (valueChange)="onKeySearch($event,'END_YR')" required></kendo-numerictextbox>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 display slidermbottom">
+                                        <label class="fl opUiLabel"
+                                               style="font-weight:normal" for="noenddate">No end date:</label><input style="margin-top:10px" type="checkbox" id="noenddate" name="noenddate"
+                                                                                                                     [(ngModel)]="NO_END_DT" title="This will set the End Date to +20 years"
+                                                                                                                     (change)="noEndDate()" />
+                                    </div>
+                                    <div class="col-md-11 display top" *ngIf="NO_END_DT">
+                                        <div class="fl opUiLabel" style="width:200px">
+                                            <span class="isReqField">* </span>No
+                                            end date reason:
+                                        </div>
+                                        <div class="blockdisplay">
+                                            <kendo-dropdownlist [data]="dropDownsData?.NO_END_DT_RSN" textField="DROP_DOWN"
+                                                                name="NO_END_DT_RSN" valueField="DROP_DOWN" [(ngModel)]="NO_END_DT_RSN" class="inputWidth" #noEndDateRsn [required]="NO_END_DT">
+                                            </kendo-dropdownlist>
+                                            <kendo-formerror *ngIf="contractDetailsForm.controls.NO_END_DT_RSN?.errors?.required && isSubmitted">
+                                                {{isRequiredMsg}}
+                                            </kendo-formerror>
+                                              </div>
+                                    </div>
+                                    <div class="col-md-11 display" [hidden]="!isBackDate">
+                                        <div class="fl opUiLabel" style="width:200px">
+                                            <span class="isReqField">* </span>Back
+                                            Date Reason:
+                                        </div>
+                                        <div class="blockdisplay">
+                                            <kendo-dropdownlist [data]="dropDownsData?.BACK_DATE_RSN" textField="DROP_DOWN"
+                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth" [required]="isBackDate">
+                                            </kendo-dropdownlist>
+                                            <kendo-formerror *ngIf="contractDetailsForm.controls.BACK_DATE_RSN?.errors?.required && isSubmitted">
+                                                {{isRequiredMsg}}
+                                            </kendo-formerror>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 display">
+                                        <div class="fl opUiLabel" style="width:200px">
+                                            <span class="isReqField">*</span>Contract Type:
+                                        </div>
+                                        <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
+                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth" name="CONTRACT_TYPE" required>
+                                        </kendo-dropdownlist>
+                                    </div>
                                 </div>
-                                <div class="col-md-1 top"  [hidden]="isTenderContract">
-                                    <div class="fr helpBtn" title="Help"><a
-                                            href="https://wiki.ith.intel.com/display/Handbook/Contract+Details"
-                                            target="_blank"><i class="intelicon-help"
-                                                style="font-size:30px !important"></i></a></div>
-                                </div>
-                                <div class="col-md-11" style="margin-bottom:20px;margin-top:15px">
-                                    <div *ngFor="let data of dropDownsData?.CUST_ACCPT; let idx=index">
-                                        <div class="row">
-                                            <div class="col-md-12"
-                                                style="margin-bottom:10px; border-bottom:1px solid #eeeeee"></div>
-                                            <div class="col-md-4">
-                                                <div class="radioButtonGroup"><input type="radio"
-                                                        id="{{data.DROP_DOWN}}" [name]="data.DROP_DOWN"
-                                                        [value]="data.DROP_DOWN" [(ngModel)]="selectedCUST_ACCPT"
-                                                        [checked]="(idx===0)"
-                                                        (change)="setCustAcceptanceRules(selectedCUST_ACCPT)" /><label
-                                                        for="{{data.DROP_DOWN}}"
-                                                        class="radioControl">&nbsp;&nbsp;{{data.DROP_DOWN}}</label>
+                                <div class="col-md-6">
+                                    <div class="col-md-11 display">
+                                        <h6 class="inputWidth">Customer Acceptance of Contract is...</h6>
+                                    </div>
+                                    <div class="col-md-1 top" [hidden]="isTenderContract">
+                                        <div class="fr helpBtn" title="Help">
+                                            <a href="https://wiki.ith.intel.com/display/Handbook/Contract+Details"
+                                               target="_blank">
+                                                <i class="intelicon-help"
+                                                   style="font-size:30px !important"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11" style="margin-bottom:20px;margin-top:15px">
+                                        <div *ngFor="let data of dropDownsData?.CUST_ACCPT; let idx=index">
+                                            <div class="row">
+                                                <div class="col-md-12"
+                                                     style="margin-bottom:10px; border-bottom:1px solid #eeeeee"></div>
+                                                <div class="col-md-4">
+                                                    <div class="radioButtonGroup">
+                                                        <input type="radio"
+                                                               id="{{data.DROP_DOWN}}" [name]="data.DROP_DOWN"
+                                                               [value]="data.DROP_DOWN" [(ngModel)]="selectedCUST_ACCPT" name="selectedCUST_ACCPT"
+                                                               [checked]="(idx===0)"
+                                                               (change)="setCustAcceptanceRules(selectedCUST_ACCPT)" /><label for="{{data.DROP_DOWN}}"
+                                                                                                                              class="radioControl">&nbsp;&nbsp;{{data.DROP_DOWN}}</label>
+                                                    </div>
+                                                    <div class="lookupDesc" *ngIf="data.DROP_DOWN==selectedCUST_ACCPT">
+                                                        {{data.ATRB_LKUP_DESC}}
+                                                    </div>
                                                 </div>
-                                                <div class="lookupDesc" *ngIf="data.DROP_DOWN==selectedCUST_ACCPT">
-                                                    {{data.ATRB_LKUP_DESC}} </div>
+                                                <div class="col-md-8" style="overflow-wrap:break-word">
+                                                    <span [innerHTML]="data.ATRB_LKUP_TTIP"></span>
+                                                </div>
                                             </div>
-                                            <div class="col-md-8" style="overflow-wrap:break-word"><span
-                                                    [innerHTML]="data.ATRB_LKUP_TTIP"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 display">
+                                        <h6 class="inputWidth">Information</h6>
+                                    </div>
+                                    <div class="col-md-11 blockdisplay" style="margin-top: 15px"
+                                         [hidden]="isTenderContract">
+                                        <div class="fl opUiLabel">
+                                            <span *ngIf="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
+                                                  class="isReqField">* </span>C2A Contract #
+                                        </div>
+                                        <kendo-textbox triggers="manual" class="inputWidth" [clearButton]="true" name="C2A_DATA_C2A_ID"
+                                                       [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
+                                        </kendo-textbox>
+                                        <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
+                                            {{isRequiredMsg}}
+                                        </kendo-formerror>
+                                        <div class="description">
+                                            Please enter the C2A Contract # associated with the
+                                            contract. Please note, values longer than 18 characters will be truncated in
+                                            Vistex. Characters (like semicolons) not supported by Vistex will also be
+                                            removed.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 blockdisplay">
+                                        <div>
+                                            <span class="f1 opUiLabel opUiLableWidth">
+                                                <span *ngIf="contractData?.IsAttachmentRequired" class="isReqField">
+                                                    *
+                                                </span>Attachments:
+                                            </span><span kendoTooltip>
+                                                <a title="Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
+                                                   class="opElementHelpIcon intelicon-information-outlined"></a>
+                                            </span><span class="description">
+                                                Your attachments will upload after clicking the Save
+                                                Contract button.
+                                            </span>
+                                        </div>
+                                        <div style="padding-left:0px">
+                                            <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true"
+                                                          [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
+                                                          (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files" [required]="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID && isSubmitted && (C2A_DATA_C2A_ID==undefined || C2A_DATA_C2A_ID=='')"></kendo-upload>
+                                            <div *ngIf="selectedCUST_ACCPT !='Pending'" class="description">
+                                                Either an
+                                                attachment to deal request is uploaded or C2A id or link is enter above.
+                                            </div>
+                                            <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
+                                                {{isRequiredMsg}}
+                                            </kendo-formerror>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 display">
-                                    <h6 class="inputWidth">Information</h6>
-                                </div>
-                                <div class="col-md-11 blockdisplay" style="margin-top: 15px"
-                                    [hidden]="isTenderContract">
-                                    <div class="fl opUiLabel"><span
-                                            *ngIf="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
-                                            class="isReqField">* </span>C2A Contract #</div>
-                                    <kendo-textbox triggers="manual" class="inputWidth" [clearButton]="true"
-                                        [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID" name="c2aId">
-                                    </kendo-textbox>
-                                    <div *ngIf="contractData?.IsAttachmentRequired && isSubmitted" class="err-Control">{{isRequiredMsg}}
-                                    </div>
-                                    <div class="description">Please enter the C2A Contract # associated with the
-                                        contract. Please note, values longer than 18 characters will be truncated in
-                                        Vistex. Characters (like semicolons) not supported by Vistex will also be
-                                        removed.</div>
-                                </div>
-                                <div class="col-md-11 blockdisplay">
-                                    <div><span class="f1 opUiLabel opUiLableWidth"><span
-                                                *ngIf="contractData?.IsAttachmentRequired" class="isReqField">*
-                                            </span>Attachments: </span><span kendoTooltip><a
-                                                title="Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
-                                                class="opElementHelpIcon intelicon-information-outlined"></a></span><span
-                                            class="description">Your attachments will upload after clicking the Save
-                                            Contract button.</span></div>
-                                    <div style="padding-left:0px">
-                                        <kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl"
-                                            (remove)="removeEventHandler($event)" [batch]="true"
-                                            [restrictions]="myRestrictions" [saveField]="formData"
-                                            (upload)="uploadEventHandler($event)" [autoUpload]="false"></kendo-upload>
-                                        <div *ngIf="selectedCUST_ACCPT !='Pending'" class="description">Either an
-                                            attachment to deal request is uploaded or C2A id or link is enter above.
+                                <div class="row top">
+                                    <div class="col-md-6">
+                                        <div class="col-md-12">
+                                            <h6>Timeline</h6>
                                         </div>
-                                        <!--<div *ngIf="contractData?.IsAttachmentRequired" class="err-Control">{{isRequiredMsg}}
-                                        </div>-->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-12">
+                                            <h6 class="noBottemBorder">Notes</h6>
+                                        </div>
+                                        <div class="col-md-11">
+                                            <kendo-textarea style="width:100%;padding-right:0px" resizable="vertical"
+                                                            [rows]="4" [(ngModel)]="NOTES" name="NOTES"></kendo-textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row top" >
-                                <div class="col-md-6">
-                                    <div class="col-md-12">
-                                        <h6>Timeline</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="col-md-12">
-                                        <h6 class="noBottemBorder">Notes</h6>
-                                    </div>
-                                    <div class="col-md-11">
-                                        <kendo-textarea style="width:100%;padding-right:0px" resizable="vertical"
-                                            [rows]="4" [(ngModel)]="NOTES"></kendo-textarea>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
-                    </div>
-                    <div id="secFooter"><button class="btn btn-primary mleft"  type="button"
-                            (click)="deleteContract()" *ngIf="false"><span>Delete{{contractType}}</span></button><button
-                            class="btn btn-primary mleft"  type="button"
-                            (click)="customContractValidate()"><span>{{saveBtnName}} </span></button></div>
+                        <div id="secFooter">
+                            <button class="btn btn-primary mleft" type="button"
+                                    (click)="deleteContract()" *ngIf="false">
+                                <span>Delete{{contractType}}</span>
+                            </button><button class="btn btn-primary mleft" type="button"
+                                             (click)="customContractValidate(contractDetailsForm)">
+                                <span>{{saveBtnName}} </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<kendo-dialog *ngIf="isBackdatepopupopend" (close)="close()">
+<kendo-dialog *ngIf="isBackdatepopupopend">
     <p class="dialogmsg">You have Selected a date in the past which means the dates you will enter will be considered
         backdated </p>
     <div style="display:flex">
@@ -245,14 +291,15 @@
         </kendo-dialog-actions>
     </div>
 </kendo-dialog>
-<kendo-dialog title="Please confirm" *ngIf="isDivBlankPopupOpen" (close)="close('cancel')" [minWidth]="250"
+<kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" [minWidth]="250"
     [width]="620">
     <p class="dialogmsg">The division is blank. Do you intend for this contract to apply to all
         divisions? </p>
-    <kendo-dialog-actions><button kendoButton (click)="close('no')">No</button><button kendoButton
-            (click)="close('yes')" themeColor="primary">Yes </button></kendo-dialog-actions>
+    <kendo-dialog-actions><button kendoButton
+        (click)="blankDivisionPopupClose('yes')" themeColor="primary">Yes
+</button><button kendoButton (click)="blankDivisionPopupClose('no')">No</button></kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog *ngIf="isMissingGrpCode" [minWidth]="250" [width]="300">
     <p class="dialogmsg">Missing Price Group Code </p>
-    <kendo-dialog-actions><button kendoButton (click)="closeAlert()">OK</button></kendo-dialog-actions>
+    <kendo-dialog-actions><button kendoButton (click)="closeMissingGrpCodeAlert()">OK</button></kendo-dialog-actions>
 </kendo-dialog>
