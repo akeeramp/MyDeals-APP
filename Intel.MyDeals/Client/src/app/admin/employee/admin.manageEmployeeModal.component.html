@@ -8,29 +8,21 @@
             <div class="nm">{{lastName}}, {{firstName}}</div>
         </div>
         <div class="col-md-6" *ngIf="isCustModal">
-            <div class="desc role-title">AGS selected geographies:</div><span *ngFor="let item of geoAllOptions"
-                class="item" id="{{item.id}}"><span *ngIf="isChecked(item.id)"
+            <div class="desc role-title">AGS selected geographies:</div><span *ngFor="let item of geoAllOptions" class="item" id="{{item.id}}"><span *ngIf="isChecked(item.id)"
                     style="margin-right: 7px">{{item.id}}</span></span>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12" style="height:360px">
-            <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from{{category}} dropdown:</div>
-            <kendo-multiselect *ngIf="isCustModal" #cmbmulti placeholder="Select customers..." [data]="selectOptions"
-                id="selCustomers" class="selCustomers" textField="CUST_NM" valueField="CUST_NM_SID"
-                [(ngModel)]="selectedIds" (valueChange)="onCustVertChange($event)"></kendo-multiselect>
-            <kendo-multiselect *ngIf="!isCustModal" #cmbmulti placeholder="Select product catagories..."
-                [data]="selectOptions" id="selCustomers" class="selCustomers" textField="PRD_CAT_NM"
-                valueField="PRD_MBR_SID" [(ngModel)]="selectedIds" (valueChange)="onCustVertChange($event)">
+            <div class="desc role-title" style="margin-top: 15px;">Edit by selecting from {{category}} dropdown:</div>
+            <kendo-multiselect *ngIf="isCustModal" #cmbmulti placeholder="Select customers..." [data]="selectOptions" id="selCustomers" class="selCustomers" textField="CUST_NM" valueField="CUST_NM_SID" [(ngModel)]="selectedIds" (valueChange)="onCustVertChange($event)"></kendo-multiselect>
+            <kendo-multiselect *ngIf="!isCustModal" #cmbmulti placeholder="Select product catagories..." [data]="selectOptions" id="selCustomers" class="selCustomers" textField="PRD_CAT_NM" valueField="PRD_MBR_SID" [(ngModel)]="selectedIds" (valueChange)="onCustVertChange($event)">
             </kendo-multiselect>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4" style="text-align: center;"><button class="btn btn-default" type="button"
-                style="width: 90%;" (click)="cancel()">Cancel</button></div>
-        <div class="col-md-4" style="text-align: center;"><button class="btn btn-default" type="button"
-                style="width: 90%;" (click)="clear()">Clear Customers</button></div>
-        <div class="col-md-4" style="text-align: center;"><button class="btn btn-primary" type="button"
-                style="width: 90%;" (click)="ok()">Save and Close</button></div>
+        <div class="col-md-4" style="text-align: center;"><button class="btn btn-default" type="button" style="width: 90%;" (click)="cancel()">Cancel</button></div>
+        <div class="col-md-4" style="text-align: center;"><button class="btn btn-default" type="button" style="width: 90%;" (click)="clear()">Clear Customers</button></div>
+        <div class="col-md-4" style="text-align: center;"><button class="btn btn-primary" type="button" style="width: 90%;" (click)="ok()">Save and Close</button></div>
     </div>
 </div>
