@@ -12,7 +12,7 @@ env:
 jobs:
   Restore-packages:
      if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
-     runs-on: [self-hosted, mydeals-prd-automation]
+     runs-on: [self-hosted, mydeals-runner01]
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
@@ -23,7 +23,7 @@ jobs:
 
   Build-Angular:
     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
-    runs-on: [self-hosted, mydeals-prd-automation]
+    runs-on: [self-hosted, mydeals-runner01]
     needs: Restore-packages
     steps:
        - name: NPM Install Build
@@ -35,7 +35,7 @@ jobs:
 
   Angular_deploy:
     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
-    runs-on: [self-hosted, mydeals-prd-automation]
+    runs-on: [self-hosted, mydeals-runner01]
     needs: Build-Angular
     steps:
        - name:  Move Publish Site 
