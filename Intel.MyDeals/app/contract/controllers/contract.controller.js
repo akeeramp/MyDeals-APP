@@ -182,24 +182,6 @@
             return c;
         }
 
-        //$scope.ApplyTitlesToChildren = function () {
-        //    if (!!$scope.contractData.PRC_ST) {
-        //        for (var x = 0; x < $scope.contractData.PRC_ST.length; x++) {
-        //            var prnt = $scope.contractData.PRC_ST[x];
-        //            if (!!prnt._behaviors && !!prnt._behaviors.isReadOnly && !!prnt._behaviors.isReadOnly.TITLE) {
-        //                if (!!prnt.PRC_TBL) {
-        //                    for (var c = 0; c < prnt.PRC_TBL.length; c++) {
-        //                        var child = prnt.PRC_TBL[c];
-        //                        if (!child._behaviors) child._behaviors = {};
-        //                        if (!child._behaviors.isReadOnly) child._behaviors.isReadOnly = {};
-        //                        child._behaviors.isReadOnly.TITLE = prnt._behaviors.isReadOnly.TITLE;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         $scope.removeBlanks = function (val) {
 
             return val.replace(/_/g, '');
@@ -266,14 +248,6 @@
             if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.PRC_TBL_ROW.length === 0) return false;
             return true;
         }
-
-        //function arrBiDirectionalDifference(arr1, arr2) {
-        //    let difference1 = arr1.filter(x => arr2.indexOf(x) === -1);
-        //    let difference2 = arr2.filter(x => arr1.indexOf(x) === -1);
-        //    let difference = difference1.concat(difference2).sort((x, y) => x - y);
-
-        //    return difference;
-        //}
 
         $scope.dealEditorTabValidationIssue = function () {
             var data = $scope.pricingTableData;
@@ -764,11 +738,11 @@
                     .then(function (response) {
                         if (qtrType == 'START_DATE') {
                             $scope.contractData.START_DT = moment(response.data.QTR_STRT).format('l');
-                            $scope.contractData = validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
+                            $scope.contractData = contractutil.validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchStartDate = true;
                         } else {
                             $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
-                            $scope.contractData = validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
+                            $scope.contractData = contractutil.validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchEndDate = true;
                         }
                     },
@@ -823,12 +797,12 @@
                         if (dateType == 'START_DT') {
                             $scope.contractData.START_QTR = response.data.QTR_NBR;
                             $scope.contractData.START_YR = response.data.YR_NBR;
-                            $scope.contractData = validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
+                            $scope.contractData = contractutil.validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchStartQuarter = true;
                         } else {
                             $scope.contractData.END_QTR = response.data.QTR_NBR;
                             $scope.contractData.END_YR = response.data.YR_NBR;
-                            $scope.contractData = validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
+                            $scope.contractData = contractutil.validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchEndQuarter = true;
                         }
                         $timeout(function () {
@@ -3354,20 +3328,6 @@
             }
         }
 
-        //$scope.isPivotable = function () {
-
-        //    if (!$scope.curPricingTable) return false;
-
-        //    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
-        //        $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-        //        var pivotFieldName = "NUM_OF_TIERS";
-        //        return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
-        //    }
-
-        //    if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-        //        return true;
-        //    }
-        //}
         $scope.numOfPivot = function (dataItem) {
             if ($scope.curPricingTable === undefined) return 1;
 
@@ -3404,38 +3364,6 @@
             return 1;   //num of pivot is 1 for undim deal types
         }
 
-        // If Tender and ECAP get the CAP value from Product JSON, if more than one product assign CAP, YCS2 value of first product only.
-        //$scope.assignProductProprties = function (data) {
-        //    if ($scope.isTenderContract && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
-        //        for (var d = 0; d < data.length; d++) {
-
-        //            if (angular.equals(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
-
-        //            // product JSON
-        //            var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
-        //            var sysProduct = [];
-
-        //            var productArray = [];
-        //            for (var key in productJSON) {
-        //                if (productJSON.hasOwnProperty(key)) {
-        //                    angular.forEach(productJSON[key], function (item) {
-        //                        sysProduct.push(item);
-        //                    });
-        //                }
-        //            }
-        //            // Take the first product
-        //            var contractProduct = data[d]["PTR_USER_PRD"].split(',')[0];
-        //            sysProduct = sysProduct.filter(function (x) {
-        //                return x.USR_INPUT === contractProduct || x.HIER_VAL_NM === contractProduct;
-        //            });
-
-        //            data[d]["CAP"] = sysProduct.length !== 0 ? sysProduct[0]["CAP"] : "";
-        //            data[d]["YCS2"] = sysProduct.length !== 0 ? sysProduct[0]["YCS2"] : "";
-        //        }
-        //    }
-        //    return data;
-        //}
-
         //function thousands_separators(num) {
         //    var num_parts = num.toString().split(".");
         //    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -3444,21 +3372,6 @@
 
         //$scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
         //    return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
-        //}
-
-        //$scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-        //    var kitRebateTotalVal = 0;
-        //    for (var i = 0; i < numOfTiers; i++) {
-        //        if (isDataPivoted) {
-        //            var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
-        //            kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
-        //        } else if (i < data.length) {
-        //            var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-        //            kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-        //        }
-        //    }
-        //    var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
-        //    return rebateVal; // kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
         //}
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
@@ -4093,27 +4006,6 @@
                 $scope.addStrategyDisabled = false;
             }
         }
-
-        //$scope.IsUniqueInList = function (listToCheck, value, keyToCompare, checkForDouble) {
-        //    // Check unique name
-        //    var count = 0;
-        //    if (!listToCheck) return true;
-
-        //    for (var i = 0; i < listToCheck.length; i++) {
-        //        if (!!listToCheck[i][keyToCompare] && !!value && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
-        //            if (checkForDouble) { // having one in he list is okay, but 2 is a no
-        //                count += 1;
-        //                if (count >= 2) {
-        //                    return false;
-        //                }
-        //            } else {
-        //                // not checking doubles, so any if there is any in the list, then return false
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
 
 
         $scope.$on('refreshContractData', function (event, args) {
@@ -5401,24 +5293,6 @@
             return data;
         }
 
-        //validate Flex dates
-        //$scope.validateFlexDate = function (data) {
-        //    if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-        //        data = contractutil.clearValidation(data, 'START_DT');
-        //        var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-        //        var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-        //        var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-        //        //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        //        var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-
-        //        var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
-
-        //        var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
-        //    }
-
-        //    return drainingInvalidDates;
-        //}
-
         //validate settlement level for hybrid 
         $scope.validateSettlementLevel = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
@@ -5444,8 +5318,8 @@
             data = contractutil.clearValidation(data, 'REBATE_OA_MAX_AMT');
             data = contractutil.clearValidation(data, 'REBATE_OA_MAX_VOL');
             //to fix a defect, setting the property value to same
-            contractutil.setToSame(data, 'REBATE_OA_MAX_AMT');
-            contractutil.setToSame(data, 'REBATE_OA_MAX_VOL');
+            data = contractutil.setToSame(data, 'REBATE_OA_MAX_AMT');
+            data = contractutil.setToSame(data, 'REBATE_OA_MAX_VOL');
 
             if (hybCond == '1' || isFlexAccrual) {
                 //condition to check values are zero
@@ -5694,22 +5568,7 @@
             }
             return data;
         }
-        //$scope.clearSettlementPartner = function (data) {
-        //    angular.forEach(data, (item) => {
-        //        if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-        //            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
-        //                item.SETTLEMENT_PARTNER = null;
-        //            }
-        //            delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
-        //            delete item._behaviors.isError["SETTLEMENT_PARTNER"];
-        //            delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
-        //        }
-        //        if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
-        //            if (item._behaviors && item._behaviors.isReadOnly)
-        //                delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
-        //        }
-        //    });
-        //}
+
         $scope.setSettlementPartner = function (item, Cond) {
             if (!item._behaviors) item._behaviors = {};
             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -5734,42 +5593,7 @@
 
         }
 
-        //helper function for clear and set behaviors
-        //$scope.clearValidation = function (data, elem) {
-        //    angular.forEach(data, (item) => {
-        //        if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-        //            delete item._behaviors.isRequired[elem];
-        //            delete item._behaviors.isError[elem];
-        //            delete item._behaviors.validMsg[elem];
-        //        }
-        //    });
-        //}
-
-        //$scope.setFlexBehaviors = function (item, elem, cond) {
-        //    if (!item._behaviors) item._behaviors = {};
-        //    if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        //    if (!item._behaviors.isError) item._behaviors.isError = {};
-        //    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        //    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-        //    item._behaviors.isRequired[elem] = true;
-        //    item._behaviors.isError[elem] = true;
-
-        //    if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
-        //        item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
-        //    }
-        //    else if (cond == 'invalidDate' && elem == 'START_DT' && !$scope.restrictGroupFlexOverlap) {
-        //        item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
-        //    }
-
-        //    else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
-        //        item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
-        //    }
-
-        //    else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
-        //        item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
-        //    }
-
-        //}
+        //helper function for clear and set behaviors               
         $scope.setBehaviors = function (item, elem, cond) {
             var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
             if (!item._behaviors) item._behaviors = {};
@@ -5886,13 +5710,7 @@
                 item._behaviors.validMsg[elem] = elemLabel + " must be > 0.";
             }
         }
-        //$scope.setToSame = function (data, elem) {
-        //    angular.forEach(data, (item) => {
-        //        if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
-        //            item[elem] = null;
-        //        }
-        //    });
-        //}
+
         $scope.ValidateEndCustomer = function (data, actionName) {
             if (actionName !== "OnLoad") {
                 angular.forEach(data, (item) => {
@@ -5994,64 +5812,6 @@
 
             return data;
         }
-        //$scope.clearEndCustomer = function (item) {
-        //    if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
-        //        delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
-        //        delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
-        //    }
-        //}
-        //$scope.setEndCustomer = function (item, dealType) {
-        //    if (!item._behaviors) item._behaviors = {};
-        //    if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        //    if (!item._behaviors.isError) item._behaviors.isError = {};
-        //    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        //    if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
-        //        || (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
-        //        item = contractutil.clearEndCustomer(item);
-        //        item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
-        //        item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country/Region must be same for " + dealType + ".";
-        //    }
-        //    else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
-        //        && (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
-        //        item = contractutil.clearEndCustomer(item);
-        //        item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
-        //        item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
-        //    }
-        //}
-
-        //$scope.validateMarketSegment = function (data) {
-        //    data = contractutil.clearValidation(data, 'MRKT_SEG');
-        //    var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-        //    //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
-        //    //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
-        //    var spreadData;
-        //    if ($scope.spreadDs != undefined) {
-        //        spreadData = $scope.spreadDs.data();
-        //    }
-        //    else {
-        //        spreadData = data
-        //    }
-
-        //    //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        //    var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-        //    var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
-        //    if (isMarketSegment) {
-        //        angular.forEach(data, (item) => {
-        //            if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
-        //                if (!item._behaviors) item._behaviors = {};
-        //                if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        //                if (!item._behaviors.isError) item._behaviors.isError = {};
-        //                if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        //                item._behaviors.isRequired["MRKT_SEG"] = true;
-        //                item._behaviors.isError["MRKT_SEG"] = true;
-        //                item._behaviors.validMsg["MRKT_SEG"] = "Market Segment is required.";
-
-        //            }
-        //        });
-
-        //    }
-        //    return data;
-        //}
 
         $scope.validateMarketingKIT = function (data) {
             var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';

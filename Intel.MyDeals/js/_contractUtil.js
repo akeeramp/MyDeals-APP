@@ -56,12 +56,12 @@ contractutil.getTenderBasedDefaults = function (newPricingTable, isTenderContrac
 contractutil.updateNPTDefaultValues = function (pt, nptDefaults) {
     //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
     if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
-    if (!!nptDefaults[MRKT_SEG]) nptDefaults[MRKT_SEG].value = pt[MRKT_SEG].split(',');
-    if (!!nptDefaults[GEO]) {
-        if (pt[GEO].indexOf('[') > -1) {
-            nptDefaults[GEO].value = pt[GEO];
+    if (!!nptDefaults["MRKT_SEG"]) nptDefaults["MRKT_SEG"].value = pt["MRKT_SEG"].split(',');
+    if (!!nptDefaults["GEO"]) {
+        if (pt["GEO"].indexOf('[') > -1) {
+            nptDefaults["GEO"].value = pt["GEO"];
         } else {
-            nptDefaults[GEO].value = pt[GEO].split(',');
+            nptDefaults["GEO"].value = pt["GEO"].split(',');
         }
     }
     if (!!nptDefaults["PAYOUT_BASED_ON"]) nptDefaults["PAYOUT_BASED_ON"].value = pt["PAYOUT_BASED_ON"];
@@ -252,6 +252,7 @@ contractutil.isPivotable = function (curPricingTable) {
     }
 }
 //16
+// If Tender and ECAP get the CAP value from Product JSON, if more than one product assign CAP, YCS2 value of first product only.
 contractutil.assignProductProprties = function (data, isTenderContract, curPricingTable) {
     if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
         for (var d = 0; d < data.length; d++) {
@@ -289,6 +290,7 @@ contractutil.setToSame = function (data, elem) {
             item[elem] = null;
         }
     });
+    return data;
 }
 //18
 //helper function for clear and set behaviors
@@ -364,7 +366,7 @@ contractutil.setFlexBehaviors = function (item, elem, cond, restrictGroupFlexOve
     else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
         item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
     }
-    return Item;
+    return item;
 }
 //23
 contractutil.validateFlexRules = function (data, curPricingTable, wipData, restrictGroupFlexOverlap) {
@@ -426,6 +428,7 @@ contractutil.setEndCustomer = function (item, dealType, curPricingTable) {
         item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
         item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
     }
+    return item;
 }
 //26
 contractutil.validateDate = function (dateType, contractData, existingMinEndDate) {
@@ -547,7 +550,6 @@ contractutil.validateTitles = function (dataItem, curPricingStrategy, contractDa
             }
         }
     }
-
     return rtn;
 }
 //28
@@ -563,7 +565,6 @@ contractutil.validateMarketSegment = function (data, wipData, spreadDs) {
     else {
         spreadData = data
     }
-
     //For multi tiers last record will have latest date, skipping duplicate DC_ID
     var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
     var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
