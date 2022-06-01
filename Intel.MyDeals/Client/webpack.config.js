@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = env => {
     const mode = env.mode;
@@ -13,17 +14,37 @@ module.exports = env => {
             watch: false,
             output: {
                 path: path.resolve(__dirname, "src/dist"),
-                filename: "[name].js"
+                filename: "[name].js",
+                clean: true
             },
             resolve: {
                 // Add '.ts' and '.tsx' as a resolvable extension.
                 mainFields: ['es2015', 'browser', 'module', 'main'],
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
+            // plugins: [
+            //     new BundleAnalyzerPlugin()
+            // ],
+            optimization: {
+                splitChunks: {
+                    chunks: 'all',
+                    maxAsyncRequests: 30,
+                    maxInitialRequests: 30,
+                    cacheGroups: {
+                        defaultVendors: {
+                            name: 'vendor',
+                            test: /[\\/]node_modules[\\/]/,
+                            priority: -10,
+                            reuseExistingChunk: true,
+                        },
+                    },
+                },
+            },
             module: {
                 rules: [{
                     test: /\.tsx?$/,
-                    loader: "ts-loader"
+                    loader: "ts-loader",
+                    exclude: /node_modules/
                 }]
             },
             //this will help to avoid sourcemap issue for chrome devtool to load
@@ -40,7 +61,8 @@ module.exports = env => {
             watch: false,
             output: {
                 path: path.resolve(__dirname, "src/dist"),
-                filename: "[name].js"
+                filename: "[name].js",
+                clean: true
             },
             optimization: {
                 minimize: true,
@@ -54,9 +76,29 @@ module.exports = env => {
                             compress: true,
                             module: true,
                             mangle: false,
+                            format: {
+                                comments: false,
+                            },
                         },
+                        extractComments: false,
+                        // enable parallel running
+                        parallel: true,
+
                     }),
                 ],
+                splitChunks: {
+                    chunks: 'all',
+                    maxAsyncRequests: 30,
+                    maxInitialRequests: 30,
+                    cacheGroups: {
+                        defaultVendors: {
+                            name: 'vendor',
+                            test: /[\\/]node_modules[\\/]/,
+                            priority: -10,
+                            reuseExistingChunk: true,
+                        },
+                    },
+                },
             },
             performance: {
                 hints: false,
@@ -71,7 +113,8 @@ module.exports = env => {
             module: {
                 rules: [{
                     test: /\.tsx?$/,
-                    loader: "ts-loader"
+                    loader: "ts-loader",
+                    exclude: /node_modules/
                 }, ]
             },
         }

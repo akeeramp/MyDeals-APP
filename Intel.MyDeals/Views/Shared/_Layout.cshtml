@@ -66,7 +66,7 @@
 
 <body @Html.RequestVerificationToken()>
     @*Since Angular bundle size is increasing the overall loading time will incresing which cause delay in UI landing page to load.
-     To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
+        To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
     <div class="loading-screen">
         <div class="fullHeight">
             <div class="jumbotron ng-scope">
@@ -104,6 +104,7 @@
         ]);
 
     </script>
+    <script src="~/Client/src/dist/vendor.js"></script>
     <script src="~/Client/src/dist/bundle.js"></script>
 
 </body>

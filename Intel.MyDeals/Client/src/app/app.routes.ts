@@ -24,15 +24,6 @@ angular
 
             })
             //*****************poc items starts here*****************
-            .state("myhandsone", {
-                url: "/myhandsone",
-                abstract: false,
-                views: {
-                    mainView: {
-                        template: '<my-handonse></my-handonse>'
-                    }
-                }
-            })
             .state("mykendocontrol", {
                 url: "/mykendocontrol",
                 abstract: false,

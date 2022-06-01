@@ -8,7 +8,6 @@ import {
 import {downgradeComponent} from "@angular/upgrade/static";
 import {SelectEvent} from "@progress/kendo-angular-layout";
 import {MatDialog} from "@angular/material/dialog";
-import {DialogOverviewExampleDialog} from "../../shared/modalPopUp/modal.component";
 import {TooltipDirective} from "@progress/kendo-angular-tooltip";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {saveAs} from "file-saver";
@@ -240,14 +239,7 @@ export class KendoControlComponent {
     console.log("checkClick ***********", this.isChecked);
   }
   openPopUp() {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: "250px",
-      data: {name: "Name", animal: "Animal"},
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("The dialog was closed:: result::", result);
-    });
+    window.alert('This logic already implmented multiple places hence removing the logic');
   }
   observeClick() {
     const value = this.obsObj == "Abhilash" ? "Abhilash Keerampara" : "Abhilash";
