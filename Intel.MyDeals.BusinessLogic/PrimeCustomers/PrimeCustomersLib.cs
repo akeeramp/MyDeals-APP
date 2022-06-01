@@ -588,7 +588,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                 //below line of code is to check the END_CUST_OBJ if it has any un-unified end customer 
                                                 List<EndCustomer> endCustomerList = JsonConvert.DeserializeObject<List<EndCustomer>>(response[count].END_CUST_OBJ);
                                                 var isUnificationMailRequired = endCustomerList.Where(data => data.IS_PRIMED_CUST == "0").ToArray().Length > 0 ? true : false;
-                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ, isUnificationMailRequired,response[count].CRE_EMP_WWID);
+                                                saveDealEndCustomerAtrbs(response[count].DEAL_ID, response[count].END_CUST_OBJ, isUnificationMailRequired, response[count].CRE_EMP_WWID);
                                             }
                                         }
                                     }
@@ -611,6 +611,12 @@ namespace Intel.MyDeals.BusinessLogic
                             _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
                                 0, null, amqResponse, res.AccountId, "AMQ_Rejected_Account");
                         }
+                    }
+                    else if (res != null && res.parentAccount == null && res.primaryAddress != null)
+                    {
+                        //Call to log Missing parent information error 
+                        _primeCustomersDataLib.SaveUcdRequestData(res.AccountName, res.primaryAddress.CountryName,
+                                        0, null, amqResponse, res.AccountId, "API_processing_Error");
                     }
                 }
 
