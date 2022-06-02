@@ -311,7 +311,8 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
                 "~/js/_gridUtil.js",
-                "~/js/helpUtil.js"
+                "~/js/helpUtil.js",
+				"~/js/_contractUtil.js"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

@@ -8,7 +8,7 @@
 
 
     SetRequestVerificationToken.$inject = ['$http'];
-    ContractController.$inject = ['$scope', '$uibModalStack', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'isTender', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary', '$q', 'opGridTemplate','productSelectorService'];
+    ContractController.$inject = ['$scope', '$uibModalStack', '$state', '$filter', '$localStorage', '$linq', 'contractData', 'copyContractData', 'isNewContract', 'isTender', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', 'colorDictionary', '$q', 'opGridTemplate', 'productSelectorService'];
 
     function ContractController($scope, $uibModalStack, $state, $filter, $localStorage, $linq, contractData, copyContractData, isNewContract, isTender, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, colorDictionary, $q, opGridTemplate, productSelectorService) {
         // store template information ()
@@ -23,7 +23,7 @@
         if (contractData != null && contractData.data[0].Customer !== undefined) {
             objsetService.getCustomerVendorDropDown('GetCustomerVendors/' + contractData.data[0].Customer.CUST_SID).then(function (response) {
                 $scope.getVendorDropDownResult = response.data;
-            },function (response) {
+            }, function (response) {
                 logger.error("Unable to get Settlement Partner list.", response, response.statusText);
             });
         }
@@ -176,24 +176,6 @@
             return c;
         }
 
-        $scope.ApplyTitlesToChildren = function () {
-            if (!!$scope.contractData.PRC_ST) {
-                for (var x = 0; x < $scope.contractData.PRC_ST.length; x++) {
-                    var prnt = $scope.contractData.PRC_ST[x];
-                    if (!!prnt._behaviors && !!prnt._behaviors.isReadOnly && !!prnt._behaviors.isReadOnly.TITLE) {
-                        if (!!prnt.PRC_TBL) {
-                            for (var c = 0; c < prnt.PRC_TBL.length; c++) {
-                                var child = prnt.PRC_TBL[c];
-                                if (!child._behaviors) child._behaviors = {};
-                                if (!child._behaviors.isReadOnly) child._behaviors.isReadOnly = {};
-                                child._behaviors.isReadOnly.TITLE = prnt._behaviors.isReadOnly.TITLE;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         $scope.removeBlanks = function (val) {
 
             return val.replace(/_/g, '');
@@ -261,14 +243,6 @@
             return true;
         }
 
-        function arrBiDirectionalDifference(arr1, arr2) {
-            let difference1 = arr1.filter(x => arr2.indexOf(x) === -1);
-            let difference2 = arr2.filter(x => arr1.indexOf(x) === -1);
-            let difference = difference1.concat(difference2).sort((x, y) => x - y);
-
-            return difference;
-        }
-
         $scope.dealEditorTabValidationIssue = function () {
             var data = $scope.pricingTableData;
             if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.WIP_DEAL === undefined) return false;
@@ -285,7 +259,7 @@
                 if (aryPtrIds.indexOf(item.DC_ID) < 1) aryPtrIds.push(item.DC_ID);
             });
 
-            var unpairedPtrs = arrBiDirectionalDifference(aryPtrIds, aryWipIds);
+            var unpairedPtrs = contractutil.arrBiDirectionalDifference(aryPtrIds, aryWipIds);
 
             var myRet = false;
             angular.forEach(data.WIP_DEAL, function (item) {
@@ -401,7 +375,7 @@
         $scope.contractData = $scope.contractData || $scope.initContract(contractData);
         $scope.isNewContract = isNewContract;
         $scope.contractData.displayTitle = "";
-        $scope.ApplyTitlesToChildren();
+        $scope.contractData = contractutil.ApplyTitlesToChildren($scope.contractData);
         $scope.initialEndDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["END_DT"] && $scope.contractData._behaviors.isReadOnly["END_DT"];
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
         $scope.existingMinEndDate = $scope.contractData.DC_ID > 0 ? $scope.contractData['END_DT'] : "";
@@ -538,7 +512,7 @@
 
                 }
 
-                });
+            });
         }
 
         $scope.gotoMCPage = function () {
@@ -676,9 +650,9 @@
                     },
                         function (error) {
                             logger.error("Unable to get Contract Type deafult. Please set value in Admin Constants screen.", error, error.statusText);
-                    })
+                        })
             }
-            
+
             // TODO: Ideally undefined check should be removed, once we run the DBConst.tt and DealPropertyWrapper.tt we can remove this
             // Not running now I see many new Attributes added for VOL_TIER
             $scope.contractData["NO_END_DT"] = ($scope.contractData.NO_END_DT_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined);
@@ -747,40 +721,7 @@
             initiateCustDivCombobox();
 
             // Date Functions
-            var validateDate = function (dateType) {
-                $scope.contractData._behaviors.isError['START_DT'] =
-                    $scope.contractData._behaviors.isError['END_DT'] = false;
-                $scope.contractData._behaviors.validMsg['START_DT'] =
-                    $scope.contractData._behaviors.validMsg['END_DT'] = "";
 
-                var startDate = $scope.contractData.START_DT;
-                var endDate = $scope.contractData.END_DT;
-
-                if (dateType == 'START_DT') {
-                    if (moment(startDate).isAfter(endDate) || moment(startDate).isBefore($scope.contractData.MinDate)) {
-                        $scope.contractData._behaviors.isError['START_DT'] = true;
-                        $scope.contractData._behaviors
-                            .validMsg['START_DT'] = moment(startDate).isBefore($scope.contractData.MinDate)
-                                ? "Start date cannot be less than - " + $scope.contractData.MinDate
-                                : "Start date cannot be greater than End Date";
-                    }
-                } else {
-                    if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter($scope.contractData.MaxDate)) {
-                        $scope.contractData._behaviors.isError['END_DT'] = true;
-                        $scope.contractData._behaviors
-                            .validMsg['END_DT'] = moment(endDate).isAfter($scope.contractData.MaxDate)
-                                ? "End date cannot be greater than - " + $scope.contractData.MaxDate
-                                : "End date cannot be less than Start Date";
-                    }
-                    if ($scope.existingMinEndDate !== "" && $scope.contractData.PRC_ST != null && $scope.contractData.PRC_ST.length != 0) {
-                        if (moment(endDate).isBefore($scope.existingMinEndDate)) {
-                            $scope.contractData._behaviors.isError['END_DT'] = true;
-                            $scope.contractData._behaviors
-                                .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + $scope.existingMinEndDate + " - if you have already created pricing strategies. ";
-                        }
-                    }
-                }
-            }
 
             // Update start date and end date based on the quarter selection
             var updateDateByQuarter = function (qtrType, qtrValue, yearValue) {
@@ -791,11 +732,11 @@
                     .then(function (response) {
                         if (qtrType == 'START_DATE') {
                             $scope.contractData.START_DT = moment(response.data.QTR_STRT).format('l');
-                            validateDate('START_DT');
+                            $scope.contractData = contractutil.validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchStartDate = true;
                         } else {
                             $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
-                            validateDate('END_DT');
+                            $scope.contractData = contractutil.validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchEndDate = true;
                         }
                     },
@@ -850,12 +791,12 @@
                         if (dateType == 'START_DT') {
                             $scope.contractData.START_QTR = response.data.QTR_NBR;
                             $scope.contractData.START_YR = response.data.YR_NBR;
-                            validateDate('START_DT');
+                            $scope.contractData = contractutil.validateDate('START_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchStartQuarter = true;
                         } else {
                             $scope.contractData.END_QTR = response.data.QTR_NBR;
                             $scope.contractData.END_YR = response.data.YR_NBR;
-                            validateDate('END_DT');
+                            $scope.contractData = contractutil.validateDate('END_DT', $scope.contractData, $scope.existingMinEndDate);
                             unWatchEndQuarter = true;
                         }
                         $timeout(function () {
@@ -974,7 +915,7 @@
                 getCurrentQuarterDetails();
             } else {
                 if (moment($scope.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
-                    $scope.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY"); 
+                    $scope.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
                 }
                 updateQuarterByDates('START_DT', $scope.contractData.START_DT);
                 updateQuarterByDates('END_DT', $scope.contractData.END_DT);
@@ -1392,73 +1333,73 @@
                 noEndDateChanged(newValue["NO_END_DT"], true);
             }
 
-            if ($scope.keyContractItemchanged(oldValue, newValue)) {
+            if (contractutil.keyContractItemchanged(oldValue, newValue, $scope.contractData.DC_ID)) {
                 el._dirty = true;
                 el._dirtyContractOnly = true;
             }
         }, true);
 
-        $scope.keyContractItemchanged = function (oldValue, newValue) {
-            function purgeBehaviors(lData) {
-                var remItems = [
-                    "IsAttachmentRequired", "MinYear", "MaxYear", "END_QTR", "END_YR", "START_QTR", "START_YR",
-                    "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
-                ];
-                var remItemsIfNoId = ["C2A_DATA_C2A_ID"];
+        //$scope.keyContractItemchanged = function (oldValue, newValue) {
+        //    function purgeBehaviors(lData) {
+        //        var remItems = [
+        //            "IsAttachmentRequired", "MinYear", "MaxYear", "END_QTR", "END_YR", "START_QTR", "START_YR",
+        //            "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
+        //        ];
+        //        var remItemsIfNoId = ["C2A_DATA_C2A_ID"];
 
-                lData._behaviors = {};
-                lData._actions = {};
-                lData._settings = {};
-                lData.infoMessages = [];
-                lData.warningMessages = [];
-                lData._dirty = {};
+        //        lData._behaviors = {};
+        //        lData._actions = {};
+        //        lData._settings = {};
+        //        lData.infoMessages = [];
+        //        lData.warningMessages = [];
+        //        lData._dirty = {};
 
-                for (var d = 0; d < remItems.length; d++) {
-                    lData[remItems[d]] = "";
-                }
-                if ($scope.contractData.DC_ID < 0) {
-                    for (var d = 0; d < remItemsIfNoId.length; d++) {
-                        lData[remItemsIfNoId[d]] = "";
-                    }
-                }
+        //        for (var d = 0; d < remItems.length; d++) {
+        //            lData[remItems[d]] = "";
+        //        }
+        //        if ($scope.contractData.DC_ID < 0) {
+        //            for (var d = 0; d < remItemsIfNoId.length; d++) {
+        //                lData[remItemsIfNoId[d]] = "";
+        //            }
+        //        }
 
-                if (!!lData.PRC_ST) {
-                    for (var s = 0; s < lData.PRC_ST.length; s++) {
-                        var item = lData.PRC_ST[s];
-                        item._behaviors = {};
-                        item._actions = {};
-                        item._settings = {};
-                        item.infoMessages = [];
-                        item.warningMessages = [];
-                        item.PASSED_VALIDATION = "";
+        //        if (!!lData.PRC_ST) {
+        //            for (var s = 0; s < lData.PRC_ST.length; s++) {
+        //                var item = lData.PRC_ST[s];
+        //                item._behaviors = {};
+        //                item._actions = {};
+        //                item._settings = {};
+        //                item.infoMessages = [];
+        //                item.warningMessages = [];
+        //                item.PASSED_VALIDATION = "";
 
-                        if (!!item.PRC_TBL) {
-                            for (var t = 0; t < item.PRC_TBL.length; t++) {
-                                item.PRC_TBL[t]._behaviors = {};
-                                item.PRC_TBL[t]._behaviors = {};
-                                item.PRC_TBL[t]._actions = {};
-                                item.PRC_TBL[t]._settings = {};
-                                item.PRC_TBL[t].infoMessages = [];
-                                item.PRC_TBL[t].warningMessages = [];
-                                item.PRC_TBL[t].PASSED_VALIDATION = "";
-                            }
-                        }
-                    }
-                }
-                var str = kendo.stringify(lData).replace(',"undefined":[]', '');
-                for (var d = 0; d < remItems.length; d++) {
-                    var find = ',"' + remItems[d] + '":""';
-                    var regex = new RegExp(find, "g");
-                    str = str.replace(regex, "");
-                }
+        //                if (!!item.PRC_TBL) {
+        //                    for (var t = 0; t < item.PRC_TBL.length; t++) {
+        //                        item.PRC_TBL[t]._behaviors = {};
+        //                        item.PRC_TBL[t]._behaviors = {};
+        //                        item.PRC_TBL[t]._actions = {};
+        //                        item.PRC_TBL[t]._settings = {};
+        //                        item.PRC_TBL[t].infoMessages = [];
+        //                        item.PRC_TBL[t].warningMessages = [];
+        //                        item.PRC_TBL[t].PASSED_VALIDATION = "";
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        var str = kendo.stringify(lData).replace(',"undefined":[]', '');
+        //        for (var d = 0; d < remItems.length; d++) {
+        //            var find = ',"' + remItems[d] + '":""';
+        //            var regex = new RegExp(find, "g");
+        //            str = str.replace(regex, "");
+        //        }
 
-                return str;
-            }
+        //        return str;
+        //    }
 
-            var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
-            //if (rtn) debugger;
-            return rtn;
-        }
+        //    var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
+        //    //if (rtn) debugger;
+        //    return rtn;
+        //}
 
         // **** LEFT NAVIGATION Methods ****
         //
@@ -1697,20 +1638,6 @@
             }, 2000);
         }
 
-        function getTenderBasedDefaults() {
-            var data = $scope.newPricingTable["_defaultAtrbs"];
-
-            if ($scope.isTenderContract) {
-                data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
-                    .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/true");
-            } else {
-                data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
-                    .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/false");
-            }
-
-            return data;
-        }
-
         // **** AUTODILL DEFAULTS Methods ****
         //
         function openAutofillModal(pt) {
@@ -1718,7 +1645,8 @@
             if (pt != null) {
                 $scope.setNptTemplate(pt);
                 //if pt not null, need to also update the nPT default atrb values
-                updateNPTDefaultValues(pt);
+                var nptDefaults = $scope.newPricingTable["_defaultAtrbs"];
+                $scope.newPricingTable["_defaultAtrbs"] = contractutil.updateNPTDefaultValues(pt, nptDefaults);
             }
 
             $scope.isVistexHybrid = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined ? $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT : "0";
@@ -1735,7 +1663,7 @@
                 'isVistexHybrid': $scope.isVistexHybrid,
                 'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
                 'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
-                'DEFAULT': getTenderBasedDefaults(),
+                'DEFAULT': contractutil.getTenderBasedDefaults($scope.newPricingTable, $scope.isTenderContract),
                 'ISVISTEX': $scope.isVistex,
                 'CUSTSID': $scope.custId
             }
@@ -1769,34 +1697,6 @@
                     $scope.newPricingTable["TITLE"] = title;
                     $scope.clearPtTemplateIcons();
                 });
-        }
-
-        function updateNPTDefaultValues(pt) {
-            var nptDefaults = $scope.newPricingTable["_defaultAtrbs"];
-
-            //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
-            if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
-            if (!!nptDefaults[MRKT_SEG]) nptDefaults[MRKT_SEG].value = pt[MRKT_SEG].split(',');
-            if (!!nptDefaults[GEO]) {
-                if (pt[GEO].indexOf('[') > -1) {
-                    nptDefaults[GEO].value = pt[GEO];
-                } else {
-                    nptDefaults[GEO].value = pt[GEO].split(',');
-                }
-            }
-            if (!!nptDefaults["PAYOUT_BASED_ON"]) nptDefaults["PAYOUT_BASED_ON"].value = pt["PAYOUT_BASED_ON"];
-            if (!!nptDefaults["PROGRAM_PAYMENT"]) nptDefaults["PROGRAM_PAYMENT"].value = pt["PROGRAM_PAYMENT"];
-            if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
-            if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
-            if (!!nptDefaults["NUM_OF_DENSITY"]) nptDefaults["NUM_OF_DENSITY"].value = pt["NUM_OF_DENSITY"];
-            if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
-            if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
-            if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
-            if (!!nptDefaults["REBATE_OA_MAX_VOL"]) nptDefaults["REBATE_OA_MAX_VOL"].value = pt["REBATE_OA_MAX_VOL"];
-            if (!!nptDefaults["REBATE_OA_MAX_AMT"]) nptDefaults["REBATE_OA_MAX_AMT"].value = pt["REBATE_OA_MAX_AMT"];
-            if (!!nptDefaults["FLEX_ROW_TYPE"]) nptDefaults["FLEX_ROW_TYPE"].value = pt["FLEX_ROW_TYPE"];
-            //not sure if necessary, javascript pass by value/reference always throwing me off. :(
-            $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
 
         // **** PRICING TABLE Methods ****
@@ -2021,7 +1921,7 @@
                 // put on hold
                 if (!dataItem._behaviors) dataItem._behaviors = {};
                 if (!dataItem._behaviors.isReadOnly) dataItem._behaviors.isReadOnly = {};
-                $scope.$broadcast('onHold',dataItem);
+                $scope.$broadcast('onHold', dataItem);
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_EXCLDS"] = true;
                 //dataItem._behaviors.isReadOnly["DEAL_GRP_CMNT"] = true;
             }
@@ -2599,950 +2499,851 @@
             return result;
         }
 
-        function validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
-            if (baseCustDiv != null && custDiv != null) {
-                if (Object.keys(dictCustDivision).length == 1 && baseCustDiv.indexOf("/") !== -1 && custDiv.indexOf("/") !== -1
-                    && baseCustDiv.split("/").length == custDiv.split("/").length) {
-                    var divs = custDiv.split("/");
-                    for (var z = 0; z < divs.length; z++) {
-                        if (baseCustDiv.indexOf(divs[z]) == -1) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-                else { return false }
-            }
-            else {
-                return false;
-            }
-        }
-
-
         // **** SAVE CONTRACT Methods ****
         //
         $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
-       
-                var source = "";
-                var modCt = [];
-                var modPs = [];
-                var modPt = [];
-                var sData = [];
-                var gData = [];
-                var errs = {};
-                var needPrdVld = [];
 
-                var contractData = [];
-                var curPricingTableData = [];
+            var source = "";
+            var modCt = [];
+            var modPs = [];
+            var modPt = [];
+            var sData = [];
+            var gData = [];
+            var errs = {};
+            var needPrdVld = [];
 
-                // Contract and Pricing Strategies
-                if (dirtyContractOnly) {
-                    contractData = [$scope.contractData];
-                    for (var c = 0; c < contractData.length; c++) {
-                        var mCt = {};
-                        Object.keys(contractData[c]).forEach(function (key, index) {
-                            if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
-                        }, contractData[c]);
-                        modCt.push(mCt);
+            var contractData = [];
+            var curPricingTableData = [];
 
-                        if (!contractData[c]["PRC_ST"]) contractData[c]["PRC_ST"] = [];
-                        var item = contractData[c]["PRC_ST"];
-                        for (var p = 0; p < item.length; p++) {
-                            var mPs = {};
-                            Object.keys(item[p]).forEach(function (key, index) {
-                                if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
-                            }, item[p]);
-                            modPs.push(mPs);
+            // Contract and Pricing Strategies
+            if (dirtyContractOnly) {
+                contractData = [$scope.contractData];
+                for (var c = 0; c < contractData.length; c++) {
+                    var mCt = {};
+                    Object.keys(contractData[c]).forEach(function (key, index) {
+                        if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+                    }, contractData[c]);
+                    modCt.push(mCt);
 
-                            if (!item[p]["PRC_TBL"]) item[p]["PRC_TBL"] = [];
-                            var ptItem = item[p]["PRC_TBL"];
+                    if (!contractData[c]["PRC_ST"]) contractData[c]["PRC_ST"] = [];
+                    var item = contractData[c]["PRC_ST"];
+                    for (var p = 0; p < item.length; p++) {
+                        var mPs = {};
+                        Object.keys(item[p]).forEach(function (key, index) {
+                            if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+                        }, item[p]);
+                        modPs.push(mPs);
 
-                            for (var t = 0; t < ptItem.length; t++) {
-                                var mPt = {};
-                                Object.keys(ptItem[t]).forEach(function (key, index) {
-                                    if (key[0] !== '_') mPt[key] = this[key];
-                                }, ptItem[t]);
+                        if (!item[p]["PRC_TBL"]) item[p]["PRC_TBL"] = [];
+                        var ptItem = item[p]["PRC_TBL"];
 
-                                if (mPt.dirty !== undefined && mPt.dirty === true) {
-                                    modPt.push(mPt);
-                                    mPt.dirty = false;
-                                }
+                        for (var t = 0; t < ptItem.length; t++) {
+                            var mPt = {};
+                            Object.keys(ptItem[t]).forEach(function (key, index) {
+                                if (key[0] !== '_') mPt[key] = this[key];
+                            }, ptItem[t]);
+
+                            if (mPt.dirty !== undefined && mPt.dirty === true) {
+                                modPt.push(mPt);
+                                mPt.dirty = false;
                             }
                         }
                     }
                 }
+            }
+            var spreadDs;
+            if ($scope.spreadDs != undefined) {
+                spreadDs = $scope.spreadDs.data();
+            }
 
-                // Pricing Table Header
-                if (!!$scope.curPricingTable.DC_ID) curPricingTableData = [$scope.curPricingTable];
 
-                // Pricing Table Rows
-                if (stateName === "contract.manager.strategy" && !bypassLowerContract) {
-                    source = "PRC_TBL";
+            // Pricing Table Header
+            if (!!$scope.curPricingTable.DC_ID) curPricingTableData = [$scope.curPricingTable];
 
-                    if ($scope.spreadDs !== undefined) {
-                        // sync all detail data sources into main grid data source for a single save
-                        var data = cleanupData($scope.spreadDs._data);
-                        // TODO: Temp fix till sync function is updated
+            // Pricing Table Rows
+            if (stateName === "contract.manager.strategy" && !bypassLowerContract) {
+                source = "PRC_TBL";
 
-                        $scope.spreadDs.data(data);
-                        $scope.spreadDs.sync();
+                if ($scope.spreadDs !== undefined) {
+                    // sync all detail data sources into main grid data source for a single save
+                    var data = cleanupData($scope.spreadDs._data);
+                    // TODO: Temp fix till sync function is updated
 
+                    $scope.spreadDs.data(data);
+                    $scope.spreadDs.sync();
+
+                }
+
+                if (curPricingTableData[0].OBJ_SET_TYPE_CD != "DENSITY" && curPricingTableData[0].OBJ_SET_TYPE_CD != "FLEX" && curPricingTableData[0].OBJ_SET_TYPE_CD != "VOL_TIER")
+                    sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+                else {
+                    for (var index = 0; index < $scope.spreadDs.data().length; index++) {
+                        sData.push($scope.spreadDs.data()[index]);
+                        if ($scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"] != undefined && $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"])
+                            sData[index]["_dirty"] = $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"];
                     }
-           
-                    if (curPricingTableData[0].OBJ_SET_TYPE_CD != "DENSITY" && curPricingTableData[0].OBJ_SET_TYPE_CD != "FLEX" && curPricingTableData[0].OBJ_SET_TYPE_CD != "VOL_TIER")
-                        sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-                    else {
-                        for (var index = 0; index < $scope.spreadDs.data().length; index++) {
-                            sData.push($scope.spreadDs.data()[index]);
-                            if ($scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"] != undefined && $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"])
-                                sData[index]["_dirty"] = $scope.pricingTableData.PRC_TBL_ROW[index]["_dirty"];
+                }
+
+                // Remove any lingering blank rows from the data
+                if (!!sData) {
+                    for (var n = sData.length - 1; n >= 0; n--) {
+                        if (!sData[n].PS_WF_STG_CD) {
+                            sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
+                        }
+                        if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
+                            sData.splice(n, 1);
+                        }
+                        //For every save remove previous validation message
+                        if (sData[n]._behaviors) {
+                            if (sData[n]._behaviors.validMsg) sData[n]._behaviors.validMsg = {};
+                            if (sData[n]._behaviors.isError) sData[n]._behaviors.isError = {};
+                        }
+                        //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
+                        if (sData[n].QLTR_PROJECT != undefined && sData[n].QLTR_PROJECT != null) {
+                            sData[n].QLTR_PROJECT = sData[n].QLTR_PROJECT.toUpperCase();
+                        }
+                        //Removes extra space from the value string.
+                        sData[n].GEO_COMBINED = $scope.spreadDs._data[n].GEO_COMBINED;
+                        sData[n].QLTR_BID_GEO = $scope.spreadDs._data[n].QLTR_BID_GEO;
+                        if (sData[n].GEO_COMBINED != undefined && sData[n].GEO_COMBINED != null && sData[n].GEO_COMBINED.toString().contains(' ')) {
+                            sData[n].GEO_COMBINED = sData[n].GEO_COMBINED.toString().split(',').map(function (value) { return value.trim(); }).join(',');
+                        }
+                        if (sData[n].QLTR_BID_GEO != undefined && sData[n].QLTR_BID_GEO != null && sData[n].QLTR_BID_GEO.toString().contains(' ')) {
+                            sData[n].QLTR_BID_GEO = sData[n].QLTR_BID_GEO.toString().split(',').map(function (value) { return value.trim(); }).join(',');
+                        }
+                    }
+                }
+                $scope.$broadcast('syncDs');
+
+                // Pricing Table Row
+                if (curPricingTableData.length > 0 && sData != undefined) {
+                    //validate settlement partner for PTE
+                    sData = $scope.validateSettlementPartner(sData);
+                    //validate OAV&OAD partner for PTE
+                    sData = $scope.validateOverArching(sData);
+                    sData = $scope.validateHybridFields(sData);
+                    //validate settlement level for PTE
+                    //sData = $scope.validateSettlementLevel(sData);
+                    //validate Flex product overlap for PTE
+                    $scope.OVLPFlexPdtPTRUSRPRDError = false;
+                    sData = $scope.validateOVLPFlexProduct(sData);
+                    //validate Flex row type for PTE
+                    sData = $scope.validateFlexRowType(sData);
+                    //validate Market Segment
+                    sData = contractutil.validateMarketSegment(sData, $scope.wipData, spreadDs);
+                    //validate Flex Rule Engine
+                    sData = contractutil.validateFlexRules(sData, $scope.curPricingTable, $scope.wipData);
+                    //validate Marketing KIT products
+                    sData = $scope.validateMarketingKIT(sData);
+                    //validate density bands
+                    sData = $scope.validateDensityBand(sData);
+
+
+
+                    // find all date fields
+                    var dateFields = [];
+                    var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+                    for (var key in fields) {
+                        if (fields.hasOwnProperty(key)) {
+                            if (typeof fields[key] !== 'function') {
+                                if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
+                            }
                         }
                     }
 
-                    // Remove any lingering blank rows from the data
-                    if (!!sData) {
-                        for (var n = sData.length - 1; n >= 0; n--) {
-                            if (!sData[n].PS_WF_STG_CD) {
-                                sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
-                            }
-                            if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
-                                sData.splice(n, 1);
-                            }
-                            //For every save remove previous validation message
-                            if (sData[n]._behaviors) {
-                                if (sData[n]._behaviors.validMsg) sData[n]._behaviors.validMsg = {};
-                                if (sData[n]._behaviors.isError) sData[n]._behaviors.isError = {};
-                            }
-                            //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
-                            if (sData[n].QLTR_PROJECT != undefined && sData[n].QLTR_PROJECT != null) {
-                                sData[n].QLTR_PROJECT = sData[n].QLTR_PROJECT.toUpperCase();
-                            }
-                            //Removes extra space from the value string.
-                            sData[n].GEO_COMBINED = $scope.spreadDs._data[n].GEO_COMBINED;
-                            sData[n].QLTR_BID_GEO = $scope.spreadDs._data[n].QLTR_BID_GEO;
-                            if (sData[n].GEO_COMBINED != undefined && sData[n].GEO_COMBINED != null && sData[n].GEO_COMBINED.toString().contains(' ')) {
-                                sData[n].GEO_COMBINED = sData[n].GEO_COMBINED.toString().split(',').map(function (value) { return value.trim(); }).join(',');
-                            }
-                            if (sData[n].QLTR_BID_GEO != undefined && sData[n].QLTR_BID_GEO != null && sData[n].QLTR_BID_GEO.toString().contains(' ')) {
-                                sData[n].QLTR_BID_GEO = sData[n].QLTR_BID_GEO.toString().split(',').map(function (value) { return value.trim(); }).join(',');
-                            }
-                        }
-                    }
-                    $scope.$broadcast('syncDs');
 
-                    // Pricing Table Row
-                    if (curPricingTableData.length > 0 && sData != undefined) {
-                        //validate settlement partner for PTE
-                        sData = $scope.validateSettlementPartner(sData);
-                        //validate OAV&OAD partner for PTE
-                        sData = $scope.validateOverArching(sData);
-                        sData = $scope.validateHybridFields(sData);
-                        //validate settlement level for PTE
-                        //sData = $scope.validateSettlementLevel(sData);
-                        //validate Flex product overlap for PTE
-                        $scope.OVLPFlexPdtPTRUSRPRDError = false;
-                        sData = $scope.validateOVLPFlexProduct(sData);
-                        //validate Flex row type for PTE
-                        sData = $scope.validateFlexRowType(sData);
-                        //validate Market Segment
-                        sData = $scope.validateMarketSegment(sData);
-                        //validate Flex Rule Engine
-                        sData = $scope.validateFlexRules(sData);
-                        //validate Marketing KIT products
-                        sData = $scope.validateMarketingKIT(sData);
-                        //validate density bands
-                        sData = $scope.validateDensityBand(sData);
+                    //
+                    // This is a temporary fix to mock-stop users from mixing Tender with non-Tender deals.  Once the Stablization release happens, we can remove this check.
+                    //
+                    var hasTender = false;
+                    var hasNonTender = false;
+                    var dictRebateType = {};
+                    var dictPayoutBasedon = {};
+                    var dictCustDivision = {};
+                    var dictPayoutBasedon = {};
+                    var dictGeoCombined = {};
+                    var dictPeriodProfile = {};
+                    var dictResetPerPeriod = {};
+                    //var dictArSettlement = {};
+                    var dictProgramPayment = {};
+                    var dictOverarchingVolume = {};
+                    var dictOverarchingDollar = {};
+                    var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
 
+                    // Check if the rows have duplicate products
+                    var duplicateProductRows = isHybridPS ? hasDuplicateProduct(sData) : {};
 
-
-                        // find all date fields
-                        var dateFields = [];
-                        var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
-                        for (var key in fields) {
-                            if (fields.hasOwnProperty(key)) {
-                                if (typeof fields[key] !== 'function') {
-                                    if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
-                                }
-                            }
-                        }
-
-
-                        //
-                        // This is a temporary fix to mock-stop users from mixing Tender with non-Tender deals.  Once the Stablization release happens, we can remove this check.
-                        //
-                        var hasTender = false;
-                        var hasNonTender = false;
-                        var dictRebateType = {};
-                        var dictPayoutBasedon = {};
-                        var dictCustDivision = {};
-                        var dictPayoutBasedon = {};
-                        var dictGeoCombined = {};
-                        var dictPeriodProfile = {};
-                        var dictResetPerPeriod = {};
-                        //var dictArSettlement = {};
-                        var dictProgramPayment = {};
-                        var dictOverarchingVolume = {};
-                        var dictOverarchingDollar = {};
-                        var isHybridPS = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
-
-                        // Check if the rows have duplicate products
-                        var duplicateProductRows = isHybridPS ? hasDuplicateProduct(sData) : {};
-
-                        var errDeals = [];
-                        if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
-                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER"
-                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
-                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
-                            for (var s = 0; s < sData.length; s++) {
-                                if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
-                                if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
-                                if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "FLEX") || sData[s].TIER_NBR === 1) {
-                                    if (sData[s]["REBATE_TYPE"] === "TENDER") {
-                                        hasTender = true;
-                                    } else {
-                                        hasNonTender = true;
-                                    }
-                                    if (isHybridPS) {
-                                        dictRebateType[sData[s]["REBATE_TYPE"]] = s;
-                                        dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
-                                        var isCustDivValid = validateCustomerDivision(dictCustDivision, sData[0]["CUST_ACCNT_DIV"], sData[s]["CUST_ACCNT_DIV"]);
-                                        if (isCustDivValid) {
-                                            dictCustDivision[sData[0]["CUST_ACCNT_DIV"]] = s;
-                                        }
-                                        else {
-                                            dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
-                                        }
-                                        dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
-                                        if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
-                                            dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
-                                        }
-                                        dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
-                                        dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
-
-                                        // The next two values if left blank can come in as either null or "", make them one pattern.
-                                        if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
-                                        else dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
-
-                                        if (sData[s]["REBATE_OA_MAX_VOL"] == null) dictOverarchingVolume[""] = s;
-                                        else dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
-                                    }
-                                }
-                            }
-                            if (errDeals.length > 0) {
-                                for (var t = 0; t < errDeals.length; t++) {
-                                    var el = sData[errDeals[t]];
-                                    if (!el._behaviors) el._behaviors = {};
-                                    if (!el._behaviors.isError) el._behaviors.isError = {};
-                                    if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
-                                    if (hasTender && hasNonTender) {
-                                        el._behaviors.isError["REBATE_TYPE"] = true;
-                                        el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table (" + $scope.ptTitle + ").";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
-                                    }
-
-                                    // Run through all PTR items and bubble up errors for a server side save block.
-                                    // TODO: Implement only hybrids/Flex attributes list as part of this blocking since we don't want to also block potential Mid Tier side issues
-                                    // See "$scope.validateHybridFields" for list of fields to add for this check
-                                    for (var e = 0; e < Object.keys(el._behaviors.validMsg).length; e++) {
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
-                                        if (Object.keys(el._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(el._behaviors.validMsg)[e]) >= 0) { 
-                                            if (!errs.PRC_TBL_ROW.contains(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])) {
-                                                errs.PRC_TBL_ROW.push(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])
-                                            }
-                                        }
-                                    }
-
-                                    if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).contains("Backend"))) {
-                                        el._behaviors.isError["PROGRAM_PAYMENT"] = true;
-                                        el._behaviors.validMsg["PROGRAM_PAYMENT"] = "Hybrid Pricing Strategy Deals must be Backend only.";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
-                                    }
-                                    if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
-                                        el._behaviors.isError["PTR_USER_PRD"] = true;
-                                        el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
-                                            duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicated within rows " + duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PTR_USER_PRD"]);
-                                    }
-                                }
-                            }
-                        }
-
-
-                        var validated_DC_Id = [];
-                        var invalidFlexDate = $scope.validateFlexDate(sData);
-
+                    var errDeals = [];
+                    if (curPricingTableData[0].OBJ_SET_TYPE_CD === "ECAP" || curPricingTableData[0].OBJ_SET_TYPE_CD === "KIT"
+                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "PROGRAM" || curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER"
+                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
+                        || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
                         for (var s = 0; s < sData.length; s++) {
-                            //Adding settlment partner error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                            }
-
-                            //Adding Market Segment error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['MRKT_SEG']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["MRKT_SEG"]);
-                            }
-                            //Adding Overarching  error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
-                            }
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_VOL']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
-                            }
-                            //Adding settlment level error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['AR_SETTLEMENT_LVL']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                            }
-                            //Adding FLEX overlap product error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
-                            }
-
-                            //Adding FLEX Row type error into err object in PTE
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['FLEX_ROW_TYPE']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
-                            }
-
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['DENSITY_BAND']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["DENSITY_BAND"]);
-                            }
-
-                            if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PAYOUT_BASED_ON']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PAYOUT_BASED_ON"]);
-                            }
-
-                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
-                                || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
-                                // Set attribute Keys for adding dimensions
-                                let rateKey;
-                                let endKey;
-                                let strtKey;
-                                if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
-                                    rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL";
+                            if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
+                            if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
+                            if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "FLEX") || sData[s].TIER_NBR === 1) {
+                                if (sData[s]["REBATE_TYPE"] === "TENDER") {
+                                    hasTender = true;
+                                } else {
+                                    hasNonTender = true;
                                 }
-                                else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
-                                    rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV";
+                                if (isHybridPS) {
+                                    dictRebateType[sData[s]["REBATE_TYPE"]] = s;
+                                    dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
+                                    var isCustDivValid = contractutil.validateCustomerDivision(dictCustDivision, sData[0]["CUST_ACCNT_DIV"], sData[s]["CUST_ACCNT_DIV"]);
+                                    if (isCustDivValid) {
+                                        dictCustDivision[sData[0]["CUST_ACCNT_DIV"]] = s;
+                                    }
+                                    else {
+                                        dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                                    }
+                                    dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
+                                    if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
+                                        dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                                    }
+                                    dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
+                                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
+
+                                    // The next two values if left blank can come in as either null or "", make them one pattern.
+                                    if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
+                                    else dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
+
+                                    if (sData[s]["REBATE_OA_MAX_VOL"] == null) dictOverarchingVolume[""] = s;
+                                    else dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
                                 }
-                                else { // DENSITY
-                                    rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
+                            }
+                        }
+                        if (errDeals.length > 0) {
+                            for (var t = 0; t < errDeals.length; t++) {
+                                var el = sData[errDeals[t]];
+                                if (!el._behaviors) el._behaviors = {};
+                                if (!el._behaviors.isError) el._behaviors.isError = {};
+                                if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
+                                if (hasTender && hasNonTender) {
+                                    el._behaviors.isError["REBATE_TYPE"] = true;
+                                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table (" + $scope.ptTitle + ").";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["REBATE_TYPE"]);
                                 }
 
-                                // If Vol Tier or Flex, take the schedule as Ints, otherwise, do a float convert
-                                if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
-                                    // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                                    if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
-                                        sData[s][endKey] = parseInt(sData[s][endKey].toString().replace(/,/g, "") || 0);
-                                    }
-                                    if (sData[s][rateKey] === null) {
-                                        sData[s][rateKey] = parseInt(0);
-                                    }
-                                    if (sData[s][strtKey] === null) {
-                                        sData[s][strtKey] = parseInt(0);
-                                    }
-                                }
-                                else { // curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY"
-                                    // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
-                                    if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
-                                        sData[s][endKey] = parseFloat(sData[s][endKey].toString().replace(/,/g, "") || 0);
-                                    }
-                                    if (sData[s][rateKey] === null || sData[s][rateKey] === "" || isNaN(sData[s][rateKey])) {
-                                        sData[s][rateKey] = parseFloat(0);
-                                    }
-                                    if ((curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY" && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") && (sData[s][endKey] === null || sData[s][endKey] === "" || isNaN(sData[s][endKey]))) {
-                                        sData[s][endKey] = parseFloat(0);
-                                    }
-                                    if (sData[s][strtKey] === null) {
-                                        sData[s][strtKey] = parseFloat(0);
+                                // Run through all PTR items and bubble up errors for a server side save block.
+                                // TODO: Implement only hybrids/Flex attributes list as part of this blocking since we don't want to also block potential Mid Tier side issues
+                                // See "$scope.validateHybridFields" for list of fields to add for this check
+                                for (var e = 0; e < Object.keys(el._behaviors.validMsg).length; e++) {
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
+                                    if (Object.keys(el._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(el._behaviors.validMsg)[e]) >= 0) {
+                                        if (!errs.PRC_TBL_ROW.contains(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])) {
+                                            errs.PRC_TBL_ROW.push(el._behaviors.validMsg[Object.keys(el._behaviors.validMsg)[e]])
+                                        }
                                     }
                                 }
 
+                                if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).contains("Backend"))) {
+                                    el._behaviors.isError["PROGRAM_PAYMENT"] = true;
+                                    el._behaviors.validMsg["PROGRAM_PAYMENT"] = "Hybrid Pricing Strategy Deals must be Backend only.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PROGRAM_PAYMENT"]);
+                                }
+                                if (isHybridPS && duplicateProductRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
+                                    el._behaviors.isError["PTR_USER_PRD"] = true;
+                                    el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
+                                        duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicated within rows " + duplicateProductRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push(el._behaviors.validMsg["PTR_USER_PRD"]);
+                                }
+                            }
+                        }
+                    }
+
+
+                    var validated_DC_Id = [];
+                    var invalidFlexDate = contractutil.validateFlexDate(sData, $scope.curPricingTable, $scope.wipData);
+
+                    for (var s = 0; s < sData.length; s++) {
+                        //Adding settlment partner error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
+
+                        //Adding Market Segment error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['MRKT_SEG']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["MRKT_SEG"]);
+                        }
+                        //Adding Overarching  error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_AMT']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
+                        }
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['REBATE_OA_MAX_VOL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                        }
+                        //Adding settlment level error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['AR_SETTLEMENT_LVL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+                        //Adding FLEX overlap product error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PTR_USER_PRD"]);
+                        }
+
+                        //Adding FLEX Row type error into err object in PTE
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['FLEX_ROW_TYPE']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["FLEX_ROW_TYPE"]);
+                        }
+
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['DENSITY_BAND']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["DENSITY_BAND"]);
+                        }
+
+                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['PAYOUT_BASED_ON']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["PAYOUT_BASED_ON"]);
+                        }
+
+                        if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
+                            || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
+                            // Set attribute Keys for adding dimensions
+                            let rateKey;
+                            let endKey;
+                            let strtKey;
+                            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                                rateKey = "RATE"; endKey = "END_VOL"; strtKey = "STRT_VOL";
+                            }
+                            else if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
+                                rateKey = "INCENTIVE_RATE"; endKey = "END_REV"; strtKey = "STRT_REV";
+                            }
+                            else { // DENSITY
+                                rateKey = "DENSITY_RATE"; endKey = "END_PB"; strtKey = "STRT_PB";
                             }
 
-                            if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
-                            sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
-                            sData[s].dc_type = "PRC_TBL_ROW";
-                            sData[s].dc_parent_type = curPricingTableData[0].dc_type;
-                            sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
-
-                            if (util.isInvalidDate(sData[s].START_DT)) sData[s].START_DT = $scope.contractData["START_DT"];
-                            if (util.isInvalidDate(sData[s].END_DT)) sData[s].END_DT = $scope.contractData["END_DT"];
-
-                            // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
-                            sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;
-                            if (sData[s].DC_ID < 0) { // Only read from contract if it is a new row - propogates to deals but doesn't save at row
-                                sData[s].CONTRACT_TYPE = $scope.contractData.CONTRACT_TYPE;
+                            // If Vol Tier or Flex, take the schedule as Ints, otherwise, do a float convert
+                            if (curPricingTableData[0].OBJ_SET_TYPE_CD === "VOL_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX") {
+                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                                if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
+                                    sData[s][endKey] = parseInt(sData[s][endKey].toString().replace(/,/g, "") || 0);
+                                }
+                                if (sData[s][rateKey] === null) {
+                                    sData[s][rateKey] = parseInt(0);
+                                }
+                                if (sData[s][strtKey] === null) {
+                                    sData[s][strtKey] = parseInt(0);
+                                }
+                            }
+                            else { // curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER" || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY"
+                                // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Now we have to turn them back before saving.
+                                if (sData[s][endKey] != null && sData[s][endKey] != undefined && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") {
+                                    sData[s][endKey] = parseFloat(sData[s][endKey].toString().replace(/,/g, "") || 0);
+                                }
+                                if (sData[s][rateKey] === null || sData[s][rateKey] === "" || isNaN(sData[s][rateKey])) {
+                                    sData[s][rateKey] = parseFloat(0);
+                                }
+                                if ((curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY" && sData[s][endKey].toString().toUpperCase() != "UNLIMITED") && (sData[s][endKey] === null || sData[s][endKey] === "" || isNaN(sData[s][endKey]))) {
+                                    sData[s][endKey] = parseFloat(0);
+                                }
+                                if (sData[s][strtKey] === null) {
+                                    sData[s][strtKey] = parseFloat(0);
+                                }
                             }
 
-                            // fix date formats
-                            for (var d = 0; d < dateFields.length; d++) {
-                                sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                                if (sData[s][dateFields[d]] === "Invalid date") {
-                                    if (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT") {//(isProgramNRE === true || (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT"))
+                        }
+
+                        if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
+                        sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
+                        sData[s].dc_type = "PRC_TBL_ROW";
+                        sData[s].dc_parent_type = curPricingTableData[0].dc_type;
+                        sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+
+                        if (util.isInvalidDate(sData[s].START_DT)) sData[s].START_DT = $scope.contractData["START_DT"];
+                        if (util.isInvalidDate(sData[s].END_DT)) sData[s].END_DT = $scope.contractData["END_DT"];
+
+                        // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
+                        sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;
+                        if (sData[s].DC_ID < 0) { // Only read from contract if it is a new row - propogates to deals but doesn't save at row
+                            sData[s].CONTRACT_TYPE = $scope.contractData.CONTRACT_TYPE;
+                        }
+
+                        // fix date formats
+                        for (var d = 0; d < dateFields.length; d++) {
+                            sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                            if (sData[s][dateFields[d]] === "Invalid date") {
+                                if (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT") {//(isProgramNRE === true || (dateFields[d] !== "OEM_PLTFRM_LNCH_DT" && dateFields[d] !== "OEM_PLTFRM_EOL_DT"))
+                                    if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                    if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                    if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                    sData[s]._behaviors.isError[dateFields[d]] = true;
+                                    sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
+                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                    errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
+                                }
+                            } else {
+                                // check dates against contract
+                                if (dateFields[d] === "START_DT") {
+                                    var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY");
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+                                    //Delete if there is any previous Error  messages
+                                    if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['START_DT']) {
+                                        delete sData[s]._behaviors.isError['START_DT'];
+                                        delete sData[s]._behaviors.validMsg['START_DT'];
+                                    }
+                                    // check dates against contract - Tender contracts don't observe start/end date within contract.
+                                    if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError[dateFields[d]] = true;
-                                        sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
+                                        sData[s]._behaviors.isError['START_DT'] = true;
+                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
+                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                     }
-                                } else {
-                                    // check dates against contract
-                                    if (dateFields[d] === "START_DT") {
-                                        var tblStartDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY"); 
-                                        var endDate = moment($scope.contractData.END_DT).format("MM/DD/YYYY"); 
-                                        var isTenderFlag = "0";
-                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-                                        //Delete if there is any previous Error  messages
-                                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['START_DT']) {
-                                            delete sData[s]._behaviors.isError['START_DT'];
-                                            delete sData[s]._behaviors.validMsg['START_DT'];
+
+                                    //Validating Votier deal Dates
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["START_DT"]).isSame(tblStartDate))) {
+                                            sData[FirstTire]["START_DT"] = tblStartDate;
                                         }
-                                        // check dates against contract - Tender contracts don't observe start/end date within contract.
-                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
+
+                                        if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
                                             if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                            sData[s]._behaviors.isError['START_DT'] = true;
-                                            sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                                            sData[FirstTire]._behaviors.isError['START_DT'] = true;
+                                            sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                             errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                                         }
-
-                                        //Validating Votier deal Dates
-                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
-                                            var FirstTire = s + 1 - sData[s]["TIER_NBR"];
-                                            if (!(moment(sData[FirstTire]["START_DT"]).isSame(tblStartDate))) {
-                                                sData[FirstTire]["START_DT"] = tblStartDate;
-                                            }
-
-                                            if (moment(tblStartDate).isAfter(endDate) && isTenderFlag !== "1") {
-                                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[FirstTire]._behaviors.isError['START_DT'] = true;
-                                                sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
-                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
-                                            }
-                                        }
-
-                                        //Validating Flex Accrual Start Dates
-                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                                            //Delete if there is any previous Error  messages
-                                            if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                                                angular.forEach(invalidFlexDate, (item) => {
-                                                    if (!$scope.restrictGroupFlexOverlap) {
-                                                        $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
-                                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                        errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                        
                                     }
-                                    if (dateFields[d] === "END_DT") {
-                                        var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY"); 
-                                        var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY"); 
-                                        var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY"); 
-                                        var isTenderFlag = "0";
-                                        if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
-                                        if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['END_DT']) {
-                                            delete sData[s]._behaviors.isError['END_DT'];
-                                            delete sData[s]._behaviors.validMsg['END_DT'];
+                                    //Validating Flex Accrual Start Dates
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                                        //Delete if there is any previous Error  messages
+                                        if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                                            angular.forEach(invalidFlexDate, (item) => {
+                                                if (!$scope.restrictGroupFlexOverlap) {
+                                                    item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', $scope.restrictGroupFlexOverlap);
+                                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                                    errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
+                                                }
+                                            });
                                         }
-
-
-                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
-                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                            sData[s]._behaviors.isError['END_DT'] = true;
-                                            sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")"; 
-                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")"); 
-                                        }
-                                        
-                                        if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
-
-
-                                            var FirstTire = s + 1 - sData[s]["TIER_NBR"];
-                                            if (!(moment(sData[FirstTire]["END_DT"]).isSame(tblEndDate))) {
-                                                sData[FirstTire]["END_DT"] = tblEndDate;
-                                            }
-
-
-                                            if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
-                                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                                sData[FirstTire]._behaviors.isError['END_DT'] = true;
-                                                sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")"; 
-                                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                                errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")"); 
-                                            }
-
-                                        }
-                                      
                                     }
+
                                 }
+                                if (dateFields[d] === "END_DT") {
+                                    var tblStartDate = moment(sData[s][dateFields[d - 1]]).format("MM/DD/YYYY");
+                                    var tblEndDate = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                                    var startDate = moment($scope.contractData.START_DT).format("MM/DD/YYYY");
+                                    var isTenderFlag = "0";
+                                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
 
-                                // PTR Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
-                                // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
-                                var dataHyb = sData.filter(obj => obj.AR_SETTLEMENT_LVL != null);
-                                var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(dataHyb.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
-                                if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
-                                    && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
-                                    sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                    sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                                }
-                            }
+                                    if (sData[s]._behaviors.isError && sData[s]._behaviors.isError['END_DT']) {
+                                        delete sData[s]._behaviors.isError['END_DT'];
+                                        delete sData[s]._behaviors.validMsg['END_DT'];
+                                    }
 
-                            if (forceValidation) {
-                                // check for rows that need to be translated
-                                // TODO:  merged cells are not updated with valid JSON, hence the work around to check for the unique DC_ID's
-                                var isValidatedRow = validated_DC_Id.filter(function (x) {
-                                    return x == sData[s].DC_ID;
-                                }).length > 0;
 
-                                if (!isValidatedRow) {
-                                    validated_DC_Id.push(sData[s].DC_ID);
-                                    if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "") ||
-                                        (!(!sData[s].PTR_SYS_INVLD_PRD || sData[s].PTR_SYS_PRD === ""))) {
+                                    if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1" && sData[s]["OBJ_SET_TYPE_CD"] != "VOL_TIER") {
                                         if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
-                                        if (sData[s].OBJ_SET_TYPE_CD == "DENSITY") {
-                                            sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run. Please ensure you are using SSD products for Density deals.";
-                                        }
-                                        else {
-                                            sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
-                                        }
-                                        needPrdVld.push({
-                                            "row": s + 1,
-                                            "DC_ID": sData[s].DC_ID,
-                                            "PTR_USER_PRD": sData[s].PTR_USER_PRD
-                                        });
+                                        sData[s]._behaviors.isError['END_DT'] = true;
+                                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                     }
-                                }
-                            }
-                        }
 
-                        $scope.spreadDsDataCopy = angular.copy(sData);
-                        // We should de-normalize pricing table row only when we are hitting MT
-                        // If there are errors don't de-normalize, else PricingTableRow and spreadSheet data will be different
-                        if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
-                            sData = $scope.deNormalizeData(util.deepClone(sData));
-                        }
-                    }
-                }
+                                    if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
 
-                // WIP Deals
-                if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
-                    source = "WIP_DEAL";
-                    gData = $scope.wipData;
-                    var uData = $scope.LookBackPeriod;
-                    var isTenderFlag = "0";
-                    if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
-                    var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
-                    var dictGroupType = {};
-                    var dictWipOverMaxVol = {};
-                    var dictWipOverMaxAmt = {};
 
-                    // Wip Deal
-                    if (gData !== undefined && gData !== null) {
-                        gData = $scope.ValidateEndCustomer(gData, "SaveAndValidate");
-                        //validate settlement parter for DE
-                        gData = $scope.validateSettlementPartner(gData);
-                        //validate OAV & OAD parter for DE
-                        gData = $scope.validateOverArching(gData);
-                        gData = $scope.validateHybridFields(gData);
-                        //validate settlement level for DE
-                        gData = $scope.validateSettlementLevel(gData);
-                        //validate flex overlap products for DE
-                        $scope.OVLPFlexPdtPTRUSRPRDError = false;
-                        gData = $scope.validateOVLPFlexProduct(gData);
-                        //validate Flex Row Type for DE
-                        gData = $scope.validateFlexRowType(gData);
-                        //validate Market Segment
-                        gData = $scope.validateMarketSegment(gData);
+                                        var FirstTire = s + 1 - sData[s]["TIER_NBR"];
+                                        if (!(moment(sData[FirstTire]["END_DT"]).isSame(tblEndDate))) {
+                                            sData[FirstTire]["END_DT"] = tblEndDate;
+                                        }
 
-                        var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
-                        var invalidFlexDate = $scope.validateFlexDate(gData);
 
-                        for (var i = 0; i < gData.length; i++) {
-                            if ((gData[i]["USER_AVG_RPU"] == null || gData[i]["USER_AVG_RPU"] == "")
-                                && (gData[i]["USER_MAX_RPU"] == null || gData[i]["USER_MAX_RPU"] == "")
-                                && gData[i]["RPU_OVERRIDE_CMNT"] != null && gData[i]["RPU_OVERRIDE_CMNT"] !== "") {
-                                gData[i]["RPU_OVERRIDE_CMNT"] = "";
-                            }
-                            // Adding settlment partner error into err object in DE
-                            if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
-                            }
-
-                            //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
-                            gData[i].QLTR_PROJECT = gData[i].QLTR_PROJECT.toUpperCase();
-
-                            if (gData[i]._behaviors.isError['MRKT_SEG']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["MRKT_SEG"]);
-                            }
-
-                            // This forces all items onto the save side errors checking.  Need to scale it to only the fields we care about.
-                            for (var e = 0; e < Object.keys(gData[i]._behaviors.validMsg).length; e++) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
-                                if (Object.keys(gData[i]._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(gData[i]._behaviors.validMsg)[e]) >= 0) { 
-                                    if (!errs.PRC_TBL_ROW.contains(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])) {
-                                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])
-                                    }
-                                }
-                            }
-
-                            // Adding Overarching error into err object in DE
-                            if (gData[i]._behaviors.isError['REBATE_OA_MAX_VOL']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
-                            }
-                            if (gData[i]._behaviors.isError['REBATE_OA_MAX_AMT']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
-                            }
-                            // Adding settlment level error into err object in DE
-                            if (gData[i]._behaviors.isError['AR_SETTLEMENT_LVL']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
-                            }
-                            // Adding FLEX overlap Product error into err object in DE
-                            if (gData[i]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
-                            }
-
-                            // Adding FLEX Row Type Product error into err object in DE
-                            if (gData[i]._behaviors.isError['FLEX_ROW_TYPE']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["FLEX_ROW_TYPE"]);
-                            }
-
-                            if (gData[i]._behaviors.isError['CONSUMPTION_TYPE']) {
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["CONSUMPTION_TYPE"]);
-                            }
-                            
-                            // TODO... this should probably mimic Pricing Table Rows
-                            if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
-
-                            // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
-                            // ^ very informative Phil... :)  Here we convert the data of Array format used by Kendo to a string format expected by our middle tier 
-                            if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
-                            if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
-                            if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
-
-                            if (($scope.curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(gData[i].TRKR_NBR).length > 0) && isTenderFlag !== "1") {
-                                if (gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[gData[i].DC_ID]) {
-                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                    gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased after approval";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Lookback Period can only be increased after approval");
-                                }
-                            }
-
-                            if (gData[i].CONSUMPTION_COUNTRY_REGION != null && gData[i].CONSUMPTION_COUNTRY_REGION != undefined && gData[i].CONSUMPTION_COUNTRY_REGION != "") {
-                                if (gData[i].CONSUMPTION_CUST_RPT_GEO != null && gData[i].CONSUMPTION_CUST_RPT_GEO != undefined && gData[i].CONSUMPTION_CUST_RPT_GEO != "") {
-                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                    gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
-                                    gData[i]._behaviors.isError['CONSUMPTION_COUNTRY_REGION'] = true;
-                                    gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY_REGION'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both");
-                                }
-                            }
-
-                            // check dates against contract - Tender contracts don't observe start/end date within contract.
-                            if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
-                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                gData[i]._behaviors.isError['START_DT'] = true;
-                                gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")"; 
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")"); 
-                            }
-
-                            // check dates against contract - Tender contracts don't observe start/end date within contract.
-                            if (moment(gData[i]["END_DT"]).isBefore($scope.contractData.START_DT) && isTenderFlag !== "1") {
-                                if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
-                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                    gData[i]._behaviors.isError['END_DT'] = true;
-                                    gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")"; 
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")"); 
-                                }
-                            }
-
-                            // check Deal dates 
-                            if (moment(gData[i]["START_DT"]).isAfter(moment(gData[i]["END_DT"])) && isTenderFlag !== "1") {
-                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                gData[i]._behaviors.isError['START_DT'] = true;
-                                gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
-                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
-                            }
-
-                            if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                                //Delete if there is any previous Error  messages
-                                if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                                    angular.forEach(invalidFlexDate, (item) => {
-                                        if (!$scope.restrictGroupFlexOverlap) {
-                                            $scope.setFlexBehaviors(item, 'START_DT', 'invalidDate');
+                                        if (moment(tblEndDate).isBefore(startDate) && isTenderFlag !== "1") {
+                                            if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                            if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                            if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                            sData[FirstTire]._behaviors.isError['END_DT'] = true;
+                                            sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                                         }
-                                    });
-                                }
-                            }
 
-                            if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
-                                if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["END_CUSTOMER_RETAIL"]);
-                                }
-                                else {
-                                    if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
-                                        delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
-                                        delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
                                     }
-                                    gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString();
+
                                 }
                             }
 
-                            var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
-                            for (var key in fields) {
-                                if (fields.hasOwnProperty(key)) {
-                                    if (fields[key].type === "date") {
-                                        gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
-                                    }
-                                }
-                            }
-
-                            // This is silly hard-coding because these are not in our template and they are used by DSA only - set them to proper dates.
-                            if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY"); 
-                            if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY"); 
-                            if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY"); 
-                            if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY"); 
-
-                            // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
-                            if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                                if (Object.keys(dictGroupType).length == 0) {
-                                    gData.map(function (data, index) {
-                                        dictGroupType[data["DEAL_COMB_TYPE"]] = index;
-                                    });
-                                }
-
-                                if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX" && $scope.restrictGroupFlexOverlap) {
-                                    $scope.clearValidation(gData, "DEAL_COMB_TYPE");
-                                    let objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-                                    let filterData = _.uniq(_.sortBy(gData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-
-                                    let filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
-                                    if (filteredGroupTypeRestriction.length > 0) {
-                                        angular.forEach(filteredGroupTypeRestriction, (item) => {
-                                            if (!item._behaviors.isError) item._behaviors.isError = {};
-                                            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-                                            item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                                            item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
-                                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                            errs.PRC_TBL_ROW.push(item._behaviors.validMsg['DEAL_COMB_TYPE']);
-                                        });
-                                    }
-                                }
-                                else if (Object.keys(dictGroupType).length > 1) {
-                                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                                    gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                                    gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
-                                }
-
-                            }
-
-                            // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                            // PTR Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
                             // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
-                            if (hasInvalidArSettlementForHybirdDeals == false && gData[i].HAS_TRACKER == "1" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
-                                && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
-                                gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
-                                gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            var dataHyb = sData.filter(obj => obj.AR_SETTLEMENT_LVL != null);
+                            var hasInvalidArSettlementForHybirdDealsPtr = isHybridPS && $.unique(dataHyb.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                            if (hasInvalidArSettlementForHybirdDealsPtr == false && sData[s].HAS_TRACKER == "1" && sData[s]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                                && editableArSettlementLevelAfterApproval.indexOf(sData[s].AR_SETTLEMENT_LVL) < 0) {
+                                sData[s]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                                sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
                             }
+                        }
 
-                            // Correct Deal Tab Rate Removals - prevent blanking field, set to 0
-                            // Corrected on schdule editor instead, but this is code to walk through an object if eeded later
-                            //if (gData[i]["OBJ_SET_TYPE_CD"] == "REV_TIER") {
-                            //    if (gData[i].INCENTIVE_RATE !== null) {
-                            //        var keys = Object.keys(gData[i].INCENTIVE_RATE);
-                            //        for (let key of keys) {
-                            //            if (gData[i].INCENTIVE_RATE[key] === null || gData[i].INCENTIVE_RATE[key] === '') {
-                            //                gData[i].INCENTIVE_RATE[key] = '0.00';
-                            //            }
-                            //        };
-                            //    }
-                            //}
+                        if (forceValidation) {
+                            // check for rows that need to be translated
+                            // TODO:  merged cells are not updated with valid JSON, hence the work around to check for the unique DC_ID's
+                            var isValidatedRow = validated_DC_Id.filter(function (x) {
+                                return x == sData[s].DC_ID;
+                            }).length > 0;
 
+                            if (!isValidatedRow) {
+                                validated_DC_Id.push(sData[s].DC_ID);
+                                if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "") ||
+                                    (!(!sData[s].PTR_SYS_INVLD_PRD || sData[s].PTR_SYS_PRD === ""))) {
+                                    if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                    if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                    if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                    sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
+                                    if (sData[s].OBJ_SET_TYPE_CD == "DENSITY") {
+                                        sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run. Please ensure you are using SSD products for Density deals.";
+                                    }
+                                    else {
+                                        sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+                                    }
+                                    needPrdVld.push({
+                                        "row": s + 1,
+                                        "DC_ID": sData[s].DC_ID,
+                                        "PTR_USER_PRD": sData[s].PTR_USER_PRD
+                                    });
+                                }
+                            }
                         }
                     }
-                }
 
-                // see if we are only saving upper contract PT items
-                if (modPt.length > 0) {
-                    return {
-                        "Contract": modCt,
-                        "PricingStrategy": modPs,
-                        "PricingTable": modPt,
-                        "PricingTableRow": [],
-                        "WipDeals": [],
-                        "EventSource": source,
-                        "Errors": errs
+                    $scope.spreadDsDataCopy = angular.copy(sData);
+                    // We should de-normalize pricing table row only when we are hitting MT
+                    // If there are errors don't de-normalize, else PricingTableRow and spreadSheet data will be different
+                    if (!(errs.PRC_TBL_ROW !== undefined && errs.PRC_TBL_ROW.length !== 0)) {
+                        sData = $scope.deNormalizeData(util.deepClone(sData));
                     }
                 }
+            }
 
-                //
-                // REMOVED THIS BECAUSE PARTIAL SAVES ARE CAuSING HAVOC IN TRANSLATION... UNTIL WE HAVE A WORK AROUND, NEED TO PASS UP ENTIRE COLLECTION
-                //
-                //var sDataSave = sData.filter(function (a) {
-                //	var hasErrors = false;
-                //	if (a._behaviors != null && a._behaviors !== undefined) {
-                //		var errors = a._behaviors.isError;
-                //		hasErrors = (errors !== null && errors !== undefined && Object.keys(errors).length !== 0 && errors.constructor === Object); // HACK: if a user doesn't change anything on an existing contract, but clicks "Save", then errors won't show up unless we include rows with errors. This can occur after user copies a PT.
-                //	}
-                //	var isPrdNeedsValidation = (a.PTR_SYS_PRD == null);
-                //	return (a._dirty || hasErrors || isPrdNeedsValidation);
-                //});
+            // WIP Deals
+            if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
+                source = "WIP_DEAL";
+                gData = $scope.wipData;
+                var uData = $scope.LookBackPeriod;
+                var isTenderFlag = "0";
+                if ($scope.contractData["IS_TENDER"] !== undefined) isTenderFlag = $scope.contractData["IS_TENDER"];
+                var isHybridPricingStatergy = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
+                var dictGroupType = {};
+                var dictWipOverMaxVol = {};
+                var dictWipOverMaxAmt = {};
 
-                //.filter(function (a) { return a._dirty })
+                // Wip Deal
+                if (gData !== undefined && gData !== null) {
+                    gData = $scope.ValidateEndCustomer(gData, "SaveAndValidate");
+                    //validate settlement parter for DE
+                    gData = $scope.validateSettlementPartner(gData);
+                    //validate OAV & OAD parter for DE
+                    gData = $scope.validateOverArching(gData);
+                    gData = $scope.validateHybridFields(gData);
+                    //validate settlement level for DE
+                    gData = $scope.validateSettlementLevel(gData);
+                    //validate flex overlap products for DE
+                    $scope.OVLPFlexPdtPTRUSRPRDError = false;
+                    gData = $scope.validateOVLPFlexProduct(gData);
+                    //validate Flex Row Type for DE
+                    gData = $scope.validateFlexRowType(gData);
+                    //validate Market Segment
+                    gData = contractutil.validateMarketSegment(gData, $scope.wipData, spreadDs);
+
+                    var hasInvalidArSettlementForHybirdDeals = isHybridPricingStatergy && $.unique(gData.map(function (dataItem) { return dataItem["AR_SETTLEMENT_LVL"] })).length > 1;
+                    var invalidFlexDate = contractutil.validateFlexDate(gData, $scope.curPricingTable, $scope.wipData);
+
+                    for (var i = 0; i < gData.length; i++) {
+                        if ((gData[i]["USER_AVG_RPU"] == null || gData[i]["USER_AVG_RPU"] == "")
+                            && (gData[i]["USER_MAX_RPU"] == null || gData[i]["USER_MAX_RPU"] == "")
+                            && gData[i]["RPU_OVERRIDE_CMNT"] != null && gData[i]["RPU_OVERRIDE_CMNT"] !== "") {
+                            gData[i]["RPU_OVERRIDE_CMNT"] = "";
+                        }
+                        // Adding settlment partner error into err object in DE
+                        if (gData[i]._behaviors.isError['SETTLEMENT_PARTNER']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["SETTLEMENT_PARTNER"]);
+                        }
+
+                        //US1071237: Vistex R2 Post Release: Convert Project Name to Upper Case
+                        gData[i].QLTR_PROJECT = gData[i].QLTR_PROJECT.toUpperCase();
+
+                        if (gData[i]._behaviors.isError['MRKT_SEG']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["MRKT_SEG"]);
+                        }
+
+                        // This forces all items onto the save side errors checking.  Need to scale it to only the fields we care about.
+                        for (var e = 0; e < Object.keys(gData[i]._behaviors.validMsg).length; e++) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            // Remove this element since it is causing a line to say broke without an error, and ensure element is on the list of blocking attributes only
+                            if (Object.keys(gData[i]._behaviors.validMsg)[e] !== "DC_ID" && $scope.hybridSaveBlockingColumns.indexOf(Object.keys(gData[i]._behaviors.validMsg)[e]) >= 0) {
+                                if (!errs.PRC_TBL_ROW.contains(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])) {
+                                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg[Object.keys(gData[i]._behaviors.validMsg)[e]])
+                                }
+                            }
+                        }
+
+                        // Adding Overarching error into err object in DE
+                        if (gData[i]._behaviors.isError['REBATE_OA_MAX_VOL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_VOL"]);
+                        }
+                        if (gData[i]._behaviors.isError['REBATE_OA_MAX_AMT']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["REBATE_OA_MAX_AMT"]);
+                        }
+                        // Adding settlment level error into err object in DE
+                        if (gData[i]._behaviors.isError['AR_SETTLEMENT_LVL']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+                        // Adding FLEX overlap Product error into err object in DE
+                        if (gData[i]._behaviors.isError['PTR_USER_PRD'] && $scope.OVLPFlexPdtPTRUSRPRDError) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["PTR_USER_PRD"]);
+                        }
+
+                        // Adding FLEX Row Type Product error into err object in DE
+                        if (gData[i]._behaviors.isError['FLEX_ROW_TYPE']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["FLEX_ROW_TYPE"]);
+                        }
+
+                        if (gData[i]._behaviors.isError['CONSUMPTION_TYPE']) {
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["CONSUMPTION_TYPE"]);
+                        }
+
+                        // TODO... this should probably mimic Pricing Table Rows
+                        if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
+
+                        // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
+                        // ^ very informative Phil... :)  Here we convert the data of Array format used by Kendo to a string format expected by our middle tier 
+                        if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
+                        if (Array.isArray(gData[i].QLTR_BID_GEO)) gData[i].QLTR_BID_GEO = gData[i].QLTR_BID_GEO.join();
+                        if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
+
+                        if (($scope.curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(gData[i].TRKR_NBR).length > 0) && isTenderFlag !== "1") {
+                            if (gData[i].CONSUMPTION_LOOKBACK_PERIOD < uData[gData[i].DC_ID]) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
+                                gData[i]._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased after approval";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Lookback Period can only be increased after approval");
+                            }
+                        }
+
+                        if (gData[i].CONSUMPTION_COUNTRY_REGION != null && gData[i].CONSUMPTION_COUNTRY_REGION != undefined && gData[i].CONSUMPTION_COUNTRY_REGION != "") {
+                            if (gData[i].CONSUMPTION_CUST_RPT_GEO != null && gData[i].CONSUMPTION_CUST_RPT_GEO != undefined && gData[i].CONSUMPTION_CUST_RPT_GEO != "") {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['CONSUMPTION_CUST_RPT_GEO'] = true;
+                                gData[i]._behaviors.validMsg['CONSUMPTION_CUST_RPT_GEO'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
+                                gData[i]._behaviors.isError['CONSUMPTION_COUNTRY_REGION'] = true;
+                                gData[i]._behaviors.validMsg['CONSUMPTION_COUNTRY_REGION'] = "Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Please enter a value in either Customer Reported Sales Geo or Consumption Country/Region, but not both");
+                            }
+                        }
+
+                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                        if (moment(gData[i]["START_DT"]).isAfter($scope.contractData.END_DT) && isTenderFlag !== "1") {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['START_DT'] = true;
+                            gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment($scope.contractData.END_DT).format("MM/DD/YYYY") + ")");
+                        }
+
+                        // check dates against contract - Tender contracts don't observe start/end date within contract.
+                        if (moment(gData[i]["END_DT"]).isBefore($scope.contractData.START_DT) && isTenderFlag !== "1") {
+                            if (gData[i]._behaviors !== null && gData[i]._behaviors !== undefined) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['END_DT'] = true;
+                                gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment($scope.contractData.START_DT).format("MM/DD/YYYY") + ")");
+                            }
+                        }
+
+                        // check Deal dates 
+                        if (moment(gData[i]["START_DT"]).isAfter(moment(gData[i]["END_DT"])) && isTenderFlag !== "1") {
+                            if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                            if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                            gData[i]._behaviors.isError['START_DT'] = true;
+                            gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
+                        }
+
+                        if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                            //Delete if there is any previous Error  messages
+                            if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                                angular.forEach(invalidFlexDate, (item) => {
+                                    if (!$scope.restrictGroupFlexOverlap) {
+                                        item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', $scope.restrictGroupFlexOverlap);
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
+                                    }
+                                });
+                            }
+                        }
+
+                        if (gData[i]["END_CUSTOMER_RETAIL"] != undefined && gData[i]["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
+                            if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["END_CUSTOMER_RETAIL"]);
+                            }
+                            else {
+                                if (gData[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                                    delete gData[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                                    delete gData[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                                }
+                                gData[i]["END_CUSTOMER_RETAIL"] = gData[i]["END_CUSTOMER_RETAIL"].toString();
+                            }
+                        }
+
+                        var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+                        for (var key in fields) {
+                            if (fields.hasOwnProperty(key)) {
+                                if (fields[key].type === "date") {
+                                    gData[i][key] = moment(gData[i][key]).format("MM/DD/YYYY");
+                                }
+                            }
+                        }
+
+                        // This is silly hard-coding because these are not in our template and they are used by DSA only - set them to proper dates.
+                        if (gData[i]["ON_ADD_DT"] !== undefined) gData[i]["ON_ADD_DT"] = moment(gData[i]["ON_ADD_DT"]).format("MM/DD/YYYY");
+                        if (gData[i]["REBATE_BILLING_START"] !== undefined) gData[i]["REBATE_BILLING_START"] = moment(gData[i]["REBATE_BILLING_START"]).format("MM/DD/YYYY");
+                        if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
+                        if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
+
+                        // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
+                        if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
+                            if (Object.keys(dictGroupType).length == 0) {
+                                gData.map(function (data, index) {
+                                    dictGroupType[data["DEAL_COMB_TYPE"]] = index;
+                                });
+                            }
+
+                            if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX" && $scope.restrictGroupFlexOverlap) {
+                                data = contractutil.clearValidation(gData, "DEAL_COMB_TYPE");
+                                let objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
+                                let filterData = _.uniq(_.sortBy(gData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+                                let filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
+                                if (filteredGroupTypeRestriction.length > 0) {
+                                    angular.forEach(filteredGroupTypeRestriction, (item) => {
+                                        if (!item._behaviors.isError) item._behaviors.isError = {};
+                                        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                                        item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                                        item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push(item._behaviors.validMsg['DEAL_COMB_TYPE']);
+                                    });
+                                }
+                            }
+                            else if (Object.keys(dictGroupType).length > 1) {
+                                if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                                if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                                gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                                gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
+                            }
+
+                        }
+
+                        // WIP Deal Level Check - Readonly will be true if AR_SETTLEMENT_LVL is "Cash" and the deal has a tracker. Otherwise, the user is allowed to 
+                        // swap between "Issue Credit to Billing Sold To" or "Issue Credit to Default Sold To by Region".
+                        if (hasInvalidArSettlementForHybirdDeals == false && gData[i].HAS_TRACKER == "1" && gData[i]._behaviors.isReadOnly["AR_SETTLEMENT_LVL"] != true
+                            && editableArSettlementLevelAfterApproval.indexOf(gData[i].AR_SETTLEMENT_LVL) < 0) {
+                            gData[i]._behaviors.isError["AR_SETTLEMENT_LVL"] = true;
+                            gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"] = "Settlement Level can be updated between \"" + editableArSettlementLevelAfterApproval.join(" / ") + "\" for active deals";
+                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg["AR_SETTLEMENT_LVL"]);
+                        }
+
+                        // Correct Deal Tab Rate Removals - prevent blanking field, set to 0
+                        // Corrected on schdule editor instead, but this is code to walk through an object if eeded later
+                        //if (gData[i]["OBJ_SET_TYPE_CD"] == "REV_TIER") {
+                        //    if (gData[i].INCENTIVE_RATE !== null) {
+                        //        var keys = Object.keys(gData[i].INCENTIVE_RATE);
+                        //        for (let key of keys) {
+                        //            if (gData[i].INCENTIVE_RATE[key] === null || gData[i].INCENTIVE_RATE[key] === '') {
+                        //                gData[i].INCENTIVE_RATE[key] = '0.00';
+                        //            }
+                        //        };
+                        //    }
+                        //}
+
+                    }
+                }
+            }
+
+            // see if we are only saving upper contract PT items
+            if (modPt.length > 0) {
                 return {
-                    "Contract": [],
-                    "PricingStrategy": [],
-                    "PricingTable": curPricingTableData,
-                    "PricingTableRow": sData === undefined ? [] : sData, //sDataSave, //sData.filter(function (a) { return a._dirty }),
-                    "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
+                    "Contract": modCt,
+                    "PricingStrategy": modPs,
+                    "PricingTable": modPt,
+                    "PricingTableRow": [],
+                    "WipDeals": [],
                     "EventSource": source,
                     "Errors": errs
                 }
-            
+            }
+
+            //
+            // REMOVED THIS BECAUSE PARTIAL SAVES ARE CAuSING HAVOC IN TRANSLATION... UNTIL WE HAVE A WORK AROUND, NEED TO PASS UP ENTIRE COLLECTION
+            //
+            //var sDataSave = sData.filter(function (a) {
+            //	var hasErrors = false;
+            //	if (a._behaviors != null && a._behaviors !== undefined) {
+            //		var errors = a._behaviors.isError;
+            //		hasErrors = (errors !== null && errors !== undefined && Object.keys(errors).length !== 0 && errors.constructor === Object); // HACK: if a user doesn't change anything on an existing contract, but clicks "Save", then errors won't show up unless we include rows with errors. This can occur after user copies a PT.
+            //	}
+            //	var isPrdNeedsValidation = (a.PTR_SYS_PRD == null);
+            //	return (a._dirty || hasErrors || isPrdNeedsValidation);
+            //});
+
+            //.filter(function (a) { return a._dirty })
+            return {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": curPricingTableData,
+                "PricingTableRow": sData === undefined ? [] : sData, //sDataSave, //sData.filter(function (a) { return a._dirty }),
+                "WipDeals": gData === undefined ? [] : gData.filter(function (a) { return a._dirty }),
+                "EventSource": source,
+                "Errors": errs
+            }
+
         }
 
-        $scope.validateTitles = function (dataItem) {
-            var rtn = true;
 
-            if (!$scope.curPricingStrategy) return true;
-            var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
-            var isPtUnique = !$scope.curPricingTable ? true : $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
-
-            // Pricing Table
-            if (!!$scope.curPricingTable) {
-                if (!$scope.curPricingTable._behaviors) $scope.curPricingTable._behaviors = {};
-                if (!$scope.curPricingTable._behaviors.validMsg) $scope.curPricingTable._behaviors.validMsg = {};
-                if (!$scope.curPricingTable._behaviors.isError) $scope.curPricingTable._behaviors.isError = {};
-
-                if (!$scope.curPricingTable._behaviors.isDirty || $scope.curPricingTable._behaviors.isDirty.TITLE) {
-                    if ($scope.curPricingTable !== undefined && $scope.curPricingTable.TITLE === "") {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " needs a Title.";
-                        $scope.curPricingTable._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    }
-                    else if (!isPtUnique) {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "Table title (" + $scope.ptTitle + ") must be a unique name within this contract.";
-                        $scope.curPricingTable._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else if ($scope.curPricingTable["TITLE"] !== undefined && $scope.curPricingTable["TITLE"].length > 80) {
-                        $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The title (" + $scope.ptTitle + ") cannot have more than 80 characters.";
-                        $scope.curPricingTable._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    }
-                    else {
-                        $scope.curPricingTable._behaviors.isError["TITLE"] = false;
-                    }
-                }
-            }
-
-            // Pricing Strategy
-            if (!!$scope.curPricingStrategy) {
-                if (!$scope.curPricingStrategy._behaviors) $scope.curPricingStrategy._behaviors = {};
-                if (!$scope.curPricingStrategy._behaviors.validMsg) $scope.curPricingStrategy._behaviors.validMsg = {};
-                if (!$scope.curPricingStrategy._behaviors.isError) $scope.curPricingStrategy._behaviors.isError = {};
-
-                if (!$scope.curPricingStrategy._behaviors.isDirty || $scope.curPricingStrategy._behaviors.isDirty.TITLE) {
-                    if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
-                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " needs a Title.";
-                        $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else if (!isPsUnique) {
-                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
-                        $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else if ($scope.curPricingStrategy["TITLE"] !== undefined && $scope.curPricingStrategy["TITLE"].length > 80) {
-                        $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
-                        $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else {
-                        $scope.curPricingStrategy._behaviors.isError["TITLE"] = false;
-                    }
-                }
-            }
-
-            if (dataItem !== undefined) {
-                if (!dataItem._behaviors) dataItem._behaviors = {};
-                if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};
-                if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
-
-                if (!dataItem._behaviors.isDirty || dataItem._behaviors.isDirty.TITLE) {
-                    if (dataItem !== undefined && dataItem.TITLE === "") {
-                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " needs a Title.";
-                        dataItem._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else if (!isPsUnique) {
-                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.psTitle + " must have unique name.";
-                        dataItem._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else if (dataItem["TITLE"] !== undefined && dataItem["TITLE"].length > 80) {
-                        dataItem._behaviors.validMsg["TITLE"] = "The " + $scope.ptTitle + " cannot have more than 80 characters.";
-                        dataItem._behaviors.isError["TITLE"] = true;
-                        rtn = false;
-                    } else {
-                        dataItem._behaviors.isError["TITLE"] = false;
-                    }
-                }
-            }
-
-            return rtn;
-        }
 
         // **** SAVE CONTRACT Methods ****
         //
@@ -3592,7 +3393,7 @@
             });
         }
 
-       
+
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract, callback) {
             if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Contract Controller", "");
@@ -3607,7 +3408,7 @@
 
             $scope.clearValidations();
 
-            if (!$scope.validateTitles()) {
+            if (!contractutil.validateTitles()) {
                 $scope.setBusy("", "");
                 $scope.isAutoSaving = false;
 
@@ -3621,12 +3422,11 @@
 
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
             var stagePending = false;
-            $scope.pendingList.length = 0; 
+            $scope.pendingList.length = 0;
 
             //checking for pending deal and set the flag true
-            for (var i = 0; i < data.WipDeals.length; i++) {                
-                if (data.WipDeals[i].WF_STG_CD == "Pending")
-                {
+            for (var i = 0; i < data.WipDeals.length; i++) {
+                if (data.WipDeals[i].WF_STG_CD == "Pending") {
                     stagePending = true;
                     $scope.pendingList.push(data.WipDeals[i].DC_ID);
                 }
@@ -3647,8 +3447,8 @@
             }
 
             var copyData = util.deepClone(data);
-            $scope.compressJson(copyData);
-            if ($scope.removeCleanItems(copyData, delPtr)) {
+            contractutil.compressJson(copyData);
+            if (contractutil.removeCleanItems(copyData, delPtr)) {
                 $scope.setBusy("");
                 $scope.isAutoSaving = false;
                 kendo.alert("Nothing to save.");
@@ -3703,7 +3503,7 @@
                         for (i = 0; i < data.PRC_TBL_ROW.length; i++) {
                             if (!!data.PRC_TBL_ROW[i].PTR_SYS_PRD) {
                                 // check for pivots
-                                data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(data.PRC_TBL_ROW[i].PTR_SYS_PRD);
+                                data.PRC_TBL_ROW[i].PTR_SYS_PRD = contractutil.uncompress(data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             }
                             if (data.PRC_TBL_ROW[i].warningMessages !== undefined && data.PRC_TBL_ROW[i].warningMessages.length > 0) {
                                 anyWarnings = true;
@@ -3873,7 +3673,7 @@
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
-                        }  
+                        }
                         if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" && stateName !== "contract.manager.strategy.wip" && isendpbreduced == false) {
                             $scope.reloadPage();
                             $scope.spreadDs.read();
@@ -3889,7 +3689,7 @@
                     util.console("updateContractAndCurPricingTable Complete");
 
                     $("#dealEditor").data("kendoGrid").dataSource.read();
-                    $("#dealEditor").data("kendoGrid").refresh(); 
+                    $("#dealEditor").data("kendoGrid").refresh();
 
                     //if a callback function is provided, invoke it now once everything else is completed
                     if (!!callback && typeof callback === "function") {
@@ -4012,7 +3812,7 @@
                     //    reapplyDropdowns(myRange, false, value.field);
                     //} else {
                     //To highlight error messages on correct rows [DE11710,DE117042]
-                    if (!dataItem.ROW_NUMBER) 
+                    if (!dataItem.ROW_NUMBER)
                         sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
                     else
                         sheet.range(dataItem.ROW_NUMBER, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
@@ -4071,54 +3871,11 @@
             });
         }
 
-        $scope.removeCleanItems = function (data, delPtr) {
-
-            if (data.Contract === undefined) data.Contract = [];
-            if (data.PricingStrategy === undefined) data.PricingStrategy = [];
-            if (data.PricingTable === undefined) data.PricingTable = [];
-            if (data.PricingTableRow === undefined) data.PricingTableRow = [];
-            if (data.WipDeals === undefined) data.WipDeals = [];
-
-            if (!!data.PricingTableRow && !!delPtr && delPtr.length > 0) {
-                data.PricingTableRow = data.PricingTableRow.filter(function (a) { return delPtr.indexOf(a.DC_ID) });
-            }
-
-            // for now... performance changes are breaking delete and translate
-            return false;
-
-            if (!!data.EventSource && data.EventSource === "WIP_DEAL") {
-                return (
-                    data.Contract.length === 0 &&
-                    data.PricingStrategy.length === 0 &&
-                    data.PricingTableRow.length === 0 &&
-                    data.WipDeals.length === 0);
-            }
-
-            return false;
-        }
-
-        $scope.compressJson = function (data) {
-            if (!data.PricingTableRow) return;
-            for (var d = 0; d < data.PricingTableRow.length; d++) {
-                data.PricingTableRow[d].PTR_SYS_PRD = $scope.compress(data.PricingTableRow[d].PTR_SYS_PRD);
-                data.PricingTableRow[d].PTR_SYS_INVLD_PRD = $scope.compress(data.PricingTableRow[d].PTR_SYS_INVLD_PRD);
-            }
-        }
-        $scope.compress = function (data) {
-            return data;
-            if (!data || data === "" || data[0] !== "{") return data;
-            return LZString.compressToBase64(data);
-        }
-        $scope.uncompress = function (data) {
-            //return data;
-            if (!data || data === "" || data[0] === "{") return data;
-            return LZString.decompressFromBase64(data);
-        }
         $scope.uncompressJson = function (data) {
             if (!data) return;
             for (var d = 0; d < data.length; d++) {
-                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD);
-                data[d].PTR_SYS_INVLD_PRD = $scope.uncompress(data[d].PTR_SYS_INVLD_PRD);
+                data[d].PTR_SYS_PRD = contractutil.uncompress(data[d].PTR_SYS_PRD);
+                data[d].PTR_SYS_INVLD_PRD = contractutil.uncompress(data[d].PTR_SYS_INVLD_PRD);
             }
         }
 
@@ -4178,20 +3935,6 @@
             }
         }
 
-        $scope.isPivotable = function () {
-
-            if (!$scope.curPricingTable) return false;
-
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
-                $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-                var pivotFieldName = "NUM_OF_TIERS";
-                return !!$scope.curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
-            }
-
-            if ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                return true;
-            }
-        }
         $scope.numOfPivot = function (dataItem) {
             if ($scope.curPricingTable === undefined) return 1;
 
@@ -4208,7 +3951,7 @@
                     return pivotVal;
                 }
 
-                if (!$scope.isPivotable()) return 1;
+                if (!contractutil.isPivotable($scope.curPricingTable)) return 1;
 
                 if (dataItem === undefined) {
                     //condition for density also added here, this is identified in case of split product
@@ -4220,44 +3963,12 @@
 
                 //VT deal type
                 var pivotVal = $scope.curPricingTable[pivotFieldName];
-                
+
                 //logic to add Density multiply by number of tier to add those many rows in spreadsheet
                 return pivotVal === undefined ? 1 : (pivotDensity == undefined ? parseInt(pivotVal) : parseInt(pivotVal) * parseInt(pivotDensity));
             }
 
             return 1;   //num of pivot is 1 for undim deal types
-        }
-
-        // If Tender and ECAP get the CAP value from Product JSON, if more than one product assign CAP, YCS2 value of first product only.
-        $scope.assignProductProprties = function (data) {
-            if ($scope.isTenderContract && $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
-                for (var d = 0; d < data.length; d++) {
-
-                    if (angular.equals(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
-
-                    // product JSON
-                    var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
-                    var sysProduct = [];
-
-                    var productArray = [];
-                    for (var key in productJSON) {
-                        if (productJSON.hasOwnProperty(key)) {
-                            angular.forEach(productJSON[key], function (item) {
-                                sysProduct.push(item);
-                            });
-                        }
-                    }
-                    // Take the first product
-                    var contractProduct = data[d]["PTR_USER_PRD"].split(',')[0];
-                    sysProduct = sysProduct.filter(function (x) {
-                        return x.USR_INPUT === contractProduct || x.HIER_VAL_NM === contractProduct;
-                    });
-
-                    data[d]["CAP"] = sysProduct.length !== 0 ? sysProduct[0]["CAP"] : "";
-                    data[d]["YCS2"] = sysProduct.length !== 0 ? sysProduct[0]["YCS2"] : "";
-                }
-            }
-            return data;
         }
 
         //function thousands_separators(num) {
@@ -4267,8 +3978,8 @@
         //}
 
         $scope.pivotData = function (data) {        //convert how we save data in MT to UI spreadsheet consumable format
-            data = $scope.assignProductProprties(data);
-            if (!$scope.isPivotable()) return data;
+            data = contractutil.assignProductProprties(data, $scope.isTenderContract, $scope.curPricingTable);
+            if (!contractutil.isPivotable($scope.curPricingTable)) return data;
             var newData = [];
             let dealType = $scope.curPricingTable['OBJ_SET_TYPE_CD'];
 
@@ -4360,7 +4071,7 @@
                                     mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db);
 
                                 }
-                                
+
                                 if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                     lData[endKey] = kendo.toString(parseFloat(lData[endKey].replace(/[$,]/g, '') || 0), "n3");
                                 }
@@ -4372,8 +4083,8 @@
 
                             }
                             else {
-                                    lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
-                                    mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
+                                lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
+                                mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
                             }
                         }
                         // Disable all Start vols except the first if there is no tracker, else disable them all
@@ -4418,8 +4129,8 @@
                             mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
                         }
 
-                        lData["TEMP_TOTAL_DSCNT_PER_LN"] = $scope.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
-                        lData["TEMP_KIT_REBATE"] = $scope.calculateKitRebate(data, d, numTiers, true);
+                        lData["TEMP_TOTAL_DSCNT_PER_LN"] = contractutil.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
+                        lData["TEMP_KIT_REBATE"] = contractutil.calculateKitRebate(data, d, numTiers, true);
                         if (productJSON.length !== 0) {
                             angular.forEach(productJSON, function (value, key) {
                                 var bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
@@ -4439,27 +4150,12 @@
             return newData;
         }
 
-        $scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
-            return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
-        }
-
-        $scope.calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-            var kitRebateTotalVal = 0;
-            for (var i = 0; i < numOfTiers; i++) {
-                if (isDataPivoted) {
-                    var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
-                    kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
-                } else if (i < data.length) {
-                    var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-                    kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
-                }
-            }
-            var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
-            return rebateVal; // kendo.toString(rebateVal, "$#,##0.00;-$#,##0.00");
-        }
+        //$scope.calculateTotalDsctPerLine = function (dscntPerLine, qty) {
+        //    return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
+        //}
 
         $scope.deNormalizeData = function (data) {      //convert how we keep data in UI to MT consumable format
-            if (!$scope.isPivotable()) return data;
+            if (!contractutil.isPivotable($scope.curPricingTable)) return data;
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
             var a;
             var newData = [];
@@ -4624,7 +4320,7 @@
             }
         }
         $scope.mapProperty = function (src, data) {
-            if ($scope.isPivotable()) {
+            if (contractutil.isPivotable($scope.curPricingTable)) {
                 var srcTierNum = parseInt(src.TIER_NBR);
                 var dataTierNum = parseInt(data.TIER_NBR);
                 if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
@@ -4661,28 +4357,6 @@
         }
         $scope.getCustId = function () {
             return $scope.contractData['CUST_MBR_SID'];
-        }
-
-        $scope.checkForMessages = function (collection, key, data) {
-            var isValid = true;
-            if (data.data[key] !== undefined) {
-                for (var i = 0; i < data.data[key].length; i++) {
-                    if (data.data[key][i].DC_ID !== undefined &&
-                        data.data[key][i].DC_ID === collection.DC_ID &&
-                        data.data[key][i].warningMessages.length > 0) {
-                        angular.forEach(data.data[key][i]._behaviors.validMsg,
-                            function (value, key) {
-                                collection._behaviors.validMsg[key] = value;
-                                collection._behaviors.isError[key] = value !== "";
-                                isValid = false;
-                            });
-                    }
-                }
-            }
-
-            //
-            // TODO: Consolidate all the messages warning and errors show in the Validation summary panel ??
-            return isValid;
         }
 
         $scope.saveUpperContract = function () {
@@ -4761,7 +4435,7 @@
 
                     $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
                     //Check for errors
-                    if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                    if (!contractutil.checkForMessages(ct, "CNTRCT", data)) {
                         $scope.setBusy("Save unsuccessful", "Could not create the Tender Folio", "Error");
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -4819,7 +4493,7 @@
                         $scope.updateResults(data.data.CNTRCT, ct);
 
                         //Check for errors
-                        if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                        if (!contractutil.checkForMessages(ct, "CNTRCT", data)) {
                             $scope.setBusy("Save unsuccessful", "Could not create the contract", "Error");
                             $timeout(function () {
                                 $scope.setBusy("", "");
@@ -4866,7 +4540,7 @@
                     $scope.updateResults(data.data.CNTRCT, ct);
 
                     //Check for errors
-                    if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                    if (!contractutil.checkForMessages(ct, "CNTRCT", data)) {
                         $scope.setBusy("Copy Unsuccessful", "Could not copy the contract", "Error");
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -5092,7 +4766,7 @@
             if ($scope.contractData.PRC_ST === undefined) {
                 $scope.contractData.PRC_ST = [];
             }
-            var isUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.newStrategy["TITLE"], "TITLE", false);
+            var isUnique = contractutil.IsUniqueInList($scope.contractData.PRC_ST, $scope.newStrategy["TITLE"], "TITLE", false);
             if (!isUnique) {
                 $scope.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
                 $scope.newStrategy._behaviors.isError["TITLE"] = true;
@@ -5111,27 +4785,6 @@
             } else {
                 $scope.addStrategyDisabled = false;
             }
-        }
-
-        $scope.IsUniqueInList = function (listToCheck, value, keyToCompare, checkForDouble) {
-            // Check unique name
-            var count = 0;
-            if (!listToCheck) return true;
-
-            for (var i = 0; i < listToCheck.length; i++) {
-                if (!!listToCheck[i][keyToCompare] && !!value && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
-                    if (checkForDouble) { // having one in he list is okay, but 2 is a no
-                        count += 1;
-                        if (count >= 2) {
-                            return false;
-                        }
-                    } else {
-                        // not checking doubles, so any if there is any in the list, then return false
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
 
 
@@ -5329,7 +4982,7 @@
                 if ($scope.curPricingStrategy.PRC_TBL === undefined) {
                     $scope.curPricingStrategy.PRC_TBL = [];
                 }
-                var isUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.newPricingTable["TITLE"], "TITLE", false);
+                var isUnique = contractutil.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.newPricingTable["TITLE"], "TITLE", false);
 
                 if (!isUnique) {
                     $scope.newPricingTable._behaviors.validMsg["TITLE"] = "* must have unique name within strategy";
@@ -5384,11 +5037,11 @@
         //setting a few constants for the strings that occur a lot
         var GEO = "GEO_COMBINED";
         var MRKT_SEG = "MRKT_SEG";
-        
+
         //watch for user changing global auto-fill default values
         $scope.$watch('newPricingTable._defaultAtrbs', function (newValue, oldValue, el) {
             var dealType = $scope.newPricingTable.OBJ_SET_TYPE_CD;
-            
+
             if (oldValue === newValue) return;
 
             if (oldValue != null && newValue == null) return;
@@ -5399,7 +5052,7 @@
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.isTenderContract ? "TENDER" : "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = [marketSegment];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
-                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType =='DENSITY' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
+                    if (!!newValue["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? newValue["PAYOUT_BASED_ON"].value = "Billings" : newValue["PAYOUT_BASED_ON"].value = "Consumption";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                     if (!!newValue["FLEX_ROW_TYPE"]) newValue["FLEX_ROW_TYPE"].value = "Accrual";
@@ -5549,7 +5202,7 @@
             else {
                 $scope.setBusy("Loading...", "Loading the Deal Editor", "Info", true);
                 $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
-            }            
+            }
         }
         $scope.gotoToPricingTable = function () {
             $scope.setBusy("Loading...", "Loading the " + $scope.ptTitle + " Editor", "Info");
@@ -5629,7 +5282,7 @@
                 dataItem._behaviors.isDirty["TITLE"] = true;
                 dataItem.dirty = true;
 
-                if (!$scope.validateTitles(dataItem)) {
+                if (!contractutil.validateTitles(dataItem, $scope.curPricingStrategy, $scope.contractData, $scope.curPricingTable, $scope.ptTitle)) {
                     $scope.openRenameTitle(dataItem, mode, dataItem.TITLE, dataItem._behaviors.validMsg["TITLE"]);
                     dataItem.TITLE = retOrigValue;
                     dataItem.dirty = false;
@@ -5715,8 +5368,8 @@
                 if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                     data.splice(n, 1);
                 } else {
-                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY"); 
-                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY"); 
+                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
+                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
                 }
             }
 
@@ -6260,7 +5913,7 @@
                     }
 
                 });
-                
+
                 var uniqAcrInc = AcrInc.filter(function (a) {
                     var key = a.RowId + '|' + a.PRDMemberSid;
                     if (!this[key]) {
@@ -6291,11 +5944,11 @@
                 callback(false);
             }
         }
-        $scope.validateOVLPFlexProduct = function (data,mode) {
+        $scope.validateOVLPFlexProduct = function (data, mode) {
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 $scope.restrictGroupFlexOverlap = false;
                 //Clearing the behaviors for the first time if no error the result will be clean
-                $scope.clearValidation(data, "PTR_USER_PRD");
+                data = contractutil.clearValidation(data, "PTR_USER_PRD");
 
                 //Parent is different at PTE and DE level
                 var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
@@ -6346,12 +5999,12 @@
 
                 }
             }
-        return data;
+            return data;
         }
         $scope.checkOVLPDate = function (data, resp, objectId) {
             window['moment-range'].extendMoment(moment);
             //get uniq duplicate product
-            var uniqOvlpCombination = _.uniq(_.map(resp, (ob) => {return ob.OVLP_ROW_ID }));
+            var uniqOvlpCombination = _.uniq(_.map(resp, (ob) => { return ob.OVLP_ROW_ID }));
             //iterate through unique product
             _.each(uniqOvlpCombination, (dup) => {
                 //filtering the uniq prod from response and sort to get correct first and second object
@@ -6381,17 +6034,17 @@
                             else if (!moment(secObj.START_DT).isBefore(secObj.END_DT)) {
                                 _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
                             }
-                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) || 
-                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) { 
+                            else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) ||
+                                (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
                             }
                             //if the dates overlap add key dup as true
                             else if (firstRange.overlaps(secRange)) {
                                 _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';                                
+                                _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
                             }
-                        } 
+                        }
                     });
                 });
 
@@ -6403,15 +6056,15 @@
         //validate Flex Row Type 
         $scope.validateFlexRowType = function (data) {
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-                $scope.clearValidation(data, 'FLEX_ROW_TYPE');
+                data = contractutil.clearValidation(data, 'FLEX_ROW_TYPE');
 
                 var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
                 //var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
                 var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
 
-                if (drainingEntries.length > 0 && accrualEntries.length==0) {
+                if (drainingEntries.length > 0 && accrualEntries.length == 0) {
                     angular.forEach(data, (item) => {
-                        $scope.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype');
+                        item = contractutil.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype', $scope.restrictGroupFlexOverlap);
                     });
                 }
                 //Validate overarching fields for FLEX Accrual rows
@@ -6425,29 +6078,11 @@
             return data;
         }
 
-        //validate Flex dates
-        $scope.validateFlexDate = function (data) {
-            if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-                $scope.clearValidation(data, 'START_DT');
-                var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-                var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-                var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-                //For multi tiers last record will have latest date, skipping duplicate DC_ID
-                var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-
-                var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
-
-                var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
-            }
-
-            return drainingInvalidDates;
-        }
-
         //validate settlement level for hybrid 
         $scope.validateSettlementLevel = function (data) {
-            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond=false ;
+            var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
             //calling clear all validation
-            $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
+            data = contractutil.clearValidation(data, 'AR_SETTLEMENT_LVL');
             if (hybCond == '1') {
                 retCond = data.every((val) => val.AR_SETTLEMENT_LVL != null && val.AR_SETTLEMENT_LVL != '' && val.AR_SETTLEMENT_LVL ==
                     data[0].AR_SETTLEMENT_LVL);
@@ -6462,20 +6097,20 @@
         // validate OverArching conditions
         $scope.validateOverArching = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
-            var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual'); 
-            var isFlatRate = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER'; 
+            var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual');
+            var isFlatRate = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER';
             //calling clear overarching in the begening
-            $scope.clearValidation(data,'REBATE_OA_MAX_AMT');
-            $scope.clearValidation(data,'REBATE_OA_MAX_VOL');
+            data = contractutil.clearValidation(data, 'REBATE_OA_MAX_AMT');
+            data = contractutil.clearValidation(data, 'REBATE_OA_MAX_VOL');
             //to fix a defect, setting the property value to same
-            $scope.setToSame(data, 'REBATE_OA_MAX_AMT');
-            $scope.setToSame(data, 'REBATE_OA_MAX_VOL');
+            data = contractutil.setToSame(data, 'REBATE_OA_MAX_AMT');
+            data = contractutil.setToSame(data, 'REBATE_OA_MAX_VOL');
 
             if (hybCond == '1' || isFlexAccrual) {
                 //condition to check values are zero
                 retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
                 retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
-                
+
                 if (retZeroOAV) {
                     angular.forEach(data, (item) => {
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero');
@@ -6509,7 +6144,7 @@
                     }
                     if (isFlatRate == 1) { // Check single column for Vol Tier - must have values
                         //if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {
-                            //$scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
+                        //$scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero');
                         if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
                             (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
                             $scope.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth');
@@ -6557,7 +6192,7 @@
                         $scope.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth');
                     });
                 }
-                
+
             }
             return data;
         }
@@ -6568,16 +6203,16 @@
 
             if (hybCond == '1' || isFlexDeal) {
                 // Assume cleared, the apply breaks
-                $scope.clearValidation(data, 'REBATE_TYPE');
-                $scope.clearValidation(data, 'PAYOUT_BASED_ON');
-                $scope.clearValidation(data, 'CUST_ACCNT_DIV');
-                $scope.clearValidation(data, 'GEO_COMBINED');
-                $scope.clearValidation(data, 'PERIOD_PROFILE');
-                $scope.clearValidation(data, 'RESET_VOLS_ON_PERIOD');
-                $scope.clearValidation(data, 'PROGRAM_PAYMENT');
-                $scope.clearValidation(data, 'SETTLEMENT_PARTNER');
-                $scope.clearValidation(data, 'AR_SETTLEMENT_LVL');
-                $scope.clearValidation(data, 'CONSUMPTION_TYPE');
+                data = contractutil.clearValidation(data, 'REBATE_TYPE');
+                data = contractutil.clearValidation(data, 'PAYOUT_BASED_ON');
+                data = contractutil.clearValidation(data, 'CUST_ACCNT_DIV');
+                data = contractutil.clearValidation(data, 'GEO_COMBINED');
+                data = contractutil.clearValidation(data, 'PERIOD_PROFILE');
+                data = contractutil.clearValidation(data, 'RESET_VOLS_ON_PERIOD');
+                data = contractutil.clearValidation(data, 'PROGRAM_PAYMENT');
+                data = contractutil.clearValidation(data, 'SETTLEMENT_PARTNER');
+                data = contractutil.clearValidation(data, 'AR_SETTLEMENT_LVL');
+                data = contractutil.clearValidation(data, 'CONSUMPTION_TYPE');
 
                 $scope.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"]);
                 if (hybCond) {
@@ -6592,7 +6227,7 @@
                 $scope.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"]);
                 $scope.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"]);
                 if (isFlexDeal) {
-                    $scope.clearValidation(data, 'END_CUSTOMER_RETAIL');
+                    data = contractutil.clearValidation(data, 'END_CUSTOMER_RETAIL');
                     $scope.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"]);
                 }
                 //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
@@ -6616,7 +6251,7 @@
             var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
             var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
-            var hasNotNull = v1.some(function (el) { return el !== null && el != ""; }); 
+            var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
 
             if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list
                 //if(v1.length > 1 && v1[0] !== "" && v1[0] != null) {  
@@ -6667,8 +6302,8 @@
             }
         }
 
-          //validate settlement partner
-        $scope.validateSettlementPartner = function (data) {            
+        //validate settlement partner
+        $scope.validateSettlementPartner = function (data) {
             var hybCond = $scope.curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
             //check if settlement is cash and pgm type is backend
             var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
@@ -6690,50 +6325,35 @@
                         });
                     }
                     else {
-                        $scope.clearSettlementPartner(data);
+                        data = contractutil.clearSettlementPartner(data);
                     }
                 }
                 else {
                     retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                     if (!retCond) {
                         angular.forEach(data, (item) => {
-                                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                                    if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
-                                        item.SETTLEMENT_PARTNER = null;
-                                    }
-                                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
-                                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
-                                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                            if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                                    item.SETTLEMENT_PARTNER = null;
                                 }
+                                delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                                delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                                delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                            }
                         });
                     }
                     else {
-                        $scope.clearSettlementPartner(data);
+                        data = contractutil.clearSettlementPartner(data);
                     }
 
                 }
             }
             else {
-                $scope.clearSettlementPartner(data);
+                data = contractutil.clearSettlementPartner(data);
             }
             return data;
         }
-        $scope.clearSettlementPartner = function (data) {
-            angular.forEach(data, (item) => {
-                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                    if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
-                        item.SETTLEMENT_PARTNER = null;
-                    }
-                    delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
-                    delete item._behaviors.isError["SETTLEMENT_PARTNER"];
-                    delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
-                }
-                if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
-                    if (item._behaviors && item._behaviors.isReadOnly)
-                    delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
-                }
-            });
-        }
+
         $scope.setSettlementPartner = function (item, Cond) {
             if (!item._behaviors) item._behaviors = {};
             if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -6758,42 +6378,7 @@
 
         }
 
-        //helper function for clear and set behaviors
-        $scope.clearValidation = function (data, elem) {
-            angular.forEach(data, (item) => {
-                if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
-                    delete item._behaviors.isRequired[elem];
-                    delete item._behaviors.isError[elem];
-                    delete item._behaviors.validMsg[elem];
-                }
-            });
-        }
-
-        $scope.setFlexBehaviors = function (item, elem, cond) {
-            if (!item._behaviors) item._behaviors = {};
-            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-            if (!item._behaviors.isError) item._behaviors.isError = {};
-            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-            if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-            item._behaviors.isRequired[elem] = true;
-            item._behaviors.isError[elem] = true;
-           
-            if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
-                item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
-            }
-            else if (cond == 'invalidDate' && elem == 'START_DT' && !$scope.restrictGroupFlexOverlap) {
-                item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
-            }
-
-            else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
-                item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
-            }
-
-            else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
-                item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
-            }
-
-        }
+        //helper function for clear and set behaviors               
         $scope.setBehaviors = function (item, elem, cond) {
             var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
             if (!item._behaviors) item._behaviors = {};
@@ -6889,8 +6474,8 @@
             }
         }
         $scope.setBehaviorsValidMessage = function (item, elem, elemLabel, cond) {
-           var isFlexDeal = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
-            var dealTypeLabel = isFlexDeal === true ? "FLEX PT": "HYBRID PS";
+            var isFlexDeal = $scope.curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
+            var dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
 
             if (cond == 'notequal') {
                 item._behaviors.validMsg[elem] = "All deals within a " + dealTypeLabel + " should have the same '" + elemLabel + "' value.";
@@ -6910,23 +6495,17 @@
                 item._behaviors.validMsg[elem] = elemLabel + " must be > 0.";
             }
         }
-        $scope.setToSame = function (data, elem) {
-            angular.forEach(data, (item) => {
-                if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
-                    item[elem] = null;
-                }
-            });
-        }
+
         $scope.ValidateEndCustomer = function (data, actionName) {
             if (actionName !== "OnLoad") {
                 angular.forEach(data, (item) => {
                     if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
-                        $scope.clearEndCustomer(item);
+                        item = contractutil.clearEndCustomer(item);
                     }
                 });
             }
             if ($scope.curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && ($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP")) {
-                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');                
+                var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
                 if (rebateType && rebateType.length > 0) {
                     if (data.length > 1) {
                         var endCustObj = ""
@@ -6939,9 +6518,9 @@
                                 parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                        item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', $scope.curPricingTable);
                                     });
-                                }                                
+                                }
                                 else {
                                     for (var i = 0; i < parsedEndCustObj.length; i++) {
                                         var exists = false;
@@ -6953,7 +6532,7 @@
                                         });
                                         if (!exists) {
                                             angular.forEach(data, (item) => {
-                                                $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                                item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', $scope.curPricingTable);
                                             });
                                             i = parsedEndCustObj.length;
                                         }
@@ -6963,13 +6542,13 @@
                             if (endCustObj == "" || parsedEndCustObj == "") {
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid Vol_Tier Deal');
+                                        item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', $scope.curPricingTable);
                                     });
                                 }
                             }
                         });
                     }
-                    
+
                 }
                 else {
                     if (data.length > 1) {
@@ -6983,7 +6562,7 @@
                                 parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
+                                        item = contractutil.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', $scope.curPricingTable);
                                     });
                                 }
                                 else {
@@ -6997,7 +6576,7 @@
                                         });
                                         if (!exists) {
                                             angular.forEach(data, (item) => {
-                                                $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
+                                                item = contractutil.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', $scope.curPricingTable);
                                             });
                                             i = parsedEndCustObj.length;
                                         }
@@ -7007,7 +6586,7 @@
                             if (endCustObj == "" || parsedEndCustObj == "") {
                                 if (parsedEndCustObj.length != endCustObj.length) {
                                     angular.forEach(data, (item) => {
-                                        $scope.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal');
+                                        item = contractutil.setEndCustomer(item, 'Hybrid ' + $scope.curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', $scope.curPricingTable);
                                     });
                                 }
                             }
@@ -7015,65 +6594,7 @@
                     }
                 }
             }
-            
-            return data;
-        }
-        $scope.clearEndCustomer = function (item) {
-            if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
-                delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
-                delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
-            }
-        }
-        $scope.setEndCustomer = function (item, dealType){
-            if (!item._behaviors) item._behaviors = {};
-            if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-            if (!item._behaviors.isError) item._behaviors.isError = {};
-            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-            if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
-                || (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
-                $scope.clearEndCustomer(item);
-                item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
-                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country/Region must be same for " + dealType + ".";
-            }
-            else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
-                && (($scope.curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || $scope.curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
-                $scope.clearEndCustomer(item);
-                item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
-                item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
-            }
-        }
 
-        $scope.validateMarketSegment = function (data) {
-            $scope.clearValidation(data, 'MRKT_SEG');
-            var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-            //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
-            //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
-            var spreadData;
-            if ($scope.spreadDs != undefined) {
-                spreadData = $scope.spreadDs.data();
-            }
-            else {
-                spreadData = data
-            }
-
-            //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-            var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
-            if (isMarketSegment) {
-                angular.forEach(data, (item) => {
-                    if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
-                        if (!item._behaviors) item._behaviors = {};
-                        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-                        if (!item._behaviors.isError) item._behaviors.isError = {};
-                        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-                        item._behaviors.isRequired["MRKT_SEG"] = true;
-                        item._behaviors.isError["MRKT_SEG"] = true; 
-                        item._behaviors.validMsg["MRKT_SEG"] = "Market Segment is required.";
-                       
-                    }
-                });
-
-            }
             return data;
         }
 
@@ -7082,7 +6603,7 @@
             let dealType = $scope.curPricingTable.OBJ_SET_TYPE_CD;
             var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             if (dealType == "KIT") {
-                $scope.clearValidation(data, 'PTR_USER_PRD');
+                data = contractutil.clearValidation(data, 'PTR_USER_PRD');
                 angular.forEach(filterData, (item) => {
                     if (item.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' && item.PTR_SYS_PRD.toString().contains('"MTRL_TYPE_CD":"KITS"')) {
                         $scope.OVLPFlexPdtPTRUSRPRDError = true;    // added this to enable error binding to cell
@@ -7101,7 +6622,7 @@
 
         $scope.validateDensityBand = function (data) {
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
-                $scope.clearValidation(data, 'DENSITY_BAND');
+                data = contractutil.clearValidation(data, 'DENSITY_BAND');
                 $scope.$broadcast('validateDensity', data);
                 if (data.some(function (el) { return el.DENSITY_BAND == null })) {
                     angular.forEach(data, (item) => {
@@ -7114,40 +6635,6 @@
                             item._behaviors.isError["DENSITY_BAND"] = true;
                             item._behaviors.validMsg["DENSITY_BAND"] = item.isDensity['ErrorMsg'];
                         }
-                    });
-                }
-            }
-            return data;
-        }
-
-        $scope.validateFlexRules = function (data) {
-            if ($scope.curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
-                $scope.clearValidation(data, 'PAYOUT_BASED_ON');
-                var accrualRule = true, drainingRule = true;
-                var objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
-                var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-                var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-                var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-                accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
-                drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
-                if (!accrualRule) {
-                    angular.forEach(filterData, (item) => {
-                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout');
-                    });
-                }
-                if (!drainingRule) {
-                    angular.forEach(drainingEntries, (item) => {
-                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout');
-                    });
-                }
-                if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
-                    var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
-                    var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
-                    angular.forEach(restrictedAccrualData, (item) => {
-                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed');
-                    });
-                    angular.forEach(restrictedDraininngData, (item) => {
-                        $scope.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed');
                     });
                 }
             }
