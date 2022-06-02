@@ -25,7 +25,8 @@
             isDuplicateTitle: isDuplicateTitle,
             deletePriceRule: deletePriceRule,
             copyPriceRule: copyPriceRule,
-            validateProducts: validateProducts
+            validateProducts: validateProducts,
+            getConstantsByName: getConstantsByName
         }
 
         return service;
@@ -80,6 +81,13 @@
 
         function getFailedRuleTasksByRuleId(ruleId) {
             return dataService.get(apiBaseUrl + 'getFailedRuleTasksByRuleId/' + ruleId);
+        }
+
+        //adding this to remove dependency from adminBanner service func
+        function getConstantsByName(data) {
+            const apiBaseUrlCnst = "api/AdminConstants/v1/";
+            const apiUrl = apiBaseUrlCnst + 'GetConstantsByName/' + data;
+            return dataService.get(apiUrl);
         }
     }
 })();

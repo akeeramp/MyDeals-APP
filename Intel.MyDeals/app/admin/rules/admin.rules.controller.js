@@ -7,9 +7,9 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', 'bannerConstantsService', '$uibModal', 'rid']
+    RuleController.$inject = ['$rootScope', '$location', 'ruleService', '$scope', '$stateParams', 'logger', '$timeout', 'confirmationModal', 'gridConstants', '$uibModal', 'rid']
 
-    function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModal, rid) {
+    function RuleController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, $uibModal, rid) {
         var vm = this;
         //Added By Bhuvaneswari for US932213
         if (window.usrRole != 'GA' && window.usrRole != 'DA' && window.usrRole != 'SA' && !window.isDeveloper) {
@@ -112,14 +112,14 @@
 
         $scope.getConstant = function () {
             // If user has closed the banner message he wont see it for the current session again.
-            constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
+            ruleService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
                 if (!!data.data) {
                     vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
                     vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(usrEmail) > -1;
                 }
             });
             if (window.usrRole != 'DA' && window.usrRole != 'SA') {
-                constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
+                ruleService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                     if (!!data.data) {
                         var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
                         vm.toolKitHidden = prcAccess.indexOf(window.usrRole) > -1;

@@ -6,9 +6,9 @@ angular
 SetRequestVerificationToken.$inject = ["$http"];
 
 RuleModalController.$inject = [
-    "$rootScope", "$location", "ruleService", "$scope", "$stateParams", "logger", "$timeout", "confirmationModal", "gridConstants", "bannerConstantsService", "$uibModalInstance", "RuleConfig", "dataItem"];
+    "$rootScope", "$location", "ruleService", "$scope", "$stateParams", "logger", "$timeout", "confirmationModal", "gridConstants", "$uibModalInstance", "RuleConfig", "dataItem"];
 
-function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, constantsService, $uibModalInstance, RuleConfig, dataItem) {
+function RuleModalController($rootScope, $location, ruleService, $scope, $stateParams, logger, $timeout, confirmationModal, gridConstants, $uibModalInstance, RuleConfig, dataItem) {
     var vm = this;
     vm.loadCriteria = false;
     vm.rule = {};
@@ -55,14 +55,14 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
 
     $scope.getConstant = function () {
         // If user has closed the banner message he wont see it for the current session again.
-        constantsService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
+        ruleService.getConstantsByName("PRC_RULE_EMAIL").then(function (data) {
             if (!!data.data) {
                 vm.adminEmailIDs = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
                 vm.isElligibleForApproval = vm.adminEmailIDs.indexOf(window.usrEmail) > -1 ? true : false;
             }
         });
         if (window.usrRole != 'DA' && window.usrRole != 'SA') {
-            constantsService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
+            ruleService.getConstantsByName("PRC_RULE_READ_ACCESS").then(function (data) {
                 if (!!data.data) {
                     var prcAccess = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
                     vm.toolKitHidden = prcAccess.indexOf(window.usrRole) > -1;
