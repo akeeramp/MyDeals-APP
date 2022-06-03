@@ -1,0 +1,182 @@
+﻿.rule_value_desc {
+    font-weight: bold;
+    color: #7d8803;
+}
+
+.rule_operator_desc {
+    font-weight: bold;
+    color: #b3b3b3;
+}
+
+.rule_attr_desc {
+    font-weight: bold;
+    color: #0071c5;
+}
+
+.componentLabel {
+    padding: 0 0 0 35px;
+    text-align: left;
+    color: #FC4C02;
+}
+
+h3 i {
+    color: #3343a4;
+}
+
+h3 a {
+    float: right;
+}
+
+.help {
+    padding-top: 50px;
+    padding-right: 40px !important;
+}
+
+#btnWordWrapControl {
+    float: right;
+    font-size: 30px !important;
+    margin-top: -5px;
+    margin-right: -14px;
+    color: white;
+}
+
+#btnEnlargeText {
+    border: 2px solid white;
+    font-size: 16px !important;
+    padding: 2px;
+    border-radius: 3px;
+    float: right;
+    margin-top: -3px;
+    margin-right: -10px;
+    color: white;
+}
+
+.button {
+    display: inline-block !important;
+    width: 28px;
+    height: 28px;
+}
+
+.btnMargin {
+    margin-right: 10px;
+}
+
+.ruleStage {
+    overflow: none !important;
+}
+
+.clrGreen {
+    color: #2196f3 !important;
+}
+
+.clrRed {
+    color: #ff5722 !important;
+}
+
+.fontStyle {
+    font-size: 10px;
+}
+
+.classToggle {
+    height: 20px;
+}
+
+.rulesDescription {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+td {
+    vertical-align: top !important;
+}
+
+.gridStatusMarker {
+    width: 25px;
+    color: #000000;
+    background-color: #cccccc;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 2px 4px 7px;
+    margin-left: -10px;
+    margin-right: 5px;
+    height: 27px;
+}
+
+.true {
+    background-color: rgb(196, 214, 0) !important;
+}
+
+.dealTools .md-icon i {
+    color: #00AEEF !important;
+}
+
+.dealTools .md-icon {
+    padding: 4px 0 0 5px;
+}
+
+.dealTools .md-icon i:hover {
+    color: #003C71 !important;
+}
+
+.dealTools .md-icon-disabled {
+    padding: 4px 2px 0 1px;
+}
+
+.dealTools .md-icon-disabled i {
+    color: #00AEEF;
+}
+
+.dealTools {
+    line-height: 1.8em;
+    height: 100% !important;
+    width: 100%;
+}
+
+.dealTools .gridStatusMarker {
+    font-family: arial;
+}
+
+.dealTools a {
+    text-decoration: none;
+}
+
+.dealTools i:hover {
+    color: #003C71;
+}
+
+.rulesGidIcon {
+    font-size: 20px;
+    margin: 2px;
+    color: #aaa;
+    margin-right: 5px;
+}
+
+.k-plus::before {
+    content: "\e005" !important;
+}
+
+.k-minus::before {
+    content: "\e006" !important;
+}
+
+.k-button {
+    cursor: pointer !important;
+}
+
+.k-grid-toolbar > .k-grid-add > .k-icon {
+    font-size: 14px !important;
+    margin-top: 1px;
+}
+
+.k-grid td, .k-grid td div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.intelicon-lab {
+    padding-top: 7px;
+}

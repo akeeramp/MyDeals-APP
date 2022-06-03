@@ -1,0 +1,384 @@
+﻿import * as angular from "angular";
+import { logger } from "../../shared/logger/logger";
+import { adminRulesService } from "./admin.rules.service";
+import { constantsService } from "../constants/admin.constants.service";
+import { Component, ViewEncapsulation } from "@angular/core";
+import { downgradeComponent } from "@angular/upgrade/static";
+import { ThemePalette } from "@angular/material/core";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import {
+    GridDataResult,
+    DataStateChangeEvent,
+    PageSizeItem,
+} from "@progress/kendo-angular-grid";
+import {
+    process,
+    State,
+    distinct,
+} from "@progress/kendo-data-query";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+
+@Component({
+    selector: "adminRules",
+    templateUrl: "Client/src/app/admin/rules/admin.rules.component.html",
+    styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
+    encapsulation: ViewEncapsulation.None
+})
+export class adminRulesComponent {
+    constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $(
+            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
+        ).remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+        this.allData = this.allData.bind(this);
+    }
+
+    public toolKitHidden = false;
+    private isLoading = true;
+    private dataSource: any;
+    private gridOptions: any;
+    private allowCustom = true;
+    private color: ThemePalette = "primary";
+    public gridResult: Array<any> = [];
+    public type = "numeric";
+    public info = true;
+    public formGroup: FormGroup;
+    public isFormChange = false;
+    public Geo: Array<any> = [];
+    public Countries: Array<any> = [];
+    private editedRowIndex: number;
+    public IsAutomationIncluded: false;
+    public isDeletion = false;
+    public isElligibleForApproval = false;
+    public adminEmailIDs = "";
+    public isExpand = true;
+    public isExpandTitle = "Click me to Expand Cloumn";
+    public isTextIncrease = true;
+    public isTextFontTitle = "Click me to Decrease Text size";
+
+    private deletionId: any;
+    private excelColumns = {
+        "Name": "Name",
+        "RuleStageLabel": "Rule Stage",
+        "RuleStatusLabel": "Rule Status",
+        "RuleAutomationLabel": "Rule Type",
+        "StartDate": "Start Date",
+        "EndDate": "End Date",
+        "OwnerName": "Owner Name",
+        "ChangedBy": "Updated By",
+        "ChangeDateTime": "Updated Date",
+        "Notes": "Notes",
+        "RuleDescription": "Rules Description"
+    }
+    public state: State = {
+        skip: 0,
+        take: 25,
+        group: [],
+        // Initial filter descriptor
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
+    public pageSizes: PageSizeItem[] = [
+        {
+            text: "10",
+            value: 10,
+        },
+        {
+            text: "25",
+            value: 25,
+        },
+        {
+            text: "50",
+            value: 50,
+        },
+        {
+            text: "100",
+            value: 100,
+        },
+    ];
+    public gridData: GridDataResult;
+
+    distinctPrimitive(fieldName: string): any {
+        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
+        this.gridData = process(this.gridResult, this.state);
+    }
+
+    closeEditor(grid, rowIndex = this.editedRowIndex) {
+        grid.closeRow(rowIndex);
+        this.editedRowIndex = undefined;
+        this.formGroup = undefined;
+    }
+
+    addHandler({ sender }) {
+        this.closeEditor(sender);
+
+    }
+
+    editHandler({ sender, rowIndex, dataItem }) {
+        this.closeEditor(sender);
+
+    }
+
+    cancelHandler({ sender, rowIndex }) {
+        this.closeEditor(sender, rowIndex);
+    }
+
+    saveHandler({ sender, rowIndex, formGroup, isNew }) {
+        sender.closeRow(rowIndex);
+    }
+    loadRules() {
+        if ((<any>window).usrRole != 'GA' && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
+        else {
+            if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
+                this.toolKitHidden = false;
+            } else {
+                this.toolKitHidden = true;
+            }
+            this.adminRulesSvc.getPriceRules(0, "GET_RULES").subscribe(
+                (result: Array<any>) => {
+                    this.gridResult = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
+                },
+                function (response) {
+                    this.loggerSvc.error(
+                        "Unable to get Price Rules.",
+                        response,
+                        response.statusText
+                    );
+                }
+            );
+        }
+    }
+
+    refreshGrid() {
+        this.isLoading = true;
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        };
+        this.loadRules();
+    }
+
+    ngOnInit() {
+        console.log("on component");
+        this.loadRules();
+    }
+
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
+
+    stageOneChar(RULE_STAGE) {
+        if (RULE_STAGE === true) {
+            return 'A';
+        } else {
+            return 'P';
+        }
+    }
+    stageOneCharStatus(IsAutomationIncluded) {
+        if (IsAutomationIncluded === true) {
+            return 'intelicon-plus-solid clrGreen';
+        } else {
+            return 'intelicon-minus-solid clrRed';
+        }
+    }
+
+    deleteRule(id) {
+        this.isDeletion = true;
+        this.deletionId = id;
+    };
+
+    cancelDeletion() {
+        this.isDeletion = false;
+    }
+
+    deleteConfirmation() {
+        this.adminRulesSvc.deletePriceRule(this.deletionId).subscribe(
+            (result: number) => {
+                this.gridResult = this.gridResult.filter(x => x.Id != result);
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to delete Price Rule.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
+    }
+
+    getConstant() {
+        // If user has closed the banner message he wont see it for the current session again.
+        this.constantSvc.getConstantsByName("PRC_RULE_EMAIL").subscribe(
+            (result: any) => {
+                if (!!result.data) {
+                    this.adminEmailIDs = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
+                    this.isElligibleForApproval = this.adminEmailIDs.indexOf((<any>window).usrEmail) > -1;
+                }
+            });
+        if ((<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA') {
+            this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").subscribe(
+                (result: any) => {
+                    if (!!result.data) {
+                        var prcAccess = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
+                        this.toolKitHidden = prcAccess.indexOf((<any>window).usrRole) > -1;
+                        if (this.toolKitHidden) {
+                            this.ngOnInit();
+                        } else {
+                            document.location.href = "/Dashboard#/portal";
+                        }
+
+                    }
+                },
+                function (response) {
+                    this.loggerSvc.error(
+                        "Unable to get constant by name.",
+                        response,
+                        response.statusText
+                    );
+                });
+        }
+
+    }
+    UpdateRuleIndicator = function (ruleId, isTrue, strActionName, isEnabled) {
+        if (isEnabled && ruleId != null && ruleId > 0) {
+            var priceRuleCriteria = { Id: ruleId, IsActive: isTrue, RuleStage: isTrue }
+            switch (strActionName) {
+                case "UPDATE_ACTV_IND": {
+                    priceRuleCriteria.IsActive = isTrue;
+                } break;
+                case "UPDATE_STAGE_IND": {
+                    priceRuleCriteria.RuleStage = isTrue;
+                    priceRuleCriteria.IsActive = isTrue; // also make it active now
+                } break;
+            }
+            this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).then(function (response) {
+                if (response.data.Id > 0) {
+                    this.gridData.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
+                    this.gridData.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
+                    this.gridData.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                    switch (strActionName) {
+                        case "UPDATE_ACTV_IND": {
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                            this.loggerSvc.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
+                        } break;
+                        case "UPDATE_STAGE_IND": {
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
+                            this.gridData.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                            this.loggerSvc.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
+                        } break;
+                    }
+                    this.isLoading = false;
+                }
+                else {
+                    switch (strActionName) {
+                        case "UPDATE_ACTV_IND": {
+                            this.rule.IsActive = !isTrue;
+                        } break;
+                        case "UPDATE_STAGE_IND": {
+                            this.rule.RuleStage = !isTrue;
+                            this.rule.IsActive = !isTrue;
+                        } break;
+                    }
+                    this.loggerSvc.error(
+                        "Unable to update Price Rule.",
+                        response,
+                        response.statusText
+                    );
+                }
+            }, function (response) {
+                switch (strActionName) {
+                    case "UPDATE_ACTV_IND": {
+                        this.rule.IsActive = !isTrue;
+                    } break;
+                    case "UPDATE_STAGE_IND": {
+                        this.rule.RuleStage = !isTrue;
+                        this.rule.IsActive = !isTrue;
+                    } break;
+                }
+                this.loggerSvc.error(
+                    "Unable to update Price Rule.",
+                    response,
+                    response.statusText
+                );
+            });
+        }
+    }
+
+    isExpandable() {
+        if (this.isExpand) {
+            this.isExpand = false;
+            this.isExpandTitle = "Click me to remove Expand column";
+        }
+        else {
+            this.isExpand = true;
+            this.isExpandTitle = "Click me to Expand Cloumn";
+        }
+    }
+
+    isFontSizeChange() {
+        if (this.isTextIncrease) {
+            this.isTextIncrease = false;
+            this.isTextFontTitle = "Click me to Increase Text size";
+        }
+        else {
+            this.isTextIncrease = true;
+            this.isTextFontTitle = "Click me to Decrease Text size"
+        }
+    }
+
+    public cellOptions = {
+        textAlign: "left",
+        wrap: true
+    };
+
+    public headerCellOptions = {
+        textAlign: "center",
+        background: "#0071C5",
+        color: "#ffffff",
+        wrap: true
+    };
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        var result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+        return result;
+    }
+
+    returnZero() {
+        return 0
+    }
+}
+angular
+    .module("app")
+    .directive(
+        "adminRules",
+        downgradeComponent({ component: adminRulesComponent })
+    );

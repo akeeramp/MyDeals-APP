@@ -31,6 +31,7 @@ import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassU
 import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks/admin.validateVistexR3Checks.component';
 import { manageEmployeeComponent } from '../admin/employee/admin.manageEmployee.component';
 import { ManageEmployeeModalComponent } from "../admin/employee/admin.manageEmployeeModal.component";
+import { adminRulesComponent } from '../admin/rules/admin.rules.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -66,5 +67,6 @@ export let adminComponents =[
     dealMassUpdateComponent,
     ValidateVistexR3ChecksComponent,
     manageEmployeeComponent,
-    ManageEmployeeModalComponent
+    ManageEmployeeModalComponent,
+    adminRulesComponent
 ]

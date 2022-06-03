@@ -358,6 +358,15 @@ angular
                     }
                 }
             })
+            .state("rules", {
+                url: "/rules",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-rules></admin-rules>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 
