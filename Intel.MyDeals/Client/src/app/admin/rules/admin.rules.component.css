@@ -35,7 +35,7 @@ h3 a {
 #btnWordWrapControl {
     float: right;
     font-size: 30px !important;
-    margin-top: -5px;
+    margin-top: -4px;
     margin-right: -14px;
     color: white;
 }
@@ -151,11 +151,11 @@ td {
     margin-right: 5px;
 }
 
-.k-plus::before {
+.k-plus::before, .k-i-plus::before {
     content: "\e005" !important;
 }
 
-.k-minus::before {
+.k-minus::before, .k-i-minus::before {
     content: "\e006" !important;
 }
 
@@ -175,8 +175,4 @@ td {
 
 a:hover {
     text-decoration: none;
-}
-
-.intelicon-lab {
-    padding-top: 7px;
 }

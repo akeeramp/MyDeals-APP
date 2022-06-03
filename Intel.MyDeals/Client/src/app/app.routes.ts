@@ -367,6 +367,15 @@ angular
                     }
                 }
             })
+            .state("dataFix", {
+                url: "/dataFix",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-data-fix></admin-data-fix>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

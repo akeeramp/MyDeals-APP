@@ -7,6 +7,7 @@ import { batchTimingComponent } from '../admin/batchTiming/admin.batchTiming.com
 import { adminVistexCustomerMappingComponent } from '../admin/vistexCustomerMapping/admin.vistexCustomerMapping.component';
 import { adminPrimeCustomersComponent } from '../admin/PrimeCustomers/admin.primeCustomers.component';
 import { geoComponent } from '../admin/geo/admin.geo.component';
+import { adminDataFixComponent } from '../admin/dataFix/admin.dataFix.component';
 import { ConstantsComponent } from '../admin/constants/admin.constants.component';
 import { adminProductAliasComponent } from '../admin/productAlias/admin.productAlias.component';
 import { adminProductsComponent } from '../admin/products/admin.products.component';
@@ -43,6 +44,7 @@ export let adminComponents =[
     adminVistexCustomerMappingComponent,
     adminPrimeCustomersComponent,
     geoComponent,
+    adminDataFixComponent,
     ConstantsComponent,
     adminProductAliasComponent,
     adminProductsComponent,

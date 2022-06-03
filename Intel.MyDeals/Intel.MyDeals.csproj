@@ -759,7 +759,11 @@
     <Content Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.component.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
+    <Content Include="Client\src\app\admin\dataFix\admin.dataFix.component.css" />
+    <Content Include="Client\src\app\admin\dataFix\admin.dataFix.component.html" />
     <Content Include="Client\src\app\admin\dataQuality\admin.dataQuality.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.ts" />
     <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />

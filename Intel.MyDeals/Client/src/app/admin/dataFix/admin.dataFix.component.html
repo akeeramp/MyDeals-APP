@@ -1,0 +1,126 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-12" style="height:50px"></div>
+</div>
+<div class="row">
+    <div class="col-md-12" style="padding-left: 35px;">
+        <h3>Data Fix</h3>
+    </div>
+    <!--<div *ngIf="!accessAllowed" class="col-md-12">
+            <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;">
+                <b>
+                <i class="intelicon-alert-solid icon-lg"></i>
+            </b>
+            Note: Access to this page is not allowed
+        </div>
+    </div>-->
+    <div class="col-md-12">
+        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 47px;">
+            This screen allows to fix the data quality issues in 'My Deals' system
+        </div>
+    </div>
+    <div class="col-md-12 kendo-grid-buttons">
+        <div *ngIf="!IsEditMode">
+            <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                        [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                        [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+
+                <ng-template kendoGridToolbarTemplate>
+                    <button kendoGridAddCommand class="k-button addButton" (click)="addNewFix()">
+                        <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW DATA FIX
+                    </button>
+                    <button kendoGridAddCommand class="k-button addButton" (click)="addNewFixExpert()">
+                        <span class="k-icon k-i-plus-outline k-icon-md"></span>EXPERT MODE
+                    </button>
+                    <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
+                                                                   class="k-button clearButton">
+                        <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+                    </button>
+                </ng-template>
+
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_NBR" title="Incident Number"></kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_MSG" title="Message"></kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By"></kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On">
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+
+        <div *ngIf="IsEditMode">
+            <div *ngIf="!IsExpertMode">
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-1" autocomplete="off">Required # :</label>
+                    <div class="col-md-6">
+                        <div class="dealTools">
+                            <div style="float:left; width:120px;">
+                                Attributes: <input style="height: 15px; width: 15px" type="checkbox" id="atrbMan" class='grid-link-checkbox with-font' name="Attributes" value="Attributes" [(ngModel)]="isAtrbSelected">
+                            </div>
+
+                            <div style="float:left; width:120px;">
+                                Actions: <input style="height: 15px; width: 15px" type="checkbox" id="actnMan" class='grid-link-checkbox with-font' name="Actions" value="Actions" [(ngModel)]="isActnSelected">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
+                    <div class="col-md-3 dealTools">
+                        <kendo-textbox style="width:100%"></kendo-textbox>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-1">Attributes : </label>
+                    <div class="col-md-10 dealTools">
+                        Attributes logic yet to implent
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label isRequired col-md-1">Actions : </label>
+                    <div class="col-md-10 dealTools">
+                        Actions Logic yet to implement
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-1" autocomplete="off"><b>Message : </b></label>
+                    <div class="col-md-6 dealTools">
+                        <kendo-textbox class="form-control md" style="width:100%"></kendo-textbox>
+                    </div>
+                    <div class="col-md-4">
+                        <button [disabled]="disabled" (click)="SaveFix(true, false)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                        <button (click)="okDataFix()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="IsExpertMode">
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}">
+                            Warning: You must know the correct structure to use for this screen.  Only use if you really know what you are doing.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <label class="control-label col-md-2" style="text-align: left;"><b>Enter JSON Packet : </b></label>
+                        <kendo-textarea [(ngModel)]="JsonMessage" style="width:100%; color: #ccc;" [rows]="10"></kendo-textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <button [disabled]="disabled" (click)="SaveFix(true, true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
+                        <button (click)="okExpert()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

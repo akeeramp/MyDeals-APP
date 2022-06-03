@@ -186,8 +186,7 @@
 
                     <li *ngIf="(isRealSA || isDeveloper)" ui-sref-active="active"><a href="#dataquality">Data Quality (DQ)</a></li>
 
-
-                    <li *ngIf="(isDeveloper)"><a href="Admin#/dataFix">Data Fix</a></li>
+                    <li *ngIf="(isDeveloper)" ui-sref-active="active"><a href="#dataFix">Data Fix</a></li>
 
                     <li *ngIf="(isDeveloper)" class="dropdown-submenu">
                         <a tabindex="-1">Security Attributes</a>
@@ -214,27 +213,27 @@
                             <li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
                             <li ui-sref-active="active"><a href="#pushDealstoVistex">Push Deals to Vistex</a></li>
                         </ul>
-                        </li>
+                    </li>
 
-                        <li *ngIf="( isRealSA ||isDeveloper)" ui-sref-active="active"><a href="#consumptionCountry">Consumption Country/Region</a></li>
+                    <li *ngIf="( isRealSA ||isDeveloper)" ui-sref-active="active"><a href="#consumptionCountry">Consumption Country/Region</a></li>
 
 
-                        <li *ngIf="(usrRole=='DA' || isRealSA || isDeveloper || isCustomerAdmin)">
-                            <!--<a href="Admin#/manageEmployee">User Accounts Administration</a>-->
-                            <a ui-sref="manageEmployee">User Accounts Administration</a>
-                        </li>
-                        <li *ngIf="(usrRole=='DA' || usrRole=='GA' || isRealSA || isDeveloper)" class="dropdown-submenu">
+                    <li *ngIf="(usrRole=='DA' || isRealSA || isDeveloper || isCustomerAdmin)">
+                        <!--<a href="Admin#/manageEmployee">User Accounts Administration</a>-->
+                        <a ui-sref="manageEmployee">User Accounts Administration</a>
+                    </li>
+                    <li *ngIf="(usrRole=='DA' || usrRole=='GA' || isRealSA || isDeveloper)" class="dropdown-submenu">
 
-                            <a tabindex="-1">Approval Rules Management</a>
-                            <ul class="dropdown-menu" style="width: 250px;">
-                                <li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>
-                                <li ui-sref-active="active"><a href="#ruleOwner">Rules Ownership Admin</a></li>
-                            </ul>
+                        <a tabindex="-1">Approval Rules Management</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>
+                            <li ui-sref-active="active"><a href="#ruleOwner">Rules Ownership Admin</a></li>
+                        </ul>
 
-                        </li>
-                        <li *ngIf="(env=='LOCAL' && usrWwid==10548414)">
-                            <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
-                        </li>
+                    </li>
+                    <li *ngIf="(env=='LOCAL' && usrWwid==10548414)">
+                        <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
+                    </li>
                 </ul>
                 </li>
 
