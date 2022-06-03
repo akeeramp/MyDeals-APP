@@ -1019,6 +1019,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title = "NRE/MDF Rebates does not support the Mutually Exclusive group type",
+                    ActionRule = MyDcActions.NreMdfSupportedGroupTypes,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Rev Tier Deals default to Additive", // Rev Tiers are Additive only deals always
                     ActionRule = MyDcActions.DefaultRevTierAdditive,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },

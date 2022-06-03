@@ -3090,6 +3090,24 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void NreMdfSupportedGroupTypes(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> targetTypes = new List<string> { "NRE", "MDF" };
+            string myRebateType = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+
+            IOpDataElement dealCompType = r.Dc.GetDataElement(AttributeCodes.DEAL_COMB_TYPE);   // For message update
+            string dealCompTypeValue = r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE); // For conditional check
+
+            if (targetTypes.Contains(myRebateType) && dealCompTypeValue.Contains("Mutually Exclusive"))
+            {
+                // TWC3119-219 - Legal: Remove Mutually exclusive group type for MDF/NRE Rebate type
+                dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type. Please choose an Additive type.");
+            }
+        }
+
         public static void CheckEcapAdjUnit(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
