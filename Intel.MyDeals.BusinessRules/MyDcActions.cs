@@ -1738,7 +1738,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId)) return; // Return on any item that isn't fully populated
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid)) return; // Return on any item that isn't fully populated
 
-            IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+            IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.DC_ID);
 
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
             List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
@@ -1746,9 +1746,8 @@ namespace Intel.MyDeals.BusinessRules
             if (overlapsCheckDeals.Count > 0)
             {
                 string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
-                deEndCustomer.AddMessage("This tender deal overlaps with other Tender Deal(s) [" + overlaps + "].  Please correct overlap.");
+                deEndCustomer.AddMessage("Deal cannot be created/updated. Another deal already exists with the same Customer, End Customer, Project and Product with overlapping dates. Change the dates for this deal or for the existing deal(s) [" + overlaps + "].");
             }
-
         }
 
         public static void CheckCeilingVolume(params object[] args)
