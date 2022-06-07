@@ -33,4 +33,9 @@ export class adminRulesService {
         const apiUrl: string = this.apiBaseUrl + 'UpdatePriceRule/' + strActionName;
         return this.httpClient.get(apiUrl, priceRuleCriteria);
     }
+
+    public getRuleSimulationResults(data): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetRuleSimulationResults/';
+        return this.httpClient.post(apiUrl, data);
+    }
 }

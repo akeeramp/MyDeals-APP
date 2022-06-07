@@ -795,6 +795,7 @@
     <Content Include="Client\src\app\admin\ruleOwner\admin.ruleOwner.component.html" />
     <Content Include="Client\src\app\admin\rules\admin.rules.component.css" />
     <Content Include="Client\src\app\admin\rules\admin.rules.component.html" />
+    <Content Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.html" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
@@ -806,6 +807,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.ts" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />

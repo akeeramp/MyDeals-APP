@@ -359,7 +359,7 @@ angular
                 }
             })
             .state("rules", {
-                url: "/rules",
+                url: "/rules/:rid",
                 abstract: false,
                 views: {
                     mainView: {

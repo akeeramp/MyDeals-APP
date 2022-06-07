@@ -33,6 +33,7 @@ import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks
 import { manageEmployeeComponent } from '../admin/employee/admin.manageEmployee.component';
 import { ManageEmployeeModalComponent } from "../admin/employee/admin.manageEmployeeModal.component";
 import { adminRulesComponent } from '../admin/rules/admin.rules.component';
+import { RulesSimulationModalComponent } from '../admin/rules/admin.rulesSimulationModal.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -70,5 +71,6 @@ export let adminComponents =[
     ValidateVistexR3ChecksComponent,
     manageEmployeeComponent,
     ManageEmployeeModalComponent,
-    adminRulesComponent
+    adminRulesComponent,
+    RulesSimulationModalComponent
 ]

@@ -25,10 +25,13 @@
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" kendoGridAddCommand class="k-button addButton">
                 <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RULE
             </button>
+            <button *ngIf="toolKitHidden == false && rid != 0" [disabled]="isLoading" class="k-button addButton" (click)="removeFilter()">
+                <span class="k-icon k-i-filter-clear k-icon-md"></span>REMOVE FILTER
+            </button>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" class="k-button" kendoGridExcelCommand icon="file-excel">
                 EXPORT TO EXCEL
             </button>
-            <button class="k-button" [disabled]="isLoading">
+            <button class="k-button" [disabled]="isLoading" (click)="openMessage('test')">
                 <span class="intelicon-lab"></span>SIMULATE RUNNING RULES
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
@@ -54,6 +57,12 @@
                 </div>
             </ng-template>
         </kendo-grid-command-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="Id" title="Id" [hidden]=true>
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+            </ng-template>
+        </kendo-grid-column>
         <kendo-grid-column width="320" [headerClass]="{'headerClass':true}" field="Name" title="Name">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

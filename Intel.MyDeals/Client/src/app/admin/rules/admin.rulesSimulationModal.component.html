@@ -1,0 +1,69 @@
+﻿<div class="modal-header modalBlueBody">
+    <h3 class="modal-title" id="modalTitle">Simulate Approval Rules Execution</h3>
+    <i id="btnClose" class="intelicon-close" (click)="close()" title="Close this window"></i>
+</div>
+<div class="modal-body modalBlueBody" id="modal-body">
+    <div class="row">
+        <div class="headerNotes">
+            <b>Note: </b>Under simulation, if you select any specific rules, they will be executed regardless of their Approval Status or Rules Status.
+            If no rules are selected, then all currently Active and Approved rules will be executed under simulation mode conditions.
+        </div>
+    </div>
+    <div class="row">
+        <label class="myLabel col-md-2">Deals List:</label>
+        <div class="col-md-9">
+            <kendo-textbox [(ngModel)]="dealsList" class="textBoxWidth k-textbox"></kendo-textbox><br />
+            <span class="description">Enter deal numbers as a comma seperated list</span>
+        </div>
+    </div>
+    <div class="row">
+        <label class="myLabel col-md-2">Rules List:</label>
+        <div class="col-md-9">
+            <kendo-multiselect #cmbmulti placeholder="Select rules to test..." [data]="Rules"
+                               textField="Name" valueField="Id" [valuePrimitive]="true"
+                               id="multiselect" [(ngModel)]="selectedIds"></kendo-multiselect>
+            <span class="description">All selected rules will be run regardless of thier Approval Status or Rules Status</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                        [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                        [groupable]="false"
+                        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
+                        class="dispResults">
+                <kendo-grid-column width="120" [headerClass]="{'headerClass':true}" field="WIP_DEAL_SID" title="Deal #" filterable=false>
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="APRV_RULES" title="Matching Approval Rules">
+                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLD_RULES" title="Matching Exclusion Rules">
+                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
+    </div>
+    <div class="row buttonBar">
+        <div class="col-md-4 simulationBtnTxt">
+            <button class="btn btn-default simulationBtn" type="button" (click)="close()">Close Window</button>
+        </div>
+        <div class="col-md-4 simulationBtnTxt">
+            <button class="btn btn-default simulationBtn" type="button" (click)="resetForm()">Reset Form</button>
+        </div>
+        <div class="col-md-4 simulationBtnTxt">
+            <button class="btn btn-success simulationBtn" type="button" (click)="runSimulation()">Run Simulation Now</button>
+        </div>
+    </div>
+    <kendo-dialog title="Message" *ngIf="isAlert" (close)="cancelAlert()">
+        <p style="margin: 30px; text-align: center;">{{message}}</p>
+        <kendo-dialog-actions>
+            <button class='k-button' (click)="cancelAlert()">OK</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+</div>
