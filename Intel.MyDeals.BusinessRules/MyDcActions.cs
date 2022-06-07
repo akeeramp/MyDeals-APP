@@ -3103,7 +3103,7 @@ namespace Intel.MyDeals.BusinessRules
             if (targetTypes.Any(myRebateType.Contains) && dealCompTypeValue.Contains("Mutually Exclusive"))
             {
                 // TWC3119-219 - Legal: Remove Mutually exclusive group type for MDF/NRE Rebate type
-                dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type. Please choose an Additive type.");
+                dealCompType.AddMessage("MDF / NRE rebates does not support the Mutually Exclusive group type.");
             }
         }
 
