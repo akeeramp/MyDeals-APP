@@ -1746,7 +1746,7 @@ namespace Intel.MyDeals.BusinessRules
             if (overlapsCheckDeals.Count > 0)
             {
                 string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
-                deEndCustomer.AddMessage("Deal cannot be created/updated. Another deal already exists with the same Customer, End Customer, Project and Product with overlapping dates. Change the dates for this deal or for the existing deal(s) [" + overlaps + "].");
+                deEndCustomer.AddMessage("This deal overlaps with another deal by having the same Customer, End Customer, Project, Product and overlapping dates. Please make changes to this deal so that it no longer overlaps this existing deal(s)  [" + overlaps + "].");
             }
         }
 
