@@ -15,14 +15,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../productSelector/productselector.component';
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
+import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
 /**
  * http://localhost:55490/Dashboard#/contractmanager/26006
  */
 
 @Component({
     selector: 'pricingTableEditor',
-    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html',
-    styleUrls: ['Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css']
+    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
 export class pricingTableEditorComponent implements OnChanges {
 
@@ -47,8 +47,8 @@ export class pricingTableEditorComponent implements OnChanges {
         private selRow = 0;
         private selCol = 0;
 
-        constructor(hotInstance: any, row: number, col: number, prop: string | number, TD: HTMLTableCellElement, cellProperties: Handsontable.CellProperties) {
-          super(hotInstance, row, col, prop, TD, cellProperties);
+        constructor(hotInstance:any) {
+          super(hotInstance);
         }
 
         prepare(row: number, col: number, prop: string | number, TD: HTMLTableCellElement, originalValue: any, cellProperties: Handsontable.CellProperties): void {
@@ -96,6 +96,7 @@ export class pricingTableEditorComponent implements OnChanges {
           }
         }
       }
+      
     }
 
     @Input() in_Cid: any = '';
@@ -104,15 +105,22 @@ export class pricingTableEditorComponent implements OnChanges {
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
 
+    /*For loading variable */
+    private isLoading:string='false';
+    private spinnerMessageHeader:string="PTE Loading";
+    private spinnerMessageDescription:string="PTE loading please wait";
+    private isBusyShowFunFact:string='false'
+    /*For loading variable */
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
     private pricingTableDet: Array<any> = [];
     private pricingTableTemplates: any = {}; // Contains templates for All Deal Types
-
+    private ColumnConfig :Array<Handsontable.ColumnSettings>=[];
     // To get the selected row and col for product selector
     private selRow = 0;
     private selCol = 0;
-
+    //
+    private multiRowDelete:Array<number>=[];
     // Handsontable Variables basic hottable structure
     private hotSettings: Handsontable.GridSettings = {
         minRows:50,
@@ -141,18 +149,7 @@ export class pricingTableEditorComponent implements OnChanges {
     // Cached Dropdown API Responses (that do not usually change)
     private dropdownResponseLocalStorageKey = 'pricingTableEditor_DropdownApiResponses';
     private dropdownResponses:any = null;
-    // private dropdownResponseInitialization() {
-    //   if (!localStorage.getItem(this.dropdownResponseLocalStorageKey)) {
-    //     this.dropdownResponses = [];
-    //     localStorage.setItem(this.dropdownResponseLocalStorageKey, JSON.stringify(this.dropdownResponses));
-    //   } else {
-    //     this.dropdownResponses = JSON.parse(localStorage.getItem(this.dropdownResponseLocalStorageKey));
-    //   }
-    // }
-    // private dropdownResponseUpdateLocal() {
-    //   localStorage.setItem(this.dropdownResponseLocalStorageKey, JSON.stringify(this.dropdownResponses));
-    // }
-
+   
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -161,7 +158,6 @@ export class pricingTableEditorComponent implements OnChanges {
         // Get template for the selected PT
         this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
     }
-
     async getPTRDetails() {
         let vm = this;
         let response = await vm.pteService.readPricingTable(vm.in_Pt_Id).toPromise().catch((err) => {
@@ -175,17 +171,15 @@ export class pricingTableEditorComponent implements OnChanges {
           return [];
         }
     }
-
-    getMergeCells(PTR: any): any {
+    getMergeCells(PTR: any):Array<any> {
       let mergCells = [];
       //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
       let distDCID = _.uniq(PTR, 'DC_ID');
-
       _.each(distDCID, (item) => {
         let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
 
         //get NUM_OF_TIERS acoording this will be the row_span for handson
-        let NUM_OF_TIERS = parseInt(curPTR.NUM_OF_TIERS);
+        let NUM_OF_TIERS = parseInt(curPTR.NUM_OF_TIERS) ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(this.curPricingTable.NUM_OF_TIERS);
         _.each(this.pricingTableTemplates.columns, (colItem, ind) => {
           if (!colItem.isDimKey && !colItem.hidden) {
             let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
@@ -196,28 +190,41 @@ export class pricingTableEditorComponent implements OnChanges {
 
       return mergCells;
     }
-
+    getMergeCellsOnDelete(){
+      let PTR=this.getPTEGenerate();
+      let mergCells= this.getMergeCells(PTR);
+      this.hotTable.updateSettings({mergeCells:mergCells});
+    }
+    getMergeCellsOnEdit(empRow:number,NUM_OF_TIERS:number): void {
+        let mergCells:any=null;
+        //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
+          //get NUM_OF_TIERS acoording this will be the row_span for handson
+           mergCells=this.hotTable.getSettings().mergeCells;
+          _.each(this.pricingTableTemplates.columns, (colItem, ind) => {
+            if (!colItem.isDimKey && !colItem.hidden) {
+              mergCells.push({ row: empRow, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
+            }
+          })
+        this.hotTable.updateSettings({mergeCells:mergCells});
+      
+    }
     getCellComments(PTR: any): any {
       let cellComments = [];
-
       _.each(PTR, (item, rowInd) => {
         if (item._behaviors.validMsg) {
           _.each(item._behaviors.validMsg, (val, key) => {
             let colInd = _.findIndex(this.pricingTableTemplates.columns, { field: key });
-
             cellComments.push({ row: rowInd, col: colInd, comment: { value: val }, className: 'custom-border' });
-
             if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
               cellComments.push({ row: rowInd, col: 0, className: 'custom-cell' });
             }
           });
         }
       });
-
       return cellComments;
     }
-
     generateHandsonTable(PTR: any) {
+      let vm=this;
       //this is the code which is create columns according to Handson from API
       let nestedHeaders: [string[], string[]]= [[],[]];
       let hiddenColumns: number[] = [];
@@ -236,16 +243,18 @@ export class pricingTableEditorComponent implements OnChanges {
         }
 
         let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
-
+        //adding for cell management in cell
+        this.ColumnConfig.push(currentColumnConfig);
         if (item.field == 'PTR_USER_PRD') {
+          currentColumnConfig.editor = this.custProdSelEditor;
+        }
+        if (item.field == 'GEO') {
           currentColumnConfig.editor = this.custProdSelEditor;
         }
         this.columns.push(currentColumnConfig);
         nestedHeaders[0].push(sheetObj[index]);
         nestedHeaders[1].push(`<span style="color:blue;font-style: italic;">${ item.title }</span>`);
       });
-
-      //this.dropdownResponseUpdateLocal();
 
       PTR = this.generatePTR(PTR);
       let mergCells = [];
@@ -255,68 +264,206 @@ export class pricingTableEditorComponent implements OnChanges {
       if (this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP') {
         mergCells = this.getMergeCells(PTR);
       }
-
       // Set the values for hotTable
       PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
-      let hotTable = this.hotRegisterer.getInstance(this.hotId);
+      //let hotTable = this.hotRegisterer.getInstance(this.hotId);
 
       // Loading new data
-      hotTable.loadData(PTR);
+      this.hotTable.loadData(PTR);
 
       // Update settings 
-      hotTable.updateSettings({
+      this.hotTable.updateSettings({
         columns: this.columns,
         hiddenColumns: {
           columns: hiddenColumns,
           indicators: true
         },
         mergeCells: mergCells,
+        cells:(row:number, col:number, prop:string)=>{
+          return this.disableCells(this.hotTable,row,col,prop)
+        },
         cell: cellComments,
+        readOnlyCellClassName:'readonly-cell',
         nestedHeaders: nestedHeaders
       });
     }
-
+    disableCells(hotTable:Handsontable,row:number,col:number,prop:any){
+     //logic for making by defaul all the cell except PTR_USER_PRD readonly
+     const cellProperties = {};
+     if(hotTable.isEmptyRow(row) ){
+       if(prop != 'PTR_USER_PRD'){
+        cellProperties['readOnly'] = true;
+       }
+     }
+     else {
+       //column config hasr eadonly property for certain column persisting that assigning for other
+        if(_.findWhere(this.ColumnConfig,{data:prop}).readOnly){
+          cellProperties['readOnly'] = true;
+        }
+        else{
+          cellProperties['readOnly'] = false;
+        }
+     }
+     return cellProperties;
+    }
     generatePTR(PTR: any) {
       return PTEUtil.pivotData(PTR, this.curPricingTable);
     }
-
     autoFillCol(changes: any) {
       console.log(changes);
     }
-
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
       if (source == 'edit' || source == 'CopyPaste.paste') {
         // Changes will track all the cells changing if we are doing copy paste of multiple cells
         _.each(changes, (item) => {
           // Refer https://handsontable.com/docs/api/hooks/#afterchange
+        /*PTR_USER_PRD change starts here */
           if (item[1] == 'PTR_USER_PRD') {
             if (item[3] != null && item[3] != '') {
-              this.autoFillCellOnProd(item, 'Edit');
+              this.autoFillCellOnProd(item);
             } else {
-              this.autoFillCellOnProd(item, 'Del');
+              //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
+              this.multiRowDelete.push(item[0])
             }
           }
+           /*PTR_USER_PRD change ends here */
+           else if(item[1] == 'AR_SETTLEMENT_LVL'){
+              this.autoFillARSet(item);
+           }
         });
+
+        if(this.multiRowDelete && this.multiRowDelete.length>0){
+          this.deleteRow(this.multiRowDelete);
+        }
       }
     }
-
-    autoFillCellOnProd(cellItem: any, action: string) {
-      let hotTable = this.hotRegisterer.getInstance(this.hotId);
-      let row = cellItem[0];
-
-      if (action == 'Del') {
-        hotTable.alter('remove_row', row);
-      } else {
-        _.each(this.curPricingTable, (val, key) => {
-          _.each(this.columns, (col, ColInd) => {
-            if (col.data == key && col.data != 'PTR_USER_PRD') {
-              hotTable.setDataAtCell(row, ColInd, val);
-            }
-          });
-        });
+    autoFillARSet(item:any){
+      let colSPIdx=_.findWhere(this.hotTable.getCellMetaAtRow(item[0]),{prop:'SETTLEMENT_PARTNER'}).col;
+      let selCell:CellSettings= {row:item[0],col:colSPIdx,editor:'text',className:'',comment:{value:'',readOnly:true}};
+      let cells=this.hotTable.getSettings().cell;
+      if(item[3] !='' && item[3].toLowerCase() !='cash'){
+        this.hotTable.setDataAtRowProp(item[0],'SETTLEMENT_PARTNER', '','no-edit');
+        //check object present 
+        let obj=_.findWhere(cells,{row:item[0],col:colSPIdx})
+        if(obj){
+          obj.editor=false;
+          obj.className='readonly-cell';
+          obj.comment.value='Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
+        }
+        else{
+          selCell.editor=false;
+          selCell.className='readonly-cell';
+          selCell.comment.value='Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
+          cells.push(selCell);
+        }
+        this.hotTable.updateSettings({cell:cells});
+      }
+      else{
+        this.hotTable.setDataAtRowProp(item[0],'SETTLEMENT_PARTNER', 'Default','no-edit');
+        //check object present 
+        let obj=_.findWhere(cells,{row:item[0],col:colSPIdx})
+        if(obj){
+          obj.editor='text';
+          obj.className='';
+          obj.comment.value='';
+        }
+        else{
+          cells.push(selCell);
+        }
+        this.hotTable.updateSettings({cell:cells});
       }
     }
-   async getAllDrowdownValues(){
+    returnEmptyRow(selRow:number):number{
+      let PTRCount = this.hotTable.countRows();
+      let row=0;
+      for(let i=0;i<PTRCount;i++){
+        //checking for the row doesnt have a DC_ID
+        if(this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null ){
+          row=i;
+          break; 
+        }
+      }
+      return row;
+    }
+    addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,empRowVal:number,selRow:number,ROW_ID:number,tier?:number){
+      let updateRows=[];
+        //make the selected row PTR_USER_PRD empty if its not the empty row
+        if(empRowVal !=selRow){
+          hotTable.setDataAtRowProp(selRow,'PTR_USER_PRD', '','no-edit');
+        }
+      _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
+        let currentstring='';
+        if(val.prop=='PTR_USER_PRD'){
+          //update PTR_USER_PRD with entered value
+          currentstring =row+','+val.prop+','+cellItem[3]+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+        }
+        else if(val.prop=='DC_ID'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+        }
+        else if(val.prop=='TIER_NBR'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          currentstring =row+','+val.prop+','+tier+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+        }
+        else if(val.prop){
+          //this will be autofill defaults value
+          let cellVal=this.curPricingTable[`${val.prop}`] ? this.curPricingTable[`${val.prop}`]:'';
+         currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
+         updateRows.push(currentstring.split(','));
+        }
+        else{
+          console.log('invalid Prop')
+        }
+      });
+       //appending everything togather
+      hotTable.setDataAtRowProp(updateRows,'no-edit');
+    }
+    deleteRow(rows:Array<number>):void{
+       //multiple delete at the sametime this will avoid issues of deleting one by one
+      this.hotTable.alter('remove_row',rows[0],rows.length,'no-edit');
+      if(this.curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER'){
+        this.getMergeCellsOnDelete();
+      }
+      //setting the value to empty to avoid extra delete
+      this.multiRowDelete=[];
+    }
+    isAlreadyChange(selRow:number):boolean{
+      let sel_DC_ID=this.hotTable.getDataAtRowProp(selRow,'DC_ID');
+      let condition=false;
+        if(sel_DC_ID){
+          condition=true;
+        }
+        else{
+          condition =false;
+        }
+      return condition;
+    }
+    autoFillCellOnProd(cellItem: any) {
+      let selrow = cellItem[0];
+       //check if there is already a merge avaialble
+      if(!this.isAlreadyChange(selrow)){
+        //identify the empty row and add it there
+        let empRow=this.returnEmptyRow(selrow);
+        let ROW_ID=_.random(250);
+        if(this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER'){
+              //add num of tier rows the logic will be based on autofill value
+              let tier=1;
+              for (let i=empRow;i<parseInt(this.curPricingTable.NUM_OF_TIERS)+empRow;i++){
+                this.addUpdateRowOnchange(this.hotTable,i,cellItem,empRow,selrow,ROW_ID,tier);
+                tier++;
+              }
+              //calling the merge cells option
+              this.getMergeCellsOnEdit(empRow,parseInt(this.curPricingTable.NUM_OF_TIERS));
+        }
+        else {
+          this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,empRow,selrow,ROW_ID);
+        }
+      }
+    }
+    async getAllDrowdownValues(){
     let dropObjs={};
     _.each(this.pricingTableTemplates.defaultAtrbs,(val,key)=>{
           dropObjs[`${key}`]=this.pteService.readDropdownEndpoint(val.opLookupUrl);
@@ -328,12 +475,14 @@ export class pricingTableEditorComponent implements OnChanges {
 
     }
     async loadPTE() {
+      this.isLoading='true';
       let PTR = await this.getPTRDetails();
       this.getTemplateDetails();
       this.dropdownResponses= await this.getAllDrowdownValues();
       this.generateHandsonTable(PTR);
+      this.isLoading='false';
     }
-    savePTE(){
+    getPTEGenerate():Array<any>{
       let hotTable = this.hotRegisterer.getInstance(this.hotId);
       let PTRCount = hotTable.countRows();
       let PTRResult:Array<any> =[];
@@ -341,17 +490,24 @@ export class pricingTableEditorComponent implements OnChanges {
         let obj={};
         if(!hotTable.isEmptyRow(i)){
           _.each(hotTable.getCellMetaAtRow(i),(val)=>{
-            obj[val.prop]=hotTable.getDataAtCell(i,val.col);
+            obj[val.prop]=hotTable.getDataAtRowProp(i,val.prop.toString())?hotTable.getDataAtRowProp(i,val.prop.toString()):null;
           });
           PTRResult.push(obj);
         }
       }
-      console.log(PTRResult);
+      return PTRResult;
+    }
+    savePTE(){
+     let result=this.getPTEGenerate();
+      console.log(result);
     }
     ngOnChanges(): void {
       this.loadPTE();
     }
-
+    ngAfterViewInit(){
+      //loading after the View init from there onwards we can reuse the hotTable instance
+      this.hotTable= this.hotRegisterer.getInstance(this.hotId);
+    }
 }
 
 angular.module("app").directive(

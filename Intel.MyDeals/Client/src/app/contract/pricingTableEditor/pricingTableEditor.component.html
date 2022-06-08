@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button (click)="savePTE()">Save</button>
+            <button (click)="savePTE()">GeneratePTR</button>
         </div>
     </div>
     <div class="row">
@@ -16,3 +16,5 @@
         </div>
     </div>
 </div>
+
+<loading-panel-angular id="PTRLoading" style="z-index:500;" show="{{isLoading}}" header="{{spinnerMessageHeader}}" description="{{spinnerMessageDescription}}"></loading-panel-angular>

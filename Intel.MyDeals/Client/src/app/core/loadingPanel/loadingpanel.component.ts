@@ -20,7 +20,7 @@ export class LoadingPanelComponent implements OnInit {
   @Input() private header: string;
   @Input() private description: string;
   @Input() private msgType: string;
-  @Input() private isShowFunFact: string;
+  @Input() private isShowFunFact: string='false';
 
   private funfactsList: Array<any> = [];
   private funFactTitle = "";

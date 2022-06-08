@@ -74,7 +74,8 @@ export class PTEUtil {
                                       index: number): Handsontable.ColumnSettings {
         let currentColumnConfig: Handsontable.ColumnSettings = {
             data: item.field,
-            width: item.width
+            width: item.width,
+            readOnly:false
         }
 
         /* Type & Format */
@@ -121,36 +122,12 @@ export class PTEUtil {
             }
 
             if (!_.isUndefined(templateColumnAttributes[item.field])) {
-                //if (templateColumnAttributes[item.field].type === 'DROPDOWN' ) { // Dropdown
                     currentColumnConfig.type = 'dropdown';
-
                     if (item.lookupUrl) {
                         currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
-                        //this.handleDropdownLookup(pteService, loggerService, dropdownResponses, item.lookupUrl, item.lookupText, item.lookupValue, item.field);
-                        //currentColumnConfig.source = dropdownResponses[item.field];  // WIP: Handsontable renderer should display key (lookupText) and save value (lookupValue) to spreadsheet data
                     }
-
-                    // WIP: Add Custom Renderer for source to display keys in dropdown
-                //} 
-                //else if (templateColumnAttributes[item.field].type === 'MULTISELECT') { // Multi-Select
-                //     // WIP
-                //     // currentColumnConfig.type = 
-                //     currentColumnConfig.type = 'dropdown';
-                //     if (item.lookupUrl) {
-                //         currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
-                //         //this.handleDropdownLookup(pteService, loggerService, dropdownResponses, item.lookupUrl, item.lookupText, item.lookupValue, item.field);
-                //         //currentColumnConfig.source = dropdownResponses[item.field]; // WIP: Handsontable renderer should display key (lookupText) and save value (lookupValue) to spreadsheet data
-                //     }
-
-                //     // WIP: Add Custom Renderer for source to display keys in Multi-select
-
-                // }
-                // TEMP
-                console.log(`PTE.utils.ts`);
-                console.log(dropdownResponses);
             }
         }
-
         /* Is Required & Nullable */
         if (item.isRequired || !templateColumnFields[item.field].nullable) {
             currentColumnConfig.allowEmpty = false;
@@ -167,39 +144,12 @@ export class PTEUtil {
                 headerAction: true,
                 // WIP: Comparsion Function
             }
+        } 
+        /* Editable or not */
+        if(!templateColumnFields[`${item.field}`].editable){
+            currentColumnConfig.readOnly=true;
         }
-
-        // /* Disabled */
-        // if (this.hotTable.isEmptyRow(row)) {
-        //     currentColumnConfig.readOnly = true
-        // }
-
         return currentColumnConfig;
     }
-
-    // private static readDropdownEndpoint(pteService: pricingTableEditorService, loggerService: logger, lookupURL: string, lookupText: string, lookupValue: string) {
-    //     pteService.readDropdownEndpoint(lookupURL).subscribe((response: any[]) => {
-    //         let lookupMap = [];
-
-    //         response.forEach(element => {   // { lookupText: lookupValue, ... }
-    //             lookupMap[element[lookupText]] = element[lookupValue];
-    //         });
-
-    //         console.log(`lookupMap`);
-    //         console.log(lookupMap);
-
-    //         return lookupMap;
-    //     }, (error) => {
-    //         loggerService.error('PTEUtil::readDropdownEndpoint::readDropdownEndpoint:: service', error);
-    //     });
-    // }
-
-    // private static handleDropdownLookup(pteService: pricingTableEditorService, loggerService: logger, dropdownResponses: any[], lookupUrl: string, lookupText, lookupValue, itemField) {
-    //     if (!dropdownResponses[itemField] || _.isEmpty(dropdownResponses[itemField])) {
-    //         dropdownResponses[itemField] = this.readDropdownEndpoint(pteService, loggerService, lookupUrl, lookupText, lookupValue);
-    //     }
-    //     console.log(`dropdownResponses`);
-    //     console.log(dropdownResponses);
-    // }
 
 }

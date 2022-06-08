@@ -3,8 +3,11 @@ td.custom-border {
 }
 
 td.custom-cell {
-    background-color: red !important;
-    color: white !important;
+    color: red !important;
+}
+
+td.readonly-cell {
+    background-color: rgb(238, 238, 238) !important;
 }
 
 .htSelectEditor {
