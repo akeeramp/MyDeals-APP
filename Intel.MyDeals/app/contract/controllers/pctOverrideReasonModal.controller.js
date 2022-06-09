@@ -68,7 +68,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
         columns: [
             {
                 field: "isSelected",
-                title: "&nbsp;",
+                title: "&nbsp;<br>",
                 filterable: false, // Altered -1 ID check to anything less then 0 is not checkable - US156297
                 template: "<div ng-if='#=MYDL_PCT_LGL_EXCPT_SID# <= 0' style='padding-left: 6px;'>"                                //if legal exception sid is -1, aka "See DCS...", we need to disable the checkbox to prevent users from changing it from its' current state.
                         + "<input type='checkbox' " + 'disabled' + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font disabled'/>"
@@ -78,71 +78,71 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                         + "<input type='checkbox' " + $scope.disabled + " ng-class='{disabled: dataItem.IS_DSBL}' ng-disabled='dataItem.IS_DSBL' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font pctOverrideCheckbox' ng-class='disabled'/>"
                         + "<label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' title='{{dataItem.IS_DSBL ? \"Exception is disabled for selection. Please contact legal\" : \"\"}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>"
                         + "</div>",
-                width: "60px",
+                width: "50px",
                 locked: true,
             },
             {
                 field: "INTEL_PRD",
-                title: "Intel Product",
+                title: "Intel Product<br>",
                 width: "220px",
-                locked: true
+                locked: true,
             },
             {
                 field: "SCPE",
                 title: "Scope",
-                width: "350px"
+                width: "370px"
             },
             {
                 field: "COST",
                 title: "Cost",
                 format: "{0:c}",
-                width: "140px"
+                width: "320px"
             },
             {
                 field: "PCT_LGL_EXCPT_STRT_DT",
-                title: "Exception Start Date",
+                title: "Exception<br>Start Date",
                 template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_STRT_DT), 'M/d/yyyy') #",
-                width: "150px"
+                width: "110px"
             },
             {
                 field: "PCT_LGL_EXCPT_END_DT",
-                title: "Exception End Date",
+                title: "Exception<br>End Date",
                 template: "#= kendo.toString(new Date(PCT_LGL_EXCPT_END_DT), 'M/d/yyyy') #",
-                width: "150px"
+                width: "110px"
             },
             {
                 field: "MEET_COMP_PRD",
                 title: "Comp Product",
                 hidden: true,
-                width: "120px"
+                width: "370px"
             },
             {
                 field: "MEET_COMP_PRC",
                 title: "Comp Price",
                 hidden: true,
-                width: "120px"
+                width: "180px"
             },
             {
                 field: "BUSNS_OBJ",
                 title: "Business Object",
                 hidden: true,
-                width: "120px"
+                width: "500px"
             },
             {
                 field: "PTNTL_MKT_IMPCT",
                 title: "Potential Market Impact",
                 hidden: true,
-                width: "120px"
+                width: "320px"
             },
             {
                 field: "APRV_ATRNY",
-                title: "Approving Attorney",
+                title: "Approving<br>Attorney",
                 hidden: true,
                 width: "120px"
             },
             {
                 field: "DT_APRV",
-                title: "Date Approved",
+                title: "Date<br>Approved",
                 hidden: true,
                 template: "#= kendo.toString(new Date(DT_APRV), 'M/d/yyyy') #",
                 width: "120px"
