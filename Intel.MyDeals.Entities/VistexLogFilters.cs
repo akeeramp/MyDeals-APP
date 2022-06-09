@@ -16,4 +16,13 @@ namespace Intel.MyDeals.Entities
         public string RQST_STS { get; set; }
     }
 
+    public class VistexResponseUpdData
+    {
+        public string strTransantionId { get; set; }
+        public string strVistexStage { get; set; }
+        public int? dealId { get; set; }
+        public int rqstSid { get; set; }
+        public string strErrorMessage { get; set; }
+    }
+
 }

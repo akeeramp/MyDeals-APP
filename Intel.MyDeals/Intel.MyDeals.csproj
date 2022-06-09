@@ -813,6 +813,8 @@
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.html" />
     <Content Include="Client\src\app\admin\primeCustomers\admin.primeCustomers.component.html" />
     <Content Include="Client\src\app\admin\vistex\admin.vistex.component.html" />
+    <Content Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.css" />
+    <Content Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.html" />
     <Content Include="Client\src\app\admin\workflowStages\admin.workflowStages.component.html" />
     <Content Include="Client\src\app\admin\workFlow\admin.workFlow.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.directive.js" />
@@ -821,6 +823,7 @@
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.css" />
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.ts" />
     <TypeScriptCompile Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.ts" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.css" />

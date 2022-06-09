@@ -376,6 +376,15 @@ angular
                     }
                 }
             })
+            .state("vistex", {
+                url: '/vistex',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<vistex-integration-log></vistex-integration-log>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

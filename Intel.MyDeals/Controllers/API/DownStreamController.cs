@@ -72,8 +72,19 @@ namespace Intel.MyDeals.Controllers.API
             VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), strVistexStage);
             return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, dealId, strErrorMessage, rqstSid), $"Unable to update vistex status");
         }
-
         [Authorize]
+        [Route("UpdateVistexStatusNew")]
+        [HttpPost]
+        [AntiForgeryValidate]
+        public Guid UpdateVistexStatusNew(VistexResponseUpdData vrud)
+
+        {
+            Guid batchId = Guid.Parse(vrud.strTransantionId);
+            VistexStage vistexStage = (VistexStage)Enum.Parse(typeof(VistexStage), vrud.strVistexStage);
+            return SafeExecutor(() => _dsaLib.UpdateVistexStatus(batchId, vistexStage, vrud.dealId, vrud.strErrorMessage, vrud.rqstSid), $"Unable to update vistex status");
+        }
+
+[Authorize]
         [Route("SendVistexData")]
         [HttpPost]
         [AntiForgeryValidate]

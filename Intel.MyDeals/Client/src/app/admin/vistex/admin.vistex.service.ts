@@ -17,7 +17,7 @@ export class dsaService {
 
 
     public sendVistexData(lstDealIds): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'SendVistexData/false';
+        const apiUrl: string = this.apiBaseUrl + 'SendVistexData';
         return this.httpClient.post(apiUrl, lstDealIds);
     }
 
@@ -36,5 +36,25 @@ export class dsaService {
 
         return this.httpClient.get(apiUrl + runMode);
 
+    }
+
+    public getVistexLogs(postData):Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'GetVistexLogs';
+        return this.httpClient.post(apiUrl, postData);
+    }
+    
+    public getVistexStatuses():Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'GetVistexStatuses'
+        return this.httpClient.get(apiUrl );
+    }
+
+    public updateVistexStatusNew(postData):Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'UpdateVistexStatusNew';
+        return this.httpClient.post(apiUrl, postData );
+    }
+    
+    public getRequestTypeList():Observable<any>{
+        const apiUrl = this.apiBaseUrl + 'GetRequestTypeList';
+        return this.httpClient.get(apiUrl); 
     }
 }
