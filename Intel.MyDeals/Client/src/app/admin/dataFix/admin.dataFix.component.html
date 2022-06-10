@@ -2,125 +2,281 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
 <div class="row">
-    <div class="col-md-12" style="height:50px"></div>
-</div>
-<div class="row">
-    <div class="col-md-12" style="padding-left: 35px;">
+    <div class="col-md-12 dataFix">
         <h3>Data Fix</h3>
     </div>
-    <!--<div *ngIf="!accessAllowed" class="col-md-12">
-            <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;">
-                <b>
-                <i class="intelicon-alert-solid icon-lg"></i>
-            </b>
-            Note: Access to this page is not allowed
-        </div>
-    </div>-->
-    <div class="col-md-12">
-        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 47px;">
-            This screen allows to fix the data quality issues in 'My Deals' system
-        </div>
+    <div *ngIf="!accessAllowed" class="col-md-12">
+        <h3 class="datafixAlert"><i class="intelicon-alert-solid icon-lg"></i> Note: Access to this page is not allowed </h3>
     </div>
-    <div class="col-md-12 kendo-grid-buttons">
-        <div *ngIf="!IsEditMode">
-            <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                        [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                        [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
-
-                <ng-template kendoGridToolbarTemplate>
-                    <button kendoGridAddCommand class="k-button addButton" (click)="addNewFix()">
-                        <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW DATA FIX
-                    </button>
-                    <button kendoGridAddCommand class="k-button addButton" (click)="addNewFixExpert()">
-                        <span class="k-icon k-i-plus-outline k-icon-md"></span>EXPERT MODE
-                    </button>
-                    <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
-                                                                   class="k-button clearButton">
-                        <span class="k-icon k-i-reload k-icon-md"></span>Refresh
-                    </button>
-                </ng-template>
-
-                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_NBR" title="Incident Number"></kendo-grid-column>
-                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_MSG" title="Message"></kendo-grid-column>
-                <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status">
-                </kendo-grid-column>
-                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By"></kendo-grid-column>
-                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On">
-                </kendo-grid-column>
-            </kendo-grid>
-        </div>
-
-        <div *ngIf="IsEditMode">
-            <div *ngIf="!IsExpertMode">
-                <div class="form-group row">
-                    <label class="control-label isRequired col-md-1" autocomplete="off">Required # :</label>
-                    <div class="col-md-6">
-                        <div class="dealTools">
-                            <div style="float:left; width:120px;">
-                                Attributes: <input style="height: 15px; width: 15px" type="checkbox" id="atrbMan" class='grid-link-checkbox with-font' name="Attributes" value="Attributes" [(ngModel)]="isAtrbSelected">
-                            </div>
-
-                            <div style="float:left; width:120px;">
-                                Actions: <input style="height: 15px; width: 15px" type="checkbox" id="actnMan" class='grid-link-checkbox with-font' name="Actions" value="Actions" [(ngModel)]="isActnSelected">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label isRequired col-md-1" autocomplete="off">Incident # :</label>
-                    <div class="col-md-3 dealTools">
-                        <kendo-textbox style="width:100%"></kendo-textbox>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label isRequired col-md-1">Attributes : </label>
-                    <div class="col-md-10 dealTools">
-                        Attributes logic yet to implent
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label isRequired col-md-1">Actions : </label>
-                    <div class="col-md-10 dealTools">
-                        Actions Logic yet to implement
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="control-label col-md-1" autocomplete="off"><b>Message : </b></label>
-                    <div class="col-md-6 dealTools">
-                        <kendo-textbox class="form-control md" style="width:100%"></kendo-textbox>
-                    </div>
-                    <div class="col-md-4">
-                        <button [disabled]="disabled" (click)="SaveFix(true, false)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
-                        <button (click)="okDataFix()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
-                    </div>
-                </div>
-
+    <div *ngIf="accessAllowed">
+        <div class="col-md-12">
+            <div class="messageBox col-md-12"  style="padding-left: 33px;">
+                This screen allows to fix the data quality issues in 'My Deals' system
             </div>
-
-            <div *ngIf="IsExpertMode">
-                <div class="form-group row">
-                    <div class="col-md-10">
-                        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}">
-                            Warning: You must know the correct structure to use for this screen.  Only use if you really know what you are doing.
+        </div>
+        <div class="col-md-12 kendo-grid-buttons addModeScroll">
+            <div *ngIf="!IsAddMode">
+                <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+                    <ng-template kendoGridToolbarTemplate>
+                        <button kendoGridAddCommand class="k-button addButton"
+                                (click)="addNewFix()">
+                            <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW DATA FIX
+                        </button><button kendoGridAddCommand class="k-button addButton" (click)="addNewFixExpert()">
+                            <span class="k-icon k-i-plus-outline k-icon-md"></span>EXPERT MODE
+                        </button>
+                        <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
+                                                                       class="k-button clearButton">
+                            <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+                        </button>
+                    </ng-template>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_NBR" title="Incident Number">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_MSG" title="Message">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On">
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+            <div *ngIf="IsAddMode">
+                <div *ngIf="!IsExpertMode">
+                    <div class="form-group row">
+                        <label class="control-label isRequired col-md-1" autocomplete="off">
+                            Required
+                            # :
+                        </label>
+                        <div class="col-md-6">
+                            <div class="dealTools">
+                                <div style="float:left; width:120px;">
+                                    Attributes: <input type="checkbox" id="atrbMan"
+                                                       class='grid-link-checkbox with-font' name="Attributes" value="Attributes"
+                                                       [(ngModel)]="isAtrbSelected">
+                                </div>
+                                <div style="float:left; width:120px;">
+                                    Actions: <input type="checkbox" id="actnMan"
+                                                    class='grid-link-checkbox with-font' name="Actions" value="Actions"
+                                                    [(ngModel)]="isActnSelected">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label isRequired col-md-1" autocomplete="off">
+                            Incident
+                            # :
+                        </label>
+                        <div class="col-md-3 dealTools">
+                            <kendo-textbox style="width:100%" [(ngModel)]="currentDataFix.INCDN_NBR"></kendo-textbox>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label isRequired col-md-1"
+                               style="padding-right:10px">Attributes : </label>
+                        <div id="dataFixAttributes" class="col-md-11" style="padding-left:10px">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="divTableRow headerFont">
+                                        <div class="divTableCell" style="width:75px"></div>
+                                        <div class="divTableCell isRequired">Object Type</div>
+                                        <div class="divTableCell isRequired">Attribute</div>
+                                        <div class="divTableCell isRequired" title="Revision Number">Rvs #</div>
+                                        <div class="divTableCell fontWeight">Mtx Value</div>
+                                        <div class="divTableCell isRequired">Object Id</div>
+                                        <div class="divTableCell isRequired">Data Value</div>
+                                        <div class="divTableCell fontWeight"><b>Data Value Max</b></div>
+                                        <div class="divTableCell isRequired">MDX</div>
+                                        <div class="divTableCell isRequired">Customer</div>
+                                        <div class="divTableCell isRequired">Batch Id</div>
+                                    </div>
+                                    <div *ngFor="let dataItem of currentDataFix.DataFixAttributes;let i=index trackBy i"
+                                         class="divTableRow">
+                                        <div class="divTableCell" style="width:75px">
+                                            <span class="icnBtn icnSkyBtn"
+                                                  (click)="addRow('AttrbBuilder',i)">
+                                                <i class="intelicon-plus-max"></i>
+                                            </span><span class="icnBtn icnGryBtn"
+                                                         (click)="removeRow('AttrbBuilder',i)" *ngIf="i!=0">
+                                                <i class="intelicon-minus-max"></i>
+                                            </span>
+                                        </div>
+                                        <div class="divTableCell kdropdownlist">
+                                            <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
+                                                                [valuePrimitive]="true"
+                                                                [data]="OpDataElements" textField="Text" valueField="Value"
+                                                                [(ngModel)]="dataItem.OBJ_TYPE_SID" class="opUiContainer sm abField"
+                                                                style="width:100%"></kendo-dropdownlist>
+                                        </div>
+                                        <div class="divTableCell kdropdownlist">
+                                            <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
+                                                                [data]="AttributeSettings" textField="Text" [valuePrimitive]="true"
+                                                                [(ngModel)]="dataItem.ATRB_SID" valueField="Value"
+                                                                class="opUiContainer sm abField" style="width:100%"></kendo-dropdownlist>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-numerictextbox [min]="0" class="dataValueNumeric" data-decimals="0"
+                                                                  format="#" [(ngModel)]="dataItem.ATRB_RVS_NBR" required>
+                                            </kendo-numerictextbox>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-numerictextbox [min]="0" class="dataValueNumeric" format="#"
+                                                                  [(ngModel)]="dataItem.ATRB_MTX_SID" required></kendo-numerictextbox>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-numerictextbox [min]="0" format="#"
+                                                                  [(ngModel)]="dataItem.OBJ_SID" class="inputWidth" required></kendo-numerictextbox>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-textbox class="form-control md dataValue" [(ngModel)]="dataItem.ATRB_VAL"
+                                                           placeholder="Data Value" required></kendo-textbox>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-textbox class="form-control md dataValue"
+                                                           [(ngModel)]="dataItem.ATRB_VAL_MAX" placeholder="Data Value Max">
+                                            </kendo-textbox>
+                                        </div>
+                                        <div class="divTableCell" style="width:100px">
+                                            <kendo-dropdownlist [data]="MDX" textField="Text" style="width:100%"
+                                                                [valuePrimitive]="true" [(ngModel)]="dataItem.MDX_CD" valueField="Value"
+                                                                class="opUiContainer sm abField"></kendo-dropdownlist>
+                                        </div>
+                                        <div class="divTableCell kdropdownlist">
+                                            <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
+                                                                [data]="MyCustomersInfo" textField="CUST_NM" [valuePrimitive]="true"
+                                                                [(ngModel)]="dataItem.CUST_MBR_SID" valueField="CUST_SID"
+                                                                class="opUiContainer sm abField" style="width:100%"></kendo-dropdownlist>
+                                        </div>
+                                        <div class="divTableCell">
+                                            <kendo-textbox class="form-control md dataValue" [(ngModel)]="dataItem.BTCH_ID"
+                                                           placeholder="Data Value Max" required></kendo-textbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label isRequired col-md-1">Actions : </label>
+                        <div class="col-md-11" style="padding-left:10px">
+                            <div *ngIf="Actions.length >0 && OpDataElements.length >0">
+                                <div id="dataFixActions" class="filterContainer">
+                                    <div class="divTable">
+                                        <div class="divTableBody">
+                                            <div class="divTableRow headerFont">
+                                                <div class="divTableCell" style="width:75px"></div>
+                                                <div class="divTableCell isRequired">Object Type</div>
+                                                <div class="divTableCell isRequired">Action</div>
+                                                <div class="divTableCell isRequired" style="width:720px;">
+                                                    Target Object Ids
+                                                </div>
+                                                <div class="divTableCell isRequired">Batch Id</div>
+                                            </div>
+                                            <div *ngFor="let dataItem of currentDataFix.DataFixActions;let i=index trackBy i"
+                                                 class="divTableRow">
+                                                <div class="divTableCell" style="width:75px">
+                                                    <span class="icnBtn icnSkyBtn"
+                                                          (click)="addRow('ActnBuilder',i)">
+                                                        <i class="intelicon-plus-max"></i>
+                                                    </span><span class="icnBtn icnGryBtn" (click)="removeRow('ActnBuilder',i)"
+                                                                 *ngIf="i!=0"><i class="intelicon-minus-max"></i></span>
+                                                </div>
+                                                <div class="divTableCell kdropdownlist">
+                                                    <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
+                                                                        [data]="OpDataElements" textField="Text" valueField="Value"
+                                                                        [valuePrimitive]="true" [(ngModel)]="dataItem.OBJ_TYPE_SID"
+                                                                        class="opUiContainer sm abField" placeholder="Select Object Type"
+                                                                        style="width:100%"></kendo-dropdownlist>
+                                                </div>
+                                                <div class="divTableCell kdropdownlist">
+                                                    <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
+                                                                        [data]="Actions" textField="Text" valueField="Text"
+                                                                        [valuePrimitive]="true" [(ngModel)]="dataItem.ACTN_NM"
+                                                                        class="opUiContainer sm abField" placeholder="Select action"
+                                                                        style="width:100%"></kendo-dropdownlist>
+                                                </div>
+                                                <div class="divTableCell">
+                                                    <kendo-textbox class="form-control md dataValue"
+                                                                   [(ngModel)]="dataItem.ACTN_VAL_LIST" placeholder="Target Object Ids"
+                                                                   required></kendo-textbox>
+                                                </div>
+                                                <div class="divTableCell">
+                                                    <kendo-textbox class="form-control md dataValue"
+                                                                   [(ngModel)]="dataItem.BTCH_ID" style="width: 270px"
+                                                                   placeholder="Data Value Max" required></kendo-textbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-1" autocomplete="off">
+                            <b>
+                                Message :
+                            </b>
+                        </label>
+                        <div class="col-md-6 dealTools">
+                            <kendo-textbox class="form-control md" style="width:100%" [(ngModel)]="currentDataFix.Message">
+                            </kendo-textbox>
+                        </div>
+                        <div class="col-md-4">
+                            <button [disabled]="disabled" (click)="SaveFix(true, false)"
+                                    class="btn btn-primary" style="margin-left: 15px">
+                                Execute
+                            </button><button (click)="okDataFix()" class="btn btn-primary" style="margin-left: 15px">
+                                Cancel / Close
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-10">
-                        <label class="control-label col-md-2" style="text-align: left;"><b>Enter JSON Packet : </b></label>
-                        <kendo-textarea [(ngModel)]="JsonMessage" style="width:100%; color: #ccc;" [rows]="10"></kendo-textarea>
+                <div *ngIf="IsExpertMode">
+                    <div class="form-group row">
+                        <div class="col-md-10">
+                            <div class="messageBox col-md-12">
+                                Warning: You must know the
+                                correct structure to use for this screen. Only use if you really know what you are doing.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-10">
+                            <label class="control-label col-md-2" style="text-align: left;">
+                                <b>
+                                    Enter JSON
+                                    Packet :
+                                </b>
+                            </label>
+                            <kendo-textarea [(ngModel)]="JsonMessage" style="width:100%;" [rows]="10"></kendo-textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-10">
+                            <button [disabled]="disabled" (click)="SaveFix(true, true)"
+                                    class="btn btn-primary" style="margin-left: 15px">
+                                Execute
+                            </button><button (click)="cancelExpert()" class="btn btn-primary" style="margin-left: 15px">
+                                Cancel / Close
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-10">
-                        <button [disabled]="disabled" (click)="SaveFix(true, true)" class="btn btn-primary" style="margin-left: 15px">Execute</button>
-                        <button (click)="okExpert()" class="btn btn-primary" style="margin-left: 15px">Cancel / Close</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 </div>
+<kendo-dialog *ngIf="validationError" (close)="close()" [width]="450">
+    <b>Please fill the following required fields!</b>
+    <div *ngFor="let errMsg of requiredFields">
+        <div>{{errMsg}}</div>
+    </div>
+    <kendo-dialog-actions><button class="AlertMsg" kendoButton (click)="close()">OK </button></kendo-dialog-actions>
+</kendo-dialog>
