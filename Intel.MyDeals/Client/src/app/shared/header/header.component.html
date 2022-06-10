@@ -163,7 +163,7 @@
                         <li ui-sref-active="active"><a href="#funfact">Fun Facts</a></li>
                     </ng-container>
                     <li *ngIf="(usrRole=='DA' || usrRole=='Legal' || (usrRole=='GA' && isSuper) || isRealSA || isDeveloper)">
-                        <a href="Admin#/meetcomp">Meet Comp</a>
+                        <li ui-sref-active="active"><a href="#meetComp">Meet Comp</a></li>
                     </li>
                     <li class="dropdown-submenu" *ngIf="(isRealSA || isDeveloper)">
                         <a tabindex="-1">Products</a>

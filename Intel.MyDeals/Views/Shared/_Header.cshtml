@@ -278,7 +278,8 @@
 
                     @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
                     {
-                        <li><a href="Admin#/meetcomp">Meet Comp</a></li>
+                        @*<li><a href="Admin#/meetcomp">Meet Comp</a></li>*@
+                        <li ui-sref-active="active"><a ui-sref="meetComp">Meet Comp</a></li>
                     }
 
                     @if (isRealSA || isDeveloper)

@@ -385,6 +385,15 @@ angular
                     }
                 }
             })
+            .state("meetComp", {
+                url: '/meetComp',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<meet-comp></meet-comp>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 
