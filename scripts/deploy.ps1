@@ -12,9 +12,9 @@ try {
        [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
        [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
        [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYD2W01.amr.corp.intel.com'}
-       [pscustomobject]@{env='DR';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\DR';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\PROD1';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\PROD2';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com'}
+       [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYD2W01.amr.corp.intel.com'}
+       [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYD2W01.amr.corp.intel.com'}
+       [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYD2W02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYD2W02.amr.corp.intel.com'}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $ENV;

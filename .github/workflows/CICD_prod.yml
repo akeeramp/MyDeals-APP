@@ -8,6 +8,7 @@ on:
         default: 'DR'
         type: choice
         options:
+          - 'CIAR'
           - 'DR'
           - 'PROD1'
           - 'PROD2'

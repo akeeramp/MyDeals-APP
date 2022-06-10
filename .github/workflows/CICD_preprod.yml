@@ -15,7 +15,6 @@ on:
           - 'UTT2'
           - 'CONS1'
           - 'CONS2'
-          - 'CIAR'
           - 'PERF'
       Move_Latest:
         description: 'Move latest code deployed'
