@@ -79,7 +79,8 @@ export class TenderFolioComponent {
         });
         result = dealDisplayOrder.map((object) => result[object]).filter(obj => obj !== undefined);
         this.PtDealTypes = result;
-        this.PtDealTypes[0]['_custom']['_active'] = true;
+        //Selecting ECAP deal by default and setting corresponding values
+        this.selectPtTemplateIcon(this.PtDealTypes[0]);
         //Eventually it will use contractdetail page for getting deal types,for now hardcoded with ecap and kit for tender folio  
         return this.PtDealTypes;
     }
@@ -295,10 +296,10 @@ export class TenderFolioComponent {
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
-            this.filterDealTypes();
-            this.initializeTenderData();
             this.newPricingTable = this.templateData.ObjectTemplates.PRC_TBL.ECAP;
             this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
+            this.filterDealTypes();
+            this.initializeTenderData();
         })
     }
 }
