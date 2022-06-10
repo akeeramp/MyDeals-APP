@@ -557,6 +557,11 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
+	////To upload Deal Reconcilation Sheet
+	ds = dbobjects.ExecuteDataSet("DECLARE @dealReconList AS T_DEAL_RECON; INSERT INTO @dealReconList([DEAL ID],[EXISTING_UCD_GLOBAL_ID],[EXISTING_UCD_GLOBAL_NAME],[EXISTING_UCD_COUNTRY_CUST_ID],[EXISTING_UCD_COUNTRY],[NEW_UCD_GLOBAL_ID],[NEW_UCD_GLOBAL_NAME],[NEW_UCD_COUNTRY_CUST_ID],[NEW_UCD_COUNTRY],[RPL_STS_CD]) VALUES (241813,00000000,'China MIIT',1000008019,'CZECH rEPUBLICDRDR',11111111,'China MIIT','1000008019','China','') EXEC [dbo].[PR_MYDL_DEAL_RECON] @deal_recon_input_data = @dealReconList,@in_emp_wwid=12002785");
+	ds.Tables[0].TableName = "DealReconInvalidRecords";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

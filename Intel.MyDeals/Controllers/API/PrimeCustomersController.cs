@@ -152,9 +152,9 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("updateDealRecon")]
-        public void updateDealRecon(List<DealRecon> lstDealRecon)
+        public IEnumerable<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon)
         {
-            _primeCustomersLib.updateDealRecon(lstDealRecon);
+            return _primeCustomersLib.updateDealRecon(lstDealRecon);
         }
     }
 }

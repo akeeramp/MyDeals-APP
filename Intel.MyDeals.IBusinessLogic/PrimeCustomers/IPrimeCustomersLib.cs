@@ -33,6 +33,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<RplStatusCode> GetRplStatusCodes();
 
-        void updateDealRecon(List<DealRecon> lstDealRecon);
+        List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
     }
 }

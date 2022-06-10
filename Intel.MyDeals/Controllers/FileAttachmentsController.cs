@@ -609,6 +609,10 @@ namespace Intel.MyDeals.Controllers
                     {
                         validationSummary.inValidRecords.Add(row);
                     }
+                    else if (row.Unified_Country_Region != "" && row.To_be_Unified_Country_Region != "" && row.Unified_Country_Region.ToLower() != row.To_be_Unified_Country_Region.ToLower())
+                    {
+                        validationSummary.inValidRecords.Add(row);
+                    }
                     else if ((row.To_be_Unified_Customer_ID != 0 && row.To_be_Country_Region_Customer_ID != 0 && row.To_be_Unified_Customer_ID == row.To_be_Country_Region_Customer_ID)
                         || (row.Unified_Customer_ID != 0 && row.Country_Region_Customer_ID != 0 && row.Country_Region_Customer_ID == row.Unified_Customer_ID))
                     {

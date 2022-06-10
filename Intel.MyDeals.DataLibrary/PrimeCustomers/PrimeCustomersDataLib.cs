@@ -642,8 +642,9 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public void updateDealRecon(List<DealRecon> lstDealRecon)
+        public List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon)
         {
+            var ret = new List<DealReconInvalidRecords>();
             T_DEAL_RECON dt = new T_DEAL_RECON();
             lstDealRecon.ForEach(x =>
             dt.AddRow(x)
@@ -655,13 +656,46 @@ namespace Intel.MyDeals.DataLibrary
             };
             try
             {
-                DataAccess.ExecuteReader(cmd);
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL ID");
+                    int IDX_ERR_MSG = DB.GetReaderOrdinal(rdr, "ERR_MSG");
+                    int IDX_EXISTING_UCD_COUNTRY = DB.GetReaderOrdinal(rdr, "EXISTING_UCD_COUNTRY");
+                    int IDX_EXISTING_UCD_COUNTRY_CUST_ID = DB.GetReaderOrdinal(rdr, "EXISTING_UCD_COUNTRY_CUST_ID");
+                    int IDX_EXISTING_UCD_GLOBAL_ID = DB.GetReaderOrdinal(rdr, "EXISTING_UCD_GLOBAL_ID");
+                    int IDX_EXISTING_UCD_GLOBAL_NAME = DB.GetReaderOrdinal(rdr, "EXISTING_UCD_GLOBAL_NAME");
+                    int IDX_NEW_UCD_COUNTRY = DB.GetReaderOrdinal(rdr, "NEW_UCD_COUNTRY");
+                    int IDX_NEW_UCD_COUNTRY_CUST_ID = DB.GetReaderOrdinal(rdr, "NEW_UCD_COUNTRY_CUST_ID");
+                    int IDX_NEW_UCD_GLOBAL_ID = DB.GetReaderOrdinal(rdr, "NEW_UCD_GLOBAL_ID");
+                    int IDX_NEW_UCD_GLOBAL_NAME = DB.GetReaderOrdinal(rdr, "NEW_UCD_GLOBAL_NAME");
+                    int IDX_RPL_STS_CD = DB.GetReaderOrdinal(rdr, "RPL_STS_CD");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new DealReconInvalidRecords
+                        {
+                            DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                            ERR_MSG = (IDX_ERR_MSG < 0 || rdr.IsDBNull(IDX_ERR_MSG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ERR_MSG),
+                            EXISTING_UCD_COUNTRY = (IDX_EXISTING_UCD_COUNTRY < 0 || rdr.IsDBNull(IDX_EXISTING_UCD_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXISTING_UCD_COUNTRY),
+                            EXISTING_UCD_COUNTRY_CUST_ID = (IDX_EXISTING_UCD_COUNTRY_CUST_ID < 0 || rdr.IsDBNull(IDX_EXISTING_UCD_COUNTRY_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EXISTING_UCD_COUNTRY_CUST_ID),
+                            EXISTING_UCD_GLOBAL_ID = (IDX_EXISTING_UCD_GLOBAL_ID < 0 || rdr.IsDBNull(IDX_EXISTING_UCD_GLOBAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EXISTING_UCD_GLOBAL_ID),
+                            EXISTING_UCD_GLOBAL_NAME = (IDX_EXISTING_UCD_GLOBAL_NAME < 0 || rdr.IsDBNull(IDX_EXISTING_UCD_GLOBAL_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EXISTING_UCD_GLOBAL_NAME),
+                            NEW_UCD_COUNTRY = (IDX_NEW_UCD_COUNTRY < 0 || rdr.IsDBNull(IDX_NEW_UCD_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NEW_UCD_COUNTRY),
+                            NEW_UCD_COUNTRY_CUST_ID = (IDX_NEW_UCD_COUNTRY_CUST_ID < 0 || rdr.IsDBNull(IDX_NEW_UCD_COUNTRY_CUST_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NEW_UCD_COUNTRY_CUST_ID),
+                            NEW_UCD_GLOBAL_ID = (IDX_NEW_UCD_GLOBAL_ID < 0 || rdr.IsDBNull(IDX_NEW_UCD_GLOBAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_NEW_UCD_GLOBAL_ID),
+                            NEW_UCD_GLOBAL_NAME = (IDX_NEW_UCD_GLOBAL_NAME < 0 || rdr.IsDBNull(IDX_NEW_UCD_GLOBAL_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NEW_UCD_GLOBAL_NAME),
+                            RPL_STS_CD = (IDX_RPL_STS_CD < 0 || rdr.IsDBNull(IDX_RPL_STS_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RPL_STS_CD)
+                        });
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
+            return ret;
         }
     }
 }

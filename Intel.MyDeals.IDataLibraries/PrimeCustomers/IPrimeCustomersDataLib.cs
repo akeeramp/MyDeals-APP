@@ -37,6 +37,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<RplStatusCode> GetRplStatusCodes();
 
-        void updateDealRecon(List<DealRecon> lstDealRecon);
+        List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
     }
 }
