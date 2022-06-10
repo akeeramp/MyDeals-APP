@@ -151,5 +151,78 @@ export class PTEUtil {
         }
         return currentColumnConfig;
     }
+    static getCellComments(PTR: any,columns:Array<any>): Array<any> {
+        let cellComments = [];
+        _.each(PTR, (item, rowInd) => {
+          if (item._behaviors.validMsg) {
+            _.each(item._behaviors.validMsg, (val, key) => {
+              let colInd = _.findIndex(columns, { field: key });
+              cellComments.push({ row: rowInd, col: colInd, comment: { value: val }, className: 'custom-border' });
+              if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
+                cellComments.push({ row: rowInd, col: 0, className: 'custom-cell' });
+              }
+            });
+          }
+        });
+        return cellComments;
+      }
+    static getMergeCells(PTR: any,columns:Array<any>,NUMOFTIERS:string):Array<any> {
+        let mergCells = [];
+        //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
+        let distDCID = _.uniq(PTR, 'DC_ID');
+        _.each(distDCID, (item) => {
+          let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
+  
+          //get NUM_OF_TIERS acoording this will be the row_span for handson
+          let NUM_OF_TIERS = parseInt(curPTR.NUM_OF_TIERS) ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
+          _.each(columns, (colItem, ind) => {
+            if (!colItem.isDimKey && !colItem.hidden) {
+              let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+              mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
+            }
+          })
+        });
+        return mergCells;
+      }
+    static setBehaviors(item:any, elem?:string) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+     }
+    static setBehaviorsValidMessage(item:any, elem:string, elemLabel:string, cond:string){
+        if (elem === 'ECAP_PRICE' && cond=='equal-zero') {
+            item._behaviors.isRequired[elem] = true;
+            item._behaviors.isError[elem] = true;
+            item._behaviors.validMsg[elem] = `${elemLabel} must be positive number`;
+        }
+    }
+    static validatePTE(PTR:Array<any>,ObjType:string):any{
+       if(ObjType=='ECAP'){
+        return PTEUtil.validatePTEECAP(PTR);
+       }
+       else{
+        return PTEUtil.validatePTEDeal(PTR);
+       }
+    }
+    static validatePTEDeal(PTR:Array<any>):any{
+        _.each(PTR,(item) =>{
+            //defaulting the behaviours object
+             PTEUtil.setBehaviors(item);
+        });
+        return PTR;
+    }
+    static validatePTEECAP(PTR:Array<any>):any{
+        //check for Ecap price 
+        _.each(PTR,(item) =>{
+            //defaulting the behaviours object
+             PTEUtil.setBehaviors(item);
+           if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
+             PTEUtil.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
+           }
+        });
+        return PTR;
+    }
 
 }

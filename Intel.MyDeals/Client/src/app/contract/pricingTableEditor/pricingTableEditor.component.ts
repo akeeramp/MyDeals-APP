@@ -106,7 +106,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Input() UItemplate: any = {};
 
     /*For loading variable */
-    private isLoading:string='false';
+    private isLoading:boolean=false;
     private spinnerMessageHeader:string="PTE Loading";
     private spinnerMessageDescription:string="PTE loading please wait";
     private isBusyShowFunFact:string='false'
@@ -171,28 +171,9 @@ export class pricingTableEditorComponent implements OnChanges {
           return [];
         }
     }
-    getMergeCells(PTR: any):Array<any> {
-      let mergCells = [];
-      //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
-      let distDCID = _.uniq(PTR, 'DC_ID');
-      _.each(distDCID, (item) => {
-        let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
-
-        //get NUM_OF_TIERS acoording this will be the row_span for handson
-        let NUM_OF_TIERS = parseInt(curPTR.NUM_OF_TIERS) ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(this.curPricingTable.NUM_OF_TIERS);
-        _.each(this.pricingTableTemplates.columns, (colItem, ind) => {
-          if (!colItem.isDimKey && !colItem.hidden) {
-            let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
-            mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
-          }
-        })
-      });
-
-      return mergCells;
-    }
     getMergeCellsOnDelete(){
       let PTR=this.getPTEGenerate();
-      let mergCells= this.getMergeCells(PTR);
+      let mergCells= PTEUtil.getMergeCells(PTR,this.pricingTableTemplates.columns,this.curPricingTable.NUM_OF_TIERS);
       this.hotTable.updateSettings({mergeCells:mergCells});
     }
     getMergeCellsOnEdit(empRow:number,NUM_OF_TIERS:number): void {
@@ -207,21 +188,6 @@ export class pricingTableEditorComponent implements OnChanges {
           })
         this.hotTable.updateSettings({mergeCells:mergCells});
       
-    }
-    getCellComments(PTR: any): any {
-      let cellComments = [];
-      _.each(PTR, (item, rowInd) => {
-        if (item._behaviors.validMsg) {
-          _.each(item._behaviors.validMsg, (val, key) => {
-            let colInd = _.findIndex(this.pricingTableTemplates.columns, { field: key });
-            cellComments.push({ row: rowInd, col: colInd, comment: { value: val }, className: 'custom-border' });
-            if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
-              cellComments.push({ row: rowInd, col: 0, className: 'custom-cell' });
-            }
-          });
-        }
-      });
-      return cellComments;
     }
     generateHandsonTable(PTR: any) {
       let vm=this;
@@ -241,7 +207,6 @@ export class pricingTableEditorComponent implements OnChanges {
         if (item.hidden) {
           hiddenColumns.push(index);
         }
-
         let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
         //adding for cell management in cell
         this.ColumnConfig.push(currentColumnConfig);
@@ -256,21 +221,17 @@ export class pricingTableEditorComponent implements OnChanges {
         nestedHeaders[1].push(`<span style="color:blue;font-style: italic;">${ item.title }</span>`);
       });
 
-      PTR = this.generatePTR(PTR);
+     
       let mergCells = [];
-      let cellComments = this.getCellComments(PTR);
-
+      let cellComments = PTEUtil.getCellComments(PTR,this.pricingTableTemplates.columns);
       // This logic will add for all tier deals
-      if (this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP') {
-        mergCells = this.getMergeCells(PTR);
+      if (this.curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER') {
+        mergCells = PTEUtil.getMergeCells(PTR,this.pricingTableTemplates.columns,this.curPricingTable.NUM_OF_TIERS);
       }
       // Set the values for hotTable
-      PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
-      //let hotTable = this.hotRegisterer.getInstance(this.hotId);
-
+      PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5,this.columns.length);
       // Loading new data
       this.hotTable.loadData(PTR);
-
       // Update settings 
       this.hotTable.updateSettings({
         columns: this.columns,
@@ -331,7 +292,7 @@ export class pricingTableEditorComponent implements OnChanges {
               this.autoFillARSet(item);
            }
         });
-
+        //for multi tier there can be more tiers to delete so moving the logc after all change
         if(this.multiRowDelete && this.multiRowDelete.length>0){
           this.deleteRow(this.multiRowDelete);
         }
@@ -446,6 +407,7 @@ export class pricingTableEditorComponent implements OnChanges {
        //check if there is already a merge avaialble
       if(!this.isAlreadyChange(selrow)){
         //identify the empty row and add it there
+
         let empRow=this.returnEmptyRow(selrow);
         let ROW_ID=_.random(250);
         if(this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER'){
@@ -455,7 +417,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.addUpdateRowOnchange(this.hotTable,i,cellItem,empRow,selrow,ROW_ID,tier);
                 tier++;
               }
-              //calling the merge cells option
+              //calling the merge cells option only where tier
               this.getMergeCellsOnEdit(empRow,parseInt(this.curPricingTable.NUM_OF_TIERS));
         }
         else {
@@ -475,22 +437,25 @@ export class pricingTableEditorComponent implements OnChanges {
 
     }
     async loadPTE() {
-      this.isLoading='true';
+      this.isLoading=true;
       let PTR = await this.getPTRDetails();
       this.getTemplateDetails();
       this.dropdownResponses= await this.getAllDrowdownValues();
+      //this is only while loading we need , need to modify as progress
+      PTR= this.generatePTR(PTR);
       this.generateHandsonTable(PTR);
-      this.isLoading='false';
+      this.isLoading=false;
     }
     getPTEGenerate():Array<any>{
-      let hotTable = this.hotRegisterer.getInstance(this.hotId);
-      let PTRCount = hotTable.countRows();
+      let PTRCount = this.hotTable.countRows();
       let PTRResult:Array<any> =[];
       for(let i=0;i<PTRCount;i++){
         let obj={};
-        if(!hotTable.isEmptyRow(i)){
-          _.each(hotTable.getCellMetaAtRow(i),(val)=>{
-            obj[val.prop]=hotTable.getDataAtRowProp(i,val.prop.toString())?hotTable.getDataAtRowProp(i,val.prop.toString()):null;
+        if(!this.hotTable.isEmptyRow(i)){
+          _.each(this.hotTable.getCellMetaAtRow(i),(val)=>{
+            if(val.prop){
+              obj[val.prop]=this.hotTable.getDataAtRowProp(i,val.prop.toString()) !=null ?this.hotTable.getDataAtRowProp(i,val.prop.toString()):null;
+            }
           });
           PTRResult.push(obj);
         }
@@ -498,10 +463,22 @@ export class pricingTableEditorComponent implements OnChanges {
       return PTRResult;
     }
     savePTE(){
-     let result=this.getPTEGenerate();
-      console.log(result);
+    this.isLoading=true;
+    this.spinnerMessageHeader='PTE Validate';
+    this.spinnerMessageDescription='PTE Validating please wait';
+    //need to revert this code
+    setTimeout(()=>{     
+      let PTR=this.getPTEGenerate();
+      let finalPTR=PTEUtil.validatePTE(PTR,this.curPricingTable.OBJ_SET_TYPE_CD);;
+      this.generateHandsonTable(finalPTR);
+      this.isLoading=false;
+      console.log(finalPTR);
+    },1000);
+  
     }
     ngOnChanges(): void {
+      this.spinnerMessageHeader='PTE loading';
+      this.spinnerMessageDescription='PTE loading please wait';
       this.loadPTE();
     }
     ngAfterViewInit(){
