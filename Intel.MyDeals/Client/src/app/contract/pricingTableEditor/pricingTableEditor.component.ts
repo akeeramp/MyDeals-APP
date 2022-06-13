@@ -251,7 +251,8 @@ export class pricingTableEditorComponent implements OnChanges {
     disableCells(hotTable:Handsontable,row:number,col:number,prop:any){
      //logic for making by defaul all the cell except PTR_USER_PRD readonly
      const cellProperties = {};
-     if(hotTable.isEmptyRow(row) ){
+     //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
+     if(this.hotTable.getDataAtRowProp(row,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(row,'DC_ID') ==null || this.hotTable.getDataAtRowProp(row,'DC_ID') ==''){
        if(prop != 'PTR_USER_PRD'){
         cellProperties['readOnly'] = true;
        }
@@ -273,23 +274,50 @@ export class pricingTableEditorComponent implements OnChanges {
     autoFillCol(changes: any) {
       console.log(changes);
     }
+    //functions to identify cell change
+    identfyUniqChanges(changes: Array<any>, source: any): Array<any>{
+      //for tier when drag/paste PTR_USER_PRD changes are based on num of tier and those many rows will come as changes but we need that as uniq change
+      if(source == 'edit' || source == 'CopyPaste.paste' || source=='Autofill.fill'){
+        let uniqchanges=[];
+        _.each(changes, (item) => {
+          if (item[1] == 'PTR_USER_PRD') {
+            if (item[3] != null && item[3] != '') {
+              uniqchanges.push(item);
+            }
+            else {
+              // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
+              if(source=='edit'){
+                //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
+                this.multiRowDelete.push(item[0])
+              }
+            } 
+          }
+        });
+        return uniqchanges;
+      }
+      else{
+        return changes;
+      }
+
+    }
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
-      if (source == 'edit' || source == 'CopyPaste.paste') {
+      if (source == 'edit' || source == 'CopyPaste.paste' || source=='Autofill.fill') {
         // Changes will track all the cells changing if we are doing copy paste of multiple cells
+        changes=this.identfyUniqChanges(changes,source);
         _.each(changes, (item) => {
           // Refer https://handsontable.com/docs/api/hooks/#afterchange
-        /*PTR_USER_PRD change starts here */
+          //PTR_USER_PRD change for autofill the 
           if (item[1] == 'PTR_USER_PRD') {
             if (item[3] != null && item[3] != '') {
               this.autoFillCellOnProd(item);
-            } else {
-              //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
-              this.multiRowDelete.push(item[0])
-            }
+            } 
           }
-           /*PTR_USER_PRD change ends here */
+           //AR settlement and partner change
            else if(item[1] == 'AR_SETTLEMENT_LVL'){
               this.autoFillARSet(item);
+           }
+           else{
+            console.log('Other actions for filed change will be added here');
            }
         });
         //for multi tier there can be more tiers to delete so moving the logc after all change
@@ -346,42 +374,6 @@ export class pricingTableEditorComponent implements OnChanges {
       }
       return row;
     }
-    addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,empRowVal:number,selRow:number,ROW_ID:number,tier?:number){
-      let updateRows=[];
-        //make the selected row PTR_USER_PRD empty if its not the empty row
-        if(empRowVal !=selRow){
-          hotTable.setDataAtRowProp(selRow,'PTR_USER_PRD', '','no-edit');
-        }
-      _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
-        let currentstring='';
-        if(val.prop=='PTR_USER_PRD'){
-          //update PTR_USER_PRD with entered value
-          currentstring =row+','+val.prop+','+cellItem[3]+','+'no-edit';
-          updateRows.push(currentstring.split(','));
-        }
-        else if(val.prop=='DC_ID'){
-          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-          currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
-          updateRows.push(currentstring.split(','));
-        }
-        else if(val.prop=='TIER_NBR'){
-          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-          currentstring =row+','+val.prop+','+tier+','+'no-edit';
-          updateRows.push(currentstring.split(','));
-        }
-        else if(val.prop){
-          //this will be autofill defaults value
-          let cellVal=this.curPricingTable[`${val.prop}`] ? this.curPricingTable[`${val.prop}`]:'';
-         currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
-         updateRows.push(currentstring.split(','));
-        }
-        else{
-          console.log('invalid Prop')
-        }
-      });
-       //appending everything togather
-      hotTable.setDataAtRowProp(updateRows,'no-edit');
-    }
     deleteRow(rows:Array<number>):void{
        //multiple delete at the sametime this will avoid issues of deleting one by one
       this.hotTable.alter('remove_row',rows[0],rows.length,'no-edit');
@@ -407,23 +399,67 @@ export class pricingTableEditorComponent implements OnChanges {
        //check if there is already a merge avaialble
       if(!this.isAlreadyChange(selrow)){
         //identify the empty row and add it there
-
         let empRow=this.returnEmptyRow(selrow);
-        let ROW_ID=_.random(250);
+        let ROW_ID=_.random(250); // will be replace with some other logic
+        let updateRows=[];
+        //make the selected row PTR_USER_PRD empty if its not the empty row
+        if(empRow !=selrow){
+          let currentstring =selrow+','+'PTR_USER_PRD'+','+' '+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+        }
         if(this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER'){
               //add num of tier rows the logic will be based on autofill value
               let tier=1;
               for (let i=empRow;i<parseInt(this.curPricingTable.NUM_OF_TIERS)+empRow;i++){
-                this.addUpdateRowOnchange(this.hotTable,i,cellItem,empRow,selrow,ROW_ID,tier);
+                this.addUpdateRowOnchange(this.hotTable,i,cellItem,empRow,selrow,ROW_ID,updateRows,tier);
                 tier++;
               }
               //calling the merge cells option only where tier
               this.getMergeCellsOnEdit(empRow,parseInt(this.curPricingTable.NUM_OF_TIERS));
         }
         else {
-          this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,empRow,selrow,ROW_ID);
+          this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,empRow,selrow,ROW_ID,updateRows,1);
         }
+        //appending everything togather
+        this.hotTable.setDataAtRowProp(updateRows,'no-edit');
       }
+    }
+    addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,empRowVal:number,selRow:number,ROW_ID:number,updateRows:Array<any>,tier?:number,){
+        //make the selected row PTR_USER_PRD empty if its not the empty row
+      _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
+        let currentstring='';
+        if(val.prop=='PTR_USER_PRD'){
+          //update PTR_USER_PRD with entered value
+           currentstring =row+','+val.prop+','+cellItem[3]+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+          //hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem[3],'no-edit');
+        }
+        else if(val.prop=='DC_ID'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          // currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
+          // updateRows.push(currentstring.split(','));
+          hotTable.setDataAtRowProp(row,val.prop, ROW_ID,'no-edit');
+        }
+        else if(val.prop=='TIER_NBR'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+           currentstring =row+','+val.prop+','+tier+','+'no-edit';
+           updateRows.push(currentstring.split(','));
+          //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+        }
+        else if(val.prop){
+          //this will be autofill defaults value
+          let cellVal=this.curPricingTable[`${val.prop}`] ? this.curPricingTable[`${val.prop}`]:'';
+          currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+          //hotTable.setDataAtRowProp(row,val.prop.toString(), cellVal,'no-edit');
+        }
+        else{
+          console.log('invalid Prop')
+        }
+      });
+       //appending everything togather
+      //hotTable.setDataAtRowProp(updateRows,'no-edit');
+      //hotTable.render();
     }
     async getAllDrowdownValues(){
     let dropObjs={};

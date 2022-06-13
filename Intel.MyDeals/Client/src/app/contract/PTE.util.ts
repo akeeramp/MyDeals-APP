@@ -174,7 +174,7 @@ export class PTEUtil {
           let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
   
           //get NUM_OF_TIERS acoording this will be the row_span for handson
-          let NUM_OF_TIERS = parseInt(curPTR.NUM_OF_TIERS) ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
+          let NUM_OF_TIERS =curPTR.NUM_OF_TIERS !=undefined ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
           _.each(columns, (colItem, ind) => {
             if (!colItem.isDimKey && !colItem.hidden) {
               let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
