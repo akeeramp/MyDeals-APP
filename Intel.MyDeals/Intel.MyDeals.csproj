@@ -1587,6 +1587,7 @@
     <Content Include="js\_contractUtil.js" />
     <Content Include="js\_gridUtil.js" />
     <Content Include="js\_linkUtil.js" />
+    <Content Include="js\_pricingTableUtil.js" />
     <Content Include="js\_search.js" />
     <Content Include="js\_securityUtil.js" />
     <Content Include="js\_util.js" />

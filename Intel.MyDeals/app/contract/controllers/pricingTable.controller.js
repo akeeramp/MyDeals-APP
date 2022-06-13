@@ -3,7 +3,6 @@
     .controller('PricingTableController', PricingTableController)
     .run(SetRequestVerificationToken);
 
-
 SetRequestVerificationToken.$inject = ['$http'];
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
@@ -69,7 +68,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
                         for (var a = 0; a < relevantAtrbs.length; a++) {
-                            mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
+                            pricingtableutil.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
                         }
                     }
                     for (var a = 0; a < relevantAtrbs.length; a++) {
@@ -100,32 +99,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
     }
-    function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
-        if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
-            if (dataItem._behaviors.validMsg[atrbName] != null) {
-                try {
-                    var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
-
-                    if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
-                        if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
-                            dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
-                            dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
-                        }
-                    }
-
-                    if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
-                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-                    } else {
-                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
-                    }
-                } catch (e) {
-
-                }
-            }
-        }
-    }
+    
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
     var cellStyle = {
@@ -192,7 +166,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         initSearchValue = s["searchTxt"];
     }
 
-
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -252,7 +225,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         if (root.isPtr) {
-            FixEcapKitField();
+            pricingtableutil.FixEcapKitField(root.pricingTableData.PRC_TBL_ROW);
             generateKendoSpreadSheetOptions();
         }
         else {
@@ -269,28 +242,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
     }
-
-    function FixEcapKitField() {
-        // Implement a rule to set KIT_ECAP column read only property = source column read only setting
-        for (var i = 0; i < root.pricingTableData.PRC_TBL_ROW.length; i++) {
-            var item = root.pricingTableData.PRC_TBL_ROW[i];
-            if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] === true) {
-                item._behaviors.isReadOnly["ECAP_PRICE_____20_____1"] = true;
-            }
-
-            //Enable Kit Name Field when Pricing Table Copied from Approved Pricing Table
-            if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["DEAL_GRP_NM"] != undefined) {
-                if (item["OBJ_SET_TYPE_CD"] == "KIT" && item["HAS_TRACKER"] == "0" && item["PS_WF_STG_CD"] == "Approved") {
-                    delete item._behaviors.isReadOnly["DEAL_GRP_NM"];
-                }
-            }
-        }
-    }
-
-    function colToInt(colName) {
-        return root.colToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
-    }
-
+    
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
@@ -336,7 +288,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             ptTemplate.model.fields.AR_SETTLEMENT_LVL.editable = false;
         }
 
-        // Show oevrarcghing colums only for hybrid deals
+        // Show overarching columns only for hybrid deals
         if (root.isTenderContract) {
             root.vistextHybridOnlyColumns.forEach(function (x) {
                 delete ptTemplate.model.fields[x];
@@ -410,7 +362,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
 
         if (!root.contractData.CustomerDivisions || custD.length <= 1) {
-            ptTemplate.columns[colToInt('CUST_ACCNT_DIV')].hidden = true;
+            ptTemplate.columns[pricingtableutil.colToInt('CUST_ACCNT_DIV', root.colToLetter)].hidden = true;
         }
 
         if (root.isTenderContract) {
@@ -483,7 +435,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             nonMergedColIndexesDict[c] = true;
                         }
                     }
-
                     if (data[d].id === null) numDeleted++;
                     rowOffset += numTiers;
                 }
@@ -497,9 +448,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // TODO maybe we need to clean up items past data length to merge = 1
             //debugger;
             sheet.range("A" + (rowOffset - numDeleted) + ":" + finalColLetter + root.ptRowCount).unmerge();
-
         });
-
     }
 
     // Generates options that kendo's html directives will use
@@ -619,7 +568,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     numWarn++;
                 }
             }
-
             root.pricingTableData.WIP_DEAL[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;
         }
 
@@ -628,7 +576,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root.wipData = root.pricingTableData.WIP_DEAL;
 
         // If no data was returned, we should redirect back to PTR
-        if (root.wipData.length === 0 || anyPtrDirtyValidation()) { // Make PT dirty
+        if (root.wipData.length === 0 || pricingtableutil.anyPtrDirtyValidation($linq, $scope.pricingTableData.PRC_TBL_ROW)) { // Make PT dirty
             $state.go('contract.manager.strategy',
                 {
                     cid: $scope.contractData.DC_ID,
@@ -637,33 +585,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                 { reload: true });
         }
-
         root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true, true);
-    }
-
-    function anyPtrDirtyValidation() {
-        var validServerType = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
-            function (x) {
-                return x._behaviors.isError.SERVER_DEAL_TYPE === true;
-            }).ToArray();
-
-        var dirtyItems = $linq.Enumerable().From($scope.pricingTableData.PRC_TBL_ROW).Where(
-            function (x) {
-                return x.PASSED_VALIDATION === "Dirty";
-            }).ToArray();
-
-        return dirtyItems.length > validServerType.length;
-    }
-
-    function getFormatedGeos(geos) {
-        if (geos == null) { return null; }
-        var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
-        if (isBlendedGeo) {
-            geos = geos.replace('[', '');
-            geos = geos.replace(']', '');
-            geos = geos.replace(' ', '');
-        }
-        return geos;
     }
 
     var productSelectionLevels = null;
@@ -678,7 +600,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'START_DT': moment(contract.START_DT).format("l"),
             'END_DT': moment(contract.END_DT).format("l"),
             'CUST_MBR_SID': contract.CUST_MBR_SID,
-            'GEO_COMBINED': getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
+            'GEO_COMBINED': pricingtableutil.getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
             'PTR_SYS_PRD': "",
             'PTR_SYS_INVLD_PRD': "",
             'PROGRAM_PAYMENT': root.curPricingTable["PROGRAM_PAYMENT"],
@@ -762,42 +684,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Do Nothing on cancel
             });
     }
-    // Converts JSON sysproducts to array
-    function populateValidProducts(sysProducts) {
-        var kitReOrderObject = { 'ReOrderedJSON': '', 'PRD_DRAWING_ORD': '' };
-
-        var addedProducts = [];
-        for (var key in sysProducts) {
-            if (sysProducts.hasOwnProperty(key)) {
-                angular.forEach(sysProducts[key], function (item) {
-                    addedProducts.push(item);
-                });
-            }
-        }
-        // Orders KIT products
-        addedProducts = $filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
-        var pricingTableSysProducts = {};
-        // Construct the new reordered JSON for KIT, if user input is Ci3, derived user input will be selected products
-        angular.forEach(addedProducts, function (item, key) {
-            if (!pricingTableSysProducts.hasOwnProperty(item.DERIVED_USR_INPUT)) {
-                pricingTableSysProducts[item.DERIVED_USR_INPUT] = [item];
-            } else {
-                pricingTableSysProducts[item.DERIVED_USR_INPUT].push(item);
-            }
-        });
-
-        kitReOrderObject.ReOrderedJSON = pricingTableSysProducts;
-        kitReOrderObject.PRD_DRAWING_ORD = addedProducts.map(function (p) {
-            return p.PRD_MBR_SID;
-        }).join(',');
-
-        kitReOrderObject.contractProducts = addedProducts.map(function (p) {
-            return p.DERIVED_USR_INPUT;
-        }).join(',');
-
-        return kitReOrderObject;
-    }
-
+    
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
         var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
@@ -946,11 +833,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         syncUndoRedoCounters();
 
-        //if (Object.prototype.toString.call(arg.range._ref) === "[object Object]") {
-        //    arg.preventDefault();
-        //    return;
-        //}
-
         var sheet = arg.sender.activeSheet();
         var range = arg.range;
 
@@ -1072,7 +954,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     // Look for another occurence of the Deal Group Name (AKA - Kit Name)
                                     for (var i = 0; i < data.length; i++) {
-                                        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == formatStringForDictKey(myRow["DEAL_GRP_NM"])
+                                        if (pricingtableutil.formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == pricingtableutil.formatStringForDictKey(myRow["DEAL_GRP_NM"])
                                             && parseInt(data[i]["TIER_NBR"]) == 1
                                             && i != myRowIndex) {
                                             dealGrpKeyFirstIndex = i;
@@ -1085,7 +967,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         var isNonEditableKITname = ((parseInt(existingRow["HAS_TRACKER"]) || 0) == 1 || (!!existingRow._behaviors && !!existingRow._behaviors.isReadOnly && existingRow._behaviors.isReadOnly["PTR_USER_PRD"] == true));
 
                                         // Prepare deal groups for merging confirmation after the range.forEachCell() is done
-                                        var myKey = formatStringForDictKey(myRow["DEAL_GRP_NM"]);
+                                        var myKey = pricingtableutil.formatStringForDictKey(myRow["DEAL_GRP_NM"]);
                                         if (!confirmationModPerDealGrp.hasOwnProperty(myKey)) {
                                             confirmationModPerDealGrp[myKey] = {
                                                 "existingDcID": existingRow["DC_ID"],
@@ -1180,7 +1062,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                     // Find/get all occurances with deal-grp-nm
                                     for (var i = data.length - 1; i >= 0 && prevValues.length <= 10; i--) {
-                                        if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
+                                        if (pricingtableutil.formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == result.key) {
                                             for (var j = (i + parseInt(data[i]["NUM_OF_TIERS"]) - 1); j >= i; j--) { // NOTE: only the first row of a merged group has DEAL_GRP_NM values (not null), so we want to backtrack to include the other tiers within that group.  The reason the other tiers are null is because when a user changes a merged cell, kendo will only update the first row and keep the others in the merge group null.  we need to remember this and thus also enforce this behavior in applySpreadsheetMerge to make sure the data source is consistent in reflecting kendo's behavior
                                                 prevValues.push(angular.copy(data[j]));
 
@@ -1209,11 +1091,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     // Check for and remove duplicates
                                     var duplicateCheckerDict = {};
                                     for (var i = prevValues.length - 1; i >= 0; i--) {
-                                        if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
+                                        if (duplicateCheckerDict.hasOwnProperty(pricingtableutil.formatStringForDictKey(prevValues[i]["PRD_BCKT"]))) {
                                             prevValues.splice(i, 1);
                                             numOfDuplicates++;
                                         } else {
-                                            duplicateCheckerDict[formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
+                                            duplicateCheckerDict[pricingtableutil.formatStringForDictKey(prevValues[i]["PRD_BCKT"])] = true;
                                         }
                                     }
 
@@ -1260,12 +1142,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     spreadDsSync();
                                     clearUndoHistory();
                                     root.child.setRowIdStyle(data);
-
                                 }
                                     , function (response) { // Cancel Merge
                                         // Find all occurances with deal-grp-nm
                                         for (var i = data.length - 1; i >= 0; i--) {
-                                            if (formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
+                                            if (pricingtableutil.formatStringForDictKey(data[i]["DEAL_GRP_NM"]) == response.key) {
                                                 // Don't clear the existing
                                                 if (data[i]["DC_ID"] == confirmationModPerDealGrp[response.key].existingDcID) {
                                                     continue;
@@ -1287,15 +1168,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-        // check for selections in te middle of a merge
-        //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
-        //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
-        //}
-
         var isRangeValueEmptyString = ((range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0));
 
         var hasValueInAtLeastOneCell = false;
-
         var shenaniganObj = null;
 
         // VOL-TIER
@@ -1418,13 +1293,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                                 // HACK: To give end vols commas, we had to format the numbers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                                 value.value = kendo.toString(value.value, "n3");
-
-
                                 myRow.END_PB = value.value;
                                 sourceData[(rowIndex - 1)].END_PB = myRow.END_PB;
                             }
 
-                            // This bypasses the delete full line for Program and *Vol Tier to prevent popup message.  Instead, mid tier returns a Please refresh message
+                            // This bypasses the delete full line for Program and *Vol Tier to prevent popup message. Instead, mid tier returns a Please refresh message
                             if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
                                 hasValueInAtLeastOneCell = true;
                             }
@@ -1447,9 +1320,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 );
                 cleanupData(data);
-                //if (!$scope.isUnmergedCellModifed) {
                 spreadDsSync();
-                //}
             }
         }
 
@@ -1488,7 +1359,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 //First clear full error for density
                 clearDensityValidation(data[rowStart].DC_ID);
                 setOrCleanValidationError('DENSITY_BAND', 'full');
-                var delIds = hasDataOrPurge(data, rowStart, rowStop);
+                var delIds = pricingtableutil.hasDataOrPurge(data, rowStart, rowStop);
                 if (delIds.length > 0) {
                     stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
                     isDelete = true;
@@ -1584,7 +1455,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
-
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
@@ -1616,8 +1486,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     systemModifiedProductInclude = false;
                 }
             }
-
-
 
             // need to see if an item changed that would cause the ADJ_ECAP_UNIT to be cleared out
             var isTrackerNumFlushed = false;
@@ -1693,16 +1561,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
             if (data[i].FLEX_ROW_TYPE == "Accrual") {
                 // Remove the restriction of single tier accrual lines only
-                // Sets column open or reead only
-                //if (data[i].NUM_OF_TIERS > 1) {
-                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).value('');
-                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(false);
-                //    sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background('#f5f5f5');
-                //}
-                //else {
+                // Sets column open or read only
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).enable(true);
                 sheet.range(oaMaxAmtIndex + (i + pteHeaderIndex)).background(null);
-                //}
             }
 
             var stlmentValue = data[i].AR_SETTLEMENT_LVL;
@@ -1715,8 +1576,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range(resetPrdIndex + (i + pteHeaderIndex)).background('#f5f5f5');
                     sheet.range(resetPrdIndex + (i + pteHeaderIndex)).validation(root.myDealsValidation(false, "", false));
                 }
-
-
 
                 // Disable AR_SETTLEMENT_LVL when PROGRAM_PAYMENT is frontend
                 sheet.range(stlmntLvlIndex + (i + pteHeaderIndex)).value('');
@@ -1865,24 +1724,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return result;
     }
 
-    //// <summary>
-    //// Formats a given dictionary key to a format that ignores spaces and capitalization for easier key comparisons.
-    //// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
-    //// </summary>
-    function formatStringForDictKey(valueToFormat) {
-        var result = "";
-        if (valueToFormat != null) {
-            result = valueToFormat.toString().toUpperCase().replace(/\s/g, "");
-        }
-        return result;
-    }
-
-    function isInt(value) {
-        return typeof value === 'number' &&
-            isFinite(value) &&
-            Math.floor(value) === value;
-    };
-
     function pivotKITDeals(data, n, dcIdDict, dictId, masterData, maxKITproducts) {
         // NOTE: cleanpData does a backwards for-loop that calls pivotKITDeals, so param "n" comes in backwards
         if ((data[n]["PTR_USER_PRD"] === "" || data[n]["PTR_USER_PRD"] === null) && data[n]["DC_ID"] === null) {
@@ -1892,8 +1733,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var products = data[n]["PTR_USER_PRD"].replace(/,,/g, ',').split(",");
             var proudctJSON = (data[n]["PTR_SYS_PRD"] === undefined || data[n]["PTR_SYS_PRD"] === "" || data[n]["PTR_SYS_PRD"] === null)
                 ? [] : JSON.parse(data[n]["PTR_SYS_PRD"]);
-            if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && isInt(parseInt(masterData[n].DC_ID))) {
-                // Because of dynamic teiring, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
+            if (!dcIdDict.hasOwnProperty(data[n].DC_ID) && data[n].DC_ID != null && pricingtableutil.isInt(parseInt(masterData[n].DC_ID))) {
+                // Because of dynamic tiering, the NUM_OF_TIERS might change, but only on the first row of a merged cell.
                 // Since we're going backwards, we need to find the first cell to get the accurate NUM_OF_TIERS
                 var firstTierProds = $filter('where')(masterData, { 'DC_ID': data[n].DC_ID, 'TIER_NBR': 1 });
                 if (firstTierProds.length > 0) {
@@ -1945,18 +1786,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var a = 0; a < numTier; a++) {
                 if (numTier == pivottedRows.length) {
                     // If user/system is reshuffling products check if that product exists, if so copy attributes, else rename bucket to new product name
-                    data[n - (numTier - 1 - a)] = updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON);
+                    data[n - (numTier - 1 - a)] = pricingtableutil.updateProductBucket(data[n - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON, $filter);
                     continue;
                 }
                 // Update existing rows, offset number of deleted rows
                 else if ((numExistingRows - rowDeleted) > 0) { // update the existing rows
-                    data[n - (numExistingRows - 1)] = updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, proudctJSON);
+                    data[n - (numExistingRows - 1)] = pricingtableutil.updateProductBucket(data[n - rowDeleted], pivottedRows, products[a], numTier, a, proudctJSON, $filter);
                     numExistingRows--;
                 } else {
                     if (rowDeleted == 0 && offSetRows > 0) {
                         // adding products / new rows
                         var copy = angular.copy(data[n - rowDeleted]);
-                        copy = updateProductBucket(copy, pivottedRows, products[a], numTier, a, proudctJSON);
+                        copy = pricingtableutil.updateProductBucket(copy, pivottedRows, products[a], numTier, a, proudctJSON, $filter);
                         data.splice(n + a - (offset - 1), 0, copy); // add rows below the existing rows in order
                         // (n(AKA the index the data is located in) + a(AKA basically what tier nbr) + offset(AKA # of existing rows) +1 (one below the offset))
                         data[n + a - (offset - 1)].id = null;
@@ -1965,7 +1806,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else {
                         // removed a product from the tiers, so instead update the current tiers with the correct data (think of it like shifting row data up by the amount removed)
                         data[n - rowDeleted + rowAdded - (numTier - 1 - a)] =
-                            updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON);
+                            pricingtableutil.updateProductBucket(data[n - rowDeleted + rowAdded - (numTier - 1 - a)], pivottedRows, products[a], numTier, a, proudctJSON, $filter);
                     }
                 }
             }
@@ -1975,49 +1816,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-
+    
     // Copy old tier 1 values to new tier 1 values. For deal group merge to work only the Tier 1 needs to have deal group name
     function updateKITTierOneValues(newFirstTierRow, oldFirstTierRow) {
         newFirstTierRow['DEAL_GRP_NM'] = oldFirstTierRow['DEAL_GRP_NM'];
         newFirstTierRow['ECAP_PRICE_____20_____1'] = oldFirstTierRow['ECAP_PRICE_____20_____1'];
         newFirstTierRow['TEMP_KIT_REBATE'] = oldFirstTierRow['TEMP_KIT_REBATE'];
     }
-
-    function updateProductBucket(row, pivottedRows, productBcktName, numTier, tierNumber, proudctJSON) {
-        var row = angular.copy(row);
-
-        // Case
-        var buckProd = $filter('filter')(pivottedRows, function (item) {
-            return item['DC_ID'] == row['DC_ID'] && item['PRD_BCKT'].toLowerCase() == productBcktName.toLowerCase();
-        }, true);
-
-        if (buckProd.length === 0) { // no corresponding row (essentially a new row)
-            row["PRD_BCKT"] = productBcktName;
-
-            // Tender only colums
-            row["CAP"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
-            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].YCS2 : "";
-
-            // Clear out any tiered values because this is an essentially new row.  Do not clear out unless it comes from a relevant user action - we don't want this to happen when the product corrects in-place to what we have defined in the system (i.e. after user manual copy paste or typed entry).
-            row["ECAP_PRICE"] = 0;
-            row["DSCNT_PER_LN"] = 0;
-            row["QTY"] = 1;
-            row["TEMP_TOTAL_DSCNT_PER_LN"] = 0;
-        } else {
-            row = buckProd[0]; //Select the first one even of there are duplicates
-            row["CAP"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].CAP : "";
-            row["YCS2"] = proudctJSON[productBcktName] !== undefined ? proudctJSON[productBcktName][0].YCS2 : "";
-        }
-        row["NUM_OF_TIERS"] = numTier;
-        row["TIER_NBR"] = tierNumber + 1;
-
-        // For deal group merge to work only the Tier 1 needs to have deal group name
-        if (row["TIER_NBR"] != 1) {
-            row['DEAL_GRP_NM'] = null;
-        }
-        return row;
-    }
-
+    
     function cleanupData(data) {
         var dcIdDict = {};
         var dictId = 0;
@@ -2078,32 +1884,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             offset++;
             i--;
         }
-
         return offset % numTier;
     }
-
-    function hasDataOrPurge(data, rowStart, rowStop) {
-        var ids = [];
-        if (data.length === 0) return ids;
-        for (var n = rowStop; n >= rowStart; n--) {
-            if (!!data[n]) {
-                if (data[n].DC_ID !== null && data[n].DC_ID > 0) {
-                    if (ids.indexOf(data[n].DC_ID) < 0) ids.push(data[n].DC_ID);
-                } else if (data[n].DC_ID !== null && data[n].DC_ID < 0) {
-                    data.splice(n, 1);
-                }
-            }
-        }
-        return ids;
-    }
-
 
     /// <summary>
     //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste) then resize the spreadsheet row
     /// </summary>
     function sanitizeAndResizeRow(stringToSanitize, sheet, sheetRowIndex) {
         var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g); // NOTE: put this before the sanitize!
-        stringToSanitize = sanitizeString(stringToSanitize, ", ")
+        stringToSanitize = pricingtableutil.sanitizeString(stringToSanitize, ", ")
         if (stringToSanitize != null) stringToSanitize = stringToSanitize.replace(/,\s*$/, "");
 
         if (lineBreakMatches != null && lineBreakMatches.length > 10) { // NOTE: 10 is arbitrary. We can increase/decrease this without effect on other parts of the tool.
@@ -2123,24 +1912,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return stringToSanitize;
     }
 
-    /// <summary>
-    //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)
-    /// </summary>
-    function sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
-        var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
-        if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
-        ///
-        //stringToSanitize = stringToSanitize.replace(/[^\x00-\x7F]/g, ""); // NOTE: Remove non-ASCII characters (also takes out hidden characters that causes js dictionary breaking)
-
-        stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas
-
-        return stringToSanitize;
-    }
-
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex, isAddedByTrackerNumber) {
         // Now lets sync all values.
-        // This is a performance boost
-        // Instead of batch and cell manipulation, we will
+        // This is a performance boost. Instead of batch and cell manipulation, we will
         //   1) dump the spreadsheet to a datasource
         //   2) update the datasource array
         //   3) reapply it to the datasource
@@ -2178,11 +1952,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var duplicateCheckerDict = {};
                         for (var i = usrPrdArr.length - 1; i >= 0; i--) {
                             usrPrdArr[i] = usrPrdArr[i].toString().trim(); // trim products
-                            if (duplicateCheckerDict.hasOwnProperty(formatStringForDictKey(usrPrdArr[i].toString()))) {
+                            if (duplicateCheckerDict.hasOwnProperty(pricingtableutil.formatStringForDictKey(usrPrdArr[i].toString()))) {
                                 // This is a duplicate, remove from list
                                 usrPrdArr.splice(i, 1);
                             } else {
-                                duplicateCheckerDict[formatStringForDictKey(usrPrdArr[i])] = true;
+                                duplicateCheckerDict[pricingtableutil.formatStringForDictKey(usrPrdArr[i])] = true;
                             }
                         }
                         data[r]["PTR_USER_PRD"] = usrPrdArr.join(",");
@@ -2339,7 +2113,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                             }
                         }
-
 
                         for (var key in ptTemplate.model.fields) {
                             if (ptTemplate.model.fields.hasOwnProperty(key)) {
@@ -2548,11 +2321,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
 
                             }
-                            // if (!trackerLockedFields.contains(root.colToLetter[key]) && (ptTemplate.model.fields.hasOwnProperty(key) && ptTemplate.model.fields[key].editable) && $scope.$parent.$parent.spreadDs._data[topLeftRowIndex - 2].HAS_TRACKER === "1") {
-                            //     range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
-                            //     range.enable(range);
-                            //     range.background(null);
-                            //}
                             else {
                                 range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
                                 range.enable(true);
@@ -2561,7 +2329,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
                     else {
-                        // if additional rows are inserted due to change in number of products for KIT deal bottomrowIndexis lower than nuber of rows...Thus aasigning bottomrowIndex same as data.length
+                        // if additional rows are inserted due to change in number of products for KIT deal bottomrowIndexis lower than number of rows...Thus assigning bottomrowIndex same as data.length
                         range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
@@ -2644,7 +2412,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 spreadDsSync();
 
                 root.child.setRowIdStyle(data);
-
                 resizeSheet(sheet);
 
                 // reset num of tiers
@@ -2707,7 +2474,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     else if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" && $scope.pricingTableData.PRC_TBL_ROW[r]['NUM_OF_TIERS'] > 1 && $scope.pricingTableData.PRC_TBL_ROW[r]['TIER_NBR'] != 1) {
                                         $scope.pricingTableData.PRC_TBL_ROW[r] = root.spreadDs._data[r];
                                     }
-
                                     else if (root.spreadDs._data[r] && root.spreadDs._data[r]['NUM_OF_TIERS'] > 1 && root.spreadDs._data[r]['TIER_NBR'] != 1) {
                                         root.spreadDs._data[r] = $scope.pricingTableData.PRC_TBL_ROW[r];
                                         root.spreadDs.sync();
@@ -2740,27 +2506,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (firstEditableColBeforeProduct !== null) {
             return firstEditableColBeforeProduct;
         } else {
-            return CalculateFirstEdiatableBeforeProductCol();
+            return pricingtableutil.CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, root.colToLetter);
         }
     }
-
-    function CalculateFirstEdiatableBeforeProductCol() {
-        if (editableColsBeforeProduct.length > 0) {
-            for (var i = 0; i < editableColsBeforeProduct.length; i++) {
-                if (firstEditableColBeforeProduct === null) {
-                    firstEditableColBeforeProduct = editableColsBeforeProduct[i];
-                } else if (root.colToLetter[firstEditableColBeforeProduct] > root.colToLetter[editableColsBeforeProduct[i]]) {
-                    // set to new firstEditableColBeforeProduct if that column is the before the previous firstEditableColBeforeProduct because they might be out of order
-                    firstEditableColBeforeProduct = editableColsBeforeProduct;
-                }
-            }
-        } else {
-            firstEditableColBeforeProduct = "PTR_USER_PRD";
-        }
-
-        return firstEditableColBeforeProduct;
-    }
-
+    
     function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
         sheet.batch(function () {
             if (!rowInfo._behaviors) return;
@@ -2768,7 +2517,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (rowInfo._behaviors.isReadOnly.hasOwnProperty(property)) {
                     var colLetter = root.colToLetter[property];
                     if (colLetter != null) {
-                        //vm.readOnlyColLetters[root.colToLetter[property]] = true;
                         disableRange(sheet.range(colLetter + (rowIndex + rowIndexOffset)));
                     }
                 }
@@ -2811,7 +2559,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $scope.$root.pc = null;
             }
         }
-
     }
 
     function showAnimatedHelp() {
@@ -3044,7 +2791,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         switch (myFieldModel.type) {
                             case "date":
                                 sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
-                                //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
                                 break;
                             case "number":
                                 // Money Formatting
@@ -3139,12 +2885,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     //        messageTemplate: "Invalid value. Please use the dropdown for available options."
     //    });
     //}
-
+    
     function disableRange(range) {
         range.enable(false);
         range.background('#f5f5f5'); // HACK: Disabled cells with null values have no class we can stylize, so we must change the cell directly :(
     }
-
+    
     // HACK: override kendo's autofill property
     // Note that a good amount of this code is Kendo's default code, Kendo v2017.1.118
     function customDragDropAutoFill(handle) {
@@ -3212,8 +2958,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 this._clipboard.parse();
                 var status = this._clipboard.canPaste();
 
-                // total HACK here.  there must be a better way, but trying to POC options
-                // pasting accross merged cells is not allowed, so need to bypass it
+                // total HACK here. there must be a better way, but trying to POC options
+                // pasting across merged cells is not allowed, so need to bypass it
                 if (!status.canPaste && !root.numOfPivot()) {
                     if (status.menuInvoked) {
                         return {
@@ -3250,12 +2996,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     this._event.preventDefault();
                 } else if (contractutil.isPivotable(root.curPricingTable)) {
                     this.customMergedPaste();
-                    //range._adjustRowHeight();
                 } else {
                     this.customPaste();
                     range._adjustRowHeight();
                 }
             },
+            
             sanitizeAndFormatPasteData: function (state, sheet) { // Non-default Kendo code for paste event
                 for (row = state.data.length - 1; row >= 0; row--) {
                     // Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
@@ -3265,7 +3011,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var cellData = state.data[row][col];
 
                         if (typeof cellData.value == "string") {
-                            var sanitizedString = sanitizeString(cellData.value, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+                            var sanitizedString = pricingtableutil.sanitizeString(cellData.value, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
 
                             // NOTE: we need to check that all the values are ot null or empty again because now have have sanitized the string
                             if (cellData.value != sanitizedString) {
@@ -3314,6 +3060,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
                 return state;
             },
+            
             customPaste: function () {
                 // Default Kendo code for paste event
                 var clip = this._clipboard;
@@ -3384,7 +3131,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     state.data = newData;
                 }
-                //}
 
                 // Non-default Kendo code for paste event
                 this.sanitizeAndFormatPasteData(state, sheet);
@@ -3504,7 +3250,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         'END_DT': moment(currentPricingTableRowData.END_DT).format("l"),
                         'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
                         'IS_HYBRID_PRC_STRAT': currentPricingTableRowData.IS_HYBRID_PRC_STRAT,
-                        'GEO_COMBINED': getFormatedGeos(currentPricingTableRowData.GEO_COMBINED),
+                        'GEO_COMBINED': pricingtableutil.getFormatedGeos(currentPricingTableRowData.GEO_COMBINED),
                         'PTR_SYS_PRD': currentPricingTableRowData.PTR_SYS_PRD,
                         'PROGRAM_PAYMENT': currentPricingTableRowData.PROGRAM_PAYMENT,
                         'PROD_INCLDS': currentPricingTableRowData.PROD_INCLDS,
@@ -3515,7 +3261,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         'END_DT': moment(contract.END_DT).format("l"),
                         'CUST_MBR_SID': contract.CUST_MBR_SID,
                         'IS_HYBRID_PRC_STRAT': root.curPricingTable["IS_HYBRID_PRC_STRAT"],
-                        'GEO_COMBINED': getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
+                        'GEO_COMBINED': pricingtableutil.getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
                         'PTR_SYS_PRD': "",
                         'PTR_SYS_INVLD_PRD': "",
                         'PROGRAM_PAYMENT': root.curPricingTable["PROGRAM_PAYMENT"],
@@ -3699,12 +3445,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var translationInput = pricingTableRowData.map(function (row, index) {
             return {
                 ROW_NUMBER: row.ROW_NUMBER,
-                USR_INPUT: getCorrectedPtrUsrPrd(row.PTR_USER_PRD),
+                USR_INPUT: pricingtableutil.getCorrectedPtrUsrPrd(row.PTR_USER_PRD),
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
                 START_DATE: moment(row.START_DT).format("l"),
                 END_DATE: moment(row.END_DT).format("l"),
-                GEO_COMBINED: getFormatedGeos(row.GEO_COMBINED),
+                GEO_COMBINED: pricingtableutil.getFormatedGeos(row.GEO_COMBINED),
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
@@ -3723,7 +3469,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         "FILTER": obj.PROD_INCLDS,
                         "START_DATE": moment(obj.START_DT).format("l"),
                         "END_DATE": moment(obj.END_DT).format("l"),
-                        "GEO_COMBINED": getFormatedGeos(obj.GEO_COMBINED),
+                        "GEO_COMBINED": pricingtableutil.getFormatedGeos(obj.GEO_COMBINED),
                         "PROGRAM_PAYMENT": obj.PROGRAM_PAYMENT,
                         "CUST_MBR_SID": $scope.contractData.CUST_MBR_SID,
                         "IS_HYBRID_PRC_STRAT": obj.IS_HYBRID_PRC_STRAT,
@@ -3733,8 +3479,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             });
         }
-
-        //if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = root.contractData["START_DT"]
 
         var translationInputToSend = translationInput.filter(function (x) {
             // If we already have the invalid JSON don't translate the products again
@@ -3760,7 +3504,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     pcMt.addPerfTimes(response.data.PerformanceTimes);
                     if ($scope.$root.pc !== null) $scope.$root.pc.add(pcMt.stop());
                     if (response.statusText === "OK") {
-                        response.data.Data = buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);
+                        response.data.Data = pricingtableutil.buildTranslatorOutputObject(invalidProductJSONRows, response.data.Data);
                         cookProducts(currentRowNumber, response.data.Data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
                     }
                 }, function (response) {
@@ -3773,7 +3517,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         } // Products where client side has invalid and duplicate product information
         else if (invalidProductJSONRows.length > 0) {
             var data = { 'ProdctTransformResults': {}, 'InValidProducts': {}, 'DuplicateProducts': {}, 'ValidProducts': {} };
-            data = buildTranslatorOutputObject(invalidProductJSONRows, data);
+            data = pricingtableutil.buildTranslatorOutputObject(invalidProductJSONRows, data);
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals, saveOnContinue);
         } else if (saveOnContinue) { // No products to validate, call the Validate and Save from contract manager
             if (!publishWipDeals) {
@@ -3792,45 +3536,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             kendo.alert("All the products have been validated.");
             root.setBusy("", "");
         }
-    }
-
-    function getCorrectedPtrUsrPrd(userInpProdName) {
-        userInpProdName = userInpProdName.trim();
-        var retVal = "";
-        if (userInpProdName.indexOf("NAND") != -1) {
-            if (userInpProdName.indexOf(",") != -1) {
-
-                var splitStr = userInpProdName.split(",");
-                for (var i = 0; i < splitStr.length; i++) {
-                    var individProdName = splitStr[i].trim();
-                    if (individProdName.indexOf("NAND") != -1) {
-                        retVal = retVal + ((retVal.length == 0) ? individProdName.substring(individProdName.lastIndexOf(" ")) : "," + individProdName.substring(individProdName.lastIndexOf(" ")));
-                    } else {
-                        retVal = retVal + ((retVal.length == 0) ? individProdName : "," + individProdName);
-                    }
-                }
-            } else {
-                retVal = userInpProdName.substring(userInpProdName.lastIndexOf(" "));
-            }
-        } else {
-            retVal = userInpProdName;
-        }
-
-        return retVal;
-    }
-
-
-    // Combine the valid and invalid JSON into single object, corrector understands following object type
-    function buildTranslatorOutputObject(invalidProductJSONRows, data) {
-        angular.forEach(invalidProductJSONRows, function (item) {
-            var inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
-            var validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
-            data.ValidProducts[item.ROW_NUMBER] = validJSON;
-            data.ProdctTransformResults[item.ROW_NUMBER] = inValidJSON.ProdctTransformResults;
-            data.DuplicateProducts[item.ROW_NUMBER] = inValidJSON.DuplicateProducts;
-            data.InValidProducts[item.ROW_NUMBER] = inValidJSON.InValidProducts;
-        });
-        return data;
     }
 
     function cookProducts(currentRow, transformResults, rowData, publishWipDeals, saveOnContinue) {
@@ -3852,7 +3557,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             //Trimming unwanted Property to make JSON light
             if (!!transformResults.ValidProducts[key]) {
-                transformResults = massagingObjectsForJSON(key, transformResults);
+                transformResults = pricingtableutil.massagingObjectsForJSON(key, transformResults);
             }
 
             // If no duplicate or invalid add valid JSON
@@ -3873,7 +3578,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (isAllValidated) {
                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                    var kitObject = populateValidProducts(transformResults.ValidProducts[key]);
+                    var kitObject = pricingtableutil.populateValidProducts(transformResults.ValidProducts[key], $filter);
                     transformResults.ValidProducts[key] = kitObject.ReOrderedJSON;
                     var userInput = updateUserInput(transformResults.ValidProducts[key], kitObject.contractProducts);
                 } else {
@@ -3892,7 +3597,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // Create a dictionary of products with their original tiered data
                         for (var i = 0; i < originalProductsArr.length; i++) {
                             var originalIndex = parseInt(r) + i; // i+1 is essentially the tier assuming the usr prd is in the right order. But then we minus 1 for getting the index so it's just i.
-                            orignalUnswappedDataDict[formatStringForDictKey(originalProductsArr[i])] = angular.copy(data[originalIndex]);
+                            orignalUnswappedDataDict[pricingtableutil.formatStringForDictKey(originalProductsArr[i])] = angular.copy(data[originalIndex]);
                         }
                     }
                 }
@@ -3921,8 +3626,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             for (var d = 0; d < root.kitDimAtrbs.length; d++) {
                                 if (root.kitDimAtrbs[d] == "TIER_NBR") { continue; }
                                 // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230
-                                if (orignalUnswappedDataDict[formatStringForDictKey(currProduct)] !== undefined) {
-                                    data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[formatStringForDictKey(currProduct)][root.kitDimAtrbs[d]];
+                                if (orignalUnswappedDataDict[pricingtableutil.formatStringForDictKey(currProduct)] !== undefined) {
+                                    data[a][root.kitDimAtrbs[d]] = orignalUnswappedDataDict[pricingtableutil.formatStringForDictKey(currProduct)][root.kitDimAtrbs[d]];
                                 }
                             }
                         }
@@ -3961,7 +3666,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             validateDensityBand(transformResults);
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
-                //$timeout(function () {
                 $scope.$root.pc.add($scope.pcCookUI.stop());
                 if (saveOnContinue) {
                     if (!publishWipDeals) {
@@ -3978,7 +3682,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     kendo.alert("All the products have been validated.");
                     root.setBusy("", "");
                 }
-                //}, 20);
             }
             else {
                 root.setBusy("", "");
@@ -4031,7 +3734,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             //Trimming unwanted Property to make JSON light
                             if (!!transformResult.ValidProducts[key]) {
-                                transformResult = massagingObjectsForJSON(key, transformResult);
+                                transformResult = pricingtableutil.massagingObjectsForJSON(key, transformResult);
                             }
 
                             // Save Valid and InValid JSO into spreadsheet hidden columns
@@ -4054,7 +3757,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             // Update user input if all the issues are done
                             if (allIssuesDone) {
                                 if (root.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                                    var kitObject = populateValidProducts(transformResult.ValidProducts[key]);
+                                    var kitObject = pricingtableutil.populateValidProducts(transformResult.ValidProducts[key], $filter);
                                     transformResult.ValidProducts[key] = kitObject.ReOrderedJSON;
                                     var products = updateUserInputFromCorrector(transformResult.ValidProducts[key],
                                         transformResult.AutoValidatedProducts[key], kitObject.contractProducts);
@@ -4131,7 +3834,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         root.setBusy("", "");
                         validateDensityBand(transformResult, true);
-                        //$timeout(function () {
                         if (saveOnContinue) {
                             if (transformResult.AbortProgration) {
                                 return true;
@@ -4149,7 +3851,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             root.setBusy("", "");
                         }
-                        //}, 20);
                     } else {
                         $timeout(function () {
                             validateSingleRowProducts(data[currentRow - 1], currentRow);
@@ -4158,44 +3859,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                     function () { });
             }, 10);
-    }
-
-    //Trimming unwanted Property to make JSON light
-    function massagingObjectsForJSON(key, transformResult) {
-        for (var validKey in transformResult.ValidProducts[key]) {
-            transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
-                return {
-                    BRND_NM: x.BRND_NM,
-                    CAP: x.CAP,
-                    CAP_END: x.CAP_END,
-                    CAP_START: x.CAP_START,
-                    DEAL_PRD_NM: x.DEAL_PRD_NM,
-                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
-                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
-                    FMLY_NM: x.FMLY_NM,
-                    HAS_L1: x.HAS_L1,
-                    HAS_L2: x.HAS_L2,
-                    HIER_NM_HASH: x.HIER_NM_HASH,
-                    HIER_VAL_NM: x.HIER_VAL_NM,
-                    MM_MEDIA_CD: x.MM_MEDIA_CD,
-                    MTRL_ID: x.MTRL_ID,
-                    MTRL_TYPE_CD: x.MTRL_TYPE_CD == undefined ? "" : x.MTRL_TYPE_CD,
-                    PCSR_NBR: x.PCSR_NBR,
-                    PRD_ATRB_SID: x.PRD_ATRB_SID,
-                    PRD_CAT_NM: x.PRD_CAT_NM,
-                    PRD_END_DTM: x.PRD_END_DTM,
-                    PRD_MBR_SID: x.PRD_MBR_SID,
-                    PRD_STRT_DTM: x.PRD_STRT_DTM,
-                    USR_INPUT: x.USR_INPUT,
-                    YCS2: x.YCS2,
-                    YCS2_END: x.YCS2_END,
-                    YCS2_START: x.YCS2_START,
-                    EXCLUDE: x.EXCLUDE,
-                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
-                }
-            });
-        }
-        return transformResult;
     }
 
     function deleteRowFromCorrector(data) {
@@ -4218,7 +3881,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
         }
     }
-
+    
     function updateUserInput(validProducts, kiProducts) {
         if (!validProducts) {
             return "";
@@ -4242,7 +3905,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        contractProducts = contDerivedUserInput.length == 1 ? getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
+                        contractProducts = contDerivedUserInput.length == 1 ? pricingtableutil.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
                     if (contractProducts !== "") {
                         input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
@@ -4258,7 +3921,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        excludeProducts = exclDerivedUserInput.length == 1 ? getFullNameOfProduct(exclDerivedUserInput[0], exclDerivedUserInput[0].DERIVED_USR_INPUT) : exclDerivedUserInput[0].DERIVED_USR_INPUT;
+                        excludeProducts = exclDerivedUserInput.length == 1 ? pricingtableutil.getFullNameOfProduct(exclDerivedUserInput[0], exclDerivedUserInput[0].DERIVED_USR_INPUT) : exclDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
                     if (excludeProducts !== "") {
                         input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
@@ -4269,7 +3932,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         return input;
     }
-
+    
     function updateUserInputFromCorrector(validProducts, autoValidatedProducts, kiProducts) {
         if (!validProducts) {
             return "";
@@ -4299,35 +3962,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
             else if (validProducts.hasOwnProperty(prd)) {
-                products.contractProducts = getUserInput(products.contractProducts, validProducts[prd], "I", 'HIER_VAL_NM');
-                products.excludeProducts = getUserInput(products.excludeProducts, validProducts[prd], "E", 'HIER_VAL_NM');
+                products.contractProducts = pricingtableutil.getUserInput(products.contractProducts, validProducts[prd], "I", 'HIER_VAL_NM', $filter);
+                products.excludeProducts = pricingtableutil.getUserInput(products.excludeProducts, validProducts[prd], "E", 'HIER_VAL_NM', $filter);
             }
         }
         return products;
     }
-
-    function getFullNameOfProduct(item, prodName) {
-        if (item.PRD_ATRB_SID > 7005) return prodName;
-        return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
-    }
-
-    function getUserInput(updatedUserInput, products, typeOfProduct, fieldNm) {
-
-        var userInput = products.filter(function (x) {
-            return x.EXCLUDE === (typeOfProduct === "E");
-        });
-        userInput = $filter('unique')(userInput, fieldNm);
-
-        userInput = userInput.map(function (elem) {
-            return elem[fieldNm];
-        }).join(",");
-
-        if (userInput !== "") {
-            updatedUserInput = updatedUserInput === "" || fieldNm !== 'HIER_VAL_NM' ? userInput : updatedUserInput + "," + userInput;
-        }
-        return updatedUserInput;
-    }
-
+    
     function validateOnlyProducts() {
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock("Pricing Table Product Validation", "UX");
         var data = cleanupData(root.spreadDs.data());
@@ -4340,7 +3981,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if ($scope.$root.pc === null) $scope.$root.pc = new perfCacheBlock($scope.ptTitle + " Editor Save & Validate", "UX");
         var data = cleanupData(root.spreadDs.data());
         //Defect -- System Testing :Price strategy for hybrid deals having multiple deals under it containing the same product
-        var multiGeoWithoutBlend = validateMultiGeoForHybrid(data);
+        var multiGeoWithoutBlend = pricingtableutil.validateMultiGeoForHybrid(data);// validateMultiGeoForHybrid(data);
         if (multiGeoWithoutBlend != "0") {
             if (multiGeoWithoutBlend == "1") {
                 logger.stickyError('Multiple GEO Selection not allowed without BLEND');
@@ -4350,7 +3991,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
         else {
-            var iscustdivnull = isCustDivisonNull(data);
+            var iscustdivnull = pricingtableutil.isCustDivisonNull(data, $scope.contractData.CUST_ACCNT_DIV);
             if (iscustdivnull) {
                 kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
                     ValidateProducts(data, false, true);
@@ -4363,50 +4004,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
     }
-    function validateMultiGeoForHybrid(data) {
-        //This is Comma Separated GEOS
-        var prod_used = [];
-        for (var i = 0; i < data.length; i++) {
-            //Add Products
-            if (data[i].IS_HYBRID_PRC_STRAT == "1") {
-                var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-                for (var j = 0; j < temp_split.length; j++) {
-                    prod_used.push(temp_split[j]);
-                }
-            }
-            //Checking GEO
-            //Added a check to check for Geo_Combined only if it exists.
-            if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
-                var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-                var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-                var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
-                if (lastComma > lastBracesPos) {
-                    return "1";
-                }
-            }
-
-        }
-        //This is to Check Product Line
-        if (prod_used.length > 0) {
-            var uniq = prod_used
-                .map(function (e) {
-                    return e;
-                }).reduce((a, b) => {
-                    a[b] = (a[b] || 0) + 1;
-                    return a
-                }, {})
-            //Duplicate Product Check
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-            if (duplicates.length > 0) {
-                return "2";
-            }
-        }
-        return "0";
-    }
+    
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
 
-        var iscustdivnull = isCustDivisonNull(data)
+        var iscustdivnull = pricingtableutil.isCustDivisonNull(data, $scope.contractData.CUST_ACCNT_DIV);
         if (iscustdivnull) {
             kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
                 ValidateProducts(data, true, true);
@@ -4421,21 +4023,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     }
 
-    function isCustDivisonNull(data) {
-        if ($scope.contractData.CUST_ACCNT_DIV != "") {
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
-                    return true;
-                }
-            }
-            return false;
-        }
-        else {
-            return false;
-        }
-    }
-
-    // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    // NOTE: This is a workaround because the built-in kendo spreadsheet datepicker causes major performance issues in IE
     kendo.spreadsheet.registerEditor("dropdownEditor", function () {
         var context;
 
@@ -4601,7 +4189,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     });
 
-    // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    // NOTE: Thhis is a workaround because the built-in kendo spreadsheet datepicker causes major performance issues in IE
     kendo.spreadsheet.registerEditor("datePickerEditor", function () {
         var context;
 
@@ -4614,12 +4202,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             },
             icon: "k-icon k-i-calendar ssEditorBtn"
         };
-
-        function fromOaDate(oadate) {
-            var date = new Date(((oadate - 25569) * 86400000));
-            var tz = date.getTimezoneOffset();
-            return new Date(((oadate - 25569 + (tz / (60 * 24))) * 86400000));
-        }
 
         function open() {
             // Get selected cell
@@ -4635,7 +4217,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
             var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
-            var cellDate = fromOaDate(context.range.value());
+            var cellDate = pricingtableutil.fromOaDate(context.range.value());
 
             var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
             var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
@@ -4790,7 +4372,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return [{
             'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
             'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
-            'GEO_MBR_SID': getFormatedGeos(dataItem.GEO_COMBINED),
+            'GEO_MBR_SID': pricingtableutil.getFormatedGeos(dataItem.GEO_COMBINED),
             'START_DT': dataItem.START_DT,
             'END_DT': dataItem.END_DT,
             'getAvailable': 'N',
@@ -4802,7 +4384,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var productData = {
             'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
             'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
-            'GEO_MBR_SID': getFormatedGeos(dataItem.GEO_COMBINED),
+            'GEO_MBR_SID': pricingtableutil.getFormatedGeos(dataItem.GEO_COMBINED),
             'START_DT': dataItem.START_DT,
             'END_DT': dataItem.END_DT,
             'getAvailable': 'N',
@@ -5011,37 +4593,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             let data = root.spreadDs.data();
             _.each(data, (itm) => {
                 if (itm.DC_ID == DCID) {
-                    clearBehaviors(itm, 'DENSITY_BAND');
-                    clearBehaviors(itm, 'DC_ID');
+                    pricingtableutil.clearBehaviors(itm, 'DENSITY_BAND');
+                    pricingtableutil.clearBehaviors(itm, 'DC_ID');
                     itm.DENSITY_BAND = null;
                 }
             });
-        }
-
-    }
-
-    function splitProductForDensity(response) {
-
-        let prdObj = {};
-        //skipping the excluded products
-        _.each(response.validateSelectedProducts, (prdDet, prd) => {
-            if (prdDet && prdDet.length > 0 && !prdDet[0].EXCLUDE) {
-                prdObj[`${prd}`] = prdDet;
-            }
-        });
-
-        if (response.splitProducts) {
-            let prod = {};
-            let items = _.keys(prdObj);
-            for (var i = 0; i < items.length; i++) {
-                let obj = {};
-                obj[`${items[i]}`] = prdObj[`${items[i]}`]
-                prod[i + 1] = obj;
-            }
-            return prod;
-        }
-        else {
-            return { "1": prdObj }
         }
     }
 
@@ -5053,7 +4609,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     let data = root.spreadDs.data();
                     let validMisProd = [];
                     // match the schema based on product translator/selector, in case of split product it can have multiple products
-                    let ValidProducts = response.ValidProducts ? response.ValidProducts : splitProductForDensity(response);
+                    let ValidProducts = response.ValidProducts ? response.ValidProducts : pricingtableutil.splitProductForDensity(response);
                     _.each(ValidProducts, (item) => {
                         // multiple products can be present in single row and in spreadDS data the products are sorted.
                         let prod = getValidDenProducts(item, prdSrc);
@@ -5114,12 +4670,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                             }
                                             return item;
                                         });
-
                                     }
                                 }
-
                             });
-
                         }
                     });
 
@@ -5137,17 +4690,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             })
                         });
                     }
-
                 }
                 //finally assigning the validation messages
                 setOrCleanValidationError('DENSITY_BAND', 'only');
-
             }
         }
         catch (ex) {
             console.error(ex);
         }
-
     }
 
     function mergeDensity(sheet, data) {
@@ -5183,19 +4733,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         });
-
-    }
-
-    function clearBehaviors(item, elem) {
-        if (!item._behaviors) item._behaviors = {};
-        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        if (!item._behaviors.isError) item._behaviors.isError = {};
-        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-        // removing the key because in setRowIdStyle it check for objects not for value
-        delete item._behaviors.isRequired[elem];
-        delete item._behaviors.isError[elem];
-        delete item._behaviors.validMsg[elem];
     }
 
     function setOrCleanValidationError(elem, action) {
@@ -5232,11 +4769,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         sheet.range(`${dcRowCol}${indx + 2}`).validation(null);
                         sheet.range(`${dcRowCol}${indx + 2}`).background("#eeeeee").color("#003C71");
                     }
-
                 });
             }
         }
-
     }
 
     function getValidDenProducts(item, prdSrc) {
@@ -5252,9 +4787,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else {
             userInput = updateUserInput(item);
         }
-
         return userInput == '' ? userInput : userInput.contractProducts.split(',');
-
     }
 
     $scope.$on('validateDensity', function (event, args) {
