@@ -86,15 +86,15 @@
                                     <div class="divTableRow headerFont">
                                         <div class="divTableCell" style="width:75px"></div>
                                         <div class="divTableCell isRequired">Object Type</div>
-                                        <div class="divTableCell isRequired">Attribute</div>
+                                        <div class="divTableCell fontWeight">Attribute</div>
                                         <div class="divTableCell isRequired" title="Revision Number">Rvs #</div>
                                         <div class="divTableCell fontWeight">Mtx Value</div>
                                         <div class="divTableCell isRequired">Object Id</div>
-                                        <div class="divTableCell isRequired">Data Value</div>
+                                        <div class="divTableCell fontWeight">Data Value</div>
                                         <div class="divTableCell fontWeight"><b>Data Value Max</b></div>
                                         <div class="divTableCell isRequired">MDX</div>
                                         <div class="divTableCell isRequired">Customer</div>
-                                        <div class="divTableCell isRequired">Batch Id</div>
+                                        <div class="divTableCell fontWeight">Batch Id</div>
                                     </div>
                                     <div *ngFor="let dataItem of currentDataFix.DataFixAttributes;let i=index trackBy i"
                                          class="divTableRow">
@@ -135,7 +135,7 @@
                                         </div>
                                         <div class="divTableCell">
                                             <kendo-textbox class="form-control md dataValue" [(ngModel)]="dataItem.ATRB_VAL"
-                                                           placeholder="Data Value" required></kendo-textbox>
+                                                           placeholder="Data Value"></kendo-textbox>
                                         </div>
                                         <div class="divTableCell">
                                             <kendo-textbox class="form-control md dataValue"
@@ -155,7 +155,7 @@
                                         </div>
                                         <div class="divTableCell">
                                             <kendo-textbox class="form-control md dataValue" [(ngModel)]="dataItem.BTCH_ID"
-                                                           placeholder="Data Value Max" required></kendo-textbox>
+                                                           placeholder="Data Value Max"></kendo-textbox>
                                         </div>
                                     </div>
                                 </div>

@@ -69,27 +69,11 @@
     font-size: 13px;
     text-align: center
 }
-/*
-header,
-.row {
-    display: flex
-}*/
-
-.k-animation-container,
-.k-animation-container-shown {
-    font-size: 10px !important
-}
-
 .addModeScroll {
     max-height: 500px;
     overflow: auto
 }
 
-/*.col {
-    text-align: center;
-    font-size: 13px
-}
-*/
 #dataFixAttributes .abValue {
     font-size: 12px;
     text-align: center;

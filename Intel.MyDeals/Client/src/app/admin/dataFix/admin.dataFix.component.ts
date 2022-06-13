@@ -17,9 +17,7 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 export class adminDataFixComponent {
     constructor(private dataFixSvc: dataFixService, private loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     private isLoading = true;
@@ -106,7 +104,7 @@ export class adminDataFixComponent {
                 ATRB_SID: "",
                 ATRB_RVS_NBR: 0,
                 ATRB_MTX_SID: 0,
-                OBJ_SID: "",
+                OBJ_SID: 0,
                 ATRB_VAL: "",
                 ATRB_VAL_MAX: "",
                 MDX_CD: "",
@@ -195,8 +193,10 @@ export class adminDataFixComponent {
             });
             if (this.currentDataFix.INCDN_NBR === "")
                 this.requiredFields.push("Incident Number");
-            if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || x.OBJ_SID === "" || x.OBJ_SID === "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "" || x.ATRB_RVS_NBR == null).length > 0)
+            if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || x.OBJ_SID == null || x.OBJ_SID == "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "" || x.ATRB_RVS_NBR == null).length > 0)
                 this.requiredFields.push("Mandatory data in attributes section cannot be empty");
+            if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x=> x.OBJ_SID == null || x.OBJ_SID == "0" ).length > 0)
+                this.requiredFields.push("Object Id Value in attributes section cannot be set empty or 0");
             if (this.isActnSelected && isExecute && this.currentDataFix.DataFixActions.filter(x => x.OBJ_TYPE_SID === "" || x.ACTN_NM === "").length > 0)
                 this.requiredFields.push("Mandatory data in actions section cannot be empty");
             const regExpForObjectIds = /[0-9,]+$/;
@@ -267,7 +267,7 @@ export class adminDataFixComponent {
                     ATRB_SID: 0,
                     ATRB_RVS_NBR: 0,
                     ATRB_MTX_SID: 0,
-                    OBJ_SID: "",
+                    OBJ_SID: 0,
                     ATRB_VAL: "",
                     ATRB_VAL_MAX: "",
                     MDX_CD: "",
