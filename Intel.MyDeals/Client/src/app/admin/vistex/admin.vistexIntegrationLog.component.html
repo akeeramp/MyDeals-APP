@@ -47,7 +47,7 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
 <div class="col-md-12" style="margin-top: 20px;">
-    <kendo-grid [data]="gridData" [skip]="state.skip" [height]="600" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+    <kendo-grid [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
         [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="{sort:true}" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
                     class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button>
