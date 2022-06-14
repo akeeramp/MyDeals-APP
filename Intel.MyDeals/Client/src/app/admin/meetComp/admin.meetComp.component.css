@@ -44,3 +44,6 @@ span.k-dropdown-wrap {
     border-color: #0071c5 !important;
     background-color: #0071c5 !important
 }
+span.k-column-title {
+    white-space: nowrap !important;
+}

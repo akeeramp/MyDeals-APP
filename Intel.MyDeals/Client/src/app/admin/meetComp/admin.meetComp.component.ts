@@ -21,28 +21,28 @@ export class meetCompComponent {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    public HasBulkUploadAccess = (<any>window).usrRole == "DA";
-    public isAccess = true;
-    public isAccessMessage: string;
-    public customers;
-    public selectedCustomerID:any = -1;
-    public meetCompDIMMasterData = [];
-    public prodCats;
-    public selectedProdCatName:any = '';
-    public brands;
-    public selectedBrandName:any = '';
-    public disabled = false;
-    public products;
-    public selectedProdName:any = '';
-    public meetCompMasterData = [];
-    public isCustomerMissing = false;
-    public isCatMissing = false;
-    public isBrandMissing = false;
-    public isBusy = false;
-    public gridData: GridDataResult;
-    public gridResult: Array<any> = [];
+    private HasBulkUploadAccess = (<any>window).usrRole == "DA";
+    private isAccess = true;
+    private isAccessMessage: string;
+    private customers;
+    private selectedCustomerID:any = -1;
+    private meetCompDIMMasterData = [];
+    private prodCats;
+    private selectedProdCatName:any = '';
+    private brands;
+    private selectedBrandName:any = '';
+    private disabled = false;
+    private products;
+    private selectedProdName:any = '';
+    private meetCompMasterData = [];
+    private isCustomerMissing = false;
+    private isCatMissing = false;
+    private isBrandMissing = false;
+    private isBusy = false;
+    private gridData: GridDataResult;
+    private gridResult: Array<any> = [];
     private color: ThemePalette = "primary";
-    public state: State = {
+    private state: State = {
         skip: 0,
         take: 10,
         group: [],
