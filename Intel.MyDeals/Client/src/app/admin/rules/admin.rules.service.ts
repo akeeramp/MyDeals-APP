@@ -38,4 +38,10 @@ export class adminRulesService {
         const apiUrl: string = this.apiBaseUrl + 'GetRuleSimulationResults/';
         return this.httpClient.post(apiUrl, data);
     }
+
+    public copyPriceRule(iRuleSid): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'CopyPriceRule/' + iRuleSid;
+        return this.httpClient.post(apiUrl, iRuleSid);
+    }
+
 }

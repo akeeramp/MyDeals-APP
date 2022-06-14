@@ -20,6 +20,7 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { RulesSimulationModalComponent } from '../../admin/rules/admin.rulesSimulationModal.component';
+import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsModal.component';
 
 @Component({
     selector: "adminRules",
@@ -38,6 +39,8 @@ export class adminRulesComponent {
     }
 
     public rule = {};
+    public Rules: Array<any> = [];
+    //public rid = rid;
     public toolKitHidden = false;
     private isLoading = true;
     private dataSource: any;
@@ -59,6 +62,7 @@ export class adminRulesComponent {
     public isTextIncrease = true;
     public isTextFontTitle = "Click me to Decrease Text size";
     public rid = 0;
+    public spinnerMessageDescription = "Please wait while we loading page";
 
     private deletionId: any;
     private excelColumns = {
@@ -393,6 +397,101 @@ export class adminRulesComponent {
 
         });
     }
+
+    addNewRule() {
+        //Call up Popup
+        this.editRule(0, false);
+    }
+
+    editRule(dataItem, isCopy) {
+        this.spinnerMessageDescription = "Please wait while we loading the rule..";
+        //vm.GetRules(id, "GET_BY_RULE_ID"); 
+        if (dataItem.id) {
+            dataItem.isCopy = isCopy;
+            this.openRuleDetailsModal(dataItem);
+        } else {
+            let tempDataItem = {
+                "id": dataItem, "isCopy": isCopy
+            };
+            this.openRuleDetailsModal(tempDataItem);
+        }
+    }
+
+    copyRule(id) {
+        this.adminRulesSvc.copyPriceRule(id).subscribe(
+            (response: any) => {
+            if (response.data > 0) {
+                this.editRule(response.data, true);
+                this.loggerSvc.success("Rule has been copied");
+
+            } else {
+                this.loggerSvc.error("Unable to copy the rule", "");
+            }
+        }, (error) => {
+                this.loggerSvc.error(
+                    "Unable to copy the rule.",
+                    error,
+                    error.statusText
+                );
+            },
+    )}
+
+    openRuleDetailsModal(dataItem) {
+        const dialogRef = this.dialog.open(RuleDetailsModalComponent, {
+                width: "1800px",
+                data: dataItem
+            });
+            dialogRef.afterClosed().subscribe(() => {
+
+            });
+        
+        //$scope.context = dataItem;
+
+        /*let modalInstance = $uibModal.open({
+            animation: true,
+            backdrop: 'static',
+            templateUrl: 'app/admin/rules/ruleDetailsModal.html',
+            controller: 'RuleModalController',
+            controllerAs: 'vm',
+            size: 'lg',
+            windowClass: 'prdSelector-modal-window',
+            resolve: {
+                RuleConfig: ['ruleService', function () {
+                    return this.adminRulesSvc.getPriceRulesConfig().then(function (response) {
+                        return response;
+                    });
+                }],
+                dataItem: function () {
+                    return angular.copy(dataItem);
+                }
+            }
+        });*/
+
+        /*modalInstance.result.then(function (returnData) {
+            vm.cancel();
+        }, function () { });*/
+    }
+
+    GetRules(id, actionName) {
+        this.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
+        this.adminRulesSvc.getPriceRules(id, actionName).subscribe(
+            (response: Array<any>) => {
+            //this.Rules = response.data;
+            this.dataSource.read();
+            //adding filter
+            if (this.rid != 0) {
+                this.dataSource.filter({ field: "Id", value: this.rid });
+                this.editRule(this.rid, false);
+            }
+        }, (error) => {
+            this.loggerSvc.error(
+                "Operation Failed.",
+                error,
+                error.statusText
+            );
+        }
+    );
+    };
 
     removeFilter() {
         this.state.filter = {

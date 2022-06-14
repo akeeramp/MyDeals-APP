@@ -35,6 +35,7 @@ import { ManageEmployeeModalComponent } from "../admin/employee/admin.manageEmpl
 import { meetCompComponent } from "../admin/meetComp/admin.meetComp.component";
 import { adminRulesComponent } from '../admin/rules/admin.rules.component';
 import { RulesSimulationModalComponent } from '../admin/rules/admin.rulesSimulationModal.component';
+import { RuleDetailsModalComponent } from '../admin/rules/admin.ruleDetailsModal.component';
 import {adminVistexIntegrationLogComponent} from '../admin/vistex/admin.vistexIntegrationLog.component'
 
 export let adminComponents =[
@@ -76,5 +77,6 @@ export let adminComponents =[
     meetCompComponent,
     adminRulesComponent,
     RulesSimulationModalComponent,
+    RuleDetailsModalComponent,
     adminVistexIntegrationLogComponent
 ]

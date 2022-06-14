@@ -22,7 +22,7 @@
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"
                 [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
         <ng-template kendoGridToolbarTemplate>
-            <button *ngIf="toolKitHidden == false" [disabled]="isLoading" kendoGridAddCommand class="k-button addButton">
+            <button *ngIf="toolKitHidden == false" [disabled]="isLoading" kendoGridAddCommand class="k-button addButton" (click)="addNewRule()">
                 <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RULE
             </button>
             <button *ngIf="toolKitHidden == false && rid != 0" [disabled]="isLoading" class="k-button addButton" (click)="removeFilter()">
@@ -50,8 +50,8 @@
                 <div class='fl gridStatusMarker centerText {{dataItem.RuleStage}}' [title]="dataItem.RuleStage? 'Approved' : 'Pending Approval'">{{ stageOneChar(dataItem.RuleStage) }}</div>
                 <div class="rule">
                     <i [title]="dataItem.IsAutomationIncluded ? 'Auto Approval' : 'Exclusion from Automation'" class='rulesGidIcon {{ stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>
-                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools'></i>
-                    <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools'></i>
+                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (Click)="editRule(dataItem,false)"></i>
+                    <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' (click)="copyRule(id)"></i>
                     <i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' (click)="deleteRule(dataItem.Id)"></i>
                     <i *ngIf="dataItem.isElligibleForApproval && !dataItem.IsActive && dataItem.IsAutomationIncluded && !dataItem.RuleStage" role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' (click)="UpdateRuleIndicator(dataItem.Id, true,'UPDATE_STAGE_IND',true)"></i>
                 </div>
