@@ -81,20 +81,21 @@
                         <label class="control-label isRequired col-md-1"
                                style="padding-right:10px">Attributes : </label>
                         <div id="dataFixAttributes" class="col-md-11" style="padding-left:10px">
-                            <div class="divTable">
+                            <span *ngIf="!(AttributeSettings.length > 0 && OpDataElements.length > 0 && MyCustomersInfo.length > 0)">Loading attributes..</span>
+                            <div class="divTable" *ngIf="AttributeSettings.length > 0 && OpDataElements.length > 0 && MyCustomersInfo.length > 0">
                                 <div class="divTableBody">
                                     <div class="divTableRow headerFont">
                                         <div class="divTableCell" style="width:75px"></div>
                                         <div class="divTableCell isRequired">Object Type</div>
-                                        <div class="divTableCell fontWeight">Attribute</div>
+                                        <div class="divTableCell isRequired">Attribute</div>
                                         <div class="divTableCell isRequired" title="Revision Number">Rvs #</div>
                                         <div class="divTableCell fontWeight">Mtx Value</div>
                                         <div class="divTableCell isRequired">Object Id</div>
-                                        <div class="divTableCell fontWeight">Data Value</div>
+                                        <div class="divTableCell isRequired">Data Value</div>
                                         <div class="divTableCell fontWeight"><b>Data Value Max</b></div>
                                         <div class="divTableCell isRequired">MDX</div>
                                         <div class="divTableCell isRequired">Customer</div>
-                                        <div class="divTableCell fontWeight">Batch Id</div>
+                                        <div class="divTableCell isRequired">Batch Id</div>
                                     </div>
                                     <div *ngFor="let dataItem of currentDataFix.DataFixAttributes;let i=index trackBy i"
                                          class="divTableRow">
@@ -165,6 +166,7 @@
                     <div class="form-group row">
                         <label class="control-label isRequired col-md-1">Actions : </label>
                         <div class="col-md-11" style="padding-left:10px">
+                            <span *ngIf="!(OpDataElements.length > 0 && Actions.length > 0)">Loading actions..</span>
                             <div *ngIf="Actions.length >0 && OpDataElements.length >0">
                                 <div id="dataFixActions" class="filterContainer">
                                     <div class="divTable">

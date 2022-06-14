@@ -193,7 +193,7 @@ export class adminDataFixComponent {
             });
             if (this.currentDataFix.INCDN_NBR === "")
                 this.requiredFields.push("Incident Number");
-            if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || x.OBJ_SID == null || x.OBJ_SID == "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "" || x.ATRB_RVS_NBR == null).length > 0)
+            if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x => x.OBJ_TYPE_SID === "" || x.OBJ_SID == null || x.OBJ_SID == "0" || x.MDX_CD === "" || x.CUST_MBR_SID === "" || x.ATRB_RVS_NBR == null || x.BTCH_ID == "" || x.ATRB_VAL == "" || x.ATRB_SID=="").length > 0)
                 this.requiredFields.push("Mandatory data in attributes section cannot be empty");
             if (this.isAtrbSelected && isExecute && this.currentDataFix.DataFixAttributes.filter(x=> x.OBJ_SID == null || x.OBJ_SID == "0" ).length > 0)
                 this.requiredFields.push("Object Id Value in attributes section cannot be set empty or 0");
