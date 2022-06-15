@@ -842,9 +842,10 @@
     <Content Include="Client\src\app\contract\lnav\lnav.component.html" />
     <Content Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.css" />
     <Content Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.html" />
-    <Content Include="Client\src\app\contract\productSelector\productselector.component.html" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.css" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\geo\geo.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\productSelector\productselector.component.html" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.html" />
@@ -2247,7 +2248,6 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\contract\productSelector\productselector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contract.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTE.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTable\pricingTable.component.ts" />
@@ -2255,6 +2255,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\handsontable.interface.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderManager\tenderManager.component.ts" />

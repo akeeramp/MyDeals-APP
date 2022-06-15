@@ -5,13 +5,14 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface DialogData {
-  animal: string;
+  product?: string;
+  source?:any,
   name: string;
 }
 
 @Component({
     selector: "product-selector",
-    templateUrl:"Client/src/app/contract/productSelector/productselector.component.html"
+    templateUrl:"Client/src/app/contract/ptModals/productSelector/productselector.component.html"
   })
 
   export class ProductSelectorComponent {

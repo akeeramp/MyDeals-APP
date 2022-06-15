@@ -5,8 +5,8 @@ import { pricingTableComponent } from "../contract/pricingTable/pricingTable.com
 import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
 import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
 import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
-import { ProductSelectorComponent } from "../contract/productSelector/productselector.component";
-
+import { ProductSelectorComponent } from "../contract/ptModals/productSelector/productselector.component";
+import { GeoSelectorComponent } from "../contract/ptModals/geo/geo.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -15,5 +15,6 @@ export let contractComponents = [
     pricingTableEditorComponent,
     TenderFolioComponent,
     tenderManagerComponent,
-    ProductSelectorComponent
+    ProductSelectorComponent,
+    GeoSelectorComponent
 ]
