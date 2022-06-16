@@ -291,7 +291,8 @@
                             <tr>
                                 <th style="text-align: right;">Credit</th>
                                 <td style="text-align: right;">{{data.CREDIT_VOLUME | number}}</td>
-                                <td style="text-align: right;">{{data.CREDIT_AMT | currency}}</td>
+                                <td style="text-align: right;" ng-if="data.CREDIT_AMT != null && data.CREDIT_AMT !=''">(<span>{{data.CREDIT_AMT | currency}}</span>)</td>
+                                <td style="text-align: right;" ng-if="data.CREDIT_AMT == null || data.CREDIT_AMT ==''">{{data.CREDIT_AMT | currency}}</td>
                             </tr>
                             <tr>
                                 <th style="text-align: right;">Debit</th>

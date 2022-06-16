@@ -548,6 +548,7 @@
                 title: "Credit Amt",
                 type: "number",
                 format: "{0:c}",
+                template: "<span ng-if='#=CREDIT_AMT# !== null && #=CREDIT_AMT# !== undefined && #=CREDIT_AMT# != 0'>(<span>#=gridUtils.tender(data, 'CREDIT_AMT', 'c')#</span>)</span>",
                 width: 120
             }, {
                 field: "DEBIT_AMT",
