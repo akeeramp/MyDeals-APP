@@ -1,21 +1,42 @@
-td.custom-border {
+td.error-border {
     border: 1px solid red !important;
 }
 
-td.custom-cell {
+td.error-cell {
     color: red !important;
+    border: solid red 1px !important;
 }
 
 td.readonly-cell {
     background-color: rgb(238, 238, 238) !important;
 }
 
-.htSelectEditor {
-    /*
-     * This hack enables to change <select> dimensions in WebKit browsers
-     */
-    -webkit-appearance: menulist-button !important;
+
+/* handsoneable related classes */
+
+.htCustTxt {
+    float: left !important;
+}
+
+.htCustCellEditor {
     position: absolute;
-    width: auto;
+    float: right;
+    width: 25px;
     z-index: 300;
+    margin-left: 0px;
+    height: 25px;
+    font-size: 0.8em;
+    opacity: 1 !important;
+}
+
+
+/* This class must not edit it helps for copy paste*/
+
+.ht_editor_hidden {
+    top: 0px !important;
+    left: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    width: 1px !important;
+    height: 1px !important;
 }

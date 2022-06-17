@@ -157,9 +157,9 @@ export class PTEUtil {
           if (item._behaviors.validMsg) {
             _.each(item._behaviors.validMsg, (val, key) => {
               let colInd = _.findIndex(columns, { field: key });
-              cellComments.push({ row: rowInd, col: colInd, comment: { value: val }, className: 'custom-border' });
+              cellComments.push({ row: rowInd, col: colInd, comment: { value: val,readOnly: true }, className: 'error-border' });
               if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
-                cellComments.push({ row: rowInd, col: 0, className: 'custom-cell' });
+                cellComments.push({ row: rowInd, col: 0, className: 'error-cell' });
               }
             });
           }

@@ -14,6 +14,7 @@ import { PTEUtil } from '../PTE.util';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
+import { marketSegComponent } from '../ptModals/marketSegment/marketSeg.component';
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
@@ -40,10 +41,9 @@ export class pricingTableEditorComponent implements OnChanges {
         public TEXTAREA_PARENT: any;
         public textareaStyle: any
         public textareaParentStyle: any
+        public hot: Handsontable.Core;
         public instance: any;
         public selectOptions: any;
-        private hotId = "spreadsheet";
-        private hotRegisterer = new HotTableRegisterer();
         private selRow = 0;
         private selCol = 0;
         private field:any = '';
@@ -60,57 +60,49 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         createElements() {
           super.createElements();
-          this.TEXTAREA.style.float = 'left';
           this.createCellButton();
+          this.TEXTAREA.className='htCustTxt';
           this.TEXTAREA_PARENT.appendChild(this.BUTTON);
         }
         createCellButton() {
           this.BUTTON = document.createElement('button');
-          this.BUTTON.setAttribute('style', `position: absolute; float: right; margin-left: 0%; height: 25px;width:25px;font-size: 0.8em;z-index:10`); // Float Right and Position Absolute allow the button to be next to the Cell
+          this.BUTTON.id="btnCustSelctor";
           this.buttonStyle = this.BUTTON.style;
-          this.BUTTON.className = 'btn btn-sm btn-primary py-0';
+          this.BUTTON.className = 'btn btn-sm btn-primary py-0 htCustCellEditor';
           this.BUTTON.innerText = '🔍';
-          this.BUTTON.addEventListener('mouseover', (event: any) => {
-            event.preventDefault();
-            this.BUTTON.focus();
-          });
           this.BUTTON.addEventListener('mousedown', (event: any) => {
+            event.stopImmediatePropagation();
             event.preventDefault();
             this.openPopUp();
           });
         }
         openPopUp() {
-          const hotTable: any = this.hotRegisterer.getInstance(this.hotId);
-          const selVal = this.hotRegisterer.getInstance(this.hotId).getDataAtCell(this.selRow, this.selCol);
+          const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
+          let modalComponent:any=null,name:string='';
           if (this.field &&  this.field== 'PTR_USER_PRD') {
-            const dialogRef = dialog.open(ProductSelectorComponent, {
-              width: '500px',
-              data: { name: "Product Selector", product: selVal },
-            });
-            dialogRef.afterClosed().subscribe(result => {
-              //this is to focus the cell selected
-              hotTable.selectCell(this.selRow, this.selCol);
-              if (result) {
-                console.log('The dialog was closed:: result::', result);
-                //here there is no handonstable source specify bcz we need to do autofill
-                hotTable.setDataAtCell(this.selRow, this.selCol, result?.product);
-              }
-            });
+            modalComponent=ProductSelectorComponent;
+            name="Product Selector";
           }
           else if (this.field &&  this.field== 'GEO_COMBINED'){
-            const dialogRef = dialog.open(GeoSelectorComponent, {
-              width: '500px',
-              data: { name: "GEO Selector", source: this.source},
-            });
-            dialogRef.afterClosed().subscribe(result => {
-              //this is to focus the cell selected
-              hotTable.selectCell(this.selRow, this.selCol);
-              if (result) {
-                console.log('The dialog was closed:: result::', result);
-                hotTable.setDataAtCell(this.selRow, this.selCol, result.toString(),'no-edit');
-              }
-            });
+            modalComponent=GeoSelectorComponent
+            name="Geo Selector";
           }
+          else{
+            modalComponent=marketSegComponent;
+            name="Market Segment Selector";
+          }
+          const dialogRef = dialog.open(modalComponent, {
+            width: '500px',
+            data: { name: name, source: this.source,selVal:selVal },
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+              if(this.field &&  this.field== 'PTR_USER_PRD')//here there is no handonstable source specify bcz we need to do autofill
+                this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString());
+              else
+              this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(),'no-edit');
+            }
+          });
         }
       }
     }
@@ -131,8 +123,6 @@ export class pricingTableEditorComponent implements OnChanges {
     private pricingTableTemplates: any = {}; // Contains templates for All Deal Types
     private ColumnConfig :Array<Handsontable.ColumnSettings>=[];
     // To get the selected row and col for product selector
-    private selRow = 0;
-    private selCol = 0;
     private multiRowDelete:Array<number>=[];
     // Handsontable Variables basic hottable structure
     private hotSettings: Handsontable.GridSettings = {
@@ -163,6 +153,15 @@ export class pricingTableEditorComponent implements OnChanges {
     private dropdownResponseLocalStorageKey = 'pricingTableEditor_DropdownApiResponses';
     private dropdownResponses:any = null;
 
+    //this will help to have a custom cell validation which allow only alphabets
+    projectValidator(value, callback){
+      if (/^[a-zA-Z ]{2,30}$/.test(value)) {
+        callback(true);
+  
+      } else {
+        callback(false);
+      }
+    }
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -221,11 +220,11 @@ export class pricingTableEditorComponent implements OnChanges {
         let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
         //adding for cell management in cell this can move to seperate function later
         this.ColumnConfig.push(currentColumnConfig);
-        if (item.field == 'PTR_USER_PRD') {
+        if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG') {
           currentColumnConfig.editor = this.custCellEditor;
         }
-        if (item.field == 'GEO_COMBINED') {
-          currentColumnConfig.editor = this.custCellEditor;
+        if(item.field=='QLTR_PROJECT'){
+          currentColumnConfig.validator=this.projectValidator;
         }
         this.columns.push(currentColumnConfig);
         nestedHeaders[0].push(sheetObj[index]);
@@ -497,7 +496,7 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         else if(val.prop=='SETTLEMENT_PARTNER'){
           //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-           if(this.curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase()=='cash'){
+           if(this.curPricingTable[`AR_SETTLEMENT_LVL`] && this.curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase()=='cash'){
             currentstring =row+','+val.prop+','+this.contractData.Customer.DFLT_SETTLEMENT_PARTNER+','+'no-edit';
            }
            else{
@@ -556,6 +555,12 @@ export class pricingTableEditorComponent implements OnChanges {
         }
       }
       return PTRResult;
+    }
+    undoPTE(){
+      this.hotTable.undo();
+    }
+    redoPTE(){
+      this.hotTable.redo();
     }
     savePTE(){
     this.isLoading=true;

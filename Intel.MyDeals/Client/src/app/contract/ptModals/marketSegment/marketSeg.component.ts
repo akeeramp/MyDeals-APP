@@ -11,16 +11,17 @@ export interface DialogData {
 }
 
 @Component({
-    selector: "geo-selector",
-    templateUrl:"Client/src/app/contract/ptModals/geo/geo.component.html"
+    selector: "market-selector",
+    templateUrl:"Client/src/app/contract/ptModals/marketSegment/marketSeg.component.html"
   })
 
-  export class GeoSelectorComponent {
+  export class marketSegComponent {
     private listItems:Array<string>=[];
     private value:Array<string>=[];
 
+
     constructor(
-      public dialogRef: MatDialogRef<GeoSelectorComponent>,
+      public dialogRef: MatDialogRef<marketSegComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
     ) {}
 
@@ -34,9 +35,9 @@ export interface DialogData {
   }
   
   angular.module("app").directive(
-    "geoSelector",
+    "marketSelector",
     downgradeComponent({
-      component: GeoSelectorComponent,
+      component: marketSegComponent,
     })
   );
   
