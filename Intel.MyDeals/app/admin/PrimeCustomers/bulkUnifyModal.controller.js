@@ -723,6 +723,17 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 var sheet = vm.spreadsheet.activeSheet();
                 sheet.range("A1:K" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
                 sheet.range("A1:A" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(true, '', true));
+                sheet.batch(function () {
+                    for (var i = 0; i < vm.dealReconValidationSummary.inValidRecords.length; i++) {
+                        var lengthOfMsg = vm.dealReconValidationSummary.inValidRecords[i].ERR_MSG.length;
+                        var height = 1;
+                        if (Math.ceil(lengthOfMsg / 40) > 1)
+                            height = height + Math.ceil(lengthOfMsg / 40) - 1;
+                        var rowht = height > 1 ? height * 15 : 30;
+                        sheet.rowHeight(i, rowht);
+                        sheet.range("K" + (i + 1)).verticalAlign("top");
+                    }
+                });
             }
             if (vm.isBulkUnify)
                 vm.ValidateSheet();
