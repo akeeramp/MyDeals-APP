@@ -2,19 +2,19 @@ param([string] $Operation,$USN,$PWD,$ENV)
 
 try {
     $ENV_DATA = @(
-       [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='ITT';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
-       [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
-       [pscustomobject]@{env='UTT1';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='UTT2';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com'}
-       [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
-       [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
-       [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYD2W01.amr.corp.intel.com'}
-       [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYD2W01.amr.corp.intel.com'}
-       [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYD2W01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYD2W01.amr.corp.intel.com'}
-       [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYD2W02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYD2W02.amr.corp.intel.com'}
+    [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='ITT';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
+    [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
+    [pscustomobject]@{env='UTT1';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='UTT2';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com'}
+    [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
+    [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com'}
+    [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com'}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $ENV;
