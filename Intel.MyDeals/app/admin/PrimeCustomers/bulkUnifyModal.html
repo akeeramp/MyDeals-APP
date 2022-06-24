@@ -47,8 +47,9 @@
             <div ng-if="(vm.isBulkUnify && vm.inValidUnifyDeals.length > 0) || (!vm.isBulkUnify && vm.dealReconValidationSummary.inValidRecords.length > 0)">
                 <div class="col-md-11 notes">
                     <span class="redbold">NOTE:</span>
-                        <span>&nbsp;Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. Fix the validation errors.</span><br />
-                        <span>&nbsp;&nbsp;&nbsp;The Possible Values for RPL Status code are EC,ECB,NOPAYIN,NOPAYOUT,NOSNCTN,NOTRDIN,NOTRDOUT,PAYCOND,REVIEWWIP,TRDCOND. Multiple RPL Status codes can be given seperated by comma</span><br /><br />
+                    <span ng-if="(vm.isBulkUnify)">Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. And its value range is 0 - 2,147,483,647. If excel contains value more than this range, it will be automatically reset to '0'. Fix the validation errors.<br /></span>
+                    <span ng-if="!(vm.isBulkUnify)">Deal ID ,Unified Customer ID, Country/Region Customer ID, 'To Be Unified Customer ID' and 'To Be Unified Country/Region' should be numeric. And its value range is 0 - 2,147,483,647. If excel contains value more than this this range, it will automatically reset to '0'. Fix the validation errors.<br /></span>
+                    <span>The Possible Values for RPL Status code are EC,ECB,NOPAYIN,NOPAYOUT,NOSNCTN,NOTRDIN,NOTRDOUT,PAYCOND,REVIEWWIP,TRDCOND. Multiple RPL Status codes can be given seperated by comma</span><br /><br />
                 </div>
                 <kendo-spreadsheet id="spreadsheetUnifyDeals" style="width: 978px; height: 400px; float:left;" k-rows="vm.SpreadSheetRowsCount" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets" k-options="vm.SpreadSheetOptions"></kendo-spreadsheet>
             </div>

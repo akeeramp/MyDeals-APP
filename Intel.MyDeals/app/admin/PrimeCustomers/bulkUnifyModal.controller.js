@@ -929,19 +929,19 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "any") {
                                 isToBeGlobalContainsAny = true;
                                 rowMsg = rowMsg + "'ANY' cannot be used as 'To Be Unified Customer Name'|";
-                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                                sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                             if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "null") {
                                 isToBeGlobalContainsNull = true;
                                 rowMsg = rowMsg + "NULL cannot be used as 'To Be Unified Customer Name'|";
-                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                                sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                             var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
                             if (!res || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.length > 65) {
                                 isToBeInvalidGlobalName = true;
-                                rowMsg = rowMsg + "Unified Customer Name either contains more than 65 characters or invalid characters|";
-                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                                rowMsg = rowMsg + "To Be Unified Customer Name either contains more than 65 characters or invalid characters|";
+                                sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                         }
                         if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID != 0
@@ -1060,7 +1060,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         else if (vm.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
                             if (jQuery.inArray(vm.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code, vm.dealReconValidationSummary.invalidRplStatusCodes) != -1) {
                                 rowMsg = rowMsg + "Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code.|"
-                                sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', true));
+                                sheet.range("J" + row + ":J" + row).validation($scope.UnifiedDealValidation(true, '', true));
                             }
                         }
                         if (rowMsg != '') {
