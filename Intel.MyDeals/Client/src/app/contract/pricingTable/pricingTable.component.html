@@ -81,7 +81,7 @@
                     </div>
                 </div>
                 <div *ngIf="selLnav=='MeetComp'">
-                    <p>Meet Comp</p>
+                    <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
                 </div>
                 <div *ngIf="selLnav=='Manage'">
                     <p>Manage screen</p>
