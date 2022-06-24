@@ -674,7 +674,8 @@ namespace Intel.MyDeals
                 "~/js/_gridUtil.js",
                 "~/js/helpUtil.js",
                 "~/js/_contractUtil.js",
-                "~/js/_pricingTableUtil.js"
+                "~/js/_pricingTableUtil.js",
+                "~/js/_commonUtil.js"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
