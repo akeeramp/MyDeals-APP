@@ -212,6 +212,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 kendo.alert("There is no data to validate");
         }
         else {
+            vm.backendValidation = false;
             vm.generateDealReconRecords();
             if (vm.dealReconValidationSummary.validRecords.length > 0)
                 vm.dealReconValidationSummary.inValidRecords = $.merge(vm.dealReconValidationSummary.inValidRecords, vm.dealReconValidationSummary.validRecords);
@@ -939,8 +940,8 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
                             if (!res || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.length > 65) {
-                                isToBeInvalidGlobalName = true;
-                                rowMsg = rowMsg + "To Be Unified Customer Name either contains more than 65 characters or invalid characters|";
+                                isInvalidToBeGlobalName = true;
+                                rowMsg = rowMsg + "'To Be Unified Customer Name' either contains more than 65 characters or invalid characters|";
                                 sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                         }
@@ -1177,6 +1178,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 else {
                     vm.backendValidation = true;
                     vm.dealReconValidationSummary = [];
+                    vm.dealReconValidationSummary.validRecords = [];
                     vm.dealReconValidationSummary.inValidRecords = response.data;
                     vm.SpreadSheetRowsCount = response.data.length + 1;
                 }

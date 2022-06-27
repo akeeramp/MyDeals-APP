@@ -331,10 +331,10 @@ namespace Intel.MyDeals.DataLibrary
                                 string dealEcRetail = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
                                 string dealEcCtry = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                 string dealRplStsCode = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
-                                int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
-                                int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
-                                int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
-                                if(!(dbDealId == 0 && dbPrimCustId == 0 && dbPrimLvlId == 0 && string.IsNullOrEmpty(ucdGlobalName) && string.IsNullOrEmpty(ucdCtry)
+                                int.TryParse(worksheet.Cells[i, 1].Value != null && !worksheet.Cells[i, 1].Value.ToString().Contains("-") ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
+                                int.TryParse(worksheet.Cells[i, 2].Value != null && !worksheet.Cells[i, 2].Value.ToString().Contains("-") ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 4].Value != null && !worksheet.Cells[i, 4].Value.ToString().Contains("-") ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
+                                if (!(dbDealId == 0 && dbPrimCustId == 0 && dbPrimLvlId == 0 && string.IsNullOrEmpty(ucdGlobalName) && string.IsNullOrEmpty(ucdCtry)
                                     && string.IsNullOrEmpty(dealEcRetail) && string.IsNullOrEmpty(dealEcCtry))) {
                                     lstRtn.Add(new UnifyDeal
                                     {
@@ -387,11 +387,11 @@ namespace Intel.MyDeals.DataLibrary
                                 string toBeucdGlobalName = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                 string toBeCtry = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
                                 string dealRplStsCode = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
-                                int.TryParse(worksheet.Cells[i, 1].Value != null ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
-                                int.TryParse(worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
-                                int.TryParse(worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
-                                int.TryParse(worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().Trim() : "0", out toBeDbPrimCustId);
-                                int.TryParse(worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().Trim() : "0", out toBeDbPrimLvlId);
+                                int.TryParse(worksheet.Cells[i, 1].Value != null && !worksheet.Cells[i, 1].Value.ToString().Contains("-") ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
+                                int.TryParse(worksheet.Cells[i, 2].Value != null && !worksheet.Cells[i, 2].Value.ToString().Contains("-") ? worksheet.Cells[i, 2].Value.ToString().Trim() : "0", out dbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 4].Value != null && !worksheet.Cells[i, 4].Value.ToString().Contains("-") ? worksheet.Cells[i, 4].Value.ToString().Trim() : "0", out dbPrimLvlId);
+                                int.TryParse(worksheet.Cells[i, 6].Value != null && !worksheet.Cells[i, 6].Value.ToString().Contains("-") ? worksheet.Cells[i, 6].Value.ToString().Trim() : "0", out toBeDbPrimCustId);
+                                int.TryParse(worksheet.Cells[i, 8].Value != null && !worksheet.Cells[i, 8].Value.ToString().Contains("-") ? worksheet.Cells[i, 8].Value.ToString().Trim() : "0", out toBeDbPrimLvlId);
                                 if (!(dbDealId == 0 && dbPrimCustId == 0 && dbPrimLvlId == 0 && toBeDbPrimCustId == 0 && toBeDbPrimLvlId == 0
                                     && string.IsNullOrEmpty(ucdGlobalName) && string.IsNullOrEmpty(ucdCtry)
                                     && string.IsNullOrEmpty(toBeucdGlobalName) && string.IsNullOrEmpty(toBeCtry)))
