@@ -19,7 +19,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // Functions
     vm.initCustomPaste = initCustomPaste;
     vm.customDragDropAutoFill = customDragDropAutoFill;
-    vm.resetDirty = resetDirty;
+    vm.resetDirty = pricingtableutil.resetDirty;
     vm.getColumns = getColumns;
     vm.openProdCorrector = openProdCorrector;
     $scope.openProductSelector = openProductSelector;
@@ -45,38 +45,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.saveDesc = "Save your " + $scope.root.ptTitle + ", validate the products, and stay in your " + $scope.root.ptTitle + " Editor";
 
     if (!!pricingTableData.data.WIP_DEAL) {
-        for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
-            var dataItem = pricingTableData.data.WIP_DEAL[i];
-            if (dataItem.OBJ_SET_TYPE_CD === "KIT" || dataItem.OBJ_SET_TYPE_CD === "FLEX" || dataItem.OBJ_SET_TYPE_CD === "VOL_TIER"
-                || dataItem.OBJ_SET_TYPE_CD === "REV_TIER" || dataItem.OBJ_SET_TYPE_CD === "DENSITY") {
-                var anyWarnings = false;
-                if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
-                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
-                if (anyWarnings) {
-                    var dimStr = "_10___";
-                    var isKit = 0;
-                    var relevantAtrbs = tierAtrbs;
-                    var tierCount = dataItem.NUM_OF_TIERS;
 
-                    if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
-                        if (dataItem.PRODUCT_FILTER === undefined) { continue; }
-                        dimStr = "_20___";
-                        isKit = 1;
-                        relevantAtrbs = root.kitDimAtrbs;
-                        tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
-                    }
-
-                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
-                        for (var a = 0; a < relevantAtrbs.length; a++) {
-                            pricingtableutil.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
-                        }
-                    }
-                    for (var a = 0; a < relevantAtrbs.length; a++) {
-                        delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
-                    }
-                }
-            }
-        }
+        pricingtableutil.warningHandler(pricingTableData, root.kitDimAtrbs);
+        
         let objectId = $scope.wipData ? 'DC_PARENT_ID' : 'DC_ID';
         let filterData = _.uniq(_.sortBy(pricingTableData.data.WIP_DEAL, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
         let accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
@@ -94,14 +65,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!item._behaviors.isError) item._behaviors.isError = {};
                     if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
                     item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                    item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX dealsss having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
+                    item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
                 });
             }
         }
     }
     
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
-
     var cellStyle = {
         textAlign: "left",
         verticalAlign: "center",
@@ -117,7 +87,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         fontSize: 13,
         fontWeight: "bold"
     };
-
     var intA = "A".charCodeAt(0);
     var ptTemplate = null;
     var columns = null;
@@ -143,11 +112,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // Hard-coded sadnesses, but are better than other hard-coded sadness solutions
     //Added Rebate type to the list
     var productValidationDependencies = [
-        "GEO_COMBINED",
-        "PROGRAM_PAYMENT",
-        "PROD_INCLDS",
-        "REBATE_TYPE",
-        "MRKT_SEG"
+        "GEO_COMBINED", "PROGRAM_PAYMENT", "PROD_INCLDS", "REBATE_TYPE", "MRKT_SEG"
     ];
     var firstEditableColBeforeProduct = null; // used along with to properly disable/enable cols before PTR_USR_PRD. Is calucated using editableColsBeforeProduct. Defaults to PTR_USR_PRD when editableColsBeforeProduct is empty
     var editableColsBeforeProduct = [
@@ -456,7 +421,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
         gTools.assignColSettings();
-
         root.wipOptions = {
             "isLayoutConfigurable": true,
             "isPricingTableEnabled": true,
@@ -466,7 +430,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             "initSearchStr": initSearchValue,
             "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
         };
-
         root.wipOptions.columns = wipTemplate.columns;
 
         for (var i = wipTemplate.columns.length - 1; i >= 0; i--) {
@@ -819,7 +782,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 : String.fromCharCode(intA + (ptTemplate.columns.length - 1));
         }
 
-        lastHiddenBeginningColLetter = String.fromCharCode(root.colToLetter[GetFirstEdiatableBeforeProductCol()].charCodeAt(0) - 1);
+        lastHiddenBeginningColLetter = String.fromCharCode(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)].charCodeAt(0) - 1);
 
         return cols;
     }
@@ -1008,38 +971,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Deal Group Merging
                 for (var key in confirmationModPerDealGrp) {
                     if (confirmationModPerDealGrp.hasOwnProperty(key)) {
-                        if (confirmationModPerDealGrp[key].isNonEditableKITname) {
-                            // User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
-                            modalOptions = {
-                                closeButtonText: "Okay",
-                                hasActionButton: false,
-                                headerText: "Cannot merge KIT name",
-                                bodyText: "A Kit with the name \"" + key + "\" already exists and its products cannot be edited. Please choose a different KIT name.",
-                                closeResults: { "key": key }
-                            };
-                        }
-                        else if (confirmationModPerDealGrp[key].RowCount > $scope.$parent.$parent.maxKITproducts) {
-                            // Cannot merge
-                            modalOptions = {
-                                closeButtonText: "Okay",
-                                hasActionButton: false,
-                                headerText: "Cannot merge KIT name",
-                                bodyText: "A Kit with the name \"" + key + "\" already exists.  Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10).  Please specify a different Kit Name or remove products from this row and try again.",
-                                closeResults: { "key": key }
-                            };
-                        } else {
-                            // Ask user if they want to merge
-                            modalOptions = {
-                                closeButtonText: "Cancel",
-                                actionButtonText: "Merge rows",
-                                hasActionButton: true,
-                                headerText: "KIT name merge confirmation",
-                                bodyText: "A Kit with the name \"" + key + "\" already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.",
-                                actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
-                                closeResults: { "key": key }
-                            };
-                        }
-
+                        modalOptions = pricingtableutil.setModalOptions(confirmationModPerDealGrp, key, $scope.$parent.$parent.maxKITproducts);
+                        
                         if (key !== "") {
                             confirmationModal.showModal({}, modalOptions)
                                 .then(function (result) { // Merge existing row with currently-changing row
@@ -1114,7 +1047,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     sheet.batch(function (e) {
                                         // TODO: disable numOfDuplicates below data
                                         // Disable user editable columns
-                                        disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
+                                        disableRange(sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)]+ (data.length + 2) + ":" + finalColLetter + (data.length + 2 + numOfDuplicates)));
 
                                         // Re-enable Product column
                                         var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + (data.length + 2 + numOfDuplicates));
@@ -1176,25 +1109,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // VOL-TIER
         if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX"
             || root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "DENSITY") {
-            let endVolIndex;
-            let strtVolIndex;
-            let rateIndex;
-            if (root.curPricingTable.OBJ_SET_TYPE_CD === "VOL_TIER" || root.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
-                endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
-                strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
-                rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
-            }
-            else if (root.curPricingTable.OBJ_SET_TYPE_CD === "REV_TIER") {
-                endVolIndex = (root.colToLetter["END_REV"].charCodeAt(0) - intA);
-                strtVolIndex = (root.colToLetter["STRT_REV"].charCodeAt(0) - intA);
-                rateIndex = (root.colToLetter["INCENTIVE_RATE"].charCodeAt(0) - intA);
-            }
-            else {
-                endVolIndex = (root.colToLetter["END_PB"].charCodeAt(0) - intA);
-                strtVolIndex = (root.colToLetter["STRT_PB"].charCodeAt(0) - intA);
-                rateIndex = (root.colToLetter["DENSITY_RATE"].charCodeAt(0) - intA);
-            }
-
+            let indexes = pricingtableutil.setIndex(root.curPricingTable.OBJ_SET_TYPE_CD, root.colToLetter, intA);
+            let endVolIndex = indexes.endVolIndex;
+            let strtVolIndex = indexes.strtVolIndex;
+            let rateIndex = indexes.rateIndex;
             let isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
             let isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
             let isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
@@ -1357,7 +1275,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var rowStop = bottomRightRowIndex - 2;
             if (root.spreadDs !== undefined) {
                 //First clear full error for density
-                clearDensityValidation(data[rowStart].DC_ID);
+                let rootSpreadDsData = root.spreadDs.data();
+                pricingtableutil.clearDensityValidation(data[rowStart].DC_ID, root.curPricingTable.OBJ_SET_TYPE_CD, rootSpreadDsData);
                 setOrCleanValidationError('DENSITY_BAND', 'full');
                 var delIds = pricingtableutil.hasDataOrPurge(data, rowStart, rowStop);
                 if (delIds.length > 0) {
@@ -1380,7 +1299,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                         sheet.batch(function () {
                                             // Disable user editable columns
-                                            disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + n + ":" + finalColLetter + (n + numToDel + numToDel)));
+                                            disableRange(sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + n + ":" + finalColLetter + (n + numToDel + numToDel)));
 
                                             // Re-enable Product column
                                             var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (n + numToDel + numToDel));
@@ -1415,7 +1334,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         cnt = cnt + 2;
 
                         // Disable user editable columns
-                        disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":" + finalColLetter + (cnt + numToDel - 1)));
+                        disableRange(sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + cnt + ":" + finalColLetter + (cnt + numToDel - 1)));
 
                         // Re-enable Product column
                         var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + topLeftRowIndex + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel - 1));
@@ -2174,8 +2093,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         // For rebate type MDF ACCRUAL,MDF ACTIVITY & NRE ACCRUAL make period profile/ar settlement blank
                         if (data[r]["REBATE_TYPE"] != undefined && (data[r]["REBATE_TYPE"] == "MDF ACCRUAL"
-                            || data[r]["REBATE_TYPE"] == "MDF ACTIVITY"
-                            || data[r]["REBATE_TYPE"] == "NRE ACCRUAL")) {
+                            || data[r]["REBATE_TYPE"] == "MDF ACTIVITY" || data[r]["REBATE_TYPE"] == "NRE ACCRUAL")) {
                             if (data[r]["PERIOD_PROFILE"] !== undefined) {
                                 data[r]["PERIOD_PROFILE"] = "";
                             }
@@ -2261,7 +2179,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var spreadData = root.spreadDs.data();
 
                         // Enable cols except voltier
-                        range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
+                        range = sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                         range = sheet.range(letterAfterTierCol + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
@@ -2330,13 +2248,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     else {
                         // if additional rows are inserted due to change in number of products for KIT deal bottomrowIndexis lower than number of rows...Thus assigning bottomrowIndex same as data.length
-                        range = sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                        range = sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
 
                         // If row is deleted when num tier changes for KIT. Disable the empty rows.
                         if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                            disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + (data.length + 2) + ":" + finalColLetter + root.ptRowCount));
+                            disableRange(sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + (data.length + 2) + ":" + finalColLetter + root.ptRowCount));
                             var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + (data.length + 2) + ":" + root.colToLetter["PTR_USER_PRD"] + root.ptRowCount);
                             prdRange.enable(true);
                             prdRange.background(null);
@@ -2432,28 +2350,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
     }
 
-    //To Remove Ghost Rows from the pricing table
-    function RemoveGhostRows() {
-        for (var i = 0; i < $scope.pricingTableData.PRC_TBL_ROW.length; i++) {
-            if ($scope.pricingTableData.PRC_TBL_ROW.length != root.spreadDs._data.length) {
-                if (i < root.spreadDs._data.length) {
-                    if (root.spreadDs._data[i].DC_ID != $scope.pricingTableData.PRC_TBL_ROW[i].DC_ID) {
-                        $scope.pricingTableData.PRC_TBL_ROW.splice(i, 1);
-                        i--;
-                    }
-                }
-                else {
-                    $scope.pricingTableData.PRC_TBL_ROW.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-    }
-
     function spreadDsSync() {
         root.spreadDs.sync();
         if ($scope.pricingTableData.PRC_TBL_ROW.length > root.spreadDs._data.length) {
-            RemoveGhostRows()
+            pricingtableutil.RemoveGhostRows($scope.pricingTableData.PRC_TBL_ROW, root.spreadDs._data);
         }
         let dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
         // NOTE: We need this after a sync for KIT and VOL-TIER to fix DE36447
@@ -2502,14 +2402,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-    function GetFirstEdiatableBeforeProductCol() {
-        if (firstEditableColBeforeProduct !== null) {
-            return firstEditableColBeforeProduct;
-        } else {
-            return pricingtableutil.CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, root.colToLetter);
-        }
-    }
-    
     function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
         sheet.batch(function () {
             if (!rowInfo._behaviors) return;
@@ -2705,7 +2597,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         root._dirty = true;
     }
 
-    // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
+    // TODO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
     function sheetBatchOnRender(sheet, dropdownValuesSheet) {
         var rowIndexOffset = 2; // This is 2 because row 0 and row 1 are hidden
@@ -2873,7 +2765,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-    //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+    //// If we can figure out how to ignore case-sensitive, we can put these dropdowns back in
     //function applyDropDowns(sheet, myFieldModel, myColumnName) {
     //    sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
     //        dataType: "list",
@@ -3159,39 +3051,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 clearUndoHistory();
             }
         });
-    }
-
-    // Reset relative dirty bits
-    function resetDirty() {
-        var field = "isDirty";
-        //var mainData = $scope.mainGridOptions.dataSource.data();
-
-        //if ($scope.dataGrid !== undefined) {
-        //	for (var i = 0; i < $scope.dataGrid.length; i++) {
-        //		if (mainData[i] !== undefined) mainData[i]._dirty = false;
-        //		angular.forEach(mainData[i],
-        //            function (value, key) {
-        //            	var item = mainData[i];
-        //            	if (item._behaviors[field] === undefined) item._behaviors[field] = {};
-        //            	item._behaviors[field][key] = false;
-
-        //            	//_MultiDim
-        //            	if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
-        //            		var detailData = root.gridDetailsDs[item["DC_ID"]].data();
-        //            		for (var ii = 0; ii < item._MultiDim.length; ii++) {
-        //            			detailData[ii]._dirty = false;
-        //            			angular.forEach(detailData[ii],
-        //                            function (v1, k1) {
-        //                            	var item2 = detailData[ii];
-        //                            	if (item2._behaviors === undefined || item2._behaviors === null) item2._behaviors = {};
-        //                            	if (item2._behaviors[field] === undefined || item2._behaviors[field] === null) item2._behaviors[field] = {};
-        //                            	item2._behaviors[field][k1] = false;
-        //                            });
-        //            		}
-        //            	}
-        //            });
-        //	}
-        //}
     }
 
     // Watch for any changes to contract data to set a dirty bit
@@ -3872,7 +3731,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             cnt = cnt + 2;
             sheet.batch(function () {
                 // Disable user editable columns
-                disableRange(sheet.range(root.colToLetter[GetFirstEdiatableBeforeProductCol()] + cnt + ":" + finalColLetter + (cnt + numToDel)));
+                disableRange(sheet.range(root.colToLetter[pricingtableutil.GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, root.colToLetter)] + cnt + ":" + finalColLetter + (cnt + numToDel)));
 
                 // Re-enable Product column
                 var prdRange = sheet.range(root.colToLetter["PTR_USER_PRD"] + cnt + ":" + root.colToLetter["PTR_USER_PRD"] + (cnt + numToDel));
@@ -4189,7 +4048,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     });
 
-    // NOTE: Thhis is a workaround because the built-in kendo spreadsheet datepicker causes major performance issues in IE
+    // NOTE: This is a workaround because the built-in kendo spreadsheet datepicker causes major performance issues in IE
     kendo.spreadsheet.registerEditor("datePickerEditor", function () {
         var context;
 
@@ -4585,22 +4444,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             isFirstUndo = false;
         }
     }
-
+    
     /*Density validation starts here*/
-    function clearDensityValidation(DCID) {
-        //the same function is called from onChange when there is a delete 
-        if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
-            let data = root.spreadDs.data();
-            _.each(data, (itm) => {
-                if (itm.DC_ID == DCID) {
-                    pricingtableutil.clearBehaviors(itm, 'DENSITY_BAND');
-                    pricingtableutil.clearBehaviors(itm, 'DC_ID');
-                    itm.DENSITY_BAND = null;
-                }
-            });
-        }
-    }
-
+    
     function validateDensityBand(response, prdSrc) {
         try {
             if (root.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
@@ -4628,7 +4474,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             _.each(distinctDC_IDs, dcid => {
                                 let selProd = _.findWhere(selProds, { DC_ID: dcid });
                                 //clearing the density validation for the products having different response
-                                clearDensityValidation(selProd.DC_ID);
+                                let rootSpreadDsData = root.spreadDs.data();
+                                pricingtableutil.clearDensityValidation(selProd.DC_ID, root.curPricingTable.OBJ_SET_TYPE_CD, rootSpreadDsData);
                                 let Nand_Den = [];
                                 _.each(item, (prdDet) => {
                                     // Handle single product with multiple density_band

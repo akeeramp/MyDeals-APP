@@ -421,3 +421,177 @@ pricingtableutil.populateValidProducts = function (sysProducts, $filter) {
 
     return kitReOrderObject;
 }
+
+//23
+//To Remove Ghost Rows from the pricing table
+pricingtableutil.RemoveGhostRows = function (pricingTableRow, rootSpreadDsData) {
+    for (var i = 0; i < pricingTableRow.length; i++) {
+        if (pricingTableRow.length != rootSpreadDsData.length) {
+            if (i < rootSpreadDsData.length) {
+                if (rootSpreadDsData[i].DC_ID != pricingTableRow[i].DC_ID) {
+                    pricingTableRow.splice(i, 1);
+                    i--;
+                }
+            }
+            else {
+                pricingTableRow.splice(i, 1);
+                i--;
+            }
+        }
+    }
+}
+
+//24
+pricingtableutil.setIndex = function (objTypeCd, rootColToLetter, intA) {
+    let endVolIndex;
+    let strtVolIndex;
+    let rateIndex;
+    if (objTypeCd === "VOL_TIER" || objTypeCd === "FLEX") {
+        endVolIndex = (rootColToLetter["END_VOL"].charCodeAt(0) - intA);
+        strtVolIndex = (rootColToLetter["STRT_VOL"].charCodeAt(0) - intA);
+        rateIndex = (rootColToLetter["RATE"].charCodeAt(0) - intA);
+    }
+    else if (objTypeCd === "REV_TIER") {
+        endVolIndex = (rootColToLetter["END_REV"].charCodeAt(0) - intA);
+        strtVolIndex = (rootColToLetter["STRT_REV"].charCodeAt(0) - intA);
+        rateIndex = (rootColToLetter["INCENTIVE_RATE"].charCodeAt(0) - intA);
+    }
+    else {
+        endVolIndex = (rootColToLetter["END_PB"].charCodeAt(0) - intA);
+        strtVolIndex = (rootColToLetter["STRT_PB"].charCodeAt(0) - intA);
+        rateIndex = (rootColToLetter["DENSITY_RATE"].charCodeAt(0) - intA);
+    }
+    return { endVolIndex, strtVolIndex, rateIndex };
+}
+
+//25
+// Reset relative dirty bits
+pricingtableutil.resetDirty = function () {
+    var field = "isDirty";
+    //var mainData = $scope.mainGridOptions.dataSource.data();
+
+    //if ($scope.dataGrid !== undefined) {
+    //	for (var i = 0; i < $scope.dataGrid.length; i++) {
+    //		if (mainData[i] !== undefined) mainData[i]._dirty = false;
+    //		angular.forEach(mainData[i],
+    //            function (value, key) {
+    //            	var item = mainData[i];
+    //            	if (item._behaviors[field] === undefined) item._behaviors[field] = {};
+    //            	item._behaviors[field][key] = false;
+
+    //            	//_MultiDim
+    //            	if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
+    //            		var detailData = root.gridDetailsDs[item["DC_ID"]].data();
+    //            		for (var ii = 0; ii < item._MultiDim.length; ii++) {
+    //            			detailData[ii]._dirty = false;
+    //            			angular.forEach(detailData[ii],
+    //                            function (v1, k1) {
+    //                            	var item2 = detailData[ii];
+    //                            	if (item2._behaviors === undefined || item2._behaviors === null) item2._behaviors = {};
+    //                            	if (item2._behaviors[field] === undefined || item2._behaviors[field] === null) item2._behaviors[field] = {};
+    //                            	item2._behaviors[field][k1] = false;
+    //                            });
+    //            		}
+    //            	}
+    //            });
+    //	}
+    //}
+}
+
+//26
+pricingtableutil.clearDensityValidation = function (DCID, objTypeCd, rootSpreadDsData) {
+    //the same function is called from onChange when there is a delete 
+    if (objTypeCd == "DENSITY") {
+        let data = rootSpreadDsData;
+        _.each(data, (itm) => {
+            if (itm.DC_ID == DCID) {
+                pricingtableutil.clearBehaviors(itm, 'DENSITY_BAND');
+                pricingtableutil.clearBehaviors(itm, 'DC_ID');
+                itm.DENSITY_BAND = null;
+            }
+        });
+    }
+}
+
+//27
+pricingtableutil.GetFirstEdiatableBeforeProductCol = function (firstEditableColBeforeProduct, editableColsBeforeProduct, rootColToLetter) {
+    if (firstEditableColBeforeProduct !== null) {
+        return firstEditableColBeforeProduct;
+    } else {
+        return pricingtableutil.CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter);
+    }
+}
+
+//28
+pricingtableutil.warningHandler = function (pricingTableData, kitDimAtrbs) {
+    for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
+        var dataItem = pricingTableData.data.WIP_DEAL[i];
+        var objTypeCd = dataItem.OBJ_SET_TYPE_CD;
+        if (objTypeCd === "KIT" || objTypeCd === "FLEX" || objTypeCd === "VOL_TIER"
+            || objTypeCd === "REV_TIER" || objTypeCd === "DENSITY") {
+            var anyWarnings = false;
+            if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+            if (anyWarnings) {
+                var dimStr = "_10___";
+                var isKit = 0;
+                var relevantAtrbs = tierAtrbs;
+                var tierCount = dataItem.NUM_OF_TIERS;
+
+                if (objTypeCd === "KIT") {
+                    if (dataItem.PRODUCT_FILTER === undefined) { continue; }
+                    dimStr = "_20___";
+                    isKit = 1;
+                    relevantAtrbs = kitDimAtrbs;
+                    tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
+                }
+
+                for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                        pricingtableutil.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
+                    }
+                }
+                for (var a = 0; a < relevantAtrbs.length; a++) {
+                    delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
+                }
+            }
+        }
+    }
+}
+
+//29
+pricingtableutil.setModalOptions = function (confirmationModPerDealGrp, key, maxKITproducts) {
+    var modalOptions = null;
+    if (confirmationModPerDealGrp[key].isNonEditableKITname) {
+        // User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
+        modalOptions = {
+            closeButtonText: "Okay",
+            hasActionButton: false,
+            headerText: "Cannot merge KIT name",
+            bodyText: "A Kit with the name \"" + key + "\" already exists and its products cannot be edited. Please choose a different KIT name.",
+            closeResults: { "key": key }
+        };
+    }
+    else if (confirmationModPerDealGrp[key].RowCount > maxKITproducts) {
+        // Cannot merge
+        modalOptions = {
+            closeButtonText: "Okay",
+            hasActionButton: false,
+            headerText: "Cannot merge KIT name",
+            bodyText: "A Kit with the name \"" + key + "\" already exists.  Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10).  Please specify a different Kit Name or remove products from this row and try again.",
+            closeResults: { "key": key }
+        };
+    } else {
+        // Ask user if they want to merge
+        modalOptions = {
+            closeButtonText: "Cancel",
+            actionButtonText: "Merge rows",
+            hasActionButton: true,
+            headerText: "KIT name merge confirmation",
+            bodyText: "A Kit with the name \"" + key + "\" already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.",
+            actionResults: { "key": key }, // HACK: without this, we won't get the correct key in the modal's .then()
+            closeResults: { "key": key }
+        };
+    }
+    return modalOptions;
+}

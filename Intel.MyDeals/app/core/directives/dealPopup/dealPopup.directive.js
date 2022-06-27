@@ -653,32 +653,23 @@ function dealPopup(objsetService, $timeout, logger, colorDictionary, opGridTempl
             }
 
             $scope.getStageBgColorStyle = function (c) {
-                return { backgroundColor: $scope.getColorStage(c) };
+                return { backgroundColor: commonUtil.getColorStage(c, colorDictionary) };
             }
             $scope.getColorStyle = function (c) {
                 return { color: $scope.getColorPct(c) };
             }
-
-            $scope.getColor = function (k, c) {
-                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                    return colorDictionary[k][c];
-                }
-                return "#aaaaaa";
-            }
+                        
             $scope.getColorType = function (d) {
-                return $scope.getColor('type', d);
+                return commonUtil.getColor('type', d, colorDictionary);
             }
-            $scope.getColorStage = function (d) {
-                if (!d) d = "Draft";
-                return $scope.getColor('stage', d);
-            }
+            
             $scope.getColorPct = function (d) {
                 if (!d) d = "InComplete";
-                return $scope.getColor('pct', d);
+                return commonUtil.getColor('pct', d, colorDictionary);
             }
             $scope.getColorMct = function (d) {
                 if (!d) d = "InComplete";
-                return $scope.getColor('mct', d);
+                return commonUtil.getColor('mct', d, colorDictionary);
             }
 
             $scope.focusMenu = function ($event, id) {

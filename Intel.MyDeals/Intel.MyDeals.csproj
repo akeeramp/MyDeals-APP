@@ -1580,6 +1580,7 @@
     <Content Include="Images\kendo_icons_intel.png" />
     <Content Include="Images\Timeout.png" />
     <Content Include="Images\wires.png" />
+    <Content Include="js\_commonUtil.js" />
     <Content Include="js\helpUtil.js" />
     <Content Include="js\jsoneditor.js" />
     <Content Include="js\sampleSPA.js" />

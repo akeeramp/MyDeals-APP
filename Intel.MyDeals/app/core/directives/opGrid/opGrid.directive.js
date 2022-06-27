@@ -700,16 +700,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
             $scope.getColorPct = function (d) {
                 if (!d) d = "InComplete";
-                return $scope.getColor('pct', d);
+                return commonUtil.getColor('pct', d, colorDictionary);
             }
-            $scope.getColor = function (k, c) {
-                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                    return colorDictionary[k][c];
-                }
-                return "#aaaaaa";
-            }
-
-
+            
             $scope.applyCustomLayoutToGrid = function (data) {
                 if (!$scope.isLayoutConfigurable) return;
 

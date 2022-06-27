@@ -109,20 +109,6 @@
 
         }
 
-        $scope.getColorStyle = function (c) {
-            return { color: $scope.getColorPct(c) };
-        }
-        $scope.getColorPct = function (d) {
-            if (!d) d = "InComplete";
-            return $scope.getColor('pct', d);
-        }
-        $scope.getColor = function (k, c) {
-            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                return colorDictionary[k][c];
-            }
-            return "#aaaaaa";
-        }
-
         $scope.dismissPopup = function () {
             for (var dc_id in $scope.CostTestGroupDetails) {
                 $scope.$parent.$broadcast('refreshPCTData', $scope.sumGridOptions["dc" + dc_id].dataSource.data);
@@ -137,32 +123,24 @@
         }
 
         $scope.getStageBgColorStyle = function (c) {
-            return { backgroundColor: $scope.getColorStage(c) };
+            return { backgroundColor: commonUtil.getColorStage(c, colorDictionary) };
         }
+
         $scope.getColorStyle = function (c) {
             return { color: $scope.getColorPct(c) };
         }
-
-        $scope.getColor = function (k, c) {
-            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                return colorDictionary[k][c];
-            }
-            return "#aaaaaa";
-        }
+                
         $scope.getColorType = function (d) {
-            return $scope.getColor('type', d);
+            return commonUtil.getColor('type', d, colorDictionary);
         }
-        $scope.getColorStage = function (d) {
-            if (!d) d = "Draft";
-            return $scope.getColor('stage', d);
-        }
+        
         $scope.getColorPct = function (d) {
             if (!d) d = "InComplete";
-            return $scope.getColor('pct', d);
+            return commonUtil.getColor('pct', d, colorDictionary);
         }
         $scope.getColorMct = function (d) {
             if (!d) d = "InComplete";
-            return $scope.getColor('mct', d);
+            return commonUtil.getColor('mct', d, colorDictionary);
         }
 
         $scope.toggleSum = function () {
@@ -291,21 +269,17 @@
             }, function () { });
         }
 
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-        }
-
         $scope.customFilter = function (ps) {
             return (
                 ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT.toUpperCase() === $scope.pctFilter.toUpperCase()) &&
-                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps))
+                ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp(commonUtil.escapeRegExp($scope.titleFilter), "i")) >= 0 || $scope.titleInPt(ps))
             );
         }
 
         $scope.titleInPt = function (ps) {
             if (ps.PRC_TBL === undefined || $scope.titleFilter === '') return ps;
             for (var i = 0; i < ps.PRC_TBL.length; i++) {
-                if (ps.PRC_TBL[i].TITLE.search(new RegExp(escapeRegExp($scope.titleFilter), "i")) >= 0) return ps;
+                if (ps.PRC_TBL[i].TITLE.search(new RegExp(commonUtil.escapeRegExp($scope.titleFilter), "i")) >= 0) return ps;
             }
             return null;
         }

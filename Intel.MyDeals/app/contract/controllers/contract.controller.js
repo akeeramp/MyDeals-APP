@@ -4922,13 +4922,7 @@
         }
         $scope.getColorPct = function (d) {
             if (!d) d = "InComplete";
-            return $scope.getColor('pct', d);
-        }
-        $scope.getColor = function (k, c) {
-            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                return colorDictionary[k][c];
-            }
-            return "#aaaaaa";
+            return commonUtil.getColor('pct', d, colorDictionary);
         }
 
         $scope.customEditPtValidate = function () {

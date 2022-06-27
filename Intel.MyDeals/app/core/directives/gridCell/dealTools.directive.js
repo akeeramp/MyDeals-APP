@@ -687,19 +687,9 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             // US87523 - Strategy Stage / Deal Status Clarity - This is very hack-ish coding by a JS newbie.
             // Taken from Phil's absolutely awesome other color-coding areas in other JS files...  Had to hijack local function getStageBgColorStyle(stgFullTitleChar()) to get the right stage though.
             $scope.getStageBgColorStyle = function (c) {
-                return { backgroundColor: $scope.getColorStage(c) };
+                return { backgroundColor: commonUtil.getColorStage(c, colorDictionary) };
             }
-            $scope.getColor = function (k, c) {
-                if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                    return colorDictionary[k][c];
-                }
-                return "#aaaaaa";
-            }
-            $scope.getColorStage = function (d) {
-                if (!d) d = "Draft";
-                return $scope.getColor('stage', d);
-            }
-
+            
             $scope.downloadQuoteLetter = function () {
                 rootScope.downloadQuoteLetter($scope.dataItem.CUST_MBR_SID, $scope.objTypeSid, $scope.dataItem.DC_ID);
             }

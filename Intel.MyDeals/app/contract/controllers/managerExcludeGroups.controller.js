@@ -43,20 +43,15 @@
         $scope.msg = "Loading Deals";
         $scope.pctFilterEnabled = root.CAN_VIEW_COST_TEST;
         $scope._dirty = false;
+
         $scope.getColorStyle = function (c) {
             return { color: $scope.getColorPct(c) };
         }
         $scope.getColorPct = function (d) {
             if (!d) d = "InComplete";
-            return $scope.getColor('pct', d);
+            return commonUtil.getColor('pct', d, colorDictionary);
         }
-        $scope.getColor = function (k, c) {
-            if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
-                return colorDictionary[k][c];
-            }
-            return "#aaaaaa";
-        }
-
+        
         $scope.dismissPopup = function () {
             var openedModal = $uibModalStack.getTop();
             $uibModalStack.dismiss(openedModal.key);
