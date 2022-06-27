@@ -1,6 +1,6 @@
 ﻿/* eslint-disable prefer-const */
 import * as angular from 'angular';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges} from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { pricingTableEditorService } from './pricingTableEditor.service'
@@ -180,7 +180,7 @@ export class pricingTableEditorComponent implements OnChanges {
         });
 
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
-          vm.pricingTableDet = response;
+            vm.pricingTableDet = response;
           return response.PRC_TBL_ROW;
         } else {
           return [];

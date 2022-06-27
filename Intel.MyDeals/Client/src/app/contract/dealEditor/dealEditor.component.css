@@ -1,0 +1,42 @@
+﻿.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.uiControlDiv {
+    padding: 2px 4px !important;
+    border: 1px solid transparent;
+    min-height: 16px !important;
+}
+
+.wrap {
+    white-space: nowrap !important;
+}
+
+.vert-center {
+    transform: translateY(-5%) !important;
+}
+
+#chkDealTools label {
+    margin: 5px 0 0 5px;
+}
+
+.k-grid-content tr {
+    background-color: white;
+}
+
+#dealEditor tr {
+    background-color: white !important;
+}
+
+.dimKey {
+    font-size: 9px;
+    line-height: 1em;
+    background-color: #00AEEF;
+    color: #ffffff;
+    padding: 2px;
+    text-transform: uppercase;
+}

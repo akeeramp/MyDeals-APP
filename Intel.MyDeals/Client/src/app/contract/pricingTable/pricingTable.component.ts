@@ -5,6 +5,7 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { templatesService } from "../../shared/services/templates.service";
+import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 
 export interface contractIds {
     Model: string;
@@ -20,7 +21,7 @@ export interface contractIds {
 })
 
 export class pricingTableComponent {
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice,private templatesSvc: templatesService) {
+    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService, private pteService: pricingTableEditorService) {
          //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
          $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
          $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -37,7 +38,8 @@ export class pricingTableComponent {
     private isPTEEnable = false;
     private isLNavEnable = false;
     public contractData = null;
-    public UItemplate = null
+    public UItemplate = null;
+    private isDETabEnabled = false;
 
     loadModel(contractModel: contractIds) {
         this.selLnav = contractModel.Model
@@ -47,6 +49,7 @@ export class pricingTableComponent {
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
+                this.enableDealEditorTab();
             }
             //defaulting the PTE page to load the images
             else {
@@ -87,6 +90,18 @@ export class pricingTableComponent {
         //The style removed are adding back
         $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
+
+    async enableDealEditorTab() {
+        let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+        });
+
+        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
+            this.isDETabEnabled = true;
+        } else {
+            this.isDETabEnabled = false;
+        }
     }
 }
 angular.module("app").directive(

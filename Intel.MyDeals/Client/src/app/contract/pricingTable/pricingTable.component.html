@@ -17,9 +17,9 @@
                                     <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></pricingTableEditor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
-                            <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true">
+                            <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true" [disabled]="isDETabEnabled == false">
                                 <ng-template kendoTabContent>
-                                    <p>Deal Editor</p>
+                                    <dealEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></dealEditor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                         </kendo-tabstrip>

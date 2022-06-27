@@ -838,6 +838,8 @@
     <Content Include="Client\src\app\advanceSearch\globalSearchResults.directive.js" />
     <Content Include="Client\src\app\contract\contractDetails\contractDetails.component.css" />
     <Content Include="Client\src\app\contract\contractDetails\contractDetails.component.html" />
+    <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.css" />
+    <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.html" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.css" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.html" />
     <Content Include="Client\src\app\contract\meetComp\meetComp.component.css" />
@@ -2248,6 +2250,8 @@
     <TypeScriptCompile Include="Client\src\app\app.routes.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditor.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\grid.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contract.util.ts" />

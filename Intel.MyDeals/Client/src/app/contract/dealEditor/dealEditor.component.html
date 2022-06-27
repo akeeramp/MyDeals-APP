@@ -1,0 +1,71 @@
+﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" (tabClose)="onClose($event)" [closable]="true">
+    <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab == data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
+        <ng-template kendoTabContent>
+            <kendo-grid id="dealEditor" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                        [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
+                        [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                        filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
+                <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
+                                   [locked]="column.locked == true" width="{{column.width}}">
+                    <ng-template kendoGridHeaderTemplate>
+                        <div *ngIf="column.field === 'tools'">
+                            <input type='checkbox' (click)='clkAllItems()' class='with-font' id='chkDealTools' [(ngModel)]="isDealToolsChecked" />
+                            <label for='chkDealTools'><b>Deal Tools</b></label>
+                        </div>
+                        <div *ngIf="column.field !== 'tools' && column.headerTemplate != null" [innerHTML]="column.headerTemplate"></div>
+                        <div *ngIf="column.headerTemplate == null" [innerHTML]="column.title"></div>
+                    </ng-template>
+                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                        <div *ngIf="column.field === 'tools'">
+                            <!--<deal-tool-angular></deal-tool-angular>-->
+                        </div>
+                        <div *ngIf="column.field === 'details'">
+                            <!--<deal-details-angular></deal-details-angular>-->
+                        </div>
+                        <div *ngIf="column.template.includes('gridUtils.uiControlWrapper')" [innerHTML]="uiControlWrapper(dataItem, column.field, '')"
+                             class="uiControlDiv wrap" [ngClass]="{'isReadOnlyCell': isReadonlyCell(dataItem, column.field), 'isDirtyCell': isDirtyCell(dataItem,column.field), 'isErrorCell': isErrorCell(dataItem,column.field)}">
+                        </div>
+                        <div *ngIf="column.field == 'DC_ID'" [innerHTML]="uiControlDealWrapper(dataItem, column.field)" class="uiControlDiv wrap"
+                             [ngClass]="{'isReadOnlyCell': isReadonlyCell(dataItem, column.field), 'isDirtyCell': isDirtyCell(dataItem,column.field), 'isErrorCell': isErrorCell(dataItem,column.field)}">
+                            <!--<deal-popup-angular></deal-popup-angular>-->
+                        </div>
+                        <div *ngIf="column.field == 'CUST_MBR_SID'" [innerHTML]="uiCustomerControlWrapper(dataItem, column.field, '')">
+                        </div>
+                        <div *ngIf="column.field == 'ECAP_PRICE'" [innerHTML]="uiDimControlWrapper(dataItem, column.field)"
+                             [ngClass]="{'isReadOnlyCell': isReadonlyCell(dataItem, column.field), 'isDirtyCell': isDirtyCell(dataItem,column.field), 'isErrorCell': isErrorCell(dataItem,column.field)}">
+                        </div>
+                        <div *ngIf="column.field == 'PASSED_VALIDATION'" [innerHTML]="uiValidationErrorDetail(dataItem)"></div>
+                        <div *ngIf="column.field != 'DC_ID' && column.field != 'ECAP_PRICE' && column.field !== 'CUST_MBR_SID'
+                             && column.field != 'tools' && column.field != 'details' && column.field != 'PASSED_VALIDATION'
+                             && !column.template.includes('gridUtils.uiControlWrapper')"
+                             [innerHTML]="column.template" class="uiControlDiv wrap">
+                        </div><!--rest of the other columns needs to be added-->
+                    </ng-template>
+                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" style="font:10px;">
+                        <div *ngIf="column.field == 'DEAL_DESC'">
+                            <kendo-textbox [style.width.px]="column.width" (change)="valueChange(dataItem, column.field)" [(ngModel)]="dataItem.DEAL_DESC">
+                            </kendo-textbox>
+                        </div>
+                        <div *ngIf="column.field == 'ECAP_PRICE' || column.field == 'VOLUME'">
+                            <div *ngIf="column.field == 'ECAP_PRICE' && curPricingTable.OBJ_SET_TYPE_CD == 'ECAP'" [style.width.px]="column.width" class="dimKey">{{translateDimKey('20___0')}}</div>
+                            <kendo-numerictextbox [style.width.px]="column.width" [ngModel]="column.field == 'ECAP_PRICE' ? dataItem.ECAP_PRICE['20___0'] : dataItem.VOLUME"
+                                                  (ngModelChange)="column.field == 'ECAP_PRICE' ? dataItem.ECAP_PRICE['20___0'] = $event : dataItem.VOLUME = $event"
+                                                  [value]="column.field == 'ECAP_PRICE' ? dataItem.ECAP_PRICE['20___0'] : dataItem.VOLUME"
+                                                  [min]="0" (valueChange)="valueChange(dataItem, column.field)"
+                                                  [autoCorrect]="autoCorrect">
+                            </kendo-numerictextbox>
+                        </div>
+                        <div *ngIf="column.field == 'REBATE_BILLING_START' || column.field == 'REBATE_BILLING_END'">
+                            <kendo-datepicker [style.width.px]="column.width" [ngModel]="column.field == 'REBATE_BILLING_START' ? dataItem.REBATE_BILLING_START : dataItem.REBATE_BILLING_END"
+                                              (ngModelChange)="column.field == 'REBATE_BILLING_START' ? dataItem.REBATE_BILLING_START = $event : dataItem.REBATE_BILLING_END = $event"
+                                              [value]="column.field == 'REBATE_BILLING_START' ? dataItem.REBATE_BILLING_START : dataItem.REBATE_BILLING_END"
+                                              (valueChange)="valueChange(dataItem, column.field)" format="MM/dd/yyyy">
+                            </kendo-datepicker>
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>
+            </kendo-grid>
+        </ng-template>
+    </kendo-tabstrip-tab>
+
+</kendo-tabstrip>
