@@ -1,6 +1,23 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
-<h1 mat-dialog-title>{{data.name}}</h1>
-<div mat-dialog-content>
-    <kendo-multiselect [data]="listItems" [(ngModel)]="value"></kendo-multiselect>
+<div class="container-fluid overflow">
+    <div class="row">
+        <div class="col">
+            <h1 mat-dialog-title>{{data.name}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div mat-dialog-content>
+                <kendo-multiselect [data]="listItems" [(ngModel)]="value" [checkboxes]="true" [autoClose]="false" (valueChange)="valueChange($event)"></kendo-multiselect>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col">
+            <div mat-dialog-actions>
+                <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button>
+                <button mat-button [mat-dialog-close]="value" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div mat-dialog-actions><button mat-button (click)="onNoClick()">No Thanks</button><button mat-button [mat-dialog-close]="value" cdkFocusInitial>Ok</button></div>

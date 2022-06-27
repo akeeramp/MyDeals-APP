@@ -21,4 +21,5 @@ export let contractComponents = [
     GeoSelectorComponent,
     marketSegComponent,
     meetCompContractComponent
+
 ]
