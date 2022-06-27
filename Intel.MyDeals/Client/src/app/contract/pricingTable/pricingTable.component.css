@@ -52,3 +52,13 @@
 .editor101 .icon p {
     margin: 6px 0
 }
+
+#left-pane {
+    height: 100%;
+    float: left;
+    overflow: auto;
+    width: 300px;
+    margin-left: -300px;
+    padding: 0;
+    background-color: #ffffff !important;
+}

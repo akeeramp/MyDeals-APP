@@ -282,6 +282,6 @@ export class meetCompContractComponent implements OnInit,OnDestroy {
 angular
     .module("app")
     .directive(
-        "meetComp",
+        "meetCompContract",
         downgradeComponent({ component: meetCompContractComponent  })
     );

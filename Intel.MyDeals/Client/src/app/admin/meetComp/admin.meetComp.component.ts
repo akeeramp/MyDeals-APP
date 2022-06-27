@@ -9,7 +9,7 @@ import * as _ from "underscore";
 import { ThemePalette } from "@angular/material/core";
 
 @Component({
-    selector: "meetComp",
+    selector: "admin-meetcomp",
     templateUrl: "Client/src/app/admin/meetComp/admin.meetComp.component.html",
     styleUrls: ['Client/src/app/admin/meetComp/admin.meetComp.component.css'],
     encapsulation: ViewEncapsulation.None
@@ -318,7 +318,7 @@ export class meetCompComponent {
     }
 }
 angular.module("app").directive(
-    "meetComp",
+    "adminMeetcomp",
     downgradeComponent({
         component: meetCompComponent,
     })

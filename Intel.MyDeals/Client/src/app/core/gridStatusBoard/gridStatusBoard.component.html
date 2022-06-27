@@ -65,7 +65,7 @@
                                 <a href="/Contract#/manager/{{dataItem.CNTRCT_OBJ_SID}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span><span style="color: #0071c5;" > {{dataItem.TITLE}}</span></a>
                             </div>
                             <ng-template #angularContract>
-                                <a href="/Contract#/contractmanager/{{dataItem.CNTRCT_OBJ_SID}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span><span style="color: #0071c5;"> {{dataItem.TITLE}}</span></a>
+                                <a href="#contractmanager/{{dataItem.CNTRCT_OBJ_SID}}{{jumptoSummary}}" title="Click to open the Contract in the Contract Editor"><span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span><span style="color: #0071c5;"> {{dataItem.TITLE}}</span></a>
                             </ng-template>
                         </ng-template>
                     </kendo-grid-column>

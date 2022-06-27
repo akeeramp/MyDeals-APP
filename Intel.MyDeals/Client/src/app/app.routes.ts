@@ -390,7 +390,7 @@ angular
                 abstract: false,
                 views: {
                     mainView: {
-                        template: '<meet-comp></meet-comp>'
+                        template: '<admin-meetcomp></admin-meetcomp>'
                     }
                 }
             })

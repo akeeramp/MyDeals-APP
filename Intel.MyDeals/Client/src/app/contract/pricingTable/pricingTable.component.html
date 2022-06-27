@@ -83,8 +83,32 @@
                 <div *ngIf="selLnav=='MeetComp'">
                     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
                 </div>
-                <div *ngIf="selLnav=='Manage'">
-                    <p>Manage screen</p>
+                <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'">
+                    <p>Approvals screen</p>
+                </div>
+                <div *ngIf="selLnav=='overlapDiv'">
+                    <p>Overlapping Deals screen</p>
+                </div>
+                <div *ngIf="selLnav=='groupExclusionDiv'">
+                    <p>Grouping Exclusions screen</p>
+                </div>
+                <div *ngIf="selLnav=='contractDetailsDiv'">
+                    <p>Details screen</p>
+                </div>
+                <div *ngIf="selLnav=='historyDiv'">
+                    <p>History screen</p>
+                </div>
+                <div *ngIf="selLnav=='contractReviewDiv'">
+                    <p>Contract screen</p>
+                </div>
+                <div *ngIf="selLnav=='dealReviewDiv'">
+                    <p>Deals screen</p>
+                </div>
+                <div *ngIf="selLnav=='dealProducts'">
+                    <p>Missing CAP/Cost screen</p>
+                </div>
+                <div *ngIf="selLnav=='pctDiv'">
+                    <p>Price Cost Test screen</p>
                 </div>
             </div>
         </div>

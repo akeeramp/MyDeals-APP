@@ -1,13 +1,14 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
+import { SecurityService } from "../../shared/services/security.service"
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class lnavService {
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
 
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
@@ -26,6 +27,9 @@ export class lnavService {
         return this.httpClient.post(apiUrl, [pt]);
     }
 
+    public chkDealRules(action, role, itemType, itemSetType, stage): boolean {
+        return this.securityService.chkDealRules(action, role, itemType, itemSetType, stage);
+    }
 }
 
 

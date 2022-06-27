@@ -1,133 +1,209 @@
-﻿<div *ngIf="contractData !=null" id="lnavContainerWrapper" style="padding-top:112px;height:100vh!important;">
+﻿<div *ngIf="contractData !=null" id="lnavContainerWrapper" style="padding-top:112px;height:100vh!important;width:98%">
     <div id="lnavHeader">
         <div>
             <div class="contract-status-bar"></div>
-            <div class="contract-title-container" title="View Contract Details"><a><small class="contractHeaderId">#{{
-                        contractData.DC_ID}} </small><small>{{contractData.Customer.CUST_NM}}:
-                    </small><small>{{contractData.TITLE}}</small></a></div>
-        </div>
-        <div>
-            <div style="height: 37px; border-bottom: 1px solid #e8eaec; overflow: hidden;">
-                <div class="col-md-12" style="padding:0px">
-                    <div class="col-md-4" style="padding:0px">
-                        <div class="flowBtn" (click)="loadModel('PTE')">Deal Entry</div>
-                    </div>
-                    <div class="col-md-4" style="padding:0px 5px">
-                        <div class="flowBtn" (click)="loadModel('MeetComp')"><i
-                                class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed"
-                                style="color: yellow;"></i>Meet Comp </div>
-                    </div>
-                    <div class="col-md-4" style="padding:0px 5px" (click)="loadModel('Manage')">
-                        <div class="flowBtn">Manage</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div>
-                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel"
-                    style="border-left: 1px solid #e8eaec !important;"><i class="intelicon-shrink flip-horizontal"></i>
-                </div>
-                <div class="fl navIconLnk" id="navIconAddPs" (click)="toggleAddStrategy()"><i
-                        class="intelicon-plus-max"></i></div>
-                <div class="fl navIconLnk" title="Filter contract"><i class="intelicon-search"></i></div>
-                <div class="fl navIconLnk">
-                    <div><i class="intelicon-fast-forward"></i></div>
-                </div>
-                <div class="fl navIconLnk" title="Help"
-                    onclick="showHelpTopic(HelpTopicEnum.DealManager_ContractNavigator);"><i class="intelicon-help"></i>
-                </div>
-                <div class="clearboth"></div>
+            <div class="contract-title-container" title="View Contract Details">
+                <a>
+                    <small class="contractHeaderId">#{{contractData.DC_ID}} </small>
+                    <small>{{contractData.Customer.CUST_NM}}:</small>
+                    <small>{{contractData.TITLE}}</small>
+                </a>
             </div>
         </div>
     </div>
-    <div id="lnavMenuContainer">
-        <div>
-            <div class="scaleTopAnim lnavMenuOption" style="padding: 10px;" [hidden]="isAddStrategyHidden">
-                <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
-                <div class="clearboth"></div>
-                <div class="bgBlueContainer"><input type="text" class="k-textbox fl" placeholder=""
-                        style="width: 228px; color: black;" maxlength="250" id="inptPrcTitle"
-                        [(ngModel)]="psTITLE" /><button class="btn btn-sm btn-primary" type="submit"
-                        style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;"
-                        (click)="customAddPsValidate()">Add</button>
-                    <div class="clearboth"></div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="scaleTopAnim lnavMenuOption" [hidden]="isAddPricingTableHidden">
-                <div class="fl ptLnavTitle">Enter Pricing Table Name</div>
-                <div class="clearboth"></div><input type="text" class="k-textbox fl" placeholder=""
-                    style="width: 228px; color: black;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
-                <div class="clearboth"></div>
-                <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
-                <div class="ptLnavtmpltContainer" style="border:red;">
-                    <div *ngFor="let DealType of PtDealTypes">
-                        <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)">
-                            <div class="fl textCircle blueBg">{{ DealType._custom.ltr}}</div>
-                            <div class="fl textName">{{ removeBlanks(DealType.name)}}</div>
-                            <div class="clearboth"></div>
-                        </div>
-                    </div>
-                    <div style="text-align: right;"><button ng-show="!addTableDisabled" class="btn btn-sm btn-primary"
-                            (click)="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button><button
-                            ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="customAddPtValidate()"
-                            type="submit" style="background-color: #00AEEF;">Add</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="lnavContainer" style="position:absolute;width:300px;">
-        <div>
-            <div style="margin-top: 10px;">
-                <div *ngFor="let ps of contractData.PRC_ST" class="lnavStrategyContainer">
-                    <div class="psNav" id="lnavPs_{{ ps.DC_ID}}"
-                        [ngClass]="{active: (curPricingStrategy.DC_ID==ps.DC_ID)}">
-                        <div class="fl" (click)="isCollapsed=!isCollapsed"><i class="glyphicon"
-                                style="margin-right: 5px; margin-top: 3px;"
-                                [ngClass]="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
-                        </div>
-                        <div class="fl" style="width: 225px; font-size: 12px;">
-                            <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}"
-                                style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;"><i
-                                    class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i><i
-                                    class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i><i
-                                    class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i><i
-                                    class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION==='Dirty'"
-                                    title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i><i
-                                    class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'"
-                                    title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
-                                <div *ngIf="ps.IS_HYBRID_PRC_STRAT==='1'"
-                                    class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
+    <div class="lnavMenuContainer">
+        <kendo-tabstrip (tabSelect)="onTabSelect($event)" style="background-color: #ffffff !important;">
+            <kendo-tabstrip-tab title="Deal Entry" [selected]="selectedTab == 0">
+                <ng-template kendoTabContent>
+                    <div class="lnavContainer">
+                        <div>
+                            <div>
+                                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
+                                    <i class="intelicon-shrink flip-horizontal"></i>
+                                </div>
+                                <div class="fl navIconLnk" id="navIconAddPs" (click)="toggleAddStrategy()">
+                                    <i class="intelicon-plus-max"></i>
+                                </div>
+                                <div class="fl navIconLnk" title="Filter contract">
+                                    <i class="intelicon-search"></i>
+                                </div>
+                                <div class="fl navIconLnk" (click)="toggleStrategyTree()" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All'}}"
+                                     *ngIf="isExistingContract()">
+                                    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" [ngClass]="{'rotate-90': !strategyTreeCollapseAll}">
+                                        <i class="intelicon-fast-forward"></i>
+                                    </div>
+                                </div>
+                                <div class="fl navIconLnk" title="Help" (click)="showHelpTopicContract()">
+                                    <i class="intelicon-help"></i>
+                                </div>
+                                <div class="clearboth"></div>
                             </div>
-                            <div (click)="isCollapsed=!isCollapsed" class="w100">{{ ps.TITLE}}</div>
                         </div>
-                        <div class="fr"><span #target class="hasMenuPs{{ ps.DC_ID}} ptBtn" title="View more options"><i
-                                    class="intelicon-vertical-menu"></i></span>
-                            <kendo-contextmenu [target]="target" showOn="click">
-                                <kendo-menu-item text="Add Pricing Strategy"></kendo-menu-item>
-                                <kendo-menu-item text="Edit Pricing Strategy Name"></kendo-menu-item>
-                            </kendo-contextmenu>
+                        <div id="lnavMenuContainer">
+                            <div>
+                                <div class="scaleTopAnim lnavMenuOption" style="padding: 10px;" [hidden]="isAddStrategyHidden">
+                                    <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
+                                    <div class="clearboth"></div>
+                                    <div class="bgBlueContainer">
+                                        <input type="text" class="k-textbox fl" placeholder=""
+                                               style="width: 228px; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="psTITLE" />
+                                        <button class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px;
+                                                background-color: #00AEEF; padding: 7px 10px;" (click)="customAddPsValidate()">
+                                            Add
+                                        </button>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="scaleTopAnim lnavMenuOption" [hidden]="isAddPricingTableHidden">
+                                    <div class="fl ptLnavTitle">Enter Pricing Table Name</div>
+                                    <div class="clearboth"></div>
+                                    <input type="text" class="k-textbox fl" placeholder="" style="width: 228px;
+                                           color: black;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
+                                    <div class="clearboth"></div>
+                                    <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
+                                    <div class="ptLnavtmpltContainer" style="border:red;">
+                                        <div *ngFor="let DealType of PtDealTypes">
+                                            <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)">
+                                                <div class="fl textCircle blueBg">{{ DealType._custom.ltr}}</div>
+                                                <div class="fl textName">{{ removeBlanks(DealType.name)}}</div>
+                                                <div class="clearboth"></div>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="hideAddPricingTable()"
+                                                    style="background-color: #00AEEF;">
+                                                Cancel
+                                            </button>
+                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="customAddPtValidate()" type="submit"
+                                                    style="background-color: #00AEEF;">
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false"
-                        title="Stage:{{ ps.WF_STG_CD}}">
-                        <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
-                            <div *ngFor="let pt of ps.PRC_TBL" class="lnavPricingTableContainer">
-                                <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav">
-                                    <div (click)="loadPTE(ps.DC_ID,pt.DC_ID)">{{pt.TITLE}}</div>
+                        <div style="position:absolute;">
+                            <div>
+                                <div style="margin-top: 10px;">
+                                    <div *ngFor="let ps of contractData.PRC_ST" class="lnavStrategyContainer">
+                                        <div class="psNav" id="lnavPs_{{ ps.DC_ID}}" [ngClass]="{active: (curPricingStrategy.DC_ID==ps.DC_ID)}">
+                                            <div class="fl" (click)="isCollapsed=!isCollapsed">
+                                                <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;"
+                                                   [ngClass]="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
+                                            </div>
+                                            <div class="fl" style="width: 225px; font-size: 12px;">
+                                                <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}"
+                                                     style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">
+                                                    <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                       *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                       *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                       *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                       *ngIf="ps.PASSED_VALIDATION==='Dirty'"
+                                                       title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                       *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'"
+                                                       title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                                                    <div *ngIf="ps.IS_HYBRID_PRC_STRAT==='1'"
+                                                         class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
+                                                </div>
+                                                <div (click)="isCollapsed=!isCollapsed" class="w100">{{ ps.TITLE}}</div>
+                                            </div>
+                                            <div class="fr">
+                                                <span #target class="hasMenuPs{{ ps.DC_ID}} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
+                                                <kendo-contextmenu [target]="target" showOn="click">
+                                                    <kendo-menu-item text="Add Pricing Strategy"></kendo-menu-item>
+                                                    <kendo-menu-item text="Edit Pricing Strategy Name"></kendo-menu-item>
+                                                </kendo-contextmenu>
+                                            </div>
+                                        </div>
+                                        <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false" title="Stage:{{ ps.WF_STG_CD}}">
+                                            <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
+                                                <div *ngFor="let pt of ps.PRC_TBL" class="lnavPricingTableContainer">
+                                                    <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav">
+                                                        <div (click)="loadPTE(ps.DC_ID,pt.DC_ID)">{{pt.TITLE}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+            <kendo-tabstrip-tab title="Meet Comp" [selected]="selectedTab == 1">
+                <ng-template kendoTabContent>
+                    <div class="lnavContainer">
+                        <div>
+                            <div>
+                                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
+                                    <i class="intelicon-shrink flip-horizontal"></i>
+                                </div>
+                                <div class="fr navIconLnk" title="Help" (click)="showHelpTopicContract()"><i class="intelicon-help"></i></div>
+                                <div class="clearboth"></div>
+                            </div>
+                        </div>
+                        <div [hidden]="isPricingStrategiesHidden" style="margin-top: 10px; position:absolute;">
+                            <div class="lnav-sum-container">
+                                <h4>Contract Compliance</h4>
+                                <div class="lnav-sum-menu-item">
+                                    <div id="mctDiv" (click)="loadModel('MeetComp')">Meet Comp</div>
+                                </div>
+                                <div class="lnav-sum-menu-item"><a (click)="showHelpTopicMeetComp()"><div>Help</div></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+            <kendo-tabstrip-tab title="Manage" [selected]="selectedTab == 2">
+                <ng-template kendoTabContent>
+                    <div class="lnavContainer">
+                        <div>
+                            <div>
+                                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
+                                    <i class="intelicon-shrink flip-horizontal"></i>
+                                </div>
+                                <div class="fr navIconLnk" title="Help" (click)="showHelpTopicContract()"><i class="intelicon-help"></i></div>
+                                <div class="clearboth"></div>
+                            </div>
+                        </div>
+                        <div [hidden]="isPricingStrategiesHidden" style="margin-top: 10px; position:absolute;">
+                            <div class="lnav-sum-container">
+                                <h4 style="border-bottom: 0 solid transparent !important;">
+                                    <i class="intelicon-document-outlined" style="color: #00AEEF; font-size:26px;"></i>Contract Manager
+                                </h4>
+                                <div class="lnav-sum-menu-item" style="padding: 4px 4px 4px 22px !important">
+                                    <div id="approvalDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'approvalDiv'}" (click)="loadModel('approvalDiv')">Approvals</div>
+                                    <div id="overlapDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'overlapDiv'}" (click)="loadModel('overlapDiv')">Overlapping Deals</div>
+                                    <div *ngIf="!CAN_VIEW_COST_TEST" id="groupExclusionDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'groupExclusionDiv'}" (click)="loadModel('groupExclusionDiv')">Grouping Exclusions</div>
+                                    <div *ngIf="usrRole=='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="loadModel('contractDetailsDiv')">Details</div>
+                                    <div id="historyDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'historyDiv'}" (click)="loadModel('historyDiv')">History</div>
+                                    <div *ngIf="usrRole !='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="loadModel('contractDetailsDiv')">Details</div>
+                                    <div *ngIf="CAN_VIEW_EXPORT" id="contractReviewDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractReviewDiv'}" (click)="loadModel('contractReviewDiv')">{{contractType}}</div>
+                                    <div *ngIf="CAN_VIEW_ALL_DEALS" id="dealReviewDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'dealReviewDiv'}" (click)="loadModel('dealReviewDiv')">Deals</div>
+                                    <div *ngIf="usrRole=='GA' || usrRole=='DA' || usrRole=='SA'" id="dealProducts" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'dealProducts'}" (click)="loadModel('dealProducts')">Missing CAP/Cost</div>
+                                </div>
+                                <h4 *ngIf="CAN_VIEW_COST_TEST || CAN_VIEW_MEET_COMP" style="border-bottom: 0 solid transparent !important;">
+                                    <i class="intelicon-payment" style="color: #FFA300; font-size: 26px; "></i>Pricing Test Views
+                                </h4>
+                                <div class="lnav-sum-menu-item" style=" padding: 4px 4px 4px 22px !important">
+                                    <div *ngIf="CAN_VIEW_COST_TEST" id="pctDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'pctDiv'}" (click)="loadModel('pctDiv')">Price Cost Test</div>
+                                    <div *ngIf="CAN_VIEW_MEET_COMP" id="mctDiv" (click)="openMeetCompTab()">Meet Comp</div>
+                                    <div *ngIf="CAN_VIEW_COST_TEST && (usrRole=='DA')" id="mctDiv" (click)="showHelpTopicCostTest()">Help</div>
+                                    <div *ngIf="CAN_VIEW_COST_TEST && (usrRole=='GA') && isSuper" id="mctDiv" (click)="showHelpTopicCostTest()">Help</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
     </div>
 </div>

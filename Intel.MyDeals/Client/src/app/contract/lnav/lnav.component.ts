@@ -1,10 +1,11 @@
 ﻿import * as angular from "angular";
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { templatesService } from "../../shared/services/templates.service";
 import { lnavService } from "../lnav/lnav.service";
 import { pricingTableComponent } from "../pricingTable/pricingTable.component";
+import { headerService } from "../../shared/header/header.service";
 
 export interface contractIds {
      Model:string;
@@ -16,11 +17,12 @@ export interface contractIds {
 @Component({
     selector: "lnavView",
     templateUrl: "Client/src/app/contract/lnav/lnav.component.html",
-    styleUrls: ['Client/src/app/contract/lnav/lnav.component.css']
+    styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class lnavComponent  {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService,private pricingTableComp:pricingTableComponent) { }
+    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService) { }
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;
@@ -38,7 +40,20 @@ export class lnavComponent  {
     public isAddPricingTableHidden = true;
     public renameMapping = {};
     public curPricingStrategyId;
+    public container: any;
+    public strategyTreeCollapseAll = true; isCollapsed = false;
 
+    private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
+    private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
+    private CAN_VIEW_EXPORT = true;
+    private CAN_VIEW_ALL_DEALS = true;
+    private usrRole;
+    private isSuper = true;
+    private superPrefix = "";
+    private extraUserPrivsDetail: Array<string> = [];
+    private contractType = "Contract";
+    private selectedTab = 0;
+    private selectedModel;
     //Output Emitter to load the Pricing table data
     loadPTE(psId, ptId) {
         const contractId_Map:contractIds={
@@ -57,6 +72,7 @@ export class lnavComponent  {
             C_ID: this.contractId,
             pt_id: 0
         };
+        this.selectedModel = model;
         this.modelChange.emit(contractId_Map);
     }
     /* PRICING STRATEGY */
@@ -271,7 +287,79 @@ export class lnavComponent  {
         //this.isSearchHidden = true;
         this.isAddPricingTableHidden = true;
     }
-    
+
+    //Help navigation
+    showHelpTopicMeetComp() {
+        const helpTopic = "Auto+Population";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+        }
+    }
+
+    showHelpTopicCostTest() {
+        const helpTopic = "Cost+Test";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+        }
+    }
+
+    showHelpTopicContract() {
+        const helpTopic = "Contract+Navigator";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+        }
+    }
+
+    onTabSelect(event: any) {
+        this.selectedTab = event.index;
+        this.headerSvc.getUserDetails().subscribe(res => {
+            this.usrRole = res.UserToken.Role.RoleTypeCd;
+            (<any>window).usrRole = this.usrRole;
+
+            if (this.isSuper) {
+                this.superPrefix = "Super";
+                this.extraUserPrivsDetail.push("Super User");
+            }
+        });
+
+        if (event.title == "Deal Entry") {
+            this.loadModel('PTE');
+        }
+        else if (event.title == "Meet Comp") {
+            this.loadModel('MeetComp');
+        }
+        else if (event.title == "Manage") {
+            this.loadModel('Manage');
+        }
+    }
+
+    openMeetCompTab() {
+        this.selectedTab = 1;
+        this.loadModel('MeetComp');
+    }
+
+    toggleStrategyTree() {
+        console.log("arrow clicked");
+        let container = angular.element(".lnavStrategyContainer");
+        console.log("arrow entered", container);
+        while (container.length !== 0) {
+            //isCollapsed is only defined in the ng-repeat's local scope, so we need to iterate through them here
+            !this.isCollapsed == this.strategyTreeCollapseAll;
+            container = container.next();
+        }
+        this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
+    }
+
+    isExistingContract() {
+        return this.contractData.DC_ID > 0;
+    }
+
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.filterDealTypes();
