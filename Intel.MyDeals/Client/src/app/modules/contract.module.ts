@@ -10,6 +10,7 @@ import { GeoSelectorComponent } from "../contract/ptModals/geo/geo.component";
 import { marketSegComponent } from "../contract/ptModals/marketSegment/marketSeg.component";
 import { meetCompContractComponent } from "../contract/meetComp/meetComp.component";
 import { dealEditorComponent } from "../contract/dealEditor/dealEditor.component";
+import { contractManagerComponent } from "../contract/contractManager/contractManager.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -22,6 +23,7 @@ export let contractComponents = [
     GeoSelectorComponent,
     marketSegComponent,
     meetCompContractComponent,
-    dealEditorComponent
+    dealEditorComponent,
+    contractManagerComponent
 
 ]

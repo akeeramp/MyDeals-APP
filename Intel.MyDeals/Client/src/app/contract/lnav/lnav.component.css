@@ -156,3 +156,11 @@
 .k-tabstrip .k-tabstrip-items .k-link {
     padding: 0.5rem 1rem !important;
 }
+
+.k-tabstrip-content.k-state-active, .k-tabstrip > .k-content.k-state-active {
+    display: contents !important;
+}
+
+.k-tabstrip-top > .k-tabstrip-items-wrapper > .k-tabstrip-items {
+    width: 101% !important;
+}
