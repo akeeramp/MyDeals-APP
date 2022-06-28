@@ -663,6 +663,11 @@ export class contractDetailsComponent {
             console.error("Unable to load the data", e);
         }
     }
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
 }
 angular.module("app").directive(
     "contractDetails",

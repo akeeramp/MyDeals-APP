@@ -22,7 +22,11 @@ export interface contractIds {
 })
 
 export class lnavComponent  {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService) { }
+    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;
@@ -364,7 +368,11 @@ export class lnavComponent  {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.filterDealTypes();
     }
-
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
 }
 
 angular.module("app").directive(
