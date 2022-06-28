@@ -70,28 +70,28 @@
     margin-right: 15px;
 }
 
-    .lnav-sum-container h4 {
-        font-size: 18px;
-        border-bottom: 2px solid #ffffff;
-        margin-top: 20px;
-    }
+.lnav-sum-container h4 {
+    font-size: 18px;
+    border-bottom: 2px solid #ffffff;
+    margin-top: 20px;
+}
 
 .lnav-sum-menu-item {
     color: #ffffff;
 }
 
-    .lnav-sum-menu-item div {
-        color: #ffffff;
-        cursor: pointer;
-        margin: 1px 0 1px 10px;
-        padding: 4px;
-        font-size: 14px;
-        width: 220px;
-    }
+.lnav-sum-menu-item div {
+    color: #ffffff;
+    cursor: pointer;
+    margin: 1px 0 1px 10px;
+    padding: 4px;
+    font-size: 14px;
+    width: 220px;
+}
 
-        .lnav-sum-menu-item div:hover {
-            background-color: #00AEEF;
-        }
+.lnav-sum-menu-item div:hover {
+    background-color: #00AEEF;
+}
 
 .lnav-sum-menu-item-active {
     background-color: #0071C5;
@@ -105,7 +105,6 @@
 .lnav-sum-menu-item a:hover {
     text-decoration: none;
 }
-
 
 .lnavContainer {
     height: 100%;
@@ -145,13 +144,13 @@
     background-color: #00AEEF !important;
 }
 
-    .k-tabstrip-items .k-item:hover, .k-tabstrip-items .k-item.k-state-hover {
-        background-color: #003C71 !important;
-    }
+.k-tabstrip-items .k-item:hover, .k-tabstrip-items .k-item.k-state-hover {
+    background-color: #003C71 !important;
+}
 
-    .k-tabstrip-items .k-item.k-state-active, .k-tabstrip-items .k-item.k-state-selected {
-        background-color: #003C71 !important;
-    }
+.k-tabstrip-items .k-item.k-state-active, .k-tabstrip-items .k-item.k-state-selected {
+    background-color: #003C71 !important;
+}
 
 .k-tabstrip .k-tabstrip-items .k-link {
     padding: 0.5rem 1rem !important;
@@ -164,3 +163,205 @@
 .k-tabstrip-top > .k-tabstrip-items-wrapper > .k-tabstrip-items {
     width: 101% !important;
 }
+
+/*LNav Flow menu mini styles*/
+.navTextLnk {
+    font-size: 10px;
+    text-align: center;
+    color: #ffffff;
+    line-height: 1.2em;
+    height: 40px;
+    padding: 7px 0;
+    background-color: #00AEEF;
+    cursor: pointer;
+    border-top: 1px solid #0071C5;
+}
+
+.navTextLnk:hover {
+    background-color: #0071C5;
+}
+
+.navTextLnk a i, .navIconLnk a i {
+    color: #00AEEF;
+}
+
+.navIconLnk:hover a i {
+    color: #FFFFFF;
+}
+
+.navTextLnk .nav-icn, .navIconLnk .nav-icn {
+    font-size: 20px;
+    margin-top: 4px;
+}
+
+.navTextLnk .nav-extra, .navIconLnk .nav-extra {
+    font-size: 14px;
+    vertical-align: super;
+    margin-left: 1px;
+}
+
+/*Navigation Styles*/
+.psNav {
+    cursor: pointer;
+    font-family: 'Intel Clear';
+    font-weight: normal;
+    font-style: normal;
+    padding: 2px 2px 0 10px;
+}
+
+.psNav:hover {
+    background-color: #003462;
+}
+
+.psNav.active {
+    color: #ffffff;
+    font-weight: bold;
+    background-color: #0071C5;
+}
+
+.psNav i {
+    cursor: pointer;
+}
+
+.psNav .ptBtn, .ptNav .ptBtn {
+    display: none;
+    font-size: 14px;
+}
+
+.psNav:hover .ptBtn, .ptNav:hover .ptBtn {
+    display: inline;
+}
+
+.psNav:hover .ptBtn:hover, .ptNav:hover .ptBtn:hover {
+    color: #F3D54E;
+}
+
+.ptNav .ptBtn {
+    display: inline;
+    /*display: none;*/
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.3em;
+}
+
+.ptNav:hover .ptBtn {
+    display: inline;
+}
+
+.ptNav:hover .ptBtn:hover {
+    color: #F3D54E;
+}
+
+.ptNav, .ptNav a {
+    color: #00AEEF;
+}
+
+.ptNav {
+    cursor: pointer;
+    font-family: 'Intel Clear';
+    font-weight: 200;
+    font-style: normal;
+    padding: 2px 10px 0 33px;
+    display: inline-flex;
+}
+
+.ptNav:hover, .ptNav:hover a {
+    color: #00AEEF;
+}
+
+.ptNav:hover {
+    color: #00AEEF;
+    background-color: #003462;
+}
+
+.ptNav.active {
+    color: #ffffff !important;
+    font-weight: bold !important;
+    background-color: #0071C5 !important;
+}
+
+/*LNAV circle styles*/
+.rotate90 {
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+}
+
+.textCircle {
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    padding: 2px;
+    color: #003C71;
+    text-align: center;
+    font: 10px Arial, sans-serif;
+    font-weight: bold;
+}
+
+.textCircle_NeedsWork {
+    border-radius: 50%;
+    /*border: 2px solid #000000;*/
+    width: 15px;
+    height: 15px;
+    /*padding: 0px;*/ /*Raise 1 px for radius decrease, 2 px was default*/
+    padding: 2px;
+    color: #FC4C02; /*Set text to Orange*/
+    text-align: center;
+    font: 10px Arial, sans-serif;
+    font-weight: bold;
+}
+
+.textCircleMd {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    color: #003C71;
+    text-align: center;
+    font: 12px Arial, sans-serif;
+    font-weight: bold;
+    margin: 1px 6px 0 8px;
+}
+
+.textName {
+    margin: 0 0 5px 5px;
+    font-weight: bold;
+}
+
+.circleWithText {
+    color: #ffffff;
+    margin: 0 0 2px 5px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 3px;
+    height: 21px;
+}
+
+.circleWithText:hover {
+    color: #FFA300;
+}
+
+.circleWithText:hover .textCircle {
+    background-color: #FFA300;
+}
+
+.circleWithText.active {
+    background-color: #003C71;
+}
+
+/*.menuItem {
+    color: #0071c5 !important;
+}
+.menuItem:hover {
+    background-color: #00aeef !important;
+}*/
+.menuItem {
+    background-color: #fff;
+}
+:host ::ng-deep .k-content {
+    padding: 0px !important;
+}
+
+.bgBlueContainer .k-textbox.isError {
+    border: 1px solid #ED1C24;
+} 

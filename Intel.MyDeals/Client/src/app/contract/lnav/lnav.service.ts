@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import { SecurityService } from "../../shared/services/security.service"
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +14,8 @@ export class lnavService {
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    //public isLnavHidden = new BehaviorSubject({ isLanvHide: true, source: '' });
+    public isLnavHidden = new BehaviorSubject(true);
 
     // #### PRICING STRATEGY CRUD ####  
     public createPricingStrategy(custId, contractId, ps) {

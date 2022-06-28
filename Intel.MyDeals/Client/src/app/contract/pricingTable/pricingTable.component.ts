@@ -6,6 +6,7 @@ import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { templatesService } from "../../shared/services/templates.service";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
+import { lnavService } from "../lnav/lnav.service";
 
 export interface contractIds {
     Model: string;
@@ -21,7 +22,8 @@ export interface contractIds {
 })
 
 export class pricingTableComponent {
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService, private pteService: pricingTableEditorService) {
+    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
+        private pteService: pricingTableEditorService, private lnavSvc: lnavService) {
          //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
          $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
          $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -40,6 +42,8 @@ export class pricingTableComponent {
     public contractData = null;
     public UItemplate = null;
     private isDETabEnabled = false;
+    public isLnavHidden: boolean;
+    //public isLnavHidden: any = {};
 
     loadModel(contractModel: contractIds) {
         this.selLnav = contractModel.Model
@@ -85,6 +89,12 @@ export class pricingTableComponent {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
         this.loadAllContractDetails();
+        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden) => {
+            this.isLnavHidden = isLnavHidden;
+        });
+        /*this.lnavSvc.isLnavHidden.subscribe((isLnavObj) => {
+            this.isLnavHidden = isLnavObj.isLanvHide;
+        });*/
     }
     ngOnDestroy() {
         //The style removed are adding back

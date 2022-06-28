@@ -8,7 +8,7 @@ import { pricingTableComponent } from "../pricingTable/pricingTable.component";
 import { headerService } from "../../shared/header/header.service";
 
 export interface contractIds {
-     Model:string;
+     Model: string;
      C_ID: number;
      ps_id: number;
      pt_id: number;
@@ -32,21 +32,22 @@ export class lnavComponent  {
     @Input() UItemplate;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>(); 
 
+    public query = "";
     public psTITLE = "";
     public newStrategy: any = {};
     public PtDealTypes;
     public ptTITLE = "";
     public newPricingTable;
     public isTenderContract = false;
-    public curPricingStrategy: any = {};
     public currentPricingTable: any = {};
     public isAddStrategyHidden = true;
     public isAddPricingTableHidden = true;
+    //public isLnavHidden: any = {};
+    public isLnavHidden = false;
     public renameMapping = {};
-    public curPricingStrategyId;
     public container: any;
-    public strategyTreeCollapseAll = true; isCollapsed = false;
-
+    public strategyTreeCollapseAll = true; isCollapsed = false; isSearchHidden = false; isSummaryHidden = true;
+    isAddStrategyBtnHidden = false;
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
     private CAN_VIEW_EXPORT = true;
@@ -58,6 +59,12 @@ export class lnavComponent  {
     private contractType = "Contract";
     private selectedTab = 0;
     private selectedModel;
+    public flowMode = "Deal Entry";
+    // Initialize current strategy and pricing table variables
+    public curPricingTable: any = {}; curPricingTableId = 0;
+    curPricingStrategyId = 0; curPricingStrategy: any = {}; spreadNeedsInitialization = true;
+    public isPtr = false; isWip = false; isPSExpanded = [];
+
     //Output Emitter to load the Pricing table data
     loadPTE(psId, ptId) {
         const contractId_Map:contractIds={
@@ -81,13 +88,15 @@ export class lnavComponent  {
     }
     /* PRICING STRATEGY */
     customAddPsValidate() {
-        let isvalid = true;
+        let isvalid = true;       
+        this.isAddStrategyBtnHidden = true;
+        this.newStrategy.TITLE = this.psTITLE;
+        const values = this.newStrategy;
+        this.newStrategy.IS_HYBRID_PRC_STRAT;
+        //this.addPricingStrategy();
         if (this.psTITLE.length > 80) {
             isvalid = false;
         }
-        this.newStrategy.TITLE = this.psTITLE;
-        const values = this.newStrategy;
-        this.addPricingStrategy();
 
         // Clear all values
         angular.forEach(values,
@@ -95,6 +104,61 @@ export class lnavComponent  {
                 values._behaviors.validMsg[key] = "";
                 values._behaviors.isError[key] = false;
             });
+        // Check required
+        angular.forEach(values,
+            function (value, key) {
+                if (key[0] !== '_' &&
+                    !Array.isArray(value) &&
+                    (value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
+                    values._behaviors.isRequired[key] === true) {
+                    values._behaviors.validMsg[key] = "* field is required";
+                    values._behaviors.isError[key] = true;
+                    isvalid = false;
+                }
+            });
+
+        // Check unique name
+        if (this.contractData.PRC_ST === undefined) {
+            this.contractData.PRC_ST = [];
+        }
+        var isUnique = this.IsUniqueInList(this.contractData.PRC_ST, this.newStrategy["TITLE"], "TITLE", false);
+        if (!isUnique) {
+            this.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
+            this.newStrategy._behaviors.isError["TITLE"] = true;
+            isvalid = false;
+        }
+
+        // Check name length
+        if (this.newStrategy["TITLE"].length > 80) {
+            this.newStrategy._behaviors.validMsg["TITLE"] = "* must be 80 characters or less";
+            this.newStrategy._behaviors.isError["TITLE"] = true;
+            isvalid = false;
+        }
+        if (isvalid) {
+            this.addPricingStrategy();
+        } else {
+            this.isAddStrategyBtnHidden = false;
+        }
+    }
+
+    IsUniqueInList(listToCheck, value, keyToCompare, checkForDouble) {
+        // Check unique name
+        var count = 0;
+        if (!listToCheck) return true;
+        for (var i = 0; i < listToCheck.length; i++) {
+            if (!!listToCheck[i][keyToCompare] && !!value && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
+                if (checkForDouble) { // having one in he list is okay, but 2 is a no
+                    count += 1;
+                    if (count >= 2) {
+                        return false;
+                    }
+                } else {
+                    // not checking doubles, so any if there is any in the list, then return false
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     addPricingStrategy() {
@@ -106,7 +170,7 @@ export class lnavComponent  {
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = this.newStrategy.TITLE;
-        ps.IS_HYBRID_PRC_STRAT = 0;//(this.newStrategy.IS_HYBRID_PRC_STRAT === true ? 1 : 0);
+        ps.IS_HYBRID_PRC_STRAT = (this.newStrategy.IS_HYBRID_PRC_STRAT === true ? 1 : 0);
 
         this.lnavSvc.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
@@ -266,8 +330,8 @@ export class lnavComponent  {
         //}
         this.isAddPricingTableHidden = false;
         this.isAddStrategyHidden = true;
-        //$scope.isAddStrategyBtnHidden = true;
-        //$scope.isSearchHidden = true;
+        this.isAddStrategyBtnHidden = true;
+        this.isSearchHidden = false;
         this.clearNptTemplate();
         this.curPricingStrategy = ps;
         if (!!this.curPricingStrategy && !this.curPricingStrategy.PRC_TBL) {
@@ -285,10 +349,67 @@ export class lnavComponent  {
         }
     }
 
+    editPricingStrategyName(ps) {
+        alert('all inputs ready, Functionality Coming Soon');
+    }
+
+    deletePricingStrategy(ps) {
+        alert('all inputs ready, Functionality Coming Soon');
+    }
+
+    onSelectMenu(event: any, ps: any): void {
+
+        //Number eventIndex = parseInt(event.index);
+        switch (parseInt(event.index)) {
+            case 0:
+                this.toggleAddStrategy();
+                break;
+            case 1:
+                this.copyPricingStrategy();
+                break;
+            case 2:
+                this.showAddPricingTable(ps);
+                break;
+            case 3:
+                this.editPricingStrategyName(ps);
+                break;
+            case 4:
+                this.deletePricingStrategy(ps);
+                break;
+            default:
+                break;
+        }
+
+    }
+    copyPricingStrategy() {
+        alert('all inputs ready, Functionality Coming Soon');
+    }
+
+    hideAddPricingTable() {
+        this.isAddPricingTableHidden = true;
+        this.isAddStrategyHidden = true;
+        this.isAddStrategyBtnHidden = false;
+        this.isSearchHidden = false;
+        //this.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
+        this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+        this.clearPtTemplateIcons();
+        // $scope.curPricingStrategy = {}; //clears curPricingStrategy
+    }
+    // **** PRICING TABLE Methods ****
+
+    clearPtTemplateIcons() {
+        /*angular.forEach(this.templates.ModelTemplates.PRC_TBL,
+            function (value, key) {
+                value._custom._active = false;
+            });*/
+    }
+
+    // **** PRICING STRATEGY Methods ****
+
     toggleAddStrategy() {
         this.isAddStrategyHidden = !this.isAddStrategyHidden;
         //this.isAddStrategyBtnHidden = !this.isAddStrategyHidden;
-        //this.isSearchHidden = true;
+        this.isSearchHidden = false;
         this.isAddPricingTableHidden = true;
     }
 
@@ -348,15 +469,21 @@ export class lnavComponent  {
         this.loadModel('MeetComp');
     }
 
+    // **** LEFT NAVIGATION Methods ****
+    //
+
+    toggleLnav() {
+        this.isLnavHidden = !this.isLnavHidden;
+        //this.isLnavHidden['isLnavHide'] = !this.isLnavHidden['isLnavHide'];
+        window.dispatchEvent(new Event('resize'));
+        this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
+    }
+
     toggleStrategyTree() {
-        console.log("arrow clicked");
-        let container = angular.element(".lnavStrategyContainer");
-        console.log("arrow entered", container);
-        while (container.length !== 0) {
-            //isCollapsed is only defined in the ng-repeat's local scope, so we need to iterate through them here
-            !this.isCollapsed == this.strategyTreeCollapseAll;
-            container = container.next();
-        }
+        //let container = angular.element(".lnavStrategyContainer");
+        this.contractData?.PRC_ST.map((x, i) => {
+            this.isPSExpanded[i] = !this.isPSExpanded[i];
+        });
         this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
     }
 
@@ -364,9 +491,70 @@ export class lnavComponent  {
         return this.contractData.DC_ID > 0;
     }
 
+    toggleSearch() {
+        this.isSearchHidden = !this.isSearchHidden;
+        this.isAddStrategyHidden = true;
+        this.isAddStrategyBtnHidden = false;
+        this.isAddPricingTableHidden = true;
+    }
+
+    //LNAv flow Mini
+    gotoDealEntry() {
+        //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead?
+        this.curPricingStrategyId = 0;
+        this.curPricingStrategy = {};
+        this.curPricingTable = {};
+        this.curPricingTableId = 0;
+        this.isPtr = false;
+        this.isWip = false;
+
+        this.goto('Deal Entry', 'contract.manager');
+    }
+    gotoCompliance() {
+        if (!this.enableFlowBtn()) return;
+        this.goto('Compliance', 'contract.compliance');
+    }
+    gotoManage() {
+        if (!this.enableFlowBtn()) return;
+        this.isAddPricingTableHidden = true;
+        this.isAddStrategyHidden = true;
+        this.isAddStrategyBtnHidden = true;
+        this.isSearchHidden = false;
+
+        this.goto('Manage', 'contract.summary');
+    }
+    goto(mode, state) {
+        //if ($scope.flowMode === mode) return;
+        this.flowMode = mode;
+        //this.go(state, { cid: this.contractData.DC_ID });
+    }
+
+    enableFlowBtn() {
+        if (this.contractData.PRC_ST === undefined || this.contractData.PRC_ST.length === 0) return false;
+
+        var passedItems = [];
+        for (var ps = 0; ps < this.contractData.PRC_ST.length; ps++) {
+            var psItem = this.contractData.PRC_ST[ps];
+            if (psItem.PRC_TBL !== undefined) {
+                for (var pt = 0; pt < psItem.PRC_TBL.length; pt++) {
+                    if (psItem.PRC_TBL[pt].PASSED_VALIDATION === "Complete") {
+                        passedItems.push(psItem.PRC_TBL[pt]);
+                    }
+                }
+            }
+        }
+
+        return passedItems.length > 0;
+    }
+
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.filterDealTypes();
+        this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
+		/*this.lnavSvc.isLnavHidden.next({ isLanvHide: false, source: '' });*/
+        this.contractData?.PRC_ST.map((x, i) => {
+            this.isPSExpanded[i] = false
+        });
     }
     ngOnDestroy() {
         //The style removed are adding back
