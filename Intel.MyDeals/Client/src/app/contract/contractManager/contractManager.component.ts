@@ -18,15 +18,13 @@ import { ThemePalette } from "@angular/material/core";
 
 export class contractManagerComponent {
     constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+  
     }
     private color: ThemePalette = 'primary';
      PCTResultView = false;
     OtherType = []; isECAP = []; isKIT = []
-    @Input() contractData;
-    @Input() UItemplate;
+    @Input() contractData:any;
+    @Input() UItemplate:any;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
     public state: State = {
@@ -185,13 +183,7 @@ export class contractManagerComponent {
             this.isPSExpanded[i] = false;
             if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
         })
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+    }  
 }
 angular.module("app").directive(
     "contractManager",

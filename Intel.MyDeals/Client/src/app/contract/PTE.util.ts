@@ -87,12 +87,12 @@ export class PTEUtil {
 
                 // Formatting
                 const cellFormat: string = templateColumnFields[item.field].format;
-                if (cellFormat.toLowerCase().includes('0:d')) { // Decimalized
+                if (cellFormat && cellFormat.toLowerCase().includes('0:d')) { // Decimalized
                     currentColumnConfig.numericFormat = {
                         pattern: '0,0.00',
                         culture: 'en-US'
                     }
-                } else if (cellFormat.toLowerCase().includes('0:c')) { // Currency
+                } else if (cellFormat && cellFormat.toLowerCase().includes('0:c')) { // Currency
                     currentColumnConfig.numericFormat = {
                         pattern: '$0,0.00',
                         culture: 'en-US'

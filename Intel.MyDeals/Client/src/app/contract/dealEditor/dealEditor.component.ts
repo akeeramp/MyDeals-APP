@@ -26,9 +26,6 @@ export class dealEditorComponent {
         private loggerService: logger, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe,
         private datePipe: DatePipe,
         protected dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
 
     @Input() in_Cid: any = '';
@@ -46,8 +43,6 @@ export class dealEditorComponent {
     private indxs: any = [];
     private isDealToolsChecked: boolean = false;
     private oldValue: any;
-
-    @ViewChild("tabstrip", { static: true }) public tabstrip: TabStripComponent;
 
     private gridResult = [];
     private gridData: GridDataResult;
@@ -98,7 +93,6 @@ export class dealEditorComponent {
         this.groups = this.groups.sort((a, b) => (a.order > b.order) ? 1 : -1);
         this.getWipColumns();
         this.assignColSettings();
-        this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`] = this.wipTemplate;
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
         this.selectedTab = "Deal Info";
         this.filterColumnbyGroup(this.selectedTab);
@@ -371,11 +365,7 @@ export class dealEditorComponent {
             }
         }
     }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+ 
 }
 
 angular.module("app").directive(

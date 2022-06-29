@@ -1,4 +1,4 @@
-﻿<div *ngIf="contractData !=null && !isLnavHidden" id="lnavContainerWrapper" style="padding-top:112px;height:100vh!important;width:98%">
+﻿<div *ngIf="contractData !=null && !isLnavHidden.isLnavHid" id="lnavContainerWrapper" style="padding-top:112px;height:100vh!important;width:98%">
     <div id="lnavHeader">
         <div>
             <div class="contract-status-bar"></div>
@@ -18,7 +18,7 @@
                     <div class="lnavContainer">
                         <div>
                             <div>
-                                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" (click)="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
+                                <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" (click)="toggleLnav('PT')" style="border-left: 1px solid #e8eaec !important;">
                                     <i class="intelicon-shrink flip-horizontal"></i>
                                 </div>
                                 <div class="fl navIconLnk" id="navIconAddPs" (click)="toggleAddStrategy()">
@@ -27,8 +27,7 @@
                                 <div class="fl navIconLnk" title="Filter contract" (click)="toggleSearch()" [ngClass]="{'active': isSearchHidden}" *ngIf="isExistingContract()">
                                     <i class="intelicon-search"></i>
                                 </div>
-                                <div class="fl navIconLnk" (click)="toggleStrategyTree()" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All'}}"
-                                     *ngIf="isExistingContract()">
+                                <div class="fl navIconLnk" (click)="toggleStrategyTree()" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All'}}" *ngIf="isExistingContract()">
                                     <div [ngClass]="{'rotate-90': !strategyTreeCollapseAll}">
                                         <!--<i class="intelicon-fast-forward"></i>#collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed"-->
                                         <i class="chevron linkable intelicon-fast-forward" data-toggle="collapse" data-target=".multi-collapse"></i>
@@ -49,17 +48,13 @@
                                     <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
                                     <div class="clearboth"></div>
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
-                                        <input type="text" class="k-textbox fl" placeholder=""
-                                               style="width: 228px; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="psTITLE"
-                                               [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" />
+                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 228px; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="psTITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" />
                                         <button class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px;
                                                 background-color: #00AEEF; padding: 7px 10px;" [disabled]="isAddStrategyBtnHidden" (click)="customAddPsValidate()">
                                             Add
                                         </button>
                                         <div class="fl ptLnavSubTitle">Create Agreement at Pricing Strategy</div>
-                                        <input type="checkbox"
-                                               id="inptPrcHybridCheck" [(ngModel)]="newStrategy.IS_HYBRID_PRC_STRAT"
-                                               style="margin-top: 12px; height: 16px; width: 16px;" />
+                                        <input type="checkbox" id="inptPrcHybridCheck" [(ngModel)]="newStrategy.IS_HYBRID_PRC_STRAT" style="margin-top: 12px; height: 16px; width: 16px;" />
                                         <div class="clearboth"></div>
                                         <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
                                     </div>
@@ -82,12 +77,10 @@
                                             </div>
                                         </div>
                                         <div style="text-align: right;">
-                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="hideAddPricingTable()"
-                                                    style="background-color: #00AEEF;">
+                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="hideAddPricingTable()" style="background-color: #00AEEF;">
                                                 Cancel
                                             </button>
-                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="customAddPtValidate()" type="submit"
-                                                    style="background-color: #00AEEF;">
+                                            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">
                                                 Add
                                             </button>
                                         </div>
@@ -101,27 +94,17 @@
                                     <div *ngFor="let ps of contractData.PRC_ST | filter:query; let psIndex = index;" class="lnavStrategyContainer">
                                         <div class="psNav row" id="lnavPs_{{ ps.DC_ID}}" [ngClass]="{active: (curPricingStrategy.DC_ID==ps.DC_ID)}">
                                             <div class="fl col-md-1" (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]">
-                                                <i class="glyphicon chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumPSdata_'+ ps.DC_ID" style="margin-right: 5px; margin-top: 3px;"
-                                                   [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
+                                                <i class="glyphicon chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumPSdata_'+ ps.DC_ID" style="margin-right: 5px; margin-top: 3px;" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                                                 <!--<i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"-->
                                             </div>
                                             <div class="fl col-md-10" style="font-size: 12px;">
-                                                <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}"
-                                                     style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">
-                                                    <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                       *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                       *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                       *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                       *ngIf="ps.PASSED_VALIDATION==='Dirty'"
-                                                       title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
-                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                       *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'"
-                                                       title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
-                                                    <div *ngIf="ps.IS_HYBRID_PRC_STRAT==='1'"
-                                                         class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
+                                                <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}" style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">
+                                                    <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Dirty'" title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+                                                    <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                                                    <div *ngIf="ps.IS_HYBRID_PRC_STRAT==='1'" class="isHybridIdent_{{ps.PASSED_VALIDATION}}">H</div>
                                                 </div>
                                                 <div (click)="isCollapsed=!isCollapsed" class="w100">{{ ps.TITLE}}</div>
                                             </div>
@@ -140,19 +123,14 @@
                                             <div class="collapse multi-collapse" id="sumPSdata_{{ps.DC_ID}}" style="margin-bottom: 10px;">
                                                 <div *ngFor="let pt of ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
                                                     <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav" [ngClass]="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
-                                                        <div class="fl textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}"
-                                                             title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | slice:0:1 }}</div>
+                                                        <div class="fl textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | slice:0:1 }}</div>
                                                         <div class="fl" style="margin: 0 8px;" (click)="loadPTE(ps.DC_ID,pt.DC_ID)">
-                                                            <div *ngIf="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'"
-                                                                 (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;"
-                                                                 ui-sref="contract.manager.strategy({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})"
-                                                                 ui-sref-opts="{reload: true}">
+                                                            <div *ngIf="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'" (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;" ui-sref="contract.manager.strategy({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})"
+                                                                ui-sref-opts="{reload: true}">
                                                                 {{ pt.TITLE }}
                                                             </div>
-                                                            <div *ngIf="pt.PASSED_VALIDATION === 'Complete' || pt.PASSED_VALIDATION === 'Finalizing'"
-                                                                 (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;"
-                                                                 ui-sref="contract.manager.strategy.wip({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})"
-                                                                 ui-sref-opts="{reload: true}">
+                                                            <div *ngIf="pt.PASSED_VALIDATION === 'Complete' || pt.PASSED_VALIDATION === 'Finalizing'" (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;" ui-sref="contract.manager.strategy.wip({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})"
+                                                                ui-sref-opts="{reload: true}">
                                                                 {{ pt.TITLE }}
                                                             </div>
                                                         </div>
@@ -183,7 +161,7 @@
                     <div class="lnavContainer">
                         <div>
                             <div>
-                                <div class="fr navIconLnk no-hint-collapse" (click)="toggleLnav()" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
+                                <div class="fr navIconLnk no-hint-collapse" (click)="toggleLnav('MC')" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
                                     <i class="intelicon-shrink flip-horizontal"></i>
                                 </div>
                                 <div class="fr navIconLnk" title="Help" (click)="showHelpTopicContract()"><i class="intelicon-help"></i></div>
@@ -196,7 +174,11 @@
                                 <div class="lnav-sum-menu-item">
                                     <div id="mctDiv" (click)="loadModel('MeetComp')">Meet Comp</div>
                                 </div>
-                                <div class="lnav-sum-menu-item"><a (click)="showHelpTopicMeetComp()"><div>Help</div></a></div>
+                                <div class="lnav-sum-menu-item">
+                                    <a (click)="showHelpTopicMeetComp()">
+                                        <div>Help</div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -207,7 +189,7 @@
                     <div class="lnavContainer">
                         <div>
                             <div>
-                                <div class="fr navIconLnk no-hint-collapse" (click)="toggleLnav()" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
+                                <div class="fr navIconLnk no-hint-collapse" (click)="toggleLnav('MN')" title="Hide Panel" style="border-left: 1px solid #e8eaec !important;">
                                     <i class="intelicon-shrink flip-horizontal"></i>
                                 </div>
                                 <div class="fr navIconLnk" title="Help" (click)="showHelpTopicContract()"><i class="intelicon-help"></i></div>
@@ -248,60 +230,11 @@
     </div>
 </div>
 
-<!--LNav Menu Mini works common for DE,MeetComp,Manage tabs-->
-<div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden">
-    <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
-    <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
-        <i class="intelicon-expand"></i>
-    </div>
-
-    <div class="navIconLnk" title="Add {{psTitle}}" (click)="toggleLnav();toggleAddStrategy()">
-        <i class="intelicon-plus-max"></i>
-    </div>
-    <div class="navIconLnk" title="Filter Current Contract" (click)="toggleLnav();toggleSearch()">
-        <i class="intelicon-search"></i>
-    </div>
-
-    <!--lnavFlowMini-->
-    <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav();gotoDealEntry()">
-        <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
-    </div>
-
-    <div class="navIconLnk" title="Meet Comp" (click)="gotoCompliance()">
-        <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
-    </div>
-
-    <div class="navIconLnk dropdown" title="Contract Manager">
-        <a class="dropdown-toggle" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
-            <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
-            <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
-        </a>
-        <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
-            <li role="presentation">
-                <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
-            </li>
-            <li role="presentation">
-                <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
-            </li>
-            <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
-                <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
-            </li>
-            <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
-                <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
-            </li>
-            <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
-                <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<!--LNav Mini setting as object-->
-<!--<div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden && isLnavHidden.isLnavHide">
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'de'">
+<div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.isLnavHid">
+    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'PT'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
-        <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
+        <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('PT')">
             <i class="intelicon-expand"></i>
         </div>
 
@@ -312,22 +245,24 @@
             <i class="intelicon-search"></i>
         </div>
     </div>
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'mc'">
+
+    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'MC'">
+        <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
+
+        <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('MC')">
+            <i class="intelicon-expand"></i>
+        </div>
+    </div>
+
+    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'MN'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
             <i class="intelicon-expand"></i>
         </div>
     </div>
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'manage'">
-        <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
-        <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
-            <i class="intelicon-expand"></i>
-        </div>
-    </div>
-
-    <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav();gotoDealEntry()">
+    <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav('PT');gotoDealEntry()">
         <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
     </div>
 
@@ -335,27 +270,35 @@
         <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
     </div>
 
-    <div class="navIconLnk dropdown" title="Contract Manager">
+    <!-- <div class="navIconLnk dropdown" title="Contract Manager">
         <a class="dropdown-toggle" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
             <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
             <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
         </a>
         <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
             <li role="presentation">
-                <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                <a ui-sref="contract.summary" ui-sref-opts="{reload: true}">
+                    <div>Approval View</div>
+                </a>
             </li>
             <li role="presentation">
-                <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                <a ui-sref="contract.details" ui-sref-opts="{reload: true}">
+                    <div>Contract Details</div>
+                </a>
             </li>
             <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
                 <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
             </li>
             <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
-                <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                <a ui-sref="contract.export" ui-sref-opts="{reload: true}">
+                    <div>Contract Review</div>
+                </a>
             </li>
             <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
-                <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                <a ui-sref="contract.deals" ui-sref-opts="{reload: true}">
+                    <div>Deals Review</div>
+                </a>
             </li>
         </ul>
-    </div>
+    </div> -->
 </div>-->

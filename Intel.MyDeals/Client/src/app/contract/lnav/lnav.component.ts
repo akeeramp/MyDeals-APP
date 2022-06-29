@@ -23,9 +23,7 @@ export interface contractIds {
 
 export class lnavComponent  {
     constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+     
     }
     @Input() contractId: number;
     @Input() contractData;
@@ -42,8 +40,7 @@ export class lnavComponent  {
     public currentPricingTable: any = {};
     public isAddStrategyHidden = true;
     public isAddPricingTableHidden = true;
-    //public isLnavHidden: any = {};
-    public isLnavHidden = false;
+    public isLnavHidden: any = {isLnavHid:false,source:'PT'};
     public renameMapping = {};
     public container: any;
     public strategyTreeCollapseAll = true; isCollapsed = false; isSearchHidden = false; isSummaryHidden = true;
@@ -391,7 +388,7 @@ export class lnavComponent  {
         this.isAddStrategyBtnHidden = false;
         this.isSearchHidden = false;
         //this.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
-        this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+        //this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         this.clearPtTemplateIcons();
         // $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
@@ -472,10 +469,9 @@ export class lnavComponent  {
     // **** LEFT NAVIGATION Methods ****
     //
 
-    toggleLnav() {
-        this.isLnavHidden = !this.isLnavHidden;
-        //this.isLnavHidden['isLnavHide'] = !this.isLnavHidden['isLnavHide'];
-        window.dispatchEvent(new Event('resize'));
+    toggleLnav(src:string) {
+        this.isLnavHidden['isLnavHid'] = !this.isLnavHidden['isLnavHid'];
+        this.isLnavHidden['source'] = src;
         this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
     }
 
@@ -550,17 +546,11 @@ export class lnavComponent  {
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.filterDealTypes();
-        this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
-		/*this.lnavSvc.isLnavHidden.next({ isLanvHide: false, source: '' });*/
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = false
         });
     }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+  
 }
 
 angular.module("app").directive(

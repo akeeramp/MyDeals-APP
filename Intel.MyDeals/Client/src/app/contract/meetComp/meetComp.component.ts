@@ -16,7 +16,7 @@ import { Keys } from "@progress/kendo-angular-common";
     encapsulation: ViewEncapsulation.None
 })
 
-export class meetCompContractComponent implements OnInit,OnDestroy {
+export class meetCompContractComponent implements OnInit {
  
     @Input() private objSid;
     @Input() private isAdhoc;
@@ -25,9 +25,7 @@ export class meetCompContractComponent implements OnInit,OnDestroy {
     @Input() private pageNm;
 
     constructor(private loggerSvc: logger,private meetCompSvc: meetCompContractService,private formBuilder: FormBuilder ) {
-         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+       
     }
     public spinnerMessageHeader = "";
     public isLoading = false;
@@ -271,12 +269,7 @@ export class meetCompContractComponent implements OnInit,OnDestroy {
         caseSensitive: false,
         operator: "startsWith",
     }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+  
 }
 
 angular

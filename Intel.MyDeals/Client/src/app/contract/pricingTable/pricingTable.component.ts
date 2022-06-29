@@ -89,12 +89,9 @@ export class pricingTableComponent {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
         this.loadAllContractDetails();
-        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden) => {
-            this.isLnavHidden = isLnavHidden;
+        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden:any) => {
+            this.isLnavHidden = isLnavHidden?.isLnavHid;
         });
-        /*this.lnavSvc.isLnavHidden.subscribe((isLnavObj) => {
-            this.isLnavHidden = isLnavObj.isLanvHide;
-        });*/
     }
     ngOnDestroy() {
         //The style removed are adding back
