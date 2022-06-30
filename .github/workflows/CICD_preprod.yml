@@ -20,7 +20,7 @@ on:
         description: 'Move latest code deployed'
         required: true
         type: choice
-        default: 'yes'
+        default: 'no'
         options:
           - 'yes'
           - 'no'

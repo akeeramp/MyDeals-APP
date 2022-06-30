@@ -5,7 +5,7 @@ on:
       ENV:
         description: 'ENV'
         required: true
-        default: 'DR'
+        default: 'CIAR'
         type: choice
         options:
           - 'CIAR'
@@ -16,7 +16,7 @@ on:
         description: 'Move latest code deployed'
         required: true
         type: choice
-        default: 'yes'
+        default: 'no'
         options:
           - 'yes'
           - 'no'
@@ -26,7 +26,7 @@ env:
 jobs:
   Verify-environement:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
-     runs-on: [self-hosted,mydeals-runner01]
+     runs-on: [self-hosted,mydeals-prdui]
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
@@ -37,7 +37,7 @@ jobs:
 
   Restore-packages:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
-     runs-on: [self-hosted,mydeals-runner01]
+     runs-on: [self-hosted,mydeals-prdui]
      needs:  Verify-environement
      steps:
        - name: Restore NUGET Packages 
@@ -47,7 +47,7 @@ jobs:
 
   Build:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
-    runs-on: [self-hosted,mydeals-runner01]
+    runs-on: [self-hosted,mydeals-prdui]
     needs: Restore-packages
     steps:
        - name: MS build publish
@@ -56,15 +56,15 @@ jobs:
 
   Deploy:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
-    runs-on: [self-hosted, mydeals-runner01]
+    runs-on: [self-hosted, mydeals-prdui]
     needs: Build
     environment:
       name: ${{ github.event.inputs.ENV }}
     steps:
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy.ps1 'Deploy_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}' 
-           npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}' 
+             npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
        - name:  Copy Publish Site to latest folder
          run: |
            ./scripts/deploy.ps1 'copy_latest' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
@@ -74,7 +74,7 @@ jobs:
 
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
-    runs-on: [self-hosted, mydeals-runner01]
+    runs-on: [self-hosted, mydeals-prdui]
     needs: Verify-environement
     environment:
       name: ${{ github.event.inputs.ENV }}
