@@ -1732,18 +1732,26 @@ namespace Intel.MyDeals.BusinessRules
 
             string projectName = r.Dc.GetDataElementValue(AttributeCodes.QLTR_PROJECT);
             string endCustomer = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
+            string isSfDeal = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+            IOpDataElement dePSWFStgCd = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
 
             int custId;
             int myPrdMbrSid;
+            IOpDataElement deProductFilter = r.Dc.GetDataElement(AttributeCodes.PRODUCT_FILTER); // Grab the ECAP product and find ID via dimsid 7 since Tenders Search Screen doesn't store ProdMbrSid as AtrbVal like all other screens.
             if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId)) return; // Return on any item that isn't fully populated
-            if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid)) return; // Return on any item that isn't fully populated
+            //if (!int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid)) return; // Return on any item that isn't fully populated
+            if (!int.TryParse(deProductFilter.DimKey.FirstOrDefault(dk => dk.AtrbID == 7).AtrbItemId.ToString(), out myPrdMbrSid)) return; // Return on any item that isn't fully populated
 
             IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.DC_ID);
 
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
             List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+            bool SfConditionsCheck = isSfDeal == "" 
+                || ((dePSWFStgCd.HasValueChanged == true && (dePSWFStgCd.AtrbValue.ToString() != "Requested" && dePSWFStgCd.AtrbValue.ToString() != "Cancelled")) 
+                || dePSWFStgCd.HasValueChanged == false);
 
-            if (overlapsCheckDeals.Count > 0)
+            // If normal deal, apply messages OR If SF deal, bypass message if certain conditions are met, but if no stage change, apply message as needed
+            if (SfConditionsCheck && overlapsCheckDeals.Count > 0)
             {
                 string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
                 deEndCustomer.AddMessage("This deal overlaps with another deal by having the same Customer, End Customer, Project, Product and overlapping dates. Please make changes to this deal so that it no longer overlaps this existing deal(s)  [" + overlaps + "].");

@@ -1510,10 +1510,18 @@ namespace Intel.MyDeals.BusinessLogic
                 bool isPrimedCust = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
                 switch (destinationStage)
                 {
+                    case "Requested":
+                        if (currentPsWfStg == WorkFlowStages.Draft || currentPsWfStg == WorkFlowStages.Submitted)
+                        {
+                            myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Requested);
+                            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Requested);
+                        }
+                        break;
                     case "Submitted": // Tenders Create New Deals request
                         if (currentPsWfStg == WorkFlowStages.Requested)
                         {
                             myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Submitted);
+                            myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Submitted);
                         }
                         else
                         {
@@ -1569,6 +1577,7 @@ namespace Intel.MyDeals.BusinessLogic
                         // TODO: Put in data limits here if business decides to truncate the deals
                         myDealsData[OpDataElementType.PRC_ST].Data[strategyId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
                         myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Cancelled);
+                        myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PS_WF_STG_CD, WorkFlowStages.Cancelled);
                         break;
                 }
 
