@@ -1,17 +1,20 @@
 ﻿import * as angular from "angular";
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { templatesService } from "../../shared/services/templates.service";
 import { lnavService } from "../lnav/lnav.service";
-import { pricingTableComponent } from "../pricingTable/pricingTable.component";
+import { logger } from "../../shared/logger/logger";
+import { lnavUtil } from '../lnav.util';
+import { downgradeComponent } from "@angular/upgrade/static";
 import { headerService } from "../../shared/header/header.service";
+import { templatesService } from "../../shared/services/templates.service";
+import { pricingTableComponent } from "../pricingTable/pricingTable.component";
+import { contractDetailsService } from "../contractDetails/contractDetails.service";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 
 export interface contractIds {
      Model: string;
      C_ID: number;
      ps_id: number;
-     pt_id: number;
+    pt_id: number;
+    contractData: any;
 }
 
 @Component({
@@ -22,7 +25,7 @@ export interface contractIds {
 })
 
 export class lnavComponent  {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService) {
+    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService) {
      
     }
     @Input() contractId: number;
@@ -31,7 +34,6 @@ export class lnavComponent  {
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>(); 
 
     public query = "";
-    public psTITLE = "";
     public newStrategy: any = {};
     public PtDealTypes;
     public ptTITLE = "";
@@ -68,6 +70,7 @@ export class lnavComponent  {
             Model: 'PTE',
             ps_id: psId,
             C_ID: this.contractId,
+            contractData: this.contractData,
             pt_id: ptId
         };
         this.modelChange.emit(contractId_Map);
@@ -78,22 +81,24 @@ export class lnavComponent  {
             Model: model,
             ps_id: 0,
             C_ID: this.contractId,
+            contractData: this.contractData,
             pt_id: 0
         };
         this.selectedModel = model;
         this.modelChange.emit(contractId_Map);
     }
-    /* PRICING STRATEGY */
+
+    // **** PRICING STRATEGY Methods ****
+    toggleAddStrategy() {
+        this.isAddStrategyHidden = !this.isAddStrategyHidden;       
+        this.isSearchHidden = false;
+        this.isAddPricingTableHidden = true;
+    }
+    
     customAddPsValidate() {
         let isvalid = true;       
-        this.isAddStrategyBtnHidden = true;
-        this.newStrategy.TITLE = this.psTITLE;
-        const values = this.newStrategy;
-        this.newStrategy.IS_HYBRID_PRC_STRAT;
-        //this.addPricingStrategy();
-        if (this.psTITLE.length > 80) {
-            isvalid = false;
-        }
+        this.isAddStrategyBtnHidden = true;        
+        const values = this.newStrategy; 
 
         // Clear all values
         angular.forEach(values,
@@ -118,7 +123,7 @@ export class lnavComponent  {
         if (this.contractData.PRC_ST === undefined) {
             this.contractData.PRC_ST = [];
         }
-        var isUnique = this.IsUniqueInList(this.contractData.PRC_ST, this.newStrategy["TITLE"], "TITLE", false);
+        var isUnique = lnavUtil.IsUniqueInList(this.contractData.PRC_ST, this.newStrategy["TITLE"], "TITLE", false);
         if (!isUnique) {
             this.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
             this.newStrategy._behaviors.isError["TITLE"] = true;
@@ -136,28 +141,7 @@ export class lnavComponent  {
         } else {
             this.isAddStrategyBtnHidden = false;
         }
-    }
-
-    IsUniqueInList(listToCheck, value, keyToCompare, checkForDouble) {
-        // Check unique name
-        var count = 0;
-        if (!listToCheck) return true;
-        for (var i = 0; i < listToCheck.length; i++) {
-            if (!!listToCheck[i][keyToCompare] && !!value && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
-                if (checkForDouble) { // having one in he list is okay, but 2 is a no
-                    count += 1;
-                    if (count >= 2) {
-                        return false;
-                    }
-                } else {
-                    // not checking doubles, so any if there is any in the list, then return false
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
+    }   
     addPricingStrategy() {
         const ct = this.contractData;
         const custId = this.contractData.CUST_MBR_SID;
@@ -179,34 +163,29 @@ export class lnavComponent  {
             this.newStrategy.IS_HYBRID_PRC_STRAT = true;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
+            this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {
+                this.contractData = response[0];
+            });
+
         })
+    }   
+
+    refreshContractData(cId) {
+         this.contractDetailsSvc
+            .readContract(cId)
+            .subscribe((response: Array<any>) => {
+                this.contractData = response[0];                
+            });
     }
 
-    getCustId = function () {
-        return this.contractData['CUST_MBR_SID'];
-    }
+    // **** PRICING TABLE Methods ****
 
-    /*PRICING TABLE */
-    filterDealTypes() {
-        let result = {};
-        const dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
-        const items = this.UItemplate["ModelTemplates"].PRC_TBL;
-        angular.forEach(items, function (value, key) {
-            if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {
-                value._custom = {
-                    "ltr": value.name[0],
-                    "_active": false
-                };
-                result[key] = value;
-            }
-        });
-        result = dealDisplayOrder.map((object) => result[object]).filter(obj => obj !== undefined);
-        this.PtDealTypes = result;
-    }
-
-    removeBlanks(val) {
-        return val.replace(/_/g, '');
-    }
+    clearPtTemplateIcons() {
+        /*angular.forEach(this.templates.ModelTemplates.PRC_TBL,
+            function (value, key) {
+                value._custom._active = false;
+            });*/
+    }    
 
     selectPtTemplateIcon(DealType) {
         const Title = this.ptTITLE;
@@ -215,53 +194,7 @@ export class lnavComponent  {
         this.newPricingTable["OBJ_SET_TYPE_CD"] = DealType.name;
         this.newPricingTable["_extraAtrbs"] = DealType.extraAtrbs;
         this.newPricingTable["_defaultAtrbs"] = DealType.defaultAtrbs
-        this.defaultAttribs();
-    }
-
-    defaultAttribs() {
-        const dealType = this.newPricingTable.OBJ_SET_TYPE_CD;
-        const marketSegment = (this.isTenderContract) ? "Corp" : "All Direct Market Segments";
-
-        if (this.newPricingTable["_defaultAtrbs"].REBATE_TYPE) this.newPricingTable["_defaultAtrbs"].REBATE_TYPE.value = this.isTenderContract ? "TENDER" : "MCP";
-        if (this.newPricingTable["_defaultAtrbs"].MRKT_SEG) this.newPricingTable["_defaultAtrbs"].MRKT_SEG.value = marketSegment;
-        if (this.newPricingTable["_defaultAtrbs"].GEO_COMBINED) this.newPricingTable["_defaultAtrbs"].GEO_COMBINED.value = ["Worldwide"];
-        if (this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Billings" : this.newPricingTable["_defaultAtrbs"].PAYOUT_BASED_ON.value = "Consumption";
-        if (this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT) this.newPricingTable["_defaultAtrbs"].PROGRAM_PAYMENT.value = "Backend";
-        if (this.newPricingTable["_defaultAtrbs"].PROD_INCLDS) this.newPricingTable["_defaultAtrbs"].PROD_INCLDS.value = "Tray";
-        if (this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE) this.newPricingTable["_defaultAtrbs"].FLEX_ROW_TYPE.value = "Accrual";
-        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
-        if (!this.isTenderContract && dealType != "KIT") {
-
-            if (this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE && dealType != 'KIT') this.newPricingTable["_defaultAtrbs"].SERVER_DEAL_TYPE.value = "";
-        }
-
-        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS) this.newPricingTable["_defaultAtrbs"].NUM_OF_TIERS.value = "1";
-        if (this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY) this.newPricingTable["_defaultAtrbs"].NUM_OF_DENSITY.value = "1";
-        if (this.isTenderContract) { // Tenders come in without a customer defined immediately
-            // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
-            if (this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE) this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE.value = "Yearly";
-            if (this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL) this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL.value = ""; // Old value "Issue Credit to Billing Sold To"
-        }
-        else {
-            if (this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE) this.newPricingTable["_defaultAtrbs"].PERIOD_PROFILE.value =
-                (this.contractData.Customer == undefined) ? "" : this.contractData.Customer.DFLT_PERD_PRFL;
-            if (this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL) {
-                // Set AR_SETTLEMENT_LVL to customer default first, and if that is blank, then fall back on deal level rules
-                let newArSettlementValue = (this.contractData.Customer == undefined) ? "" : this.contractData.Customer.DFLT_AR_SETL_LVL;
-                if (this.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") { // If this is cust default, force it blank
-                    newArSettlementValue = "";
-                } else {
-                    if (newArSettlementValue == "")
-                        newArSettlementValue = (dealType == "ECAP" ||
-                            dealType == "KIT")
-                            ? "Issue Credit to Billing Sold To"
-                            : "Issue Credit to Default Sold To by Region";
-                }
-                this.newPricingTable["_defaultAtrbs"].AR_SETTLEMENT_LVL.value = newArSettlementValue;
-            }
-        }
-        if (this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_VOL.value = "";
-        if (this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT.value = "";
+        this.newPricingTable = lnavUtil.defaultAttribs(this.newPricingTable, this.isTenderContract, this.contractData);
     }
 
     customAddPtValidate() {
@@ -271,15 +204,13 @@ export class lnavComponent  {
             this.addPricingTable();
         }
     }
+
     addPricingTable() {
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
-        if (!pt) {
-            //.addTableDisabled = false;
-            this.loggerSvc.error("Could not create the Pricing Table.", "Error");
-            //$scope.setBusy("", "");
+        if (!pt) {            
+            this.loggerSvc.error("Could not create the Pricing Table.", "Error");            
             return;
         }
-
         pt.DC_ID = -100;
         pt.DC_PARENT_ID = this.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = this.newPricingTable.OBJ_SET_TYPE_CD;
@@ -299,32 +230,23 @@ export class lnavComponent  {
                 }
             }
         }
-
-        this.lnavSvc.createPricingTable(this.getCustId(), this.contractData.DC_ID, pt).subscribe((response: any) => {
-            pt.DC_ID=response.PRC_TBL[1].DC_ID;
-            this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID);
-            //window.location.href = "/Contract#/contractmanager/" + this.contractData["DC_ID"];
+        this.lnavSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+            pt.DC_ID = response.PRC_TBL[1].DC_ID;
+            this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+                this.contractData = response[0];
+                this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID);
+            });
         })
     }
 
     clearNptTemplate() {
-        this.currentPricingTable = null;
-        //angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
-        //    function (value, key) {
-        //        value._custom._active = false;
-        //    });
+        this.currentPricingTable = null;        
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
 
     /* Ps and Pt Tree*/
-    showAddPricingTable(ps) {
-
-        // if its hybrid PS and already contains a PS do not allow to create one mor pricing table.
-        //if (ps.IS_HYBRID_PRC_STRAT !== undefined && ps.IS_HYBRID_PRC_STRAT == "1" && ps.PRC_TBL != undefined && ps.PRC_TBL.length > 0) {
-        //    kendo.alert("You can add only one pricing table within a hybrid pricing strategy");
-        //    return;
-        //}
+    showAddPricingTable(ps) {       
         this.isAddPricingTableHidden = false;
         this.isAddStrategyHidden = true;
         this.isAddStrategyBtnHidden = true;
@@ -346,6 +268,10 @@ export class lnavComponent  {
         }
     }
 
+    copyPricingStrategy() {
+        alert('all inputs ready, Functionality Coming Soon');
+    }
+
     editPricingStrategyName(ps) {
         alert('all inputs ready, Functionality Coming Soon');
     }
@@ -353,10 +279,8 @@ export class lnavComponent  {
     deletePricingStrategy(ps) {
         alert('all inputs ready, Functionality Coming Soon');
     }
-
-    onSelectMenu(event: any, ps: any): void {
-
-        //Number eventIndex = parseInt(event.index);
+    
+    onSelectMenu(event: any, ps: any): void {        
         switch (parseInt(event.index)) {
             case 0:
                 this.toggleAddStrategy();
@@ -378,9 +302,7 @@ export class lnavComponent  {
         }
 
     }
-    copyPricingStrategy() {
-        alert('all inputs ready, Functionality Coming Soon');
-    }
+    
 
     hideAddPricingTable() {
         this.isAddPricingTableHidden = true;
@@ -388,27 +310,11 @@ export class lnavComponent  {
         this.isAddStrategyBtnHidden = false;
         this.isSearchHidden = false;
         //this.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
-        //this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+        this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         this.clearPtTemplateIcons();
         // $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
-    // **** PRICING TABLE Methods ****
-
-    clearPtTemplateIcons() {
-        /*angular.forEach(this.templates.ModelTemplates.PRC_TBL,
-            function (value, key) {
-                value._custom._active = false;
-            });*/
-    }
-
-    // **** PRICING STRATEGY Methods ****
-
-    toggleAddStrategy() {
-        this.isAddStrategyHidden = !this.isAddStrategyHidden;
-        //this.isAddStrategyBtnHidden = !this.isAddStrategyHidden;
-        this.isSearchHidden = false;
-        this.isAddPricingTableHidden = true;
-    }
+    
 
     //Help navigation
     showHelpTopicMeetComp() {
@@ -449,7 +355,6 @@ export class lnavComponent  {
                 this.extraUserPrivsDetail.push("Super User");
             }
         });
-
         if (event.title == "Deal Entry") {
             this.loadModel('PTE');
         }
@@ -460,33 +365,26 @@ export class lnavComponent  {
             this.loadModel('Manage');
         }
     }
-
     openMeetCompTab() {
         this.selectedTab = 1;
         this.loadModel('MeetComp');
     }
 
-    // **** LEFT NAVIGATION Methods ****
-    //
-
+    // **** LEFT NAVIGATION Methods ****    
     toggleLnav(src:string) {
         this.isLnavHidden['isLnavHid'] = !this.isLnavHidden['isLnavHid'];
         this.isLnavHidden['source'] = src;
         this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
     }
-
-    toggleStrategyTree() {
-        //let container = angular.element(".lnavStrategyContainer");
+    toggleStrategyTree() {        
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = !this.isPSExpanded[i];
         });
         this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
     }
-
     isExistingContract() {
         return this.contractData.DC_ID > 0;
     }
-
     toggleSearch() {
         this.isSearchHidden = !this.isSearchHidden;
         this.isAddStrategyHidden = true;
@@ -503,54 +401,37 @@ export class lnavComponent  {
         this.curPricingTableId = 0;
         this.isPtr = false;
         this.isWip = false;
-
         this.goto('Deal Entry', 'contract.manager');
     }
     gotoCompliance() {
-        if (!this.enableFlowBtn()) return;
+        if (!lnavUtil.enableFlowBtn(this.contractData)) return;
         this.goto('Compliance', 'contract.compliance');
     }
     gotoManage() {
-        if (!this.enableFlowBtn()) return;
+        if (!lnavUtil.enableFlowBtn(this.contractData)) return;
         this.isAddPricingTableHidden = true;
         this.isAddStrategyHidden = true;
         this.isAddStrategyBtnHidden = true;
         this.isSearchHidden = false;
-
         this.goto('Manage', 'contract.summary');
     }
-    goto(mode, state) {
-        //if ($scope.flowMode === mode) return;
-        this.flowMode = mode;
-        //this.go(state, { cid: this.contractData.DC_ID });
-    }
 
-    enableFlowBtn() {
-        if (this.contractData.PRC_ST === undefined || this.contractData.PRC_ST.length === 0) return false;
+    goto(mode, state) {       
+        this.flowMode = mode;        
+    } 
 
-        var passedItems = [];
-        for (var ps = 0; ps < this.contractData.PRC_ST.length; ps++) {
-            var psItem = this.contractData.PRC_ST[ps];
-            if (psItem.PRC_TBL !== undefined) {
-                for (var pt = 0; pt < psItem.PRC_TBL.length; pt++) {
-                    if (psItem.PRC_TBL[pt].PASSED_VALIDATION === "Complete") {
-                        passedItems.push(psItem.PRC_TBL[pt]);
-                    }
-                }
-            }
-        }
-
-        return passedItems.length > 0;
+    removeBlanks(val) {
+        return val.replace(/_/g, '');
     }
 
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
-        this.filterDealTypes();
+        this.newStrategy.IS_HYBRID_PRC_STRAT = false;
+        this.PtDealTypes = lnavUtil.filterDealTypes(this.UItemplate);
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = false
         });
     }
-  
 }
 
 angular.module("app").directive(

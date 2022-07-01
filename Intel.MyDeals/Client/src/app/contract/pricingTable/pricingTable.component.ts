@@ -13,6 +13,7 @@ export interface contractIds {
     C_ID: number;
     ps_id: number;
     pt_id: number;
+    contractData: any;
 }
 
 @Component({
@@ -53,6 +54,7 @@ export class pricingTableComponent {
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
+                this.contractData = contractModel.contractData;
                 this.enableDealEditorTab();
             }
             //defaulting the PTE page to load the images
