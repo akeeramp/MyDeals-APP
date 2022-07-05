@@ -19,10 +19,11 @@ import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
 import { PTE_CellChange_Util } from '../PTEUtils/PTE_CellChange_util';
-//import { AutoFillComponent } from '../ptModals/autofillsettings/autofillsettings.component';
+import { AutoFillComponent } from '../ptModals/autofillsettings/autofillsettings.component';
+import { lnavService } from '../lnav/lnav.service';
 
 @Component({
-    selector: 'pricingTableEditor',
+    selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
 export class pricingTableEditorComponent implements OnChanges {
@@ -31,9 +32,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 private templateService: templatesService,
                 private pricingTableSvc: pricingTableEditorService,
                 private loggerService: logger,
-        protected dialog: MatDialog) {
-      
-      //this.dropdownResponseInitialization();
+                private lnavSVC:lnavService,
+              protected dialog: MatDialog) {
+     /*  custom cell editot logic starts here*/
       this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
         public TEXTAREA: any;
         public BUTTON: any;
@@ -108,6 +109,7 @@ export class pricingTableEditorComponent implements OnChanges {
           });
         }
       }
+     /*  custom cell editot logic ends here*/
     }
     @Input() in_Cid: any = '';
     @Input() in_Ps_Id: any = '';
@@ -124,6 +126,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private curPricingTable: any = {};
     private pricingTableDet: Array<any> = [];
     private pricingTableTemplates: any = {}; // Contains templates for All Deal Types
+    private autoFillData:any=null;
     private ColumnConfig :Array<Handsontable.ColumnSettings>=[];
     // To get the selected row and col for product selector
     private multiRowDelete:Array<number>=[];
@@ -392,27 +395,41 @@ export class pricingTableEditorComponent implements OnChanges {
     },0);
   
     }
+    openAutoFill(){
+      let autofillData= this.autoFillData;
+      const dialogRef = this.dialog.open(AutoFillComponent, {
+          height:'750px',
+          width: '1500px',
+          data: autofillData,
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if(result){
+            //the scuscriber to this in Lnav ngonint code and this fill help autofill setting from lnav screen
+            this.autoFillData=result;
+            this.lnavSVC.autoFillData.next(this.autoFillData);
+           }
+        });
+  }
+    ngOnInit(){
+       //code for autofill change to accordingly change values
+       this.pteService.autoFillData.subscribe(res => {
+        this.autoFillData = res;
+      },err => {
+        this.loggerService.error( "pteService::isAutoFillChange**********",err);
+      }
+    );
+    }
     ngOnChanges(): void {
       this.loadPTE();
     }
-    // openAutofill(){
-    //   const dialogRef = this.dialog.open(AutoFillComponent, {
-    //     height:'600px',
-    //     width: '1000px',
-    //     data: this.curPricingTable,
-    //   });
-    //   dialogRef.afterClosed().subscribe(result => {
-    //     if (result) {
-    //       console.log(result);
-    //     }
-    //   });
-    // }
     ngAfterViewInit(){
       //loading after the View init from there onwards we can reuse the hotTable instance
       this.hotTable= this.hotRegisterer.getInstance(this.hotId);
       // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
       new PTE_CellChange_Util(this.hotTable);
     }
+
    
 }
 

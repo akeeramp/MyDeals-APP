@@ -11,6 +11,7 @@ import { marketSegComponent } from "../contract/ptModals/marketSegment/marketSeg
 import { meetCompContractComponent } from "../contract/meetComp/meetComp.component";
 import { dealEditorComponent } from "../contract/dealEditor/dealEditor.component";
 import { contractManagerComponent } from "../contract/contractManager/contractManager.component";
+import { AutoFillComponent } from "../contract/ptModals/autofillsettings/autofillsettings.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -24,6 +25,7 @@ export let contractComponents = [
     marketSegComponent,
     meetCompContractComponent,
     dealEditorComponent,
-    contractManagerComponent
+    contractManagerComponent,
+    AutoFillComponent
 
 ]

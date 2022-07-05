@@ -6,8 +6,11 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { headerService } from "../../shared/header/header.service";
 import { templatesService } from "../../shared/services/templates.service";
 import { pricingTableComponent } from "../pricingTable/pricingTable.component";
+import { MatDialog } from '@angular/material/dialog';
+import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
+import { pricingTableEditorService } from "../pricingTableEditor/pricingTableEditor.service";
 
 export interface contractIds {
      Model: string;
@@ -25,7 +28,7 @@ export interface contractIds {
 })
 
 export class lnavComponent  {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService) {
+    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService,private contractDetailsSvc: contractDetailsService,private dialog:MatDialog,private pteSVC:pricingTableEditorService) {
      
     }
     @Input() contractId: number;
@@ -56,9 +59,10 @@ export class lnavComponent  {
     private superPrefix = "";
     private extraUserPrivsDetail: Array<string> = [];
     private contractType = "Contract";
-    private selectedTab = 0;
+    private selectedTab:number = 0;
     private selectedModel;
     public flowMode = "Deal Entry";
+    private autoFillData:any=null;
     // Initialize current strategy and pricing table variables
     public curPricingTable: any = {}; curPricingTableId = 0;
     curPricingStrategyId = 0; curPricingStrategy: any = {}; spreadNeedsInitialization = true;
@@ -279,9 +283,37 @@ export class lnavComponent  {
     deletePricingStrategy(ps) {
         alert('all inputs ready, Functionality Coming Soon');
     }
-    
-    onSelectMenu(event: any, ps: any): void {        
-        switch (parseInt(event.index)) {
+    onSelectMenu(event: any, ps: any): void {
+        //Number eventIndex = parseInt(event.index);
+        switch (event.item?.text) {
+            case "Edit Autofill Defaults":
+                this.openAutoFill();
+                break;
+            default:
+                break;
+        }
+
+    }
+    openAutoFill(){
+        //sample code will be changed once actual code implemented
+        let autofillData=this.autoFillData.hasOwnProperty('ISTENDER')?this.autoFillData:{ "ISTENDER": false, "isVistexHybrid": "0", "DEALTYPE": "ECAP", "EXTRA": {}, "DEFAULT": { "REBATE_TYPE": { "value": "OTHER", "label": "Rebate Type", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetFilteredRebateTypes/false/ECAP", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "MRKT_SEG": { "value": ["All Direct Market Segments"], "label": "Market Segment", "type": "EMBEDDEDMULTISELECT", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "You cannot mix ALL & other market segments.\\n\\nNon Corp selects: Consumer retail pull, Education, Government, & SMB", "helpMsg": "You cannot mix ALL & other market segments.\\n\\nNon Corp selects: Consumer retail pull, Education, Government, & SMB" }, "GEO_COMBINED": { "value": "[EMEA],Worldwide", "label": "Geo", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetGeosDropdowns", "opLookupText": "dropdownName", "opLookupValue": "dropdownName", "validMsg": "", "helpMsg": "" }, "PAYOUT_BASED_ON": { "value": "Billings", "label": "Payout Based On", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "PROGRAM_PAYMENT": { "value": "Backend", "label": "Program Payment", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "PROD_INCLDS": { "value": "Tray", "label": "Media", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdowns/PROD_INCLDS", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "PERIOD_PROFILE": { "value": "Bi-Weekly (2 weeks)", "label": "Period Profile", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdownsWithCustomerId/PERIOD_PROFILE", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "AR_SETTLEMENT_LVL": { "value": "Cash", "label": "Settlement Level", "type": "BUTTONGROUP", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "/api/Dropdown/GetDropdowns/AR_SETTLEMENT_LVL", "opLookupText": "DROP_DOWN", "opLookupValue": "DROP_DOWN", "validMsg": "", "helpMsg": "" }, "REBATE_OA_MAX_VOL": { "value": "", "label": "Overarching Maximum Volume", "type": "IntegerTextBox", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "", "opLookupText": "", "opLookupValue": "", "validMsg": "", "helpMsg": "" }, "REBATE_OA_MAX_AMT": { "value": "", "label": "Overarching Maximum Dollar", "type": "NumericTextBox", "isRequired": false, "isError": false, "isHidden": false, "opLookupUrl": "", "opLookupText": "", "opLookupValue": "", "validMsg": "", "helpMsg": "" } }, "ISVISTEX": true, "CUSTSID": "27" };
+        const dialogRef = this.dialog.open(AutoFillComponent, {
+            height:'750px',
+            width: '1500px',
+            data: autofillData,
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            if(result){
+                //the scuscriber to this in PTE ngonint code and this fill help autofill setting from PTE screen
+                this.autoFillData=result
+                this.pteSVC.autoFillData.next(result);
+             }
+          });
+    }
+    onSelectMenu_old(event: any, ps: any): void {
+        //Number eventIndex = parseInt(event.index);
+        switch (event.item?.text) {
             case 0:
                 this.toggleAddStrategy();
                 break;
@@ -302,7 +334,6 @@ export class lnavComponent  {
         }
 
     }
-    
 
     hideAddPricingTable() {
         this.isAddPricingTableHidden = true;
@@ -310,11 +341,10 @@ export class lnavComponent  {
         this.isAddStrategyBtnHidden = false;
         this.isSearchHidden = false;
         //this.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
-        this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+        //this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         this.clearPtTemplateIcons();
         // $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
-    
 
     //Help navigation
     showHelpTopicMeetComp() {
@@ -430,6 +460,12 @@ export class lnavComponent  {
         this.PtDealTypes = lnavUtil.filterDealTypes(this.UItemplate);
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = false
+        });
+       //code for autofill change to accordingly change values
+       this.lnavSvc.autoFillData.subscribe(res => {
+        this.autoFillData = res;
+        },err => {
+            this.loggerSvc.error( "lnavSvc::isAutoFillChange**********",err);
         });
     }
 }

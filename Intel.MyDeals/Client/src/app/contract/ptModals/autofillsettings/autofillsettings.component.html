@@ -1,26 +1,92 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
-
 <div class="container-fluid overflow">
-    <div class="row">
-        <div class="col">
-            <h1 mat-dialog-title>{{data.name}}</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div mat-dialog-content>
-                <p>If blending, Worldwide will not be blended with any geos.</p>
-                <kendo-multiselect [data]="listItems" [(ngModel)]="value" [autoClose]="false"></kendo-multiselect>
-                <input type="checkbox" kendoCheckBox [(ngModel)]="isBlend" /> Blend
+    <div class="modal-content" style="background-color:white;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;padding:15px;">
+        <div class="autofill-settings modal-header">
+            <div class="row">
+                <div class="col">
+                    <div class="cursorArea autofillHeader">
+                        <p class="autofill-header-title">{{autofillData.DEALTYPE}} {{rebateTypeTitle}} Autofill Settings</p>
+                        <p class="autofill-header-tip">Use the selections below to auto-populate your deal table, you may also overwrite the autofill selections made here in the grid</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row justify-content-end">
-        <div class="col">
-            <div mat-dialog-actions>
-                <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button>
-                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+        <div class="autofill-settings modal-body">
+            <div class="row" style="padding-bottom:50px">
+                <div class="col-md-8">
+                    <div *ngFor="let item of autofillData.DEFAULT |keyvalue">
+                        <div *ngIf="item.value.type == 'BUTTONGROUP'" [hidden]="autofillData.ISTENDER && (item.key == 'REBATE_TYPE' || item.key == 'AR_SETTLEMENT_LVL' || item.key == 'PERIOD_PROFILE')">
+                            <!-- <div op-control-data-element op-class="'md intel'" ng-model="autofillData.DEFAULT" op-cd="key" op-type="value.type" op-label="value.label" op-lookup-url="value.opLookupUrl" op-lookup-text="value.opLookupText" op-lookup-value="value.opLookupValue" op-is-form="true"
+                                op-extra="value.extra" op-ui-mode="'HORIZONTAL'"></div> -->
+                            <!-- Conditions to check the dropdown  attribute  match with buttongroup attribute and iterate over dropdown values-->
+                            <div class="row">
+                                <div class="col">
+                                    <h5>{{item.value.label}}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div *ngFor="let drops of dropdownResponses |keyvalue">
+                                        <div *ngIf="drops.key==item.key">
+                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN'">
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)">{{elem.DROP_DOWN}}
+                                                    </mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                            <!-- The attribute Geo has different value field and its multi select -->
+                                            <div *ngIf="item.value.opLookupText=='dropdownName'">
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" #group="matButtonToggleGroup" [(value)]="geoValues" (change)="OnGeoChange(item.key,group.value)" multiple>
+                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.dropdownName}}">{{elem.dropdownName}}
+                                                    </mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div *ngFor="let item of autofillData.DEFAULT |keyvalue">
+                        <div *ngIf="item.value.type == 'EMBEDDEDMULTISELECT'">
+                            <p>EMBEDDEDMULTISELECT</p>
+                            <!-- <div op-control-data-element op-class="'md intel'" ng-model="autofillData.DEFAULT" op-cd="key" op-type="value.type" op-label="value.label" op-lookup-url="value.opLookupUrl" op-lookup-text="value.opLookupText" op-lookup-value="value.opLookupValue" op-is-form="true"
+                                op-extra="true" op-expanded="true" op-ui-mode="'VERTICAL'"></div> -->
+                        </div>
+                    </div>
+                    <br />
+                    <div *ngIf="autofillData.isVistexHybrid == '1' || autofillData.DEALTYPE == 'FLEX'" class="autoFillOverarching">
+                        <div *ngIf="autofillData.isVistexHybrid == '1'" class="autoFillOverarchingTitle">
+                            Please fill out either Max Volume or Amount, but not both.
+                        </div>
+                        <br />
+                        <div class="col-md-8 row">
+                            <p>isVistexHybrid</p>
+                            <!-- <div *ngIf="autofillData.isVistexHybrid == '1'" op-class="'md intel minPadding'" op-control-data-element ng-model="autofillData.DEFAULT" op-cd="'REBATE_OA_MAX_VOL'" op-type="'NUMERIC'" op-label="'Overarching Maximum Volume:'" op-min-value="0" op-is-form="true"
+                                op-style="'color:#1a3e6f;font-weight:bold;width:375px;'" op-max-value="99999999" op-ui-mode="'HORIZONTAL'">
+                            </div>
+                            <div op-class="'md intel minPadding'" op-control-data-element ng-model="autofillData.DEFAULT" op-cd="'REBATE_OA_MAX_AMT'" op-type="'NUMERIC'" op-label="'Overarching Maximum Dollar($):'" op-min-value="0" op-format="'c0'" op-is-form="true" op-style="'color:#1a3e6f;font-weight:bold;width:375px;'"
+                                op-max-value="999999999" op-ui-mode="'HORIZONTAL'">
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="row" style="width:100%">
+                <div class="col-md-10">
+                    <!--EMPTY SPACE-->
+                </div>
+                <div class="col-md-2">
+                    <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button>
+                    <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>

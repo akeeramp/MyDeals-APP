@@ -14,12 +14,14 @@
                         <kendo-tabstrip (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
-                                    <pricingTableEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></pricingTableEditor>
+                                    <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                    </pricing-table-editor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                             <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true" [disabled]="isDETabEnabled == false">
                                 <ng-template kendoTabContent>
-                                    <dealEditor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate"></dealEditor>
+                                    <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                    </deal-editor>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                         </kendo-tabstrip>
@@ -84,7 +86,8 @@
                     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
                 </div>
                 <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'">
-                    <contractManager [contractData]="contractData" [UItemplate]="UItemplate"></contractManager>
+                    <contract-manager [contractData]="contractData" [UItemplate]="UItemplate">
+                    </contract-manager>
                 </div>
                 <div *ngIf="selLnav=='overlapDiv'">
                     <p>Overlapping Deals screen</p>

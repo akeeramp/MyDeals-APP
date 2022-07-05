@@ -1,0 +1,50 @@
+.modal-header {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.buttongroup-btn {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+
+.buttongroup-btn {
+    border-bottom: transparent;
+}
+
+.opUiContainer.md .opUiLabel.buttonGroupLabel {
+    font-size: 13px !important;
+}
+
+.msPopup {
+    max-height: 200px;
+}
+
+.autofill-header-title {
+    color: #1a3e6f;
+    font-size: 24px !important;
+    text-align: center;
+}
+
+.autoFillOverarching .k-numerictextbox {
+    padding: 0px;
+}
+
+.minPadding {
+    padding: 2px;
+}
+
+.autoFillOverarchingTitle {
+    color: darkslategray;
+    font-size: 14px !important;
+    font-weight: 600;
+    margin: -5px 0 -15px 0;
+}
+
+
+/*This "opUiContainer.md .opUiLabel" overrides site-wide CSS*/
+
+.opUiContainer.md .opUiLabel {
+    font-size: 13px !important;
+    width: 203px;
+}

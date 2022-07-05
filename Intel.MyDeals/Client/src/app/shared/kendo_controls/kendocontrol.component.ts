@@ -274,6 +274,10 @@ export class KendoControlComponent {
     );
     // saveAs("https://file-examples-com.github.io/uploads/2017/10/file-sample_150kB.pdf", "sample.pdf");
   }
+  togglePGM(){
+    console.log('togglePGM***********');
+    (<any>$('#collapseOne')).collapse('toggle');
+  }
   ngOnInit() {
     this.autoData = this.autoList.slice();
     this.conditionArray = this.nestedArray;

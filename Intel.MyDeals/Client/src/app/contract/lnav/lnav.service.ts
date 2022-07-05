@@ -15,6 +15,7 @@ export class lnavService {
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
     public isLnavHidden = new BehaviorSubject({isLnavHid:false,source:'PT'});
+    public autoFillData = new BehaviorSubject({});
 
     // #### PRICING STRATEGY CRUD ####  
     public createPricingStrategy(custId, contractId, ps) {

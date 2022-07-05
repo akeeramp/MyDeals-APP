@@ -15,7 +15,7 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'dealEditor',
+    selector: 'deal-editor',
     templateUrl: 'Client/src/app/contract/dealEditor/dealEditor.component.html',
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None

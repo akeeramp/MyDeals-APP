@@ -11,7 +11,7 @@ import { ThemePalette } from "@angular/material/core";
 
 
 @Component({
-    selector: "contractManager",
+    selector: "contract-manager",
     templateUrl: "Client/src/app/contract/contractManager/contractManager.component.html",
     styleUrls: ['Client/src/app/contract/contractManager/contractManager.component.css']
 })
