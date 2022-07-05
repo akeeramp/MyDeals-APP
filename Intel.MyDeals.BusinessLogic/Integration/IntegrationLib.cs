@@ -499,6 +499,10 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Product Check
 
             #region Deal Stability and Overlapping Check
+            // Select IQR End Customer or Primed End Customer as End Customer for My Deals (Moved up prior to deal stability checks end)
+            if (endCustomer != null && endCustomer != "") customer = endCustomer;
+            else customer = unifiedEndCustomer;
+
             if (geoCombined == null || geoCombined == "" || ecapPrice == "" || dealStartDate == null || dealEndDate == null || billingStartDate == null || billingEndDate == null ||
                 dealType == "" || groupType == "" || marketSegment == "")
             {
@@ -508,7 +512,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(initWipId, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(initWipId, dealStartDate, dealEndDate, projectName, customer, custId, myPrdMbrSid); // endCustomer = customer
 
             if (overlapsCheckDeals.Count > 0)
             {
@@ -520,8 +524,6 @@ namespace Intel.MyDeals.BusinessLogic
             #endregion Deal Stability and Overlapping Check
 
             //Prime Customer Information 
-            if (endCustomer != null && endCustomer != "") customer = endCustomer;
-            else customer = unifiedEndCustomer;
             if (customer.ToUpper() != "ANY")
             {
                 EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
@@ -1279,7 +1281,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
             int myPrdMbrSid = int.TryParse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid) ? myPrdMbrSid : 0;
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(dealId, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(dealId, dealStartDate, dealEndDate, projectName, customer, custId, myPrdMbrSid); // endCustomer = customer
 
             if (overlapsCheckDeals.Count > 0)
             {
