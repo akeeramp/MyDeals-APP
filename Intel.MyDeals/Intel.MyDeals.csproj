@@ -851,8 +851,8 @@
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.css" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.html" />
     <Content Include="Client\src\app\contract\ptModals\geo\geo.component.html" />
-	<Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.html" />
-	<Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.css" />
     <Content Include="Client\src\app\contract\ptModals\productSelector\productselector.component.html" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
@@ -2271,8 +2271,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />
-	<TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
-	<TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />

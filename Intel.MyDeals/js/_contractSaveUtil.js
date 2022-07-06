@@ -381,7 +381,7 @@ contractSaveUtil.validateHybridFields = function (data, curPricingStrategy, curP
         contractSaveUtil.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
         if (isFlexDeal) {
             data = contractSaveUtil.clearValidation(data, 'END_CUSTOMER_RETAIL', curPricingTable);
-            contractSaveUtil.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], wipData, spreadDs, curPricingTable);
+            contractSaveUtil.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], curPricingTable);
         }
         //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
     }
