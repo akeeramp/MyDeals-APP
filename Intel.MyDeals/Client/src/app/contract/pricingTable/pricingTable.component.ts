@@ -14,6 +14,7 @@ export interface contractIds {
     ps_id: number;
     pt_id: number;
     contractData: any;
+   // isVisible: boolean;
 }
 
 @Component({
@@ -33,9 +34,10 @@ export class pricingTableComponent {
     public curPricingStrategy = {};
     public pricingTableData = {};
     public c_Id: number;
+    type:string
     public ps_Id: number;
     public pt_Id: number;
-    private isPTETab = true;
+    private isPTETab = false;
     private isDETab = false;
     private selLnav = 'PTE';
     private isPTEEnable = false;
@@ -44,18 +46,28 @@ export class pricingTableComponent {
     public UItemplate = null;
     private isDETabEnabled = false;
     public isLnavHidden: boolean;
+    public searchedContractData = {
+        Model: "",
+        C_ID:0,
+        ps_id: 0,
+        pt_id: 0,
+        contractData: "",
+    }
     //public isLnavHidden: any = {};
 
-    loadModel(contractModel: contractIds) {
+    loadModel(contractModel: contractIds, isRedirect:boolean=false) {
         this.selLnav = contractModel.Model
         if (this.selLnav == 'PTE') {
+              //highligh the selected lnav PT in case request coming fom search result for PTE.
+              this.lnavSvc.lnavHieight.next(contractModel);
+            if (!isRedirect) this.isPTETab = true;
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
                 this.isPTEEnable = true;
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
-                this.enableDealEditorTab();
+                this.enableDealEditorTab(isRedirect);
             }
             //defaulting the PTE page to load the images
             else {
@@ -71,46 +83,87 @@ export class pricingTableComponent {
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
     onTabSelect(e: SelectEvent) {
+        //window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + this.c_Id + "/0/0/0";
         console.log("onTabSelect  ***********", e);
+        if (e.title == "Deal Editor") {
+            this.isDETab = true; this.isPTETab = false
+        }
+        else {
+            this.isDETab = false; this.isPTETab = true;
+        }
     }
-    loadAllContractDetails() {
+
+    loadAllContractDetails(IDS=[]) {
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
             this.contractData = response[0];
-            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
-                this.UItemplate = response;
-                this.isLNavEnable=true;
-            },(error) => {
-                this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
-            })
+            //if it is Tender deal redirect to Tender manager
+            if (response[0].IS_TENDER == 1) window.location.href = "/Dashboard#/tendermanager/" + this.c_Id;
+            else {
+                this.loadTemplateDetails(IDS, this.contractData );
+            }
         },(error) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
         })
      
     }
+
+    loadTemplateDetails(IDS, contractData) {
+        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+            this.UItemplate = response;
+            this.isLNavEnable = true;
+            if (IDS.length > 1) {
+                //this conditions means the page is loaded from search result
+                if (this.type == "PS" || this.type == "PT" || this.type == "WIP") {
+                    this.searchedContractData.C_ID = this.c_Id;
+                    this.searchedContractData.ps_id = Number(IDS[1])
+                    this.searchedContractData.pt_id = this.pt_Id = Number(IDS[2])
+                    this.searchedContractData.Model = "PTE";
+                    this.searchedContractData.contractData = contractData;
+                    this.loadModel(this.searchedContractData, true);
+                }
+
+            }
+        }, (error) => {
+            this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
+        })
+    }
+
+    fetchDetailsfromURL(url) {
+        var index = url.indexOf('contractmanager')
+        //type of ID(Contract,PS,PT or WIP)
+        this.type = url[index + 1];
+        var IDS = url.slice(index + 2);
+        this.c_Id = Number(IDS[0]);
+        this.loadAllContractDetails(IDS);
+    }
+
+
     ngOnInit() {
         const url = window.location.href.split('/');
-        this.c_Id = Number(url[url.length - 1]);
-        this.loadAllContractDetails();
-        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden:any) => {
+        this.fetchDetailsfromURL(url)
+        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
             this.isLnavHidden = isLnavHidden?.isLnavHid;
         });
     }
+
     ngOnDestroy() {
         //The style removed are adding back
         $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
-    async enableDealEditorTab() {
+    async enableDealEditorTab(isRedirect = false) {
         let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
         });
-
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             this.isDETabEnabled = true;
-        } else {
-            this.isDETabEnabled = false;
-        }
+            //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
+            if (isRedirect) {
+                if (this.type != "PT") { this.isDETab = true; this.isPTETab = false}
+                else { this.isDETab = false; this.isPTETab = true }
+            }
+        } else { this.isDETabEnabled = false;  }
     }
 }
 angular.module("app").directive(

@@ -75,7 +75,7 @@ export class contractDetailsComponent {
     onFileUploadComplete() {
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
-            window.location.href = "#contractmanager/" + this.contractData["DC_ID"];
+            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
         }
     }
 
@@ -357,7 +357,7 @@ export class contractDetailsComponent {
                         this.uploadFile();
                     }
                     else {
-                        window.location.href = "#contractmanager/" + this.contractData["DC_ID"];
+                        window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                     }
                     }
             });
@@ -562,7 +562,7 @@ export class contractDetailsComponent {
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {
-                            window.location.href = "#contractmanager/" + this.contractData["DC_ID"];
+                            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"]+"/0/0/0";
                         }
                     }
                 }

@@ -27,7 +27,7 @@
                             <div *ngFor="let item of objTypes['CNTRCT'].result">
                                 <mat-list-item>
                                     <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}:&nbsp;<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
-                                    <div (click)="gotoOBJ(item.DC_ID,'CNTRCT')" class="search-result-item">{{item.TITLE}}</div>
+                                    <div (click)="gotoOBJ(item,'CNTRCT')" class="search-result-item">{{item.TITLE}}</div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </div>
@@ -55,7 +55,7 @@
                             <div *ngFor="let item of objTypes['PRC_ST'].result">
                                 <mat-list-item>
                                     <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
-                                    <div (click)="gotoOBJ(item.DC_ID,'PRC_ST')" class="search-result-item">{{item.TITLE}}</div>
+                                    <div (click)="gotoOBJ(item,'PRC_ST')" class="search-result-item">{{item.TITLE}}</div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </div>
@@ -83,7 +83,7 @@
                             <div *ngFor="let item of objTypes['PRC_TBL'].result">
                                 <mat-list-item>
                                     <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
-                                    <div (click)="gotoOBJ(item.DC_ID,'PRC_TBL')" class="search-result-item">{{item.TITLE}}</div>
+                                    <div (click)="gotoOBJ(item,'PRC_TBL')" class="search-result-item">{{item.TITLE}}</div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </div>
@@ -111,7 +111,7 @@
                             <div *ngFor="let item of objTypes['WIP_DEAL'].result">
                                 <mat-list-item>
                                     <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
-                                    <div (click)="gotoOBJ(item.DC_ID,'WIP_DEAL')" class="search-result-item">{{item.TITLE}}</div>
+                                    <div (click)="gotoOBJ(item,'WIP_DEAL')" class="search-result-item">{{item.TITLE}}</div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </div>

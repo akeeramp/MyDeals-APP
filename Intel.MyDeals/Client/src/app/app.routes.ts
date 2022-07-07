@@ -408,7 +408,7 @@ angular
             })
 
             .state("contractmanager", {
-                url: "/contractmanager/:cid",
+                url: "/contractmanager/:type/:cid/:PSID/:PTID/:DealID",
                 abstract: false,
                 views: {
                     mainView: {

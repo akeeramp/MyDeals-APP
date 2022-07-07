@@ -16,7 +16,9 @@ export class GlobalSearchResultsComponent  {
     
     }
     //these are input coming from gloablsearch component
-    @Input() searchText="";
+    @Input() searchText = "";
+    response :any
+    
     @Input() opType="ALL";
     @Output() getWindowWidth = new EventEmitter;  
     @Output() isWindowOpen=new EventEmitter;
@@ -112,30 +114,51 @@ export class GlobalSearchResultsComponent  {
         this.getObjectTypeResult(this.opType);
      }
     }
-    gotoOBJ(DCID:any,opType:string){
-     this.isWindowOpen.emit(false);
-      if (opType == 'CNTRCT') {
-          if (this.isAngularJSEnabled) {
-              window.location.href = "/Contract#/manager/" + DCID;
-          }
+    gotoOBJ(item: any, opType: string) {
+        let DCID = item.DC_ID
+        this.isWindowOpen.emit(false);
+        if (DCID <= 0) {
+            this.loggerSvc.error("Unable to locate the Pricing Strategy.", "error")
+            return;
+        }
+      if (opType == 'CNTRCT' ) {
+          if (this.isAngularJSEnabled) window.location.href = "/Contract#/manager/" + DCID;
+          else  window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + DCID + "/0/0/0";
+     }
+      else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {
+          if (this.isAngularJSEnabled) window.location.href = (opType == 'PRC_ST') ? "/advancedSearch#/gotoPs/" + DCID : (opType == 'PRC_TBL') ? "/advancedSearch#/gotoPt/" + DCID : "/advancedSearch#/gotoDeal/" + DCID;
           else {
-              window.location.href = "/Dashboard#/contractmanager/" + DCID;
+              // calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
+              //in case of WIp deal click on the global search results we need contract id ,PS and PT ID to navigate to respective deal so calling this function to hit the api to get the details
+              //in case of PT ID click on the global search results we need contract ID which is not present in item so calling API to get the data
+              this.getIDs(DCID, item.DC_PARENT_ID, opType)
           }
-     }
-     else if(opType=='PRC_ST'){
-      window.location.href = "/advancedSearch#/gotoPs/" + DCID;
-     }
-     else if(opType=='PRC_TBL'){
-      window.location.href = "/advancedSearch#/gotoPt/" + DCID;
-     }
-     else {
-      window.location.href = "/advancedSearch#/gotoDeal/" + DCID;
      }
     }
+
     viewMore(opType:string){
       this.resultTake=50;
       this.getObjectTypeResult(opType);
     }
+
+    getIDs(dcId, parentdcID, opType = "") {
+        this.globalSearchSVC.getContractIDDetails(dcId,opType).subscribe(res => {
+            if (res) {
+                this.response = res;
+                console.log(this.response.ContractId)
+                if (opType == "WIP_DEAL")
+                window.location.href = "/Dashboard#/contractmanager/WIP/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/" + dcId;
+                else if (opType == "PRC_ST")
+                    window.location.href = "/Dashboard#/contractmanager/PS/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/0";
+                else window.location.href = "/Dashboard#/contractmanager/PT/" + this.response.ContractId + "/" + parentdcID + "/" + dcId + "/0";
+            }
+        },
+            error => {
+                this.loggerSvc.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
+            }
+        );
+    }
+
     //yet to migrate Advance Search Screen
     gotoAdvanced() {
         //$("#winGlobalSearchResults").data("kendoWindow").close();

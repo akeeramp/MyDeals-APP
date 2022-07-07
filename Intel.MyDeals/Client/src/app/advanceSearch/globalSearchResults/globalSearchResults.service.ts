@@ -9,6 +9,7 @@ import * as _ from "underscore";
 
 export class globalSearchResultsService { 
     public apiBaseUrl = "/api/Search/GetGlobalSearchList/";
+    apiUrl = "";
 
     constructor(private httpClient: HttpClient) {
       }
@@ -17,6 +18,12 @@ export class globalSearchResultsService {
        return this.httpClient.get(this.apiBaseUrl + `${opType}/${take}/${search}`);
     }
 
+    public getContractIDDetails(id, opType) {
+        if (opType == "WIP_DEAL") this.apiUrl = "GotoDeal/";
+        else if (opType == "PRC_ST") this.apiUrl = "GotoPS/";
+        else this.apiUrl = "GotoPT/";
+        return this.httpClient.get("api/Search/" + this.apiUrl + id);
+    }
 
 }
 

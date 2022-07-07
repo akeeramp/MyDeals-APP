@@ -16,6 +16,7 @@ export class lnavService {
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
     public isLnavHidden = new BehaviorSubject({isLnavHid:false,source:'PT'});
     public autoFillData = new BehaviorSubject({});
+    public lnavHieight = new BehaviorSubject({Model:'PTE',C_ID:0,ps_id:0,pt_id:0,contractData:{}});
 
     // #### PRICING STRATEGY CRUD ####  
     public createPricingStrategy(custId, contractId, ps) {

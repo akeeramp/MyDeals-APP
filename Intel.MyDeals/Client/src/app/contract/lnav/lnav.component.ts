@@ -61,6 +61,7 @@ export class lnavComponent  {
     private contractType = "Contract";
     private selectedTab:number = 0;
     private selectedModel;
+    private contractId_Map:contractIds={Model:'PTE',C_ID:0,ps_id:0,pt_id:0,contractData:{}};
     public flowMode = "Deal Entry";
     private autoFillData:any=null;
     // Initialize current strategy and pricing table variables
@@ -70,18 +71,20 @@ export class lnavComponent  {
 
     //Output Emitter to load the Pricing table data
     loadPTE(psId, ptId) {
-        const contractId_Map:contractIds={
+        //this is to high
+        this.contractId_Map={
             Model: 'PTE',
             ps_id: psId,
             C_ID: this.contractId,
             contractData: this.contractData,
             pt_id: ptId
         };
-        this.modelChange.emit(contractId_Map);
+       
+        this.modelChange.emit(this.contractId_Map);
     }
 
     loadModel(model:string) {
-        const contractId_Map:contractIds={
+        this.contractId_Map={
             Model: model,
             ps_id: 0,
             C_ID: this.contractId,
@@ -89,7 +92,7 @@ export class lnavComponent  {
             pt_id: 0
         };
         this.selectedModel = model;
-        this.modelChange.emit(contractId_Map);
+        this.modelChange.emit(this.contractId_Map);
     }
 
     // **** PRICING STRATEGY Methods ****
@@ -466,6 +469,15 @@ export class lnavComponent  {
         this.autoFillData = res;
         },err => {
             this.loggerSvc.error( "lnavSvc::isAutoFillChange**********",err);
+        });
+    }
+    ngAfterViewInit(){
+        //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
+        this.lnavSvc.lnavHieight.subscribe(res => {
+            this.contractId_Map = res;
+            (<any>$(`#sumPSdata_${this.contractId_Map.ps_id}`)).collapse('show');
+        },err => {
+            this.loggerSvc.error( "lnavSvc::lnavHieight**********",err);
         });
     }
 }

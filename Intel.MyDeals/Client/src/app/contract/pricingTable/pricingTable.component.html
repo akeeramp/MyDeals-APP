@@ -13,15 +13,18 @@
                     <div *ngIf="isPTEEnable==true">
                         <kendo-tabstrip (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
-                                <ng-template kendoTabContent>
-                                    <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
-                                    </pricing-table-editor>
+                                <ng-template kendoTabContent >
+                                    <div *ngIf="isPTETab">
+                                        <pricing-table-editor  [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                        </pricing-table-editor>
+                                    </div>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                             <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true" [disabled]="isDETabEnabled == false">
                                 <ng-template kendoTabContent>
-                                    <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
-                                    </deal-editor>
+                                    <div *ngIf="isDETab">
+                                        <deal-editor  [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                        </deal-editor></div>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                         </kendo-tabstrip>

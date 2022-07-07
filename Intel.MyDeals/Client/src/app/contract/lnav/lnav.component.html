@@ -123,9 +123,9 @@
                                         <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false" title="Stage:{{ ps.WF_STG_CD}}">
                                             <div class="collapse multi-collapse" id="sumPSdata_{{ps.DC_ID}}" style="margin-bottom: 10px;">
                                                 <div *ngFor="let pt of ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
-                                                    <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav" [ngClass]="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
+                                                    <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav">
                                                         <div class="fl textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | slice:0:1 }}</div>
-                                                        <div class="fl" style="margin: 0 8px;" (click)="loadPTE(ps.DC_ID,pt.DC_ID)">
+                                                        <div class="fl" style="margin: 0 8px;" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}" (click)="loadPTE(ps.DC_ID,pt.DC_ID)">
                                                             <div *ngIf="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'" (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;">
                                                                 {{ pt.TITLE }}
                                                             </div>
@@ -267,5 +267,5 @@
 
     <div class="navIconLnk" title="Meet Comp" (click)="gotoCompliance()">
         <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
-    </div>   
+    </div>
 </div>

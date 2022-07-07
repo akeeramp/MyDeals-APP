@@ -5,11 +5,28 @@
 <div class="container-fluid overflow">
     <div class="row">
         <div class="col">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button (click)="savePTE()">GeneratePTR</button>
-            <button (click)="undoPTE()">undo</button>
-            <button (click)="redoPTE()">redo</button>
-            <button (click)="openAutoFill()">openauto</button>
+            <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="savePTE()">
+                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                <span class="text">
+                    Save & Validate
+                </span>
+            </button>
+            <button class="btn btn-sm ssToolbarBtn" (click)="undoPTE()">
+                <i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+            </button>
+            <button class="btn btn-sm ssToolbarBtn" (click)="redoPTE()">
+                <i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+            </button>
+            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()">
+                <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                AutofillDefaults
+            </button>
             <!-- <button (click)="openAutofill()">autofill</button> -->
         </div>
     </div>

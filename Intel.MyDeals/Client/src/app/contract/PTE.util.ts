@@ -22,38 +22,45 @@ export class PTEUtil {
     };
 
     static pivotData(PTR: any, curPT: any): any {
-        if (this.isPivotable(curPT)) {
-            let result = [];
+        try {
+            if (this.isPivotable(curPT)) {
+                let result = [];
 
-            // Identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
-            let distDCID = _.uniq(PTR, 'DC_ID');
-            _.each(distDCID, (item) => {
-                let num_tier = this.numOfPivot(item);
-                for (let i = 1; i <= num_tier; i++) {
-                    let newValid = {};
-                    let obj = JSON.parse(JSON.stringify(item));
-                    //setting the dimenstion values
-                    obj['STRT_VOL'] = obj[`STRT_VOL_____10___${i}`];
-                    obj['TIER_NBR'] = i;
-                    obj['RATE'] = obj[`RATE_____10___${i}`];
-                    obj['END_VOL'] = obj[`END_VOL_____10___${i}`];
+                // Identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
+                let distDCID = _.uniq(PTR, 'DC_ID');
+                _.each(distDCID, (item) => {
+                    let num_tier = this.numOfPivot(item);
+                    for (let i = 1; i <= num_tier; i++) {
+                        let newValid = {};
+                        let obj = JSON.parse(JSON.stringify(item));
+                        //setting the dimenstion values
+                        obj['STRT_VOL'] = obj[`STRT_VOL_____10___${i}`];
+                        obj['TIER_NBR'] = i;
+                        obj['RATE'] = obj[`RATE_____10___${i}`];
+                        obj['END_VOL'] = obj[`END_VOL_____10___${i}`];
 
-                    // Setting the validMsg for error
-                    if (obj._behaviors && obj._behaviors.validMsg) {
-                        _.each(obj._behaviors.validMsg, (val, key) => {
-                            val = JSON.parse(val);
-                            if (_.keys(val)[0] == i.toString()) {
-                                newValid[key] = _.values(val)[0];
-                            }
-                        });
-                        obj._behaviors.validMsg = newValid;
+                        // Setting the validMsg for error
+                        if (obj._behaviors && obj._behaviors.validMsg) {
+                            _.each(obj._behaviors.validMsg, (val, key) => {
+                                if(typeof val  == 'object'){
+                                    val = JSON.parse(val);
+                                    if (_.keys(val)[0] == i.toString()) {
+                                        newValid[key] = _.values(val)[0];
+                                    }
+                                }
+                            });
+                            obj._behaviors.validMsg = newValid;
+                        }
+                        result.push(obj);
                     }
-                    result.push(obj);
-                }
-            });
-            return result;
-        } else {
-            return PTR;
+                });
+                return result;
+            } else {
+                return PTR;
+            }
+        }
+        catch(ex){
+            console.error('pivotData*******************',ex);
         }
     }
 
