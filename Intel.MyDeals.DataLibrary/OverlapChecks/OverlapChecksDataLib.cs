@@ -17,9 +17,9 @@ namespace Intel.MyDeals.DataLibrary
     public class OverlapChecksDataLib : IOverlapChecksDataLib
     {
 
-        public List<OverlappingTenders> CheckForOverlappingTenders(int dealId, DateTime startDate, DateTime endDate, string projectName, string endCustomerName, int customerId, int productId)
+        public List<OverlappingTenders> CheckForOverlappingTenders(int dealId, DateTime startDate, DateTime endDate, string projectName, string endCustomerName, string endCustomerCntry, int customerId, int productId)
         {
-            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Start: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, customerId, productId);
+            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Start: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId);
 
             var ret = new List<OverlappingTenders>();
 
@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataLibrary
                 END_DATE = endDate,
                 QLTR_PROJECT = projectName,
                 END_CUSTOMER_RETAIL = endCustomerName,
+                END_CUSTOMER_CNTRY = endCustomerCntry,
                 CUST_MBR_SID = customerId,
                 PRD_MBR_SID = productId
             };
@@ -63,7 +64,7 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
 
-            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Done: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, customerId, productId);
+            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Done: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId);
 
             return ret;
         }

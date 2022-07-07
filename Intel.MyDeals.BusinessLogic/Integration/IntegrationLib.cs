@@ -512,7 +512,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(initWipId, dealStartDate, dealEndDate, projectName, customer, custId, myPrdMbrSid); // endCustomer = customer
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(initWipId, dealStartDate, dealEndDate, projectName, customer, endCustomerCountry, custId, myPrdMbrSid); // endCustomer = customer
 
             if (overlapsCheckDeals.Count > 0)
             {
@@ -1281,7 +1281,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Overlaps check, no other tender deal with same Customer/Product/Dates/End Customer/Project can exist, block creeation if they do.
             int myPrdMbrSid = int.TryParse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRODUCT_FILTER), out myPrdMbrSid) ? myPrdMbrSid : 0;
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(dealId, dealStartDate, dealEndDate, projectName, customer, custId, myPrdMbrSid); // endCustomer = customer
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(dealId, dealStartDate, dealEndDate, projectName, customer, endCustomerCountry, custId, myPrdMbrSid); // endCustomer = customer
 
             if (overlapsCheckDeals.Count > 0)
             {

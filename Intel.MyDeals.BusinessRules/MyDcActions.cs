@@ -1732,6 +1732,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string projectName = r.Dc.GetDataElementValue(AttributeCodes.QLTR_PROJECT);
             string endCustomer = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
+            string endCustomerCntry = r.Dc.GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
             string isSfDeal = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
             IOpDataElement dePSWFStgCd = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
 
@@ -1745,7 +1746,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.DC_ID);
 
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, custId, myPrdMbrSid);
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, endCustomerCntry, custId, myPrdMbrSid);
             bool SfConditionsCheck = isSfDeal == "" 
                 || ((dePSWFStgCd.HasValueChanged == true && (dePSWFStgCd.AtrbValue.ToString() != "Requested" && dePSWFStgCd.AtrbValue.ToString() != "Cancelled")) 
                 || dePSWFStgCd.HasValueChanged == false);
