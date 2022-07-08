@@ -6,6 +6,7 @@ import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctP
 import { gridStatusBoardComponent } from '../core/gridStatusBoard/gridStatusBoard.component';
 import { contractStatusBoardComponent } from '../core/gridStatusBoard/contractStatusBoard.component';
 import { AdminBannerComponent } from '../core/adminBanner/adminBanner.component';
+import { dealDetailsComponent } from '../core/gridCell/dealDetail/dealDetail.component';
 
 export let coreComponents = [
     PingComponent,
@@ -15,5 +16,6 @@ export let coreComponents = [
     iconMctPctComponent,
     gridStatusBoardComponent,
     contractStatusBoardComponent,
-    AdminBannerComponent
+    AdminBannerComponent,
+    dealDetailsComponent
 ]

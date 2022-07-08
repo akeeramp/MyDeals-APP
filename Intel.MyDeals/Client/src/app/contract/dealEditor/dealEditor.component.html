@@ -20,7 +20,7 @@
                             <!--<deal-tool-angular></deal-tool-angular>-->
                         </div>
                         <div *ngIf="column.field === 'details'">
-                            <!--<deal-details-angular></deal-details-angular>-->
+                            <deal-details-angular [dealDetail]='dataItem'></deal-details-angular>                           
                         </div>
                         <div *ngIf="column.template.includes('gridUtils.uiControlWrapper')" [innerHTML]="uiControlWrapper(dataItem, column.field, '')"
                              class="uiControlDiv wrap" [ngClass]="{'isReadOnlyCell': isReadonlyCell(dataItem, column.field), 'isDirtyCell': isDirtyCell(dataItem,column.field), 'isErrorCell': isErrorCell(dataItem,column.field)}">
