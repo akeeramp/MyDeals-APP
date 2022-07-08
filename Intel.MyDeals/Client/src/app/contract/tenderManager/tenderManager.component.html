@@ -1,1 +1,71 @@
-﻿<h3>Tender Deal {{c_Id}} Loaded</h3>
+﻿<div *ngIf="!isLoading" class="pricing-strategy-status-bar fl" style="margin-top: 20px;position: absolute;">
+    <div class="valid_Dirty" style="padding: 5px 8px;float:left">
+        <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
+        <span>{{contractData.Customer.CUST_NM}}: </span>
+        <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
+    </div>
+    <button class="ng-scope btn btn-primary deleteContract" (click)="deleteContract()" title='Delete Contract'>
+        <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
+    </button>
+</div>
+
+<div class="row wizard" style="padding-top: 50px;">
+    <div class="col-xs-3 col-md-3">
+        <div class="wizard-panel first">
+            <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+                <span class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'PTR'}">1</span>
+            </a>
+        </div>
+        <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+            <div class="wizard-step-text">
+                <h4><i [hidden]="selectedTAB == 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
+                <p>Adhoc Tender Table Editor Manager</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-3 col-md-3">
+        <div class="wizard-panel">
+            <span id="tenderWidDE" class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'DE'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">2</span>
+        </div>
+        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
+            <div class="wizard-step-text">
+                <h4><i [hidden]="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
+                <p>Adhoc Tender Deal Editor Manager</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-3 col-md-3">
+        <div class="wizard-panel">
+            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')">3</span>
+        </div>
+        <a (click)="tenderWidgetPathManager('', 'MC')">
+            <div class="wizard-step-text">
+                <h4><i [hidden]="selectedTAB == 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
+                <p>Tender Meet Comp Manager</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-xs-3 col-md-3">
+        <div class="wizard-panel last">
+            <span id="tenderWidPD" class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'PD'}" (click)="tenderWidgetPathManager('', 'PD')">4</span>
+            <span kendo-tooltip="" k-content="'Publishing will separate the deals entered in the table below so that they can be individually approved.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
+        </div>
+        <a (click)="tenderWidgetPathManager('', 'PD')">
+            <div class="wizard-step-text">
+                <h4><i [hidden]="selectedTAB == 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
+                <p>Converting into individual deals.</p>
+            </div>
+        </a>
+    </div>
+</div>
+<div *ngIf="selectedTab == 'PTR' && !isLoading" class="col-md-12">
+    <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+    </pricing-table-editor>
+</div>
+<div *ngIf="selectedTab == 'DE'" class="col-md-12">
+    <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+    </deal-editor>
+</div>
+<div *ngIf="selectedTab == 'MC'" class="col-md-12">
+    <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
+</div>

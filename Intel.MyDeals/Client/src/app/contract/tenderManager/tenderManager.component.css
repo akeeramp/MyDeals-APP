@@ -1,0 +1,36 @@
+﻿#tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR {
+    cursor: pointer !important;
+}
+
+.k-master-row > td {
+    border-top: 2px solid #b1babf !important;
+}
+
+.pricing-strategy-status-bar {
+    color: #000000;
+    padding: 1px 0 0 6px;
+    font-size: 10px;
+    font-family: arial;
+    text-transform: uppercase;
+    height: 16px;
+}
+
+.contractHeaderId {
+    color: #00aeef !important;
+}
+
+.deleteContract {
+    cursor: pointer !important;
+    font-size: 14px !important;
+    float: right !important;
+    padding: 2px !important;
+    text-transform: none !important;
+    border: none;
+    color: #fafafa !important;
+    background: #707a02 !important;
+    border-radius: 0px;
+}
+
+.valid_Dirty {
+    background: #e8eaec;
+}

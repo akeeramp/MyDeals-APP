@@ -856,6 +856,7 @@
     <Content Include="Client\src\app\contract\ptModals\productSelector\productselector.component.html" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
+    <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.css" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.html" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.css" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.html" />
