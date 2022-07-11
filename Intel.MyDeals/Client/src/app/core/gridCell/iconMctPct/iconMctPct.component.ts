@@ -48,7 +48,7 @@ export class iconMctPctComponent implements OnInit {
         return "intelicon-help-solid";
     }
 
-    getColor(k: string, c: string): string {
+    getColor(k: string, c: string, colorDictionary): string {
         if (c === undefined) { return "#aaaaaa" }
         c = this.titleCase(c);
         if (c === "Incomplete") c = "InComplete"; // It should all be upper case now, but, just in case...
@@ -65,12 +65,12 @@ export class iconMctPctComponent implements OnInit {
 
     getColorPct(d: string): string{
         if (!d) { d = "InComplete"; }
-        return this.getColor('pct', d);
+        return this.getColor('pct', d, colorDictionary);
     }
 
     getColorMct(d: string): string{
         if (!d) { d = "InComplete"; }
-        return this.getColor('mct', d);
+        return this.getColor('mct', d, colorDictionary);
     }
 }
 angular

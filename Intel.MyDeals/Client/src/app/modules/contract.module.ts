@@ -12,6 +12,8 @@ import { meetCompContractComponent } from "../contract/meetComp/meetComp.compone
 import { dealEditorComponent } from "../contract/dealEditor/dealEditor.component";
 import { contractManagerComponent } from "../contract/contractManager/contractManager.component";
 import { AutoFillComponent } from "../contract/ptModals/autofillsettings/autofillsettings.component";
+import { managerPctComponent } from "../contract/managerPct/managerPct.component";
+import { pctChildGridComponent } from "../contract/managerPct/pctChildGrid.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -26,6 +28,7 @@ export let contractComponents = [
     meetCompContractComponent,
     dealEditorComponent,
     contractManagerComponent,
-    AutoFillComponent
-
+    AutoFillComponent,
+    managerPctComponent,
+    pctChildGridComponent
 ]

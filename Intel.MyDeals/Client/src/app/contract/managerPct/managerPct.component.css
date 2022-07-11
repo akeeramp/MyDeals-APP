@@ -1,4 +1,4 @@
-.dealTools {
+﻿.dealTools {
     margin-left: -5px !important
 }
 
@@ -20,16 +20,8 @@
     overflow: auto
 }
 
-.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after {
-    content: 'Accepted' !important;
-}
-
-.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after {
-    content: 'Pending' !important;
-}
-
 #sum-wrapper {
-    height: 80vh;
+    height: 75vh;
     overflow: scroll;
     padding: 100px 0 0 0;
     -webkit-box-sizing: border-box;
@@ -39,7 +31,7 @@
 
 #sum-header {
     height: 100px;
-    margin-top: -100px;
+    margin-top: -100px !important;
     font-size: 14px;
     font-family: "Intel Clear";
     font-weight: 200;
@@ -138,7 +130,6 @@
 .k-dialog .k-content {
     margin-top: -30px
 }
-
 
 #sum-container .k-textbox.k-space-left {
     padding-left: 2.1em
@@ -383,10 +374,50 @@ a.lnkIcon {
     cursor: default
 }
 
+.org {
+    color: #FFA300 !important
+}
+
 .bigIcon {
-    font-size: 26px;
+    font-size: 26px
 }
 
 .medIcon {
-    font-size: 18px;
-} 
+    font-size: 18px
+}
+
+.sumGridOptionsExpand>.k-grid-content-locked {
+    height: auto !important
+}
+
+.k-grid-content-locked .k-grouping-row td {
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 0 solid transparent;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent
+}
+
+#pctTab .k-tabstrip-items .k-item {
+    background: #fdfdfd;
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
+    color: #003C71 !important;
+    padding: .6em !important;
+    text-transform: none !important;
+    background-color: #fff;
+    border-bottom-width: 0
+}
+
+#pctTab .k-tabstrip-items .k-state-active {
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+    border-color: #b1babf;
+    border-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    border-radius: 4px 4px 0 0
+}

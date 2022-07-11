@@ -103,10 +103,10 @@
                             <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'"><i *ngIf="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid bigIcon"></i><i *ngIf="ps.CAP_MISSING_FLG==='1' || ps.COST_MISSING_FLG==='1'" style="color:#f3d54e"
                                     class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
-                            <td style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
+                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.COST_TEST_RESULT" [dataValue]="ps.COST_TEST_RESULT" [canEdit]="CAN_EDIT_COST_TEST" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
-                            <td style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
+                            <td  class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.MEETCOMP_TEST_RESULT" [dataValue]="ps.MEETCOMP_TEST_RESULT" [canEdit]="CAN_VIEW_MEET_COMP" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
                         </tr>
@@ -129,12 +129,12 @@
                                     </td>
                                     <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA'"><i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e"
                                             title="{{getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i></td>
-                                    <td style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
+                                    <td class="medIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
                                         <a class="lnkIcon" [ngClass]="{'noPointer': !CAN_EDIT_COST_TEST}">
                                             <icon-mct-pct-angular ngDefaultControl [dataValue]="pt.COST_TEST_RESULT" [(ngModel)]="pt.COST_TEST_RESULT" [canEdit]='CAN_EDIT_COST_TEST' [iconClass]="medIcon"></icon-mct-pct-angular>
                                         </a>
                                     </td>
-                                    <td style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
+                                    <td class="medIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
                                         <a class="lnkIcon" [ngClass]="{'noPointer': !CAN_VIEW_MEET_COMP}">
                                             <icon-mct-pct-angular ngDefaultControl [dataValue]="pt.MEETCOMP_TEST_RESULT" [(ngModel)]="pt.MEETCOMP_TEST_RESULT" [canEdit]="CAN_VIEW_MEET_COMP" [iconClass]="medIcon"></icon-mct-pct-angular>
                                         </a>
