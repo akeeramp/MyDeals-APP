@@ -232,4 +232,51 @@ export class PTEUtil {
         return PTR;
     }
 
+    // set PTR_SYS_PRD attr value after getting transform results
+    static cookProducts(transformResults, rowData): any {
+        let data = rowData;
+       
+        // Process multiple match products
+        var isAllValidated = true;
+        var key: any;
+        for (key in transformResults.ProdctTransformResults) {
+            let r = key - 1;
+            // Flag dependency column errors - these columns may cause product translator to not find a valid product
+            if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
+                for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
+                    data[r]._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
+                    data[r]._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
+                }
+            }
+            // If no duplicate or invalid add valid JSON
+            data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+        }
+        return data;
+    }
+
+    static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
+        // Validate columns that product is dependent on
+        for (var i = 0; i < currentPricingTableRowData.length; i++) {
+            for (var d = 0; d < productValidationDependencies.length; d++) {
+                if (currentPricingTableRowData[i][productValidationDependencies[d]] === null || currentPricingTableRowData[i][productValidationDependencies[d]] === "") {
+                    PTEUtil.setBehaviors(currentPricingTableRowData[i]);
+                    currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]] = true;
+                    currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]] = "This field is required.";
+                    currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]] = true;
+                    hasProductDependencyErr = true;
+                }
+                else {
+                    if (currentPricingTableRowData[i]._behaviors !== undefined
+                        && currentPricingTableRowData[i]._behaviors.isError !== undefined
+                        && currentPricingTableRowData[i]._behaviors.validMsg !== undefined
+                        && currentPricingTableRowData[i]._behaviors.isRequired !== undefined) {
+                        delete currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]];
+                        delete currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]];
+                        delete currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]];
+                    }
+                }
+            }
+        }
+        return hasProductDependencyErr;
+    }
 }
