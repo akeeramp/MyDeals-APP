@@ -1,6 +1,7 @@
 <!--<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />-->
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
@@ -80,7 +81,7 @@
                         <span>{{dataItem.COMP_SKU}}</span>
                     </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                        <kendo-combobox #custDropDown [data]="distinctPrimitive(column.field)" [formControl]="formGroup.get('COMP_SKU')" [allowCustom]="true"></kendo-combobox>
+                        <kendo-combobox #custDropDown [data]="meetCompSkuDropdownData" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompSku"></kendo-combobox>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="170" [headerClass]="{'headerClass':true}">
@@ -92,7 +93,7 @@
                         <span>{{dataItem.COMP_PRC}}</span>
                     </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                        <kendo-combobox #custDropDown [data]="distinctPrimitive(column.field)" [formControl]="formGroup.get('COMP_PRC')" [allowCustom]="true"></kendo-combobox>
+                        <kendo-combobox #custDropDown [data]="meetCompPrcDropdownData" textField="COMP_PRC" valueField="COMP_PRC" placeholder="Select Comp PRC" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompPrc"></kendo-combobox>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="CAP" title="CAP" width="120" [headerClass]="{'headerClass':true}">
@@ -205,7 +206,7 @@
                                     <span>{{childDataItem.COMP_SKU}}</span>
                                 </ng-template>
                                 <ng-template kendoGridEditTemplate let-childDataItem="childDataItem" let-formGroup="formGroup" let-column="column">
-                                    <kendo-combobox #custDropDown [data]="distinctPrimitive(column.field)" [formControl]="formGroup.get('COMP_SKU')" [allowCustom]="true"></kendo-combobox>
+                                    <kendo-combobox #custDropDown [data]="meetCompSkuDropdownData" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompSku"></kendo-combobox>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="150">
@@ -213,7 +214,7 @@
                                     <span>{{childDataItem.COMP_PRC}}</span>
                                 </ng-template>
                                 <ng-template kendoGridEditTemplate let-childDataItem="childDataItem" let-formGroup="formGroup" let-column="column">
-                                    <kendo-combobox #custDropDown [data]="distinctPrimitive(column.field)" [formControl]="formGroup.get('COMP_PRC')" [allowCustom]="true"></kendo-combobox>
+                                    <kendo-combobox #custDropDown [data]="meetCompPrcDropdownData" textField="COMP_PRC" valueField="COMP_PRC" placeholder="Select Comp PRC" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompPrc"></kendo-combobox>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="CAP" title="CAP" width="120">
