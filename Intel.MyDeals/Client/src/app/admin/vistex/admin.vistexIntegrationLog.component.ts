@@ -8,7 +8,7 @@ import * as moment from 'moment';
 import { GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
 import { process,State,distinct} from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
-
+import * as _ from 'underscore';
 @Component({
     selector: "vistexIntegrationLog",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
@@ -239,7 +239,7 @@ export class adminVistexIntegrationLogComponent implements OnInit,OnDestroy {
         }
         this.dsaService.updateVistexStatusNew(postDataObj).subscribe( (response)=> {
             if (response == strTransantionId) {
-                angular.forEach(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
+                _.each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
                     dataItem.ERR_MSG = errMsg == null ? '' : errMsg;
                     dataItem.RQST_STS = rqstStatus;
                     dataItem.BTCH_ID = rqstStatus.toLowerCase() == 'pending' ? '00000000-0000-0000-0000-000000000000': dataItem.BTCH_ID;

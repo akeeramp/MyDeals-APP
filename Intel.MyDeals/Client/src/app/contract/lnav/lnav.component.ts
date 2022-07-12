@@ -11,7 +11,7 @@ import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { pricingTableEditorService } from "../pricingTableEditor/pricingTableEditor.service";
-
+import * as _ from 'underscore';
 export interface contractIds {
     Model: string;
     C_ID: number;
@@ -110,13 +110,13 @@ export class lnavComponent {
         const values = this.newStrategy;
 
         // Clear all values
-        angular.forEach(values,
+        _.each(values,
             function (value, key) {
                 values._behaviors.validMsg[key] = "";
                 values._behaviors.isError[key] = false;
             });
         // Check required
-        angular.forEach(values,
+        _.each(values,
             function (value, key) {
                 if (key[0] !== '_' &&
                     !Array.isArray(value) &&

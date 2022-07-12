@@ -1,0 +1,118 @@
+﻿<div *ngIf="in_Field_Name == 'DEAL_DESC'">
+    <kendo-textbox (change)="valueChange(in_DataItem, in_Field_Name)" [(ngModel)]="in_DataItem.DEAL_DESC">
+    </kendo-textbox>
+</div>
+<div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'">
+    <div *ngIf="in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP'" class="dimKey">{{translateDimKey(ecapDimKey)}}</div>
+    <div *ngIf="in_Field_Name == 'KIT_ECAP'" class="dimKey">{{translateDimKey(kitEcapdim)}}</div>
+    <kendo-numerictextbox [ngModel]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
+                          (ngModelChange)="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] = $event : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] = $event : in_DataItem[in_Field_Name] = $event"
+                          [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                          [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
+                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD') ? 'n0' : 'n2'"
+                          [autoCorrect]="autoCorrect">
+    </kendo-numerictextbox>
+</div>
+<div *ngIf="((in_Field_Name == 'ECAP_PRICE' || in_Field_Name == 'DSCNT_PER_LN') && in_Deal_Type == 'KIT')">
+    <div *ngFor="let key Of tierArray(in_DataItem[in_Field_Name]); let i = index">
+        <div *ngIf="(in_Field_Name == 'ECAP_PRICE' && i > 0) || in_Field_Name == 'DSCNT_PER_LN'">
+            <div class="dimKey">{{translateDimKey(key)}}</div>
+            <kendo-numerictextbox [ngModel]="in_DataItem[in_Field_Name][key]"
+                                  (ngModelChange)="in_DataItem[in_Field_Name][key] = $event"
+                                  [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                                  [value]="in_DataItem[in_Field_Name][key]"
+                                  [autoCorrect]="autoCorrect">
+            </kendo-numerictextbox>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END' || in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'
+     || in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'">
+    <kendo-datepicker [ngModel]="in_DataItem[in_Field_Name]"
+                      (ngModelChange)="in_DataItem[in_Field_Name] = $event"
+                      [value]="in_DataItem[in_Field_Name]"
+                      (valueChange)="valueChange(in_DataItem, in_Field_Name)" format="MM/dd/yyyy">
+    </kendo-datepicker>
+</div>
+<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER')">
+    <div *ngFor="let fieldDet of fields">
+        <div *ngIf="fieldDet.title === 'Tier'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title !== 'Tier'" class="col-md-3 tierHeader tierBorder">{{fieldDet.title}}</div>
+    </div>
+    <div *ngFor="let key Of tierArray(in_DataItem.TIER_NBR); let i = index">
+        <div class="col-md-12 rowDetailHeight">
+            <div *ngFor="let fieldDet of fields">
+                <div class="col-md-3 rowDetailHeight">
+                    <span class="tierColumn rowValueHeight" *ngIf="fieldDet.title == 'Tier' || (fieldDet.title.includes('Start') && (i != 0 || in_DataItem['HAS_TRACKER'] == 1)) || (fieldDet.title.includes('End') && in_DataItem['HAS_TRACKER'] == 1 && i != (in_DataItem['NUM_OF_TIERS']-1))">{{in_DataItem[fieldDet.field][key]}}</span>
+                    <span class="rowValueHeight" *ngIf="(fieldDet.title.includes('Start') && (i == 0 && in_DataItem['HAS_TRACKER'] == 0)) || ((fieldDet.title.includes('End') && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1)))) || fieldDet.title.includes('Rate'))">
+                        <kendo-numerictextbox class="rowValueHeight"
+                                              [ngModel]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                              (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
+                                              [value]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                              [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
+                                              [autoCorrect]="autoCorrect" [format]="(fieldDet.field.includes('RATE') || in_Deal_Type == 'REV_TIER' )? 'n2' : 'n0'">
+                        </kendo-numerictextbox>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')">
+    <div *ngFor="let fieldDet of fields">
+        <div *ngIf="fieldDet.title === 'Tier'" class="col-md-2 tierHeader">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title === 'Band' || fieldDet.title === 'Rate'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.title !== 'Band' && fieldDet.title !== 'Rate'" class="col-md-2 tierHeader tierBorder">{{fieldDet.title}}</div>
+    </div>
+    <div *ngFor="let key Of tierArray(in_DataItem.TIER_NBR); let i = index">
+        <div class="col-md-12 rowBorder">
+            <div *ngFor="let fieldDet of fields">
+                <div *ngIf="fieldDet.field == 'TIER_NBR'">
+                    <div class="col-md-2 topPadding">
+                        <span>{{in_DataItem[fieldDet.field][key]}}</span>
+                    </div>
+                </div>
+                <div *ngIf="fieldDet.field == 'DENSITY_BAND' || fieldDet.field == 'DENSITY_RATE'">
+                    <div class="col-md-3 topPadding">
+                        <div *ngFor="let keyBand Of tierArray(in_DataItem.NUM_OF_DENSITY); let band = index">
+                            <div *ngIf="fieldDet.field == 'DENSITY_RATE'">
+                                <span class="densityRatePadding">
+                                    <kendo-numerictextbox [ngModel]="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key]"
+                                                          (ngModelChange)="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key] = $event"
+                                                          [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
+                                                          [value]="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key]"
+                                                          [autoCorrect]="autoCorrect" format="n2">
+                                    </kendo-numerictextbox>
+                                </span>
+                            </div>
+                            <div *ngIf="fieldDet.field == 'DENSITY_BAND'">
+                                <span class="displayBlock rowBorder" [style.height.px]="30">
+                                    {{in_DataItem[fieldDet.field]['8___' + (band+1)]}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="fieldDet.field == 'STRT_PB' || fieldDet.field == 'END_PB'">
+                    <div class="col-md-2 topPadding">
+                        <div *ngIf="(fieldDet.field == 'STRT_PB' && (i>0 || in_DataItem['HAS_TRACKER'] == '1')) || (fieldDet.field =='END_PB' && in_DataItem['HAS_TRACKER'] == '1' && i != (in_DataItem['NUM_OF_TIERS']-1))">
+                            <span class="displayBlock densityPadding" [style.height.px]="30">
+                                {{in_DataItem[fieldDet.field][key]}}
+                            </span>
+                        </div>
+                        <div *ngIf="(fieldDet.field == 'STRT_PB' && i==0 && in_DataItem['HAS_TRACKER'] == '0') || (fieldDet.field =='END_PB' && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1))))">
+                            <span>
+                                <kendo-numerictextbox [ngModel]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                                      (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
+                                                      [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
+                                                      [value]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                                      [autoCorrect]="autoCorrect" format="n3">
+                                </kendo-numerictextbox>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,9 @@ import { meetCompContractComponent } from "../contract/meetComp/meetComp.compone
 import { dealEditorComponent } from "../contract/dealEditor/dealEditor.component";
 import { contractManagerComponent } from "../contract/contractManager/contractManager.component";
 import { AutoFillComponent } from "../contract/ptModals/autofillsettings/autofillsettings.component";
+import { dealEditorHeaderTemplateComponent } from "../contract/dealEditor/dealEditorHeaderTemplate.component";
+import { dealEditorCellTemplateComponent } from "../contract/dealEditor/dealEditorCellTemplate.component";
+import { dealEditorEditTemplateComponent } from "../contract/dealEditor/dealEditorEditTemplate.component";
 import { managerPctComponent } from "../contract/managerPct/managerPct.component";
 import { pctChildGridComponent } from "../contract/managerPct/pctChildGrid.component";
 
@@ -29,6 +32,9 @@ export let contractComponents = [
     dealEditorComponent,
     contractManagerComponent,
     AutoFillComponent,
+    dealEditorCellTemplateComponent,
+    dealEditorEditTemplateComponent,
+    dealEditorHeaderTemplateComponent,
     managerPctComponent,
     pctChildGridComponent
 ]

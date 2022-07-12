@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-
+import * as _ from 'underscore';
 export class lnavUtil {
 
     static IsUniqueInList(listToCheck: any, value: any, keyToCompare: any, checkForDouble: boolean) {
@@ -132,7 +132,7 @@ export class lnavUtil {
             dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
         }
         const items = UItemplate["ModelTemplates"].PRC_TBL;
-        angular.forEach(items, function (value, key) {
+        _.each(items, function (value, key) {
             if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {
                 value._custom = {
                     "ltr": value.name[0],

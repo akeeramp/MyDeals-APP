@@ -1,0 +1,6 @@
+﻿<div *ngIf="in_Field_Name === 'tools'">
+    <input type='checkbox' (click)='clkAllItems()' class='with-font' id='chkDealTools' [(ngModel)]="isDealToolsChecked" />&nbsp;
+    <label for='chkDealTools'><b>Deal Tools</b></label>
+</div>
+<div *ngIf="in_Field_Name !== 'tools' && in_Header_Template != null" [innerHTML]="in_Header_Template"></div>
+<div *ngIf="in_Header_Template == null" [innerHTML]="in_Title"></div>

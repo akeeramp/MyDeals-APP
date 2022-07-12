@@ -1,0 +1,222 @@
+﻿import * as angular from 'angular';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { logger } from '../../shared/logger/logger';
+import { downgradeComponent } from '@angular/upgrade/static';
+import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { GridUtil } from '../grid.util';
+@Component({
+    selector: 'deal-editor-cell',
+    templateUrl: 'Client/src/app/contract/dealEditor/dealEditorCellTemplate.component.html',
+    styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
+    encapsulation: ViewEncapsulation.None
+})
+export class dealEditorCellTemplateComponent {
+
+    constructor(private loggerService: logger, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe,
+        private datePipe: DatePipe) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
+    @Input() in_Field_Name: string = '';
+    @Input() in_Template: string = '';
+    @Input() in_Deal_Type: string = '';
+    @Input() in_DataItem: any = '';
+    private ecapDimKey = "20___0";
+    private kitEcapdim = "20_____1";
+    private dim = "10___";
+    private fields: any;
+
+    uiControlWrapper(passedData, field, format) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
+            field == "CREDIT_VOLUME" || field == "DEBIT_VOLUME" || field == "REBATE_OA_MAX_VOL") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.decimalPipe.transform(data[field], "1.0-0");
+        }
+        if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
+            field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
+            || field == "ADJ_ECAP_UNIT" || field == "CREDIT_AMT" || field == "DEBIT_AMT") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.currencyPipe.transform(parseInt(data[field]), 'USD', 'symbol', '1.2-2');
+        }
+        if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
+            || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+        }
+        return GridUtil.uiControlWrapper(data, field, format);
+    }
+
+    uiControlDealWrapper(passedData, field) {
+        return GridUtil.uiControlDealWrapper(passedData, field);
+    }
+
+    uiCustomerControlWrapper(passedData, field) {
+        return GridUtil.uiCustomerControlWrapper(passedData, field);
+    }
+
+    uiDimControlWrapper(passedData, field) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var dim = "";
+        if (field == "ECAP_PRICE" && data.OBJ_SET_TYPE_CD == "ECAP") {
+            if (data.ECAP_PRICE[this.ecapDimKey] !== undefined && data.ECAP_PRICE[this.ecapDimKey] !== null && data.ECAP_PRICE[this.ecapDimKey] !== "")
+                data.ECAP_PRICE[this.ecapDimKey] = this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2');
+            dim = this.ecapDimKey;
+        }
+        if (field == "KIT_ECAP") {
+            if (data.ECAP_PRICE[this.kitEcapdim] !== undefined && data.ECAP_PRICE[this.kitEcapdim] !== null && data.ECAP_PRICE[this.kitEcapdim] !== "")
+                data.ECAP_PRICE[this.kitEcapdim] = this.currencyPipe.transform(data.ECAP_PRICE[this.kitEcapdim], 'USD', 'symbol', '1.2-2');
+            dim = this.kitEcapdim;
+            field = "ECAP_PRICE";
+        }
+        if (field == "COMPETITIVE_PRICE") {
+            if (data[field][this.ecapDimKey] !== undefined && data[field][this.ecapDimKey] !== null && data[field][this.ecapDimKey] !== "")
+                data[field][this.ecapDimKey] = this.currencyPipe.transform(data[field][this.ecapDimKey], 'USD', 'symbol', '1.2-2');
+            dim = this.ecapDimKey;
+        }
+        return GridUtil.uiDimControlWrapper(data, field, dim);
+    }
+
+    uiPositiveDimControlWrapper(passedData, field) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var value = data[field];
+        var sortedKeys = Object.keys(value).sort();
+        for (var index in sortedKeys) {
+            var dimKey = sortedKeys[index];
+            if (data[field][dimKey] !== undefined && data[field][dimKey] !== null && data[field][dimKey] !== "") {
+                if (field == "ECAP_PRICE" || field == "DSCNT_PER_LN" || (field == "CAP" && data[field][dimKey] != "No CAP") || (field == "YCS2_PRC_IRBT" && data[field][dimKey] != "No YCS2")) {
+                    data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
+                }
+            }
+            if (field == "QTY") {
+                data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
+            }
+            if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT") {
+                data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
+            }
+        }
+        return GridUtil.uiPositiveDimControlWrapper(data, field);
+    }
+
+    uiValidationErrorDetail(passedData) {
+        return GridUtil.uiValidationErrorDetail(passedData);
+    }
+
+    uiControlScheduleWrapper(passedData) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var numTiers = 0;
+        var tiers = data.TIER_NBR;
+        for (var key in tiers) {
+            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+                numTiers++;
+                var dim = "10___" + numTiers;
+                for (var f = 0; f < this.fields.length; f++) {
+                    if (data[this.fields[f].field][dim] != "Unlimited") {
+                        if (this.fields[f].format == "number")
+                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
+                        else
+                            data[this.fields[f].field][dim] = this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2');
+                    }
+                }
+            }
+        }
+        return GridUtil.uiControlScheduleWrapper(data);
+    }
+    uiControlScheduleWrapperDensity(passedData) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var numTiers = 0;
+        var tiers = data.TIER_NBR;
+        for (var key in tiers) {
+            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+                numTiers++;
+                for (var f = 0; f < this.fields.length; f++) {
+                    var dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
+                    if (this.fields[f].field == "DENSITY_RATE") {
+                        for (var bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
+                            data[this.fields[f].field][dim + bands + '____' + key] = this.currencyPipe.transform(data[this.fields[f].field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
+                        }
+                    }
+                    else if (this.fields[f].field == "STRT_PB" || this.fields[f].field == "END_PB") {
+                        if (data[this.fields[f].field][key] != "Unlimited") {
+                            if (this.fields[f].format == "number")
+                                data[this.fields[f].field][key] = this.decimalPipe.transform(data[this.fields[f].field][key], "1.0-3");
+                        }
+                    }
+                }
+            }
+        }
+        return GridUtil.uiControlScheduleWrapperDensity(data);
+    }
+
+    uiReadonlyControlWrapper(passedData, field) {
+        return GridUtil.uiReadonlyControlWrapper(passedData, field);
+    }
+    uiDimTrkrControlWrapper(passedData) {
+        return GridUtil.uiDimTrkrControlWrapper(passedData);
+    }
+    uiStartDateWrapper(passedData, field) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        if (field == "START_DT" || field == "LAST_REDEAL_DT") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+        }
+        return GridUtil.uiStartDateWrapper(data, field);
+    }
+    uiControlEndDateWrapper(passedData, field) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        if (field == "END_DT" || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT") {
+            if (data[field] != undefined && data[field] != null && data[field] != "")
+                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+        }
+        return GridUtil.uiControlEndDateWrapper(data, field);
+    }
+    getFormatedDim(passedData) {
+        return GridUtil.getFormatedDim(passedData, 'TempCOMP_SKU', '20___0');
+    }
+    isReadonlyCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field] != undefined)
+            return true;
+        return false;
+    }
+    isDirtyCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isDirty != undefined && passedData._behaviors.isDirty[field] != undefined)
+            return true;
+        return false;
+    }
+    isErrorCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
+            return true;
+        return false;
+    }
+    isHiddenCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isHidden != undefined && passedData._behaviors.isHidden[field] != undefined)
+            return true;
+        return false;
+    }
+    isRequiredCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isRequired != undefined && passedData._behaviors.isRequired[field] != undefined)
+            return true;
+        return false;
+    }
+    isSavedCell(passedData, field) {
+        if (passedData._behaviors != undefined && passedData._behaviors.isSaved != undefined && passedData._behaviors.isSaved[field] != undefined)
+            return true;
+        return false;
+    }
+    ngOnInit() {
+        this.fields = this.in_Deal_Type === 'VOL_TIER' ? GridUtil.volTierFields : this.in_Deal_Type === 'REV_TIER' ? GridUtil.revTierFields : GridUtil.densityFields;
+    }
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
+}
+
+angular.module("app").directive(
+    "dealEditorCell",
+    downgradeComponent({
+        component: dealEditorCellTemplateComponent,
+    })
+);

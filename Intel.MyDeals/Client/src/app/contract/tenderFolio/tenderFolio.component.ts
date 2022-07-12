@@ -7,7 +7,7 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import * as _moment from 'moment';
 const moment = _moment;
 import * as angular from "angular";
-
+import * as _ from 'underscore';
 @Component({
     providers: [TenderFolioService],
     selector: "app-tender-folio",
@@ -68,7 +68,7 @@ export class TenderFolioComponent {
         let result = {};
         const dealDisplayOrder = ["ECAP", "KIT"];
         const items = this.templateData["ModelTemplates"].PRC_TBL;
-        angular.forEach(items, function (value, key) {
+        _.each(items, function (value, key) {
             if (value.name !== 'ALL_TYPES') {
                 value._custom = {
                     "ltr": value.name[0],

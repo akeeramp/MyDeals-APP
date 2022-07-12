@@ -842,6 +842,9 @@
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.html" />
     <Content Include="Client\src\app\contract\contractManager\contractManager.component.css" />
     <Content Include="Client\src\app\contract\contractManager\contractManager.component.html" />
+    <Content Include="Client\src\app\contract\dealEditor\dealEditorCellTemplate.component.html" />
+    <Content Include="Client\src\app\contract\dealEditor\dealEditorEditTemplate.component.html" />
+    <Content Include="Client\src\app\contract\dealEditor\dealEditorHeaderTemplate.component.html" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.css" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.html" />
     <Content Include="Client\src\app\contract\managerPct\managerPct.component.css" />
@@ -2261,6 +2264,9 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractDetails\contractDetails.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditor.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorCellTemplate.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorEditTemplate.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorHeaderTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\grid.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.service.ts" />
