@@ -10,7 +10,7 @@ import * as _ from 'underscore';
 import { templatesService } from '../../shared/services/templates.service';
 import { ContractUtil } from '../contract.util';
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj } from './handsontable.interface';
-import { PTEUtil } from '../PTE.util';
+import { PTEUtil } from '../PTEUtils/PTE.util';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
@@ -23,6 +23,7 @@ import { AutoFillComponent } from '../ptModals/autofillsettings/autofillsettings
 import { lnavService } from '../lnav/lnav.service';
 import * as moment from 'moment';
 import { productSelectorService } from '../../shared/services/productSelector.service';
+import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -169,10 +170,8 @@ export class pricingTableEditorComponent implements OnChanges {
     private pageTitle = this.ptTitle + " Editor";
     private saveDesc = "Save your " + this.ptTitle + ", validate the products, and stay in your " + this.ptTitle + " Editor";
 
-    private editedProducts: Array<string> = [];
-    private productValidationDependencies = [
-        "GEO_COMBINED", "PROGRAM_PAYMENT", "PROD_INCLDS", "REBATE_TYPE", "MRKT_SEG"
-    ];
+    private productValidationDependencies = PTE_Config_Util.productValidationDependencies;
+    private kitDimAtrbs:Array<string> = PTE_Config_Util.kitDimAtrbs;
 
     //this will help to have a custom cell validation which allow only alphabets
     projectValidator(value, callback) {
@@ -328,13 +327,6 @@ export class pricingTableEditorComponent implements OnChanges {
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
                 if (PTR && PTR.length > 0) {
-                    // this.editedProducts = 
-                    for (var i = 0; i < changes.length; i++) {
-                        this.pricingTableDet['PRC_TBL_ROW'][changes[i]['row']]['PTR_SYS_PRD'] = "";
-                    }
-                    /*if (changes[0]['new'] != changes[0]['old']) {
-                        this.pricingTableDet['PRC_TBL_ROW'][changes[0]['row']]['PTR_SYS_PRD'] = "";
-                    }*/
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates);
                 }
                 if (AR && AR.length > 0) {
@@ -376,7 +368,7 @@ export class pricingTableEditorComponent implements OnChanges {
         this.getTemplateDetails();
         this.dropdownResponses = await this.getAllDrowdownValues();
         //this is only while loading we need , need to modify as progress
-        PTR = PTEUtil.pivotData(PTR, this.curPricingTable);
+        PTR=PTEUtil.pivotData(PTR,false, this.curPricingTable,this.kitDimAtrbs);
         this.generateHandsonTable(PTR);
         this.isLoading = false;
     }
@@ -434,8 +426,6 @@ export class pricingTableEditorComponent implements OnChanges {
         //this.generateHandsonTable(updatedPTR);
         this.isLoading = false;
         
-        //after API
-        this.editedProducts = [];
     }
 
     async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
@@ -543,7 +533,6 @@ export class pricingTableEditorComponent implements OnChanges {
         );
     }
     ngOnChanges(): void {
-        this.editedProducts = [];
         this.loadPTE();
     }
     ngAfterViewInit() {
