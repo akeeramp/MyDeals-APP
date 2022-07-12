@@ -145,5 +145,53 @@ export class lnavUtil {
         return result;
     }
 
+    static setDefaultAttributes(newPricingTable, isTenderContract, currentPricingTable, contractData) {
+        var dealType = newPricingTable.OBJ_SET_TYPE_CD;
+        //initialize, hard coded for now, build into an admin page in future.
+        var marketSegment = (isTenderContract) ? "Corp" : "All Direct Market Segments";
+        if (currentPricingTable == null) {
+            if (!!newPricingTable._defaultAtrbs["REBATE_TYPE"]) newPricingTable._defaultAtrbs["REBATE_TYPE"].value = isTenderContract ? "TENDER" : "MCP";
+            if (!!newPricingTable._defaultAtrbs["MRKT_SEG"]) newPricingTable._defaultAtrbs["MRKT_SEG"].value = [marketSegment];
+            if (!!newPricingTable._defaultAtrbs["GEO_COMBINED"]) newPricingTable._defaultAtrbs["GEO_COMBINED"].value = ["Worldwide"];
+            if (!!newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Billings" : newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Consumption";
+            if (!!newPricingTable._defaultAtrbs["PROGRAM_PAYMENT"]) newPricingTable._defaultAtrbs["PROGRAM_PAYMENT"].value = "Backend";
+            if (!!newPricingTable._defaultAtrbs["PROD_INCLDS"]) newPricingTable._defaultAtrbs["PROD_INCLDS"].value = "Tray";
+            if (!!newPricingTable._defaultAtrbs["FLEX_ROW_TYPE"]) newPricingTable._defaultAtrbs["FLEX_ROW_TYPE"].value = "Accrual";
+            if (!!newPricingTable._defaultAtrbs["NUM_OF_DENSITY"]) newPricingTable._defaultAtrbs["NUM_OF_DENSITY"].value = "1";
+            if (!isTenderContract && newPricingTable.OBJ_SET_TYPE_CD != "KIT") {
+                //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
+                if (!!newPricingTable._defaultAtrbs["SERVER_DEAL_TYPE"] && newPricingTable["OBJ_SET_TYPE_CD"] != "KIT") newPricingTable._defaultAtrbs["SERVER_DEAL_TYPE"].value = "";
+            }
+            if (!!newPricingTable._defaultAtrbs["NUM_OF_TIERS"]) newPricingTable._defaultAtrbs["NUM_OF_TIERS"].value = "1";
+            if (!!newPricingTable._defaultAtrbs["NUM_OF_DENSITY"]) newPricingTable._defaultAtrbs["NUM_OF_DENSITY"].value = "1";// This is all cases, above kit is done here anyhow.
+            if (isTenderContract) { // Tenders come in without a customer defined immediately
+                // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
+                if (!!newPricingTable._defaultAtrbs["PERIOD_PROFILE"]) newPricingTable._defaultAtrbs["PERIOD_PROFILE"].value = "Yearly";
+                if (!!newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"]) newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"].value = ""; // Old value "Issue Credit to Billing Sold To"
+            } else {
+                if (!!newPricingTable._defaultAtrbs["PERIOD_PROFILE"]) newPricingTable._defaultAtrbs["PERIOD_PROFILE"].value =
+                    (contractData.Customer == undefined) ? "" : contractData.Customer.DFLT_PERD_PRFL;
+                if (!!newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"]) {
+                    // Set AR_SETTLEMENT_LVL to customer default first, and if that is blank, then fall back on deal level rules
+                    var newArSettlementValue = (contractData.Customer == undefined) ? "" : contractData.Customer.DFLT_AR_SETL_LVL;
+                    if (contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") { // If this is cust default, force it blank
+                        newArSettlementValue = "";
+                    } else {
+                        if (newArSettlementValue == "")
+                            newArSettlementValue = (newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                                newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
+                                ? "Issue Credit to Billing Sold To"
+                                : "Issue Credit to Default Sold To by Region";
+                    }
+                    newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
+                }
+            }
+            if (!!newPricingTable._defaultAtrbs["REBATE_OA_MAX_VOL"]) newPricingTable._defaultAtrbs["REBATE_OA_MAX_VOL"].value = "";
+            if (!!newPricingTable._defaultAtrbs["REBATE_OA_MAX_AMT"]) newPricingTable._defaultAtrbs["REBATE_OA_MAX_AMT"].value = "";
+
+        }
+        return newPricingTable;
+    }
+
 }
 

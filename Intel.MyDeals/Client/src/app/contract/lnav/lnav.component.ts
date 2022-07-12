@@ -197,105 +197,11 @@ export class lnavComponent {
     }
 
 
-    setDefaultAttributes() {
-        var dealType = this.newPricingTable.OBJ_SET_TYPE_CD;
-        //initialize, hard coded for now, build into an admin page in future.
-        var marketSegment = (this.isTenderContract) ? "Corp" : "All Direct Market Segments";
-        if (this.currentPricingTable == null) {
-            if (!!this.newPricingTable._defaultAtrbs["REBATE_TYPE"]) this.newPricingTable._defaultAtrbs["REBATE_TYPE"].value = this.isTenderContract ? "TENDER" : "MCP";
-            if (!!this.newPricingTable._defaultAtrbs["MRKT_SEG"]) this.newPricingTable._defaultAtrbs["MRKT_SEG"].value = [marketSegment];
-            if (!!this.newPricingTable._defaultAtrbs["GEO_COMBINED"]) this.newPricingTable._defaultAtrbs["GEO_COMBINED"].value = ["Worldwide"];
-            if (!!this.newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"]) dealType == 'FLEX' || dealType == 'REV_TIER' || dealType == 'DENSITY' ? this.newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Billings" : this.newPricingTable._defaultAtrbs["PAYOUT_BASED_ON"].value = "Consumption";
-            if (!!this.newPricingTable._defaultAtrbs["PROGRAM_PAYMENT"]) this.newPricingTable._defaultAtrbs["PROGRAM_PAYMENT"].value = "Backend";
-            if (!!this.newPricingTable._defaultAtrbs["PROD_INCLDS"]) this.newPricingTable._defaultAtrbs["PROD_INCLDS"].value = "Tray";
-            if (!!this.newPricingTable._defaultAtrbs["FLEX_ROW_TYPE"]) this.newPricingTable._defaultAtrbs["FLEX_ROW_TYPE"].value = "Accrual";
-            if (!!this.newPricingTable._defaultAtrbs["NUM_OF_DENSITY"]) this.newPricingTable._defaultAtrbs["NUM_OF_DENSITY"].value = "1";
-            if (!this.isTenderContract && this.newPricingTable.OBJ_SET_TYPE_CD != "KIT") {
-                //if (!!newValue["NUM_OF_TIERS"] && !$scope.newPricingTable["OBJ_SET_TYPE_CD"] == 'KIT') newValue["NUM_OF_TIERS"].value = "1";
-                if (!!this.newPricingTable._defaultAtrbs["SERVER_DEAL_TYPE"] && this.newPricingTable["OBJ_SET_TYPE_CD"] != "KIT") this.newPricingTable._defaultAtrbs["SERVER_DEAL_TYPE"].value = "";
-            }
-            if (!!this.newPricingTable._defaultAtrbs["NUM_OF_TIERS"]) this.newPricingTable._defaultAtrbs["NUM_OF_TIERS"].value = "1";
-            if (!!this.newPricingTable._defaultAtrbs["NUM_OF_DENSITY"]) this.newPricingTable._defaultAtrbs["NUM_OF_DENSITY"].value = "1";// This is all cases, above kit is done here anyhow.
-            if (this.isTenderContract) { // Tenders come in without a customer defined immediately
-                // Tenders don't have a customer at this point, Default to blank for customer defaults and let pricingTable.Controller.js handle tender defaults
-                if (!!this.newPricingTable._defaultAtrbs["PERIOD_PROFILE"]) this.newPricingTable._defaultAtrbs["PERIOD_PROFILE"].value = "Yearly";
-                if (!!this.newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"]) this.newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"].value = ""; // Old value "Issue Credit to Billing Sold To"
-            } else {
-                if (!!this.newPricingTable._defaultAtrbs["PERIOD_PROFILE"]) this.newPricingTable._defaultAtrbs["PERIOD_PROFILE"].value =
-                    (this.contractData.Customer == undefined) ? "" : this.contractData.Customer.DFLT_PERD_PRFL;
-                if (!!this.newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"]) {
-                    // Set AR_SETTLEMENT_LVL to customer default first, and if that is blank, then fall back on deal level rules
-                    var newArSettlementValue = (this.contractData.Customer == undefined) ? "" : this.contractData.Customer.DFLT_AR_SETL_LVL;
-                    if (this.contractData.Customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") { // If this is cust default, force it blank
-                        newArSettlementValue = "";
-                    } else {
-                        if (newArSettlementValue == "")
-                            newArSettlementValue = (this.newPricingTable["OBJ_SET_TYPE_CD"] == "ECAP" ||
-                                this.newPricingTable["OBJ_SET_TYPE_CD"] == "KIT")
-                                ? "Issue Credit to Billing Sold To"
-                                : "Issue Credit to Default Sold To by Region";
-                    }
-                    this.newPricingTable._defaultAtrbs["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
-                }
-            }
-            if (!!this.newPricingTable._defaultAtrbs["REBATE_OA_MAX_VOL"]) this.newPricingTable._defaultAtrbs["REBATE_OA_MAX_VOL"].value = "";
-            if (!!this.newPricingTable._defaultAtrbs["REBATE_OA_MAX_AMT"]) this.newPricingTable._defaultAtrbs["REBATE_OA_MAX_AMT"].value = "";
-
-        }
-    }
+  
 
     customAddPtValidate() {
         let isValid = true;
-        this.newPricingTable.TITLE = this.ptTITLE;
-        // Clear all values
-        //angular.forEach(this.newPricingTable,
-        //    function (value, key) {
-        //        if (this.newPricingTable._behaviors.validMsg != undefined && this.newPricingTable._behaviors.validMsg != null && this.newPricingTable._behaviors.validMsg != "" ) {
-        //            this.newPricingTable._behaviors.validMsg[key] = "";
-        //            this.newPricingTable._behaviors.isError[key] = false;
-        //        }
-        //    });
-
-        //// Check required
-        //angular.forEach(this.newPricingTable,
-        //    function (value, key) {
-        //        if (key[0] !== '_' &&
-        //            !Array.isArray(value) &&
-        //            (!isNaN(value) || value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
-        //            this.newPricingTable._behaviors.isRequired[key] === true) {
-        //            this.newPricingTable._behaviors.validMsg[key] = "* field is required";
-        //            this.newPricingTable._behaviors.isError[key] = true;
-        //            isValid = false;
-        //        }
-        //    });
-
-        //// Check unique name within ps
-        //if (!!this.curPricingStrategy) {
-        //    if (this.curPricingStrategy.PRC_TBL === undefined) {
-        //        this.curPricingStrategy.PRC_TBL = [];
-        //    }
-        //    var isUnique = lnavUtil.IsUniqueInList(this.curPricingStrategy.PRC_TBL, this.newPricingTable["TITLE"], "TITLE", false);
-
-        //    if (!isUnique) {
-        //        this.newPricingTable._behaviors.validMsg["TITLE"] = "* must have unique name within strategy";
-        //        this.newPricingTable._behaviors.isError["TITLE"] = true;
-        //        isValid = false;
-        //    }
-        //}
-
-        //// Check name length
-        //if (this.newPricingTable["TITLE"].length > 80) {
-        //    this.newPricingTable._behaviors.validMsg["TITLE"] = "* must be 80 characters or less";
-        //    this.newPricingTable._behaviors.isError["TITLE"] = true;
-        //    isValid = false;
-        //}
-
-        //// Check if there is a selected deal type
-        //if (this.newPricingTable.OBJ_SET_TYPE_CD == "") {
-        //    this.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
-        //    this.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
-        //    isValid = false;
-        //}        
+        this.newPricingTable.TITLE = this.ptTITLE;               
         if (isValid) {
             this.addPricingTable();
         }
@@ -421,7 +327,7 @@ export class lnavComponent {
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
-            this.setDefaultAttributes();
+            this.newPricingTable = lnavUtil.setDefaultAttributes(this.newPricingTable, this.isTenderContract, this.currentPricingTable, this.contractData);
         }
         if (this.contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
             this.custId = this.contractData.CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
