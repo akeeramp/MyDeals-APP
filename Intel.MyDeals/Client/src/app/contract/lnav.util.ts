@@ -69,6 +69,44 @@ export class lnavUtil {
         return newPricingTable;
     }
 
+    static updateNPTDefaultValues(pt, nptDefaults) {
+        //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
+        if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
+        if (!!nptDefaults["MRKT_SEG"]) nptDefaults["MRKT_SEG"].value = pt["MRKT_SEG"].split(',');
+        if (!!nptDefaults["GEO_COMBINED"]) {
+            if (pt["GEO_COMBINED"].indexOf('[') > -1) {
+                nptDefaults["GEO_COMBINED"].value = pt["GEO_COMBINED"];
+            } else {
+                nptDefaults["GEO_COMBINED"].value = pt["GEO_COMBINED"].split(',');
+            }
+        }
+        if (!!nptDefaults["PAYOUT_BASED_ON"]) nptDefaults["PAYOUT_BASED_ON"].value = pt["PAYOUT_BASED_ON"];
+        if (!!nptDefaults["PROGRAM_PAYMENT"]) nptDefaults["PROGRAM_PAYMENT"].value = pt["PROGRAM_PAYMENT"];
+        if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
+        if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
+        if (!!nptDefaults["NUM_OF_DENSITY"]) nptDefaults["NUM_OF_DENSITY"].value = pt["NUM_OF_DENSITY"];
+        if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
+        if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
+        if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
+        if (!!nptDefaults["REBATE_OA_MAX_VOL"]) nptDefaults["REBATE_OA_MAX_VOL"].value = pt["REBATE_OA_MAX_VOL"];
+        if (!!nptDefaults["REBATE_OA_MAX_AMT"]) nptDefaults["REBATE_OA_MAX_AMT"].value = pt["REBATE_OA_MAX_AMT"];
+        if (!!nptDefaults["FLEX_ROW_TYPE"]) nptDefaults["FLEX_ROW_TYPE"].value = pt["FLEX_ROW_TYPE"];
+        //not sure if necessary, javascript pass by value/reference always throwing me off. :(
+        return nptDefaults;
+    }
+
+    static getTenderBasedDefaults(newPricingTable, isTenderContract) {
+        var data = newPricingTable["_defaultAtrbs"];
+        if (isTenderContract) {
+            data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
+                .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/true");
+        } else {
+            data["REBATE_TYPE"].opLookupUrl = data["REBATE_TYPE"].opLookupUrl
+                .replace("GetDropdowns/REBATE_TYPE", "GetFilteredRebateTypes/false");
+        }
+        return data;
+    }
+
     static enableFlowBtn(contractData) {
         if (contractData.PRC_ST === undefined || contractData.PRC_ST.length === 0) return false;
         var passedItems = [];
@@ -85,9 +123,14 @@ export class lnavUtil {
         return passedItems.length > 0;
     }
 
-    static filterDealTypes(UItemplate) {
+    static filterDealTypes(UItemplate, isHybrid) {
         let result = {};
-        const dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
+        let dealDisplayOrder = [];
+        if (isHybrid) {
+            dealDisplayOrder = ["ECAP", "VOL_TIER"];
+        } else {
+            dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
+        }
         const items = UItemplate["ModelTemplates"].PRC_TBL;
         angular.forEach(items, function (value, key) {
             if (value.name !== 'ALL_TYPES' && value.name !== 'TENDER') {

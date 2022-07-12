@@ -68,6 +68,7 @@
                                            color: black;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
                                     <div class="clearboth"></div>
                                     <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
+                                    <div style="color: #FF6E77;">{{ objTypeCdMessage }}</div>
                                     <div class="ptLnavtmpltContainer" style="border:red;">
                                         <div *ngFor="let DealType of PtDealTypes">
                                             <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)">
@@ -86,6 +87,7 @@
                                             Add
                                         </button>
                                     </div>
+                                    <div style="color: #F3D54E;">{{ validMsgTITLE }}</div>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +125,7 @@
                                         <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false" title="Stage:{{ ps.WF_STG_CD}}">
                                             <div class="collapse multi-collapse" id="sumPSdata_{{ps.DC_ID}}" style="margin-bottom: 10px;">
                                                 <div *ngFor="let pt of ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
-                                                    <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav">
+                                                    <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav" [ngClass]="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
                                                         <div class="fl textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | slice:0:1 }}</div>
                                                         <div class="fl" style="margin: 0 8px;" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}" (click)="loadPTE(ps.DC_ID,pt.DC_ID)">
                                                             <div *ngIf="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'" (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 195px;">
@@ -135,7 +137,7 @@
                                                         </div>
                                                         <div class="fr" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'">
                                                             <span #targetPS class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
-                                                            <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectMenu($event,ps)">
+                                                            <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectMenu($event,ps,pt)">
                                                                 <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item icon="k-icon k-i-copy" text="Copy Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>

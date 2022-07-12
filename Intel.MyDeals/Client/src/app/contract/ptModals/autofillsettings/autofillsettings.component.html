@@ -29,15 +29,24 @@
                                     <div *ngFor="let drops of dropdownResponses |keyvalue">
                                         <div *ngIf="drops.key==item.key">
                                             <div *ngIf="item.value.opLookupText=='DROP_DOWN'">
-                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)">{{elem.DROP_DOWN}}
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" style="width:100%; margin:1%">
+                                                    <mat-button-toggle style="width:100%" class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)">
+                                                        {{elem.DROP_DOWN}}
+                                                    </mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+                                            <div *ngIf="(item.key == 'NUM_OF_TIERS' || item.key == 'NUM_OF_DENSITY') && item.value.opLookupText=='dropdownName'">
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" style="width:100%; margin:1%">
+                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.dropdownName}}" [checked]="item.value.value==elem.dropdownName" style="width:100%" (change)="OnTierChange(item.key,elem.dropdownName)">
+                                                        {{elem.dropdownName}}
                                                     </mat-button-toggle>
                                                 </mat-button-toggle-group>
                                             </div>
                                             <!-- The attribute Geo has different value field and its multi select -->
-                                            <div *ngIf="item.value.opLookupText=='dropdownName'">
-                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" #group="matButtonToggleGroup" [(value)]="geoValues" (change)="OnGeoChange(item.key,group.value)" multiple>
-                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.dropdownName}}">{{elem.dropdownName}}
+                                            <div *ngIf="(item.key == 'GEO_COMBINED' ) && item.value.opLookupText=='dropdownName'">
+                                                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" #group="matButtonToggleGroup" [value]="geoValues" (change)="OnGeoChange(item.key,group.value)" multiple style="width:100%; margin:1%">
+                                                    <mat-button-toggle class="btn btn-primary" *ngFor="let elem of drops.value" value="{{elem.dropdownName}}" style="width:100%">
+                                                        {{elem.dropdownName}}
                                                     </mat-button-toggle>
                                                 </mat-button-toggle-group>
                                             </div>
@@ -48,28 +57,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="padding-left:40px">
                     <div *ngFor="let item of autofillData.DEFAULT |keyvalue">
                         <div *ngIf="item.value.type == 'EMBEDDEDMULTISELECT'">
-                            <p>EMBEDDEDMULTISELECT</p>
-                            <!-- <div op-control-data-element op-class="'md intel'" ng-model="autofillData.DEFAULT" op-cd="key" op-type="value.type" op-label="value.label" op-lookup-url="value.opLookupUrl" op-lookup-text="value.opLookupText" op-lookup-value="value.opLookupValue" op-is-form="true"
-                                op-extra="true" op-expanded="true" op-ui-mode="'VERTICAL'"></div> -->
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Marketting Segment</h5>
+                                </div>
+                            </div>
+                            <kendo-multiselect [data]="marketSeglist" [(ngModel)]="mkgvalues" [checkboxes]="true" [autoClose]="false"></kendo-multiselect>
                         </div>
                     </div>
                     <br />
-                    <div *ngIf="autofillData.isVistexHybrid == '1' || autofillData.DEALTYPE == 'FLEX'" class="autoFillOverarching">
-                        <div *ngIf="autofillData.isVistexHybrid == '1'" class="autoFillOverarchingTitle">
+                    <div *ngIf="autofillData.isVistexHybrid == true || autofillData.DEALTYPE == 'FLEX'" class="autoFillOverarching">
+                        <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle">
                             Please fill out either Max Volume or Amount, but not both.
                         </div>
                         <br />
+                        <div class="col-md-8 row" *ngIf="autofillData.isVistexHybrid == true">
+                            <p>'Overarching Maximum Volume:</p>
+                            <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="999999999" [autoCorrect]="false">
+                            </kendo-numerictextbox>
+                        </div>
+                        <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
                         <div class="col-md-8 row">
-                            <p>isVistexHybrid</p>
-                            <!-- <div *ngIf="autofillData.isVistexHybrid == '1'" op-class="'md intel minPadding'" op-control-data-element ng-model="autofillData.DEFAULT" op-cd="'REBATE_OA_MAX_VOL'" op-type="'NUMERIC'" op-label="'Overarching Maximum Volume:'" op-min-value="0" op-is-form="true"
-                                op-style="'color:#1a3e6f;font-weight:bold;width:375px;'" op-max-value="99999999" op-ui-mode="'HORIZONTAL'">
-                            </div>
-                            <div op-class="'md intel minPadding'" op-control-data-element ng-model="autofillData.DEFAULT" op-cd="'REBATE_OA_MAX_AMT'" op-type="'NUMERIC'" op-label="'Overarching Maximum Dollar($):'" op-min-value="0" op-format="'c0'" op-is-form="true" op-style="'color:#1a3e6f;font-weight:bold;width:375px;'"
-                                op-max-value="999999999" op-ui-mode="'HORIZONTAL'">
-                            </div> -->
+                            <p>Overarching Maximum Dollar($):</p>
+                            <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [max]="999999999" [autoCorrect]="false">
+                            </kendo-numerictextbox>
                         </div>
                     </div>
                 </div>
