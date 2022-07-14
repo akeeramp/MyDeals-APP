@@ -2,19 +2,19 @@ param([string] $Operation,$USN,$PWD,$ENV)
 
 try {
     $ENV_DATA = @(
-    [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='ITT';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
-    [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
-    [pscustomobject]@{env='UTT1';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='UTT2';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com'}
-    [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
-    [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com'}
-    [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com'}
+        [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='ITT';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
+        [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com'}
+        [pscustomobject]@{env='UTT1';DEPLOY_PATH='\\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='UTT2';DEPLOY_PATH='\\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2UTTMYDLW02.amr.corp.intel.com'}
+        [pscustomobject]@{env='CONS1';DEPLOY_PATH='\\FM7CONMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='CONS2';DEPLOY_PATH='\\FM7CONMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CONMYDLW02.amr.corp.intel.com'}
+        [pscustomobject]@{env='CIAR';DEPLOY_PATH='\\FM7CIAMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM7CIAMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='PERF';DEPLOY_PATH='\\HF2PRFMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2PRFMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com'}
+        [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com'}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $ENV;
@@ -43,10 +43,33 @@ try {
         }
         else
         {
+            if($ENV -eq 'PROD1'){
+               $ENV='PROD'
             & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
             & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            }
+            elseif($ENV -eq 'PROD2'){
+               $ENV='PROD'
+            & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            }
+           elseif($ENV -eq 'DR'){
+               $ENV='PROD'
+            & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            }
+            else {
+                  & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
+            if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            }
         }
    }
       elseif ($Operation -eq 'Deploy_prod' ){
@@ -56,12 +79,12 @@ try {
             EXIT 1
         }
         else{
-            & net use y: $result.DEPLOY_PATH /user:$USN $PWD /y;
-            & robocopy output/_PublishedWebsites/Intel.MyDeals y: /e /MT /copyall /secfix ;
+            & net use z: $result.DEPLOY_PATH /user:$USN $PWD /z;
+            & robocopy output/_PublishedWebsites/Intel.MyDeals z: /e /MT /copyall /secfix ;
             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV y: Web.Config /MT /copyall /secfix;
+            & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV z: Web.Config /MT /copyall /secfix;
             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-            & net use * /delete /y;
+            & net use * /delete /z;
         }
     }
      elseif ($Operation -eq 'Deploy_latest' ){

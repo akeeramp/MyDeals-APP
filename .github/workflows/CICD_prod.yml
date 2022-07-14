@@ -64,7 +64,6 @@ jobs:
        - name:  Move Publish Site 
          run: |
            ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}' 
-             npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
        - name:  Copy Publish Site to latest folder
          run: |
            ./scripts/deploy.ps1 'copy_latest' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
@@ -82,7 +81,6 @@ jobs:
        - name:  Move Publish Site from latest
          run: |
            ./scripts/deploy.ps1 'Deploy_latest_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}' 
-           npx @intc/squawker squawk -i 14464 --sa MyDeals-UI-${{ github.event.inputs.ENV }}
        - name:  IIS Restart
          run: |
             ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
