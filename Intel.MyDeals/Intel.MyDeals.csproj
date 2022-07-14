@@ -2285,6 +2285,14 @@
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\handsontable.interface.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE.util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_CellChange_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Common_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Config_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Helper_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Load_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Save_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Validation_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
