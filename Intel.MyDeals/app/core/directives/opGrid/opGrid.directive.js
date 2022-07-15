@@ -226,12 +226,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.context = dataItem;
 
                 //objsetService.getMissingCapCost(dataItem.DC_ID, 5, dataItem.CUST_MBR_SID).then(function (data) {
-                    //$scope.contractData = data.data[0];
+                //$scope.contractData = data.data[0];
 
                 var modalInstance = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/partials/ptModals/missingCapCostModal.html',
-                    controller: 'missingCapCostModalCtrl', 
+                    controller: 'missingCapCostModalCtrl',
                     controllerAs: '$ctrl',
                     size: 'lg',
                     windowClass: 'tenderPctFolio-modal-window',
@@ -702,7 +702,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 if (!d) d = "InComplete";
                 return commonUtil.getColor('pct', d, colorDictionary);
             }
-            
+
             $scope.applyCustomLayoutToGrid = function (data) {
                 if (!$scope.isLayoutConfigurable) return;
 
@@ -947,7 +947,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     validationErrorCheck = checkedDeals.filter(function (x) {
                         return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
                     });
-                    isDealhasErrors = validationErrorCheck.length>0?true:false;
+                    isDealhasErrors = validationErrorCheck.length > 0 ? true : false;
 
                 } else {
                     isdealsUnified = data.filter(function (x) {
@@ -980,9 +980,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         return x["PASSED_VALIDATION"].toLowerCase() == "dirty";
                     });
                     isDealhasErrors = validationErrorCheck.length > 0 ? true : false;
-                    
+
                 }
-                
+
                 if (args["action"] == "Won" && isdealsUnified != undefined && isdealsUnified.length > 0) {
                     kendo.alert("End Customers needs to be Unified before it can be set to " + args["action"]);
                     return;
@@ -991,8 +991,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
                     return;
                 }
-                else if (args["action"] == "Won" &&  isRPLReviewwip.length > 0) {
-                    kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] +" till Review is complete. ");
+                else if (args["action"] == "Won" && isRPLReviewwip.length > 0) {
+                    kendo.alert("End customer Review in Progress. Deal cannot be set to " + args["action"] + " till Review is complete. ");
                     return;
                 }
                 else if (args["action"] == "Won" && isNoRplStatusAvailable.length > 0) {
@@ -1100,14 +1100,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             //To refresh the modified row data after redeal without refresh the screen manually
             $scope.$on('updateDealAtrb', function (event, args) {
-                for (var i = 0; i < args.WIP_DEAL.length; i++) 
-                {
+                for (var i = 0; i < args.WIP_DEAL.length; i++) {
                     // DE117459 : added check to  reflect change in AVG_RPU without Refresh on FRCST_VOLUME change
                     var index = $scope.opData.findIndex(ele => ele.DC_ID == args.WIP_DEAL[i].DC_ID)
-                    if (index != null && index != undefined && index >= 0)
-                    {
-                        for (var j = 0; j < atrbList.length; j++)
-                        {
+                    if (index != null && index != undefined && index >= 0) {
+                        for (var j = 0; j < atrbList.length; j++) {
                             $scope.opData[index][atrbList[j]] = args.WIP_DEAL[i][atrbList[j]];
                         }
 
@@ -1285,7 +1282,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if ($scope.curGroup === "") {
                         var data = $scope.contractDs.data();
                         if (contractutil.ValidateEndCustomer != undefined
-                            && contractutil.ValidateEndCustomer != null && contractutil.ValidateEndCustomer != '') {
+                            && contractutil.ValidateEndCustomer != null && contractutil.ValidateEndCustomer != ''
+                            && $scope.$parent.$parent.curPricingStrategy != undefined && $scope.$parent.$parent.curPricingStrategy != null
+                            && $scope.$parent.$parent.curPricingStrategy != '' && $scope.$parent.$parent.curPricingTable != undefined
+                            && $scope.$parent.$parent.curPricingTable != null && $scope.$parent.$parent.curPricingTable != '') {
                             data = contractutil.ValidateEndCustomer(data, "OnLoad", $scope.$parent.$parent.curPricingStrategy, $scope.$parent.$parent.curPricingTable);
                         }
                         //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading DE page
@@ -1450,8 +1450,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var colData = $(container).closest("[data-role=grid]").data("kendoGrid")._data;
                         if (colData != null && colData != undefined && colData.length > 0
                             && colData[0].CUST_MBR_SID != null &&
-                            colData[0].CUST_MBR_SID != undefined)
-                        {
+                            colData[0].CUST_MBR_SID != undefined) {
                             custId = colData[0].CUST_MBR_SID;
                         }
                         if (options.field.toUpperCase() == "SETTLEMENT_PARTNER") {
@@ -1483,7 +1482,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                             read: field.opLookupUrl
                                         }
                                     }
-                                });}
+                                });
+                        }
 
                     }
                 }
@@ -1526,8 +1526,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             col.enableSelectAll = true;
                             col.enableDeselectAll = true;
                         }
-                        if (options.field.toUpperCase() === "DEAL_SOLD_TO_ID")
-                        {
+                        if (options.field.toUpperCase() === "DEAL_SOLD_TO_ID") {
                             cur_cust_mbr_sid = "/" + options.model["CUST_MBR_SID"];
                             cur_cust_mbr_sid += "/" + options.model["GEO_COMBINED"].replace(/\//g, ',');
                             cur_cust_mbr_sid += "/" + options.model["CUST_ACCNT_DIV"].replace(/\//g, ',');
@@ -1831,7 +1830,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
 
                 // If schduler editor is triggered and saved, check if values are blanked out and set to 0 (All schedule Rates)
-                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB" )  && dataItem[field]["10___" + row] === null) {
+                if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field]["10___" + row] === null) {
                     dataItem[field]["10___" + row] = "0";
                 }
 
