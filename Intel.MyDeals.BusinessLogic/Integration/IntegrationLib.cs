@@ -440,7 +440,7 @@ namespace Intel.MyDeals.BusinessLogic
                 return initWipId; // Bail out - Required product data is not provided to proceed further
             }
             //if IQR deals created other than processor,SSD-family level,[PMem,Ethernet] products at Deal product name level and Server products at Processor level throw error.
-            if (!((productType.ToLower() == "ssd" && productLevel.ToLower()=="family")|| ((productType.ToLower() == "ethernet"|| productType.ToLower() == "pmem") && productLevel.ToLower()== "dealproductname") || (productType.ToLower() == "server" && productLevel.ToLower() == "processor")))
+            if (!((productType.ToLower() == "ssd" && productLevel.ToLower()=="family")|| ((productType.ToLower() == "ethernet"|| productType.ToLower() == "pmem") && productLevel.ToLower()== "dealproductname") || ( (productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")))
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created at [" + productLevel + "] level for [" + productType + "] Product type.", "Deal cannot be created at the selected level for the selected Product type"));
                 return initWipId; // Bail out - Invalid Product level/ Product Type selected
@@ -455,7 +455,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     productData = dealPdctName;
                 }
-                else if (productType.ToLower() == "server" && productLevel.ToLower() == "processor")
+                else if ( (productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")
                 {
                     productData = processorNumber;
                 }
