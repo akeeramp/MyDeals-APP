@@ -210,22 +210,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
-        pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
+        pricingTableData.data.PRC_TBL_ROW = contractutil.pivotData(pricingTableData.data.PRC_TBL_ROW, root.isTenderContract, root.curPricingTable, root.kitDimAtrbs);
 
         //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading PTE page
         if (pricingTableData.data.PRC_TBL_ROW != undefined && pricingTableData.data.PRC_TBL_ROW.length > 1 && pricingTableData.data.PRC_TBL_ROW[0].IS_HYBRID_PRC_STRAT == '1'
-            && $scope.$parent.$parent.validateSettlementLevel != undefined
-            && $scope.$parent.$parent.validateSettlementLevel != null && $scope.$parent.$parent.validateSettlementLevel != ""
-            && $scope.$parent.$parent.validateOverArching != undefined && $scope.$parent.$parent.validateOverArching != null
-            && $scope.$parent.$parent.validateOverArching != "" && $scope.$parent.$parent.curPricingTable != undefined
+            && $scope.$parent.$parent.curPricingStrategy != undefined && $scope.$parent.$parent.curPricingStrategy != null
+            && $scope.$parent.$parent.curPricingStrategy != "" && $scope.$parent.$parent.curPricingTable != undefined
             && $scope.$parent.$parent.curPricingTable != null && $scope.$parent.$parent.curPricingTable != ""
             && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != undefined
             && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != null) {
             var isValidationNeeded = pricingTableData.data.PRC_TBL_ROW.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
             if (isValidationNeeded && isValidationNeeded.length == pricingTableData.data.PRC_TBL_ROW.length
                 && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
-                pricingTableData.data.PRC_TBL_ROW = $scope.$parent.$parent.validateSettlementLevel(pricingTableData.data.PRC_TBL_ROW);
-                pricingTableData.data.PRC_TBL_ROW = $scope.$parent.$parent.validateOverArching(pricingTableData.data.PRC_TBL_ROW);
+                pricingTableData.data.PRC_TBL_ROW = contractSaveUtil.validateSettlementLevel(pricingTableData.data.PRC_TBL_ROW, $scope.$parent.$parent.curPricingStrategy);
+                pricingTableData.data.PRC_TBL_ROW = contractSaveUtil.validateOverArching(pricingTableData.data.PRC_TBL_ROW, $scope.$parent.$parent.curPricingStrategy, $scope.$parent.$parent.curPricingTable);
             }
         }
 
@@ -3013,7 +3011,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         var data = $scope.root.spreadDs.data();
                         var dataItem = data[pasteRef.topLeft.row + padNumRows + row];
-                        var numTiers = root.numOfPivot(dataItem);    //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later Note2: when it "correctly" returns a tier num for non-product kit columns, because we disabled merged cell paste this gets affected as well.
+                        var numTiers = root.numOfPivot(dataItem);     //Note: numOfPivot will "incorrectly" return 1 here for KIT deals, but that is fine as the tiering logic is more dependant on the commas and is executed separately later Note2: when it "correctly" returns a tier num for non-product kit columns, because we disabled merged cell paste this gets affected as well.
                         for (var t = 0; t < numTiers; t++) {
                             newData.push(util.deepClone(state.data[row]));
                         }
@@ -3239,7 +3237,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (saveOnContinue === undefined || saveOnContinue === null) saveOnContinue = false;
 
-        currentPricingTableRowData = root.deNormalizeData(currentPricingTableRowData);
+        currentPricingTableRowData = contractSaveUtil.deNormalizeData(currentPricingTableRowData, $scope.$parent.$parent.curPricingTable, root.kitDimAtrbs, $scope.$parent.$parent.maxKITproducts);
 
         // if row number is passed then its translation for single row
         if (!!currentRowNumber) {
@@ -4529,10 +4527,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (itm.DC_ID == item.DCID) {
                                     itm._dirty = true;
                                     if (item.cond.contains('nullDensity')) {
-                                        root.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it')
+                                        contractSaveUtil.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', $scope.$parent.$parent.curPricingTable)
                                     }
                                     else if (item.cond == 'insufficientDensity')
-                                        root.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`);
+                                        contractSaveUtil.setBehaviors(itm, 'DENSITY_BAND', `The no. of densities selected for the product was ${item.selDen} but the actual no. of densities for the product is ${item.actDen}`, $scope.$parent.$parent.curPricingTable);
                                 }
                             })
                         });

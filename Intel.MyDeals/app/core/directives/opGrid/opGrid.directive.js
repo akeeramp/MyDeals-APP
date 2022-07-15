@@ -1284,23 +1284,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     if ($scope.curGroup === "") {
                         var data = $scope.contractDs.data();
-                        if ($scope.$parent.$parent.ValidateEndCustomer != undefined
-                            && $scope.$parent.$parent.ValidateEndCustomer != null && $scope.$parent.$parent.ValidateEndCustomer != '') {
-                            data = $scope.$parent.$parent.ValidateEndCustomer(data, "OnLoad");
+                        if (contractutil.ValidateEndCustomer != undefined
+                            && contractutil.ValidateEndCustomer != null && contractutil.ValidateEndCustomer != '') {
+                            data = contractutil.ValidateEndCustomer(data, "OnLoad", $scope.$parent.$parent.curPricingStrategy, $scope.$parent.$parent.curPricingTable);
                         }
                         //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading DE page
                         if (data != undefined && data.length > 1 && data[0].IS_HYBRID_PRC_STRAT == '1'
-                            && $scope.$parent.$parent.validateSettlementLevel != undefined && $scope.$parent.$parent.validateSettlementLevel != null
-                            && $scope.$parent.$parent.validateSettlementLevel != "" && $scope.$parent.$parent.validateOverArching != undefined
-                            && $scope.$parent.$parent.validateOverArching != null && $scope.$parent.$parent.validateOverArching != ""
+                            && $scope.$parent.$parent.curPricingStrategy != undefined
+                            && $scope.$parent.$parent.curPricingStrategy != null && $scope.$parent.$parent.curPricingStrategy != ""
                             && $scope.$parent.$parent.curPricingTable != undefined && $scope.$parent.$parent.curPricingTable != null
                             && $scope.$parent.$parent.curPricingTable != ""
                             && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != undefined
                             && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION != null) {
                             var isValidationNeeded = data.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
                             if (isValidationNeeded && data.length == isValidationNeeded.length && $scope.$parent.$parent.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
-                                data = $scope.$parent.$parent.validateSettlementLevel(data);
-                                data = $scope.$parent.$parent.validateOverArching(data);
+                                data = contractSaveUtil.validateSettlementLevel(data, $scope.$parent.$parent.curPricingStrategy);
+                                data = contractSaveUtil.validateOverArching(data, $scope.$parent.$parent.curPricingStrategy, $scope.$parent.$parent.curPricingTable);
                             }
                         }
                         $scope.selectFirstTab();

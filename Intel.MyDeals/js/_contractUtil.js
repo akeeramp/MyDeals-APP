@@ -582,3 +582,446 @@ contractutil.validateMarketSegment = function (data, wipData, spreadDs) {
     }
     return data;
 }
+
+
+contractutil.ValidateEndCustomer = function (data, actionName, curPricingStrategy, curPricingTable) {
+    if (actionName !== "OnLoad") {
+        angular.forEach(data, (item) => {
+            if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
+                item = contractutil.clearEndCustomer(item);
+            }
+        });
+    }
+    if (curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP")) {
+        var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+        if (rebateType && rebateType.length > 0) {
+            if (data.length > 1) {
+                var endCustObj = ""
+                if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                    endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                }
+                angular.forEach(data, (item) => {
+                    var parsedEndCustObj = "";
+                    if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                        parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                        if (parsedEndCustObj.length != endCustObj.length) {
+                            angular.forEach(data, (item) => {
+                                item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
+                            });
+                        }
+                        else {
+                            for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                var exists = false;
+                                angular.forEach(endCustObj, (item) => {
+                                    if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                        item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                        exists = true;
+                                    }
+                                });
+                                if (!exists) {
+                                    angular.forEach(data, (item) => {
+                                        item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
+                                    });
+                                    i = parsedEndCustObj.length;
+                                }
+                            }
+                        }
+                    }
+                    if (endCustObj == "" || parsedEndCustObj == "") {
+                        if (parsedEndCustObj.length != endCustObj.length) {
+                            angular.forEach(data, (item) => {
+                                item = contractutil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
+                            });
+                        }
+                    }
+                });
+            }
+
+        }
+        else {
+            if (data.length > 1) {
+                var endCustObj = ""
+                if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                    endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                }
+                angular.forEach(data, (item) => {
+                    var parsedEndCustObj = "";
+                    if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                        parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                        if (parsedEndCustObj.length != endCustObj.length) {
+                            angular.forEach(data, (item) => {
+                                item = contractutil.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
+                            });
+                        }
+                        else {
+                            for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                var exists = false;
+                                angular.forEach(endCustObj, (item) => {
+                                    if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                        item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                        exists = true;
+                                    }
+                                });
+                                if (!exists) {
+                                    angular.forEach(data, (item) => {
+                                        item = contractutil.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
+                                    });
+                                    i = parsedEndCustObj.length;
+                                }
+                            }
+                        }
+                    }
+                    if (endCustObj == "" || parsedEndCustObj == "") {
+                        if (parsedEndCustObj.length != endCustObj.length) {
+                            angular.forEach(data, (item) => {
+                                item = contractutil.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    return data;
+}
+
+contractutil.setSettlementPartner = function (item, Cond) {
+    if (!item._behaviors) item._behaviors = {};
+    if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+    if (!item._behaviors.isError) item._behaviors.isError = {};
+    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+    item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
+    item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+    if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+        if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+            item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
+        }
+        if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+            delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+        }
+        else {
+            if (Cond == '1') {
+                item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+            }
+        }
+    }
+    return item;
+}
+
+contractutil.validateSettlementPartner = function (data, curPricingStrategy, getVendorDropDownResult) {
+    var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
+    //check if settlement is cash and pgm type is backend
+    var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+    if (cashObj && cashObj.length > 0) {
+        if (getVendorDropDownResult != null && getVendorDropDownResult != undefined && getVendorDropDownResult.length > 0) {
+            var customerVendor = getVendorDropDownResult;
+            angular.forEach(data, (item) => {
+                var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                if (partnerID && partnerID.length == 1) {
+                    item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                }
+            });
+        }
+        else if (hybCond == '1') {
+            retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
+            if (!retCond) {
+                angular.forEach(data, (item) => {
+                    item = contractutil.setSettlementPartner(item, '1');
+                });
+            }
+            else {
+                data = contractutil.clearSettlementPartner(data);
+            }
+        }
+        else {
+            retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
+            if (!retCond) {
+                angular.forEach(data, (item) => {
+                    if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                        if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                            item.SETTLEMENT_PARTNER = null;
+                        }
+                        delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                        delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                        delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                    }
+                });
+            }
+            else {
+                data = contractutil.clearSettlementPartner(data);
+            }
+
+        }
+    }
+    else {
+        data = contractutil.clearSettlementPartner(data);
+    }
+    return data;
+}
+
+contractutil.getColor = function (k, c, colorDictionary) {
+    if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+        return colorDictionary[k][c];
+    }
+    return "#aaaaaa";
+}
+
+contractutil.numOfPivot = function (dataItem, curPricingTable) {
+    if (curPricingTable === undefined) return 1;
+    if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
+        curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+        var pivotFieldName = "NUM_OF_TIERS";
+        var pivotDensity = curPricingTable["NUM_OF_DENSITY"];
+        // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
+        if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
+            if (dataItem["NUM_OF_TIERS"] !== undefined) return dataItem["NUM_OF_TIERS"];
+            var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
+            dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
+            return pivotVal;
+        }
+        if (!contractutil.isPivotable(curPricingTable)) return 1;
+        if (dataItem === undefined) {
+            //condition for density also added here, this is identified in case of split product
+            return curPricingTable[pivotFieldName] === undefined ? 1 : (pivotDensity == undefined ? parseInt(curPricingTable[pivotFieldName]) : parseInt(curPricingTable[pivotFieldName]) * parseInt(pivotDensity));
+        }
+        if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
+        //VT deal type
+        var pivotVal = curPricingTable[pivotFieldName];
+        //logic to add Density multiply by number of tier to add those many rows in spreadsheet
+        return pivotVal === undefined ? 1 : (pivotDensity == undefined ? parseInt(pivotVal) : parseInt(pivotVal) * parseInt(pivotDensity));
+    }
+    return 1;   //num of pivot is 1 for undim deal types
+}
+
+contractutil.pivotData = function (data, isTenderContract, curPricingTable, kitDimAtrbs) {        //convert how we save data in MT to UI spreadsheet consumable format
+    data = contractutil.assignProductProprties(data, isTenderContract, curPricingTable);
+    var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+    var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
+    if (!contractutil.isPivotable(curPricingTable)) return data;
+    var newData = [];
+    let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
+
+    for (var d = 0; d < data.length; d++) {
+        // Tiered data
+        var productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
+        var numTiers = contractutil.numOfPivot(data[d], curPricingTable);
+        let curTier = 1, db = 1, dt = 1;
+
+        for (var t = 1; t <= numTiers; t++) {
+            var lData = util.deepClone(data[d]);
+
+            if (dealType === "VOL_TIER" || dealType === "FLEX" ||
+                dealType === "REV_TIER") {
+                // Set attribute Keys for adding dimensions
+                let endKey;
+                let strtKey;
+                if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                    endKey = "END_VOL"; strtKey = "STRT_VOL";
+                }
+                else if (curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
+                    endKey = "END_REV"; strtKey = "STRT_REV";
+                }
+
+                // Vol-tier specific cols with tiers
+                for (var i = 0; i < tierAtrbs.length; i++) {
+                    var tieredItem = tierAtrbs[i];
+                    lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+
+                    lData = contractutil.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t, curPricingTable);
+
+                    if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
+                        // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                        if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                            lData[endKey] = kendo.toString(parseInt(lData[endKey] || 0), "n0");
+                        }
+                    }
+                    else {
+                        // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
+                        if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                            lData[endKey] = kendo.toString(parseFloat(lData[endKey] || 0), "n2");
+                        }
+                    }
+
+                }
+                // Disable all Start vols except the first if there is no tracker, else disable them all
+                if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
+                    if (!data[d]._behaviors.isReadOnly) {
+                        data[d]._behaviors.isReadOnly = {};
+                    }
+                    lData._behaviors.isReadOnly[strtKey] = true;
+                }
+                // Disable all End volumes except for the last tier if there is a tracker
+                if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
+                    if (t !== numTiers) {
+                        if (!data[d]._behaviors.isReadOnly) {
+                            data[d]._behaviors.isReadOnly = {};
+                        }
+                        lData._behaviors.isReadOnly[endKey] = true;
+                    }
+                }
+            }
+            else if (dealType === "DENSITY") {
+                let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
+                let densityNumTiers = numTiers / densityBands;
+
+                if (db > densityBands) {
+                    db = 1;
+                    curTier++;
+                }
+
+                if (dt > densityNumTiers) {
+                    dt = 1;
+                }
+                // Set attribute Keys for adding dimensions
+                let endKey = "END_PB", strtKey = "STRT_PB";
+
+                // Density specific cols with tiers
+                for (var i = 0; i < densityTierAtrbs.length; i++) {
+                    var tieredItem = densityTierAtrbs[i];
+                    if (tieredItem != "DENSITY_RATE") {
+                        let dimKey = (tieredItem == "DENSITY_BAND") ? "_____8___" : "_____10___";
+                        if (tieredItem != "DENSITY_BAND") {
+                            lData[tieredItem] = lData[tieredItem + dimKey + curTier];
+                            lData = contractutil.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier, curPricingTable);
+                        }
+                        else {
+                            lData[tieredItem] = lData[tieredItem + dimKey + db];
+                            lData = contractutil.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db, curPricingTable);
+
+                        }
+
+                        if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
+                            lData[endKey] = kendo.toString(parseFloat(lData[endKey].replace(/[$,]/g, '') || 0), "n3");
+                        }
+
+                        if (tieredItem === strtKey && lData[strtKey] !== undefined) {
+                            //lData[strtKey] = thousands_separators((parseFloat(lData[strtKey].replace(/[$,]/g, ''))).toFixed(3));
+                            lData[strtKey] = kendo.toString(parseFloat(lData[strtKey].replace(/[$,]/g, '') || 0), "n3");
+                        }
+
+                    }
+                    else {
+                        lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
+                        lData = contractutil.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier, curPricingTable);
+                    }
+                }
+                // Disable all Start vols except the first if there is no tracker, else disable them all
+                let densityBandCount = parseInt(data[d]["NUM_OF_DENSITY"]);
+                if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t > densityBandCount)) {
+                    if (!data[d]._behaviors.isReadOnly) {
+                        data[d]._behaviors.isReadOnly = {};
+                    }
+                    lData._behaviors.isReadOnly[strtKey] = true;
+                }
+                // Disable all End volumes except for the last tier if there is a tracker
+                if (!!data[d]._behaviors && data[d].HAS_TRACKER === "1") {
+                    if (densityBandCount != 1) {
+                        if (t < numTiers - densityBandCount) {
+                            if (!data[d]._behaviors.isReadOnly) {
+                                data[d]._behaviors.isReadOnly = {};
+                            }
+                            lData._behaviors.isReadOnly[endKey] = true;
+                        }
+                    }
+                    else {
+                        if (t != numTiers) {
+                            if (!data[d]._behaviors.isReadOnly) {
+                                data[d]._behaviors.isReadOnly = {};
+                            }
+                            lData._behaviors.isReadOnly[endKey] = true;
+                        }
+                    }
+                }
+            }
+            else if (dealType === "KIT") {
+                // KIT specific cols with 'tiers'
+                for (var i = 0; i < kitDimAtrbs.length; i++) {
+                    var tieredItem = kitDimAtrbs[i];
+                    lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
+                    if (tieredItem == "TIER_NBR") {
+                        lData[tieredItem] = t; // KIT add tier number
+                        if (lData[tieredItem] != 1) {
+                            lData['DEAL_GRP_NM'] = null;
+                        }
+                    }
+                    lData = contractutil.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1), curPricingTable);
+                }
+
+                lData["TEMP_TOTAL_DSCNT_PER_LN"] = contractutil.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
+                lData["TEMP_KIT_REBATE"] = contractutil.calculateKitRebate(data, d, numTiers, true);
+                if (productJSON.length !== 0) {
+                    angular.forEach(productJSON, function (value, key) {
+                        var bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
+                        if (bckt !== undefined && key.toUpperCase() === bckt.toUpperCase()) {
+                            lData["CAP"] = value[0]["CAP"];
+                            lData["YCS2"] = value[0]["YCS2"];
+                        }
+                    });
+                }
+            }
+
+            newData.push(lData);
+            dt++; db++;
+        }
+    }
+    return newData;
+}
+
+
+contractutil.mapTieredWarnings = function (dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber, curPricingTable) {
+    // Tie warning message (valid message and red highlight) to its specific tier
+    // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
+    if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
+        if (dataItem._behaviors.validMsg[atrbName] != null) {
+            try {
+                // Parse the Dictionary json
+                var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+
+                if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+                    // KIT ECAP
+                    if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
+                        dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
+                        dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
+                    }
+                }
+                if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+                    // Set the validation message
+                    if (atrbToSetErrorTo.contains("DENSITY_RATE")) {
+                        if (dataToTieTo.dc_type == "WIP_DEAL") {
+                            let densityRateCheck = Object.values(dataToTieTo.DENSITY_RATE).every(item => item <= 0);
+                            if (densityRateCheck) {
+                                dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                                dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                            }
+                            else {
+                                delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                                delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                            }
+                        }
+                        else if (dataToTieTo.DENSITY_RATE <= 0) {
+                            dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                            dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                        }
+                        else {
+                            delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                            delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                        }
+                    }
+                    else {
+                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                    }
+                } else {
+                    // Delete the tier-specific validation if it doesn't tie to this specific tier
+                    delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                    delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                }
+            } catch (e) {
+                // not Valid Json String
+            }
+        }
+    }
+    return dataToTieTo;
+}  
