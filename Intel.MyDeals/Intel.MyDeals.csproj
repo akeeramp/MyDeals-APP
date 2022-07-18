@@ -2267,6 +2267,9 @@
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorCellTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorEditTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorHeaderTemplate.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Common_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Load_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Save_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\grid.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.service.ts" />

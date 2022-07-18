@@ -1,4 +1,7 @@
-﻿export class GridUtil {
+﻿import { DE_Common_Util } from '../contract/DEUtils/DE_Common_util';
+import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { DE_Load_Util } from './DEUtils/DE_Load_util';
+export class GridUtil {
     static volTierFields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start Vol", "field": "STRT_VOL", "format": "number", "align": "right" },
@@ -94,7 +97,7 @@
         var tmplt = '';
 
         if (passedData[field] === undefined) return tmplt;
-        
+
         if (dim == "20_____2" && passedData.HAS_SUBKIT == "0") {
             //no subkit allowed case
             tmplt += '<div class="uiControlDiv isReadOnlyCell">';
@@ -135,7 +138,7 @@
             titleMsg += formattedMessage;
         else
             titleMsg += passedData.PASSED_VALIDATION;
-        var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_" + passedData.PASSED_VALIDATION + " " + classNm + "' title='" + titleMsg + "'></i></div></div>";
+        var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon iConFont validf_" + passedData.PASSED_VALIDATION + " " + classNm + "' title='" + titleMsg + "'></i></div></div>";
         return tmplt;
     }
     static uiControlScheduleWrapper(passedData) {
@@ -158,10 +161,10 @@
                 tmplt += '<div class="col-md-12 rowDetailHeight">';
                 for (var f = 0; f < fields.length; f++) {
                     //tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
-                    tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder ' + this.getClassNm(passedData, fields[f].field) + '" style="text-align: ' + fields[f].align + ';">';
+                    tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign ' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
-                    tmplt += '<span class="ng-binding" style="padding: 0 4px;">' + passedData[fields[f].field][dim] + '</span>';
+                    tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
                     tmplt += '</div>';
                 }
                 tmplt += '</div>';
@@ -188,7 +191,7 @@
                 tmplt += ' class="kitRowValue ' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
-                tmplt += '<span class="ng-binding" style="padding: 0 4px;">' + passedData[field][dimkey] + '</span>';
+                tmplt += '<span class="ng-binding dataPadding">' + passedData[field][dimkey] + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }
@@ -201,7 +204,7 @@
     }
     static uiReadonlyControlWrapper = function (passedData, field) {
         var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-        tmplt += '    <div class="ng-binding vert-center">'+ passedData[field]+'</div>';
+        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -214,11 +217,11 @@
         var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv ' + this.getClassNm(passedData, field) +'"';        
+        tmplt += '<div class="uiControlDiv ' + this.getClassNm(passedData, field) + '"';
         tmplt += '<div class="vert-center">';
         dim = "20_____2"
         if (passedData[field][dim] != null) {
-            tmplt += '    <div class="ng-binding">' + passedData[field][dim] +'</div>';
+            tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
         }
         dim = "20_____1"
         if (passedData[field][dim] != null) {
@@ -227,7 +230,7 @@
         for (var index in sortedKeys) { //only looking for positive dim keys
             dim = sortedKeys[index];
             if (data.hasOwnProperty(dim) && dim.indexOf("___") >= 0 && dim.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                tmplt += '    <div class="ng-binding">' + passedData[field][dim] +'</div>';
+                tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
             }
         }
         tmplt += '</div></div>';
@@ -240,8 +243,8 @@
         tmplt += '<div class="uiControlDiv ' + this.getClassNm(passedData, field) + '"';
         tmplt += '    <div class="ng-binding vert-center">';
         if (this.displayFrontEndDateMessage(passedData))
-            tmplt += '<span> <i class="intelicon-information style="font- size: 12px; color: #00AEEF;" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
-        tmplt += '    <span class="ng-binding">'+ passedData[field] +'</span></div>';
+            tmplt += '<span> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
+        tmplt += '    <span class="ng-binding">' + passedData[field] + '</span></div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -289,21 +292,16 @@
                             tmplt += '<div ';
 
                             if (fields[f].field == "DENSITY_BAND") {
-                                //tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + bands + '\')"';
-                                //tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
                                 tmplt += 'class="col-md-12 ' + this.getClassNm(passedData, fields[f].field) + '">'
                                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands])
                                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim + bands] + '"></div>';
-                                //tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
-                                tmplt += '<span class="ng-binding" style="padding: 0 4px;">' + passedData[fields[f].field][dim+bands] + '</span>';
+                                tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands] + '</span>';
                             }
                             else {
-                                //tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + bands + "____" + key + '\')"';
                                 tmplt += 'class="col-md-12 ' + this.getClassNm(passedData, fields[f].field) + '">'
                                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands + '____' + key] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands + '____' + key])
                                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim + bands + '____' + key] + '"></div>';
-                                //tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + bands + "____" + key + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
-                                tmplt += '<span class="ng-binding" style="padding: 0 4px;">' + passedData[fields[f].field][dim + bands + '____' + key] +'</span>';
+                                tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands + '____' + key] + '</span>';
                             }
                             tmplt += '</div>';
                             tmplt += '</div>';
@@ -314,13 +312,9 @@
                     }
                     else {
                         tmplt += '<div class="col-md-2 ' + this.getClassNm(passedData, fields[f].field) + '">';
-                        //tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
-                        //tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
                         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
-                        //tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
-                        //tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
-                        tmplt += '<span class="ng-binding" style="padding: 0 4px;">' + passedData[fields[f].field][dim] +'</span>';
+                        tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
                         tmplt += '</div>';
                     }
                 }
@@ -358,5 +352,319 @@
                 classNm = "isDirtyCell";
         }
         return classNm;
+    }
+    static uiBoolControlWrapper = function (passedData, field) {
+        var tmplt = '<div class="uiControlDiv isReadOnlyCell"';
+        tmplt += '    <div class="ng-binding vert-center">' + DE_Common_Util.showBool(passedData[field]) + '</div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiParentControlWrapper = function (passedData) {
+        var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '    <div class="ng-binding vert-center">' + this.stgFullTitleChar(passedData) + '</div>';    //note: opGrid's showStage() calls gridUtils.stgFullTitleChar() in this file
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static stgFullTitleChar = function (passedData) {
+        return passedData.WF_STG_CD === "Draft" ? passedData.PS_WF_STG_CD : passedData.WF_STG_CD;
+    }
+    static uiProductDimControlWrapper = function (passedData, type) {
+        // We need to get the mydeals product, split them show them in prd_bckt split
+        var data = passedData["TITLE"].split(',');
+        var tmplt = '';
+        if (type == "kit") {
+            tmplt += '<div class="col-md-12">';
+            for (var i = 0; i < data.length; i++) {
+                tmplt += '<div class="col-md-12 rowHeight">';
+                tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
+                //tmplt += '<span class="ng-binding dataPadding gridCellSpan" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
+                tmplt += '</div>';
+                tmplt += '</div>';
+            }
+            tmplt += '</div>';
+        } else if (type == "subkit" && passedData.HAS_SUBKIT == "1") {
+            tmplt += '<div class="col-md-12">';
+            for (var i = 0; i < data.length; i++) {
+                if (i <= 1) {   //primary or secondary1
+                    tmplt += '<div class="col-md-12 rowHeight">';
+                    tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                    tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
+                    //tmplt += '<span class="ng-binding dataPadding gridCellSpan" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
+                    tmplt += '</div>';
+                    tmplt += '</div>';
+                } else {
+                    tmplt += '<div class="col-md-12 rowHeight">';
+                    tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                    tmplt += '<span class="dataPadding"></span>';
+                    tmplt += '</div>';
+                    tmplt += '</div>';
+                }
+            }
+            tmplt += '</div>';
+        } else {
+            //no subkit allowed case, i.e. type = "subkit" and HAS_SUBKIT == 0
+            tmplt += '<div class="uiControlDiv isReadOnlyCell">';
+            tmplt += '<div class="ng-binding vert-center">No Sub KIT</div>';
+            tmplt += '</div>';
+        }
+        return tmplt;
+    }
+    static uiProductControlWrapper = function (passedData) {
+        var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '     <div class="ng-binding vert-center gridCellSpan" title="' + passedData.TITLE + '">' + passedData.TITLE + '</div>';
+        //tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="{{dataItem.TITLE}}"></div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiMultiselectArrayControlWrapper = function (passedData, field) {
+        var tmplt = '';
+        if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
+            tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
+        tmplt += '<div class="uiControlDiv msgClassStyles ' + this.getClassNm(passedData, field) + '"';
+        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+        tmplt += '</div>';
+
+        return tmplt;
+    }
+    static uiPrimarySecondaryDimControlWrapper = function (passedData) {
+        var data = passedData["ECAP_PRICE"];    //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers
+
+        if (data === undefined || data === null) return "";
+
+        var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
+        var setPrimary = true;
+        var tmplt = '<div class="col-md-12">';
+        for (var index in sortedKeys) { //only looking for positive dim keys
+            var dimkey = sortedKeys[index];
+            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                tmplt += '<div class="col-md-12 rowHeight">';
+                tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                if (setPrimary) {
+                    tmplt += '<span class="ng-binding dataPadding">P</span>';
+                    setPrimary = false;
+                } else {
+                    tmplt += '<span class="ng-binding dataPadding">S</span>';
+                }
+                tmplt += '</div>';
+                tmplt += '</div>';
+            }
+        }
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiKitCalculatedValuesControlWrapper = function (passedData, kittype, value) {
+        var tmplt = '';
+        tmplt += '<div class="uiControlDiv isReadOnlyCell">';
+        if (passedData.HAS_SUBKIT == "0" && kittype == "subkit") {
+            tmplt += '    <div class="vert-center">No Sub KIT</div>';
+        } else {
+            tmplt += '    <div class="ng-binding vert-center">' + value + '</div>';
+        }
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiControlBackEndRebateWrapper = function (value) {
+        var tmplt = '';
+        tmplt += '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '    <div class="ng-binding vert-center">' + value + '</div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiTotalDiscountPerLineControlWrapper = function (passedData) {
+        var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+
+        if (data === undefined || data === null) return "";
+
+        var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
+
+        var tmplt = '<div class="col-md-12">';
+        for (var index in sortedKeys) { //only looking for positive dim keys
+            var dimkey = sortedKeys[index];
+            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                var value = new CurrencyPipe('en-us').transform(passedData["QTY"][dimkey] * passedData["DSCNT_PER_LN"][dimkey], 'USD', 'symbol', '1.2-2');
+                tmplt += '<div class="col-md-12 rowHeight">';
+                tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                //tmplt += ' ng-click="passThoughFunc(root.clickCellDim, dataItem, \'QTY\', \'' + dimkey + '\')"';
+                tmplt += '<span class="ng-binding dataPadding">' + value + '</span>';
+                tmplt += '</div>';
+                tmplt += '</div>';
+            }
+        }
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {
+        var msg = "";
+        var msgClass = "";
+        var tmplt = '';
+        if (!dimKey) dimKey = "";
+        if (dimKey !== "" && !!passedData[field]) {
+            if (passedData[field][dimKey] !== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
+        } else {
+            if (passedData[field] !== undefined) passedData[field] = passedData[field].replace(/$|,/g, '');
+        }
+        var fieldVal = (dimKey !== "")
+            ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ""
+            : !!passedData[field] && !!passedData[field] ? passedData[field] : "";
+        var startVal = (dimKey !== "")
+            ? !!passedData[startDt] && !!passedData[startDt][dimKey] ? passedData[startDt][dimKey] : ""
+            : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : "";
+
+        if (field === "CAP" && fieldVal === "No CAP") {
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
+            tmplt += '<div class="capLineStyle">No CAP</div>';
+            if (startVal !== "" && startVal !== '01/01/1900') {
+                tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
+            }
+            tmplt += '</div>';
+
+        } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
+            tmplt += '<div style="capLineStyle">No YCS2</div>';
+            if (startVal !== "" && startVal !== '01/01/1900') {
+                tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
+            }
+            tmplt += '</div>';
+
+        } else {
+            if (field === "CAP") {
+                var cap = (dimKey !== "")
+                    ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].toString().replace(/,|$/g, '')) : ""
+                    : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.toString().replace(/,|$/g, '')) : "";
+
+                var ecap = (dimKey !== "")
+                    ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].toString().replace(/,|$/g, '')) : ""
+                    : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.toString().replace(/,|$/g, '')) : "";
+
+                if (ecap > cap) {
+                    var dsplCap = cap === "" ? "No CAP" : cap;
+                    var dsplEcap = ecap === "" ? "No ECAP" : ecap;
+                    msg = "title = 'ECAP ($" + dsplEcap + ") is greater than the CAP ($" + dsplCap + ")'";
+                    msgClass = "isSoftWarnCell";
+                }
+            }
+            var capText = '<span class="ng-binding boldFont">' + passedData[field][dimKey] + '</span>';
+
+            if (fieldVal !== "" && fieldVal.indexOf("-") > -1) {
+                msg = "CAP price " + fieldVal + " cannot be a range.";
+                msgClass = "isSoftWarnCell";
+                capText = '<span class="ng-binding boldFont">' + passedData[field][dimKey] + '</span>';
+            }
+            if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
+                tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
+            tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + '" ' + msg;
+            tmplt += '     class="' + this.getClassNm(passedData, field) + '">';
+            tmplt += capText;
+            tmplt += '    <div>';
+            tmplt += '    <span class="ng-binding">' + passedData[startDt][dimKey] + '</span> - ';
+            tmplt += '    <span class="ng-binding">' + passedData[endDt][dimKey] + '</span>';
+            tmplt += '    </div>';
+            tmplt += '</div>';
+        }
+        return tmplt;
+    }
+    static uiDimInfoControlWrapper = function (passedData, field) {
+        var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
+
+        if (data === undefined || data === null) return "";
+
+        var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
+
+        var YCS2modifier = "";
+        if (field === "YCS2") {
+            YCS2modifier = "_PRC_IRBT";
+        }
+
+        var tmplt = '<div class="col-md-12">';
+        for (var index in sortedKeys) { //only looking for positive dim keys
+            var dimkey = sortedKeys[index];
+            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
+                tmplt += '<div class="col-md-12 rowHeight">';
+                tmplt += '<div class="col-md-12 textRightAlign ' + this.getClassNm(passedData, field) + '">';
+                //tmplt += "<op-popover ";
+                //if (field === "CAP") {
+                //    tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
+                //}
+                //if (field === "YCS2") {
+                //    tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
+                //}
+                //tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
+                //var fieldText = field + '_STRT_DT';
+                //// Special handling for YCS2, naming convention is not followed in defining start date attribute..
+                //if (field === "YCS2") {
+                //    fieldText = field + '_START_DT';
+                //}
+                //tmplt += this.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, fieldText, field + '_END_DT', dimkey);
+                //tmplt += "</op-popover>";
+                tmplt += '</div>';
+                tmplt += '</div>';
+            }
+        }
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static uiCrDbPercWrapper = function (passedData) {
+        var percData = DE_Load_Util.getTotalDealVolume(passedData);
+
+        var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+        tmplt += '    <div class="ng-binding vert-center">';
+        if (passedData["VOLUME"] !== undefined && percData.vol !== 999999999) {
+            tmplt += '      <div class="progress .creditDebitAlignmentStyle">';
+            tmplt += '        <div class="progress-bar" role="progressbar" value="' + percData.perc + '" min="0" max="100" style="width: ' + percData.perc + '%;"></div>';
+            tmplt += '      </div>';
+            tmplt += '      <div class="progressBarTextSize">' + DE_Load_Util.numberWithCommas(percData.numerator) + ' out of ' + DE_Load_Util.numberWithCommas(percData.vol) + '</div>';
+        } else {
+            tmplt += '      <div>' + DE_Load_Util.numberWithCommas(percData.numerator) + '</div>';
+        }
+        tmplt += '    </div>';
+        tmplt += '</div>';
+        return tmplt;
+    }
+    static getResultSingleIcon = function (passedData, field) {
+        var result = passedData[field];
+        var iconNm = this.getResultSingleIconNm(result);
+
+        if (field === 'MEETCOMP_TEST_RESULT') {
+            return '<div class="text-center uiControlDiv isReadOnlyCell cursorStyle"><div class="vert-center">' + iconNm + '</div></div>';
+            //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
+        }
+        else {
+            if ((<any>window).usrRole === 'DA' || ((<any>window).usrRole === 'GA' && (<any>window).isSuper || (<any>window).usrRole === 'SA' || (<any>window).usrRole === 'Legal')) { // Cost Test visable by Super GA, DA, and SA
+                return '<div class="text-center uiControlDiv isReadOnlyCell cursorStyle"><div class="vert-center">' + iconNm + '</div></div>';
+                //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
+            }
+            else {
+                return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
+            }
+        }
+    }
+    static getResultSingleIconNm = function (result) {
+        var iconNm = DE_Load_Util.getResultMappingIconClass(result);
+        var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
+        return '<i class="iConFont ' + iconNm + '" title="' + iconTitle + '"></i>';
+        //return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
+    }
+    static getMissingCostCapIcon = function (data) {
+        var title = this.getMissingCostCapTitle(data);
+
+        if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
+        return '<div class="text-center uiControlDiv isReadOnlyCell"><div class="vert-center"><i class="intelicon-help-solid bigIcon missingCapStyle" title="' + title + '"></i></div></div>';
+        //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMissingCapCostScreen(dataItem)"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
+    }
+    static getMissingCostCapTitle = function (data) {
+        var title = '';
+        if ((<any>window).usrRole === 'DA' || ((<any>window).usrRole === 'GA' || (<any>window).usrRole === 'SA' || (<any>window).usrRole === 'Legal')) {
+            if (data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
+                title = 'Missing CAP';
+            }
+            if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1") {
+                title = 'Missing Cost';
+            }
+            if (data.COST_MISSING_FLG !== undefined && data.COST_MISSING_FLG == "1" && data.CAP_MISSING_FLG !== undefined && data.CAP_MISSING_FLG == "1") {
+                title = 'Missing Cost and CAP';
+            }
+        }
+        return title;
     }
 }

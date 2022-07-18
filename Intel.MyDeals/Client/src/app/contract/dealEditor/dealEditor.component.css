@@ -43,9 +43,9 @@
     vertical-align: top !important;
 }
 
-.badge.warning {
-    background-color: #f3D54E;
-}
+    .badge.warning {
+        background-color: #f3D54E;
+    }
 
 .rowHeight {
     height: 25px;
@@ -61,11 +61,11 @@
 .densityRow {
     border: 0.1px solid lightgrey;
     padding: 2px 0px 0px 1px;
-    text-align:right;
+    text-align: right;
 }
 
-.densityPadding{
-    padding:0px 4px !important;
+.densityPadding {
+    padding: 0px 4px !important;
 }
 
 .densityRatePadding {
@@ -121,6 +121,7 @@ tr:last-child > td {
 .k-grid td {
     border-bottom: 1px solid lightgrey !important;
     padding: 0px !important;
+    white-space: nowrap;
 }
 
 .k-grid-edit-row .k-textbox, .k-widget {
@@ -152,19 +153,88 @@ tr:last-child > td {
     border-radius: 4px 4px 0 0;
 }
 
-.displayBlock{
-    display:block;
+.displayBlock {
+    display: block;
 }
 
-.topPadding{
-    padding-top:3px !important;
+.topPadding {
+    padding-top: 3px !important;
 }
 
 .saveButton {
-    width:10%;
+    width: 10%;
 }
 
-.text{
-    display:inline-flex;
+.text {
+    display: inline-flex;
     padding: 0px 5px;
+}
+
+.textRightAlign {
+    text-align: right;
+}
+
+.gridCellSpan {
+    color: #0071C5;
+    cursor: pointer;
+}
+
+.dataPadding {
+    padding: 0 4px;
+}
+
+.dateWrapper {
+    font-size: 12px;
+    color: #00AEEF;
+}
+
+.capInfoWrapper {
+    font-family: arial;
+    text-align: center;
+    color: white;
+}
+
+.capLineStyle {
+    line-height: 1em;
+    font-family: arial;
+    text-align: center;
+    font-weight: 600
+}
+
+.msgClassStyles {
+    line-height: 1em;
+    font-family: arial;
+    text-align: center;
+}
+
+.boldFont {
+    font-weight: bold;
+}
+
+.creditDebitAlignmentStyle {
+    height: 12px;
+    margin-top: -2px;
+    margin-bottom: 2px;
+}
+
+.progressBarTextSize {
+    font-size: 10px;
+    line-height: 10px;
+}
+
+.iConFont {
+    font-size: 20px !important
+}
+
+.cursorStyle {
+    cursor: pointer;
+}
+
+.missingCapStyle {
+    color: rgb(243, 213, 78);
+    font-size: 18px !important;
+}
+
+.bigIcon {
+    font-size: 26px;
 }

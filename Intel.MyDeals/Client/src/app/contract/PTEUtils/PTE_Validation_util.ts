@@ -1,5 +1,8 @@
-import { PTE_Common_Util } from "./PTE_Common_util";
-import { PTE_Helper_Util } from "./PTE_Helper_util";
+import { ContractUtil } from '../contract.util';
+import { PTEUtil } from '../PTEUtils/PTE.util';
+import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
+import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
+import * as _ from 'underscore';
 
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
@@ -255,4 +258,124 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }
+    static ValidateEndCustomer(data: any, actionName: string, isHybrid, objSetTypeCd) {
+        if (actionName !== "OnLoad") {
+            _.each(data, (item) => {
+                if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
+                    item = ContractUtil.clearEndCustomer(item);
+                }
+            });
+        }
+        if (isHybrid === '1' && (objSetTypeCd === "VOL_TIER" || objSetTypeCd === "ECAP")) {
+            var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+            if (rebateType && rebateType.length > 0) {
+                if (data.length > 1) {
+                    var endCustObj = ""
+                    if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                        endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                    }
+                    _.each(data, (item) => {
+                        var parsedEndCustObj = "";
+                        if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                            parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                            if (parsedEndCustObj.length != endCustObj.length) {
+                                _.each(data, (item) => {
+                                    item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                });
+                            }
+                            else {
+                                for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                    var exists = false;
+                                    _.each(endCustObj, (item) => {
+                                        if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                            item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                            exists = true;
+                                        }
+                                    });
+                                    if (!exists) {
+                                        _.each(data, (item) => {
+                                            item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                        });
+                                        i = parsedEndCustObj.length;
+                                    }
+                                }
+                            }
+                        }
+                        if (endCustObj == "" || parsedEndCustObj == "") {
+                            if (parsedEndCustObj.length != endCustObj.length) {
+                                _.each(data, (item) => {
+                                    item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                });
+                            }
+                        }
+                    });
+                }
+
+            }
+            else {
+                if (data.length > 1) {
+                    var endCustObj = ""
+                    if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
+                        endCustObj = JSON.parse(data[0].END_CUST_OBJ)
+                    }
+                    _.each(data, (item) => {
+                        var parsedEndCustObj = "";
+                        if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
+                            parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
+                            if (parsedEndCustObj.length != endCustObj.length) {
+                                _.each(data, (item) => {
+                                    item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                });
+                            }
+                            else {
+                                for (var i = 0; i < parsedEndCustObj.length; i++) {
+                                    var exists = false;
+                                    _.each(endCustObj, (item) => {
+                                        if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
+                                            item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
+                                            exists = true;
+                                        }
+                                    });
+                                    if (!exists) {
+                                        _.each(data, (item) => {
+                                            item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                        });
+                                        i = parsedEndCustObj.length;
+                                    }
+                                }
+                            }
+                        }
+                        if (endCustObj == "" || parsedEndCustObj == "") {
+                            if (parsedEndCustObj.length != endCustObj.length) {
+                                _.each(data, (item) => {
+                                    item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        return data;
+    }
+    static validateDeal(data: Array<any>, curPricingTable, curPricingStrategy): any {
+        _.each(data, (item) => {
+            //defaulting the behaviours object
+            PTEUtil.setBehaviors(item);
+        });
+        if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
+            return this.validateECAP(data);
+        }
+        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy.IS_HYBRID_PRC_STRATEGY, curPricingTable.OBJ_SET_TYPE_CD)
+    }
+    static validateECAP(data: Array<any>): any {
+        //check for Ecap price 
+        _.each(data, (item) => {
+            //defaulting the behaviours object
+            if (item.ECAP_PRICE["20___0"] == null || item.ECAP_PRICE["20___0"] == 0 || item.ECAP_PRICE["20___0"] == '' || item.ECAP_PRICE["20___0"] < 0) {
+                PTEUtil.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
+            }
+        });
+        return data;
+    }    
 }

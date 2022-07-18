@@ -5,10 +5,10 @@ import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field } f
 import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEditor.service';
 import Handsontable from 'handsontable';
 import { IntlService } from "@progress/kendo-angular-intl";
-
+import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 
 export class PTEUtil {
-   
+
     // Handsontable Config Defaults
     private static defaultDateFormat = 'MM/DD/YYYY';
     private static defaultDatePickerConfig = {
@@ -39,71 +39,16 @@ export class PTEUtil {
     static calculateTotalDsctPerLine = function (dscntPerLine, qty) {
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
-    static mapTieredWarnings = function (dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber, curPricingTable) {
-        // Tie warning message (valid message and red highlight) to its specific tier
-        // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
-        if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
-            if (dataItem._behaviors.validMsg[atrbName] != null) {
-                try {
-                    // Parse the Dictionary json
-                    var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
-    
-                    if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-                        // KIT ECAP
-                        if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
-                            dataToTieTo._behaviors.validMsg["ECAP_PRICE_____20_____1"] = jsonTierMsg["-1"];
-                            dataToTieTo._behaviors.isError["ECAP_PRICE_____20_____1"] = true;
-                        }
-                    }
-                    if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
-                        // Set the validation message
-                        if (atrbToSetErrorTo.contains("DENSITY_RATE")) {
-                            if (dataToTieTo.dc_type == "WIP_DEAL") {
-                                let densityRateCheck = Object.values(dataToTieTo.DENSITY_RATE).every(item => item <= 0);
-                                if (densityRateCheck) {
-                                    dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                                    dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-                                }
-                                else {
-                                    delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-                                    delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
-                                }
-                            }
-                            else if (dataToTieTo.DENSITY_RATE <= 0) {
-                                dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                                dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-                            }
-                            else {
-                                delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-                                delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
-                            }
-                        }
-                        else {
-                            dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-                            dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-                        }
-                    } else {
-                        // Delete the tier-specific validation if it doesn't tie to this specific tier
-                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
-                    }
-                } catch (e) {
-                    // not Valid Json String
-                }
-            }
-        }
-        return dataToTieTo;
-    }  
     static assignProductProprties = function (data, isTenderContract, curPricingTable) {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             for (var d = 0; d < data.length; d++) {
-    
+
                 if (_.isEqual(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
-    
+
                 // product JSON
                 var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
                 var sysProduct = [];
-    
+
                 var productArray = [];
                 for (var key in productJSON) {
                     if (productJSON.hasOwnProperty(key)) {
@@ -117,7 +62,7 @@ export class PTEUtil {
                 sysProduct = sysProduct.filter(function (x) {
                     return x.USR_INPUT === contractProduct || x.HIER_VAL_NM === contractProduct;
                 });
-    
+
                 data[d]["CAP"] = sysProduct.length !== 0 ? sysProduct[0]["CAP"] : "";
                 data[d]["YCS2"] = sysProduct.length !== 0 ? sysProduct[0]["YCS2"] : "";
             }
@@ -131,16 +76,16 @@ export class PTEUtil {
         if (!this.isPivotable(curPricingTable)) return data;
         var newData = [];
         let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
-    
+
         for (var d = 0; d < data.length; d++) {
             // Tiered data
             var productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
             var numTiers = this.numOfPivot(data[d], curPricingTable);
             let curTier = 1, db = 1, dt = 1;
-    
+
             for (var t = 1; t <= numTiers; t++) {
                 var lData = this.deepClone(data[d]);
-    
+
                 if (dealType === "VOL_TIER" || dealType === "FLEX" ||
                     dealType === "REV_TIER") {
                     // Set attribute Keys for adding dimensions
@@ -152,14 +97,14 @@ export class PTEUtil {
                     else if (curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER") {
                         endKey = "END_REV"; strtKey = "STRT_REV";
                     }
-    
+
                     // Vol-tier specific cols with tiers
                     for (var i = 0; i < tierAtrbs.length; i++) {
                         var tieredItem = tierAtrbs[i];
                         lData[tieredItem] = lData[tieredItem + "_____10___" + t];
-    
-                        lData = this.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t, curPricingTable);
-    
+
+                        PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+
                         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX") {
                             // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
@@ -172,7 +117,7 @@ export class PTEUtil {
                                 lData[endKey] =parseFloat(lData[endKey] || 0);
                             }
                         }
-    
+
                     }
                     // Disable all Start vols except the first if there is no tracker, else disable them all
                     if (!!data[d]._behaviors && ((t === 1 && data[d].HAS_TRACKER === "1") || t !== 1)) {
@@ -194,18 +139,18 @@ export class PTEUtil {
                 else if (dealType === "DENSITY") {
                     let densityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
                     let densityNumTiers = numTiers / densityBands;
-    
+
                     if (db > densityBands) {
                         db = 1;
                         curTier++;
                     }
-    
+
                     if (dt > densityNumTiers) {
                         dt = 1;
                     }
                     // Set attribute Keys for adding dimensions
                     let endKey = "END_PB", strtKey = "STRT_PB";
-    
+
                     // Density specific cols with tiers
                     for (var i = 0; i < densityTierAtrbs.length; i++) {
                         var tieredItem = densityTierAtrbs[i];
@@ -213,27 +158,27 @@ export class PTEUtil {
                             let dimKey = (tieredItem == "DENSITY_BAND") ? "_____8___" : "_____10___";
                             if (tieredItem != "DENSITY_BAND") {
                                 lData[tieredItem] = lData[tieredItem + dimKey + curTier];
-                                lData = this.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier, curPricingTable);
+                                PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
                             }
                             else {
                                 lData[tieredItem] = lData[tieredItem + dimKey + db];
-                                lData = this.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db, curPricingTable);
-    
+                                PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, db);
+
                             }
-    
+
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
                                 lData[endKey] = parseFloat(lData[endKey].replace(/[$,]/g, '') || 0);
                             }
-    
+
                             if (tieredItem === strtKey && lData[strtKey] !== undefined) {
                                 //lData[strtKey] = thousands_separators((parseFloat(lData[strtKey].replace(/[$,]/g, ''))).toFixed(3));
                                 lData[strtKey] = parseFloat(lData[strtKey].replace(/[$,]/g, '') || 0);
                             }
-    
+
                         }
                         else {
                             lData[tieredItem] = lData[tieredItem + "_____8___" + db + "____10___" + curTier];
-                            lData = this.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier, curPricingTable);
+                            PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, curTier);
                         }
                     }
                     // Disable all Start vols except the first if there is no tracker, else disable them all
@@ -275,9 +220,9 @@ export class PTEUtil {
                                 lData['DEAL_GRP_NM'] = null;
                             }
                         }
-                        lData = this.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1), curPricingTable);
+                        PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, (t - 1));
                     }
-    
+
                     lData["TEMP_TOTAL_DSCNT_PER_LN"] = this.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
                     lData["TEMP_KIT_REBATE"] = this.calculateKitRebate(data, d, numTiers, true);
                     if (productJSON.length !== 0) {
@@ -290,7 +235,7 @@ export class PTEUtil {
                         });
                     }
                 }
-    
+
                 newData.push(lData);
                 dt++; db++;
             }
@@ -341,12 +286,12 @@ export class PTEUtil {
     }
 
     static generateHandsontableColumn(pteService: pricingTableEditorService,
-                                      loggerService: logger,
-                                      dropdownResponses: any[],
-                                      templateColumnFields: PRC_TBL_Model_Field[],
-                                      templateColumnAttributes: PRC_TBL_Model_Attributes[],
-                                      item: PRC_TBL_Model_Column,
-                                      index: number): Handsontable.ColumnSettings {
+        loggerService: logger,
+        dropdownResponses: any[],
+        templateColumnFields: PRC_TBL_Model_Field[],
+        templateColumnAttributes: PRC_TBL_Model_Attributes[],
+        item: PRC_TBL_Model_Column,
+        index: number): Handsontable.ColumnSettings {
         let currentColumnConfig: Handsontable.ColumnSettings = {
             data: item.field,
             width: item.width,
@@ -397,10 +342,10 @@ export class PTEUtil {
             }
 
             if (!_.isUndefined(templateColumnAttributes[item.field])) {
-                    currentColumnConfig.type = 'dropdown';
-                    if (item.lookupUrl) {
-                        currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
-                    }
+                currentColumnConfig.type = 'dropdown';
+                if (item.lookupUrl) {
+                    currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
+                }
             }
         }
         /* Is Required & Nullable */
@@ -419,7 +364,7 @@ export class PTEUtil {
                 headerAction: true,
                 // WIP: Comparsion Function
             }
-        } 
+        }
         /* Editable or not */
         if(!templateColumnFields[`${item.field}`].editable){
             currentColumnConfig.readOnly=true;
@@ -429,43 +374,43 @@ export class PTEUtil {
     static getCellComments(PTR: any,columns:Array<any>): Array<any> {
         let cellComments = [];
         _.each(PTR, (item, rowInd) => {
-          if (item._behaviors.validMsg) {
-            _.each(item._behaviors.validMsg, (val, key) => {
-              let colInd = _.findIndex(columns, { field: key });
-              cellComments.push({ row: rowInd, col: colInd, comment: { value: val,readOnly: true }, className: 'error-border' });
-              if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
-                cellComments.push({ row: rowInd, col: 0, className: 'error-cell' });
-              }
-            });
-          }
+            if (item._behaviors.validMsg) {
+                _.each(item._behaviors.validMsg, (val, key) => {
+                    let colInd = _.findIndex(columns, { field: key });
+                    cellComments.push({ row: rowInd, col: colInd, comment: { value: val,readOnly: true }, className: 'error-border' });
+                    if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
+                        cellComments.push({ row: rowInd, col: 0, className: 'error-cell' });
+                    }
+                });
+            }
         });
         return cellComments;
-      }
+    }
     static getMergeCells(PTR: any,columns:Array<any>,NUMOFTIERS:string):Array<any> {
         let mergCells = [];
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
         let distDCID = _.uniq(PTR, 'DC_ID');
         _.each(distDCID, (item) => {
-          let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
-  
-          //get NUM_OF_TIERS acoording this will be the row_span for handson
-          let NUM_OF_TIERS =curPTR.NUM_OF_TIERS !=undefined ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
-          _.each(columns, (colItem, ind) => {
-            if (!colItem.isDimKey && !colItem.hidden) {
-              let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
-              mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
-            }
-          })
+            let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
+
+            //get NUM_OF_TIERS acoording this will be the row_span for handson
+            let NUM_OF_TIERS =curPTR.NUM_OF_TIERS !=undefined ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
+            _.each(columns, (colItem, ind) => {
+                if (!colItem.isDimKey && !colItem.hidden) {
+                    let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+                    mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
+                }
+            })
         });
         return mergCells;
-      }
+    }
     static setBehaviors(item:any, elem?:string) {
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
         if (!item._behaviors.isError) item._behaviors.isError = {};
         if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-     }
+    }
     static setBehaviorsValidMessage(item:any, elem:string, elemLabel:string, cond:string){
         if (elem === 'ECAP_PRICE' && cond=='equal-zero') {
             item._behaviors.isRequired[elem] = true;
@@ -474,17 +419,17 @@ export class PTEUtil {
         }
     }
     static validatePTE(PTR:Array<any>,ObjType:string):any{
-       if(ObjType=='ECAP'){
-        return PTEUtil.validatePTEECAP(PTR);
-       }
-       else{
-        return PTEUtil.validatePTEDeal(PTR);
-       }
+        if(ObjType=='ECAP'){
+            return PTEUtil.validatePTEECAP(PTR);
+        }
+        else{
+            return PTEUtil.validatePTEDeal(PTR);
+        }
     }
     static validatePTEDeal(PTR:Array<any>):any{
         _.each(PTR,(item) =>{
             //defaulting the behaviours object
-             PTEUtil.setBehaviors(item);
+            PTEUtil.setBehaviors(item);
         });
         return PTR;
     }
@@ -492,17 +437,17 @@ export class PTEUtil {
         //check for Ecap price 
         _.each(PTR,(item) =>{
             //defaulting the behaviours object
-             PTEUtil.setBehaviors(item);
-           if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
-             PTEUtil.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
-           }
+            PTEUtil.setBehaviors(item);
+            if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
+                PTEUtil.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
+            }
         });
         return PTR;
     }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults, rowData): any {
         let data = rowData;
-       
+
         // Process multiple match products
         var isAllValidated = true;
         var key: any;

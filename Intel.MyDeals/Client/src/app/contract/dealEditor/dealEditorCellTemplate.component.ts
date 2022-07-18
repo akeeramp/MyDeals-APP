@@ -4,6 +4,7 @@ import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { GridUtil } from '../grid.util';
+import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 @Component({
     selector: 'deal-editor-cell',
     templateUrl: 'Client/src/app/contract/dealEditor/dealEditorCellTemplate.component.html',
@@ -24,6 +25,7 @@ export class dealEditorCellTemplateComponent {
     @Input() in_DataItem: any = '';
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
+    private subKitEcapDim = "20_____2";
     private dim = "10___";
     private fields: any;
 
@@ -64,10 +66,16 @@ export class dealEditorCellTemplateComponent {
                 data.ECAP_PRICE[this.ecapDimKey] = this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2');
             dim = this.ecapDimKey;
         }
-        if (field == "KIT_ECAP") {
+        if (field == "KIT_ECAP" || field == "CAP_KIT" || field == "YCS2_KIT") {
             if (data.ECAP_PRICE[this.kitEcapdim] !== undefined && data.ECAP_PRICE[this.kitEcapdim] !== null && data.ECAP_PRICE[this.kitEcapdim] !== "")
                 data.ECAP_PRICE[this.kitEcapdim] = this.currencyPipe.transform(data.ECAP_PRICE[this.kitEcapdim], 'USD', 'symbol', '1.2-2');
             dim = this.kitEcapdim;
+            field = "ECAP_PRICE";
+        }
+        if (field == "SUBKIT_ECAP") {
+            if (data.ECAP_PRICE[this.subKitEcapDim] !== undefined && data.ECAP_PRICE[this.subKitEcapDim] !== null && data.ECAP_PRICE[this.subKitEcapDim] !== "")
+                data.ECAP_PRICE[this.subKitEcapDim] = this.currencyPipe.transform(data.ECAP_PRICE[this.subKitEcapDim], 'USD', 'symbol', '1.2-2');
+            dim = this.subKitEcapDim;
             field = "ECAP_PRICE";
         }
         if (field == "COMPETITIVE_PRICE") {
@@ -170,6 +178,50 @@ export class dealEditorCellTemplateComponent {
                 data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
         }
         return GridUtil.uiControlEndDateWrapper(data, field);
+    }
+    uiBoolControlWrapper(passedData, field) {
+        return GridUtil.uiBoolControlWrapper(passedData, field);
+    }
+    uiProductDimControlWrapper(passedData, type) {
+        return GridUtil.uiProductDimControlWrapper(passedData, type);
+    }
+    uiProductControlWrapper(passedData) {
+        return GridUtil.uiProductControlWrapper(passedData);
+    }
+    uiParentControlWrapper(passedData) {
+        return GridUtil.uiParentControlWrapper(passedData);
+    }
+    uiMultiselectArrayControlWrapper(passedData, field) {
+        return GridUtil.uiMultiselectArrayControlWrapper(passedData, field);
+    }
+    uiPrimarySecondaryDimControlWrapper(passedData) {
+        return GridUtil.uiPrimarySecondaryDimControlWrapper(passedData);
+    }
+    uiKitCalculatedValuesControlWrapper(passedData, kitType, column) {
+        var value = this.currencyPipe.transform(PTE_Load_Util.kitCalculatedValues(passedData, kitType, column), 'USD', 'symbol', '1.2-2');
+        return GridUtil.uiKitCalculatedValuesControlWrapper(passedData, kitType, value);
+    }
+    uiControlBackEndRebateWrapper(passedData) {
+        var dim = this.in_Deal_Type == "ECAP" ? this.ecapDimKey : this.kitEcapdim;
+        var value = this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2');
+        return GridUtil.uiControlBackEndRebateWrapper(value);
+    }
+    uiTotalDiscountPerLineControlWrapper(passedData) {
+        return GridUtil.uiTotalDiscountPerLineControlWrapper(passedData);
+    }
+    getResultSingleIcon(passedData, field) {
+        var parent = document.getElementById(field + "_" + passedData.DC_ID);
+        parent.innerHTML = GridUtil.getResultSingleIcon(passedData, field);
+        var child = parent.getElementsByTagName('i');
+        if (child != undefined && child.length == 1)
+            child[0].style.color = this.getColorStyle(passedData[field]);
+        return;
+    }
+    getColorStyle = function (result) {
+        return PTE_Load_Util.getColorPct(result);
+    }
+    uiCrDbPercWrapper(passedData) {
+        return GridUtil.uiCrDbPercWrapper(passedData);
     }
     getFormatedDim(passedData) {
         return GridUtil.getFormatedDim(passedData, 'TempCOMP_SKU', '20___0');
