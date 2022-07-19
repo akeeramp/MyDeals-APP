@@ -2299,6 +2299,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.component.ts" />
+	<TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.service.ts" />
+		<TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\prodSel_Util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderManager\tenderManager.component.ts" />

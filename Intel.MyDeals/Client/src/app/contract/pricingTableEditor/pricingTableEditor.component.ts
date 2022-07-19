@@ -39,6 +39,7 @@ export class pricingTableEditorComponent implements OnChanges {
         private lnavSVC: lnavService,
         protected dialog: MatDialog) {
         /*  custom cell editot logic starts here*/
+        let VM=this;
         this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
             public TEXTAREA: any;
             public BUTTON: any;
@@ -83,25 +84,35 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             openPopUp() {
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
-                let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px';
+                let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px',data={};
                 if (this.field && this.field == 'PTR_USER_PRD') {
                     modalComponent = ProductSelectorComponent;
                     name = "Product Selector";
-                    height = "650px"
-                    width = "1350px";
+                    height = "850px"
+                    width = "1700px";
+                    let obj={},curRow=[];
+                    _.each(this.hot.getCellMetaAtRow(this.selRow), (val) => {
+                        if (val.prop) {
+                            obj[val.prop] = this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) != null ? this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) : null;
+                        }
+                    });
+                    curRow.push(obj);
+                    data={ name: name, source: this.source, selVal: selVal,contractData:VM.contractData,curPricingTable:VM.curPricingTable,curRow:curRow};
                 }
                 else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
                     name = "Geo Selector";
+                    data={ name: name, source: this.source, selVal: selVal};
                 }
                 else {
                     modalComponent = marketSegComponent;
                     name = "Market Segment Selector";
+                    data={ name: name, source: this.source, selVal: selVal};
                 }
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,
                     width: width,
-                    data: { name: name, source: this.source, selVal: selVal },
+                    data: data,
                 });
                 dialogRef.afterClosed().subscribe(result => {
                     if (result) {

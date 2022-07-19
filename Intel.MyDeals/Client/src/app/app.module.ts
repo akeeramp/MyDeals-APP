@@ -52,6 +52,7 @@ import { EditorModule } from "@progress/kendo-angular-editor";
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
 import { UploadModule } from '@progress/kendo-angular-upload';
+import { NavigationModule } from "@progress/kendo-angular-navigation";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
@@ -98,8 +99,8 @@ import { contractComponents } from './modules/contract.module';
         NgPipesModule,
         OrderModule,
         GridsterModule,
-        UploadModule
-        
+        UploadModule,
+        NavigationModule
      ],
      providers: [
         {

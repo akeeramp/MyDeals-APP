@@ -44,6 +44,7 @@
         "@progress/kendo-angular-label": "^3.0.3",
         "@progress/kendo-angular-layout": "^6.3.6",
         "@progress/kendo-angular-menu": "^3.0.3",
+        "@progress/kendo-angular-navigation": "^2.0.0",
         "@progress/kendo-angular-pdf-export": "^3.0.1",
         "@progress/kendo-angular-popup": "^4.0.1",
         "@progress/kendo-angular-progressbar": "2.0.2",

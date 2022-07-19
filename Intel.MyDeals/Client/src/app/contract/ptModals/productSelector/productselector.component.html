@@ -1,26 +1,94 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <div class="container-fluid overflow">
-    <div class="row">
-        <div class="col">
-            <h1 mat-dialog-title>{{data.name}}</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div mat-dialog-content>
-                <mat-form-field appearance="fill">
-                    <mat-label>Make your entry</mat-label><input matInput [(ngModel)]="data.selVal">
-                </mat-form-field>
+    <div class="product-selector modal-content"
+        style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;;">
+        <div class="product-selector modal-content">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                    <p>
+                        Product Selector
+                        <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
+                    </p>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-2" style="padding-top: 8px"></div>
+                <div class="col-md-6 col-sm-6 col-xs-6 prodSelectorSearch">
+                    <div class="modalCloseIcon fr">
+                        <i role="button" title="Close" class="intelicon-close-max" (click)="onNoClick()"></i>
+                    </div>
+                    <button class="btn btn-default prdBtn fr" (click)="clearSearch()"
+                        style="margin: 0 0 0 8px;">Clear</button>
+                    <button class="btn btn-primary prdBtn fr" (click)="searchProduct()"
+                        style="margin: 0 0 0 10px;">Search</button>
+                    <kendo-autocomplete placeholder="Enter country" class="prod-autocomplete fr form-control input-sm">
+                    </kendo-autocomplete>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row justify-content-end">
-        <div class="col">
-            <div mat-dialog-actions>
-                <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button>
-                <button mat-button [mat-dialog-close]="data.selVal" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+            <div class="row">
+                <div class="col-md breadCrumbWrapper">
+                    <!-- kendo breadcrumb implementation this is not exact breadcrum but making in the similar way -->
+                    <div>
+                        <ul class="productSelectorpath breadcrumb">
+                            <li><a role="button" class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
+                            <li *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
+                                <a *ngIf="p.name != 'NA'" class="prdAnchor" role="button"
+                                    (click)="selectPath(index + 1)">{{p.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div *ngIf="!showTree">
+                    <div *ngFor="let p of items | orderBy: 'name'; let last = last;let index=index" role="group">
+                            <button role="button" (click)="selectItem(p, true)">{{checkForBlank(p.name)}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div *ngIf="showTree">
+                        <kendo-grid [data]="gridData" [loading]="isGirdLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" 
+                            filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                            [groupable]="false" (dataStateChange)="dataStateChange($event)"  [selectable]="{enabled: true, checkboxOnly: true }" 
+                             kendoGridSelectBy="{{prdSelectionkey}}"  [(selectedKeys)]="prdSelection" (selectedKeysChange)="onSelectedKeysChange()">
+                            <kendo-grid-checkbox-column>
+                                <ng-template kendoGridHeaderTemplate>
+                                    <input type="checkbox" kendoCheckBox id="selectAllCheckboxId" kendoGridSelectAllCheckbox
+                                        [state]="selectAllState"
+                                        (selectAllChange)="onSelectAllChange($event)">
+                                    <label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+                                </ng-template>
+                            </kendo-grid-checkbox-column>
+                            <ng-template ngFor [ngForOf]="gridColumnsProduct" let-column>
+                                <kendo-grid-column  [headerClass]="{'headerClass':true}" field="{{column.field}}" title="{{column.title}}" [hidden]="column.hidden">
+                                </kendo-grid-column>
+                            </ng-template>
+                        </kendo-grid>
+                   </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <kendo-textarea [value]="prdSelectionDisp"></kendo-textarea>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col">
+                    <div mat-dialog-actions>
+                        <button mat-button (click)="onNoClick()" class="btn btn-warning">
+                            Cancel
+                        </button>
+                        <button mat-button [mat-dialog-close]="data.selVal" cdkFocusInitial class="btn btn-primary">
+                            Save & Close
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<loading-panel-angular id="PTRLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader"
+    [description]="spinnerMessageDescription"></loading-panel-angular>
