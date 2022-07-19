@@ -1,3 +1,5 @@
+import { PTEUtil } from "./PTE.util";
+import { PTE_Load_Util } from "./PTE_Load_util";
 
 export class PTE_Helper_Util {
     static getFormatedGeos (geos) {
@@ -188,4 +190,124 @@ export class PTE_Helper_Util {
             return PTE_Helper_Util.CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter);
         }
     }
+
+    static getColor(k, c, colorDictionary) {
+        if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
+            return colorDictionary[k][c];
+        }
+        return "#aaaaaa";
+    }
+
+    static deNormalizeData = function (data, curPricingTable, kitDimAtrbs, maxKITproducts) {      //convert how we keep data in UI to MT consumable format
+        if (!PTEUtil.isPivotable(curPricingTable)) return data;
+        //For multi tiers last record will have latest date, skipping duplicate DC_ID
+        var a;
+        var newData = [];
+        var lData = {};
+        var tierDimKey = "_____10___";
+        var prodDimKey = "_____20___";
+
+        var dimKey;
+        var dimAtrbs;
+        var isKit = 0;
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
+        var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
+        let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
+
+        if (dealType === "VOL_TIER" || dealType === "FLEX" ||
+            dealType === "REV_TIER" || dealType === "DENSITY") {
+            dimKey = tierDimKey;
+            dimAtrbs = tierAtrbs;
+        }
+        else if (dealType === "KIT") {
+            dimKey = prodDimKey;
+            dimAtrbs = kitDimAtrbs;
+            isKit = 1;
+        }
+
+        var prevTier = 1, densityBand = 1;
+
+        for (var d = 0; d < data.length; d) {
+            var numTiers = PTE_Load_Util.numOfPivot(data[d], curPricingTable);      //KITTODO: rename numTiers to more generic var name for kit deals?
+            if (dealType == "DENSITY") {
+                let numDensityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
+                let densityNumTiers = numTiers / numDensityBands;
+                let prevRow = (d == 0) ? parseInt(data[d]["DC_ID"]) : parseInt(data[d - 1]["DC_ID"]);
+                let curRow = parseInt(data[d]["DC_ID"]);
+                let count = 0;
+
+                for (var x = 1 - isKit; x <= numTiers - isKit; x++) {
+                    if (prevTier != data[d].TIER_NBR || prevRow != curRow) { densityBand = 1; prevTier = data[d].TIER_NBR; }
+                    if (prevRow != curRow) {
+                        count = d;
+                        curRow = prevRow;
+                    }
+                    else {
+                        count = (d == 0) ? 0 : (count + numDensityBands);
+                    }
+                    if (x === 1 - isKit) { lData = data[d]; }
+                    for (a = 0; a < densityTierAtrbs.length; a++) { // each tiered attribute
+                        if (dealType == "DENSITY" && densityTierAtrbs[a] == "DENSITY_RATE") {
+                            let densityDimKey = "_____8___";
+                            lData[densityTierAtrbs[a] + densityDimKey + densityBand + "____10___" + data[d].TIER_NBR] = data[d][densityTierAtrbs[a]];
+                            densityBand++;
+                        }
+                        else {
+                            let densityDimKey = (densityTierAtrbs[a] == "DENSITY_BAND") ? "_____8___" : "_____10___";
+
+                            if ((densityTierAtrbs[a] == "DENSITY_BAND") && x <= numDensityBands) {
+                                lData[densityTierAtrbs[a] + densityDimKey + x] = data[d][densityTierAtrbs[a]];
+                            }
+                            else if (densityTierAtrbs[a] != "DENSITY_BAND" && x <= densityNumTiers) {
+                                lData[densityTierAtrbs[a] + densityDimKey + x] = data[count][densityTierAtrbs[a]];
+                            }
+                        }
+                        if (x === numTiers - isKit) { // last tier
+                            delete lData[densityTierAtrbs[a]];
+                        }
+                    }
+                    d++;
+                    if (d === data.length) {
+                        break;
+                    }
+                }
+
+            }
+            else {
+
+                for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
+                    if (t === 1 - isKit) { lData = data[d]; }
+                    for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
+                        lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
+
+                        if (t === numTiers - isKit) { // last tier
+                            delete lData[dimAtrbs[a]];
+
+                            if (dealType === "KIT") {
+                                // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
+                                //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
+                                for (var i = 0; i < maxKITproducts; i++) {
+                                    var tierToDel = (t + 1 + i);
+                                    lData[dimAtrbs[a] + dimKey + tierToDel] = "";
+                                }
+                            }
+                        }
+                    }
+                    // NOTE: the length of the data is the number of rows. But we need to iterate by the number of
+                    //		normalized rows (which we are creating now) due to tiered dimensions in VOL-TIER and KIT.
+                    //		Hence why we increment d and break on d === data.length manually.
+                    //		Basically,  this d-incrementing code is mimicking a skip of rows in "data" that are not of tier_nbr 1.
+                    //		But also we can't just put a "tier_nbr != 1" check because we still need to use data[d] of each corresponding tier.
+                    d++;
+                    if (d === data.length) {
+                        break;
+                    }
+                }
+
+            }
+            newData.push(lData);
+        }
+
+        return newData;
+    }  
 }

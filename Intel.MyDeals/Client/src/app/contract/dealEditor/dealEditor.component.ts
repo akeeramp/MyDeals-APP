@@ -6,7 +6,6 @@ import * as _ from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { ContractUtil } from '../contract.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
@@ -307,8 +306,8 @@ export class dealEditorComponent {
     }
 
     ngOnInit() {
-        this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
-        this.curPricingTable = ContractUtil.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+        this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
         this.getGroupsAndTemplates();
         this.selectedTab = "Deal Info";

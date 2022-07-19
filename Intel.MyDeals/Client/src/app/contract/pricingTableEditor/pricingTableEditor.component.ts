@@ -8,7 +8,6 @@ import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as _ from 'underscore';
 import { templatesService } from '../../shared/services/templates.service';
-import { ContractUtil } from '../contract.util';
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,6 +23,7 @@ import { lnavService } from '../lnav/lnav.service';
 import * as moment from 'moment';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
+import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -184,9 +184,9 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
-        this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+        this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         // Get the Current Pricing Table data
-        this.curPricingTable = ContractUtil.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         // Get template for the selected PT
         this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
     }

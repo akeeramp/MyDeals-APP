@@ -2276,7 +2276,6 @@
     <TypeScriptCompile Include="Client\src\app\contract\lnav.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\contract\contract.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctChildGrid.component.ts" />

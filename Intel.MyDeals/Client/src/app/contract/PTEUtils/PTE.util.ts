@@ -245,7 +245,6 @@ export class PTEUtil {
     static deepClone = function(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
-
     static isPivotable = function (curPricingTable) {
         if (!curPricingTable) return false;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
@@ -257,7 +256,6 @@ export class PTEUtil {
             return true;
         }
     }
-
     static numOfPivot = function (dataItem, curPricingTable) {
         if (curPricingTable === undefined) return 1;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
@@ -284,7 +282,6 @@ export class PTEUtil {
         }
         return 1;   //num of pivot is 1 for undim deal types
     }
-
     static generateHandsontableColumn(pteService: pricingTableEditorService,
         loggerService: logger,
         dropdownResponses: any[],
@@ -465,7 +462,6 @@ export class PTEUtil {
         }
         return data;
     }
-
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
         // Validate columns that product is dependent on
         for (var i = 0; i < currentPricingTableRowData.length; i++) {

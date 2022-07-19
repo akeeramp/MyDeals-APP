@@ -1,8 +1,12 @@
-import { ContractUtil } from '../contract.util';
+import * as _ from 'underscore';
+import * as moment from "moment";
+import { lnavUtil } from "../lnav.util";
 import { PTEUtil } from '../PTEUtils/PTE.util';
+import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
-import * as _ from 'underscore';
+
+
 
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
@@ -257,16 +261,331 @@ export class PTE_Validation_Util {
             };
         }
         return modalOptions;
+    }    
+    static validateDeal(data: Array<any>, curPricingTable, curPricingStrategy): any {
+        _.each(data, (item) => {
+            //defaulting the behaviours object
+            PTEUtil.setBehaviors(item);
+        });
+        if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
+            return this.validateECAP(data);
+        }
+        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy, curPricingTable)
     }
-    static ValidateEndCustomer(data: any, actionName: string, isHybrid, objSetTypeCd) {
-        if (actionName !== "OnLoad") {
-            _.each(data, (item) => {
-                if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
-                    item = ContractUtil.clearEndCustomer(item);
+    static validateECAP(data: Array<any>): any {
+        //check for Ecap price 
+        _.each(data, (item) => {
+            //defaulting the behaviours object
+            if (item.ECAP_PRICE["20___0"] == null || item.ECAP_PRICE["20___0"] == 0 || item.ECAP_PRICE["20___0"] == '' || item.ECAP_PRICE["20___0"] < 0) {
+                PTEUtil.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
+            }
+        });
+        return data;
+    }    
+    static setToSame(data, elem) {
+        _.forEach(data, (item) => {
+            if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
+                item[elem] = null;
+            }
+        });
+        return data;
+    }
+
+    static clearValidation(data, elem) {
+        _.forEach(data, (item) => {
+            if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                delete item._behaviors.isRequired[elem];
+                delete item._behaviors.isError[elem];
+                delete item._behaviors.validMsg[elem];
+            }
+        });
+        return data;
+    }
+
+    static clearSettlementPartner = function (data) {
+        _.forEach(data, (item) => {
+            if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                    item.SETTLEMENT_PARTNER = null;
+                }
+                delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+            }
+            if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && item.HAS_TRACKER == "0") {
+                if (item._behaviors && item._behaviors.isReadOnly)
+                    delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+            }
+        });
+        return data;
+    }
+
+    static validateFlexDate(data, curPricingTable, wipData) {
+        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            data = this.clearValidation(data, 'START_DT');
+            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
+            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+            var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
+
+            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
+        }
+        return drainingInvalidDates;
+    }
+
+    static setFlexBehaviors(item, elem, cond, restrictGroupFlexOverlap) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+        item._behaviors.isRequired[elem] = true;
+        item._behaviors.isError[elem] = true;
+
+        if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
+            item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
+        }
+        else if (cond == 'invalidDate' && elem == 'START_DT' && !restrictGroupFlexOverlap) {
+            item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
+        }
+
+        else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
+            item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
+        }
+
+        else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
+            item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
+        }
+        return item;
+    }
+
+    static validateFlexRules(data, curPricingTable, wipData, restrictGroupFlexOverlap) {
+        if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+            data = this.clearValidation(data, 'PAYOUT_BASED_ON');
+            var accrualRule = true, drainingRule = true;
+            var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
+            drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
+            if (!accrualRule) {
+                _.forEach(filterData, (item) => {
+                    item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
+                });
+            }
+            if (!drainingRule) {
+                _.forEach(drainingEntries, (item) => {
+                    item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
+                });
+            }
+            if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
+                var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
+                var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
+                _.forEach(restrictedAccrualData, (item) => {
+                    item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
+                });
+                _.forEach(restrictedDraininngData, (item) => {
+                    item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
+                });
+            }
+        }
+        return data;
+    }
+
+    static clearEndCustomer = function (item) {
+        if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {
+            delete item._behaviors.isError["END_CUSTOMER_RETAIL"];
+            delete item._behaviors.validMsg["END_CUSTOMER_RETAIL"];
+        }
+        return item;
+    }
+
+    static setEndCustomer(item, dealType, curPricingTable) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if ((item.END_CUSTOMER_RETAIL != '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+            || ((curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") && item.REBATE_TYPE.toLowerCase() != "tender")) {//To show required error message
+            item = this.clearEndCustomer(item);
+            item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
+            item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer Retail and End Customer Country/Region must be same for " + dealType + ".";
+        }
+        else if ((item.END_CUSTOMER_RETAIL == '' && item.END_CUSTOMER_RETAIL != null && item.END_CUSTOMER_RETAIL != undefined)
+            && ((curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "PROGRAM") && item.REBATE_TYPE.toLowerCase() == "tender")) {
+            item = this.clearEndCustomer(item);
+            item._behaviors.isError["END_CUSTOMER_RETAIL"] = true;
+            item._behaviors.validMsg["END_CUSTOMER_RETAIL"] = "End Customer/Retail is required.";
+        }
+        return item;
+    }
+
+    static validateDate(dateType, contractData, existingMinEndDate) {
+        contractData._behaviors.isError['START_DT'] =
+            contractData._behaviors.isError['END_DT'] = false;
+        contractData._behaviors.validMsg['START_DT'] =
+            contractData._behaviors.validMsg['END_DT'] = "";
+
+        var startDate = contractData.START_DT;
+        var endDate = contractData.END_DT;
+
+        if (dateType == 'START_DT') {
+            if (moment(startDate).isAfter(endDate) || moment(startDate).isBefore(contractData.MinDate)) {
+                contractData._behaviors.isError['START_DT'] = true;
+                contractData._behaviors
+                    .validMsg['START_DT'] = moment(startDate).isBefore(contractData.MinDate)
+                        ? "Start date cannot be less than - " + contractData.MinDate
+                        : "Start date cannot be greater than End Date";
+            }
+        } else {
+            if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(contractData.MaxDate)) {
+                contractData._behaviors.isError['END_DT'] = true;
+                contractData._behaviors
+                    .validMsg['END_DT'] = moment(endDate).isAfter(contractData.MaxDate)
+                        ? "End date cannot be greater than - " + contractData.MaxDate
+                        : "End date cannot be less than Start Date";
+            }
+            if (existingMinEndDate !== "" && contractData.PRC_ST != null && contractData.PRC_ST.length != 0) {
+                if (moment(endDate).isBefore(existingMinEndDate)) {
+                    contractData._behaviors.isError['END_DT'] = true;
+                    contractData._behaviors
+                        .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + existingMinEndDate + " - if you have already created pricing strategies. ";
+                }
+            }
+        }
+        return contractData;
+    }
+
+    static validateTitles = function (dataItem, curPricingStrategy, contractData, curPricingTable, ptTitle) {
+        var rtn = true;
+
+        if (!curPricingStrategy) return true;
+        var isPsUnique = lnavUtil.IsUniqueInList(contractData.PRC_ST, curPricingStrategy["TITLE"], "TITLE", true);
+        var isPtUnique = !curPricingTable ? true : lnavUtil.IsUniqueInList(curPricingStrategy.PRC_TBL, curPricingTable["TITLE"], "TITLE", true);
+
+        // Pricing Table
+        if (!!curPricingTable) {
+            if (!curPricingTable._behaviors) curPricingTable._behaviors = {};
+            if (!curPricingTable._behaviors.validMsg) curPricingTable._behaviors.validMsg = {};
+            if (!curPricingTable._behaviors.isError) curPricingTable._behaviors.isError = {};
+
+            if (!curPricingTable._behaviors.isDirty || curPricingTable._behaviors.isDirty.TITLE) {
+                if (curPricingTable !== undefined && curPricingTable.TITLE === "") {
+                    curPricingTable._behaviors.validMsg["TITLE"] = "The " + ptTitle + " needs a Title.";
+                    curPricingTable._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                }
+                else if (!isPtUnique) {
+                    curPricingTable._behaviors.validMsg["TITLE"] = "Table title (" + ptTitle + ") must be a unique name within this contract.";
+                    curPricingTable._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else if (curPricingTable["TITLE"] !== undefined && curPricingTable["TITLE"].length > 80) {
+                    curPricingTable._behaviors.validMsg["TITLE"] = "The title (" + ptTitle + ") cannot have more than 80 characters.";
+                    curPricingTable._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                }
+                else {
+                    curPricingTable._behaviors.isError["TITLE"] = false;
+                }
+            }
+        }
+
+        // Pricing Strategy
+        if (!!curPricingStrategy) {
+            if (!curPricingStrategy._behaviors) curPricingStrategy._behaviors = {};
+            if (!curPricingStrategy._behaviors.validMsg) curPricingStrategy._behaviors.validMsg = {};
+            if (!curPricingStrategy._behaviors.isError) curPricingStrategy._behaviors.isError = {};
+
+            if (!curPricingStrategy._behaviors.isDirty || curPricingStrategy._behaviors.isDirty.TITLE) {
+                if (curPricingStrategy !== undefined && curPricingStrategy.TITLE === "") {
+                    curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + ptTitle + " needs a Title.";
+                    curPricingStrategy._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else if (!isPsUnique) {
+                    curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + ptTitle + " must have unique name.";
+                    curPricingStrategy._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else if (curPricingStrategy["TITLE"] !== undefined && curPricingStrategy["TITLE"].length > 80) {
+                    curPricingStrategy._behaviors.validMsg["TITLE"] = "The " + ptTitle + " cannot have more than 80 characters.";
+                    curPricingStrategy._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else {
+                    curPricingStrategy._behaviors.isError["TITLE"] = false;
+                }
+            }
+        }
+
+        if (dataItem !== undefined) {
+            if (!dataItem._behaviors) dataItem._behaviors = {};
+            if (!dataItem._behaviors.validMsg) dataItem._behaviors.validMsg = {};
+            if (!dataItem._behaviors.isError) dataItem._behaviors.isError = {};
+
+            if (!dataItem._behaviors.isDirty || dataItem._behaviors.isDirty.TITLE) {
+                if (dataItem !== undefined && dataItem.TITLE === "") {
+                    dataItem._behaviors.validMsg["TITLE"] = "The " + ptTitle + " needs a Title.";
+                    dataItem._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else if (!isPsUnique) {
+                    dataItem._behaviors.validMsg["TITLE"] = "The " + ptTitle + " must have unique name.";
+                    dataItem._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else if (dataItem["TITLE"] !== undefined && dataItem["TITLE"].length > 80) {
+                    dataItem._behaviors.validMsg["TITLE"] = "The " + ptTitle + " cannot have more than 80 characters.";
+                    dataItem._behaviors.isError["TITLE"] = true;
+                    rtn = false;
+                } else {
+                    dataItem._behaviors.isError["TITLE"] = false;
+                }
+            }
+        }
+        return rtn;
+    }
+
+    static validateMarketSegment = function (data, wipData, spreadDs) {
+        data = this.clearValidation(data, 'MRKT_SEG');
+        var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+        //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+        //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+        var spreadData;
+        if (spreadDs != undefined) {
+            spreadData = spreadDs;
+        }
+        else {
+            spreadData = data
+        }
+        //For multi tiers last record will have latest date, skipping duplicate DC_ID
+        var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+        var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
+        if (isMarketSegment) {
+            _.forEach(data, (item) => {
+                if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
+                    if (!item._behaviors) item._behaviors = {};
+                    if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+                    if (!item._behaviors.isError) item._behaviors.isError = {};
+                    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+                    item._behaviors.isRequired["MRKT_SEG"] = true;
+                    item._behaviors.isError["MRKT_SEG"] = true;
+                    item._behaviors.validMsg["MRKT_SEG"] = "Market Segment is required.";
+
                 }
             });
         }
-        if (isHybrid === '1' && (objSetTypeCd === "VOL_TIER" || objSetTypeCd === "ECAP")) {
+        return data;
+    }
+
+     static ValidateEndCustomer(data, actionName, curPricingStrategy, curPricingTable) {
+        if (actionName !== "OnLoad") {
+            _.forEach(data, (item) => {
+                if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
+                    item = this.clearEndCustomer(item);
+                }
+            });
+        }
+        if (curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP")) {
             var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
             if (rebateType && rebateType.length > 0) {
                 if (data.length > 1) {
@@ -274,27 +593,27 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.each(data, (item) => {
+                    _.forEach(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
-                                    item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                _.forEach(data, (item) => {
+                                    item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.each(endCustObj, (item) => {
+                                    _.forEach(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.each(data, (item) => {
-                                            item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                        _.forEach(data, (item) => {
+                                            item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
                                     }
@@ -303,8 +622,8 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
-                                    item = ContractUtil.setEndCustomer(item, 'Hybrid Vol_Tier Deal', objSetTypeCd);
+                                _.forEach(data, (item) => {
+                                    item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
                         }
@@ -318,27 +637,27 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.each(data, (item) => {
+                    _.forEach(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
-                                    item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                _.forEach(data, (item) => {
+                                    item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.each(endCustObj, (item) => {
+                                    _.forEach(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.each(data, (item) => {
-                                            item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                        _.forEach(data, (item) => {
+                                            item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
                                     }
@@ -347,8 +666,8 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
-                                    item = ContractUtil.setEndCustomer(item, 'Hybrid ' + objSetTypeCd + ' Deal', objSetTypeCd);
+                                _.forEach(data, (item) => {
+                                    item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
                         }
@@ -356,26 +675,326 @@ export class PTE_Validation_Util {
                 }
             }
         }
+
         return data;
     }
-    static validateDeal(data: Array<any>, curPricingTable, curPricingStrategy): any {
-        _.each(data, (item) => {
-            //defaulting the behaviours object
-            PTEUtil.setBehaviors(item);
-        });
-        if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
-            return this.validateECAP(data);
-        }
-        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy.IS_HYBRID_PRC_STRATEGY, curPricingTable.OBJ_SET_TYPE_CD)
-    }
-    static validateECAP(data: Array<any>): any {
-        //check for Ecap price 
-        _.each(data, (item) => {
-            //defaulting the behaviours object
-            if (item.ECAP_PRICE["20___0"] == null || item.ECAP_PRICE["20___0"] == 0 || item.ECAP_PRICE["20___0"] == '' || item.ECAP_PRICE["20___0"] < 0) {
-                PTEUtil.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
+
+    static setSettlementPartner = function (item, Cond) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        item._behaviors.isRequired["SETTLEMENT_PARTNER"] = true;
+        item._behaviors.isError["SETTLEMENT_PARTNER"] = true;
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+        if (item.HAS_TRACKER == 0 || item.HAS_TRACKER == undefined) {
+            if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() !== 'cash') {
+                item._behaviors.isReadOnly["SETTLEMENT_PARTNER"] = true;
             }
-        });
+            if (item.AR_SETTLEMENT_LVL != undefined && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') {
+                delete item._behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+            }
+            else {
+                if (Cond == '1') {
+                    item._behaviors.validMsg["SETTLEMENT_PARTNER"] = "For hybrid deal vendor must be same if any settlement level is cash";
+                }
+            }
+        }
+        return item;
+    }
+
+    static validateSettlementPartner = function (data, curPricingStrategy, getVendorDropDownResult) {
+        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
+        //check if settlement is cash and pgm type is backend
+        var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+        if (cashObj && cashObj.length > 0) {
+            if (getVendorDropDownResult != null && getVendorDropDownResult != undefined && getVendorDropDownResult.length > 0) {
+                var customerVendor = getVendorDropDownResult;
+                _.forEach(data, (item) => {
+                    var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                    if (partnerID && partnerID.length == 1) {
+                        item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                    }
+                });
+            }
+            else if (hybCond == '1') {
+                retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
+                if (!retCond) {
+                    _.forEach(data, (item) => {
+                        item = this.setSettlementPartner(item, '1');
+                    });
+                }
+                else {
+                    data = this.clearSettlementPartner(data);
+                }
+            }
+            else {
+                retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
+                if (!retCond) {
+                    _.forEach(data, (item) => {
+                        if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
+                            if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
+                                item.SETTLEMENT_PARTNER = null;
+                            }
+                            delete item._behaviors.isRequired["SETTLEMENT_PARTNER"];
+                            delete item._behaviors.isError["SETTLEMENT_PARTNER"];
+                            delete item._behaviors.validMsg["SETTLEMENT_PARTNER"];
+                        }
+                    });
+                }
+                else {
+                    data = this.clearSettlementPartner(data);
+                }
+
+            }
+        }
+        else {
+            data = this.clearSettlementPartner(data);
+        }
         return data;
-    }    
+    }
+
+    static itemValidationBlock = function (data, key, mode, wipData, spreadDs, curPricingTable) {
+        var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+        //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
+        //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
+        var spreadData;
+        if (spreadDs != undefined) {
+            spreadData = spreadDs;
+        }
+        else {
+            spreadData = data
+        }
+
+        //For multi tiers last record will have latest date, skipping duplicate DC_ID
+        var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+        var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
+        var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
+
+        if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list
+            //if(v1.length > 1 && v1[0] !== "" && v1[0] != null) {  
+            if (v1.length > 1 && hasNotNull) {
+                _.each(data, (item) => {
+                    if (!item._behaviors) item._behaviors = {};
+                    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                    if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
+                        PTE_Load_Util.setBehaviors(item, key, 'notequal', curPricingTable);
+                    }
+                });
+            }
+        }
+        if (mode.indexOf("equalblank") >= 0) { // Returns -1 if not in list
+            if (hasNotNull == false && v1[0] !== "") {
+                var v1List = data.filter((val) => val[key] === null);
+                _.each(v1List, (item) => {
+                    if (!item._behaviors) item._behaviors = {};
+                    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                    if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set blank error message
+                        PTE_Load_Util.setBehaviors(item, key, 'equalblank', curPricingTable);
+                    }
+                });
+            }
+        }
+        //Additional check for settlement partner if AR Settlement Level is 'CASH'
+        if (key == "SETTLEMENT_PARTNER" && !hasNotNull) {
+            _.each(data, (item) => {
+                if (!item._behaviors) item._behaviors = {};
+                if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                if (item._behaviors.isReadOnly[key] === undefined && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') { // If not read only, set error message
+                    PTE_Load_Util.setBehaviors(item, key, 'equalblank', curPricingTable);
+                }
+            });
+        }
+
+        if (key == "END_CUSTOMER_RETAIL") {
+            var uniqueEndCustomerCountry = filterData.map((val) => val["PRIMED_CUST_CNTRY"]).filter((value, index, self) => self.indexOf(value) === index);
+            if (uniqueEndCustomerCountry.length > 1) {
+                _.each(data, (item) => {
+                    if (!item._behaviors) item._behaviors = {};
+                    if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+                    if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
+                        PTE_Load_Util.setBehaviors(item, key, 'notequal', curPricingTable);
+                    }
+                });
+            }
+        }
+
+        return data;
+    }
+    // validate OverArching conditions
+    static validateOverArching = function (data, curPricingStrategy, curPricingTable) {
+        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
+        var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual');
+        var isFlatRate = curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER';
+        //calling clear overarching in the begening
+        data = this.clearValidation(data, 'REBATE_OA_MAX_AMT');
+        data = this.clearValidation(data, 'REBATE_OA_MAX_VOL');
+        //to fix a defect, setting the property value to same
+        data = this.setToSame(data, 'REBATE_OA_MAX_AMT');
+        data = this.setToSame(data, 'REBATE_OA_MAX_VOL');
+
+        if (hybCond == '1' || isFlexAccrual) {
+            //condition to check values are zero
+            retZeroOAV = data.every((val) => val.REBATE_OA_MAX_VOL === 0);
+            retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
+
+            if (retZeroOAV) {
+                _.each(data, (item) => {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero', curPricingTable);
+                });
+            }
+            else if (retZeroOAD) {
+                _.each(data, (item) => {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero', curPricingTable);
+                });
+            }
+
+            //else if (retOAVCond && retOADCond) { But on a line by line bases to capture both values filled out, not entire table both columns filled out.
+            var testMaxAmtValues = [];
+            var testMaxAmtCount = 0;
+            var testMaxVolValues = [];
+            var testMaxVolCount = 0;
+            _.each(data, (item) => {
+                // Are both values populated on this item?
+                if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") &&
+                    (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL !== "")) {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth', curPricingTable);
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth', curPricingTable);
+                }
+                // Are both values empty for this item?
+                if (!(isFlexAccrual == 1 || isFlatRate == true)) { // Pulls Flex/Vol Tier out of this test
+                    if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
+                        (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
+                        item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalemptyboth', curPricingTable);
+                        item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth', curPricingTable);
+                    }
+                }
+                if (isFlatRate == true) { // Check single column for Vol Tier - must have values
+                    //if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {                
+                    if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
+                        (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
+                        item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth', curPricingTable);
+                        item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth', curPricingTable);
+                    }
+                }
+                // Check for 0 values
+                if (item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT === "0") {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero', curPricingTable);
+                }
+                if (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL === "0") {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero', curPricingTable);
+                }
+                // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
+                //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+                if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
+                    testMaxAmtCount++;
+                    if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
+                        testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
+                    }
+                }
+                if (item.REBATE_OA_MAX_VOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+                    testMaxVolCount++;
+                    if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
+                        testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
+                    }
+                }
+            });
+            // Check if this is a flex, and if it is, only accrual single tier rows count..
+            //var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
+            var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
+            if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
+                _.each(data, (item) => {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal', curPricingTable);
+                });
+            }
+            if (testMaxVolValues.length > 1 || (testMaxVolValues.length > 0 && testMaxVolCount != elementCount)) {
+                _.each(data, (item) => {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal', curPricingTable);
+                });
+            }
+            if (testMaxAmtValues.length > 0 && testMaxVolValues.length > 0) {
+                _.each(data, (item) => {
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth', curPricingTable);
+                    item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth', curPricingTable);
+                });
+            }
+        }
+        return data;
+    }
+    static validateFlexRowType = function (data, curPricingStrategy, curPricingTable, wipData, spreadDs, restrictGroupFlexOverlap) {
+        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            data = this.clearValidation(data, 'FLEX_ROW_TYPE');
+
+            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            //var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
+            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+
+            if (drainingEntries.length > 0 && accrualEntries.length == 0) {
+                _.each(data, (item) => {
+                    item = this.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype', restrictGroupFlexOverlap);
+                });
+            }
+
+            if (accrualEntries.length > 0) {
+                this.validateOverArching(accrualEntries, curPricingStrategy, curPricingTable);
+            }
+            this.validateHybridFields(data, curPricingStrategy, curPricingTable, wipData, spreadDs);
+        }
+        return data;
+    }
+    static validateHybridFields = function (data, curPricingStrategy, curPricingTable, wipData, spreadDs) {
+        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
+        var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
+        //calling clear overarching in the begening
+
+        if (hybCond == '1' || isFlexDeal) {
+            // Assume cleared, the apply breaks
+            data = this.clearValidation(data, 'REBATE_TYPE');
+            data = this.clearValidation(data, 'PAYOUT_BASED_ON');
+            data = this.clearValidation(data, 'CUST_ACCNT_DIV');
+            data = this.clearValidation(data, 'GEO_COMBINED');
+            data = this.clearValidation(data, 'PERIOD_PROFILE');
+            data = this.clearValidation(data, 'RESET_VOLS_ON_PERIOD');
+            data = this.clearValidation(data, 'PROGRAM_PAYMENT');
+            data = this.clearValidation(data, 'SETTLEMENT_PARTNER');
+            data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
+            data = this.clearValidation(data, 'CONSUMPTION_TYPE');
+
+            this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            if (hybCond) {
+                this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], wipData, spreadDs, curPricingTable);
+            }
+            this.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "GEO_COMBINED", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "PERIOD_PROFILE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "RESET_VOLS_ON_PERIOD", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "PROGRAM_PAYMENT", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "SETTLEMENT_PARTNER", ["notequal"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            if (isFlexDeal) {
+                data = this.clearValidation(data, 'END_CUSTOMER_RETAIL', curPricingTable);
+                this.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], wipData, spreadDs, curPricingTable);
+            }
+            //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
+        }
+        return data;
+    }
+    //validate settlement level for hybrid 
+    static validateSettlementLevel = function (data, curPricingStrategy) {
+        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
+        //calling clear all validation
+        data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
+        if (hybCond == '1') {
+            retCond = data.every((val) => val.AR_SETTLEMENT_LVL != null && val.AR_SETTLEMENT_LVL != '' && val.AR_SETTLEMENT_LVL ==
+                data[0].AR_SETTLEMENT_LVL);
+            if (!retCond) {
+                _.each(data, (item) => {
+                    this.setBehaviors(item, 'AR_SETTLEMENT_LVL', 'notequal');
+                });
+            }
+        }
+        return data;
+    }
 }
