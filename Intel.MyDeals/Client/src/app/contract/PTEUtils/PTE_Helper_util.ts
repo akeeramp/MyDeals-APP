@@ -199,7 +199,7 @@ export class PTE_Helper_Util {
     }
 
     static deNormalizeData = function (data, curPricingTable, kitDimAtrbs, maxKITproducts) {      //convert how we keep data in UI to MT consumable format
-        if (!PTEUtil.isPivotable(curPricingTable)) return data;
+        if (!PTE_Load_Util.isPivotable(curPricingTable)) return data;
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
         var a;
         var newData = [];

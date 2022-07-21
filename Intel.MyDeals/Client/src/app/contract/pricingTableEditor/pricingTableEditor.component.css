@@ -2,12 +2,13 @@ td.error-border {
     border: 1px solid red !important;
 }
 
-td.error-cell {
-    color: red !important;
-    border: solid red 1px !important;
+td:first-of-type.error-cell {
+    background-color: red;
+    color: white !important;
+    border: solid lightgrey 1px !important;
 }
 
-td.readonly-cell {
+td:not(:first-of-type).readonly-cell {
     background-color: rgb(238, 238, 238) !important;
 }
 
@@ -39,4 +40,7 @@ td.readonly-cell {
     bottom: 0px !important;
     width: 1px !important;
     height: 1px !important;
+}
+.handsontable .htCommentCell:after {
+    border-top-color: red;
 }
