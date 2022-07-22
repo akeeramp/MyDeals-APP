@@ -61,6 +61,8 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     // public PAGE_NM = pageNm;
     meetCompMasterResult: any[];
     public meetCompMasterdata;
+    public meetCompUnchangedData;
+    public meetCompUpdatedList = [];
     public meetCompSkuDropdownData = [];
     public meetCompPrcDropdownData = [];
     public totalApiEntries = 0;
@@ -69,6 +71,10 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     public isEditableGrid = "True";
     public mySelection = [];
     public selectAllState: SelectAllCheckboxState = "unchecked";
+
+    public selectedCust = '';
+    public selectedCustomerText = '';
+    public curentRow;
 
     private gridData: GridDataResult;
     private childGridData: GridDataResult;
@@ -110,27 +116,6 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
             value: 100,
         }
     ];
-
-    public onSelectedKeysChange(): void {
-        const len = this.mySelection.length;
-        if (len === 0) {
-            this.selectAllState = "unchecked";
-        } else if (len > 0 && len < this.gridResult.length) {
-            this.selectAllState = "indeterminate";
-        } else {
-            this.selectAllState = "checked";
-        }
-    }
-
-    public onSelectAllChange(checkedState: SelectAllCheckboxState): void {
-        if (checkedState === "checked") {
-            this.selectAllState = "checked";
-            this.mySelection = this.gridResult.map((val, index) => index);
-        } else {
-            this.mySelection = [];
-            this.selectAllState = "unchecked";
-        }
-    }
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -287,14 +272,192 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         
     }
 
+    //Triggered on click of checkbox on grid
+    selectProdIDS(selectedID, event) {
+        const isSelected = event.target.checked;
+        if (this.state.filter.filters.length > 0) {
+            //UPDATE Selected Filter ROWS
+            const filterData = this.gridData.data;
+            if (selectedID == 'all') {
+                if (isSelected) {
+                    for (let i = 0; i < filterData.length; i++) {
+                        if (filterData[i].MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                            this.meetCompMasterdata._elements[filterData[i].RW_NM - 1].IS_SELECTED = true;
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < filterData.length; i++) {
+                        if (filterData[i].MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                            this.meetCompMasterdata._elements[filterData[i].RW_NM - 1].IS_SELECTED = false;
+                        }
+                    }
+                }
+            }
+            else {
+                this.meetCompMasterdata._elements[selectedID - 1].IS_SELECTED = isSelected;
+                const filterList = new List<any>(filterData);
+                this.resetDealItems(this.meetCompMasterdata._elements[selectedID - 1].GRP_PRD_SID, filterList,isSelected); // Reset All the Deals not copied from Peers
+            }
+        }
+        else {
+            if (selectedID == 'all') {
+                if (isSelected) {
+                    this.meetCompMasterdata._elements.forEach(function (obj) {
+                        if (obj.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                            obj.IS_SELECTED = true;
+                        }
+                    });
+                }
+                else {
+                    this.meetCompMasterdata._elements.forEach(function (obj) {
+                        if (obj.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                            obj.IS_SELECTED = false;
+                        }
+                    });
+                }
+            }
+            else {
+                this.meetCompMasterdata._elements[selectedID - 1].IS_SELECTED = isSelected;
+                this.resetDealItems(this.meetCompMasterdata._elements[selectedID - 1].GRP_PRD_SID, this.meetCompMasterdata,isSelected); // Reset All the Deals not copied from Peers
+            }
+        }
+        //Holding expanded column
+        if (selectedID == 'all') {
+            // expandSelected();
+        }
+    }
+
+    resetDealItems(GRP_PRD_SID, data,isSelected) {
+        //Getting all Child Item
+        const tempDealData =data
+            .Where(function (x) {
+                return (x.GRP_PRD_SID == GRP_PRD_SID);
+            })
+            .ToArray();
+        for (let i = 0; i < tempDealData.length; i++) {
+            this.meetCompMasterdata._elements[tempDealData[i].RW_NM - 1].IS_SELECTED = isSelected;
+        }
+    }
+
+    addToUpdateList(dataItem) {
+        let indx = -1;
+        this.meetCompUpdatedList.some(function (e, i) {
+            if (e.RW_NM == dataItem.RW_NM) {
+                indx = i;
+                return true;
+            }
+        });
+        if (indx > -1) {
+            this.meetCompUpdatedList.splice(indx, 1);
+        }
+        this.meetCompUpdatedList.push(dataItem);
+        this.setUpdateFlag = true;
+    }
+
+    //Returns all selected rows from grid
+    getProductLineData() {
+        let filterData;
+        if (this.state.filter.filters.length > 0) {
+            filterData = this.gridData.data;
+        }
+        else {
+            filterData = this.meetCompMasterdata.ToArray();
+        }
+        //UPDATE Selected Product ROWS
+        const selectedData = filterData
+            .filter( (x)=> {
+                return (x.IS_SELECTED == true);
+            })
+        return selectedData;
+    }
+
+    addSKUForCustomer(mode, isSelected) {
+        if (this.selectedCustomerText.trim().length > 0) {
+            this.meetCompMasterdata._elements[this.curentRow - 1].COMP_SKU = this.selectedCustomerText;
+            if (mode == "0" || mode == 0) {
+                this.meetCompMasterdata._elements[this.curentRow - 1].CUST_NM_SID = this.selectedCust;
+            }
+            else {
+                this.meetCompMasterdata._elements[this.curentRow - 1].CUST_NM_SID = 1;
+            }
+            this.addToUpdateList(this.meetCompMasterdata._elements[this.curentRow - 1]);
+            let isUpdated = false;
+            //Update child
+            if (this.meetCompMasterdata._elements[this.curentRow - 1].GRP == "PRD") {
+                let selData = [];
+                if (isSelected) {
+                    selData = this.getProductLineData();
+                }
+                if (selData.length > 0) {
+                    isUpdated = true;
+                    for (let cntData = 0; selData.length > cntData; cntData++) {
+                        const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+                        //Updating Product Line
+                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                            this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_SKU = this.selectedCustomerText;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                        }
+                        //Updating Deal line
+                        const tempData =this.meetCompUnchangedData
+                            .Where(function (x) {
+                                return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                            }).ToArray();
+                        for (let i = 0; i < tempData.length; i++) {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_SKU = this.selectedCustomerText;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+                    }
+                }
+                else {
+                    const tempData = this.meetCompUnchangedData
+                        .Where( (x)=> {
+                            return (
+                                x.GRP_PRD_SID == this.meetCompMasterdata._elements[this.curentRow - 1].GRP_PRD_SID &&
+                                x.GRP == "DEAL" &&
+                                x.MC_NULL == true &&
+                                x.MEET_COMP_UPD_FLG == "Y");
+                        }).ToArray();
+                    for (let i = 0; i < tempData.length; i++) {
+                        this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_SKU = this.selectedCustomerText;
+                        this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                    }
+                    if (tempData.length > 0) {
+                        isUpdated = true;
+                    }
+                }
+                if (isUpdated) {
+                    // expandSelected("COMP_SKU", $scope.curentRow);
+                }
+            }
+        }
+    }
+
     loadMeetCompData() {
         this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
         this.MC_MODE = "A";
         this.meetCompSvc.getMeetCompProductDetails(this.objSid, this.MC_MODE, this.objTypeId).subscribe(
             (response: Array<any>) => {
+                response.forEach( (obj) => {
+                    obj.IS_SELECTED = false;
+                    //Setting COMP_PRC to null. Its nullable Int
+                    if (obj.COMP_PRC == 0) {
+                        obj.COMP_PRC = null;
+                    }
+                    //Setting IA_BNCH to null. Its nullable Int
+                    if (obj.IA_BNCH == 0) {
+                        obj.IA_BNCH = null;
+                    }
+                    //Setting COMP_BNCH to null. Its nullable Int
+                    if (obj.COMP_BNCH == 0) {
+                        obj.COMP_BNCH = null;
+                    }
+                });
                 this.meetCompMasterResult = response;
                 this.totalApiEntries = this.meetCompMasterResult.length;
                 this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
+                const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
+                this.meetCompUnchangedData = new List<any>(tempCopy);
                 this.gridResult = this.meetCompMasterdata
                     .Where(function (x) {
                         return x.GRP == "PRD" && x.DEFAULT_FLAG == "Y";
@@ -315,12 +478,171 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         );
     }
 
-    onCompSkuChange(val: any) {
-        console.log(val);
+    onCompSkuChange(val: any,dataItem:any) {
+        const selectedIndx = val.RW_NM;
+        this.selectedCustomerText = (val.COMP_SKU).trim();
+        this.selectedCust =dataItem.CUST_NM_SID;
+        this.curentRow =dataItem.RW_NM;
+        if (selectedIndx == -1 && this.selectedCustomerText.trim().length > 0) {
+            this.addSKUForCustomer("0",dataItem.IS_SELECTED);
+            dataItem.COMP_SKU = this.selectedCustomerText.trim();
+        }
+        else if (selectedIndx > -1 && this.selectedCustomerText.trim().length > 0) {
+            const selectedValue = val.RW_NM;
+            dataItem.COMP_SKU = this.selectedCustomerText.trim();
+
+            let tempprcData = [];
+            dataItem.COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
+            let isUpdated = false;
+            if (dataItem.GRP == "PRD") {
+                let selData = [];
+                if (dataItem.IS_SELECTED) {
+                    selData = this.getProductLineData();
+                }
+                this.addSKUForCustomer("0", dataItem.IS_SELECTED);
+                if (selData.length > 0) {
+                    isUpdated = true;
+                    for (let cntData = 0; selData.length > cntData; cntData++) {
+                        const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                        //Updating Product Line
+                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                            this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                        }
+
+                        //Updating Deal line
+                        tempprcData = this.meetCompUnchangedData
+                            .Where(function (x) {
+                                return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                            })
+                            .ToArray();
+
+                        for (let i = 0; i < tempprcData.length; i++) {
+                            if (dataItem.COMP_PRC) {
+                                this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                            }
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1]);
+                        }
+                    }
+                }
+                else {
+                    tempprcData = this.meetCompUnchangedData
+                        .Where(function (x) {
+                            return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                        }).ToArray();
+                    for (let i = 0; i < tempprcData.length; i++) {
+                        if (dataItem.COMP_PRC) {
+                            this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                        }
+                        this.addToUpdateList(this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1]);
+                    }
+                    if (tempprcData.length > 0) {
+                        isUpdated = true;
+                    }
+                }
+            }
+            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_SKU = (val.COMP_SKU).trim();
+            // Setting COMP PRC based on Comp SKU if available
+            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
+            this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+
+            //Retaining the same expand
+            if (isUpdated) {
+                // expandSelected("COMP_SKU", options.model.RW_NM);
+            }
+        }
     }
 
-    onCompPriceChange(val: any) {
-        console.log(val);
+    onCompPriceChange(val: any,dataItem:any) {
+        dataItem.COMP_PRC = val.COMP_PRC == "" ? null : val.COMP_PRC;
+        const objItem = this.meetCompUnchangedData
+        .Where(function (x) {
+            return (
+                x.GRP_PRD_SID == dataItem.GRP_PRD_SID &&
+                x.COMP_SKU == dataItem.COMP_SKU
+            );
+        }).ToArray();
+
+        //Set AMT
+        let itm_amt = 0;
+        if (objItem.length > 0) {
+            itm_amt = objItem[0].COMP_PRC;
+        }
+        if (itm_amt !== dataItem.COMP_PRC && dataItem.COMP_PRC != null) {
+            if (isNaN(dataItem.COMP_PRC) || dataItem.COMP_PRC == null) {
+                if (val.COMP_PRC) {
+                    dataItem.COMP_PRC = val.COMP_PRC;
+                } else {
+                    dataItem.COMP_PRC = null;
+                }
+            }
+            if (dataItem.COMP_PRC > 0) {
+                let tempData = [];
+                let isUpdated = false;
+                if (dataItem.GRP == "PRD") {
+                    let selData = [];
+                    if (dataItem.IS_SELECTED) {
+                        selData = this.getProductLineData();
+                    }
+                    if (selData.length > 0) {
+                        isUpdated = true;
+                        for (let cntData = 0; selData.length > cntData; cntData++) {
+                            const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                            //Updating Product Line
+                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                            }
+
+                            //Updating Deal line
+                            tempData = this.meetCompUnchangedData
+                                .Where(function (x) {
+                                return (
+                                    x.GRP_PRD_SID == temp_grp_prd &&
+                                    x.GRP == "DEAL" &&
+                                    x.MC_NULL == true &&
+                                    x.MEET_COMP_UPD_FLG == "Y"
+                                );
+                                }).ToArray();
+
+                            for (let i = 0; i < tempData.length; i++) {
+                                this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                            }
+                        }
+                    } else {
+                        tempData = this.meetCompUnchangedData.Where(function (x) {
+                            return (
+                                x.GRP_PRD_SID == dataItem.GRP_PRD_SID &&
+                                x.GRP == "DEAL" &&
+                                x.MC_NULL == true &&
+                                x.MEET_COMP_UPD_FLG == "Y"
+                            );
+                        }).ToArray();
+
+                        for (let i = 0; i < tempData.length; i++) {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+
+                        if (tempData.length > 0) {
+                        isUpdated = true;
+                        }
+                    }
+                }
+                this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                this.addToUpdateList(dataItem);
+
+                //Retaining the same expand
+                if (isUpdated) {
+                // expandSelected("COMP_PRC", options.model.RW_NM);
+                }
+            } else {
+                return false;
+            }
+        }
     }
 
     setBusy(msg, detail) {
@@ -369,11 +691,10 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     public valueNormalizerCompSku =(text: Observable<string>)=>
         text.pipe(
           map((content: string) => {
-            this.totalApiEntries++;
             return {
               COMP_SKU : content,
-              RW_NM: this.totalApiEntries,
-              key: this.totalApiEntries
+              RW_NM: -1,
+              key: -1
             };
           })
         );
@@ -381,11 +702,10 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     public valueNormalizerCompPrc = (text: Observable<number>)=>
         text.pipe(
           map((content: number) => {
-            this.totalApiEntries++;
             return {
               COMP_PRC : content,
-              RW_NM: this.totalApiEntries,
-              key: this.totalApiEntries
+              RW_NM: -1,
+              key: -1
             };
           })
         );
