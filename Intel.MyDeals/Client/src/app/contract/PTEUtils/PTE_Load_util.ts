@@ -41,7 +41,7 @@ export class PTE_Load_Util {
         return isValid;
     }
 
-    static setBehaviors = function (item, elem, cond, curPricingTable) {
+    static setBehaviors(item, elem, cond, curPricingTable) {
         var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -133,7 +133,7 @@ export class PTE_Load_Util {
         return item;
     }
 
-    static setBehaviorsValidMessage = function (item, elem, elemLabel, cond, curPricingTable) {
+    static setBehaviorsValidMessage(item, elem, elemLabel, cond, curPricingTable) {
         var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         var dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
 
@@ -239,7 +239,7 @@ export class PTE_Load_Util {
         });
         return mergCells;
     }
-    static pivotData = function (data, isTenderContract, curPricingTable, kitDimAtrbs) {        //convert how we save data in MT to UI spreadsheet consumable format
+    static pivotData(data, isTenderContract, curPricingTable, kitDimAtrbs) {        //convert how we save data in MT to UI spreadsheet consumable format
         data = this.assignProductProprties(data, isTenderContract, curPricingTable);
         var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
         var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
@@ -412,10 +412,10 @@ export class PTE_Load_Util {
         }
         return newData;
     }
-    static deepClone = function (obj) {
+    static deepClone(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
-    static isPivotable = function (curPricingTable) {
+    static isPivotable(curPricingTable) {
         if (!curPricingTable) return false;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
             curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
@@ -426,7 +426,7 @@ export class PTE_Load_Util {
             return true;
         }
     }
-    static numOfPivot = function (dataItem, curPricingTable) {
+    static numOfPivot(dataItem, curPricingTable) {
         if (curPricingTable === undefined) return 1;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
             curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
@@ -452,7 +452,7 @@ export class PTE_Load_Util {
         }
         return 1;   //num of pivot is 1 for undim deal types
     }
-    static assignProductProprties = function (data, isTenderContract, curPricingTable) {
+    static assignProductProprties(data, isTenderContract, curPricingTable) {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             for (var d = 0; d < data.length; d++) {
 
@@ -482,10 +482,10 @@ export class PTE_Load_Util {
         }
         return data;
     }
-    static calculateTotalDsctPerLine = function (dscntPerLine, qty) {
+    static calculateTotalDsctPerLine(dscntPerLine, qty) {
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
-    static calculateKitRebate = function (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
+    static calculateKitRebate(data, firstTierRowIndex, numOfTiers, isDataPivoted) {
         var kitRebateTotalVal = 0;
         for (var i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
@@ -498,5 +498,75 @@ export class PTE_Load_Util {
         }
         var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
         return rebateVal;
+    }
+
+    static mapProperty(src, data, curPricingTable) {
+        if (this.isPivotable(curPricingTable)) {
+            var srcTierNum = parseInt(src.TIER_NBR);
+            var dataTierNum = parseInt(data.TIER_NBR);
+            if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
+                var arItems = data;
+                for (var key in arItems) {
+                    if (arItems.hasOwnProperty(key) && data[key] !== undefined)
+                        src[key] = data[key];
+                }
+            }
+        } else {
+            if (src["DC_ID"] === data["DC_ID"]) {
+                var arItems = data;
+                for (var key in arItems) {
+                    if (arItems.hasOwnProperty(key) && data[key] !== undefined)
+                        src[key] = data[key];
+                }
+            }
+        }
+    }
+
+    static mapActionIdChange(src, action, renameMapping) {
+        if (src["DC_ID"] === action["DcID"]) {
+            renameMapping[src["DC_ID"]] = action["AltID"];
+            src["DC_ID"] = action["AltID"];
+        }
+    }
+
+    static updateResults(data, source, curPricingTable) {
+        let renameMapping = {};
+        var i, p;
+        if (data !== undefined && data !== null) {
+            // look for actions -> this has to be first because remapping might happen
+            for (i = 0; i < data.length; i++) {
+                if (data[i]["_actions"] !== undefined) {
+                    var actions = data[i]["_actions"];
+                    for (var a = 0; a < actions.length; a++) {
+                        if (actions[a]["Action"] === "ID_CHANGE") {
+                            if (Array.isArray(source)) {
+                                for (p = 0; p < source.length; p++) {
+                                    this.mapActionIdChange(source[p], actions[a], renameMapping);
+                                }
+                            } else {
+                                this.mapActionIdChange(source, actions[a], renameMapping);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Now look for items that need to be updated
+            for (i = 0; i < data.length; i++) {
+                if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
+                    if (Array.isArray(source)) {
+                        for (p = 0; p < source.length; p++) {
+                            if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = renameMapping[data[i]["DC_ID"]];
+                            if (data[i]["DC_ID"] === source[p]["DC_ID"]) {
+                                this.mapProperty(source[p], data[i], curPricingTable);
+                            }
+                        }
+                    } else {
+                        if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = renameMapping[data[i]["DC_ID"]];
+                        if (data[i]["DC_ID"] === source["DC_ID"]) this.mapProperty(source, data[i], curPricingTable);
+                    }
+                }
+            }
+        }
     }
 }

@@ -25,6 +25,7 @@ import { productSelectorService } from '../../shared/services/productSelector.se
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
+import { lnavUtil } from '../lnav.util';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -185,6 +186,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private productValidationDependencies = PTE_Config_Util.productValidationDependencies;
     private kitDimAtrbs:Array<string> = PTE_Config_Util.kitDimAtrbs;
     private isTenderContract = false;
+    private newPricingTable: any = {};
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -541,7 +543,37 @@ export class pricingTableEditorComponent implements OnChanges {
     }
 
     openAutoFill() {
-        let autofillData = this.autoFillData;
+        let ptTemplate, custId, isVistex
+        let pt = this.curPricingTable;
+        if (pt != null) {
+            this.newPricingTable = pt;
+            ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
+            this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
+            this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
+            this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
+            this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs);
+        }
+        if (this.contractData != null && this.contractData.Customer.VISTEX_CUST_FLAG != null && this.contractData.Customer.VISTEX_CUST_FLAG != undefined
+            && this.contractData.Customer.VISTEX_CUST_FLAG != '') { // Moved down due to normal items missing customer level fields in some cases.
+
+            isVistex = this.contractData.Customer.VISTEX_CUST_FLAG
+        }
+        if (this.contractData != null) {
+            custId = this.contractData.CUST_MBR_SID;
+        }
+        let isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+        let autofillData = {
+            "ISTENDER": this.isTenderContract,
+            "isVistexHybrid": isVistexHybrid,            
+            "DEFAULT": lnavUtil.getTenderBasedDefaults(this.newPricingTable, this.isTenderContract),
+            "ISVISTEX": isVistex,
+            "contractData": this.contractData,
+            "currPt": pt,
+            "currPs": this.curPricingStrategy,
+            "newPt": this.newPricingTable,
+            "ptTemplate": ptTemplate
+        };
+       
         const dialogRef = this.dialog.open(AutoFillComponent, {
             height: '750px',
             width: '1500px',
@@ -552,6 +584,9 @@ export class pricingTableEditorComponent implements OnChanges {
             if (result) {
                 //the scuscriber to this in Lnav ngonint code and this fill help autofill setting from lnav screen
                 this.autoFillData = result;
+                this.curPricingTable["_defaultAtrbs"] = this.autoFillData.newPt["_defaultAtrbs"];                
+                //PTE_Load_Util.updateResults(this.newPricingTable, pt, this.curPricingTable) //Not Needed for now?
+                //Following is for pushing PTE autofillsettings changes  to Lnav pricing table level
                 this.lnavSVC.autoFillData.next(this.autoFillData);
             }
         });

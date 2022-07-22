@@ -1,4 +1,5 @@
 ﻿import * as angular from "angular";
+import * as _ from "underscore";
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
 import { lnavUtil } from '../lnav.util';
@@ -11,7 +12,7 @@ import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { pricingTableEditorService } from "../pricingTableEditor/pricingTableEditor.service";
-import * as _ from 'underscore';
+
 export interface contractIds {
     Model: string;
     C_ID: number;
@@ -83,7 +84,6 @@ export class lnavComponent {
         };
         this.modelChange.emit(contractId_Map);
     }
-
     loadModel(model: string) {
         const contractId_Map: contractIds = {
             Model: model,
@@ -95,7 +95,6 @@ export class lnavComponent {
         this.selectedModel = model;
         this.modelChange.emit(contractId_Map);
     }
-
     // **** PRICING STRATEGY Methods ****
     toggleAddStrategy() {
         this.isAddStrategyHidden = !this.isAddStrategyHidden;
@@ -103,7 +102,6 @@ export class lnavComponent {
         this.isSearchHidden = false;
         this.isAddPricingTableHidden = true;
     }
-
     customAddPsValidate() {
         let isvalid = true;
         this.isAddStrategyBtnHidden = true;
@@ -178,7 +176,6 @@ export class lnavComponent {
 
         })
     }
-
     refreshContractData(cId) {
         this.contractDetailsSvc
             .readContract(cId)
@@ -186,27 +183,76 @@ export class lnavComponent {
                 this.contractData = response[0];
             });
     }
-
     // **** PRICING TABLE Methods ****
-
     clearPtTemplateIcons() {
-        /*angular.forEach(this.templates.ModelTemplates.PRC_TBL,
-            function (value, key) {
+        _.each(this.PtDealTypes,
+            function (value) {
                 value._custom._active = false;
-            });*/
+            });
     }
-
-
-  
-
     customAddPtValidate() {
         let isValid = true;
-        this.newPricingTable.TITLE = this.ptTITLE;               
+        this.newPricingTable["TITLE"] = this.ptTITLE;
+        const values = this.newPricingTable;
+        isValid = this.isValidPt(values);       
         if (isValid) {
             this.addPricingTable();
         }
     }
+    isValidPt(values) {
+        let isValid = true;
+        // Clear all values
+        _.each(values,
+            function (value, key) {
+                if (values._behaviors.validMsg[key]) {
+                    values._behaviors.validMsg[key] = "";
+                    values._behaviors.isError[key] = false;
+                }
+            });
 
+        //// Check required
+        _.each(values,
+            function (value, key) {
+                if (key[0] !== '_' &&
+                    !Array.isArray(value) &&
+                    (!isNaN(value) || value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
+                    values._behaviors.isRequired[key] === true) {
+                    values._behaviors.validMsg[key] = "* field is required";
+                    values._behaviors.isError[key] = true;
+                    isValid = false;
+                }
+            });
+
+        // Check unique name within ps
+        if (!!this.curPricingStrategy) {
+            if (this.curPricingStrategy.PRC_TBL === undefined) {
+                this.curPricingStrategy.PRC_TBL = [];
+            }
+            var isUnique = lnavUtil.IsUniqueInList(this.curPricingStrategy.PRC_TBL, this.newPricingTable["TITLE"], "TITLE", false);
+
+            if (!isUnique) {
+                this.newPricingTable._behaviors.validMsg["TITLE"] = "* must have unique name within strategy";
+                this.newPricingTable._behaviors.isError["TITLE"] = true;
+                isValid = false;
+            }
+        }
+
+        // Check name length
+        if (this.newPricingTable["TITLE"].length > 80) {
+            this.newPricingTable._behaviors.validMsg["TITLE"] = "* must be 80 characters or less";
+            this.newPricingTable._behaviors.isError["TITLE"] = true;
+            isValid = false;
+        }
+
+        // Check if there is a selected deal type
+        if (this.newPricingTable.OBJ_SET_TYPE_CD == "") {
+            this.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
+            this.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
+            isValid = false;
+         }
+
+         return isValid;
+    }
     addPricingTable() {
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
@@ -240,13 +286,11 @@ export class lnavComponent {
             });
         })
     }
-
     clearNptTemplate() {
         this.currentPricingTable = null;
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
-
     /* Ps and Pt Tree*/
     showAddPricingTable(ps) {
         this.isAddPricingTableHidden = false;
@@ -256,7 +300,8 @@ export class lnavComponent {
         this.PtDealTypes = null;
         this.clearNptTemplate();
         this.curPricingStrategy = ps;
-        let isHybridDeal = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+        this.ptTITLE = "";
+        let isHybridDeal = (Number(this.curPricingStrategy.IS_HYBRID_PRC_STRAT) == 1 ? true : false);
         this.PtDealTypes = lnavUtil.filterDealTypes(this.UItemplate, isHybridDeal);
         if (!!this.curPricingStrategy && !this.curPricingStrategy.PRC_TBL) {
             // default Pricing Table title to Pricing Strategy title
@@ -272,15 +317,12 @@ export class lnavComponent {
             this.newPricingTable.TITLE = defTitle;
         }
     }
-
     copyPricingStrategy() {
         alert('all inputs ready, Functionality Coming Soon');
     }
-
     editPricingStrategyName(ps) {
         alert('all inputs ready, Functionality Coming Soon');
     }
-
     deletePricingStrategy(ps) {
         alert('all inputs ready, Functionality Coming Soon');
     }
@@ -310,12 +352,14 @@ export class lnavComponent {
         }
 
     }
-
-
-
     openAutoFill(ps, pt) {
         let ptTemplate;
+        let isVistexHybrid;
+        if (ps != null) {
+            this.curPricingStrategy = ps;
+        }
         if (pt != null) {
+            this.curPricingTable = pt;
             this.newPricingTable = pt;
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
@@ -323,25 +367,32 @@ export class lnavComponent {
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs);
         }
-        else {
+        else {            
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
-            this.newPricingTable = lnavUtil.setDefaultAttributes(this.newPricingTable, this.isTenderContract, this.currentPricingTable, this.contractData);
+            this.newPricingTable = lnavUtil.setDefaultAttributes(this.newPricingTable, this.isTenderContract, pt, this.contractData);
         }
         if (this.contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
             this.custId = this.contractData.CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
         }
-        let isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+        if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT) {
+            isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+        }
+        else {
+            isVistexHybrid = (ps.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+        }
 
-        let autofillData =  {
+        let autofillData = {
             "ISTENDER": this.isTenderContract,
-            "isVistexHybrid": isVistexHybrid,
-            "DEALTYPE": this.newPricingTable.OBJ_SET_TYPE_CD,
-            "EXTRA": this.newPricingTable._extraAtrbs,
+            "isVistexHybrid": isVistexHybrid,            
             "DEFAULT": lnavUtil.getTenderBasedDefaults(this.newPricingTable, this.isTenderContract),
-            "ISVISTEX": true,
-            "CUSTSID": this.custId
+            "ISVISTEX": false,            
+            "contractData": this.contractData,
+            "currPt": pt,
+            "currPs": this.curPricingStrategy,
+            "newPt": this.newPricingTable,
+            "ptTemplate": ptTemplate
         };
         this.autoFillData = autofillData;
         const dialogRef = this.dialog.open(AutoFillComponent, {
@@ -353,15 +404,23 @@ export class lnavComponent {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //the scuscriber to this in PTE ngonint code and this fill help autofill setting from PTE screen
-                this.autoFillData = result
-                this.newPricingTable["_defaultAtrbs"] = this.autoFillData["DEFAULT"];
-                this.pteSVC.autoFillData.next(result);
+                this.autoFillData = result;                
+                if (pt == null) {
+                    this.newPricingTable = this.autoFillData["newPt"];
+                    this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+                        this.contractData = response[0];
+                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID);
+                    });
+                    this.hideAddPricingTable();
+                }              
             }
         });
-    }
-
+    }    
     selectPtTemplateIcon(DealType) {
+        let isValid = true;
+        this.clearPtTemplateIcons();
         const Title = this.ptTITLE;
+        DealType._custom._active = true;
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL[DealType.name];
         this.newPricingTable["TITLE"] = Title;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = DealType.name;
@@ -371,21 +430,22 @@ export class lnavComponent {
             this.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = false;
             this.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "";
         }
-        this.openAutoFill(null, null);
-        //this.newPricingTable = lnavUtil.defaultAttribs(this.newPricingTable, this.isTenderContract, this.contractData);
+        const values = this.newPricingTable;
+        isValid = this.isValidPt(values);
+        if (isValid) {
+            this.openAutoFill(null, null);
+        }
+        else {
+            this.clearPtTemplateIcons();
+        }       
     }
-
     hideAddPricingTable() {
         this.isAddPricingTableHidden = true;
         this.isAddStrategyHidden = true;
         this.isAddStrategyBtnHidden = true;
-        this.isSearchHidden = false;
-        //this.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
-        //this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
-        this.clearPtTemplateIcons();
-        // $scope.curPricingStrategy = {}; //clears curPricingStrategy
+        this.isSearchHidden = false;        
+        this.clearPtTemplateIcons();        
     }
-
     //Help navigation
     showHelpTopicMeetComp() {
         const helpTopic = "Auto+Population";
@@ -395,7 +455,6 @@ export class lnavComponent {
             window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
         }
     }
-
     showHelpTopicCostTest() {
         const helpTopic = "Cost+Test";
         if (helpTopic && String(helpTopic).length > 0) {
@@ -404,7 +463,6 @@ export class lnavComponent {
             window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
         }
     }
-
     showHelpTopicContract() {
         const helpTopic = "Contract+Navigator";
         if (helpTopic && String(helpTopic).length > 0) {
@@ -413,7 +471,6 @@ export class lnavComponent {
             window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
         }
     }
-
     onTabSelect(event: any) {
         this.selectedTab = event.index;
         this.headerSvc.getUserDetails().subscribe(res => {
@@ -439,7 +496,6 @@ export class lnavComponent {
         this.selectedTab = 1;
         this.loadModel('MeetComp');
     }
-
     // **** LEFT NAVIGATION Methods ****    
     toggleLnav(src: string) {
         this.isLnavHidden['isLnavHid'] = !this.isLnavHidden['isLnavHid'];
@@ -461,7 +517,6 @@ export class lnavComponent {
         this.isAddStrategyBtnHidden = true;
         this.isAddPricingTableHidden = true;
     }
-
     //LNAv flow Mini
     gotoDealEntry() {
         //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead?
@@ -485,18 +540,16 @@ export class lnavComponent {
         this.isSearchHidden = false;
         this.goto('Manage', 'contract.summary');
     }
-
     goto(mode, state) {
         this.flowMode = mode;
     }
-
     removeBlanks(val) {
         return val.replace(/_/g, '');
     }
-
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
-        this.newStrategy.IS_HYBRID_PRC_STRAT = false;        
+        this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
+        this.newStrategy.IS_HYBRID_PRC_STRAT = false;
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = false
         });

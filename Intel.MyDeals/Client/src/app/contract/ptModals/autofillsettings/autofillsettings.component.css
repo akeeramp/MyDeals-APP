@@ -48,3 +48,96 @@
     font-size: 13px !important;
     width: 203px;
 }
+
+.matbutton {
+    color: #fff;
+    border-radius: 5px
+}
+
+.mat-icon {
+    height: 30px;
+}
+
+.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    font-size: 19px;
+    line-height: 1.33333;
+    font-weight: normal;
+    padding: 0 12px;
+}
+
+
+.mat-button-toggle-button {
+    border: 0;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    outline: none;
+    width: 100%;
+    height: 30px;
+    cursor: pointer;
+}
+
+.mat-button-toggle-appearance-standard {
+    background: #777777 !important;
+}
+
+.mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+    color: rgba(0,0,0,.87);
+    background: #00AEEF !important;
+}
+
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+    border: none;
+}
+
+mat-button-toggle-label-content {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #111;
+    background-color: #fff;
+}
+
+.modal-content {
+    background: #003c71;
+    resize: horizontal;
+    min-width: 750px !important;
+}
+
+.mat-button-toggle-appearance-standard, .mat-button-toggle-label-content {
+    font-size: 15px !important;
+    line-height: 2 !important;
+    font-weight: bold !important;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    color: #fff;
+    padding: 0 12px !important;
+}
+
+.autofillrow {
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:left;
+}
+
+    .autofillrow > div {
+    width:100%;
+    margin:2px;
+    text-align:left;
+    }
+.headstyle {
+    font-family: Bruum FY;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    color: #1a3e6f;
+}
+    
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    width: 100%
+}
