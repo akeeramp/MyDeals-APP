@@ -62,3 +62,72 @@
     padding: 0;
     background-color: #ffffff !important;
 }
+
+
+#contractHeader {
+    height: 62px !important;
+    margin-top: 0px !important;
+    font-size: 14px;
+    font-family: "Intel Clear";
+    font-weight: 200;
+    font-style: normal;
+}
+
+.pricing-strategy-status-bar {
+    color: #000000;
+    font-size: 10px;
+    font-family: arial;
+    text-transform: uppercase;
+    height: 16px;
+}
+
+#contractContainerWrapper {
+    height: 100%;
+    padding: 0px 0 0 0 !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#contractContainer {
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.fntLg {
+    font-family: 'Intel Clear';
+    font-weight: 200;
+    font-style: normal;
+    font-size: 16px;
+}
+
+.textCircleMd {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    color: #003C71;
+    text-align: center;
+    font: 12px Arial, sans-serif;
+    font-weight: bold;
+    margin: 1px 6px 0 2px;
+}
+
+.valid_Complete {
+    background: #C4D600;
+}
+
+b {
+    font-weight: bold !important;
+}
+
+.isHybridIdentHeader, .isHybridIdentHeader_Complete, .isHybridIdentHeader_Finalizing, .isHybridIdentHeader_Valid, .isHybridIdentHeader_Dirty, .isHybridIdentHeader_0, .isHybridIdentHeader_ {
+    font-size: 11px;
+    font-weight: bold;
+    color: blue;
+    position: relative;
+    margin-left: 9px;
+    margin-top: -25px;
+}

@@ -9,13 +9,40 @@
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight">
                 <div *ngIf="selLnav=='PTE'">
-                    <div id="contractHeader"></div>
                     <div *ngIf="isPTEEnable==true">
+                        <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;">
+                            <div class="valid_{{passed_validation}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">PRICING STRATEGY:</span> {{ wf_Stage }}</div>
+                        </div>
+                        <div id="contractHeader">
+                            <div>
+                                <div class="col-md-10" style="padding-left: 0px;">
+                                    <div class="col-md-1" title="{{ passed_validation || 'Not validated yet' }}" style="width: 2.5% !important; line-height: 1em; font-size: 26px; padding-left: 0px;">
+                                        <i class="intelicon-protection-solid bigIcon validf_{{passed_validation}}" *ngIf="passed_validation === 'Complete'" title="{{passed_validation}}"></i>
+                                        <i class="intelicon-protection-outlined bigIcon validf_{{passed_validation}}" *ngIf="passed_validation === 'Finalizing'" title="{{passed_validation}}"></i>
+                                        <i class="intelicon-protection-outlined bigIcon validf_{{passed_validation}}" *ngIf="passed_validation === 'Valid'" title="{{passed_validation}}"></i>
+                                        <i class="intelicon-protection-outlined bigIcon validf_{{passed_validation}}" *ngIf="passed_validation === 'Dirty'" title="{{(passed_validation === 'Dirty' ? 'Validation Errors' : passed_validation) || 'Not validated yet'}}"></i>
+                                        <i class="intelicon-protection-outlined bigIcon validf_{{passed_validation}}" *ngIf="passed_validation !== 'Valid' && passed_validation !== 'Dirty' && passed_validation !== 'Complete' && passed_validation !== 'Finalizing'" title="{{passed_validation || 'Not validated yet'}}"></i>
+                                        <div *ngIf="is_hybrid_ps === '1'" class="isHybridIdentHeader_{{passed_validation}}">H</div>
+                                    </div>
+                                    <div class="fntLg" style="color: #000000; margin: 2px 6px 2px 0; font-size: 20px;">
+                                        <b style="color:#123b70">#{{ ps_Id }}</b> {{ ps_title }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-10" style="padding-left: 0px;">
+                                    <div class="fl textCircleMd valid_{{passed_validation}}">{{ pt_type | slice:0:1 }}</div>
+                                    <div class="fntLg" style="color: #000000;">
+                                        <b style="color:#123b70">#{{ pt_Id }}</b> {{ pt_title }}
+                                    </div>
+                                </div>
+                                <div class="clearboth"></div>
+                            </div>
+                        </div>
                         <kendo-tabstrip (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
-                                <ng-template kendoTabContent >
+                                <ng-template kendoTabContent>
                                     <div *ngIf="isPTETab">
-                                        <pricing-table-editor  [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
                                         </pricing-table-editor>
                                     </div>
                                 </ng-template>
@@ -23,8 +50,9 @@
                             <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true" [disabled]="isDETabEnabled == false">
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isDETab">
-                                        <deal-editor  [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
-                                        </deal-editor></div>
+                                        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate">
+                                        </deal-editor>
+                                    </div>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                         </kendo-tabstrip>

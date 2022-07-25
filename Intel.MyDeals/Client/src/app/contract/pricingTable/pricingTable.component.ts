@@ -13,6 +13,8 @@ export interface contractIds {
     C_ID: number;
     ps_id: number;
     pt_id: number;
+    ps_index: number;
+    pt_index: number;
     contractData: any;
    // isVisible: boolean;
 }
@@ -37,6 +39,9 @@ export class pricingTableComponent {
     type:string
     public ps_Id: number;
     public pt_Id: number;
+    public PRC_ST: any;
+    public ps_title: any; pt_title: any; pt_type: any; is_hybrid_ps: any;
+    passed_validation: any; wf_Stage: string;
     private isPTETab = false;
     private isDETab = false;
     private selLnav = 'PTE';
@@ -51,6 +56,8 @@ export class pricingTableComponent {
         C_ID:0,
         ps_id: 0,
         pt_id: 0,
+        ps_index: 0,
+        pt_index: 0,
         contractData: "",
     }
     //public isLnavHidden: any = {};
@@ -66,6 +73,12 @@ export class pricingTableComponent {
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
+                this.ps_title = this.contractData.PRC_ST[contractModel.ps_index].TITLE;
+                this.pt_title = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].TITLE;
+                this.pt_type = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].OBJ_SET_TYPE_CD;
+                this.wf_Stage = this.contractData.PRC_ST[contractModel.ps_index].WF_STG_CD;
+                this.passed_validation = this.contractData.PRC_ST[contractModel.ps_index].PASSED_VALIDATION;
+                this.is_hybrid_ps = this.contractData.PRC_ST[contractModel.ps_index].IS_HYBRID_PRC_STRAT;
                 this.contractData = contractModel.contractData;
                 this.enableDealEditorTab(isRedirect);
             }

@@ -15,6 +15,20 @@ td:not(.error-cell).readonly-cell {
 
 /* handsoneable related classes */
 
+.k-item.k-state-active {
+    border-top: 1px solid #0071C5 !important;
+    border-left: 1px solid #0071C5 !important;
+    border-right: 1px solid #0071C5 !important;
+    margin-right: 5px !important;
+    color: #FFFFFF !important;
+    background-color: #003C71 !important;
+    cursor: default !important;
+}
+
+.k-tabstrip-items .k-item {
+    margin-right: 4px !important;
+}
+
 .htCustTxt {
     float: left !important;
 }

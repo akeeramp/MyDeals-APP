@@ -18,6 +18,8 @@ export interface contractIds {
     C_ID: number;
     ps_id: number;
     pt_id: number;
+    ps_index: number;
+    pt_index: number;
     contractData: any;
 }
 
@@ -62,7 +64,7 @@ export class lnavComponent {
     private contractType = "Contract";
     private selectedTab: number = 0;
     private selectedModel;
-    private contractId_Map: contractIds = { Model: 'PTE', C_ID: 0, ps_id: 0, pt_id: 0, contractData: {} };
+    private contractId_Map: contractIds = { Model: 'PTE', C_ID: 0, ps_id: 0, pt_id: 0, ps_index: 0, pt_index: 0, contractData: {} };
     public flowMode = "Deal Entry";
     private autoFillData: any = null;
     // Initialize current strategy and pricing table variables
@@ -74,13 +76,15 @@ export class lnavComponent {
 
 
     //Output Emitter to load the Pricing table data
-    loadPTE(psId, ptId) {
+    loadPTE(psId, ptId, ps_index: number, pt_index: number) {
         const contractId_Map: contractIds = {
             Model: 'PTE',
             ps_id: psId,
+            pt_id: ptId,
+            ps_index,
+            pt_index,
             C_ID: this.contractId,
-            contractData: this.contractData,
-            pt_id: ptId
+            contractData: this.contractData           
         };
         this.modelChange.emit(contractId_Map);
     }
@@ -88,9 +92,11 @@ export class lnavComponent {
         const contractId_Map: contractIds = {
             Model: model,
             ps_id: 0,
+            pt_id: 0,
+            ps_index: 0,
+            pt_index: 0,
             C_ID: this.contractId,
-            contractData: this.contractData,
-            pt_id: 0
+            contractData: this.contractData            
         };
         this.selectedModel = model;
         this.modelChange.emit(contractId_Map);
@@ -282,7 +288,7 @@ export class lnavComponent {
             pt.DC_ID = response.PRC_TBL[1].DC_ID;
             this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
-                this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID);
+                this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
             });
         })
     }
@@ -409,7 +415,7 @@ export class lnavComponent {
                     this.newPricingTable = this.autoFillData["newPt"];
                     this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
-                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID);
+                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID,0,0);
                     });
                     this.hideAddPricingTable();
                 }              
@@ -563,7 +569,7 @@ export class lnavComponent {
     ngAfterViewInit() {
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
         this.lnavSvc.lnavHieight.subscribe(res => {
-            this.contractId_Map = res;
+            this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
             (<any>$(`#sumPSdata_${this.contractId_Map.ps_id}`)).collapse('show');
         }, err => {
             this.loggerSvc.error("lnavSvc::lnavHieight**********", err);

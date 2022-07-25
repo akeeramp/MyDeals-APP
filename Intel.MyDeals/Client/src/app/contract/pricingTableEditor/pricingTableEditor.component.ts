@@ -161,8 +161,8 @@ export class pricingTableEditorComponent implements OnChanges {
         fixedRowsTop: 0,
         copyPaste: true,
         comments: true,
-        height: 690,
-        width: 1550,
+        height: 540,
+        width: 1402,
         afterChange: (changes, source) => {
             //using => operator to-call-parent-function-from-callback-function
             this.afterCellChange(changes, source);
