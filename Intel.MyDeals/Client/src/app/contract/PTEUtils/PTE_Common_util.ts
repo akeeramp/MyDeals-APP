@@ -1,6 +1,12 @@
 import { DE_Common_Util } from '../DEUtils/DE_Common_util';
+import Handsontable from 'handsontable';
+import * as _ from 'underscore';
 
 export class PTE_Common_Util {
+    private static hotTable:Handsontable
+    constructor(hotTable:Handsontable){
+        PTE_Common_Util.hotTable=hotTable;
+    }
     static tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
     static densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
     static kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
@@ -130,5 +136,64 @@ export class PTE_Common_Util {
             }
         }
         return null;
+    }
+    static setBehaviors(item:any, elem?:string) {
+        if (!item._behaviors) item._behaviors = {};
+        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
+        if (!item._behaviors.isError) item._behaviors.isError = {};
+        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
+        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
+    }
+    static setBehaviorsValidMessage(item:any, elem:string, elemLabel:string, cond:string){
+        if (elem === 'ECAP_PRICE' && cond=='equal-zero') {
+            item._behaviors.isRequired[elem] = true;
+            item._behaviors.isError[elem] = true;
+            item._behaviors.validMsg[elem] = `${elemLabel} must be positive number`;
+        }
+    }
+    static deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+    static getPTEGenerate(columns:Array<any>,curPricingTable:any): Array<any> {
+        let PTRCount = this.hotTable.countRows();
+        let PTRResult: Array<any> = [];
+        for (let i = 0; i < PTRCount; i++) {
+            let obj = {};
+            if (!this.hotTable.isEmptyRow(i)) {
+                //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
+                 _.each(columns,(val) => {
+                    if (val.data) {
+                        obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
+                        //this logic is mainly applying for tier logic because Dim colum can some empty
+                        // let DCIDItem=_.findWhere(PTRResult,{DC_ID:this.hotTable.getDataAtRowProp(i,'DC_ID')});
+                        // if(DCIDItem){
+                        //     obj[val.data.toString()] =DCIDItem[`${val.data.toString()}`];
+                        // }
+                        // else{
+                        //     obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
+                        // }
+                    }
+                });
+                PTRResult.push(obj);
+            }
+            else{
+              //this means after empty row nothing to be added
+                break;
+            }
+        }
+        //incase of tier places the NUM_OF_TIERS
+        if(curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD=='FLEX' || curPricingTable.OBJ_SET_TYPE_CD=='REV_TIER'){
+            const uniqDCID=_.uniq(PTRResult,'DC_ID');
+            _.each(uniqDCID,itmsDC=>{
+                let DCPTR=_.where(PTRResult,{DC_ID:itmsDC.DC_ID});
+                let selTier=_.max(DCPTR,(itm:any)=>{return itm.TIER_NBR;});
+                _.each(PTRResult,(item)=>{
+                    if(item.DC_ID==itmsDC.DC_ID){
+                        item.NUM_OF_TIERS=selTier.TIER_NBR;
+                    }
+                });
+            });
+        }
+        return PTRResult;
     }
 }

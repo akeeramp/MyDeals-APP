@@ -25,6 +25,8 @@ import { productSelectorService } from '../../shared/services/productSelector.se
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
+import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
+import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { lnavUtil } from '../lnav.util';
 
 @Component({
@@ -176,7 +178,6 @@ export class pricingTableEditorComponent implements OnChanges {
     // Cached Dropdown API Responses (that do not usually change)
     private dropdownResponseLocalStorageKey = 'pricingTableEditor_DropdownApiResponses';
     private dropdownResponses: any = null;
-
     private psTitle = "Pricing Strategy";
     private ptTitle = "Pricing Table";
     private ptTitleLbl = "Enter " + this.ptTitle + " Name";
@@ -186,6 +187,9 @@ export class pricingTableEditorComponent implements OnChanges {
     private productValidationDependencies = PTE_Config_Util.productValidationDependencies;
     private kitDimAtrbs:Array<string> = PTE_Config_Util.kitDimAtrbs;
     private isTenderContract = false;
+    private maxKITproducts:number = PTE_Config_Util.maxKITproducts;
+
+    //this will help to have a custom cell validation which allow only alphabets
     private newPricingTable: any = {};
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
@@ -222,7 +226,7 @@ export class pricingTableEditorComponent implements OnChanges {
         }
     }
     getMergeCellsOnDelete() {
-        let PTR = this.getPTEGenerate();
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
         let mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, PTE_Load_Util.numOfPivot(PTR, this.curPricingTable));
         this.hotTable.updateSettings({ mergeCells: mergCells });
     }
@@ -291,22 +295,6 @@ export class pricingTableEditorComponent implements OnChanges {
         //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
         if (this.hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || this.hotTable.getDataAtRowProp(row, 'DC_ID') == null || this.hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
             if (prop != 'PTR_USER_PRD') {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        else if (this.hotTable.getDataAtRowProp(row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-            var behaviors = this.hotTable.getDataAtRowProp(row, '_behaviors');
-            if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                if (prop.contains('ECAP_PRICE')) {
-                    prop = "ECAP_PRICE";
-                }
-                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-                    cellProperties['readOnly'] = true;
-                }
-            }
-        }
-        else if (this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() !== 'cash') {
-            if (prop == 'SETTLEMENT_PARTNER') {
                 cellProperties['readOnly'] = true;
             }
         }
@@ -388,12 +376,27 @@ export class pricingTableEditorComponent implements OnChanges {
         let dropObjs = {};
         _.each(this.pricingTableTemplates.defaultAtrbs, (val, key) => {
             dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(val.opLookupUrl);
-        });
-        let result = await forkJoin(dropObjs).toPromise().catch((err) => {
+         });
+         _.each(this.pricingTableTemplates.model.fields,(item,key)=>{
+            if(item && item.uiType && item.uiType=='DROPDOWN' && item.opLookupUrl && item.opLookupUrl !='' && (dropObjs[`${key}`] ==null || dropObjs[`${key}`]==undefined)){
+               if(key=='SETTLEMENT_PARTNER'){
+                //calling  settlement partner seperatly
+                dropObjs['SETTLEMENT_PARTNER'] = this.pteService.getDropDownResult(item.opLookupUrl+'/'+this.contractData.Customer.CUST_SID);
+               }
+               else if(key=='PERIOD_PROFILE'){
+                 //calling  PERIOD_PROFILE 
+                dropObjs['PERIOD_PROFILE'] = this.pteService.getDropDownResult(item.opLookupUrl+this.contractData.Customer.CUST_SID);
+               }
+               else{
+                dropObjs[`${key}`] = this.pteService.getDropDownResult(item.opLookupUrl);
+               }
+            }
+         })
+
+         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
         return result;
-
     }
     async loadPTE() {
         this.spinnerMessageHeader = 'PTE loading';
@@ -401,27 +404,11 @@ export class pricingTableEditorComponent implements OnChanges {
         this.isLoading = true;
         let PTR = await this.getPTRDetails();
         this.getTemplateDetails();
-        this.dropdownResponses = await this.getAllDrowdownValues();
+        this.dropdownResponses =  await this.getAllDrowdownValues();
         //this is only while loading we need , need to modify as progress
         PTR = PTE_Load_Util.pivotData(PTR, false, this.curPricingTable, this.kitDimAtrbs);
         this.generateHandsonTable(PTR);
         this.isLoading = false;
-    }
-    getPTEGenerate(): Array<any> {
-        let PTRCount = this.hotTable.countRows();
-        let PTRResult: Array<any> = [];
-        for (let i = 0; i < PTRCount; i++) {
-            let obj = {};
-            if (!this.hotTable.isEmptyRow(i)) {
-                _.each(this.hotTable.getCellMetaAtRow(i), (val) => {
-                    if (val.prop) {
-                        obj[val.prop] = this.hotTable.getDataAtRowProp(i, val.prop.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.prop.toString()) : null;
-                    }
-                });
-                PTRResult.push(obj);
-            }
-        }
-        return PTRResult;
     }
     undoPTE() {
         this.hotTable.undo();
@@ -429,28 +416,63 @@ export class pricingTableEditorComponent implements OnChanges {
     redoPTE() {
         this.hotTable.redo();
     }
-    savePTE() {
-        this.isLoading = true;
-        this.spinnerMessageHeader = 'PTE Validate';
-        this.spinnerMessageDescription = 'PTE Validating please wait';
-        //Handsonetable loading taking some time so putting this logic for loader
-        setTimeout(() => {
-            let PTR = this.getPTEGenerate();
-            let finalPTR = PTEUtil.validatePTE(PTR, this.curPricingTable.OBJ_SET_TYPE_CD);;
-            this.generateHandsonTable(finalPTR);
-            this.isLoading = false;
-            console.log(PTR);
-        }, 0);
 
+    async saveEntireContractRoot(finalPTR:Array<any>){
+        //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
+        finalPTR=PTE_Helper_Util.deNormalizeData(finalPTR,this.curPricingTable,this.kitDimAtrbs,this.maxKITproducts);
+        //This method will remove all the unwanted property since there are keys with undefined values
+        finalPTR = PTE_Common_Util.deepClone(finalPTR);
+        //settment partner change for taking only the ID the API will send back us the both
+        finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
+        //sanitize Data before save this will make sure all neccessary attributes are avaialbel
+        finalPTR = PTE_Save_Util.sanitizePTR(finalPTR,this.contractData);
+        let data={
+            "Contract": [],
+            "PricingStrategy": [],
+            "PricingTable": [this.curPricingTable],
+            "PricingTableRow": finalPTR,
+            "WipDeals": [],
+            "EventSource": 'PRC_TBL',
+            "Errors": {}
+        }
+        let result= await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID,this.contractData.DC_ID,data,true,true,false).toPromise().catch((error)=>{
+            this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
+        });
+        let genPTR=PTE_Save_Util.generatePTRAfterSave(result);
+        if(genPTR && genPTR.length>0){
+         genPTR = PTE_Load_Util.pivotData(genPTR, false, this.curPricingTable, this.kitDimAtrbs);
+         this.generateHandsonTable(genPTR);
+        }
+        else{
+         this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::",'error');
+        }
     }
-
+    async validatePricingTableProducts() {
+    this.isLoading = true;
+    this.spinnerMessageHeader = 'PTE Save';
+    this.spinnerMessageDescription = 'PTE Saving please wait';
+    //Handsonetable loading taking some time so putting this logic for loader
+  
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
+        //Checking for UI errors
+        let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable,this.contractData);
+        //if there is any error bind the result to handsone table
+        let error=_.find(finalPTR,(x)=>{return _.keys(x._behaviors.isError).length>0});
+        if(error && error.length>0){
+            this.generateHandsonTable(finalPTR);
+        }
+        else{
+            await this.saveEntireContractRoot(finalPTR);
+        }
+        this.isLoading = false;
+    }
     async validateOnlyProducts() {
         //loader
         this.isLoading = true;
         this.spinnerMessageHeader = 'Validating your data...';
         this.spinnerMessageDescription = 'Please wait wile we validate your information!';
         //generate PTE
-        let PTR = this.getPTEGenerate();
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTR = PTR;
         if (translateResult) {
@@ -458,11 +480,10 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         //let data = PTEUtil.validatePTE(PTR, this.curPricingTable.OBJ_SET_TYPE_CD);
         //the below generate table will get called for error binding later
-        //this.generateHandsonTable(updatedPTR);
+        this.generateHandsonTable(updatedPTR);
         this.isLoading = false;
 
     }
-
     async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
@@ -487,17 +508,20 @@ export class pricingTableEditorComponent implements OnChanges {
         let dealType = this.curPricingTable.OBJ_SET_TYPE_CD;
 
         // Pricing table rows products to be translated
-        let pricingTableRowData = currentPricingTableRowData.filter(function (x) {
+        let pricingTableRowData = currentPricingTableRowData.filter((x) => {
+            console.log(x);
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
                 || (dealType == "KIT"); //|| ($scope.isExcludePrdChange);
         });
 
+        //find uniq records incase of tier logic
+        pricingTableRowData=_.uniq(pricingTableRowData,'DC_ID');
         // Convert into format accepted by translator API
         // ROW_NUMBER, CUST_MBR_SID, IS_HYBRID_PRC_STRAT - Remove hard coded values
-        let translationInput = pricingTableRowData.map(function (row, index) {
+        let translationInput = pricingTableRowData.map((row, index) =>{
             return {
-                ROW_NUMBER: "3",
+                ROW_NUMBER: row.DC_ID,
                 USR_INPUT: row.PTR_USER_PRD,
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
@@ -506,8 +530,8 @@ export class pricingTableEditorComponent implements OnChanges {
                 GEO_COMBINED: row.GEO_COMBINED,
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
-                CUST_MBR_SID: "27",
-                IS_HYBRID_PRC_STRAT: "0",
+                CUST_MBR_SID: this.contractData.CUST_MBR_SID,
+                IS_HYBRID_PRC_STRAT: this.curPricingTable.IS_HYBRID_PRC_STRAT,
                 SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
@@ -541,7 +565,6 @@ export class pricingTableEditorComponent implements OnChanges {
 
         return transformResults;
     }
-
     openAutoFill() {
         let ptTemplate, custId, isVistex
         let pt = this.curPricingTable;
@@ -608,9 +631,8 @@ export class pricingTableEditorComponent implements OnChanges {
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);
         // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
         new PTE_CellChange_Util(this.hotTable);
+        new PTE_Common_Util(this.hotTable);
     }
-
-
 }
 
 angular.module("app").directive(

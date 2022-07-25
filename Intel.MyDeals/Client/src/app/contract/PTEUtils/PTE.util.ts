@@ -22,7 +22,7 @@ export class PTEUtil {
         //   return date.getDay() === 0 || date.getDay() === 6;
         // }
     };
-
+   
     static generateHandsontableColumn(pteService: pricingTableEditorService,
         loggerService: logger,
         dropdownResponses: any[],
@@ -81,15 +81,15 @@ export class PTEUtil {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
                 currentColumnConfig.datePickerConfig = this.defaultDatePickerConfig;
-            } else {
-                currentColumnConfig.type = 'text';
-            }
-
-            if (!_.isUndefined(templateColumnAttributes[item.field])) {
+            } 
+            else if (templateColumnFields[item.field].uiType && templateColumnFields[item.field].uiType=='DROPDOWN') {
                 currentColumnConfig.type = 'dropdown';
                 if (item.lookupUrl) {
                     currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
                 }
+            }
+            else {
+                currentColumnConfig.type = 'text';
             }
         }
         /* Is Required & Nullable */
@@ -115,20 +115,7 @@ export class PTEUtil {
         }
         return currentColumnConfig;
     }
-    static setBehaviors(item:any, elem?:string) {
-        if (!item._behaviors) item._behaviors = {};
-        if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
-        if (!item._behaviors.isError) item._behaviors.isError = {};
-        if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-        if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
-    }
-    static setBehaviorsValidMessage(item:any, elem:string, elemLabel:string, cond:string){
-        if (elem === 'ECAP_PRICE' && cond=='equal-zero') {
-            item._behaviors.isRequired[elem] = true;
-            item._behaviors.isError[elem] = true;
-            item._behaviors.validMsg[elem] = `${elemLabel} must be positive number`;
-        }
-    }
+   
     static validatePTE(PTR:Array<any>,ObjType:string):any{
         if(ObjType=='ECAP'){
             return PTEUtil.validatePTEECAP(PTR);
@@ -140,7 +127,7 @@ export class PTEUtil {
     static validatePTEDeal(PTR:Array<any>):any{
         _.each(PTR,(item) =>{
             //defaulting the behaviours object
-            PTEUtil.setBehaviors(item);
+            PTE_Common_Util.setBehaviors(item);
         });
         return PTR;
     }
@@ -148,53 +135,94 @@ export class PTEUtil {
         //check for Ecap price 
         _.each(PTR,(item) =>{
             //defaulting the behaviours object
-            PTEUtil.setBehaviors(item);
+            PTE_Common_Util.setBehaviors(item);
             if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
-                PTEUtil.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
+                PTE_Common_Util.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
             }
         });
         return PTR;
     }
-    // set PTR_SYS_PRD attr value after getting transform results
-    static cookProducts(transformResults, rowData): any {
-        let data = rowData;
+    static getCellComments(PTR: any,columns:Array<any>): Array<any> {
+        let cellComments = [];
+        _.each(PTR, (item, rowInd) => {
+            if (item._behaviors && item._behaviors.validMsg) {
+                _.each(item._behaviors.validMsg, (val, key) => {
+                    let colInd = _.findIndex(columns, { field: key });
+                    cellComments.push({ row: rowInd, col: colInd, comment: { value: val,readOnly: true }, className: 'error-border' });
+                    if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
+                        cellComments.push({ row: rowInd, col: 0, className: 'error-cell' });
+                    }
+                });
+            }
+        });
+        return cellComments;
+    }
+    static getMergeCells(PTR: any,columns:Array<any>,NUMOFTIERS:string):Array<any> {
+        let mergCells = [];
+        //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
+        let distDCID = _.uniq(PTR, 'DC_ID');
+        _.each(distDCID, (item) => {
+            let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
 
+            //get NUM_OF_TIERS acoording this will be the row_span for handson
+            let NUM_OF_TIERS =curPTR.NUM_OF_TIERS !=undefined ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
+            _.each(columns, (colItem, ind) => {
+                if (!colItem.isDimKey && !colItem.hidden) {
+                    let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+                    mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
+                }
+            })
+        });
+        return mergCells;
+    }
+    // set PTR_SYS_PRD attr value after getting transform results
+    static cookProducts(transformResults:any, rowData:Array<any>): any {
         // Process multiple match products
         var isAllValidated = true;
         var key: any;
         for (key in transformResults.ProdctTransformResults) {
-            let r = key - 1;
-            // Flag dependency column errors - these columns may cause product translator to not find a valid product
-            if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
-                for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
-                    data[r]._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
-                    data[r]._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
+            _.each(rowData,(data)=>{
+                // Flag dependency column errors - these columns may cause product translator to not find a valid product
+                if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
+                    for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
+                        data._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
+                        data._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
+                    }
                 }
-            }
-            // If no duplicate or invalid add valid JSON
-            data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+                // If no duplicate or invalid add valid JSON,setting the value for the DC_IDs which are return frrom API
+                if(data && data.DC_ID==key){
+                    data.PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+                }
+            });
+           
         }
-        return data;
+        return rowData;
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
+       //this code will help us to identify uniq entry in case of tier
+        let uniqDCIDS=_.uniq(_.pluck(currentPricingTableRowData,'DC_ID'));
+        let distinctPricingTableRowData=[];
+        _.each(uniqDCIDS,DCID=>{
+            distinctPricingTableRowData.push(_.findWhere(currentPricingTableRowData,{DC_ID:DCID}));
+        });
         // Validate columns that product is dependent on
-        for (var i = 0; i < currentPricingTableRowData.length; i++) {
+        for (var i = 0; i < distinctPricingTableRowData.length; i++) {
             for (var d = 0; d < productValidationDependencies.length; d++) {
-                if (currentPricingTableRowData[i][productValidationDependencies[d]] === null || currentPricingTableRowData[i][productValidationDependencies[d]] === "") {
-                    PTEUtil.setBehaviors(currentPricingTableRowData[i]);
-                    currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]] = true;
-                    currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]] = "This field is required.";
-                    currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]] = true;
+                if (distinctPricingTableRowData[i][productValidationDependencies[d]] === null || distinctPricingTableRowData[i][productValidationDependencies[d]] === "") {
+                    PTE_Common_Util.setBehaviors(distinctPricingTableRowData[i]);
+                    distinctPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]] = true;
+                    distinctPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]] = "This field is required.";
+                    distinctPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]] = true;
                     hasProductDependencyErr = true;
                 }
                 else {
-                    if (currentPricingTableRowData[i]._behaviors !== undefined
-                        && currentPricingTableRowData[i]._behaviors.isError !== undefined
-                        && currentPricingTableRowData[i]._behaviors.validMsg !== undefined
-                        && currentPricingTableRowData[i]._behaviors.isRequired !== undefined) {
-                        delete currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]];
-                        delete currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]];
-                        delete currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]];
+                    if (distinctPricingTableRowData[i]._behaviors !== undefined
+                        && distinctPricingTableRowData[i]._behaviors.isError !== undefined
+                        && distinctPricingTableRowData[i]._behaviors.validMsg !== undefined
+                        && distinctPricingTableRowData[i]._behaviors.isRequired !== undefined) {
+                        delete distinctPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]];
+                        delete distinctPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]];
+                        delete distinctPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]];
                     }
                 }
             }

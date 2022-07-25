@@ -23,7 +23,7 @@ export class DE_Save_Util {
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (var i = 0; i < data.length; i++) {
-                PTEUtil.setBehaviors(data[i], '');
+                PTE_Common_Util.setBehaviors(data[i], '');
                 this.savedWithWarning(data[i], groups, templates);
             }
         }

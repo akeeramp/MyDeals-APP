@@ -265,7 +265,7 @@ export class PTE_Validation_Util {
     static validateDeal(data: Array<any>, curPricingTable, curPricingStrategy): any {
         _.each(data, (item) => {
             //defaulting the behaviours object
-            PTEUtil.setBehaviors(item);
+            PTE_Common_Util.setBehaviors(item);
         });
         if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
             return this.validateECAP(data);
@@ -277,7 +277,7 @@ export class PTE_Validation_Util {
         _.each(data, (item) => {
             //defaulting the behaviours object
             if (item.ECAP_PRICE["20___0"] == null || item.ECAP_PRICE["20___0"] == 0 || item.ECAP_PRICE["20___0"] == '' || item.ECAP_PRICE["20___0"] < 0) {
-                PTEUtil.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
+                PTE_Common_Util.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
             }
         });
         return data;

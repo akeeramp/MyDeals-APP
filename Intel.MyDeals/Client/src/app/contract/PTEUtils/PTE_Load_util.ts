@@ -40,8 +40,8 @@ export class PTE_Load_Util {
         }
         return isValid;
     }
-
-    static setBehaviors(item, elem, cond, curPricingTable) {
+    //coomon util has same functionality need to modify that with this
+    static setBehaviors (item, elem, cond, curPricingTable) {
         var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -132,8 +132,8 @@ export class PTE_Load_Util {
 
         return item;
     }
-
-    static setBehaviorsValidMessage(item, elem, elemLabel, cond, curPricingTable) {
+    //coomon util has same functionality need to modify that with this
+    static setBehaviorsValidMessage (item, elem, elemLabel, cond, curPricingTable) {
         var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         var dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
 
@@ -159,7 +159,7 @@ export class PTE_Load_Util {
     static getCellComments(PTR: any, columns: Array<any>): Array<any> {
         let cellComments = [];
         _.each(PTR, (item, rowInd) => {
-            if (item._behaviors.validMsg) {
+            if (item&& item._behaviors &&item._behaviors.validMsg) {
                 let msg = "";
                 _.each(item._behaviors.validMsg, (val, key) => {
                     let colInd = _.findIndex(columns, { field: key });
@@ -254,7 +254,7 @@ export class PTE_Load_Util {
             let curTier = 1, db = 1, dt = 1;
 
             for (var t = 1; t <= numTiers; t++) {
-                var lData = this.deepClone(data[d]);
+                var lData = PTE_Common_Util.deepClone(data[d]);
 
                 if (dealType === "VOL_TIER" || dealType === "FLEX" ||
                     dealType === "REV_TIER") {
@@ -284,7 +284,7 @@ export class PTE_Load_Util {
                         else {
                             // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                lData[endKey] = parseFloat(lData[endKey] || 0);
+                                lData[endKey] =parseFloat(lData[endKey] || 0);
                             }
                         }
 
@@ -415,17 +415,6 @@ export class PTE_Load_Util {
     static deepClone(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
-    static isPivotable(curPricingTable) {
-        if (!curPricingTable) return false;
-        if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
-            curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-            var pivotFieldName = "NUM_OF_TIERS";
-            return !!curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
-        }
-        if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
-            return true;
-        }
-    }
     static numOfPivot(dataItem, curPricingTable) {
         if (curPricingTable === undefined) return 1;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
@@ -452,7 +441,18 @@ export class PTE_Load_Util {
         }
         return 1;   //num of pivot is 1 for undim deal types
     }
-    static assignProductProprties(data, isTenderContract, curPricingTable) {
+    static isPivotable(curPricingTable) {
+        if (!curPricingTable) return false;
+        if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
+            curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
+            var pivotFieldName = "NUM_OF_TIERS";
+            return !!curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
+        }
+        if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
+            return true;
+        }
+    }
+    static assignProductProprties (data, isTenderContract, curPricingTable) {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             for (var d = 0; d < data.length; d++) {
 
@@ -482,10 +482,10 @@ export class PTE_Load_Util {
         }
         return data;
     }
-    static calculateTotalDsctPerLine(dscntPerLine, qty) {
+    static calculateTotalDsctPerLine (dscntPerLine, qty) {
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
-    static calculateKitRebate(data, firstTierRowIndex, numOfTiers, isDataPivoted) {
+    static calculateKitRebate (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
         var kitRebateTotalVal = 0;
         for (var i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
@@ -569,4 +569,6 @@ export class PTE_Load_Util {
             }
         }
     }
+     // code for Pivot Logic ends here
+ 
 }
