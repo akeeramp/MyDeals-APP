@@ -2,14 +2,12 @@ import { DE_Common_Util } from '../DEUtils/DE_Common_util';
 import Handsontable from 'handsontable';
 import * as _ from 'underscore';
 
+import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 export class PTE_Common_Util {
     private static hotTable:Handsontable
     constructor(hotTable:Handsontable){
         PTE_Common_Util.hotTable=hotTable;
     }
-    static tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-    static densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
-    static kitDimAtrbs = ["ECAP_PRICE", "DSCNT_PER_LN", "QTY", "PRD_BCKT", "TIER_NBR", "TEMP_TOTAL_DSCNT_PER_LN"];
     static getFullNameOfProduct (item, prodName) {
         if (item.PRD_ATRB_SID > 7005) return prodName;
         return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
@@ -48,14 +46,14 @@ export class PTE_Common_Util {
             if (anyWarnings) {
                 var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
                 var isKit = 0;
-                var relevantAtrbs = curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" ? this.densityTierAtrbs : this.tierAtrbs;
+                var relevantAtrbs = curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" ? PTE_Config_Util.densityTierAtrbs : PTE_Config_Util.tierAtrbs;
                 var tierCount = dataItem.NUM_OF_TIERS;
                 let curTier = 1, db = 1;
                 if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                     if (dataItem.PRODUCT_FILTER === undefined) { continue; }
                     dimStr = "_20___";
                     isKit = 1;          // KIT dimensions are 0-based indexed unlike VT's num_of_tiers which begins at 1
-                    relevantAtrbs = this.kitDimAtrbs;
+                    relevantAtrbs = PTE_Config_Util.kitDimAtrbs;
                     tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
                 }
                 // map tiered warnings
@@ -195,5 +193,13 @@ export class PTE_Common_Util {
             });
         }
         return PTRResult;
+    }
+
+    static parseCellValues(field, dataItem) {
+        DE_Common_Util.parseCellValues(field, dataItem);
+    }
+
+    static cellCloseValues(field, dataItem) {
+        DE_Common_Util.cellCloseValues(field, dataItem);
     }
 }

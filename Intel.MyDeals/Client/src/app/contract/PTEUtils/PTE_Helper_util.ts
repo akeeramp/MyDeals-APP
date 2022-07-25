@@ -1,5 +1,6 @@
 import { PTEUtil } from "./PTE.util";
 import { PTE_Load_Util } from "./PTE_Load_util";
+import { PTE_Config_Util } from "./PTE_Config_util";
 
 export class PTE_Helper_Util {
     static getFormatedGeos (geos) {
@@ -210,8 +211,8 @@ export class PTE_Helper_Util {
         var dimKey;
         var dimAtrbs;
         var isKit = 0;
-        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"]; // TODO: Loop through isDimKey attrbites for this instead for dynamicness
-        var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
+        var tierAtrbs = PTE_Config_Util.tierAtrbs;
+        var densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
         let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
 
         if (dealType === "VOL_TIER" || dealType === "FLEX" ||

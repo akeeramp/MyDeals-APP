@@ -17,6 +17,8 @@ import { dealEditorCellTemplateComponent } from "../contract/dealEditor/dealEdit
 import { dealEditorEditTemplateComponent } from "../contract/dealEditor/dealEditorEditTemplate.component";
 import { managerPctComponent } from "../contract/managerPct/managerPct.component";
 import { pctChildGridComponent } from "../contract/managerPct/pctChildGrid.component";
+import { systemPricePointModalComponent } from "../contract/ptModals/dealEditorModals/systemPricePointModal.component";
+import { endCustomerRetailModalComponent } from "../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -36,5 +38,7 @@ export let contractComponents = [
     dealEditorEditTemplateComponent,
     dealEditorHeaderTemplateComponent,
     managerPctComponent,
-    pctChildGridComponent
+    pctChildGridComponent,
+    systemPricePointModalComponent,
+    endCustomerRetailModalComponent
 ]

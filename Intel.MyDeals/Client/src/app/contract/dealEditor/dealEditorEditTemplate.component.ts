@@ -2,7 +2,7 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
-import { GridUtil } from '../grid.util';
+import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 @Component({
     selector: 'deal-editor-edit',
@@ -20,6 +20,8 @@ export class dealEditorEditTemplateComponent {
     @Input() in_Field_Name: string = '';
     @Input() in_Deal_Type: string = '';
     @Input() in_DataItem: any = '';
+    @Input() in_DropDownResponses: any;
+    private dropDowResponse: any = {};
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private dim = "10___";
@@ -147,7 +149,12 @@ export class dealEditorEditTemplateComponent {
         }
     }
     ngOnInit() {
-        this.fields = this.in_Deal_Type === 'VOL_TIER' ? GridUtil.volTierFields : this.in_Deal_Type === 'REV_TIER' ? GridUtil.revTierFields : GridUtil.densityFields;
+        this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
+        console.log("dropdownResponse", this.in_DropDownResponses.__zone_symbol__value["DEAL_COMB_TYPE"]);
+        var keys = Object.keys(this.in_DropDownResponses.__zone_symbol__value);
+        for (var key = 0; key < keys.length; key++) {
+            this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.DROP_DOWN);
+        }
     }
     ngOnDestroy() {
         //The style removed are adding back

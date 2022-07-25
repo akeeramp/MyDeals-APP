@@ -5,6 +5,7 @@ import { downgradeComponent } from '@angular/upgrade/static';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { GridUtil } from '../grid.util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
+import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 @Component({
     selector: 'deal-editor-cell',
     templateUrl: 'Client/src/app/contract/dealEditor/dealEditorCellTemplate.component.html',
@@ -40,7 +41,7 @@ export class dealEditorCellTemplateComponent {
             field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
             || field == "ADJ_ECAP_UNIT" || field == "CREDIT_AMT" || field == "DEBIT_AMT") {
             if (data[field] != undefined && data[field] != null && data[field] != "")
-                data[field] = this.currencyPipe.transform(parseInt(data[field]), 'USD', 'symbol', '1.2-2');
+                data[field] = this.currencyPipe.transform(parseFloat(data[field]), 'USD', 'symbol', '1.2-2');
         }
         if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
             || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
@@ -86,6 +87,14 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiDimControlWrapper(data, field, dim);
     }
 
+    uiDimInfoControlWrapper(passeddata, field) {
+        return GridUtil.uiDimInfoControlWrapper(passeddata, field);
+    }
+
+    getMissingCostCapIcon(passedData) {
+        return GridUtil.getMissingCostCapIcon(passedData);
+    }
+
     uiPositiveDimControlWrapper(passedData, field) {
         var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         var value = data[field];
@@ -100,7 +109,7 @@ export class dealEditorCellTemplateComponent {
             if (field == "QTY") {
                 data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
             }
-            if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT") {
+            if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
                 data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
             }
         }
@@ -257,7 +266,7 @@ export class dealEditorCellTemplateComponent {
         return false;
     }
     ngOnInit() {
-        this.fields = this.in_Deal_Type === 'VOL_TIER' ? GridUtil.volTierFields : this.in_Deal_Type === 'REV_TIER' ? GridUtil.revTierFields : GridUtil.densityFields;
+        this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
     }
     ngOnDestroy() {
         //The style removed are adding back

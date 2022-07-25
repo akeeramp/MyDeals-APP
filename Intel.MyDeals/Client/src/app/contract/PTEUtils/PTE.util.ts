@@ -238,7 +238,7 @@ export class PTEUtil {
         }
     }
     static EndValueValidator(value, callBack) {
-        if (value != undefined && (/^[0-9]+$/.test(value) || value.toLowerCase() == "unlimited")) {
+        if (value != undefined && (!Number.isNaN(Number(value)) || value.toLowerCase() == "unlimited")) {
             callBack(true);
         } else {
             callBack(false);

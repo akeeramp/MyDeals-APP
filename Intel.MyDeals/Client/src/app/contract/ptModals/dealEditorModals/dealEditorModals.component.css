@@ -1,0 +1,166 @@
+﻿.endCustomerRowStyle {
+    padding-left: 5px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.colStyle {
+    text-align: center;
+    padding-left: 0px;
+    width: 90px !important;
+}
+
+.rplColStyle {
+    text-align: left;
+    padding-left: 3px;
+    width: 100px !important;
+}
+
+.rightZeroPadding {
+    padding-right: 0px;
+}
+
+.leftZeroPadding {
+    padding-left: 0px;
+}
+
+.biggerWidth {
+    width: 350px !important;
+}
+
+.bigWidth {
+    width: 300px !important;
+}
+
+.mediumWidth {
+    width: 280px !important;
+}
+
+.smallWidth {
+    width: 270px !important;
+}
+
+.textCenterAlign {
+    text-align: center;
+}
+
+.textRightAlign {
+    text-align: right;
+}
+
+.textLeftAlign {
+    text-align: left;
+}
+
+.leftMargin {
+    margin-left: 30px;
+}
+
+.modal-body .opUiElement {
+    width: 100%;
+}
+
+.modal-body {
+    max-height: 500px;
+    overflow: auto;
+    padding: 0px !important;
+}
+
+.modal-dialog {
+    width: 1000px !important;
+}
+
+.filterRow {
+    margin-bottom: 7px;
+}
+
+.icnBtn {
+    border-radius: 4px;
+    width: 24px;
+    padding: 2px 5px;
+    margin: 2px 12px 2px 0;
+    cursor: pointer;
+}
+
+    .icnBtn i {
+        color: #ffffff;
+    }
+
+.icnSkyBtn {
+    background-color: #00AEEF;
+}
+
+    .icnSkyBtn:hover {
+        background-color: #0071C5;
+    }
+
+.icnGryBtn {
+    background-color: #bbbbbb;
+}
+
+    .icnGryBtn:hover {
+        background-color: #cccccc;
+    }
+
+.icnGreenBtn {
+    background-color: #008000;
+}
+
+.icnRedBtn {
+    background-color: #ff0000;
+}
+
+.icnSky {
+    cursor: pointer;
+    color: #00AEEF;
+    margin-left: 8px;
+}
+
+.buttonMinPadding {
+    padding-left: 140px !important;
+}
+
+.buttonMaxPadding {
+    padding-left: 150px !important;
+}
+
+.ss-loading-panel {
+    margin-top: 15%;
+    margin-left: 37%;
+}
+
+label {
+    font-weight: bold !important;
+    display: inline-block !important;
+    font-size: 15px;
+}
+
+.comboBoxStyleIfAny {
+    width: 270px !important;
+    display: none;
+}
+
+.ctryComboBoxStyleIfAny {
+    width: 250px !important;
+    display: none;
+}
+
+.comboBoxStyleIfNotAny {
+    width: 300px !important;
+    display: none;
+}
+
+.btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important;
+}
+
+.floatRight {
+    float: right;
+}
+
+.ss-loading-panel {
+    margin-top: 15% !important;
+    margin-left: 15% !important;
+}

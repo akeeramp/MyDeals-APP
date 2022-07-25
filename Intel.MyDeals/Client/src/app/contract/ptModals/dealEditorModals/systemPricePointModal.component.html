@@ -1,0 +1,39 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Select {{label}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-4">
+                <label class="control-label" for="inputControl">Operator</label>
+                <kendo-dropdownlist [data]="operators"
+                                    [(ngModel)]="operator"
+                                    textField="name"
+                                    valueField="id"
+                                    [defaultItem]="defaultItem">
+                </kendo-dropdownlist>
+                <!--<select id="inputControl" kendo-drop-down-list k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.operator"></select>-->
+            </div>
+            <div class="col-sm-8">
+                <label class="control-label" for="inputPrice">Price Point</label>
+                <kendo-numerictextbox [(ngModel)]="price"
+                                      min="0.01" max="1000000"
+                                      [format]="c2"
+                                      [autoCorrect]="autoCorrect"
+                                      [value]="price">
+                </kendo-numerictextbox>
+                <!--<input class="form-control" kendo-numeric-text-box id="inputPrice" format="'c2'" min="0.01" max="1000000" k-ng-model="$ctrl.price">-->
+                <p><small>Valid Range: 0.01 - 1,000,000</small></p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="fr">
+                <button class="btn btn-warning" (click)="cancel()">Cancel</button>
+                <button class="btn btn-primary" (click)="ok()">Save And Close</button>
+            </div>
+        </div>
+    </div>
+</div>

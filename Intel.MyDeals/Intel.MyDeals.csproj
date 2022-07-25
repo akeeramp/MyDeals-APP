@@ -856,6 +856,9 @@
     <Content Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.html" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.css" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\dealEditorModals\dealEditorModals.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\geo\geo.component.html" />
     <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.html" />
     <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.css" />
@@ -2295,6 +2298,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Load_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Save_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Validation_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />

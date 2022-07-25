@@ -1,15 +1,18 @@
-﻿<div *ngIf="in_Field_Name == 'DEAL_DESC'">
-    <kendo-textbox (change)="valueChange(in_DataItem, in_Field_Name)" [(ngModel)]="in_DataItem.DEAL_DESC">
+﻿<div *ngIf="in_Field_Name == 'DEAL_DESC' || in_Field_Name == 'TERMS' || in_Field_Name == 'QLTR_PROJECT' || in_Field_Name == 'RPU_OVERRIDE_CMNT'">
+    <kendo-textbox (change)="valueChange(in_DataItem, in_Field_Name)" [ngModel]="in_DataItem[in_Field_Name]"
+                   (ngModelChange)="in_DataItem[in_Field_Name] = $event">
     </kendo-textbox>
 </div>
-<div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'">
+<div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'
+     || in_Field_Name == 'USER_MAX_RPU' || in_Field_Name == 'USER_AVG_RPU' || in_Field_Name == 'TOTAL_DOLLAR_AMOUNT' || in_Field_Name == 'ADJ_ECAP_UNIT'
+     || in_Field_Name == 'MAX_PAYOUT' || in_Field_Name == 'REBATE_OA_MAX_VOL' || in_Field_Name == 'REBATE_OA_MAX_AMT'">
     <div *ngIf="in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP'" class="dimKey">{{translateDimKey(ecapDimKey)}}</div>
     <div *ngIf="in_Field_Name == 'KIT_ECAP'" class="dimKey">{{translateDimKey(kitEcapdim)}}</div>
     <kendo-numerictextbox [ngModel]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
                           (ngModelChange)="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] = $event : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] = $event : in_DataItem[in_Field_Name] = $event"
                           [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                           [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
-                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD') ? 'n0' : 'n2'"
+                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
                           [autoCorrect]="autoCorrect">
     </kendo-numerictextbox>
 </div>
@@ -27,14 +30,14 @@
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END' || in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'
-     || in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'">
+     || in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT' || in_Field_Name == 'ON_ADD_DT'">
     <kendo-datepicker [ngModel]="in_DataItem[in_Field_Name]"
                       (ngModelChange)="in_DataItem[in_Field_Name] = $event"
                       [value]="in_DataItem[in_Field_Name]"
                       (valueChange)="valueChange(in_DataItem, in_Field_Name)" format="MM/dd/yyyy">
     </kendo-datepicker>
 </div>
-<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER')">
+<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
     <div *ngFor="let fieldDet of fields">
         <div *ngIf="fieldDet.title === 'Tier'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
         <div *ngIf="fieldDet.title !== 'Tier'" class="col-md-3 tierHeader tierBorder">{{fieldDet.title}}</div>
@@ -115,4 +118,11 @@
             </div>
         </div>
     </div>
+</div>
+<div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE' || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN'">
+    <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
+                        [ngModel]="in_DataItem[in_Field_Name]"
+                        (ngModelChange)="in_DataItem[in_Field_Name] = $event"
+                        (valueChange)="valueChange(in_DataItem, in_Field_Name)">
+    </kendo-dropdownlist>
 </div>

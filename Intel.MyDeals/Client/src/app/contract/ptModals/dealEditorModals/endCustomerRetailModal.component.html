@@ -1,0 +1,130 @@
+﻿<div>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Select End Customer/Retail and Country/Region</h3>
+    </div>
+    <loading-panel-angular id="EndCustomerLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+    <div class="modal-body" id="modal-body">
+        <div *ngIf="isError || changeErrorFlag">
+            <p>
+                <span style="color:red;">
+                    <label>Please Fix the below Errors</label>
+                </span>
+            </p>
+        </div>
+        <div class="filterRow">
+            <div *ngFor="let endCust Of END_CUST_OBJ; let i = index">
+                <div class="col-md-12 endCustomerRowStyle" *ngIf="i == 0">
+                    <div class="col-md-1 colStyle">
+                        <label>Is Unified</label>
+                    </div>
+                    <div class="col-md-1 rplColStyle">
+                        <label>RPL Status</label>
+                    </div>
+                    <div class="col-md-1 rightZeroPadding" *ngIf="!isAdmin">
+                        <label></label>
+                    </div>
+                    <div class="textCenterAlign" [ngClass]="{'col-md-5 bigWidth': isAdmin, 'col-md-4 smallWidth': !isAdmin}">
+                        <label>End Customer</label>
+                    </div>
+                    <div [ngClass]="{'col-md-3': isAny, 'col-md-4': !isAny, 'biggerWidth textCenterAlign' :(isAny && isAdmin), 'smallWidth textCenterAlign': (isAny && !isAdmin), 'bigWidth textRightAlign leftMargin':(!isAny && isAdmin),'mediumWidth textRightAlign': (!isAny && !isAdmin) }">
+                        <label>Country/Region</label>
+                    </div>
+                    <div class="col-md-1 leftZeroPadding textRightAlign floatRight" *ngIf="END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                        <label>Exclude</label>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom: 15px;">
+                    <div class="col-md-1 align-content-center">
+                        <span title="Unified" *ngIf="endCust.IS_PRIMED_CUST==1" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Not Unified" *ngIf="endCust.IS_PRIMED_CUST==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                    </div>
+                    <div class="col-md-1 align-content-center">
+                        <span title="NA" *ngIf="(endCust.IS_PRIMED_CUST==0 && (endCust.IS_RPL==0 || endCust.IS_RPL==null)) || (endCust.RPL_STS_CD == null || endCust.RPL_STS_CD == '')" class="fl icnBtn icnGryBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="Review in Progress" *ngIf="endCust.IS_PRIMED_CUST==1 &&  (endCust.RPL_STS_CD != null && endCust.RPL_STS_CD != '' && endCust.RPL_STS_CD.match('REVIEWWIP')) && endCust.IS_RPL==0" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                        <span title="Non – Sanctioned" *ngIf="endCust.IS_PRIMED_CUST==1 && endCust.IS_RPL==0 && (endCust.RPL_STS_CD != null && endCust.RPL_STS_CD != '' && !endCust.RPL_STS_CD.match('REVIEWWIP'))" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
+                        <span title="Sanctioned" *ngIf="endCust.IS_PRIMED_CUST==1 && endCust.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
+                    </div>
+                    <div class="col-md-1 rightZeroPadding" *ngIf="!isAdmin" style="width:90px;">
+                        <span class="fl icnBtn icnSkyBtn" (click)="addRow(endCust)"><i class="intelicon-plus-max"></i></span>
+                        <span class="fl icnBtn icnGryBtn" (click)="removeRow(endCust)" *ngIf="i>0"><i class="intelicon-minus-max"></i></span>
+                        <span class="fl icnBtn" *ngIf="i == 0"></span>
+                    </div>
+                    <div [ngClass]="{'col-md-5':isAdmin, 'col-md-4':!isAdmin}">
+                        <span class="fl" *ngIf="i == 0" [ngStyle]="{'width:340px' : (isAny && isAdmin), 'width:290px' : isAny, 'width:350px' : isAdmin, 'width:300px' : (!isAny && !isAdmin)}">
+                            <kendo-combobox [data]="endCustOptions" [id]="'ComboBoxSelect_'+i"
+                                            textField="Text"
+                                            valueField="Value"
+                                            [(ngModel)]="endCust.END_CUSTOMER_RETAIL"
+                                            [valuePrimitive]="true"
+                                            kendoDropDownFilter="contains"
+                                            allowCustom="true"
+                                            placeholder="Select End Customer"
+                                            class="fl opUiElement"
+                                            [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
+                                            (valueChange)="changeField(i, endCust)">
+                            </kendo-combobox>
+                        </span>
+                        <span class="fl" *ngIf="i > 0" [ngStyle]="{'width:340px' : (isAny && isAdmin), 'width:290px' : isAny, 'width:350px' : isAdmin, 'width:300px' : (!isAny && !isAdmin)}">
+                            <kendo-combobox [data]="endCustOptionsWithOutAny" [id]="'ComboBoxSelect_'+i"
+                                            textField="Text"
+                                            valueField="Value"
+                                            [(ngModel)]="endCust.END_CUSTOMER_RETAIL"
+                                            [valuePrimitive]="true"
+                                            allowCustom="true"
+                                            kendoDropDownFilter="contains"
+                                            placeholder="Select End Customer"
+                                            class="fl opUiElement"
+                                            [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
+                                            (valueChange)="changeField(i, endCust)">
+                            </kendo-combobox>
+                        </span>
+                    </div>
+                    <div [ngClass]="{'col-md-3':isAny, 'col-md-4': !isAny}">
+                        <span class="fl" [ngStyle]="{'width:250px' : isAny, 'width:315px;margin-left:30px' : isAdmin, 'width:300px;margin-left:30px' : !isAdmin}">
+                            <kendo-combobox [data]="countries" [id]="'DropdownSelections_'+i"
+                                            textField="CTRY_NM"
+                                            valueField="CTRY_NM"
+                                            [(ngModel)]="endCust.PRIMED_CUST_CNTRY"
+                                            allowCustom="true"
+                                            kendoDropDownFilter="contains"
+                                            [valuePrimitive]="true"
+                                            placeholder="Select Country/Region"
+                                            class="fl opUiElement"
+                                            [disabled]="(isAny && i == 0) || isAdmin? true:false"
+                                            [ngClass]="{'ctryComboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
+                                            (valueChange)="changeCountryField(i, endCust)">
+                            </kendo-combobox>
+                        </span>
+                    </div>
+                    <div class="col-md-1" *ngIf="END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'" style="padding-left: 15px; float: right; padding-top:5px;">
+                        <div *ngIf="i>0">
+                            <span class="fl icnBtn icnSkyBtn"><i class="intelicon-check"></i></span>
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-7">
+                <button class="btn btn-primary" id="ClearEndCustomer" [disabled]="endCustomerRetailPopUpModal.clearEndCustomerDisabled == true" (click)="remove()">Clear End Customer</button>&nbsp;
+                <button class="btn btn-warning" type="button" (click)="cancel()">Cancel</button>
+            </div>
+            <div class="col-md-5" [ngClass]="{'buttonMaxPadding' : isAny, 'buttonMinPadding': !isAny}">
+                <button class="btn btn-primary" type="button" [disabled]="ecOptionsFlag == true" (click)="ok()">Validate</button>&nbsp;
+                <button id="saveandclose" class="btn btn-primary" type="button" [disabled]="validateFlag == true" (click)="saveAndClose()">Save And Close</button>
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+<kendo-dialog title="Warning" *ngIf="isWarning" (close)="cancelWarning()">
+    <p style="margin: 30px; text-align: center;">{{message}}</p>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="cancel()">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

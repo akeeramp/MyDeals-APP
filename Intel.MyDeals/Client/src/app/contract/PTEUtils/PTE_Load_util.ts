@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 import { PTE_Common_Util } from './PTE_Common_util';
+import { PRC_TBL_Model_Column } from '../pricingTableEditor/handsontable.interface';
 export class PTE_Load_Util {
     static getRulesForDE(objSetTypeCd) {
         return DE_Load_Util.getRules(objSetTypeCd);
@@ -241,8 +242,8 @@ export class PTE_Load_Util {
     }
     static pivotData(data, isTenderContract, curPricingTable, kitDimAtrbs) {        //convert how we save data in MT to UI spreadsheet consumable format
         data = this.assignProductProprties(data, isTenderContract, curPricingTable);
-        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
-        var densityTierAtrbs = ["DENSITY_RATE", "STRT_PB", "END_PB", "DENSITY_BAND", "TIER_NBR"];
+        var tierAtrbs = PTE_Config_Util.tierAtrbs;
+        var densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
         if (!this.isPivotable(curPricingTable)) return data;
         var newData = [];
         let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
@@ -569,6 +570,22 @@ export class PTE_Load_Util {
             }
         }
     }
-     // code for Pivot Logic ends here
- 
+    static getHiddenColumns(columnTemplates, customerDivisions) {
+        let hiddenColumns = [];
+        _.each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
+            /* Hidden Columns */
+            if (item.hidden) {
+                hiddenColumns.push(index);
+            }
+            if (item.field == "CUST_ACCNT_DIV") {
+                var custD = customerDivisions.filter(function (x) {
+                    return x["ACTV_IND"] === true
+                });
+                if (!customerDivisions || custD.length <= 1) {
+                    hiddenColumns.push(index);
+                }
+            }
+        });
+        return hiddenColumns;
+    }
 }

@@ -2,13 +2,13 @@ td.error-border {
     border: 1px solid red !important;
 }
 
-td:first-of-type.error-cell {
+td.error-cell {
     background-color: red;
     color: white !important;
     border: solid lightgrey 1px !important;
 }
 
-td:not(:first-of-type).readonly-cell {
+td:not(.error-cell).readonly-cell {
     background-color: rgb(238, 238, 238) !important;
 }
 

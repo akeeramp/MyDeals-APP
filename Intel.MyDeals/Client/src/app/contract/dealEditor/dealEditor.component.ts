@@ -13,6 +13,9 @@ import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
+import { forkJoin } from 'rxjs';
+import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
+import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 
 @Component({
     selector: 'deal-editor',
@@ -51,6 +54,8 @@ export class dealEditorComponent {
     private gridData: GridDataResult;
     public isLoading = false;
     private isTenderContract = false;
+    private dropdownResponses: any = null;
+    private EndCustDropdownResponses: any = null;
     private state: State = {
         skip: 0,
         take: 25,
@@ -177,106 +182,92 @@ export class dealEditorComponent {
 
     cellClickHandler(args: CellClickEvent): void {
         if (args.dataItem != undefined) {
-            if (args.column.field == "ECAP_PRICE" && this.curPricingTable.OBJ_SET_TYPE_CD == "ECAP")
-                args.dataItem["ECAP_PRICE"][this.ecapDimKey] = parseInt(args.dataItem["ECAP_PRICE"][this.ecapDimKey]);
-            if (args.column.field == "KIT_ECAP")
-                args.dataItem["ECAP_PRICE"][this.kitEcapdim] = parseInt(args.dataItem["ECAP_PRICE"][this.kitEcapdim]);
-            if (args.column.field == "VOLUME" || args.column.field == "CONSUMPTION_LOOKBACK_PERIOD")
-                args.dataItem[args.column.field] = parseInt(args.dataItem[args.column.field]);
-            if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
-                || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
-                || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT")
-                args.dataItem[args.column.field] = new Date(args.dataItem[args.column.field]);
-            if (args.column.field == "TIER_NBR") {
-                var tiers = args.dataItem.TIER_NBR;
-                for (var key in tiers) {
-                    if (this.curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER') {
-                        if (args.dataItem["STRT_VOL"][key] != "Unlimited")
-                            args.dataItem["STRT_VOL"][key] = parseInt(args.dataItem["STRT_VOL"][key]);
-                        if (args.dataItem["END_VOL"][key] != "Unlimited")
-                            args.dataItem["END_VOL"][key] = parseInt(args.dataItem["END_VOL"][key]);
-                        args.dataItem["RATE"][key] = parseFloat(args.dataItem["RATE"][key]);
-                    }
-                    else if (this.curPricingTable.OBJ_SET_TYPE_CD === 'REV_TIER') {
-                        if (args.dataItem["STRT_REV"][key] != "Unlimited")
-                            args.dataItem["STRT_REV"][key] = parseFloat(args.dataItem["STRT_REV"][key]);
-                        if (args.dataItem["END_REV"][key] != "Unlimited")
-                            args.dataItem["END_REV"][key] = parseFloat(args.dataItem["END_REV"][key]);
-                        args.dataItem["INCENTIVE_RATE"][key] = parseFloat(args.dataItem["INCENTIVE_RATE"][key]);
-                    }
-                    else if (this.curPricingTable.OBJ_SET_TYPE_CD === 'DENSITY') {
-                        for (var i = 0; i < args.dataItem["NUM_OF_DENSITY"]; i++) {
-                            args.dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = parseFloat(args.dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key]);
-                        }
-                        if (args.dataItem["STRT_PB"][key] != "Unlimited")
-                            args.dataItem["STRT_PB"][key] = parseFloat(args.dataItem["STRT_PB"][key]);
-                        if (args.dataItem["END_PB"][key] != "Unlimited")
-                            args.dataItem["END_PB"][key] = parseFloat(args.dataItem["END_PB"][key]);
-                    }
-                }
-            }
-            if ((args.column.field == "ECAP_PRICE" || args.column.field == "DSCNT_PER_LN") && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") {
-                var tiers = args.dataItem[args.column.field];
-                for (var key in tiers) {
-                    args.dataItem[args.column.field][key] = parseInt(args.dataItem[args.column.field][key]);
-                }
-            }
+            PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
         if (!args.isEdited && args.column.field !== "CUST_MBR_SID" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
-            !(args.dataItem._behaviors != undefined && args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
+            args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && !(args.dataItem._behaviors != undefined &&
+                args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
             args.sender.editCell(
                 args.rowIndex,
                 args.columnIndex
             );
+            if (args.column.field == "SYS_PRICE_POINT") {
+                this.openSystemPriceModal(args.dataItem);
+            }
+            else if (args.column.field == "END_CUSTOMER_RETAIL") {
+                var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
+                this.openEndCustomerModal(args.dataItem, column[0]);
+            }
         }
+    }
+
+    updateModalDataItem(dataItem, field, returnVal) {
+        if (dataItem != undefined && dataItem._behaviors != undefined) {
+            dataItem[field] = returnVal;
+            if (dataItem._behaviors.isDirty == undefined)
+                dataItem._behaviors.isDirty = {};
+            dataItem._behaviors.isDirty[field] = true;
+            dataItem["_dirty"] = true;
+        }
+    }
+
+    openSystemPriceModal(dataItem) {
+        const dialogRef = this.dialog.open(systemPricePointModalComponent, {
+            width: "900px",
+            data: {
+                label: "System Price Point",
+                cellCurrValues: dataItem["SYS_PRICE_POINT"]
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if (returnVal != undefined && returnVal != null && returnVal != "") {
+                this.updateModalDataItem(dataItem, "SYS_PRICE_POINT", returnVal);
+            }
+        });
+    }
+
+    openEndCustomerModal(dataItem, column) {
+        const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
+            width: "1000px",
+            data: {
+                item: {
+                    retailLookUpUrl: column.lookupUrl,
+                    countryLookUpUrl: "/api/PrimeCustomers/GetCountries",
+                    colName: "END_CUSTOMER_RETAIL",
+                    isAdmin: false,
+                    clearEndCustomerDisabled: false,
+                    dealId: dataItem.DC_ID
+                },
+                cellCurrValues: {
+                    END_CUST_OBJ: dataItem.END_CUST_OBJ,
+                    END_CUSTOMER_RETAIL: dataItem.END_CUSTOMER_RETAIL,
+                    IS_PRIME: dataItem.IS_PRIMED_CUST,
+                    PRIMED_CUST_CNTRY: dataItem.PRIMED_CUST_CNTRY,
+                    PRIMED_CUST_NM: dataItem.PRIMED_CUST_NM,
+                    PRIMED_CUST_ID: dataItem.PRIMED_CUST_ID
+                }
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if (returnVal != undefined) {
+                dataItem.END_CUST_OBJ = returnVal.END_CUST_OBJ;
+                this.updateModalDataItem(dataItem, "END_CUSTOMER_RETAIL", returnVal.END_CUSTOMER_RETAIL);
+                this.updateModalDataItem(dataItem, "IS_PRIME", returnVal.IS_PRIME);
+                this.updateModalDataItem(dataItem, "PRIMED_CUST_CNTRY", returnVal.PRIMED_CUST_CNTRY);
+                this.updateModalDataItem(dataItem, "PRIMED_CUST_NM", returnVal.PRIMED_CUST_NM);
+                this.updateModalDataItem(dataItem, "PRIMED_CUST_ID", returnVal.PRIMED_CUST_ID);
+                this.updateModalDataItem(dataItem, "IS_RPL", returnVal.IS_RPL);
+            }
+        });
     }
 
     cellCloseHandler(args: CellCloseEvent): void {
         if (args.dataItem != undefined) {
-            if (args.column.field == "ECAP_PRICE" && this.curPricingTable.OBJ_SET_TYPE_CD == "ECAP")
-                args.dataItem["ECAP_PRICE"][this.ecapDimKey] = args.dataItem["ECAP_PRICE"][this.ecapDimKey].toString();
-            if (args.column.field == "KIT_ECAP")
-                args.dataItem["ECAP_PRICE"][this.kitEcapdim] = args.dataItem["ECAP_PRICE"][this.kitEcapdim].toString();
-            if (args.column.field == "VOLUME" || args.column.field == "CONSUMPTION_LOOKBACK_PERIOD")
-                args.dataItem[args.column.field] = args.dataItem[args.column.field].toString();
+            PTE_Common_Util.cellCloseValues(args.column.field, args.dataItem);
             if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
                 || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
-                || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT")
+                || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
                 args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
-            if (args.column.field == "TIER_NBR") {
-                var tiers = args.dataItem.TIER_NBR;
-                for (var key in tiers) {
-                    if (this.curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER') {
-                        if (args.dataItem["STRT_VOL"][key] != "Unlimited")
-                            args.dataItem["STRT_VOL"][key] = args.dataItem["STRT_VOL"][key].toString();
-                        if (args.dataItem["END_VOL"][key] != "Unlimited")
-                            args.dataItem["END_VOL"][key] = args.dataItem["END_VOL"][key].toString();
-                        args.dataItem["RATE"][key] = args.dataItem["RATE"][key].toString();
-                    }
-                    else if (this.curPricingTable.OBJ_SET_TYPE_CD === 'REV_TIER') {
-                        if (args.dataItem["STRT_REV"][key] != "Unlimited")
-                            args.dataItem["STRT_REV"][key] = args.dataItem["STRT_REV"][key].toString();
-                        if (args.dataItem["END_REV"][key] != "Unlimited")
-                            args.dataItem["END_REV"][key] = args.dataItem["END_REV"][key].toString();
-                        args.dataItem["INCENTIVE_RATE"][key] = args.dataItem["INCENTIVE_RATE"][key].toString();
-                    }
-                    else if (this.curPricingTable.OBJ_SET_TYPE_CD === 'DENSITY') {
-                        for (var i = 0; i < args.dataItem["NUM_OF_DENSITY"]; i++) {
-                            args.dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = args.dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key].toString();
-                        }
-                        if (args.dataItem["STRT_PB"][key] != "Unlimited")
-                            args.dataItem["STRT_PB"][key] = args.dataItem["STRT_PB"][key].toString();
-                        if (args.dataItem["END_PB"][key] != "Unlimited")
-                            args.dataItem["END_PB"][key] = args.dataItem["END_PB"][key].toString();
-                    }
-                }
-            }
-            if ((args.column.field == "ECAP_PRICE" || args.column.field == "DSCNT_PER_LN") && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") {
-                var tiers = args.dataItem[args.column.field];
-                for (var key in tiers) {
-                    args.dataItem[args.column.field][key] = args.dataItem[args.column.field][key].toString();
-                }
-            }
         }
     }
 
@@ -300,16 +291,36 @@ export class dealEditorComponent {
     }
 
     SaveDeal() {
-        PTE_Save_Util.saveDeal(this.gridResult, this.curPricingTable, this.curPricingStrategy, this.groups, this.templates);
+        PTE_Save_Util.saveDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.groups, this.templates);
         this.gridData = process(this.gridResult, this.state);
         console.log(this.gridData);
     }
 
+    async getAllDrowdownValues() {
+        let dropObjs = {};
+        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN"];
+        _.each(atrbs, (item) => {
+            var column = this.wipTemplate.columns.filter(x => x.field == item);
+            let url = "";
+            if (item == "COUNTRY")
+                url = "/api/PrimeCustomers/GetCountries";
+            else if (item == "PERIOD_PROFILE")
+                url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
+            else
+                url = column[0].lookupUrl;
+            dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
+        });
+        let result = await forkJoin(dropObjs).toPromise().catch((err) => {
+            this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
+        });
+        return result;
+    }
     ngOnInit() {
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
         this.getGroupsAndTemplates();
+        this.dropdownResponses = this.getAllDrowdownValues();
         this.selectedTab = "Deal Info";
         this.filterColumnbyGroup(this.selectedTab);
     }

@@ -241,19 +241,7 @@ export class pricingTableEditorComponent implements OnChanges {
         const columnFields: PRC_TBL_Model_Field[] = this.pricingTableTemplates.model.fields;
         const columnAttributes: PRC_TBL_Model_Attributes[] = this.pricingTableTemplates.defaultAtrbs;
         // Iterate through each column from the Pricing Table Template
-        _.each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
-            /* Hidden Columns */
-            if (item.hidden) {
-                hiddenColumns.push(index);
-            }
-            if (item.field == "CUST_ACCNT_DIV") {
-                var custD = this.contractData.CustomerDivisions.filter(function (x) {
-                    return x["ACTV_IND"] === true
-                });
-                if (!this.contractData.CustomerDivisions || custD.length <= 1) {
-                    hiddenColumns.push(index);
-                }
-            }
+        _.each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {            
             let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
@@ -264,7 +252,8 @@ export class pricingTableEditorComponent implements OnChanges {
             nestedHeaders[0].push(sheetObj[index]);
             nestedHeaders[1].push(`<span style="color:blue;font-style: italic;">${item.title}</span>`);
         });
-
+        /* Hidden Columns */
+        hiddenColumns = PTE_Load_Util.getHiddenColumns(columnTemplates, this.contractData.CustomerDivisions);
         let mergCells = [];
         let cellComments = PTE_Load_Util.getCellComments(PTR, this.pricingTableTemplates.columns);
         // This logic will add for all tier deals
@@ -298,7 +287,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 cellProperties['readOnly'] = true;
             }
         }
-        else {
+        if (this.hotTable.getDataAtRowProp(row, 'DC_ID') !== undefined && this.hotTable.getDataAtRowProp(row, 'DC_ID') !== null && this.hotTable.getDataAtRowProp(row, 'DC_ID') !== '' && this.hotTable.getDataAtRowProp(row, 'DC_ID') < 0) {
             //column config hasr eadonly property for certain column persisting that assigning for other
             if (_.findWhere(this.ColumnConfig, { data: prop }).readOnly) {
                 cellProperties['readOnly'] = true;
@@ -307,6 +296,22 @@ export class pricingTableEditorComponent implements OnChanges {
                 cellProperties['readOnly'] = false;
             }
         }
+        if (this.hotTable.getDataAtRowProp(row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(row, '_behaviors') != null) {
+            var behaviors = this.hotTable.getDataAtRowProp(row, '_behaviors');
+            if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+            }
+        }
+        if (this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() !== 'cash') {
+            if (prop == 'SETTLEMENT_PARTNER') {
+                cellProperties['readOnly'] = true;
+            }
+        }        
         return cellProperties;
     }
     //functions to identify cell change

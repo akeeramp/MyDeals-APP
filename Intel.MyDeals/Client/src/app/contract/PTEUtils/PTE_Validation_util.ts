@@ -5,7 +5,7 @@ import { PTEUtil } from '../PTEUtils/PTE.util';
 import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
-
+import { PTE_Config_Util } from './PTE_Config_util';
 
 
 export class PTE_Validation_Util {
@@ -199,7 +199,7 @@ export class PTE_Validation_Util {
                 || objTypeCd === "REV_TIER" || objTypeCd === "DENSITY") {
                 var anyWarnings = false;
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
-                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "DENSITY_RATE", "TIER_NBR", "STRT_REV", "END_REV", "INCENTIVE_RATE", "STRT_PB", "END_PB"];
+                var tierAtrbs = PTE_Config_Util.tierAtrbs;
                 if (anyWarnings) {
                     var dimStr = "_10___";
                     var isKit = 0;
@@ -262,15 +262,15 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }    
-    static validateDeal(data: Array<any>, curPricingTable, curPricingStrategy): any {
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract): any {
         _.each(data, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
         });
         if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
-            return this.validateECAP(data);
+            data = this.validateECAP(data);
         }
-        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy, curPricingTable)
+        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy, curPricingTable);
     }
     static validateECAP(data: Array<any>): any {
         //check for Ecap price 
