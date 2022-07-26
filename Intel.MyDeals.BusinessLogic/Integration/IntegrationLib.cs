@@ -888,8 +888,9 @@ namespace Intel.MyDeals.BusinessLogic
                 executionResponse += "Processing [" + batchId + "] - [" + salesForceIdCntrct + "] - [" + salesForceIdDeal + "]<br>";
                 int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
 
-                if (custId == 0) // Need to have a working customer for this request and failed, skip!
+                if ((custCimId == null || custCimId == "") || custId == 0) // Need to have a working customer for this request and failed, skip!
                 {
+                    if (custCimId == null) custCimId = "null";
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}. Contact Mydeals Support Invalid Customer", "Invalid Customer"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, 0, dealId);
                     continue;
@@ -1844,7 +1845,7 @@ namespace Intel.MyDeals.BusinessLogic
             string custCimId = jsonDataPacket.CustomerCIMId; // empty string still returns Dell ID
             int custId = _jmsDataLib.FetchCustFromCimId(custCimId); // set the customer ID based on Customer CIM ID
 
-            if (custId == 0) // Need to have a working customer for this request and failed, skip!
+            if (custCimId == "" || custId == 0) // Need to have a working customer for this request and failed, skip!
             {
                 return "ERROR: Failed on CIM ID Lookup"; // Bail out - no customers matched
             }
