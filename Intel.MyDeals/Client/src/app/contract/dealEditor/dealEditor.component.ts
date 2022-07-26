@@ -299,22 +299,29 @@ export class dealEditorComponent {
     async getAllDrowdownValues() {
         let dropObjs = {};
         let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN"];
+
         _.each(atrbs, (item) => {
-            var column = this.wipTemplate.columns.filter(x => x.field == item);
-            let url = "";
-            if (item == "COUNTRY")
-                url = "/api/PrimeCustomers/GetCountries";
-            else if (item == "PERIOD_PROFILE")
-                url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
-            else
-                url = column[0].lookupUrl;
-            dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
+            let column = this.wipTemplate.columns.filter(x => x.field == item);
+            if (column && column.length > 0 && column[0].lookupUrl && column[0].lookupUrl != '') {
+                let url = "";
+                if (item == "COUNTRY")
+                    url = "/api/PrimeCustomers/GetCountries";
+
+                else if (item == "PERIOD_PROFILE")
+                    url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
+
+                else
+                    url = column[0].lookupUrl;
+
+                dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
+            }
         });
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
         return result;
     }
+
     ngOnInit() {
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);

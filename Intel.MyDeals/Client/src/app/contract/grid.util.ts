@@ -360,6 +360,14 @@ export class GridUtil {
     static stgFullTitleChar = function (passedData) {
         return passedData.WF_STG_CD === "Draft" ? passedData.PS_WF_STG_CD : passedData.WF_STG_CD;
     }
+    static stgOneChar = function (passedData) {
+        if (passedData.WF_STG_CD === "Draft") {
+            return (passedData.PS_WF_STG_CD === undefined) ? "&nbsp;" : passedData.PS_WF_STG_CD[0];
+        }
+        else {
+            return (passedData.WF_STG_CD === undefined) ? "&nbsp;" : passedData.WF_STG_CD[0];
+        }
+    }
     static uiProductDimControlWrapper = function (passedData, type) {
         // We need to get the mydeals product, split them show them in prd_bckt split
         var data = passedData["TITLE"].split(',');

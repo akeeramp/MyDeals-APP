@@ -238,4 +238,8 @@ export class DE_Load_Util {
         }
         return "#aaaaaa";
     }
+    static getColorStage(d) {
+        if (!d) d = "Draft";
+        return this.getColor('stage', d);
+    }
 }

@@ -1,0 +1,120 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div class="dealTools">
+    <div *ngIf="isPublishable != true">
+        <div class="dirtyTip" *ngIf="dataItem._dirty" title="This deal has been modified"></div>
+        <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>        
+    
+        <!-- Checkbox -->
+        <div class='fl' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (!(isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'))">
+            <!-- ng-disabled="dataItem.SALESFORCE_ID !== ''" was another option, but visually couldn't change it from normal looking check box, so... -->
+            <input type="checkbox" [(ngModel)]="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" />
+            <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>
+        </div>
+
+        <!-- SalesForce Checkbox Disabled icon except for DA users -->
+        <div class='fl md-icon' *ngIf="isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'">
+            <i class="intelicon-minus-max" title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
+        </div>
+
+        <!-- Split group icon -->
+        <div *ngIf="isSplitEnabled" class='fl'>
+            <div class='fl md-icon rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER !== '1' ||  (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Active' || dataItem.WF_STG_CD === 'Won'))))">
+                <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" (click)="openSplit()" title="Split the Group"></i>
+            </div>
+            <div class='fl md-icon-disabled rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
+                <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
+                   title="You cannot split this group while it is being re-dealed."></i>
+            </div>
+            <kendo-dialog *ngIf="openSplitDialog" [height]="245" [maxWidth]="485">
+                <div class="kendoAlert" style="padding: 2.4em;">
+                    <h4>Would you like to split the group?</h4>
+                    <p>This will allow you to make changes in the Deal Editor.<br />Please note a new Row ID will be assigned for your reference.
+                </div>
+                <kendo-dialog-actions class="kendoAction">
+                    <div kendoButton (click)="doSplit()" class="kendoBtn okBtn">OK</div>
+                    <div kendoButton (click)="closeSplit()" class="kendoBtn cancelBtn">CANCEL</div>
+                </kendo-dialog-actions>
+            </kendo-dialog>
+        </div>
+
+        <!-- Notes icon -->
+        <div *ngIf="isCommentEnabled" class='fl'>
+            <div class='fl md-icon' *ngIf="!dataItem.NOTES || dataItem.NOTES === ''">
+                <i class='intelicon-discussion-outlined' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" (click)="openNotes()"></i>
+            </div>
+            <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
+                <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" (click)="openNotes()"></i>
+            </div>
+        </div>
+
+        <!-- History icon title="Click to view deal history"-->
+        <div class='fl md-icon' *ngIf="isHistoryEnabled">
+            <i class="intelicon-history" style="font-size: 20px !important;" title="View Deal History" (click)="clkHistoryIcon(dataItem)"></i>
+        </div>
+
+        <!-- Attachments icon -->
+        <div class='fl md-icon' *ngIf="isFileAttachmentEnabled">
+            <i [ngClass]="getFileIcon(dataItem)" [ngStyle]="getFileStyle(dataItem)" title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkFileIcon(dataItem)"></i>
+        </div>
+
+        <!-- Quote Letter icon -->
+        <div class='fl md-icon' *ngIf="isQuoteLetterEnabled">
+            <i *ngIf="showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" (click)="downloadQuoteLetter()"></i>
+        </div>
+        <div class='fl md-icon-disabled' *ngIf="isQuoteLetterEnabled">
+            <i *ngIf="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
+        </div>
+
+        <!-- NPSG DISABLE QUOTES CODE  -->
+        <!--<div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
+        <i ng-if="showQuote(dataItem) && !isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
+        </div>-->
+            <!--<div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
+        <i ng-if="showQuote(dataItem) && isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #ff0000;" title="Quote Letter not available due to Product Vertical Lockout [{{disableQuotesForVerticalsList}}]"></i>
+        </div>-->
+
+        <!-- SalesForce icon (ng-attr-title="Deal created in IQR")-->
+        <div class='fl md-icon' *ngIf="isSalesForceDeal">
+            <i class="intelicon-cloud-outlined" style="font-size: 20px !important;" title="IQR Deal"></i>
+        </div>
+
+        <!-- Cancel/Rollback/Delete icon -->
+        <div class='fl md-icon' *ngIf="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+            <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+               title="Unable to delete this deal at this stage"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0')" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to delete this deal" (click)="openDeleteDialog()"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to Cancel this deal" (click)="openCancelDialog()"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
+               title="Remove deal from Hold before Rollback is allowed"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
+        </div>
+        <div class='fl md-icon-disabled' *ngIf="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+            <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+               title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
+        </div>
+
+        <!-- Hold icon -->
+        <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false">
+            <i [ngClass]='getHoldIcon(dataItem)' [ngStyle]="getHoldStyle(dataItem)" title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)"></i>
+        </div>
+        <div class='fl md-icon-disabled' *ngIf="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false ">
+            <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
+               title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
+        </div>
+
+        <div class='clearboth'></div>
+    </div>
+    <div *ngIf="isPublishable == true">
+     <!--Checkbox--> 
+    <div class='fl'>
+            <input type="checkbox" [(ngModel)]="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all checked rows"></label>
+        </div>
+    </div>
+</div>

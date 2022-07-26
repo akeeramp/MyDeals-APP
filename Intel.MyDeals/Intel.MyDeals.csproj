@@ -877,6 +877,8 @@
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.js" />
     <Content Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.css" />
     <Content Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.html" />
+    <Content Include="Client\src\app\core\gridCell\dealTools\dealTools.component.css" />
+    <Content Include="Client\src\app\core\gridCell\dealTools\dealTools.component.html" />
     <Content Include="Client\src\app\core\gridCell\iconMctPct\iconMctPct.component.html" />
     <Content Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.css" />
     <Content Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.html" />
@@ -2314,6 +2316,8 @@
     <TypeScriptCompile Include="Client\src\app\core\angular.constants.ts" />
     <TypeScriptCompile Include="Client\src\app\core\core.shared.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridCell\dealTools\dealTools.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\gridCell\dealTools\dealTools.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridCell\iconMctPct\iconMctPct.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.service.ts" />

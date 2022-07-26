@@ -392,6 +392,9 @@ export class pricingTableEditorComponent implements OnChanges {
                  //calling  PERIOD_PROFILE 
                 dropObjs['PERIOD_PROFILE'] = this.pteService.getDropDownResult(item.opLookupUrl+this.contractData.Customer.CUST_SID);
                }
+               else if (key == 'ORIG_ECAP_TRKR_NBR') {
+                   console.log('no valid URL Need to check');
+               }
                else{
                 dropObjs[`${key}`] = this.pteService.getDropDownResult(item.opLookupUrl);
                }
