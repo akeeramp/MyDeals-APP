@@ -256,8 +256,8 @@ export class pricingTableEditorComponent implements OnChanges {
         hiddenColumns = PTE_Load_Util.getHiddenColumns(columnTemplates, this.contractData.CustomerDivisions);
         let mergCells = [];
         let cellComments = PTE_Load_Util.getCellComments(PTR, this.pricingTableTemplates.columns);
-        // This logic will add for all tier deals
-        mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, PTE_Load_Util.numOfPivot(PTR, this.curPricingTable));
+        // This logic will add for all tier deals. 
+        mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns,this.curPricingTable);
         // Set the values for hotTable
         PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
         // Loading new data
