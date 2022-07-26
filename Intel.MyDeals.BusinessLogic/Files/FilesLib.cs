@@ -118,5 +118,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _filesDataLib.ExtractDealReconFile(fileData);
         }
+
+        public List<BulkPriceUpdateRecord> ExtractBulkPriceUpdateFile(byte[] fileData)
+        {
+            return _filesDataLib.ExtractBulkPriceUpdateFile(fileData);
+        }
+
     }
 }

@@ -1,0 +1,14 @@
+﻿﻿<div class="col-md-12">
+    <h2>Bulk Price Updates Admin</h2>
+</div>
+<br />
+<div class="col-md-3" style="padding-left:2px;">
+    <button ng-click="vm.OpenBulkPriceUpdateModal()" class="btn btn-primary">Upload Bulk Pricing Data</button>
+    <button ng-click="vm.processData()" class="btn btn-primary">Process Deal Updates</button>
+</div>
+<div class="col-md-12" style="padding-top: 20px;">
+    Place some pretty table below - use spreadsheet
+</div>
+<div class="col-md-12" style="padding-top: 20px;">
+    <div id="bulkPriceUpdateGrid" kendo-grid="BulkPriceUpdateGrid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>
+</div>

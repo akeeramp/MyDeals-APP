@@ -253,6 +253,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\BulkPriceUpdatesController.cs" />
     <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
     <Compile Include="Controllers\API\CustomerVendorsController.cs" />
     <Compile Include="Controllers\API\DataFixController.cs" />
@@ -343,6 +344,11 @@
     <Content Include="app\admin\batchTiming\admin.batchTiming.controller.js" />
     <Content Include="app\admin\batchTiming\batchTiming.html" />
     <Content Include="app\admin\batchTiming\batchTiming.service.js" />
+    <Content Include="app\admin\bulkPriceUpdate\admin.bulkPriceUpdate.controller.js" />
+    <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdate.html" />
+    <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdate.service.js" />
+    <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdateModal.controller.js" />
+    <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdateModal.html" />
     <Content Include="app\admin\cache\admin.cache.controller.js" />
     <Content Include="app\admin\cache\cache.html" />
     <Content Include="app\admin\constants\admin.constants.controller.js" />

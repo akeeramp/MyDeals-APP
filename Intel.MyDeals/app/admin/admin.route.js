@@ -415,6 +415,15 @@
                 }
             },
             {
+                state: 'admin.bulkPriceUpdate',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/bulkPriceUpdate/bulkPriceUpdate.html'
+                    , url: 'bulkPriceUpdate'
+                    , controller: 'BulkPriceUpdateController as vm'
+                }
+            },
+            {
                 state: 'admin.pushDealstoVistex',
                 abstract: false,
                 config: {

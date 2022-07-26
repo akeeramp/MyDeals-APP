@@ -32,5 +32,8 @@ namespace Intel.MyDeals.IBusinessLogic
         List<UnifyDeal> ExtractBulkUnifyFile(byte[] fileData);
 
         List<DealRecon> ExtractDealReconFile(byte[] fileData);
+
+        List<BulkPriceUpdateRecord> ExtractBulkPriceUpdateFile(byte[] fileData);
+
     }
 }

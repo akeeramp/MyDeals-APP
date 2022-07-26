@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountsLib.cs" />
+    <Compile Include="BulkPriceUpdate\BulkPriceUpdateLib.cs" />
     <Compile Include="Cache\CacheLib.cs" />
     <Compile Include="CapMsp\CapMspLib.cs" />
     <Compile Include="Constants Lookups\ConstantsLookupsLib.cs" />

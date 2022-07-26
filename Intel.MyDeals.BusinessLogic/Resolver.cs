@@ -47,6 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IJmsLib, JmsLib>();
             registerService.RegisterType<IVistexServiceLib, VistexServiceLib>();
             registerService.RegisterType<IIntegrationLib, IntegrationLib>();
+            registerService.RegisterType<IBulkPriceUpdateLib, BulkPriceUpdateLib>();
             registerService.RegisterType<IOpLogLib, OpLogLib>();
             registerService.RegisterType<INotificationsLib, NotificationsLib>();
             registerService.RegisterType<IDataQualityLib, DataQualityLib>();

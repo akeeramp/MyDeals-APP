@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkPriceUpdate\IBulkPriceUpdateLib.cs" />
     <Compile Include="Constants Lookups\IConstantsLookupsLib.cs" />
     <Compile Include="ConsumptionCountry\IConsumptionCountryLib.cs" />
     <Compile Include="Contracts\IContractsLib.cs" />

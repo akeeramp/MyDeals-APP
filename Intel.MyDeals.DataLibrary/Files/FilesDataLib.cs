@@ -279,15 +279,29 @@ namespace Intel.MyDeals.DataLibrary
                 strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status code"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
-            else
+            else if (fileType == "DealRecon")
             {
                 fileAttachmentData.FILE_NM = "DealRecon.xlsx";
                 strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status code"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
+            else // (fileType == "BulkPriceUpdate")
+            {
+                fileAttachmentData.FILE_NM = "BulkPriceUpdate.xlsx";
+                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Deal Start Date", "Deal End Date", "Billings Start Date", "Billings End Date", "Project Name", "Additional Terms"));
+                arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
+            }
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
-                ExcelWorksheet excelWorksheet = excelPackage.Workbook.Worksheets.Add("UnifyDeals");
+                ExcelWorksheet excelWorksheet;
+                if (fileType == "BulkUnify" || fileType == "DealRecon")
+                {
+                    excelWorksheet = excelPackage.Workbook.Worksheets.Add("UnifyDeals");
+                }
+                else // (fileType == "BulkPriceUpdate") 
+                {
+                    excelWorksheet = excelPackage.Workbook.Worksheets.Add("BulkPriceUpdate");
+                }
                 excelWorksheet.Cells["A1"].LoadFromArrays(arrTemplate);
                 double dblMaxWidthOfColumn = 300;
                 for (int iColumnCount = 1; iColumnCount <= arrTemplate[0].Length; iColumnCount++)
@@ -418,5 +432,64 @@ namespace Intel.MyDeals.DataLibrary
             }
             return lstRtn;
         }
+
+        public List<BulkPriceUpdateRecord> ExtractBulkPriceUpdateFile(byte[] fileData)
+        {
+            List<BulkPriceUpdateRecord> lstRtn = new List<BulkPriceUpdateRecord>();
+            using (MemoryStream memStream = new MemoryStream(fileData))
+            {
+                using (ExcelPackage excelPackage = new ExcelPackage(memStream))
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.FirstOrDefault();
+
+                    if (worksheet.Dimension != null)
+                    {
+                        // get number of rows and columns in the sheet
+                        int iRows = worksheet.Dimension.Rows;
+                        int iColumns = worksheet.Dimension.Columns;
+
+                        if (iRows >= 2 && iColumns >= 9)
+                        {
+                            // loop through the worksheet rows and columns 
+                            for (int i = 2; i <= iRows; i++)
+                            {
+                                int dbDealId = 0;
+
+                                int.TryParse(worksheet.Cells[i, 1].Value != null && !worksheet.Cells[i, 1].Value.ToString().Contains("-") ? worksheet.Cells[i, 1].Value.ToString().Trim() : "0", out dbDealId);
+                                string dbDealDesc = worksheet.Cells[i, 2].Value != null ? worksheet.Cells[i, 2].Value.ToString().TrimEnd() : string.Empty;
+                                string dbEcapPrice = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().TrimEnd() : string.Empty;
+                                string dbVolume = worksheet.Cells[i, 4].Value != null ? worksheet.Cells[i, 4].Value.ToString().TrimEnd() : string.Empty;
+                                string dbDealStartDate = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
+                                string dbDealEndDate = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
+                                string dbBillingsStartDate = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
+                                string dbBillingsEndDate = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
+                                string dbProjectName = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
+                                string dbAdditionalTermsAndConditions = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+
+                                if (dbDealId != 0)
+                                {
+                                    lstRtn.Add(new BulkPriceUpdateRecord
+                                    {
+                                        DealId = dbDealId,
+                                        DealDesc = dbDealDesc,
+                                        EcapPrice = dbEcapPrice,
+                                        Volume = dbVolume,
+                                        DealStartDate = dbDealStartDate,
+                                        DealEndDate = dbDealEndDate,
+                                        BillingsStartDate = dbBillingsStartDate,
+                                        BillingsEndDate = dbBillingsEndDate,
+                                        ProjectName = dbProjectName,
+                                        AdditionalTermsAndConditions = dbAdditionalTermsAndConditions
+                                    });
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            return lstRtn;
+        }
+
     }
 }

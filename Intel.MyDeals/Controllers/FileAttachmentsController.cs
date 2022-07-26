@@ -686,5 +686,34 @@ namespace Intel.MyDeals.Controllers
             }
             return validationSummary;
         }
+
+        [Authorize]
+        public ActionResult ExtractBulkPriceUpdateFile(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<BulkPriceUpdateRecord> lstBulkPriceUpdates = new List<BulkPriceUpdateRecord>();
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    using (StreamReader reader = new StreamReader(file.InputStream))
+                    {
+                        byte[] textBytes = new byte[file.InputStream.Length];
+                        file.InputStream.Read(textBytes, 0, textBytes.Length);
+                        lstBulkPriceUpdates.AddRange(_filesLib.ExtractBulkPriceUpdateFile(textBytes));
+                    }
+                }
+            }
+            if (lstBulkPriceUpdates.Count > 0)
+            {
+                //var bulkPriceUpdateValidation = ValidateBulkPriceUpdate(lstBulkPriceUpdates);
+                // Add in simple validation if needed
+                var jsonResult = Json(lstBulkPriceUpdates, JsonRequestBehavior.AllowGet);
+                return jsonResult;
+            }
+            else
+                return Json(string.Empty);
+        }
+
+
     }
 }
