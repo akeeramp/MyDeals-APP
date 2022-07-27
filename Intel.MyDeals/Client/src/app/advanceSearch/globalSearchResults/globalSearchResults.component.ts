@@ -25,7 +25,7 @@ export class GlobalSearchResultsComponent  {
     private resultTake=5;
     private viewMoreVisible = true;
     //To load angular Contract Manager from search change value to false, will be removed once contract manager migration is done
-    private isAngularJSEnabled = true;
+    private isAngularJSEnabled = false;
     private opTypes:Array<any> = [
       {
           value: "ALL",

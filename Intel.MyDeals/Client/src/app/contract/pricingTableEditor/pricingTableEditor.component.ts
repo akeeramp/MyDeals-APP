@@ -110,6 +110,8 @@ export class pricingTableEditorComponent implements OnChanges {
                 }
                 else {
                     modalComponent = marketSegComponent;
+                    height = "500px"
+                    width = "700px";
                     name = "Market Segment Selector";
                     data={ name: name, source: this.source, selVal: selVal};
                 }
@@ -153,7 +155,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private hotSettings: Handsontable.GridSettings = {
         wordWrap: false,
         minRows: 100,
-        maxRows: 100,
+        maxRows: 150,
         colHeaders: false,
         rowHeaders: true,
         rowHeaderWidth: 0,
@@ -357,7 +359,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
                 if (PTR && PTR.length > 0) {
-                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates);
+                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns);
                 }
                 if (AR && AR.length > 0) {
                     PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
@@ -380,6 +382,7 @@ export class pricingTableEditorComponent implements OnChanges {
     async getAllDrowdownValues() {
         let dropObjs = {};
         _.each(this.pricingTableTemplates.defaultAtrbs, (val, key) => {
+            
             dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(val.opLookupUrl);
          });
          _.each(this.pricingTableTemplates.model.fields,(item,key)=>{
@@ -499,7 +502,6 @@ export class pricingTableEditorComponent implements OnChanges {
         if (hasProductDependencyErr) {
             // Sync to show errors
             //root.syncCellValidationsOnAllRows(currentPricingTableRowData);
-
             // Tell user to fix errors
             this.isLoading = true;
             this.spinnerMessageHeader = 'Not saved. Please fix errors.';
@@ -512,63 +514,20 @@ export class pricingTableEditorComponent implements OnChanges {
             return;
         }
 
-        //Getting deal type
-        let dealType = this.curPricingTable.OBJ_SET_TYPE_CD;
-
-        // Pricing table rows products to be translated
-        let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-            console.log(x);
-            return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
-                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT"); //|| ($scope.isExcludePrdChange);
-        });
-
-        //find uniq records incase of tier logic
-        pricingTableRowData=_.uniq(pricingTableRowData,'DC_ID');
-        // Convert into format accepted by translator API
-        // ROW_NUMBER, CUST_MBR_SID, IS_HYBRID_PRC_STRAT - Remove hard coded values
-        let translationInput = pricingTableRowData.map((row, index) =>{
-            return {
-                ROW_NUMBER: row.DC_ID,
-                USR_INPUT: row.PTR_USER_PRD,
-                EXCLUDE: false,
-                FILTER: row.PROD_INCLDS,
-                START_DATE: moment(row.START_DT).format("l"),
-                END_DATE: moment(row.END_DT).format("l"),
-                GEO_COMBINED: row.GEO_COMBINED,
-                PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
-                PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
-                CUST_MBR_SID: this.contractData.CUST_MBR_SID,
-                IS_HYBRID_PRC_STRAT: this.curPricingTable.IS_HYBRID_PRC_STRAT,
-                SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
-            }
-        });
-
-        let translationInputToSend = translationInput.filter(function (x) {
-            // If we already have the invalid JSON don't translate the products again
-            return x.SendToTranslation == true;
-        });
-
-        // Products invalid JSON data present in the row
-        let invalidProductJSONRows = pricingTableRowData.filter(function (x) {
-            return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
-        });
-
-        let transformResults;
-
+        
+        let translationInputToSend=PTEUtil.translationToSendObj(this.curPricingTable,currentPricingTableRowData,this.contractData);
+        let transformResults:any=null;
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
             // Validate products
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             // root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
             // var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
-            transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, dealType, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
+            transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
                     this.loggerService.error("Product Trans::", error);
                 })
-
-            console.log("Transform : ", transformResults);
         }
 
         return transformResults;

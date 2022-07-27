@@ -4,6 +4,8 @@ import {downgradeComponent} from "@angular/upgrade/static";
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from "underscore";
+import { Observable, of } from "rxjs";
+import { CheckedState } from "@progress/kendo-angular-treeview";
 
 export interface DialogData {
   selVal?: string;
@@ -17,28 +19,37 @@ export interface DialogData {
   })
 
   export class marketSegComponent {
-    private listItems:Array<string>=[];
-    private value:Array<string>=[];
-
+     private listItems:Array<string>=[];
+     private checkedKeys:any[]=[];
+     public key = "DROP_DOWN";
 
     constructor(
       public dialogRef: MatDialogRef<marketSegComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
     ) {}
-    
-    valueChange(event:any){
+    onSelectionChange(event:any){
       if(event && event.length>0){
         if(_.indexOf(event,'All Direct Market Segments')>=0){
-          this.value=['All Direct Market Segments'];
+          this.checkedKeys=['All Direct Market Segments'];
         }
       }
     }
+    hasChildren(node: any): boolean {
+      return node.items && node.items.length > 0;
+    }
+    public fetchChildren(node: any): Observable<any[]> {
+      // returns the items collection of the parent node as children
+      return of(node.items);
+    }
     ngOnInit(){
         this.listItems=this.data.source;
-        this.value=this.data.selVal?this.data.selVal.split(','):null;
+        this.checkedKeys=this.data.selVal?this.data.selVal.split(','):null;
     }
     onNoClick(): void {
       this.dialogRef.close();
+    }
+    onSave():void{
+      this.dialogRef.close(this.checkedKeys.toString());
     }
   }
   

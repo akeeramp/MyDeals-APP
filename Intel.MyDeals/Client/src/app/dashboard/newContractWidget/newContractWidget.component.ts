@@ -28,7 +28,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     createTenderFolioText = 'Create Tender Folio';
 
     //To load angular Contract details page change value to true, will be removed once contract details migration is done
-    public angularEnabled = false;
+    public angularEnabled = true;
 
     constructor(private newContractWidgetService: NewContractWidgetService, protected dialog: MatDialog) { }
 

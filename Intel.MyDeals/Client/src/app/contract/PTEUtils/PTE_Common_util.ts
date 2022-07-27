@@ -162,14 +162,6 @@ export class PTE_Common_Util {
                  _.each(columns,(val) => {
                     if (val.data) {
                         obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
-                        //this logic is mainly applying for tier logic because Dim colum can some empty
-                        // let DCIDItem=_.findWhere(PTRResult,{DC_ID:this.hotTable.getDataAtRowProp(i,'DC_ID')});
-                        // if(DCIDItem){
-                        //     obj[val.data.toString()] =DCIDItem[`${val.data.toString()}`];
-                        // }
-                        // else{
-                        //     obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
-                        // }
                     }
                 });
                 PTRResult.push(obj);

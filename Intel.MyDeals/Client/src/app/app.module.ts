@@ -53,6 +53,7 @@ import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
 import { UploadModule } from '@progress/kendo-angular-upload';
 import { NavigationModule } from "@progress/kendo-angular-navigation";
+import { TreeViewModule } from "@progress/kendo-angular-treeview";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
@@ -100,7 +101,8 @@ import { contractComponents } from './modules/contract.module';
         OrderModule,
         GridsterModule,
         UploadModule,
-        NavigationModule
+        NavigationModule,
+        TreeViewModule
      ],
      providers: [
         {

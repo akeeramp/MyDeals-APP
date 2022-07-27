@@ -6,6 +6,7 @@ import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEdi
 import Handsontable from 'handsontable';
 import { IntlService } from "@progress/kendo-angular-intl";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
+import * as moment from 'moment';
 
 export class PTEUtil {
 
@@ -82,10 +83,16 @@ export class PTEUtil {
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
                 currentColumnConfig.datePickerConfig = this.defaultDatePickerConfig;
             } 
-            else if (templateColumnFields[item.field].uiType && templateColumnFields[item.field].uiType=='DROPDOWN') {
+            else if (templateColumnFields[item.field].uiType &&(templateColumnFields[item.field].uiType=='DROPDOWN' ||  templateColumnFields[item.field].uiType=='MULTISELECT' ||  templateColumnFields[item.field].uiType=='EMBEDDEDMULTISELECT')) {
                 currentColumnConfig.type = 'dropdown';
                 if (item.lookupUrl) {
-                    currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
+                    //market segment has items which has child so we need to pass the full object
+                    if(item.field=='MRKT_SEG'){
+                        currentColumnConfig.source=dropdownResponses[`${item.field}`];
+                    }else{
+                        currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
+                    }
+                    
                 }
             }
             else {
@@ -243,5 +250,50 @@ export class PTEUtil {
         } else {
             callBack(false);
         }
+    }
+    static translationToSendObj(curPricingTable:any,currentPricingTableRowData:Array<any>,contractData:any):any{
+        //Getting deal type
+        let dealType = curPricingTable.OBJ_SET_TYPE_CD;
+
+        // Pricing table rows products to be translated
+        let pricingTableRowData = currentPricingTableRowData.filter((x) => {
+            console.log(x);
+            return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
+                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
+                || (dealType == "KIT"); //|| ($scope.isExcludePrdChange);
+        });
+
+        //find uniq records incase of tier logic
+        pricingTableRowData=_.uniq(pricingTableRowData,'DC_ID');
+        // Convert into format accepted by translator API
+        // ROW_NUMBER, CUST_MBR_SID, IS_HYBRID_PRC_STRAT - Remove hard coded values
+        let translationInput = pricingTableRowData.map((row, index) =>{
+            return {
+                ROW_NUMBER: row.DC_ID,
+                USR_INPUT: row.PTR_USER_PRD,
+                EXCLUDE: false,
+                FILTER: row.PROD_INCLDS,
+                START_DATE: moment(row.START_DT).format("l"),
+                END_DATE: moment(row.END_DT).format("l"),
+                GEO_COMBINED: row.GEO_COMBINED,
+                PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
+                PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
+                CUST_MBR_SID: contractData.CUST_MBR_SID,
+                IS_HYBRID_PRC_STRAT: curPricingTable.IS_HYBRID_PRC_STRAT,
+                SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
+            }
+        });
+
+        let translationInputToSend = translationInput.filter(function (x) {
+            // If we already have the invalid JSON don't translate the products again
+            return x.SendToTranslation == true;
+        });
+
+        // Products invalid JSON data present in the row
+        let invalidProductJSONRows = pricingTableRowData.filter(function (x) {
+            return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
+        });
+
+        return translationInput;
     }
 }
