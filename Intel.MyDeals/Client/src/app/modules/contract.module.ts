@@ -19,6 +19,7 @@ import { managerPctComponent } from "../contract/managerPct/managerPct.component
 import { pctChildGridComponent } from "../contract/managerPct/pctChildGrid.component";
 import { systemPricePointModalComponent } from "../contract/ptModals/dealEditorModals/systemPricePointModal.component";
 import { endCustomerRetailModalComponent } from "../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
+import { RenameTitleComponent } from "../contract/ptModals/renameTitle/renameTitle.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -40,5 +41,6 @@ export let contractComponents = [
     managerPctComponent,
     pctChildGridComponent,
     systemPricePointModalComponent,
-    endCustomerRetailModalComponent
+    endCustomerRetailModalComponent,
+    RenameTitleComponent
 ]

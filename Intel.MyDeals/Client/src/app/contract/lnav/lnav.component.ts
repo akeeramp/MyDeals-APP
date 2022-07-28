@@ -9,6 +9,7 @@ import { templatesService } from "../../shared/services/templates.service";
 import { pricingTableComponent } from "../pricingTable/pricingTable.component";
 import { MatDialog } from '@angular/material/dialog';
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
+import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { pricingTableEditorService } from "../pricingTableEditor/pricingTableEditor.service";
@@ -73,6 +74,7 @@ export class lnavComponent {
     public isPtr = false; isWip = false; isPSExpanded = [];
     public custId: any;
     public objTypeCdMessage;
+    public uid: number = -100;
 
 
     //Output Emitter to load the Pricing table data
@@ -84,7 +86,7 @@ export class lnavComponent {
             ps_index,
             pt_index,
             C_ID: this.contractId,
-            contractData: this.contractData           
+            contractData: this.contractData
         };
         this.modelChange.emit(contractId_Map);
     }
@@ -96,7 +98,7 @@ export class lnavComponent {
             ps_index: 0,
             pt_index: 0,
             C_ID: this.contractId,
-            contractData: this.contractData            
+            contractData: this.contractData
         };
         this.selectedModel = model;
         this.modelChange.emit(contractId_Map);
@@ -156,6 +158,7 @@ export class lnavComponent {
         }
     }
     addPricingStrategy() {
+        this.loggerSvc.info("Saving...", "Saving the Pricing Strategy");
         const ct = this.contractData;
         const custId = this.contractData.CUST_MBR_SID;
         const contractId = this.contractData.DC_ID
@@ -171,7 +174,7 @@ export class lnavComponent {
             ps.DC_ID = response.PRC_ST[1].DC_ID;
             this.contractData.PRC_ST.push(ps);
             this.showAddPricingTable(ps);
-
+            this.loggerSvc.success("Save Successful", "Added Pricing Strategy");
             this.newStrategy.TITLE = "";
             this.newStrategy.IS_HYBRID_PRC_STRAT = true;
             this.curPricingStrategy = ps;
@@ -200,7 +203,7 @@ export class lnavComponent {
         let isValid = true;
         this.newPricingTable["TITLE"] = this.ptTITLE;
         const values = this.newPricingTable;
-        isValid = this.isValidPt(values);       
+        isValid = this.isValidPt(values);
         if (isValid) {
             this.addPricingTable();
         }
@@ -255,9 +258,9 @@ export class lnavComponent {
             this.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
             this.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
             isValid = false;
-         }
+        }
 
-         return isValid;
+        return isValid;
     }
     addPricingTable() {
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
@@ -297,6 +300,22 @@ export class lnavComponent {
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
+    unmarkCurPricingStrategyIf = function (id) {
+        if (this.curPricingStrategyId === id) {
+            this.curPricingStrategy = {};
+            this.curPricingStrategyId = 0;
+        }
+    }
+    unmarkCurPricingTableIf = function (id) {
+        if (this.curPricingTableId > 0 &&
+            this.curPricingTable !== null &&
+            this.curPricingStrategy.DC_ID === id) {
+            this.curPricingTable = {
+            };
+            this.curPricingTableId = 0;
+        }
+    }
+
     /* Ps and Pt Tree*/
     showAddPricingTable(ps) {
         this.isAddPricingTableHidden = false;
@@ -323,33 +342,152 @@ export class lnavComponent {
             this.newPricingTable.TITLE = defTitle;
         }
     }
-    copyPricingStrategy() {
-        alert('all inputs ready, Functionality Coming Soon');
+    copyPricingStrategy(ps) {
+        this.copyObj("Pricing Strategy", this.contractData.PRC_ST, ps.DC_ID, true);
     }
+    copyPricingTable = function (ps, pt) {
+        this.copyObj("Pricing Table", ps.PRC_TBL, pt.DC_ID, false);
+    }
+
+    copyObj(objType, objTypes, id, isPs) {
+        this.loggerSvc.info("Copying", "Copying the " + objType);
+
+        var selectedItems = objTypes.filter(x => x.DC_ID === id);
+        var titles = objTypes.map(x => x.TITLE);
+        if (selectedItems.length === 0) {
+            alert("Unable to locate the " + objType);
+            return;
+        }
+        if (selectedItems.length > 0) {
+            var item = selectedItems[0];
+        }
+        if (!item) {
+            alert("Unable to copy the " + objType);
+            return;
+        }
+        item.DC_ID = this.uid--;
+        item.HAS_TRACKER = "0";
+        item.COST_TEST_RESULT = "Not Run Yet";
+        item.MEETCOMP_TEST_RESULT = "Not Run Yet";
+        const custId = this.contractData.CUST_MBR_SID;
+        const contractId = this.contractData.DC_ID
+        // define new TITLE
+        while (titles.indexOf(item.TITLE) >= 0) {
+            item.TITLE += " (copy)";
+        }
+        if (isPs == true) {
+            this.lnavSvc.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
+                this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
+                this.refreshContractData(contractId);
+            }), err => {
+                this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
+            };
+        }
+        else {
+            this.lnavSvc.copyPricingTable(custId, contractId, id, item).subscribe((response: any) => {
+                this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
+                this.refreshContractData(contractId);
+            }), err => {
+                this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
+            };
+        }
+    }
+    editPricingTableName(pt) {
+        this.openRenameTitle(pt, "Pricing Table");
+    }
+
     editPricingStrategyName(ps) {
-        alert('all inputs ready, Functionality Coming Soon');
+        this.openRenameTitle(ps, "Pricing Strategy");
     }
-    deletePricingStrategy(ps) {
-        alert('all inputs ready, Functionality Coming Soon');
+    openRenameTitle(data, title) {
+        let renameData = {
+            "contractData": this.contractData,
+            "data": data,
+            "mode": title
+        };
+        const dialogRef = this.dialog.open(RenameTitleComponent, {
+            height: '250px',
+            width: '600px',
+            data: renameData,
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                data.TITLE = result;
+            }
+        });
     }
-    onSelectMenu(event: any, ps: any, pt: any): void {
+    
+    deletePricingStrategy(ps) {        
+        if (confirm("Are you sure that you want to delete this Pricing Strategy ?")) {
+            this.loggerSvc.info("Deleting...", "Deleting the Pricing Strategy");
+            const custId = this.contractData.CUST_MBR_SID;
+            const contractId = this.contractData.DC_ID
+            this.lnavSvc.deletePricingStrategy(custId, contractId, ps).subscribe((response: any) => {
+                this.unmarkCurPricingStrategyIf(ps.DC_ID);
+                this.unmarkCurPricingTableIf(ps.DC_ID);
+                this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(ps), 1);
+                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
+            }), err => {
+                this.loggerSvc.error("Could not delete Pricing Strategy" + ps.DC_ID, err, err.statusText);
+            };
+        }
+    }
+
+    deletePricingTable(ps, pt) {
+        if (confirm("Are you sure that you want to delete this Pricing Table ?")) {
+            this.loggerSvc.info("Deleting...", "Deleting the Pricing Table");
+            const custId = this.contractData.CUST_MBR_SID;
+            const contractId = this.contractData.DC_ID;
+            this.lnavSvc.deletePricingTable(custId, contractId, pt).subscribe((response: any) => {
+                this.unmarkCurPricingTableIf(ps.DC_ID);
+                ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
+                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table");
+            }), err => {
+                this.loggerSvc.error("Could not delete Pricing Table" + pt.DC_ID, err, err.statusText);
+            };
+        }
+    }
+    onSelectPtMenu(event: any, ps: any, pt: any): void {
         //Number eventIndex = parseInt(event.index);
         switch (event.item?.text) {
             case "Add Pricing Strategy":
                 this.toggleAddStrategy();
                 break;
+            case "Add Pricing Table":
+                this.showAddPricingTable(ps);
+                break;
+            case "Copy Pricing Table":
+                this.copyPricingTable(ps, pt);
+                break;
+            case "Edit Pricing Table Name":
+                this.editPricingTableName(pt);
+                break;
+            case "Edit Autofill Defaults":
+                this.openAutoFill(ps, pt);
+                break;
+            case "Delete Pricing Table":
+                this.deletePricingTable(ps, pt);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    onSelectPsMenu(event: any, ps: any): void {
+        switch (event.item?.text) {
+            case "Add Pricing Strategy":
+                this.toggleAddStrategy();
+                break;
             case "Copy Pricing Strategy":
-                this.copyPricingStrategy();
+                this.copyPricingStrategy(ps);
                 break;
             case "Add Pricing Table":
                 this.showAddPricingTable(ps);
                 break;
             case "Edit Pricing Strategy Name":
                 this.editPricingStrategyName(ps);
-                break;
-            case "Edit Autofill Defaults":
-                this.openAutoFill(ps, pt);
-                break;
+                break;            
             case "Delete Pricing Strategy":
                 this.deletePricingStrategy(ps);
                 break;
@@ -373,7 +511,7 @@ export class lnavComponent {
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs);
         }
-        else {            
+        else {
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
@@ -391,9 +529,9 @@ export class lnavComponent {
 
         let autofillData = {
             "ISTENDER": this.isTenderContract,
-            "isVistexHybrid": isVistexHybrid,            
+            "isVistexHybrid": isVistexHybrid,
             "DEFAULT": lnavUtil.getTenderBasedDefaults(this.newPricingTable, this.isTenderContract),
-            "ISVISTEX": false,            
+            "ISVISTEX": false,
             "contractData": this.contractData,
             "currPt": pt,
             "currPs": this.curPricingStrategy,
@@ -410,18 +548,18 @@ export class lnavComponent {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //the scuscriber to this in PTE ngonint code and this fill help autofill setting from PTE screen
-                this.autoFillData = result;                
+                this.autoFillData = result;
                 if (pt == null) {
                     this.newPricingTable = this.autoFillData["newPt"];
                     this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
-                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID,0,0);
+                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
                     });
                     this.hideAddPricingTable();
-                }              
+                }
             }
         });
-    }    
+    }
     selectPtTemplateIcon(DealType) {
         let isValid = true;
         this.clearPtTemplateIcons();
@@ -443,14 +581,14 @@ export class lnavComponent {
         }
         else {
             this.clearPtTemplateIcons();
-        }       
+        }
     }
     hideAddPricingTable() {
         this.isAddPricingTableHidden = true;
         this.isAddStrategyHidden = true;
         this.isAddStrategyBtnHidden = true;
-        this.isSearchHidden = false;        
-        this.clearPtTemplateIcons();        
+        this.isSearchHidden = false;
+        this.clearPtTemplateIcons();
     }
     //Help navigation
     showHelpTopicMeetComp() {
