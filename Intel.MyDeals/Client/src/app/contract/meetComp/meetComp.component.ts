@@ -43,6 +43,7 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     public hideViewMeetCompResult = (<any>window).usrRole === "FSE";
     public hideViewMeetCompOverride = !((<any>window).usrRole === "DA" || (<any>window).usrRole === "Legal");
     public canUpdateMeetCompSKUPriceBench = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA");
+    public usrRole = (<any>window).usrRole;
     public columnIndex = {
         COMP_SKU: 7,
         COMP_PRC: 7,
@@ -137,10 +138,6 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         );
     }
 
-    ngOnInit(): void {
-        this.loadMeetCompData();
-    }
-
     convertToChildGridArray(parentDataItem) {
         const meetCompListObj = new List<any>(this.meetCompMasterResult);
         this.childGridResult = meetCompListObj
@@ -160,10 +157,9 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
     }
 
     public cellClickHandler(args: CellClickEvent): void {
-        if (args.column.field == "COMP_SKU") {
+        if(args.column.field == "COMP_SKU") {
             this.generateMeetCompSkuDropdownData(args.dataItem);
-        }
-        if (args.column.field == "COMP_PRC"){
+        }else if (args.column.field == "COMP_PRC"){
             this.generateMeetCompPrcDropdownData(args.dataItem);
         }
         if (!args.isEdited) {
@@ -645,6 +641,137 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         }
     }
 
+    onIaBnchChange(val:any,dataItem:any){
+        if (this.meetCompMasterdata._elements[dataItem.RW_NM - 1].IA_BNCH != val) {
+            dataItem.IA_BNCH = val;
+            if (val > 0) {
+                this.meetCompMasterdata._elements[dataItem.RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
+                this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+                let isUpdated = false;
+                if (dataItem.GRP == "PRD") {
+                    let selData = [];
+                    if (dataItem.IS_SELECTED) {
+                        selData = this.getProductLineData();
+                    }
+                    if (selData.length > 0) {
+                        isUpdated = true;
+                        for (let cntData = 0; selData.length > cntData; cntData++) {
+                            const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                            //Updating Product Line
+                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
+                                this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                            }
+
+                            //Updating Deal line
+                            const tempData = this.meetCompUnchangedData
+                                .Where(function (x) {
+                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                })
+                                .ToArray();
+
+                            for (let i = 0; i < tempData.length; i++) {
+                                this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                            }
+                        }
+                    }else {
+                        const tempData = this.meetCompUnchangedData
+                            .Where(function (x) {
+                                return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                            })
+                            .ToArray();
+
+                        for (let i = 0; i < tempData.length; i++) {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+
+                        if (tempData.length > 0) {
+                            isUpdated = true;
+                        }
+                    }
+                    //Retaining the same expand
+                    if (isUpdated) {
+                        // expandSelected("IA_BNCH", options.model.RW_NM);
+                    }
+                }
+            }
+            else {
+                return false;
+            }
+
+        }
+    }
+
+    onCompBnchChange(val:any,dataItem:any){
+        if (this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_BNCH != val) {
+            dataItem.COMP_BNCH = val;
+            if (val > 0) {
+                this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
+                this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+                let isUpdated = false;
+
+                if (dataItem.GRP == "PRD") {
+                    let selData = [];
+                    if (dataItem.IS_SELECTED) {
+                        selData = this.getProductLineData();
+                    }
+                    if (selData.length > 0) {
+                        isUpdated = true;
+                        for (let cntData = 0; selData.length > cntData; cntData++) {
+                            const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                            //Updating Product Line
+                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
+                                this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                            }
+
+                            //Updating Deal line
+                            const tempData =this.meetCompUnchangedData
+                                .Where(function (x) {
+                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                                })
+                                .ToArray();
+
+                            for (let i = 0; i < tempData.length; i++) {
+                                this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                            }
+                        }
+                    }
+                    else {
+                        const tempData = this.meetCompUnchangedData
+                            .Where(function (x) {
+                                return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
+                            })
+                            .ToArray();
+
+                        for (let i = 0; i < tempData.length; i++) {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+
+                        if (tempData.length > 0) {
+                            isUpdated = true;
+                        }
+                    }
+
+                    //Retaining the same expand
+                    if (isUpdated) {
+                        // expandSelected("COMP_BNCH", options.model.RW_NM);
+                    }
+
+                }
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
     setBusy(msg, detail) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -709,6 +836,10 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
             };
           })
         );
+
+    ngOnInit(): void {
+        this.loadMeetCompData();
+    }
 
     ngOnDestroy() {
         //The style removed are adding back
