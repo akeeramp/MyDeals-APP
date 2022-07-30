@@ -34,58 +34,17 @@ export class PTE_CellChange_Util {
           }
         return condition;
       }
-      static addUpdateRowOnchangeCommon(row:number,val:any,updateRows:Array<any>,curPricingTable:any,contractData:any){
-        //make the selected row PTR_USER_PRD empty if its not the empty row
-          let currentstring='';
-          if(val.prop=='SETTLEMENT_PARTNER'){
-            //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-            if(curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase()=='cash'){
-              currentstring =row+','+val.prop+','+contractData.Customer.DFLT_SETTLEMENT_PARTNER+','+'no-edit';
-            }
-            else{
-              currentstring =row+','+val.prop+','+' '+','+'no-edit';
-            }
-            updateRows.push(currentstring.split(','));
-            //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-          }
-          else if(val.prop=='START_DT'){
-            //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-            currentstring =row+','+val.prop+','+contractData.START_DT+','+'no-edit';
-            updateRows.push(currentstring.split(','));
-            //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-          }
-          else if(val.prop=='END_DT'){
-            //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-            currentstring =row+','+val.prop+','+contractData.END_DT+','+'no-edit';
-            updateRows.push(currentstring.split(','));
-            //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-          }
-          else if(val.prop=='RESET_VOLS_ON_PERIOD'){
-            //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-            currentstring =row+','+val.prop+','+'No'+','+'no-edit';
-            updateRows.push(currentstring.split(','));
-            //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-          }
-          else if(val.prop){
-            //this will be autofill defaults value 
-            let cellVal=curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`]:'';
-            currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
-            updateRows.push(currentstring.split(','));
-            //hotTable.setDataAtRowProp(row,val.prop.toString(), cellVal,'no-edit');
-          }
-          else{
-            console.log('invalid Prop')
-          }
-      }
-      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,empRowVal:number,selRow:number,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,tier?:number,){
+  
+      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,tier?:number,){
         //make the selected row PTR_USER_PRD empty if its not the empty row
       _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
         let currentstring='';
         if(val.prop=='PTR_USER_PRD'){
           //update PTR_USER_PRD with entered value
-           currentstring =row+','+val.prop+','+cellItem.new+','+'no-edit';
-          updateRows.push(currentstring.split(','));
-          //hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem[3],'no-edit');
+         //  currentstring =row+','+val.prop+','+cellItem.new+','+'no-edit';
+         // updateRows.push(currentstring.split(','));
+         //this exclussivlt because for  products can be with comma seperate values
+          hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem.new,'no-edit');
         }
         else if(val.prop=='DC_ID'){
           //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
@@ -105,7 +64,57 @@ export class PTE_CellChange_Util {
        
       });
       }
- 
+      static addUpdateRowOnchangeCommon(row:number,val:any,updateRows:Array<any>,curPricingTable:any,contractData:any,rowData?:any){
+        //make the selected row PTR_USER_PRD empty if its not the empty row
+          let currentstring='';
+          //rowdata scenario is for KIT
+          if(rowData){
+            currentstring =row+','+val.prop+','+rowData[`${val.prop}`]+','+'no-edit';
+            updateRows.push(currentstring.split(','));
+          }
+          else{
+            if(val.prop=='SETTLEMENT_PARTNER'){
+              //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+              if(curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase()=='cash'){
+                currentstring =row+','+val.prop+','+contractData.Customer.DFLT_SETTLEMENT_PARTNER+','+'no-edit';
+              }
+              else{
+                currentstring =row+','+val.prop+','+' '+','+'no-edit';
+              }
+              updateRows.push(currentstring.split(','));
+              //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+            }
+            else if(val.prop=='START_DT'){
+              //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+              currentstring =row+','+val.prop+','+contractData.START_DT+','+'no-edit';
+              updateRows.push(currentstring.split(','));
+              //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+            }
+            else if(val.prop=='END_DT'){
+              //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+              currentstring =row+','+val.prop+','+contractData.END_DT+','+'no-edit';
+              updateRows.push(currentstring.split(','));
+              //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+            }
+            else if(val.prop=='RESET_VOLS_ON_PERIOD'){
+              //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+              currentstring =row+','+val.prop+','+'No'+','+'no-edit';
+              updateRows.push(currentstring.split(','));
+              //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+            }
+            else if(val.prop){
+              //this will be autofill defaults value 
+              let cellVal=curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`]:'';
+              currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
+              updateRows.push(currentstring.split(','));
+              //hotTable.setDataAtRowProp(row,val.prop.toString(), cellVal,'no-edit');
+            }
+            else{
+              console.log('invalid Prop')
+            }
+          }
+         
+      }
     static getMergeCellsOnEdit(empRow:number,NUM_OF_TIERS:number,pricingTableTemplates:any): void {
         let mergCells:any=null;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
@@ -119,33 +128,39 @@ export class PTE_CellChange_Util {
         this.hotTable.updateSettings({mergeCells:mergCells});
       
     }
-    static  addUpdateRowOnchangeKIT(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,product:number,){
+    static  addUpdateRowOnchangeKIT(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,product:number,rowData?:any){
       //make the selected row PTR_USER_PRD empty if its not the empty row
-    _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
-      let currentstring='';
-      if(val.prop=='PTR_USER_PRD'){
-        //update PTR_USER_PRD with entered value
-         currentstring =row+','+val.prop+','+cellItem.new+','+'no-edit';
-        //updateRows.push(currentstring.split(','));
-        //this exclussivlt because for KIT there can be product with comma seperate
-        hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem.new,'no-edit');
-      }
-      else if(val.prop=='DC_ID'){
-        //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-        // currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
-        // updateRows.push(currentstring.split(','));
-        hotTable.setDataAtRowProp(row,val.prop, ROW_ID,'no-edit');
-      }
-      else if(val.prop=='PRD_BCKT'){
-        //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-         currentstring =row+','+val.prop+','+product+','+'no-edit';
-         updateRows.push(currentstring.split(','));
-        //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-      }
-      else{
-        this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData);
-      }
-    });
+      _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
+        let currentstring='';
+        //this will makesure to hit translate API
+        if(val.prop=='PTR_SYS_PRD'){
+          hotTable.setDataAtRowProp(row,'PTR_SYS_PRD','','no-edit');
+        }
+        if(val.prop=='PTR_USER_PRD'){
+          //update PTR_USER_PRD with entered value
+          //currentstring =row+','+val.prop+','+cellItem.new+','+'no-edit';
+          //updateRows.push(currentstring.split(','));
+          //this exclussivlt because for  products can be with comma seperate values
+          hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem.new,'no-edit');
+        }
+        else if(val.prop=='DC_ID'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          // currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
+          // updateRows.push(currentstring.split(','));
+          hotTable.setDataAtRowProp(row,val.prop, ROW_ID,'no-edit');
+        }
+        else if(val.prop=='PRD_BCKT'){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          currentstring =row+','+val.prop+','+product+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+          //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+        }
+        else{
+          this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData,rowData);
+         }
+        });
+      
+  
     }
     static getMergeCellsOnEditKit(isExist:boolean,empRow:number,prodLen:number,pricingTableTemplates:any,itrObj?:any): any {
       let mergCells:any=null;
@@ -195,11 +210,13 @@ export class PTE_CellChange_Util {
           //get the DC_ID of selected row
           let ROW_ID=this.hotTable.getDataAtRowProp(selrow,'DC_ID');
           //the row can be insert or delete to get that we are removing and adding the rows
+          let DataOfRow= PTE_Common_Util.getPTEGenerate(columns,curPricingTable,selrow);
           this.hotTable.alter('remove_row',selrow, items[0].old.split(',').length,'no-edit');
           this.hotTable.alter('insert_row',selrow, items[0].new.split(',').length,'no-edit');
+
           let prodIndex=0;
           for (let i=selrow;i<parseInt(prods.length)+selrow;i++){
-            this.addUpdateRowOnchangeKIT(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,prods[prodIndex]);
+            this.addUpdateRowOnchangeKIT(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,prods[prodIndex],DataOfRow[0]);
             prodIndex++;
           }
           let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
@@ -212,6 +229,26 @@ export class PTE_CellChange_Util {
           });
           this.getMergeCellsOnEditKit(true,1,1,pricingTableTemplates,iterObj);
         }
+      }
+      //in case of copy paste or autofill
+      else{
+         //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds since its prod the length can be predicted so deleting full
+         this.hotTable.alter('remove_row',items[0].row,150,'no-edit');
+         //identify the empty row and the next empty row will be the consecutive one
+         let empRow=this.returnEmptyRow();
+         _.each(items,(cellItem)=>{
+             let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
+             //add num of tier rows the logic will be based on autofill value
+             let prods=cellItem.new.split(','),prodIndex=0;
+             for (let i=empRow;i<parseInt(prods.length)+empRow;i++){
+              this.addUpdateRowOnchangeKIT(this.hotTable,i,cellItem,ROW_ID,updateRows,curPricingTable,contractData,prods[prodIndex]);
+              prodIndex++;
+             }
+             //calling the merge cells optionfor tier 
+             this.getMergeCellsOnEdit(empRow,parseInt(prods.length),pricingTableTemplates);
+             //the next empty row will be previus empty row + num of tiers;
+             empRow=empRow+parseInt(prods.length);
+         });
       }
       //appending everything togather
       this.hotTable.setDataAtRowProp(updateRows,'no-edit');
@@ -233,12 +270,15 @@ export class PTE_CellChange_Util {
           //add num of tier rows the logic will be based on autofill value
           let tier=1;
           for (let i=empRow;i<parseInt(NUM_OF_TIERS)+empRow;i++){
-            this.addUpdateRowOnchange(this.hotTable,i,items[0],empRow,selrow,ROW_ID,updateRows,curPricingTable,contractData,tier);
+            this.addUpdateRowOnchange(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,tier);
             tier++;
           }
           //calling the merge cells option only where tier
           this.getMergeCellsOnEdit(empRow,parseInt(curPricingTable.NUM_OF_TIERS),pricingTableTemplates);
-         
+        }
+        else{
+          //This will make sure to hit translate API
+          this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
         }
       }
       else{
@@ -247,12 +287,11 @@ export class PTE_CellChange_Util {
         //identify the empty row and the next empty row will be the consecutive one
         let empRow=this.returnEmptyRow();
         _.each(items,(cellItem)=>{
-            let selrow = cellItem.row;
             let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
             //add num of tier rows the logic will be based on autofill value
             let tier=1;
             for (let i=empRow;i<parseInt(curPricingTable.NUM_OF_TIERS)+empRow;i++){
-              this.addUpdateRowOnchange(this.hotTable,i,cellItem,empRow,selrow,ROW_ID,updateRows,curPricingTable,contractData,tier);
+              this.addUpdateRowOnchange(this.hotTable,i,cellItem,ROW_ID,updateRows,curPricingTable,contractData,tier);
               tier++;
             }
             //calling the merge cells optionfor tier 
@@ -266,7 +305,6 @@ export class PTE_CellChange_Util {
       this.hotTable.setDataAtRowProp(updateRows,'no-edit');
     }
     static autoFillCellOnProd(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,columns:any[]) {
-     
       let OBJ_SET_TYPE_CD=curPricingTable.OBJ_SET_TYPE_CD;
       if(OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD=='KIT'){
         this.autoFillCellonProdKit(items,curPricingTable,contractData,pricingTableTemplates,columns);
@@ -288,7 +326,11 @@ export class PTE_CellChange_Util {
             let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
             //first deleting the row this will help if the empty row and selected row doest match
             this.hotTable.alter('remove_row',selrow,1,'no-edit');
-            this.addUpdateRowOnchange(this.hotTable,empRow,items[0],empRow,selrow,ROW_ID,updateRows,curPricingTable,contractData,1);
+            this.addUpdateRowOnchange(this.hotTable,empRow,items[0],ROW_ID,updateRows,curPricingTable,contractData,1);
+          }
+          else{
+            //This will make sure to hit translate API
+            this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
           }
         }
         else{
@@ -303,9 +345,8 @@ export class PTE_CellChange_Util {
           //identify the empty row and the next empty row will be the consecutive one
           let empRow=this.returnEmptyRow();
           _.each(items,(cellItem)=>{
-              let selrow = cellItem.row;
               let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
-              this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,empRow,selrow,ROW_ID,updateRows,curPricingTable,contractData,1);
+              this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,ROW_ID,updateRows,curPricingTable,contractData,1);
               empRow++;
           });
         }

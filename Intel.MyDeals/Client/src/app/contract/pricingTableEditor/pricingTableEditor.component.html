@@ -1,8 +1,9 @@
 ﻿<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 
-<div class="container-fluid overflow"  style="border: 2px solid #dbdbdb; margin-top: 0px !important;">
+<div class="container-fluid overflow" style="border: 2px solid #dbdbdb; margin-top: 0px !important;">
     <div class="row">
         <div class="col">
 
@@ -13,31 +14,36 @@
             <!-- <div id="spreadsheet"></div> -->
             <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()">
                 <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                <span class="text" style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
+                <span class="text"
+                    style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
                     Save & Validate
                 </span>
             </button>
             <button class="btn btn-sm ssToolbarBtn" (click)="undoPTE()">
-                <i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+                <i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}"
+                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <button class="btn btn-sm ssToolbarBtn" (click)="redoPTE()">
-                <i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+                <i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}"
+                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <!-- Product Validator Button -->
-            <button class="btn btn-sm ssToolbarBtn" (click)="validateOnlyProducts()"
-                    title="Validate the products entered in the web sheet">
+            <button class="btn btn-sm ssToolbarBtn" (click)="validateOnlyProducts('onLoad')"
+                title="Validate the products entered in the web sheet">
                 <table>
                     <tr>
                         <td>
                             <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
                         </td>
-                        <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
+                        <td class="hidden-sm hidden-xs"
+                            style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
                             Validate Products <br />Entered in web sheet
                         </td>
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()"  style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">>
+            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()"
+                style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">
                 <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                 Autofill Defaults
             </button>
@@ -52,4 +58,17 @@
     </div>
 </div>
 
-<loading-panel-angular id="PTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+<kendo-dialog title="Please confirm" *ngIf="isDialogOpen" (close)="closeDialog('No')" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">
+        Are you sure you want to Delete?
+    </p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="closeDialog('No')">No</button>
+        <button kendoButton (click)="closeDialog('Delete')" themeColor="primary">
+            Yes
+        </button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+<loading-panel-angular id="PTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+    [description]="spinnerMessageDescription"></loading-panel-angular>

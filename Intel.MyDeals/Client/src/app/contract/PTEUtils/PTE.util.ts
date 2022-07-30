@@ -164,45 +164,34 @@ export class PTEUtil {
         });
         return cellComments;
     }
-    static getMergeCells(PTR: any,columns:Array<any>,NUMOFTIERS:string):Array<any> {
-        let mergCells = [];
-        //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
-        let distDCID = _.uniq(PTR, 'DC_ID');
-        _.each(distDCID, (item) => {
-            let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
-
-            //get NUM_OF_TIERS acoording this will be the row_span for handson
-            let NUM_OF_TIERS =curPTR.NUM_OF_TIERS !=undefined ? parseInt(curPTR.NUM_OF_TIERS) :parseInt(NUMOFTIERS);
-            _.each(columns, (colItem, ind) => {
-                if (!colItem.isDimKey && !colItem.hidden) {
-                    let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
-                    mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
-                }
-            })
-        });
-        return mergCells;
-    }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults:any, rowData:Array<any>): any {
-        // Process multiple match products
-        var isAllValidated = true;
-        var key: any;
-        for (key in transformResults.ProdctTransformResults) {
-            _.each(rowData,(data)=>{
-                // Flag dependency column errors - these columns may cause product translator to not find a valid product
-                if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
-                    for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
-                        data._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
-                        data._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
-                    }
-                }
-                // If no duplicate or invalid add valid JSON,setting the value for the DC_IDs which are return frrom API
-                if(data && data.DC_ID==key){
-                    data.PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+        _.each(rowData,(data)=>{
+            //setting PTR_SYS_PRD for valid products
+            _.each(transformResults.ValidProducts,(val,DCID)=>{
+                if(data && data.DC_ID==DCID){
+                    data.PTR_SYS_PRD = JSON.stringify(val)
+                    PTE_Common_Util.setBehaviors(data);
+                    data._behaviors.isError['PTR_USER_PRD']=false;
                 }
             });
-           
-        }
+               //setting PTR_SYS_PRD for InValidProducts
+           _.each(transformResults.InValidProducts,(val,DCID)=>{
+              if(val.I && val.I.length>0){
+                if(data && data.DC_ID==DCID){
+                    PTE_Common_Util.setBehaviors(data);
+                    data._behaviors.isError['PTR_USER_PRD']=true;
+                }
+              }
+            });
+             //setting PTR_SYS_PRD for DuplicateProducts
+            _.each(transformResults.DuplicateProducts,(val,DCID)=>{
+                  if(data && data.DC_ID==DCID){
+                      PTE_Common_Util.setBehaviors(data);
+                      data._behaviors.isError['PTR_USER_PRD']=true;
+                  }
+              });
+         });
         return rowData;
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
@@ -257,7 +246,6 @@ export class PTEUtil {
 
         // Pricing table rows products to be translated
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-            console.log(x);
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
                 || (dealType == "KIT"); //|| ($scope.isExcludePrdChange);

@@ -152,37 +152,49 @@ export class PTE_Common_Util {
     static deepClone(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
-    static getPTEGenerate(columns:Array<any>,curPricingTable:any): Array<any> {
-        let PTRCount = this.hotTable.countRows();
+
+    static getPTEGenerate(columns:Array<any>,curPricingTable:any,rownumber?:number): Array<any> {
         let PTRResult: Array<any> = [];
-        for (let i = 0; i < PTRCount; i++) {
-            let obj = {};
-            if (!this.hotTable.isEmptyRow(i)) {
-                //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
-                 _.each(columns,(val) => {
-                    if (val.data) {
-                        obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
-                    }
-                });
-                PTRResult.push(obj);
-            }
-            else{
-              //this means after empty row nothing to be added
-                break;
-            }
-        }
-        //incase of tier places the NUM_OF_TIERS
-        if(curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD=='FLEX' || curPricingTable.OBJ_SET_TYPE_CD=='REV_TIER'){
-            const uniqDCID=_.uniq(PTRResult,'DC_ID');
-            _.each(uniqDCID,itmsDC=>{
-                let DCPTR=_.where(PTRResult,{DC_ID:itmsDC.DC_ID});
-                let selTier=_.max(DCPTR,(itm:any)=>{return itm.TIER_NBR;});
-                _.each(PTRResult,(item)=>{
-                    if(item.DC_ID==itmsDC.DC_ID){
-                        item.NUM_OF_TIERS=selTier.TIER_NBR;
-                    }
-                });
+        if(rownumber){
+            let obj={}
+            _.each(columns,(val) => {
+                if (val.data) {
+                    obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : null;
+                }
             });
+            PTRResult.push(obj);
+        }
+        else{
+            let PTRCount = this.hotTable.countRows();
+            for (let i = 0; i < PTRCount; i++) {
+                let obj = {};
+                if (!this.hotTable.isEmptyRow(i)) {
+                    //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
+                     _.each(columns,(val) => {
+                        if (val.data) {
+                            obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
+                        }
+                    });
+                    PTRResult.push(obj);
+                }
+                else{
+                  //this means after empty row nothing to be added
+                    break;
+                }
+            }
+            //incase of tier places the NUM_OF_TIERS
+            if(curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD=='FLEX' || curPricingTable.OBJ_SET_TYPE_CD=='REV_TIER'){
+                const uniqDCID=_.uniq(PTRResult,'DC_ID');
+                _.each(uniqDCID,itmsDC=>{
+                    let DCPTR=_.where(PTRResult,{DC_ID:itmsDC.DC_ID});
+                    let selTier=_.max(DCPTR,(itm:any)=>{return itm.TIER_NBR;});
+                    _.each(PTRResult,(item)=>{
+                        if(item.DC_ID==itmsDC.DC_ID){
+                            item.NUM_OF_TIERS=selTier.TIER_NBR;
+                        }
+                    });
+                });
+            }
         }
         return PTRResult;
     }

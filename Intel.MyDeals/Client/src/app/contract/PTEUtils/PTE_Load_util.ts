@@ -160,7 +160,8 @@ export class PTE_Load_Util {
     static getCellComments(PTR: any, columns: Array<any>): Array<any> {
         let cellComments = [];
         _.each(PTR, (item, rowInd) => {
-            if (item&& item._behaviors &&item._behaviors.validMsg) {
+            //this piece of code is to bind comments to the cell except PTR_USER_PRD
+            if (item && item._behaviors && item._behaviors.validMsg) {
                 let msg = "";
                 _.each(item._behaviors.validMsg, (val, key) => {
                     let colInd = _.findIndex(columns, { field: key });
@@ -170,6 +171,20 @@ export class PTE_Load_Util {
                 if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined && msg != "") {
                     cellComments.push({ row: rowInd, col: 0, comment: { value: msg, readOnly: true }, className: 'error-cell' });
                 }
+            }
+            //error binding for PTR USR PRD based on true or false
+            if(item && item._behaviors && item._behaviors.isError){
+                _.each(item._behaviors.isError, (val, key) => {
+                    if(key=='PTR_USER_PRD'){
+                        let colInd = _.findIndex(columns, { field: key });
+                        if(val==true){
+                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'error-product' });
+                        }
+                        else{
+                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'success-product' });
+                        }
+                    }
+                });
             }
         });
         return cellComments;
@@ -229,7 +244,8 @@ export class PTE_Load_Util {
         _.each(distDCID, (item) => {
             let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
             //get NUM_OF_TIERS acoording this will be the row_span for handson 
-            let NUM_OF_TIERS = (curPTR.NUM_OF_TIERS != undefined && curPTR.NUM_OF_TIERS !=null && curPTR.NUM_OF_TIERS !='')  ? parseInt(curPTR.NUM_OF_TIERS) : this.numOfPivot(curPTR,curPricingTable);
+           // let NUM_OF_TIERS = (curPTR.NUM_OF_TIERS != undefined && curPTR.NUM_OF_TIERS !=null && curPTR.NUM_OF_TIERS !='')  ? parseInt(curPTR.NUM_OF_TIERS) : this.numOfPivot(curPTR,curPricingTable);
+           let NUM_OF_TIERS =  this.numOfPivot(curPTR,curPricingTable);
             _.each(columns, (colItem, ind) => {
                 if (!colItem.isDimKey && !colItem.hidden) {
                     let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
@@ -423,7 +439,7 @@ export class PTE_Load_Util {
             var pivotDensity = curPricingTable["NUM_OF_DENSITY"];
             // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
             if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
-                if (dataItem["NUM_OF_TIERS"] !== undefined && dataItem["NUM_OF_TIERS"] !== null && dataItem["NUM_OF_TIERS"] !== '') return dataItem["NUM_OF_TIERS"];
+                //if (dataItem["NUM_OF_TIERS"] !== undefined && dataItem["NUM_OF_TIERS"] !== null && dataItem["NUM_OF_TIERS"] !== '') return dataItem["NUM_OF_TIERS"];
                 var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
                 dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
                 return pivotVal;

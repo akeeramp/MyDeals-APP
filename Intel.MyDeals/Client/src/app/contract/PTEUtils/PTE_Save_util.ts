@@ -68,7 +68,7 @@ export class PTE_Save_Util {
     static generatePTRAfterSave(result:any):Array<any>{
         let PTR=[];
         const PTRResult=result.Data.PRC_TBL_ROW;
-        if(PTRResult && PTRResult.length>0){
+        if(PTRResult && PTRResult.length>0 && PTRResult[0]._actions){
             let actions=PTRResult[0]._actions;
             PTRResult.splice(0,1);
             _.each(PTRResult,(item)=>{
