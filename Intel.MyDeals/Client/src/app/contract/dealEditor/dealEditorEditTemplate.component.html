@@ -1,4 +1,4 @@
-﻿<div *ngIf="in_Field_Name == 'DEAL_DESC' || in_Field_Name == 'TERMS' || in_Field_Name == 'QLTR_PROJECT' || in_Field_Name == 'RPU_OVERRIDE_CMNT'">
+﻿<div *ngIf="in_Field_Name == 'DEAL_DESC' || in_Field_Name == 'TERMS' || in_Field_Name == 'QLTR_PROJECT' || in_Field_Name == 'RPU_OVERRIDE_CMNT' || in_Field_Name == 'CONSUMPTION_REASON_CMNT'">
     <kendo-textbox (change)="valueChange(in_DataItem, in_Field_Name)" [ngModel]="in_DataItem[in_Field_Name]"
                    (ngModelChange)="in_DataItem[in_Field_Name] = $event">
     </kendo-textbox>
@@ -119,7 +119,7 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE' || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN'">
+<div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE' || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN' || in_Field_Name == 'CONSUMPTION_REASON'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [ngModel]="in_DataItem[in_Field_Name]"
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"

@@ -130,6 +130,8 @@ export class endCustomerRetailModalComponent {
         }
         for (var i = 0; i < ecValues.length; i++) {
             var rowError = false;
+            var endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
+            var ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
             if (i > 0) {
                 this.END_CUST_OBJ[i].IS_EXCLUDE = isExclude;
             }
@@ -140,23 +142,51 @@ export class endCustomerRetailModalComponent {
             if (ecValues[i] == "" && (ctryValues[i] == "" || (!ctryExists && !(ctryValues[i].toLowerCase() === "any" && i==0)))) {
                 this.isError = true;
                 rowError = true;
-                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End Customer/Retail and End Customer Country/Region")
-                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please select End Customer/Retail and End Customer Country/Region")
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "red";
+                    endCustField.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
+                    }
+                }
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "red";
+                    ctryField.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
+                    }
+                }
             }
             else if (ecValues[i] == "") {
                 rowError = true;
                 this.isError = true;
-                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Please select End customer/Retail")
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "red";
+                    endCustField.setAttribute("title", "Please select End customer/Retail");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Please select End customer/Retail");
+                    }
+                }
             }
 
             else if (ctryValues[i] == "" || (!ctryExists && !(ctryValues[i].toLowerCase() === "any" && i == 0))) {
                 this.isError = true;
                 rowError = true;
-                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "Please Select End Customer Country/Region from the dropdown")
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "red";
+                    ctryField.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
+                    }
+                }
             }
 
             else {
@@ -171,8 +201,15 @@ export class endCustomerRetailModalComponent {
             if (!res && IsECSelected === undefined) {
                 this.isError = true;
                 rowError = true;
-                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "red";
+                    endCustField.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
+                    }
+                }
             }
 
             if (ecValues[i].toUpperCase() == "ANY" && this.isAdmin == true) {
@@ -183,17 +220,38 @@ export class endCustomerRetailModalComponent {
             }
             else if (ecValues[i].toUpperCase() == "ANY") {
                 if (i > 0) {
-                    $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                    $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "Any can be selected only in the First combination")
+                    if (endCustField != undefined && endCustField != null) {
+                        endCustField.style.backgroundColor = "red";
+                        endCustField.setAttribute("title", "Any can be selected only in the First combination");
+                        let child = endCustField.children[1] as HTMLElement;
+                        if (child != undefined && child != null) {
+                            child.style.backgroundColor = "red";
+                            child.setAttribute("title", "Any can be selected only in the First combination");
+                        }
+                    }
                     this.isError = true;
                     rowError = true;
                 }
             }
             if (!rowError) {
-                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "white");
-                $("#ComboBoxSelect_" + i).parent().find("span").removeAttr("title")
-                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "white");
-                $("#DropdownSelections_" + i).parent().find("span").removeAttr("title")
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "white";
+                    endCustField.removeAttribute("title");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "white";
+                        child.removeAttribute("title");
+                    }
+                }
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "white";
+                    ctryField.removeAttribute("title");
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "white";
+                        child.removeAttribute("title");
+                    }
+                }
             }
         }
 
@@ -203,8 +261,15 @@ export class endCustomerRetailModalComponent {
             if (embCtry) {
                 this.isError = true;
                 rowError = true;
-                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", this.embValidationMsg)
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "red";
+                    ctryField.setAttribute("title", this.embValidationMsg);
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", this.embValidationMsg);
+                    }
+                }
             }
         });
 
@@ -217,10 +282,26 @@ export class endCustomerRetailModalComponent {
                     var responsedata = this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_ID != null && x.PRIMED_CUST_ID != "" && x.PRIMED_CUST_ID == item.PRIMED_CUST_ID && x.PRIMED_CUST_CNTRY == item.PRIMED_CUST_CNTRY);
                     if (responsedata.length > 1) {
                         this.validateFlag = true;
-                        $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                        $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
-                        $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                        $("#DropdownSelections_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
+                        var endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
+                        if (endCustField != undefined && endCustField != null) {
+                            endCustField.style.backgroundColor = "red";
+                            endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                            let child = endCustField.children[1] as HTMLElement;
+                            if (child != undefined && child != null) {
+                                child.style.backgroundColor = "red";
+                                child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                            }
+                        }
+                        var ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+                        if (ctryField != undefined && ctryField != null) {
+                            ctryField.style.backgroundColor = "red";
+                            ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                            let child = ctryField.children[1] as HTMLElement;
+                            if (child != undefined && child != null) {
+                                child.style.backgroundColor = "red";
+                                child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                            }
+                        }
                     }
                     i++;
                 });
@@ -242,14 +323,46 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 this.validateFlag = true;
                 rowError = true;
-                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
-                $("#DropdownSelections_" + duplicateIndex).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + duplicateIndex).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
-                $("#ComboBoxSelect_" + i).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
-                $("#DropdownSelections_" + i).parent().find("span").css("background-color", "red");
-                $("#DropdownSelections_" + i).parent().find("span").attr("title", "End Customer/Retail and End Customer Country/Region Combination must be unique")
+                var endCustField = document.getElementById("ComboBoxSelect_" + duplicateIndex).children[0] as HTMLElement;
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "red";
+                    endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                    }
+                }
+                var ctryField = document.getElementById("DropdownSelections_" + duplicateIndex).children[0] as HTMLElement;
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "red";
+                    ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                    }
+                }
+                endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
+                if (endCustField != undefined && endCustField != null) {
+                    endCustField.style.backgroundColor = "red";
+                    endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                    let child = endCustField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
+                    }
+                }
+                ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+                if (ctryField != undefined && ctryField != null) {
+                    ctryField.style.backgroundColor = "red";
+                    ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                    let child = ctryField.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
+                    }
+                }
             }
             duplicateIndex++;
         });
@@ -283,22 +396,45 @@ export class endCustomerRetailModalComponent {
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
         var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem.CTRY_NM, 'ok');
+        var field = document.getElementById("DropdownSelections_" + index).children[0] as HTMLElement;
         if (dataItem === undefined || dataItem === null || dataItem.length <= 0) {
-            $("#DropdownSelections_" + index).parent().find("span").css("background-color", "red");
-            $("#DropdownSelections_" + index).parent().find("span").attr("title", "Please Select End Customer Country/Region from the dropdown")
+            if (field != undefined && field != null) {
+                field.style.backgroundColor = "red";
+                field.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
+                let child = field.children[1] as HTMLElement;
+                if (child != undefined && child != null) {
+                    child.style.backgroundColor = "red";
+                    child.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
+                }
+            }
         }
         else if (embCountry) {
-            $("#DropdownSelections_" + index).parent().find("span").css("background-color", "red");
-            $("#DropdownSelections_" + index).parent().find("span").attr("title", this.embValidationMsg)
+            if (field != undefined && field != null) {
+                field.style.backgroundColor = "red";
+                field.setAttribute("title", this.embValidationMsg);
+                let child = field.children[1] as HTMLElement;
+                if (child != undefined && child != null) {
+                    child.style.backgroundColor = "red";
+                    child.setAttribute("title", this.embValidationMsg);
+                }
+            }
         }
         else {
-            $("#DropdownSelections_" + index).parent().find("span").css("background-color", "white");
-            $("#DropdownSelections_" + index).parent().find("span").removeAttr("title");
+            if (field != undefined && field != null) {
+                field.style.backgroundColor = "white";
+                field.removeAttribute("title");
+                let child = field.children[1] as HTMLElement;
+                if (child != undefined && child != null) {
+                    child.style.backgroundColor = "white";
+                    child.removeAttribute("title");
+                }
+            }
         }
     }
 
     changeField = function (index, endCust) {
         this.isAny = this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY';
+        var field = document.getElementById("ComboBoxSelect_" + index).children[0] as HTMLElement;
         this.validateFlag = true;
         var dataElement = endCust;
         var dataItem = this.endCustOptions.filter(x => x.Value == dataElement.END_CUSTOMER_RETAIL);
@@ -314,7 +450,6 @@ export class endCustomerRetailModalComponent {
         var isECUserText = false;
         //to get the user entered free text end customer value
         if (dataItem === undefined || dataItem === null || dataItem.length <= 0) {
-            endCustomer = $('#ComboBoxSelect_' + index).parent().find("input").val();
             if (endCustomer != null && endCustomer != undefined && endCustomer != "") {
                 endCustomer = endCustomer.trim();
                 var ecIndex = index;
@@ -328,15 +463,29 @@ export class endCustomerRetailModalComponent {
         if (isECUserText) {
             var isEndCustomerValid = patt.test(endCustomer);
             if (isEndCustomerValid) {
-                $("#ComboBoxSelect_" + index).parent().find("span").css("background-color", "white");
-                $("#ComboBoxSelect_" + index).parent().find("span").removeAttr("title");
+                if (field != undefined && field != null) {
+                    field.style.backgroundColor = "white";
+                    field.removeAttribute("title");
+                    let child = field.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "white";
+                        child.removeAttribute("title");
+                    }
+                }
                 this.ChangeErrorFlag = false;
             }
             else {
                 this.ChangeErrorFlag = true;
                 this.validateFlag = true;
-                $("#ComboBoxSelect_" + index).parent().find("span").css("background-color", "red");
-                $("#ComboBoxSelect_" + index).parent().find("span").attr("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.")
+                if (field != undefined && field != null) {
+                    field.style.backgroundColor = "red";
+                    field.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
+                    let child = field.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "red";
+                        child.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
+                    }
+                }
             }
         }
         if (endCustomer.toUpperCase() == "ANY") {
@@ -347,29 +496,57 @@ export class endCustomerRetailModalComponent {
             }
             else {
                 if (parseInt(index) > 0) {
-                    $('#DropdownSelections_' + index).parent().find("input").val("");
-                    $("#ComboBoxSelect_" + index).parent().find("span").css("background-color", "red");
-                    $("#ComboBoxSelect_" + index).parent().find("span").attr("title", "Any can be selected only in the First combination")
+                    dataElement.PRIMED_CUST_CNTRY = "";
+                    if (field != undefined && field != null) {
+                        field.style.backgroundColor = "red";
+                        field.setAttribute("title", "Any can be selected only in the First combination");
+                        let child = field.children[1] as HTMLElement;
+                        if (child != undefined && child != null) {
+                            child.style.backgroundColor = "red";
+                            child.setAttribute("title", "Any can be selected only in the First combination");
+                        }
+                    }
                     this.ChangeErrorFlag = true
                     this.validateFlag = true;
                 }
                 else {
-                    $("#ComboBoxSelect_" + index).parent().find("span").css("background-color", "white");
-                    $("#ComboBoxSelect_" + index).parent().find("span").removeAttr("title");
-                    $('#DropdownSelections_' + index).parent().find("input").val("Any");
+                    if (field != undefined && field != null) {
+                        field.style.backgroundColor = "white";
+                        field.removeAttribute("title");
+                        let child = field.children[1] as HTMLElement;
+                        if (child != undefined && child != null) {
+                            child.style.backgroundColor = "white";
+                            child.removeAttribute("title");
+                        }
+                    }
                     dataElement.PRIMED_CUST_CNTRY = "Any";
                 }
             }
         }
         else if (endCustomer !== null && !this.ChangeErrorFlag) {
-            $("#ComboBoxSelect_" + index).parent().find("span").css("background-color", "white");
-            $("#ComboBoxSelect_" + index).parent().find("span").removeAttr("title");
+            if (field != undefined && field != null) {
+                field.style.backgroundColor = "white";
+                field.removeAttribute("title");
+                let child = field.children[1] as HTMLElement;
+                if (child != undefined && child != null) {
+                    child.style.backgroundColor = "white";
+                    child.removeAttribute("title");
+                }
+            }
             var primeCustCountryValue = this.END_CUST_OBJ[0].PRIMED_CUST_CNTRY == null ? "" : this.END_CUST_OBJ[0].PRIMED_CUST_CNTRY;
             if (parseInt(index) == 0 && primeCustCountryValue.toUpperCase() == "ANY") {
                 dataElement.PRIMED_CUST_CNTRY = "";
-                $('#DropdownSelections_' + index).parent().find("input").val("");
-                $("#DropdownSelections_" + index).parent().find("span").css("background-color", "white");
-                $("#DropdownSelections_" + index).parent().find("span").removeAttr("title")
+                var ctryfield = document.getElementById("DropdownSelections_" + index).children[0] as HTMLElement;
+
+                if (ctryfield != undefined && ctryfield != null) {
+                    ctryfield.style.backgroundColor = "white";
+                    ctryfield.removeAttribute("title");
+                    let child = ctryfield.children[1] as HTMLElement;
+                    if (child != undefined && child != null) {
+                        child.style.backgroundColor = "white";
+                        child.removeAttribute("title");
+                    }
+                }
             }
             _.each(this.END_CUST_OBJ, (item) => {
                 //Embargo Country/Region validation alert.

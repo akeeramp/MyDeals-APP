@@ -12,6 +12,18 @@ export class DE_Load_Util {
             wipTemplate.columns[i].indx = indxs[wipTemplate.columns[i].field] === undefined ? 0 : indxs[wipTemplate.columns[i].field];
             wipTemplate.columns[i].hidden = false;
         }
+        var zeroIndexColumns = wipTemplate.columns.filter(x => x.indx == 0);
+        if (zeroIndexColumns != undefined && zeroIndexColumns != null && zeroIndexColumns.length > 0) {
+            var indexes = (zeroIndexColumns.length - 1) * -1;
+            for (var i = 0; i < wipTemplate.columns.length; i++) {
+                for (var j = 0; j < zeroIndexColumns.length; j++) {
+                    if (wipTemplate.columns[i].field == zeroIndexColumns[j].field) {
+                        wipTemplate.columns[i].indx = indexes++;
+                        break;
+                    }
+                }
+            }
+        }
         wipTemplate.columns = wipTemplate.columns.sort((a, b) => (a.indx > b.indx) ? 1 : -1);
     }
 

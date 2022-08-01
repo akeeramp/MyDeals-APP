@@ -16,6 +16,7 @@ import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
+import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
 
 @Component({
     selector: 'deal-editor',
@@ -56,6 +57,8 @@ export class dealEditorComponent {
     private isTenderContract = false;
     private dropdownResponses: any = null;
     private EndCustDropdownResponses: any = null;
+    private enableSelectAll: boolean = false;
+    private enableDeselectAll: boolean = false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -198,6 +201,13 @@ export class dealEditorComponent {
                 var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
                 this.openEndCustomerModal(args.dataItem, column[0]);
             }
+            else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
+                || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
+                || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
+                || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
+                var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
+                this.openMultiSelectModal(args.dataItem, column[0]);
+            }
         }
     }
 
@@ -220,7 +230,7 @@ export class dealEditorComponent {
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
-            if (returnVal != undefined && returnVal != null && returnVal != "") {
+            if (returnVal != undefined && returnVal != null) {
                 this.updateModalDataItem(dataItem, "SYS_PRICE_POINT", returnVal);
             }
         });
@@ -257,6 +267,83 @@ export class dealEditorComponent {
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_NM", returnVal.PRIMED_CUST_NM);
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_ID", returnVal.PRIMED_CUST_ID);
                 this.updateModalDataItem(dataItem, "IS_RPL", returnVal.IS_RPL);
+            }
+        });
+    }
+
+    openMultiSelectModal(dataItem, column) {
+        let source: any  =[];
+        let value = [];
+        let url = "";
+        if (column.field == "CONSUMPTION_COUNTRY_REGION") {
+            url = column.lookupUrl + dataItem.CUST_MBR_SID;
+            this.enableSelectAll = true;
+            this.enableDeselectAll = true;
+            if (dataItem[column.field] != undefined && dataItem[column.field] != null && dataItem[column.field] !== "") {
+                value = dataItem[column.field].split("|").map(function (item) {
+                    return item.trim();
+                });
+            }
+        }        
+        else {
+            if (column.field == "CONSUMPTION_CUST_PLATFORM" || column.field == "CONSUMPTION_CUST_SEGMENT"
+                || column.field == "CONSUMPTION_CUST_RPT_GEO" || column.field == "CONSUMPTION_SYS_CONFIG"
+                || column.field == "DEAL_SOLD_TO_ID" || column.field == "TRGT_RGN") {
+                if (column.field == "DEAL_SOLD_TO_ID") {
+                    url = column.lookupUrl + "/" + dataItem.CUST_MBR_SID + "/" + dataItem.GEO_COMBINED.replace(/\//g, ',') + "/" + dataItem.CUST_ACCNT_DIV.replace(/\//g, ',');
+                    column.lookupText = "subAtrbCd";
+                }
+                else if (column.field == "TRGT_RGN") {
+                    url = column.lookupUrl + dataItem.GEO_COMBINED;
+                    this.enableSelectAll = false;
+                    this.enableDeselectAll = false;
+                    value = dataItem[column.field];
+                }
+                else
+                    url = column.lookupUrl + dataItem.CUST_MBR_SID;
+                this.enableSelectAll = true;
+                this.enableDeselectAll = true;
+            }
+            else {
+                url = column.lookupUrl;
+                this.enableSelectAll = false;
+                this.enableDeselectAll = false;
+            }
+            if (dataItem[column.field] != undefined && dataItem[column.field] != null && dataItem[column.field] !== "") {
+                if (typeof dataItem[column.field] == "string") {
+                    value = dataItem[column.field].split(",").map(function (item) {
+                        return item.trim();
+                    });
+                } else {
+                    value = dataItem[column.field].map(function (item) {
+                        return item.trim();
+                    });
+                }
+            }
+        }
+        if (column.field == "MRKT_SEG") {
+            source = this.dropdownResponses.__zone_symbol__value["MRKT_SEG"]
+        }
+        const dialogRef = this.dialog.open(multiSelectModalComponent, {
+            width: "800px",
+            data: {
+                cellCurrValues: value,
+                items: {
+                    'label': column.title,
+                    'opLookupUrl': url,
+                    'opLookupText': column.lookupText,
+                    'opLookupValue': column.lookupValue,
+                    'enableSelectAll': this.enableSelectAll,
+                    'enableDeselectAll': this.enableDeselectAll,
+                    'data': source
+                },
+                colName: column.field,
+                isBlendedGeo: false
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if (returnVal != undefined && returnVal != null) {
+                this.updateModalDataItem(dataItem, column.field, returnVal);
             }
         });
     }
@@ -298,7 +385,7 @@ export class dealEditorComponent {
 
     async getAllDrowdownValues() {
         let dropObjs = {};
-        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN"];
+        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN","CONSUMPTION_REASON","MRKT_SEG"];
 
         _.each(atrbs, (item) => {
             let column = this.wipTemplate.columns.filter(x => x.field == item);

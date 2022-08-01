@@ -1,6 +1,5 @@
 ﻿import * as angular from 'angular';
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
@@ -12,10 +11,7 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 })
 export class dealEditorEditTemplateComponent {
 
-    constructor(private loggerService: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    constructor() {        
     }
     @Input() in_Field_Name: string = '';
     @Input() in_Deal_Type: string = '';
@@ -155,11 +151,6 @@ export class dealEditorEditTemplateComponent {
         for (var key = 0; key < keys.length; key++) {
             this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.DROP_DOWN);
         }
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

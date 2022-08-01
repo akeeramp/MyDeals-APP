@@ -141,3 +141,10 @@ mat-button-toggle-label-content {
     margin-left: -15px;
     width: 100%
 }
+
+.k-treeview {
+    height: 250px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 2px 2px 4px #000 !important;
+    background-color: white !important;
+}

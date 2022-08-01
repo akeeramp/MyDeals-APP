@@ -31,7 +31,8 @@ export class GridUtil {
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + msg;
-            tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+            if (passedData[field] != undefined && passedData[field] != null)
+                tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -50,7 +51,7 @@ export class GridUtil {
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
             if (passedData['CREDIT_AMT'] != undefined && passedData['CREDIT_AMT'] != 0)
-                tmplt += '    <div class="ng-binding vert-center">(' + passedData[field] + ')"</div>';
+                tmplt += '    <div class="ng-binding vert-center">(' + passedData[field] + ')"</div>';            
             tmplt += '</div>';
             return tmplt;
         }
@@ -58,7 +59,8 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+            if (passedData[field] != undefined && passedData[field] != null)
+                tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -69,7 +71,8 @@ export class GridUtil {
             tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
         tmplt += '    <div class="ng-binding vert-center">';
         // tmplt += '        <deal-popup-icon deal-id="\'' + passedData[field] + '\'"></deal-popup-icon>';
-        tmplt += passedData[field];
+        if (passedData[field] != undefined && passedData[field] != null)
+            tmplt += passedData[field];
         tmplt += '    </div>';
         return tmplt;
     }
@@ -103,7 +106,8 @@ export class GridUtil {
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                     tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             }
-            tmplt += '    <div class="ng-binding vert-center">' + passedData[field][dim] + '</div>';
+            if (passedData[field][dim] != undefined && passedData[field][dim] != null)
+                tmplt += '    <div class="ng-binding vert-center">' + passedData[field][dim] + '</div>';
             tmplt += '</div>';
         }
         return tmplt;
@@ -156,7 +160,8 @@ export class GridUtil {
                     tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
-                    tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
+                    if (passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
+                        tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
                     tmplt += '</div>';
                 }
                 tmplt += '</div>';
@@ -183,7 +188,8 @@ export class GridUtil {
                 tmplt += ' class="kitRowValue' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
-                tmplt += '<span class="ng-binding dataPadding">' + passedData[field][dimkey] + '</span>';
+                if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null)
+                    tmplt += '<span class="ng-binding dataPadding">' + passedData[field][dimkey] + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }
@@ -196,7 +202,8 @@ export class GridUtil {
     }
     static uiReadonlyControlWrapper = function (passedData, field) {
         var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+        if (passedData[field] != undefined && passedData[field] != null)
+            tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -212,17 +219,18 @@ export class GridUtil {
         tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
         tmplt += '<div class="vert-center">';
         dim = "20_____2"
-        if (passedData[field][dim] != null) {
+        if (passedData[field][dim] != null && passedData[field][dim] != undefined) {
             tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
         }
         dim = "20_____1"
-        if (passedData[field][dim] != null) {
+        if (passedData[field][dim] != null && passedData[field][dim] != undefined) {
             tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
         }
         for (var index in sortedKeys) { //only looking for positive dim keys
             dim = sortedKeys[index];
             if (data.hasOwnProperty(dim) && dim.indexOf("___") >= 0 && dim.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
+                if (passedData[field][dim] != undefined && passedData[field][dim] != null)
+                    tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
             }
         }
         tmplt += '</div></div>';
@@ -236,8 +244,9 @@ export class GridUtil {
         tmplt += '    <div class="ng-binding vert-center">';
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
-        tmplt += '    <span class="ng-binding">' + passedData[field] + '</span></div>';
-        tmplt += '</div>';
+        if (passedData[field] != undefined && passedData[field] != null)
+            tmplt += '    <span class="ng-binding">' + passedData[field] + '</span>';
+        tmplt += '</div></div>';
         return tmplt;
     }
     static uiControlEndDateWrapper = function (passedData, field) {
@@ -248,7 +257,8 @@ export class GridUtil {
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
         tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
-        tmplt += '    <div class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
+        if (passedData[field] != undefined && passedData[field] != null)
+            tmplt += '    <div class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -287,13 +297,15 @@ export class GridUtil {
                                 tmplt += 'class="col-md-12' + this.getClassNm(passedData, fields[f].field) + '">'
                                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands])
                                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim + bands] + '"></div>';
-                                tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands] + '</span>';
+                                if (passedData[fields[f].field][dim + bands] != undefined && passedData[fields[f].field][dim + bands] != null)
+                                    tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands] + '</span>';
                             }
                             else {
                                 tmplt += 'class="col-md-12' + this.getClassNm(passedData, fields[f].field) + '">'
                                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands + '____' + key] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands + '____' + key])
                                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim + bands + '____' + key] + '"></div>';
-                                tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands + '____' + key] + '</span>';
+                                if (passedData[fields[f].field][dim + bands + '____' + key] != undefined && passedData[fields[f].field][dim + bands + '____' + key] != null)
+                                    tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands + '____' + key] + '</span>';
                             }
                             tmplt += '</div>';
                             tmplt += '</div>';
@@ -306,7 +318,8 @@ export class GridUtil {
                         tmplt += '<div class="col-md-2' + this.getClassNm(passedData, fields[f].field) + '">';
                         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
-                        tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
+                        if (passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
+                            tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
                         tmplt += '</div>';
                     }
                 }
@@ -347,7 +360,8 @@ export class GridUtil {
     }
     static uiBoolControlWrapper = function (passedData, field) {
         var tmplt = '<div class="uiControlDiv isReadOnlyCell"';
-        tmplt += '    <div class="ng-binding vert-center">' + DE_Common_Util.showBool(passedData[field]) + '</div>';
+        if (passedData[field]!= undefined && passedData[field] != null)
+            tmplt += '    <div class="ng-binding vert-center">' + DE_Common_Util.showBool(passedData[field]) + '</div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -422,7 +436,8 @@ export class GridUtil {
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
             tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
         tmplt += '<div class="uiControlDiv msgClassStyles' + this.getClassNm(passedData, field) + '"';
-        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+        if (passedData[field] != undefined && passedData[field] != null)
+            tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
         tmplt += '</div>';
 
         return tmplt;

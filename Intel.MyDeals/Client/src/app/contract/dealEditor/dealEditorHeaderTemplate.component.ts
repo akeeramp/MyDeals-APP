@@ -1,6 +1,5 @@
 ﻿import * as angular from 'angular';
 import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 
 @Component({
@@ -11,11 +10,7 @@ import { downgradeComponent } from '@angular/upgrade/static';
 })
 export class dealEditorHeaderTemplateComponent {
 
-    constructor(private loggerService: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor() {}
     @Input() in_Field_Name: string = '';
     @Input() in_Header_Template: string = '';
     @Input() in_Title: string = '';
@@ -24,12 +19,6 @@ export class dealEditorHeaderTemplateComponent {
     clkAllItems(): void {
         this.selectAllData.emit();
     }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
-    ngOnInit() { }
 }
 
 angular.module("app").directive(

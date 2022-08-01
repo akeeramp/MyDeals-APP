@@ -7,7 +7,7 @@ import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.compon
 import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
 import { ProductSelectorComponent } from "../contract/ptModals/productSelector/productselector.component";
 import { GeoSelectorComponent } from "../contract/ptModals/geo/geo.component";
-import { marketSegComponent } from "../contract/ptModals/marketSegment/marketSeg.component";
+import { multiSelectModalComponent } from "../contract/ptModals/multiSelectModal/multiSelectModal.component";
 import { meetCompContractComponent } from "../contract/meetComp/meetComp.component";
 import { dealEditorComponent } from "../contract/dealEditor/dealEditor.component";
 import { contractManagerComponent } from "../contract/contractManager/contractManager.component";
@@ -30,7 +30,7 @@ export let contractComponents = [
     tenderManagerComponent,
     ProductSelectorComponent,
     GeoSelectorComponent,
-    marketSegComponent,
+    multiSelectModalComponent,
     meetCompContractComponent,
     dealEditorComponent,
     contractManagerComponent,

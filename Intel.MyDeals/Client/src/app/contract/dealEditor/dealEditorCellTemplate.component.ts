@@ -16,9 +16,6 @@ export class dealEditorCellTemplateComponent {
 
     constructor(private loggerService: logger, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe,
         private datePipe: DatePipe) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() in_Field_Name: string = '';
     @Input() in_Template: string = '';
@@ -272,11 +269,6 @@ export class dealEditorCellTemplateComponent {
         this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
         this.in_DataItem.PRC_ST = this.contract_Data.PRC_ST;
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

@@ -69,8 +69,17 @@
                                 <h5 class="headstyle">Marketting Segment</h5>
                             </div>
                         </div>
-                        <kendo-multiselect #multiselect [data]="marketSeglist" [(ngModel)]="mkgvalues" [checkboxes]="true" [autoClose]="false" (valueChange)="onMktgValueChange($event)">
-                        </kendo-multiselect>
+                        <kendo-multiselect [(ngModel)]="mkgvalues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
+                        <kendo-treeview [nodes]="marketSeglist"
+                                        textField="DROP_DOWN"
+                                        [children]="fetchChildren"
+                                        [hasChildren]="hasChildren"
+                                        kendoTreeViewCheckable
+                                        [(checkedKeys)]="mkgvalues"
+                                        checkBy="DROP_DOWN"
+                                        [isChecked]="isChecked"
+                                        (checkedKeysChange)="onMktgValueChange($event)">
+                        </kendo-treeview>
                         <!--<div class="ktest"></div>-->
                     </div>
                     <!--</div>-->

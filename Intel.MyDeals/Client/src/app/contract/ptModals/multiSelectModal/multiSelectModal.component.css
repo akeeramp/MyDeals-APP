@@ -1,0 +1,22 @@
+﻿.k-treeview {
+    height: 250px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 2px 2px 4px #000 !important;
+    background-color:white !important;
+}
+.k-textbox{
+    width:100% !important;
+}
+
+.ss-loading-panel {
+    margin-top: 15% !important;
+    margin-left: 15% !important;
+}
+
+.mat-dialog-container {
+    background-color: #1a3e6f;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: none;
+    border-right: none;
+}

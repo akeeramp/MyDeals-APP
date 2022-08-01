@@ -13,7 +13,7 @@ import { PTEUtil } from '../PTEUtils/PTE.util';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
-import { marketSegComponent } from '../ptModals/marketSegment/marketSeg.component';
+import { multiSelectModalComponent } from '../ptModals/multiSelectModal/multiSelectModal.component';
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
@@ -65,7 +65,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 super.prepare(row, col, prop, TD, originalValue, cellProperties);
                 this.selCol = col;
                 this.selRow = row;
-                this.field = prop;
+                this.field = prop;                
                 this.source = cellProperties.source ? cellProperties.source : '';
             }
             createElements() {
@@ -108,12 +108,12 @@ export class pricingTableEditorComponent implements OnChanges {
                     name = "Geo Selector";
                     data={ name: name, source: this.source, selVal: selVal};
                 }
-                else {
-                    modalComponent = marketSegComponent;
+                else {                    
+                    modalComponent = multiSelectModalComponent;
                     height = "500px"
                     width = "700px";
-                    name = "Market Segment Selector";
-                    data={ name: name, source: this.source, selVal: selVal};
+                    name = this.field;
+                    data = { colName: name, items: { 'data': this.source}, cellCurrValues: selVal};
                 }
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,

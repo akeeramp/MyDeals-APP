@@ -1,0 +1,68 @@
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<div [ngClass]="{'targetGeoModal': isTgrRgn}">
+    <div class="modal-header" *ngIf="!isTgrRgn">
+        <h3 class="modal-title" id="modal-title">Select {{multiSelectPopUpModal.label}}</h3>
+    </div>
+    <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+    <div class="container-fluid overflow modal-body">
+        <div *ngIf="!isTgrRgn">
+            <div *ngIf="isEmptyList">
+                <span *ngIf="!msg" style="color:red;">
+                    There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.
+                </span>
+                <span *ngIf="msg" style="color:red;">
+                    There are no Sold-Tos currently mapped to this customer.
+                </span>
+            </div>
+        </div>
+        <div *ngIf="isTgrRgn">
+            <div class="target-region-picker modal-header">
+                <div class="cursorArea col-md-10 trgtRgnHeader">
+                    <p class="">Target Sales Geo Picker</p>
+                </div>
+                <span class="rgnmodalCloseIcon fr">
+                    <i role="button" title="Close" class="intelicon-close-max" (click)="onNoClick()"></i>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div mat-dialog-content>
+                    <kendo-multiselect [(ngModel)]="checkedKeys" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
+                        <kendo-treeview [nodes]="multiSelectData"
+                                        kendoTreeViewHierarchyBinding
+                                        childrenField="items"
+                                        [textField]="multiSelectPopUpModal.opLookupText"
+                                        [children]="fetchChildren"
+                                        [hasChildren]="hasChildren"
+                                        [kendoTreeViewCheckable]="checkableSettings"
+                                        [(checkedKeys)]="checkedKeys"
+                                        [checkBy]="key"
+                                        [isChecked]="isChecked"
+                                        [filterable]="isFilterEnabled"
+                                        (checkedKeysChange)="onSelectionChange($event)">
+                        </kendo-treeview>
+                </div>                
+            </div>
+        </div>
+        <br />
+        <div class="row justify-content-end" *ngIf="!isTgrRgn">
+            <div class="col-md-12">
+                <div mat-dialog-actions class="col-md-7" *ngIf="multiSelectPopUpModal.enableSelectAll || multiSelectPopUpModal.enableDeselectAll">
+                    <button style="width:35%" *ngIf="multiSelectPopUpModal.enableSelectAll" (click)="selectAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;
+                    <button style="width:40%" *ngIf="multiSelectPopUpModal.enableDeselectAll" (click)="deSelectAllCustomerReportedGeos()" class="btn btn-primary">Deselect All</button>
+                </div>
+                <div mat-dialog-actions class="fr">
+                    <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button> &nbsp;
+                    <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isTgrRgn">
+            <div mat-dialog-actions class="fr" style="width:100%">
+                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary" style="width:100%">Save & Close</button>
+            </div>
+        </div>
+    </div>
+</div>

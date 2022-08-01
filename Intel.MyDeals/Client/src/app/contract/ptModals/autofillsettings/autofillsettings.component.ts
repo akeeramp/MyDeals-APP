@@ -1,20 +1,21 @@
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from "underscore";
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { autoFillService } from "../autofillsettings/autofillsetting.service";
 import { logger } from '../../../shared/logger/logger';
+import { CheckedState } from "@progress/kendo-angular-treeview";
 
 @Component({
     selector: "autofill-selector",
     templateUrl: "Client/src/app/contract/ptModals/autofillsettings/autofillsettings.component.html",
-    styleUrls: ["Client/src/app/contract/ptModals/autofillsettings/autofillsettings.component.css"]
+    styleUrls: ["Client/src/app/contract/ptModals/autofillsettings/autofillsettings.component.css"],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class AutoFillComponent {
-    @ViewChild('multiselect', { static: true }) public multiselect: any;
     private dropdownResponses: any = null;
     private isLoading: boolean = false;
     private spinnerMessageHeader: string = "AutoFillSetting Loading";
@@ -23,8 +24,9 @@ export class AutoFillComponent {
     private geoValues: Array<string> = [];
     private geos: Array<string> = [];
     private isBlend: boolean = false;
-    private marketSeglist: Array<string> = [];
+    private marketSeglist: any = [];
     private mkgvalues: Array<string> = [];
+    private parentKeys: any = [];
     private opValidMsg: string = "";
     private isMultipleGeosSelected: boolean = false;
     private CurrPricingStrategy: any = {};
@@ -43,7 +45,32 @@ export class AutoFillComponent {
         @Inject(MAT_DIALOG_DATA) public autofillData: any
     ) { }
 
+    public isChecked = (dataItem: any, index: string): CheckedState => {
+        if (this.containsItem(dataItem)) { return 'checked'; }
+        if (this.isIndeterminate(dataItem.items)) { return 'indeterminate'; }
+        return 'none';
+    };
 
+    private containsItem(item: any): boolean {
+        if (this.mkgvalues != undefined && this.mkgvalues != null && this.mkgvalues.length > 0)
+            return this.mkgvalues.indexOf(item['DROP_DOWN']) > -1;
+        else
+            return false;
+    }
+
+    private isIndeterminate(items: any[] = []): boolean {
+        if (items != undefined && items != null) {
+            let idx = 0;
+            let item;
+            while (item = items[idx]) {
+                if (this.isIndeterminate(item.items) || this.containsItem(item)) {
+                    return true;
+                }
+                idx += 1;
+            }
+        }
+        return false;
+    }
     async getAllDropdownValues() {
         let dropObjs = {};
         _.each(this.autofillData.DEFAULT, (val, key) => {
@@ -116,8 +143,25 @@ export class AutoFillComponent {
 
     onMktgValueChange(event: any) {
         if (event && event.length > 0) {
-            if (_.indexOf(event, 'All Direct Market Segments') >= 0) {
+            var selectedList = event.join(",");
+            if (_.indexOf(event, 'All Direct Market Segments') > 0) {
                 this.mkgvalues = ['All Direct Market Segments'];
+            }
+            else {
+                if (_.indexOf(event, 'All Direct Market Segments') == 0)
+                    this.mkgvalues.splice(0, 1);
+
+                _.each(this.mkgvalues, (key) => {
+                    var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
+                    if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
+                        this.mkgvalues = [selectedData[0].items[0].DROP_DOWN];
+                    }
+                });
+                _.each(this.parentKeys, (key) => {
+                    if (selectedList.includes(key)) {
+                        this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
+                    }
+                });
             }
         }
     }
@@ -258,6 +302,13 @@ export class AutoFillComponent {
         
         
     }
+    hasChildren(node: any): boolean {
+        return node.items && node.items.length > 0;
+    }
+    fetchChildren(node: any): Observable<any[]> {
+        // returns the items collection of the parent node as children
+        return of(node.items);
+    }
 
     async loadAutoFill() {
         this.isLoading = true;
@@ -281,9 +332,13 @@ export class AutoFillComponent {
             this.geoValues = geoVals;
         }
         this.isBlend = false;
-        this.marketSeglist = this.dropdownResponses['MRKT_SEG'].map(a => a.DROP_DOWN);
+        this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
+        _.each(this.marketSeglist, (key) => {
+            if (key.items != undefined && key.items != null && key.items.length > 0) {
+                this.parentKeys.push(key.DROP_DOWN);
+            }
+        });
         let mkgvalue = this.autofillData.DEFAULT['MRKT_SEG'].value;
-        this.multiselect.toggle(true);        
         if (mkgvalue?.indexOf("[") >= 0) {
             this.mkgvalues = mkgvalue ? mkgvalue.replace('[', '').replace(']', '').split(',') : [];
         }
