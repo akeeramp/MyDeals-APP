@@ -20,6 +20,7 @@ namespace Intel.MyDeals.Entities
             public string ProjectName { get; set; }
             public string BillingsStartDate { get; set; }
             public string BillingsEndDate { get; set; }
+            public string TrackerEffectiveStartDate { get; set; }
             public string AdditionalTermsAndConditions { get; set; }
             public string UpdateStatus { get; set; }
             public string DealStage { get; set; }
@@ -38,6 +39,7 @@ namespace Intel.MyDeals.Entities
         public string ProjectName { get; set; }
         public string BillingsStartDate { get; set; }
         public string BillingsEndDate { get; set; }
+        public string TrackerEffectiveStartDate { get; set; }
         public string AdditionalTermsAndConditions { get; set; }
         public string UpdateStatus { get; set; }
         public string DealStage { get; set; }

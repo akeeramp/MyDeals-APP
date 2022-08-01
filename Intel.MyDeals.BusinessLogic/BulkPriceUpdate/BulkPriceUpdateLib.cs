@@ -153,6 +153,14 @@ namespace Intel.MyDeals.BusinessLogic
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
             }
 
+            if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.TrackerEffectiveStartDate)) 
+            {
+                // RedealNoEarlierThenPrevious check the date entered by user and raises validation error is needed.  Might wish to put additional safety checks ehre later if needed.
+                DateTime trackerEffectiveStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.TrackerEffectiveStartDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), trackerEffectiveStartDate.ToString("MM/dd/yyyy"));
+                UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_BY), OpUserStack.MyOpUserToken.Usr.WWID.ToString());
+            }
+
             string additionalTermsAndConditions = bulkPriceUpdateRecord.AdditionalTermsAndConditions;
             UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.TERMS), additionalTermsAndConditions);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.TERMS), additionalTermsAndConditions);
