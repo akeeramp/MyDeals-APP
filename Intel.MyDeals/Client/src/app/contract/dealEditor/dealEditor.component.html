@@ -1,36 +1,48 @@
 ﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
+            <span><i class="intelicon-pin-outlined " title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             {{data.name}} &nbsp;
             <span class="badge error ng-binding" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
             <span class="badge warning" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
             <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
         </ng-template>
         <ng-template kendoTabContent>
-            <button class="btn btn-sm btn-save ssToolbarBtn saveButton" ssToolbarBtn (click)="SaveDeal()">
-                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                <span class="text">
-                    Save & Validate
-                </span>
-            </button>
+            <div class="fl">
+                <button class="btn btn-sm btn-save ssToolbarBtn notdirty" ssToolbarBtn (click)="SaveDeal()">
+                    <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px; color: #abababd1;"></i>
+                    <span class="text hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #abababd1;">
+                        Save & Validate
+                    </span>
+                </button>
+            </div>
             <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                         [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                         [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
-                        filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
+                        filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
+                        class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
+                        style="width: 320px; height: 354.788px;" data-role="grid">
                 <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                    [locked]="column.locked == true" width="{{column.width}}">
                     <ng-template kendoGridHeaderTemplate>
                         <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" (selectAllData)="clkAllItems($event)"></deal-editor-header>
                     </ng-template>
-                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate class="uiControlDiv isReadOnlyCell" style="color: #0071C5; cursor: pointer; width: 1062.67px;">
                         <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [(contract_Data)]="contractData"></deal-editor-cell>
                     </ng-template>
-                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" style="font:10px;">
+                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" class="uiControlDiv isReadOnlyCell" style="font:10px;">
                         <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses"></deal-editor-edit>
                     </ng-template>
                 </kendo-grid-column>
             </kendo-grid>
         </ng-template>
     </kendo-tabstrip-tab>
-
+    <kendo-tabstrip-tab [disabled]="true" width="100"></kendo-tabstrip-tab>
+        <kendo-tabstrip-tab [disabled]="true">
+            <ng-template kendoTabTitle>
+                <div class="fr dealTag ng-binding" style=" font-weight:bold; top: 0; right: 0; z-index: 100; font-size: 16px;">
+                    {{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals
+                </div>
+            </ng-template>
+        </kendo-tabstrip-tab>
 </kendo-tabstrip>

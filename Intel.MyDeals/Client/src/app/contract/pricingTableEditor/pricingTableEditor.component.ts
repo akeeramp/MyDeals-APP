@@ -28,6 +28,7 @@ import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { lnavUtil } from '../lnav.util';
+import { Tender_Util } from '../PTEUtils/Tender_util';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -229,14 +230,7 @@ export class pricingTableEditorComponent implements OnChanges {
             // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
-            if (this.isTenderContract) {
-                for (var p = 0; p < response.PRC_TBL_ROW.length; p++) {
-                    var item = response.PRC_TBL_ROW[p];
-                    if (item !== undefined && item.PTR_SYS_PRD === "") {
-                        item.dirty = true;
-                    }
-                }
-            }
+            Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
             vm.pricingTableDet = response;
             return response.PRC_TBL_ROW;
         } else {
@@ -701,6 +695,7 @@ export class pricingTableEditorComponent implements OnChanges {
         });
     }
     ngOnInit() {
+        this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         //code for autofill change to accordingly change values
         this.pteService.autoFillData.subscribe(res => {
             this.autoFillData = res;

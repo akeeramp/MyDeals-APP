@@ -4,18 +4,22 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
 <div *ngIf="isDataAvaialable" class="meetComp-show-hide">
-    <div id="meetCompOvrrd" class="col-md-12">
+    <div id="meetCompOvrrd" class="col-md-12" style="padding-top: 40px !important">
         <div style="margin-bottom:4px">
             <button class="btn btn-sm ssToolbarBtn fl" style="padding: 5px 0px;" (click)="saveAndRunMeetComp()">
                 <table>
                     <tbody>
-                        <tr>
+                        <tr style="border-bottom:none;">
                             <td>
-                                <div class="btn btn-skyblue-sm"><i class="fa fa-refresh fa-fw iconRunPct"
-                                        style="font-size: 20px"></i></div>
+                                <div class="btn btn-skyblue-sm">
+                                    <i class="fa fa-refresh fa-fw iconRunPct"
+                                       style="color:#fff; font-size: 25px"></i>
+                                </div>
                             </td>
-                            <td class="skyblue-text" style="padding-left: 5px; text-align: left; font-size: 12px;">Save
-                                &amp; Validate<br>Meet Comp </td>
+                            <td class="skyblue-text" style="padding-left: 5px; text-align: left; font-size: 15px;">
+                                Save
+                                &amp; Validate<br>Meet Comp
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -85,7 +89,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
+                        <div style="padding-left: 5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
                     </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
                         <kendo-combobox #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
@@ -102,7 +106,7 @@
                         <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">
                             <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc"></div>
                             <ng-template #comp_prc>
-                                <div>${{dataItem.COMP_PRC}} </div>
+                                <div style="padding-left: 5px;">${{dataItem.COMP_PRC}} </div>
                             </ng-template>
                         </div>
                     </ng-template>
@@ -238,41 +242,41 @@
                         <!-- CHILD GRID BEGINS -->
                         <kendo-grid [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
                             (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
-                            <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="150">
+                            <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.OBJ_SET_TYPE}}">{{dataItem.OBJ_SET_TYPE}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="120">
+                            <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell'>{{dataItem.DEAL_OBJ_SID}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="150">
+                            <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.DEAL_DESC}}">{{dataItem.DEAL_DESC}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="END_CUST_RETAIL" title="End Customer/Retail" width="170">
+                            <kendo-grid-column field="END_CUST_RETAIL" title="End Customer/Retail" width="170" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.END_CUST_RETAIL}}">{{dataItem.END_CUST_RETAIL}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170">
+                            <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
+                                    <div style="padding-left:5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
                                 </ng-template>
                                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
                                     <kendo-combobox #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
                                         [allowCustom]="true" [valueNormalizer]="valueNormalizerCompSku" (valueChange)="onCompSkuChange($event,dataItem)"></kendo-combobox>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="150">
+                            <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">
                                         <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc_c"></div>
                                         <ng-template #comp_prc_c>
-                                            <div>${{dataItem.COMP_PRC}} </div>
+                                            <div style="padding-left:5px;">${{dataItem.COMP_PRC}} </div>
                                         </ng-template>
                                     </div>
                                 </ng-template>
@@ -281,7 +285,7 @@
                                         placeholder="Select Comp PRC" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompPrc" (valueChange)="onCompPriceChange($event,dataItem)"></kendo-combobox>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="CAP" title="CAP" width="120">
+                            <kendo-grid-column field="CAP" title="CAP" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.CAP==0;else cap_c" class="readOnlyCell" title="0"></div>
                                     <ng-template #cap_c>
@@ -290,7 +294,7 @@
                                     </ng-template>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="IA_BNCH" title="IA Bench" width="120">
+                            <kendo-grid-column field="IA_BNCH" title="IA Bench" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) )}">
                                         <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch">
@@ -304,7 +308,7 @@
                                     <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.IA_BNCH" [min]="0" (valueChange)="onIaBnchChange($event,dataItem)"></kendo-numerictextbox>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="120">
+                            <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) )}">
                                         <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch">
@@ -318,48 +322,48 @@
                                     <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.COMP_BNCH" [min]="0" (valueChange)="onCompBnchChange($event,dataItem)"></kendo-numerictextbox>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column [hidden]="hideViewMeetCompResult" field="MEET_COMP_STS" title="Test Results" width="120">
+                            <kendo-grid-column [hidden]="hideViewMeetCompResult" [headerClass]="{'headerClass':true}" field="MEET_COMP_STS" title="Test Results" width="120">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class='readOnlyCell'>
                                         <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon"></icon-mct-pct-angular>
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="MC_AVG_RPU" title="Avg. Net Price" width="150">
+                            <kendo-grid-column field="MC_AVG_RPU" title="Avg. Net Price" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}">{{dataItem.MC_AVG_RPU}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_FLG" title="Analysis Override" width="150">
+                            <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_FLG" title="Analysis Override" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
                                         {{dataItem.COMP_OVRRD_FLG}}
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220">
+                            <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
                                         {{dataItem.COMP_OVRRD_RSN}}
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="BRND_FMLY" title="Brand / Family" width="120">
+                            <kendo-grid-column field="BRND_FMLY" title="Brand / Family" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.BRND_FMLY}}">{{dataItem.BRND_FMLY}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column title="Group Deals" width="150">
+                            <kendo-grid-column title="Group Deals" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.DEAL_DESC}}"></div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="150">
+                            <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell'>{{dataItem.MEET_COMP_ANALYSIS}}</div>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="ECAP_PRC" title="ECAP Price" width="120">
+                            <kendo-grid-column field="ECAP_PRC" title="ECAP Price" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.ECAP_PRC==0;else ecap_prc" class='readOnlyCell' title="0">
                                     </div>
@@ -369,7 +373,7 @@
                                     </ng-template>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column field="YCS2" title="YCS2 Price" width="120">
+                            <kendo-grid-column field="YCS2" title="YCS2 Price" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.YCS2==0;else ycs2_prc" class='readOnlyCell' title="0">
                                     </div>

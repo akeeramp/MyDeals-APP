@@ -13,6 +13,7 @@ import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
+import { Tender_Util } from '../PTEUtils/Tender_util';
 import { forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
@@ -47,6 +48,7 @@ export class dealEditorComponent {
     public templates: any;
     public selectedTab: any;
     private isDealToolsChecked: boolean = false;
+    public voltLength;
     private numSoftWarn = 0;
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
@@ -105,6 +107,7 @@ export class dealEditorComponent {
     getWipDealData() {
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+                this.voltLength = response.WIP_DEAL.length
                 this.gridResult = response.WIP_DEAL;
                 PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
                 PTE_Common_Util.clearBadegCnt(this.groups);
@@ -412,7 +415,7 @@ export class dealEditorComponent {
     ngOnInit() {
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
-        this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
+        this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         this.getGroupsAndTemplates();
         this.dropdownResponses = this.getAllDrowdownValues();
         this.selectedTab = "Deal Info";

@@ -2310,6 +2310,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Load_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Save_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Validation_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\Tender_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />

@@ -21,7 +21,8 @@ export class contractManagerComponent {
   
     }
     private color: ThemePalette = 'primary';
-     PCTResultView = false;
+    PCTResultView = false;
+    public submitModal = false;
     OtherType = []; isECAP = []; isKIT = []
     @Input() contractData:any;
     @Input() UItemplate:any;
@@ -40,11 +41,19 @@ export class contractManagerComponent {
     grid = { isECAPGrid: false, KITGrid: false, OtherGrid:false}
     public gridData: GridDataResult;
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
-    titleFilter = "";canActionIcon = true; public isAllCollapsed=true; canEdit = true;
-    toggleSum () {
-        this.contractData?.PRC_ST.map((x, i) => {
-            this.isPSExpanded[i] = !this.isPSExpanded[i]
-        });
+    titleFilter = ""; canActionIcon = true; public isAllCollapsed = false; canEdit = true;
+
+    toggleSum() {
+        if (this.isAllCollapsed == true) {
+            this.contractData?.PRC_ST.map((x, i) => {
+                this.isPSExpanded[i] = true;
+            });
+        }
+        if (this.isAllCollapsed == false) {
+            this.contractData?.PRC_ST.map((x, i) => {
+                this.isPSExpanded[i] = false;
+            });
+        }
         this.isAllCollapsed = !this.isAllCollapsed;
     }
 
@@ -173,7 +182,21 @@ export class contractManagerComponent {
             })
         }
     }
+    showingHelpTopicContract() {
+        const helpTopic = "Features";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+        }
+    }
 
+    public close(status: string): void {
+        this.submitModal = false;
+    }
+    submitContract(): void {
+        this.submitModal = true;
+    }
 
     ngOnInit() {
         this.userRole = (<any>window).usrRole;

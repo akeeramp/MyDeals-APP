@@ -647,9 +647,15 @@ export class lnavComponent {
         this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
     }
     toggleStrategyTree() {
-        this.contractData?.PRC_ST.map((x, i) => {
-            this.isPSExpanded[i] = !this.isPSExpanded[i];
-        });
+        if (this.strategyTreeCollapseAll == true) {
+            this.contractData?.PRC_ST.map((x, i) => {
+                this.isPSExpanded[i] = true;
+            });
+        } else {
+            this.contractData?.PRC_ST.map((x, i) => {
+                this.isPSExpanded[i] = false;
+            });
+        }
         this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
     }
     isExistingContract() {

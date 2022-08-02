@@ -134,7 +134,7 @@ tr:last-child > td {
     background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%);
     background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
     color: #003C71 !important;
-    padding: 0.6em !important;
+    padding: 0.8em !important;
     text-transform: none !important;
     background-color: #fff;
     border-bottom-width: 0;
@@ -151,6 +151,7 @@ tr:last-child > td {
     border-right-width: 1px;
     border-bottom-width: 0;
     border-radius: 4px 4px 0 0;
+    color: #00AEEF !important;
 }
 
 .displayBlock {
@@ -168,6 +169,9 @@ tr:last-child > td {
 .text {
     display: inline-flex;
     padding: 0px 5px;
+    font-size: 11px !important;
+    font-weight: 200;
+    line-height: 1em;
 }
 
 .textRightAlign {
@@ -238,3 +242,153 @@ tr:last-child > td {
 .bigIcon {
     font-size: 26px;
 }
+.k-hstack {
+    height: 37px;
+    font-size: 14px;
+    font-family: "Intel Clear";
+}
+
+.op-grid-container {
+    height: 100%;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.k-pager-wrap {
+    background-color: #ffffff;
+}
+
+.op-grid .k-pager-wrap {
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+}
+
+.k-webkit .k-pager-wrap {
+    min-height: 2.56em;
+}
+
+.op-grid.k-grid {
+    width: 100% !important;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent;
+    border-bottom: 0 solid transparent;
+    border-right: 1px solid #e6e6e6;
+    border-left: 1px solid #e6e6e6;
+}
+
+.opUiContainer.md {
+    font-size: 12px;
+}
+
+.k-grid {
+    box-shadow: none;
+    position: relative;
+    zoom: 1;
+}
+
+.k-grid-lockedcolumns {
+    white-space: nowrap;
+}
+
+/*#dealEditor > .k-auto-scrollable {
+    min-height: 60px;
+    min-width: 60px;
+}*/
+
+.op-grid.k-grid .k-grid-header, .op-grid.k-grid .k-grid-content {
+    border-right: 1px solid #e6e6e6;
+}
+
+.k-grid-content-locked + .k-grid-content {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.k-grid-content {
+    zoom: 1;
+}
+
+.op-grid.k-grid .uiControlDiv {
+    height: 100%;
+}
+
+.op-grid .uiControlDiv {
+    padding: 4px 8px;
+    min-height: 20px;
+}
+
+.uiControlDiv {
+    border: 1px solid transparent;
+}
+
+.isReadOnlyCell {
+    color: #000 !important;
+    background-color: rgba(0,0,0,.05) !important;
+}
+
+.k-link:active {
+    color: white !important;
+}
+
+.k-header, .headerClass, .k-touch-action-none, .k-filterable, .k-grid-draggable-header {
+    background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
+}
+
+.k-grid table {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.col-md-12 {
+    padding: 0 !important;
+}
+
+.gradTab.k-tabstrip .k-tabstrip-items .k-state-active .k-link {
+    color: #00AEEF;
+}
+
+.opUiContainer.md.k-grid td {
+    font-size: 12px !important;
+    height: 33px !important;
+}
+
+.dealTools {
+    margin-top: 38px;
+}
+
+.k-label {
+    padding: 1px;
+    min-width: 7px;
+    display: inline-block;
+}
+
+.op-grid.k-grid .k-grid-header .k-header .k-link {
+    font-weight: 600;
+}
+
+.op-grid.k-grid .k-grid-filter .k-icon.k-i-filter {
+    color: #00AEEF;
+    opacity: 1;
+}
+
+.intelicon-protection-solid {
+    font-size: 20px;
+}
+
+.op-grid.k-grid .k-grid-header th.k-header {
+    vertical-align: top;
+}
+
+.k-state-disabled {
+    opacity: 1 !important;
+}
+
+.k-cell-inner {
+    font-size: 11px !important;
+}
+.dealCell {
+    height: 100% !important;
+    width: 100% !important;
+}
+

@@ -1,10 +1,13 @@
-<div style="font-size: 14px; line-height: 1.1em; text-align: center; position: absolute; top: 28px; right: 18px;"><span style="color: #0071C5; padding-right:3px">Customer Acceptance</span><span id="toggle-container" title="click to change Contract Acceptance Criteria">
-    <kendo-switch [(ngModel)]="checked" onLabel="Accepted" offLabel="Pending" style="width: 100px;"></kendo-switch>
-    <!--<mat-slide-toggle [color]="color" [checked]="checked" ></mat-slide-toggle>-->
-</span></div>
-<div id="sum-wrapper">
-    <div id="sum-header" style="min-width: 800px;">
-        <div class="sum-filter-bar" style="padding: 0 10px;">
+<div style="font-size: 14px; line-height:2.9em; text-align: center; position: absolute; top: 16px; right:60px;">
+    <span style="color: #0071C5; padding-right:22px">Customer Acceptance</span><span id="toggle-container" title="Click to Change Contract Acceptance Criteria">
+        <kendo-switch [(ngModel)]="checked" onLabel="Accepted" offLabel="Pending" style="width:100px;"></kendo-switch>
+        <!--<mat-slide-toggle [color]="color" [checked]="checked" ></mat-slide-toggle>-->
+    </span>
+</div>
+
+<div id="sum-wrapper" style="overflow:hidden">
+    <div id="sum-header" style="min-width: 800px;height:106px">
+        <div class="sum-filter-bar" style="padding: 1px 10px;">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()" title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All'}}" [ngClass]="{'rotate-90': !isAllCollapsed}"><i class="chevron linkable intelicon-fast-forward" data-toggle="collapse" data-target=".multi-collapse"></i></td>
@@ -18,28 +21,41 @@
                         <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div><input type="checkbox" name="allRadGrp" class="with-font" id="all_rad_email" (click)="clkAllRow($event, 'Email')" [(ngModel)]="emailCheckBox" /><label for="all_rad_email"></label>
                     </td>
                     <td style="width: 100px; text-align: center;" nowrap>
-                        <div class="btn-group"><button class="btn btn-sm btn-skyblue" type="button" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #0071C5"><i
-                                    class="fa fa-filter" aria-hidden="true" style="font-size: 18px;"></i></button>
-                            <button class="btn btn-sm btn-skyblue dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown" style="margin-top: -2px;"><span class="caret"></span><span
-                                    class="sr-only">Toggle Dropdown</span></button>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-skyblue" type="button" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #000 !important">
+                                <i class="fa fa-filter" aria-hidden="true" style="font-size: 18px;"></i>
+                            </button>
+                            <button class="btn btn-sm btn-skyblue dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown" style="margin-top: -2px;">
+                                <span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
+                            </button>
                             <div class="dropdown-menu" role="menu">
                                 <div *ngFor="let ps of contractData.PRC_ST | unique:'WF_STG_CD' | orderBy:'WF_STG_CD'">
-                                    <input type="checkbox" class="with-font" id="item{{ps.DC_ID}}" [(ngModel)]="ps.filtered" /><label for="item{{ps.DC_ID}}">{{ps.WF_STG_CD}}</label></div>,
+                                    <input type="checkbox" class="with-font" id="item{{ps.DC_ID}}" [(ngModel)]="ps.filtered" /><label for="item{{ps.DC_ID}}">{{ps.WF_STG_CD}}</label>
+                                </div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <div class="fr helpBtn" title="Help" (click)="showHelpTopic(HelpTopicEnum.ContractManager_Features);"><i class="intelicon-help" style="font-size:30px !important"></i></div>
+                        <div class="fr helpBtn" title="Help" (click)="showingHelpTopicContract()"><i class="intelicon-help" style="font-size:30px !important"></i></div>
                     </td>
                     <td style="width: 50px; text-align: center;"></td>
                     <td>
-                        <span class="k-textbox k-space-left" style="width: 300px; margin-top: -4px;">
+                        <span class="k-textbox" style="width: 300px; margin-top: -4px;">
                             <i class="intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i>
-                            <input style="width: 290px;" placeholder="Search for Pricing Strategy or Pricing Table" [(ngModel)]="titleFilter"/>
+                            <input style="width: 290px;border:none" placeholder="Search for Pricing Strategy or Pricing Table" [(ngModel)]="titleFilter" />
                         </span>
                     </td>
-                    <td style="width: 500px; text-align: right; padding-right: 2px;">
-                        <div class="dropdown clearfix fr" style="padding-top: 5px;"><button class="btn btn-skyblue dropdown-toggle" id="dropActionss" type="button" (click)="actionItems()" title="Submit Approval, Revision and Cancel requests or send an email" *ngIf="canEdit">Submit</button></div>
+                    <td style="width:500px;text-align:right;padding-right:2px;">
+                        <div class="dropdown clearfix fr" style="padding-top:5px;">
+                            <button kendoButton class="btn btn-skyblue dropdown-toggle" id="dropActionss" type="button" (click)="submitContract()" title="Submit Approval, Revision and Cancel requests or send an email"
+                                    *ngIf="!submitModal">
+                                Submit
+                            </button>
+                            <kendo-dialog *ngIf="submitModal" (close)="close('cancel')" [width]="350">
+                                <p style="margin:30px; text-align: center; font-size:17px">No Pricing Strategies were selected.</p>
+                                <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
+                            </kendo-dialog>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -49,20 +65,45 @@
                 <tr>
                     <td style="width: 30px;">&nbsp;</td>
                     <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" *ngIf="canEdit">
-                        Approve</td>
-                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" *ngIf="canEdit">Revise
+                        Approve
                     </td>
-                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" *ngIf="canEdit">Email
+                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" *ngIf="canEdit">
+                        Revise
+                    </td>
+                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" *ngIf="canEdit">
+                        Email
                     </td>
                     <td style="width: 100px; text-align: center;">Stage</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td style="line-height: 1.1em;">Pricing Strategy / Pricing Table</td>
                     <td style="width: 150px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'">
                         <div title='Deals missing Cost and/or CAP cannot be approved by Division Approvers until the missing data has been added. For urgent issues, contact TAC.'>
-                            Missing Cost/CAP</div>
+                            Missing Cost/CAP
+                        </div>
                     </td>
-                    <td style="width: 160px; text-align: center;">Price Cost Test </td>
-                    <td style="width: 160px; text-align: center;">Meet Comp Test </td>
+                    <td style="width: 160px; text-align: center; ">
+                        <div title='Execute Price Cost Test and Meet Comp Test'
+                             class="btn btn-skyblue-sm" style="padding-left:100px">
+                            <i class="fa fa-refresh fa-fw iconRunPct" style="color:#fff; font-size:20px;"></i>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Price Cost Test
+                        <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height: 0.01em; margin-left: 54px">
+                            Last Run: 33 mins ago
+                        </div>
+                    </td>
+
+                    <td style="width: 160px; text-align: center;">
+                        <div title='Execute Price Cost Test and Meet Comp Test ' class="btn btn-skyblue-sm">
+                            <i class="fa fa-refresh fa-fw iconRunPct" style="color:#fff; font-size:20px"></i>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        Meet Comp Test
+                        <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height:0.01em;margin-left:48px;">
+                            Last Run: 33 mins ago
+                        </div>
+
+                    </td>
                 </tr>
             </table>
             <hr />
@@ -74,15 +115,20 @@
                 <div *ngFor="let ps of contractData?.PRC_ST | filter:titleFilter ;let psIndex=index" class="sumPsContainer">
                     <table style="width: 100%;">
                         <tr>
-                            <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}" (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]"><i class="chevron linkable collapseALL" data-toggle="collapse" [attr.data-target]="'#PSData_'+ psIndex" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
+                            <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}" (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
+                                <i class="chevron linkable collapseALL" data-toggle="collapse" [attr.data-target]="'#PSData_'+ psIndex" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" *ngIf="canEdit">
-                                <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [hidden]="!(ps.WF_STG_CD !=='Pending')"><input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
-                                        id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event)" /><label for="rad_approve_{{ps.DC_ID}}"></label></div>
+                                <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [hidden]="!(ps.WF_STG_CD !=='Pending')">
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
+                                           id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
+                                </div>
                             </td>
                             <td style="width: 50px; text-align: center;" *ngIf="canEdit">
-                                <div *ngIf="canAction('Revise', ps, true) && canActionIcon && hasVertical(ps)" title="{{actionReason('Revise', ps)}}"><input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)" class="with-font psCheck psCheck-Revise"
-                                        id="rad_revise_{{ps.DC_ID}}" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}" (click)="onCheckboxChange('reviseCheckBox',$event)"></label></div>
+                                <div *ngIf="canAction('Revise', ps, true) && canActionIcon && hasVertical(ps)" title="{{actionReason('Revise', ps)}}">
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)" class="with-font psCheck psCheck-Revise"
+                                           id="rad_revise_{{ps.DC_ID}}" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}" (click)="onCheckboxChange('reviseCheckBox',$event)"></label>
+                                </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
                                 <div *ngIf="canEmailIcon && hasVertical(ps)" title="email pricing strategy"><input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="emailCheck[ps.DC_ID]" class="with-font psCheck psCheck-Email" id="rad_email_{{ps.DC_ID}}" (click)="onCheckboxChange('emailCheckBox',$event)" /><label for="rad_email_{{ps.DC_ID}}"></label></div>
@@ -92,43 +138,50 @@
                                     <div [textContent]="ps.WF_STG_CD || 'no stage'" [ngStyle]="getStageBgColorStyle(ps.WF_STG_CD)"></div>
                                 </div>
                             </td>
-                            <td style="width: 50px; text-align: center;"><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                    *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
+                            <td style="width: 50px; text-align: center;">
+                                <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
+                                                                                                                                                                                                                 *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-alert-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Dirty'" title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors: Fix in Deal Editor' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
                                 <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                             </td>
                             <td>
                                 <div [textContent]="ps.TITLE" class="bolder linkable" title="Click to open the{{psTitle}} in the{{contractType}} Editor"></div>
                             </td>
-                            <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'"><i *ngIf="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid bigIcon"></i><i *ngIf="ps.CAP_MISSING_FLG==='1' || ps.COST_MISSING_FLG==='1'" style="color:#f3d54e"
-                                    class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
+                            <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA' || userRole=='SA'">
+                                <i *ngIf="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'"></i><i *ngIf="ps.CAP_MISSING_FLG==='1' || ps.COST_MISSING_FLG==='1'" style="color:#f3d54e"
+                                                                                                          class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
                             <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.COST_TEST_RESULT" [dataValue]="ps.COST_TEST_RESULT" [canEdit]="CAN_EDIT_COST_TEST" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
-                            <td  class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
+                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP">
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.MEETCOMP_TEST_RESULT" [dataValue]="ps.MEETCOMP_TEST_RESULT" [canEdit]="CAN_VIEW_MEET_COMP" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
                         </tr>
                     </table>
                     <div *ngFor="let pt of ps.PRC_TBL;let i=index">
-                        <div class="collapse multi-collapse" id="PSData_{{psIndex}}">
+                        <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : isAllCollapsed}">
                             <table style="width: 100%; ">
                                 <tr id="detail_{{pt.DC_ID}}">
                                     <td style="width: 20px;" *ngIf="canEdit"></td>
-                                    <td style="width: 271px; height: 30px; text-align: right;" *ngIf="canEdit"><i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID" (click)="isPTExpanded[pt.DC_ID]=!isPTExpanded[pt.DC_ID]; togglePt(pt)" [ngClass]="{'intelicon-down': isPTExpanded[pt.DC_ID], 'intelicon-right-next': !isPTExpanded[pt.DC_ID]}"></i>
+                                    <td style="width: 271px; height: 30px; text-align: right;" *ngIf="canEdit">
+                                        <i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID" (click)="isPTExpanded[pt.DC_ID]=!isPTExpanded[pt.DC_ID]; togglePt(pt)" [ngClass]="{'intelicon-down': isPTExpanded[pt.DC_ID], 'intelicon-right-next': !isPTExpanded[pt.DC_ID]}"></i>
                                     </td>
                                     <td style="width: 30px; height: 30px; text-align: right;" (click)="isPtCollapsed=!isPtCollapsed; togglePt( pt)" [hidden]="canEdit">
-                                        <button class="chevron linkable" type="button" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+'{{pt.DC_ID}}'" (click)="togglePt( pt)"></button></td>
+                                        <button class="chevron linkable" type="button" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+'{{pt.DC_ID}}'" (click)="togglePt( pt)"></button>
+                                    </td>
                                     <td style="width: 50px; padding-left: 17px;">
                                         <div class="textCircle{{ pt.WIP_WORK_FLG==='1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION}}" title="{{ (pt.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet'}}{{pt.WIP_WORK_FLG==='1' ? ' - Some deals still require attention': ''}}">
-                                            {{ pt.OBJ_SET_TYPE_CD | slice:0:1}} </div>
+                                            {{ pt.OBJ_SET_TYPE_CD | slice:0:1}}
+                                        </div>
                                     </td>
                                     <td>
                                         <div [textContent]="pt.TITLE" class="bold linkable" title="Click to open the{{ptTitle}} in the{{contractType}} Editor"></div>
                                     </td>
-                                    <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA'"><i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e"
-                                            title="{{getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i></td>
+                                    <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA'">
+                                        <i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e"
+                                                                                                                                                                                         title="{{getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
+                                    </td>
                                     <td class="medIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
                                         <a class="lnkIcon" [ngClass]="{'noPointer': !CAN_EDIT_COST_TEST}">
                                             <icon-mct-pct-angular ngDefaultControl [dataValue]="pt.COST_TEST_RESULT" [(ngModel)]="pt.COST_TEST_RESULT" [canEdit]='CAN_EDIT_COST_TEST' [iconClass]="medIcon"></icon-mct-pct-angular>
@@ -150,19 +203,22 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Id" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120" [locked]="true">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        <div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation:{{ (dataItem.PASSED_VALIDATION==="Dirty" ? "Validation Errors" : dataItem.PASSED_VALIDATION) || "Not validated yet"}}'
-                                                                [ngClass]='{ "intelicon-protection-solid": (dataItem.PASSED_VALIDATION===undefined || dataItem.PASSED_VALIDATION===""), "intelicon-protection-checked-verified-solid": (dataItem.PASSED_VALIDATION==="Complete"), "intelicon-protection-solid intelicon-alert-solid": (dataItem.PASSED_VALIDATION==="Dirty")}'></i>{{dataItem.DC_ID}}
+                                                        <div class='dealLnk'>
+                                                            <i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation:{{ (dataItem.PASSED_VALIDATION==="Dirty" ? "Validation Errors" : dataItem.PASSED_VALIDATION) || "Not validated yet"}}'
+                                                               [ngClass]='{ "intelicon-protection-solid": (dataItem.PASSED_VALIDATION===undefined || dataItem.PASSED_VALIDATION===""), "intelicon-protection-checked-verified-solid": (dataItem.PASSED_VALIDATION==="Complete"), "intelicon-protection-solid intelicon-alert-solid": (dataItem.PASSED_VALIDATION==="Dirty")}'></i>{{dataItem.DC_ID}}
                                                         </div>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Tracker Number" field="TRKR_NBR" [headerClass]="{'headerClass':true}" [width]="160" [locked]="true">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span [innerHtml]="concatDimElements(dataItem,'TRKR_NBR')"></span>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span [innerHtml]="concatDimElements(dataItem,'TRKR_NBR')"></span>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Type" field="OBJ_SET_TYPE_CD" [headerClass]="{'headerClass':true}" [width]="100">
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Start/End" field="START_DT" [headerClass]="{'headerClass':true}" [width]="175">
-                                                    <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.START_DT | date: 'M/d/yyyy'}}-{{dataItem?.END_DT | date: 'M/d/yyyy'}}
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{dataItem.START_DT | date: 'M/d/yyyy'}}-{{dataItem?.END_DT | date: 'M/d/yyyy'}}
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="OEM Platform Launch Date" [width]="170" field="OEM_PLTFRM_LNCH_DT" [headerClass]="{'headerClass':true}" [hidden]="!OtherType[pt.DC_ID]">
@@ -170,7 +226,8 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="OEM Platform EOL Date" [width]="170" field="OEM_PLTFRM_EOL_DT" [headerClass]="{'headerClass':true}" [hidden]="!OtherType[pt.DC_ID]">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        {{dataItem.OEM_PLTFRM_EOL_DT | date: 'M/d/yyyy'}} </ng-template>
+                                                        {{dataItem.OEM_PLTFRM_EOL_DT | date: 'M/d/yyyy'}}
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Product" field="TITLE" [headerClass]="{'headerClass':true}" [width]="120">
                                                 </kendo-grid-column>
@@ -181,46 +238,51 @@
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <span>
                                                             {{getFormatedDim(dataItem, 'CAP', '20_____1', 'currency')}}
-                                                        </span></ng-template>
+                                                        </span>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]">
-                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'CAP', '20___0', 'currency')}}
-                                                        </span></ng-template>
-                                                    < </kendo-grid-column>
-                                                        <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]">
-                                                            <ng-template kendoGridCellTemplate let-dataItem><span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20___0','currency')}}</span></ng-template>
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]">
-                                                            <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT', '20___0','currency')}}</span></ng-template>
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="KIT YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]">
-                                                            <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT','20_____1', 'currency')}}</span></ng-template>
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="120">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Cost Test Result" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}" [width]="130">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Comp SKU" field="COMP_SKU" [headerClass]="{'headerClass':true}" [width]="100">
-                                                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMP_SKU', '20___0','string')}}</span></ng-template>
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Comp Price" field="COMPETITIVE_PRICE" [headerClass]="{'headerClass':true}" [width]="100">
-                                                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMPETITIVE_PRICE','20___0', 'currency')}}</span></ng-template>
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Meet Comp Test Result" field="MEETCOMP_TEST_RESULT" [headerClass]="{'headerClass':true}" [width]="140">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]"></kendo-grid-column>
-                                                        <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="100">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="OtherType[pt.DC_ID]"></kendo-grid-column>
-                                                        <kendo-grid-column title="End Customer" field="END_CUSTOMER_RETAIL" [headerClass]="{'headerClass':true}" [width]="150" [hidden]="OtherType[pt.DC_ID]"></kendo-grid-column>
-                                                        <kendo-grid-column title="Deal Description" field="DEAL_DESC" [headerClass]="{'headerClass':true}" [width]="150">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="100">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Expired" field="EXPIRE_FLG" [headerClass]="{'headerClass':true}" [width]="100">
-                                                        </kendo-grid-column>
-                                                        <kendo-grid-column title="Attachments" field="HAS_ATTACHED_FILES" [headerClass]="{'headerClass':true}" [width]="120">
-                                                        </kendo-grid-column>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span>
+                                                            {{getFormatedDim(dataItem, 'CAP', '20___0', 'currency')}}
+                                                        </span>
+                                                    </ng-template>
+                                                    <
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]">
+                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20___0','currency')}}</span></ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]">
+                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT', '20___0','currency')}}</span></ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="KIT YCS2" field="YCS2_PRC_IRBT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]">
+                                                    <ng-template kendoGridCellTemplate let-dataItem><span>{{getFormatedDim(dataItem, 'YCS2_PRC_IRBT','20_____1', 'currency')}}</span></ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="120">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Cost Test Result" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}" [width]="130">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Comp SKU" field="COMP_SKU" [headerClass]="{'headerClass':true}" [width]="100">
+                                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMP_SKU', '20___0','string')}}</span></ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Comp Price" field="COMPETITIVE_PRICE" [headerClass]="{'headerClass':true}" [width]="100">
+                                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"><span>{{getFormatedDim(dataItem, 'COMPETITIVE_PRICE','20___0', 'currency')}}</span></ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Meet Comp Test Result" field="MEETCOMP_TEST_RESULT" [headerClass]="{'headerClass':true}" [width]="140">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]"></kendo-grid-column>
+                                                <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="100">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="OtherType[pt.DC_ID]"></kendo-grid-column>
+                                                <kendo-grid-column title="End Customer" field="END_CUSTOMER_RETAIL" [headerClass]="{'headerClass':true}" [width]="150" [hidden]="OtherType[pt.DC_ID]"></kendo-grid-column>
+                                                <kendo-grid-column title="Deal Description" field="DEAL_DESC" [headerClass]="{'headerClass':true}" [width]="150">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="100">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Expired" field="EXPIRE_FLG" [headerClass]="{'headerClass':true}" [width]="100">
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Attachments" field="HAS_ATTACHED_FILES" [headerClass]="{'headerClass':true}" [width]="120">
+                                                </kendo-grid-column>
                                             </kendo-grid>
                                         </div>
                                     </div>
