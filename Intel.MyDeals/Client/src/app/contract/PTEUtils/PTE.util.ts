@@ -166,6 +166,7 @@ export class PTEUtil {
     }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults:any, rowData:Array<any>): any {
+        let inValidProd:any[]=[]
         _.each(rowData,(data)=>{
             //setting PTR_SYS_PRD for valid products
             _.each(transformResults.ValidProducts,(val,DCID)=>{
@@ -192,7 +193,13 @@ export class PTEUtil {
                   }
               });
          });
-        return rowData;
+        //setting InValidProducts for corrector
+        _.each(transformResults.InValidProducts,(val,DCID)=>{
+            if(val.I && val.I.length>0){
+                inValidProd.push({DCID,Product:val.I.toString()});
+              }
+            });
+         return {rowData,inValidProd};
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
        //this code will help us to identify uniq entry in case of tier

@@ -22,6 +22,7 @@ import { endCustomerRetailModalComponent } from "../contract/ptModals/dealEditor
 import { RenameTitleComponent } from "../contract/ptModals/renameTitle/renameTitle.component";
 import { managerExcludeGroupsComponent } from "../contract/managerExcludeGroups/managerExcludeGroups.component";
 import { excludeDealGroupModalDialog } from "../contract/managerExcludeGroups/excludeDealGroupModal.component";
+import { ProductCorrectorComponent } from "../contract/ptModals/productCorrector/productcorrector.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -46,5 +47,6 @@ export let contractComponents = [
     endCustomerRetailModalComponent,
     RenameTitleComponent,
     managerExcludeGroupsComponent,
-    excludeDealGroupModalDialog
+    excludeDealGroupModalDialog,
+    ProductCorrectorComponent
 ]

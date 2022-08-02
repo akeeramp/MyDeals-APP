@@ -12,8 +12,10 @@ import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sh
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
+import { ProductCorrectorComponent } from '../ptModals/productCorrector/productcorrector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
 import { multiSelectModalComponent } from '../ptModals/multiSelectModal/multiSelectModal.component';
+
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
@@ -587,24 +589,35 @@ export class pricingTableEditorComponent implements OnChanges {
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
-        let updatedPTR = PTR;
+        let updatedPTRObj:any = null;
         if (translateResult) {
-            updatedPTR = PTEUtil.cookProducts(translateResult['Data'], PTR);
-        }
-        //Calling to bind the cook result of success or failure
-        this.generateHandsonTable(updatedPTR);
-        if(action=='onSave'){
-            //since the errors are binding from cook products check for any error
-            isPrdValid=_.find(updatedPTR,(x)=>{
-                if(x._behaviors && x._behaviors.isError){
-                    return _.contains(_.values(x._behaviors.isError),true)
+            updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
+            //Calling to bind the cook result of success or failure
+            this.generateHandsonTable(updatedPTRObj.rowData);
+            if(updatedPTRObj.inValidProd && updatedPTRObj.inValidProd.length>0){
+                // Product corrector if invalid products
+                this.isLoading = false;
+                this.openProductCorrector(updatedPTRObj.inValidProd)
+            }
+            else{
+                if(action=='onSave'){
+                    //since the errors are binding from cook products check for any error
+                    isPrdValid=_.find(updatedPTRObj.rowData,(x)=>{
+                        if(x._behaviors && x._behaviors.isError){
+                            return _.contains(_.values(x._behaviors.isError),true)
+                        }
+                    });
+                    this.isLoading = false;
+                    //the result can have both valid and invalid so any failure it should fail to save
+                    return isPrdValid!=null?false:true;
                 }
-            });
-            this.isLoading = false;
-            //the result can have both valid and invalid so any failure it should fail to save
-            return isPrdValid!=null?false:true;
+                else{
+                    this.isLoading = false;
+                }
+            }
         }
         else{
+            this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
             this.isLoading = false;
         }
     }
@@ -644,6 +657,19 @@ export class pricingTableEditorComponent implements OnChanges {
         }
 
         return transformResults;
+    }
+    openProductCorrector(inValidProd:any){
+        const dialogRef = this.dialog.open(ProductCorrectorComponent, {
+            height: '650px',
+            width: '1200px',
+            data: inValidProd,
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+               console.log(result);
+            }
+        });
     }
     openAutoFill() {
         let ptTemplate, custId, isVistex

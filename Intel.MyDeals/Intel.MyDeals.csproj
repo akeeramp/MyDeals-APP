@@ -868,6 +868,8 @@
     <Content Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.css" />
     <Content Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\productSelector\productselector.component.html" />
+	<Content Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.html" />
+	<Content Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.css" />
     <Content Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.css" />
     <Content Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.html" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
@@ -2318,6 +2320,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.component.ts" />
+	 <TypeScriptCompile Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\prodSel_Util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.ts" />
