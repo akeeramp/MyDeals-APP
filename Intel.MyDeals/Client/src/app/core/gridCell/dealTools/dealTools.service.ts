@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
+import { SecurityService } from "../../../shared/services/security.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +13,11 @@ export class dealToolsService {
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
 
+    public chkDealRules(action, role, itemType, itemSetType, stage): boolean {
+        return this.securityService.chkDealRules(action, role, itemType, itemSetType, stage);
+    }
     public readContract(id): Observable<any>  {
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
         const apiUrl: string = this.apiBaseContractUrl + 'GetUpperContract/' + id;
@@ -24,5 +28,9 @@ export class dealToolsService {
     }
     public actionWipDeals(custId, contractId, data): Observable<any> {
         return this.httpClient.post(this.apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
+    }
+    public unGroupPricingTableRow(custId, contractId, ptrId) {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId
+        return this.httpClient.get(apiUrl);
     }
 }

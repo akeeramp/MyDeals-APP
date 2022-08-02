@@ -6,15 +6,14 @@
 <div class="dealTools">
     <div *ngIf="isPublishable != true">
         <div class="dirtyTip" *ngIf="dataItem._dirty" title="This deal has been modified"></div>
-        <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>        
-    
+        <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
+
         <!-- Checkbox -->
         <div class='fl' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (!(isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'))">
             <!-- ng-disabled="dataItem.SALESFORCE_ID !== ''" was another option, but visually couldn't change it from normal looking check box, so... -->
             <input type="checkbox" [(ngModel)]="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" />
             <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>
         </div>
-
         <!-- SalesForce Checkbox Disabled icon except for DA users -->
         <div class='fl md-icon' *ngIf="isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'">
             <i class="intelicon-minus-max" title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
@@ -51,7 +50,7 @@
             </div>
         </div>
 
-        <!-- History icon title="Click to view deal history"-->
+        <!-- History icon ng-attr-title="Click to view deal history"-->
         <div class='fl md-icon' *ngIf="isHistoryEnabled">
             <i class="intelicon-history" style="font-size: 20px !important;" title="View Deal History" (click)="clkHistoryIcon(dataItem)"></i>
         </div>
@@ -68,15 +67,7 @@
         <div class='fl md-icon-disabled' *ngIf="isQuoteLetterEnabled">
             <i *ngIf="!showQuote(dataItem)" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #e7e7e8;" title="Quote Letter not available"></i>
         </div>
-
-        <!-- NPSG DISABLE QUOTES CODE  -->
-        <!--<div class='fl md-icon' ng-if="(isQuoteLetterEnabled)">
-        <i ng-if="showQuote(dataItem) && !isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to download Quote Letter" ng-click="downloadQuoteLetter()"></i>
-        </div>-->
-            <!--<div class='fl md-icon-disabled' ng-if="(isQuoteLetterEnabled)">
-        <i ng-if="showQuote(dataItem) && isQuoteLetterVerticalRestricted" class='intelicon-quote' style="font-size: 20px !important; cursor: default; color: #ff0000;" title="Quote Letter not available due to Product Vertical Lockout [{{disableQuotesForVerticalsList}}]"></i>
-        </div>-->
-
+                
         <!-- SalesForce icon (ng-attr-title="Deal created in IQR")-->
         <div class='fl md-icon' *ngIf="isSalesForceDeal">
             <i class="intelicon-cloud-outlined" style="font-size: 20px !important;" title="IQR Deal"></i>

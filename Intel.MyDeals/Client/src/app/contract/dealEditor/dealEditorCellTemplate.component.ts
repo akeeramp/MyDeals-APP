@@ -21,7 +21,8 @@ export class dealEditorCellTemplateComponent {
     @Input() in_Template: string = '';
     @Input() in_Deal_Type: string = '';
     @Input() in_DataItem: any = '';
-    @Input() contract_Data;
+    @Input() contract_Data: any = '';
+    @Input() grid_Data: any = '';
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private subKitEcapDim = "20_____2";

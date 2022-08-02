@@ -1,10 +1,11 @@
 ﻿import * as angular from "angular";
 import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-//import { logger } from 'src/app/shared/logger/logger';
+import { logger } from '../../../shared/logger/logger';
 import { GridUtil } from "../../../contract/grid.util";
 import { DE_Load_Util } from "../../../contract/DEUtils/DE_Load_util";
 import { dealToolsService } from '../dealTools/dealTools.service';
+import * as _ from 'underscore';
 
 @Component({
     providers: [dealToolsService],
@@ -15,12 +16,13 @@ import { dealToolsService } from '../dealTools/dealTools.service';
 })
 
 export class dealToolsComponent {
-    constructor(private dataService: dealToolsService) {
+    constructor(private dataService: dealToolsService, private loggerService: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() dataItem;
+    @Input() gridData;
     @Input() isSplitEnabled;
     @Input() isFileAttachmentEnabled;
     @Input() isHistoryEnabled;
@@ -33,6 +35,7 @@ export class dealToolsComponent {
     private isPublishable;
     private isDaUser;  
     private editable: boolean;
+    private C_VIEW_ATTACHMENTS: boolean= this.dataService.chkDealRules('C_VIEW_ATTACHMENTS', (<any>window).usrRole, null, null, null);
     private isTenderContract = false;
     private openSplitDialog = false;
     private fileItems = {
@@ -87,8 +90,12 @@ export class dealToolsComponent {
         }
     }
 
-    loadDealTools() {
-        this.dataItem._parentCnt = 1;//logic yet to make
+    loadDealTools() {        
+        let childParent = _.countBy(this.gridData, 'DC_PARENT_ID');
+        _.each(this.gridData, item => {
+            item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
+        });
+
         this.isTenderContract = this.dataItem["IS_TENDER"] == "1" ? true : false;
         if(typeof this.isTenderContract !== 'undefined') {
             this.isTenderContract = (this.isTenderContract == true);
@@ -110,26 +117,25 @@ export class dealToolsComponent {
         }
         if (!!this.isEditable)
             this.isEditable = false;
-        
+                
         // Swap IF statement to prevent IQR from having access to quote letters
         if (this.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem.OBJ_SET_TYPE_CD !== 'KIT')
             this.isQuoteLetterEnabled = false;
         
-        this.isDaUser = ((<any>window).usrRole === "DA");
-        this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
-        //this.dataItem._settings.C_DEL_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA");
+        this.isDaUser = ((<any>window).usrRole === "DA");//SalesForce Checkbox Disabled icon except for DA users
 
-        // This is taken from contract.controller.js line 105.  This definately is not coming in correctly from there..
+        this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
         this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem.SALESFORCE_ID === undefined || this.dataItem.SALESFORCE_ID === ""));
+
         if (this.dataItem._settings.C_DEL_DEALS === undefined || this.dataItem._settings.C_DEL_DEALS === false) {
             // In tenders screen for DA user, this is undefined but skipping over
             this.isDeleteEnabled = false;
         }
-        //P_S object is holding the Pricing Strategy ID with Pricing Strategy Status
-        this.dataItem.P_S = {};
+        //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
+        this.dataItem.PS = {};
         if (this.dataItem.PRC_ST) {
             for (let i = 0; i < this.dataItem.PRC_ST.length; i++) {
-                this.dataItem.P_S[this.dataItem.PRC_ST[i].DC_ID] = this.dataItem.PRC_ST[i].IS_HYBRID_PRC_STRAT;
+                this.dataItem.PS[this.dataItem.PRC_ST[i].DC_ID] = this.dataItem.PRC_ST[i].IS_HYBRID_PRC_STRAT;
             }
         }        
     }
@@ -149,8 +155,8 @@ export class dealToolsComponent {
     openSplit() {
         this.openSplitDialog = true;        
     }
-    doSplit() {
-        //this.unGroupPricingTableRow(this.dataItem);
+    doSplit(dataItem) {
+        //migrate unGroupPricingTableRow() from contract controller with dataItem as parameter
     }
     openNotes() {
         //yet to migrate
@@ -160,13 +166,14 @@ export class dealToolsComponent {
     }
     // FILES Items
     getFileValue(dataItem) {
-        if (!this.dataItem._settings.C_VIEW_ATTACHMENTS) return "NoPerm";
+        if (!this.dataItem._settings.C_VIEW_ATTACHMENTS)
+            return "NoPerm";
         if (this.isFileAttachmentEnabled) {
             if (!this.dataItem.HAS_ATTACHED_FILES || this.dataItem.HAS_ATTACHED_FILES === '0') {
                 if (this.dataItem.PS_WF_STG_CD === 'Cancelled') return "CantAdd";
                 if (this.dataItem.PS_WF_STG_CD !== 'Cancelled') return "AddFile";
             }            
-            return "HasFile";// Else it has files
+            return "HasFile";
         }
         return "NoPerm";
     }    
@@ -181,8 +188,6 @@ export class dealToolsComponent {
     }
     clkFileIcon(dataItem) {
         var fVal = this.getFileValue(dataItem);
-        //Forces datasource web API call
-        //$scope.attachmentsDataSource.read();
         if (fVal === "HasFile" || fVal === "AddFile") {
             this.openAttachments();
         }
@@ -234,7 +239,7 @@ export class dealToolsComponent {
         let isPSEnabled = {};
         if (this.dataItem.OBJ_PATH_HASH !== undefined && this.dataItem.OBJ_PATH_HASH != "") {
             isPSEnabled = JSON.parse(this.dataItem.OBJ_PATH_HASH);
-            if (this.dataItem.P_S[isPSEnabled["PS"]] === "1")
+            if (this.dataItem.PS[isPSEnabled["PS"]] === "1")
                 return true; // this.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
         }
         else { // Remove the else block, just using this in case we need to ID what objects are causing problems
