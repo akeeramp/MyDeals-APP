@@ -847,6 +847,9 @@
     <Content Include="Client\src\app\contract\dealEditor\dealEditorHeaderTemplate.component.html" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.css" />
     <Content Include="Client\src\app\contract\lnav\lnav.component.html" />
+    <Content Include="Client\src\app\contract\managerExcludeGroups\excludeDealGroupModal.component.html" />
+    <Content Include="Client\src\app\contract\managerExcludeGroups\managerExcludeGroups.component.css" />
+    <Content Include="Client\src\app\contract\managerExcludeGroups\managerExcludeGroups.component.html" />
     <Content Include="Client\src\app\contract\managerPct\managerPct.component.css" />
     <Content Include="Client\src\app\contract\managerPct\managerPct.component.html" />
     <Content Include="Client\src\app\contract\managerPct\pctChildGrid.component.html" />
@@ -2285,6 +2288,9 @@
     <TypeScriptCompile Include="Client\src\app\contract\lnav.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\lnav\lnav.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\managerExcludeGroups\excludeDealGroupModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\managerExcludeGroups\managerExcludeGroups.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\managerExcludeGroups\managerExcludeGroups.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctChildGrid.component.ts" />

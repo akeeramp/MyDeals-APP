@@ -4,9 +4,13 @@
     <kendo-tabstrip-tab title="Passes" [selected]="selectedTab==2"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="InCompletes" [selected]="selectedTab==3"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="NA" [selected]="selectedTab==4"></kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="selectedTab==5"></kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="selectedTab==5">
+        <ng-template kendoTabContent>
+            <manager-exclude-groups [contractData]="contractData" [UItemplate]="UItemplate"></manager-exclude-groups>
+        </ng-template>
+    </kendo-tabstrip-tab>
 </kendo-tabstrip>
-<div id="sum-wrapper">
+<div id="sum-wrapper" *ngIf="!isExcludeGroup">
     <div id="sum-header" style="min-width: 800px;">
         <div class="sum-filter-bar" style="padding: 0 10px;">
             <table style="width: 100%;">

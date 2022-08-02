@@ -20,6 +20,8 @@ import { pctChildGridComponent } from "../contract/managerPct/pctChildGrid.compo
 import { systemPricePointModalComponent } from "../contract/ptModals/dealEditorModals/systemPricePointModal.component";
 import { endCustomerRetailModalComponent } from "../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 import { RenameTitleComponent } from "../contract/ptModals/renameTitle/renameTitle.component";
+import { managerExcludeGroupsComponent } from "../contract/managerExcludeGroups/managerExcludeGroups.component";
+import { excludeDealGroupModalDialog } from "../contract/managerExcludeGroups/excludeDealGroupModal.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -42,5 +44,7 @@ export let contractComponents = [
     pctChildGridComponent,
     systemPricePointModalComponent,
     endCustomerRetailModalComponent,
-    RenameTitleComponent
+    RenameTitleComponent,
+    managerExcludeGroupsComponent,
+    excludeDealGroupModalDialog
 ]

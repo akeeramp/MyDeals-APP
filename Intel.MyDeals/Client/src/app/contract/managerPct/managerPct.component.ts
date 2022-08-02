@@ -50,6 +50,7 @@ export class managerPctComponent {
     public selectAllState: SelectAllCheckboxState = "unchecked";
     private gridResult;
     public pricingStrategyFilter;
+    private isExcludeGroup = false;
 
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
@@ -191,18 +192,26 @@ export class managerPctComponent {
     selTab(tabName) {
         if (tabName == "All") {
             this.pctFilter = "";
+            this.isExcludeGroup = false;
         }
         else if (tabName == "Failures") {
             this.pctFilter = "Fail";
+            this.isExcludeGroup = false;
         }
         else if (tabName == "Passes") {
             this.pctFilter = "Pass";
+            this.isExcludeGroup = false;
         }
         else if (tabName == "InCompletes") {
             this.pctFilter = "InComplete";
+            this.isExcludeGroup = false;
         }
         else if (tabName == "NA") {
             this.pctFilter = "NA";
+            this.isExcludeGroup = false;
+        }
+        else if (tabName == "Grouping Exclusions") {
+            this.isExcludeGroup = true;
         }
     }
 
