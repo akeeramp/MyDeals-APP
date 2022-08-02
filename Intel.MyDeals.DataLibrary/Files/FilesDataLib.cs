@@ -463,8 +463,9 @@ namespace Intel.MyDeals.DataLibrary
                                 string dbDealEndDate = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
                                 string dbBillingsStartDate = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                 string dbBillingsEndDate = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
-                                string dbProjectName = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
-                                string dbAdditionalTermsAndConditions = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+                                string dbTrackerStartDate = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
+                                string dbProjectName = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+                                string dbAdditionalTermsAndConditions = worksheet.Cells[i, 11].Value != null ? worksheet.Cells[i, 11].Value.ToString().TrimEnd() : string.Empty;
 
                                 if (dbDealId != 0)
                                 {
@@ -479,6 +480,7 @@ namespace Intel.MyDeals.DataLibrary
                                         BillingsStartDate = dbBillingsStartDate,
                                         BillingsEndDate = dbBillingsEndDate,
                                         ProjectName = dbProjectName,
+                                        TrackerEffectiveStartDate = dbTrackerStartDate,
                                         AdditionalTermsAndConditions = dbAdditionalTermsAndConditions
                                     });
                                 }
