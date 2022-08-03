@@ -9,13 +9,13 @@ import { logger } from "../../shared/logger/logger";
 import { DatePipe } from "@angular/common";
 import { DashboardComponent } from "../../dashboard/dashboard/dashboard.component";
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
+import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 @Component({
     providers: [GridStatusBoardService, DatePipe],
     selector: "grid-status-board-angular",
     templateUrl: "Client/src/app/core/gridStatusBoard/gridStatusBoard.component.html"
 })
-
 export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild(GridComponent) grid: GridComponent;
 
@@ -28,9 +28,9 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
     //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
-    public angularJSEnabled = false;
+    public readonly angularJSEnabled = this.dynamicEnablementService.isAngularJSEnabled();
 
-    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService) {
+    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService, private dynamicEnablementService: DynamicEnablementService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();

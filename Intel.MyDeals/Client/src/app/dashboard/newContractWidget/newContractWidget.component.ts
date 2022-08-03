@@ -5,12 +5,13 @@ import { NewContractWidgetService } from "./newContractWidget.service"
 import { MatDialog } from '@angular/material/dialog';
 import { CopyContractComponent } from '../copyContract/copyContract.component';
 import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.component";
+import { DynamicEnablementService } from '../../shared/services/dynamicEnablement.service';
+
 @Component({
     selector: 'app-widget-newcontract',
     templateUrl: "Client/src/app/dashboard/newContractWidget/newContractWidget.component.html",
     styleUrls: ["Client/src/app/dashboard/newContractWidget/newContractWidget.component.css"]
 })
-
 export class NewContractWidgetComponent implements OnInit, OnDestroy {
     @Input() widget;
     @Input() resizeEvent: EventEmitter<GridsterItem>;
@@ -28,9 +29,9 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     createTenderFolioText = 'Create Tender Folio';
 
     //To load angular Contract details page change value to true, will be removed once contract details migration is done
-    public angularEnabled = true;
+    public readonly angularJSEnabled = this.dynamicEnablementService.isAngularJSEnabled();
 
-    constructor(private newContractWidgetService: NewContractWidgetService, protected dialog: MatDialog) { }
+    constructor(private newContractWidgetService: NewContractWidgetService, private dynamicEnablementService: DynamicEnablementService, protected dialog: MatDialog) {}
 
     ngOnInit(): void {
 
