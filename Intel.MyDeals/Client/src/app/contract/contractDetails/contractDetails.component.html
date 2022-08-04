@@ -25,7 +25,7 @@
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
                                         <kendo-combobox #CUST_MBR_SID_Combo [data]="Customers"
-                                                        class="kendoInput" textField="CUST_NM" valueField="CUST_SID"
+                                                        class="kendoInput" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
                                         </kendo-combobox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.Customer?.errors?.required && contractDetailsForm.controls.Customer?.touched">
@@ -114,7 +114,7 @@
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
                                                                   [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
                                                                   [(ngModel)]="END_YR" [disabled]="NO_END_DT" name="END_YR" (valueChange)="onKeySearch($event,'END_YR')" required></kendo-numerictextbox>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="col-md-11 display slidermbottom">
@@ -135,7 +135,7 @@
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.NO_END_DT_RSN?.errors?.required && isSubmitted">
                                                 {{isRequiredMsg}}
                                             </kendo-formerror>
-                                              </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-11 display" [hidden]="!isBackDate">
                                         <div class="fl opUiLabel" style="width:200px">
@@ -181,7 +181,7 @@
                                                 <div class="col-md-4">
                                                     <div class="radioButtonGroup">
                                                         <input type="radio"
-                                                               id="{{data.DROP_DOWN}}" [name]="data.DROP_DOWN"
+                                                               id="{{data.DROP_DOWN}}" [name]="data.DROP_DOWN" [disabled]="disableCustAccpt"
                                                                [value]="data.DROP_DOWN" [(ngModel)]="selectedCUST_ACCPT" name="selectedCUST_ACCPT"
                                                                [checked]="(idx===0)"
                                                                (change)="setCustAcceptanceRules(selectedCUST_ACCPT)" /><label for="{{data.DROP_DOWN}}"
@@ -245,12 +245,65 @@
                                                 {{isRequiredMsg}}
                                             </kendo-formerror>
                                         </div>
+                                        <div class="col-md-11 row" *ngIf="!isNewContract">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                                                <div class="panel-body">
+                                                    <div *ngIf="!(attachmentCount <= 0 || !initComplete)">
+                                                        <kendo-grid id="fileAttachmentGrid" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
+                                                                    [sort]="state.sort" [sortable]="true" [reorderable]="true" [resizable]="true"
+                                                                    (dataStateChange)="dataStateChange($event)">
+                                                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
+                                                            </kendo-grid-column>
+                                                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="" width="10%">
+                                                                <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                                                    <!--<a class='delete-attach-icon' *ngIf='C_DELETE_ATTACHMENTS' (click)='deleteFileAttachment(dataItem)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>-->
+                                                                </ng-template>
+                                                            </kendo-grid-column>
+                                                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_NM" title="File Name" width="40%">
+                                                                <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                                                    <a download [href]="'/api/FileAttachments/Open/'+ dataItem.FILE_DATA_SID + '/'">{{dataItem.FILE_NM}}</a>
+                                                                </ng-template>
+                                                            </kendo-grid-column>
+                                                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" width="25%">
+                                                            </kendo-grid-column>
+                                                            <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" width="25%">
+                                                                <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                                                    <div [innerHtml]="stripMilliseconds(dataItem.CHG_DTM)"></div>
+                                                                </ng-template>
+                                                            </kendo-grid-column>
+                                                        </kendo-grid>
+                                                    </div>
+                                                    <div *ngIf="!(attachmentCount != 0 || !initComplete)" style="height:80px;">
+                                                        <p style="margin-top:5px">This contract has no attachments.</p>
+                                                    </div>
+                                                    <div *ngIf="!initComplete" style="height:80px;">
+                                                        <p style="margin-top:5px"><i>Retrieving attachments...</i></p>
+                                                    </div>
+                                                    <div *ngIf="!(attachmentCount >= 0)" style="height:80px; color:red">
+                                                        <p style="margin-top:5px">Unable to retrieve attachments!</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row top">
                                     <div class="col-md-6">
                                         <div class="col-md-12">
                                             <h6>Timeline</h6>
+                                            <div *ngFor="let data of TimeLineDetails;let i = index">
+                                                <div *ngIf="i<=maxCount" class="details">
+                                                 <p><span style="color: #003C71;font-size: 14px;float:left">{{data.ATRB_DESC}}</span> <span style="float: right;" class="updateBy">updated by {{data.FRST_NM}}{{data.LST_NM}}({{data.USR_ROLES}})({{data.CHG_EMP_WWID}})</span></p>
+                                                <p><span class="atbrDetails" style="float:left;" >"{{data.ATRB_VAL}}"</span><span style="float: right;" class="atbrDate">{{data.HIST_EFF_FR_DTM}}</span></p>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="isShowBtn">
+                                                <a (click)="showAll()" class="showMore" title={{btnText}}>
+                                                    {{btnText}} <i *ngIf="btnText == 'Show More'" class="intelicon-down"></i> <i *ngIf="btnText == 'Show Less'" class="intelicon-up"></i>
+                                                </a>
+                                                <!--<a (click)="gotoHistory()" style="cursor: pointer; float: right;">view all contract history</a>-->
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -268,7 +321,7 @@
                         </div>
                         <div id="secFooter">
                             <button class="btn btn-primary mleft" type="button"
-                                    (click)="deleteContract()" *ngIf="false">
+                                    (click)="deleteContract()" *ngIf="showDeleteButton">
                                 <span>Delete{{contractType}}</span>
                             </button><button class="btn btn-primary mleft" type="button"
                                              (click)="customContractValidate(contractDetailsForm)">
@@ -282,22 +335,34 @@
     </div>
 </div>
 <kendo-dialog *ngIf="isBackdatepopupopend">
-    <p class="dialogmsg">You have Selected a date in the past which means the dates you will enter will be considered
-        backdated </p>
+    <p class="dialogmsg">
+        You have Selected a date in the past which means the dates you will enter will be considered
+        backdated
+    </p>
     <div style="display:flex">
-        <kendo-dialog-actions style="flex-grow:1;margin-right:4px"><button kendoButton
-                (click)="pastDateFieldsenable()">OK</button></kendo-dialog-actions>
-        <kendo-dialog-actions style="flex-grow:1"><button kendoButton (click)="applyTodayDate()">Cancel</button>
+        <kendo-dialog-actions style="flex-grow:1;margin-right:4px">
+            <button kendoButton
+                    (click)="pastDateFieldsenable()">
+                OK
+            </button>
+        </kendo-dialog-actions>
+        <kendo-dialog-actions style="flex-grow:1">
+            <button kendoButton (click)="applyTodayDate()">Cancel</button>
         </kendo-dialog-actions>
     </div>
 </kendo-dialog>
 <kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" [minWidth]="250"
-    [width]="620">
-    <p class="dialogmsg">The division is blank. Do you intend for this contract to apply to all
-        divisions? </p>
-    <kendo-dialog-actions><button kendoButton
-        (click)="blankDivisionPopupClose('yes')" themeColor="primary">Yes
-</button><button kendoButton (click)="blankDivisionPopupClose('no')">No</button></kendo-dialog-actions>
+              [width]="620">
+    <p class="dialogmsg">
+        The division is blank. Do you intend for this contract to apply to all
+        divisions?
+    </p>
+    <kendo-dialog-actions>
+        <button kendoButton
+                (click)="blankDivisionPopupClose('yes')" themeColor="primary">
+            Yes
+        </button><button kendoButton (click)="blankDivisionPopupClose('no')">No</button>
+    </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog *ngIf="isMissingGrpCode" [minWidth]="250" [width]="300">
     <p class="dialogmsg">Missing Price Group Code </p>

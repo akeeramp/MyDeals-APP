@@ -12,7 +12,8 @@ export class contractDetailsService {
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBaseCustomerCalenderUrl = "api/CustomerCalendar/";
     public dropDownApiUrl = "/api/Dropdown/";
-
+    public timeLineApiUrl = "api/Timeline/";
+    private fileApiUrl = "/api/FileAttachments/";
     constructor(private httpClient: HttpClient) { }
 
     public readContract(id) {
@@ -62,4 +63,22 @@ export class contractDetailsService {
         return this.httpClient.post(apiUrl, [ct]);
     }
 
+    public GetObjTimelineDetails(contractDetailId,objTypeIds,objTypeSId): Observable<any> {
+        const rbody = { 'objSid': contractDetailId, "objTypeIds": objTypeIds, "objTypeSid": objTypeSId };
+        const apiTimeLineUrl: string = this.timeLineApiUrl + "GetObjTimelineDetails";
+        return this.httpClient.post(apiTimeLineUrl, rbody);
+    }
+    deleteContract(custId, contractId) {
+        const apiDeleteContractUrl = this.apiBaseContractUrl + 'DeleteContract/' + custId + '/' + contractId;
+        return this.httpClient.get(apiDeleteContractUrl);
+    }
+    getFileAttachments(custId, ctrctId) {
+        const url = this.fileApiUrl + "Get/" + custId + "/1/" + ctrctId + "/CNTRCT";
+        return this.httpClient.get(url);
+    }
+
+    deleteAttachment(custId, objTypeSid, objSid, fileSid) {
+        const url = this.fileApiUrl + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
+        return this.httpClient.get(url);
+    }
 }

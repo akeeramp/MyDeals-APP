@@ -389,6 +389,15 @@
     border: 1px solid #ED1C24;
 }
 
+.contractIdBtn{
+    background: white;
+    border-color: white;
+    padding-left: 0px; 
+}
+.contractIdBtn:hover{
+    color:black;
+}
+
 .k-link:hover {
     background-color: #00AEEF !important;
     color: #FFFFFF !important;

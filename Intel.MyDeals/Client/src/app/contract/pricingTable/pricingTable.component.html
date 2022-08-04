@@ -144,6 +144,9 @@
                 <div *ngIf="selLnav=='pctDiv'">
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate"></manager-pct>
                 </div>
+                <div *ngIf="selLnav=='ViewContractDetails'">
+                    <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
+                </div>
             </div>
         </div>
     </div>

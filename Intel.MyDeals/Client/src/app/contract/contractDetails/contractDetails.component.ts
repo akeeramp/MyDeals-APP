@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component, HostListener } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { logger } from "../../shared/logger/logger";
 import { contractDetailsService } from "./contractDetails.service";
@@ -8,21 +8,30 @@ import { templatesService } from "../../shared/services/templates.service";
 import * as _moment from "moment";
 import { forkJoin } from "rxjs";
 import {  FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
+import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
+import { process, State } from "@progress/kendo-data-query";
+import { GridUtil } from "../grid.util";
+import { DatePipe } from '@angular/common';
 const moment = _moment;
 
 @Component({
     selector: "contract-details",
     templateUrl: "Client/src/app/contract/contractDetails/contractDetails.component.html",
     styleUrls: ["Client/src/app/contract/contractDetails/contractDetails.component.css"],
+
 })
 export class contractDetailsComponent {
+    contractType: string;
+    disableCustomer: boolean = false;
+    disableCustAccpt: boolean = false;
     constructor(private templatesSvc: templatesService,
-        private contractDetailsSvc: contractDetailsService,
+        private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
         private loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
+    @Input() C_ID: number;
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
     BACK_DATE_RSN;CONTRACT_TYPE;
@@ -56,7 +65,30 @@ export class contractDetailsComponent {
     isDivBlankPopupOpen = false; isMissingGrpCode = false; isValid = false;
     public stDate: Date; isRequiredMsg = "* field is required"; existingMinEndDate: Date = null;
     public copyContractData: any;public uploadSaveUrl = "/FileAttachments/Save";
-    
+    public TimeLineDetails: Array<any>;
+    public showDeleteButton = false;
+    private isNewContract = false;
+    private attachmentCount = 0;
+    private initComplete = false;
+    private attachmentsDataSource: any = [];
+    private gridData: GridDataResult;
+    private btnText = "Show More";
+    private isShowBtn = false;
+    private maxCount = 5;
+    private state: State = {
+        skip: 0,
+        take: 25,
+        group: [],
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
+
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
+        this.gridData = process(this.attachmentsDataSource, this.state);
+    }
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -182,7 +214,7 @@ export class contractDetailsComponent {
                     this.titleErrorMsg = "";
                 }
             }, error => {
-                    this.loggerSvc.error("Unable to get the duplicate contract title", error);
+                this.loggerSvc.error("Unable to get the duplicate contract title", error);
             });
     }
 
@@ -197,7 +229,7 @@ export class contractDetailsComponent {
                         const selectedCustDiv = this.Customer_Divs.filter(x => x.CUST_DIV_NM == cust)
                         if (selectedCustDiv.length > 0) this.CUST_NM_DIV.push(selectedCustDiv[0]);
                     })
-                  }
+                }
                 if ((this.Customer_Divs[0].PRC_GRP_CD == "")) {
                     this.isMissingGrpCode = true;
                 }
@@ -217,7 +249,7 @@ export class contractDetailsComponent {
         );
     }
 
-   onDateChange(evt) {//Below function is to show/hide the backdate reason based on the start date change
+    onDateChange(evt) {//Below function is to show/hide the backdate reason based on the start date change
         const strtDate =  new Date(this.stDate);
         const selectedDate = new Date(evt);
         if (strtDate > selectedDate) {
@@ -233,7 +265,7 @@ export class contractDetailsComponent {
             this.contractData.BACK_DATE_RSN = "";
             this.BACK_DATE_RSN = undefined;
         }
-       this.getCurrentQuarterDetails(); //update the Quarter slider and kendo numeric text box based on date change
+        this.getCurrentQuarterDetails(); //update the Quarter slider and kendo numeric text box based on date change
     }
 
     pastDateConfirm(newDate) {
@@ -250,7 +282,7 @@ export class contractDetailsComponent {
         this.contractData._behaviors.isRequired["BACK_DATE_RSN"] = true;
     }
 
-   applyTodayDate() { //apply today's date on cancel click event of back date reason popup
+    applyTodayDate() { //apply today's date on cancel click event of back date reason popup
         const today = moment().format("l");
         this.START_DT = new Date(moment(this.contractData.START_DT).isBefore(today)? today: this.contractData.START_DT);
         this.isBackdatepopupopend = false;
@@ -266,8 +298,9 @@ export class contractDetailsComponent {
         Object.keys(ctrctFormData.controls).forEach(key => {
             ctrctFormData.controls[key].markAsTouched();
             const currentControl = ctrctFormData.controls[key];
-        if (!this.isCopyContract) {
-            this.contractData._behaviors.isDirty[key] = currentControl.dirty;
+            if (!this.isCopyContract) {
+                if (!this.contractData._behaviors.isDirty) this.contractData._behaviors.isDirty = {};
+                this.contractData._behaviors.isDirty[key] = currentControl.dirty;
             }
         });
         this.isSubmitted = true;
@@ -293,15 +326,15 @@ export class contractDetailsComponent {
         const ct = this.contractData;
         const maximumDate = moment(ct.START_DT).add(20, 'years').format('l');
         if (!this.contractData._behaviors) this.contractData._behaviors = {};
-            if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
+        if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
             this.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 12/31/2099";
             this.contractData._behaviors.isError["END_DT"] = true;
             this.isValid = false;
         }
         else if (moment(ct.END_DT).isBefore(ct.START_DT) || moment(ct.END_DT).isAfter(maximumDate)) {
             this.contractData._behaviors.validMsg['END_DT'] = moment(ct.END_DT).isAfter(maximumDate)
-                    ? "End date cannot be greater than - " + maximumDate
-                    : "End date cannot be less than Start Date";
+                ? "End date cannot be greater than - " + maximumDate
+                : "End date cannot be less than Start Date";
             this.contractData._behaviors.isError["END_DT"] = true;
             this.isValid = false;
         }
@@ -318,21 +351,21 @@ export class contractDetailsComponent {
         });
         this.contractData._behaviors.isError["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.isError["CUST_ACCNT_DIV"];
         this.contractData._behaviors.validMsg["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.validMsg["CUST_ACCNT_DIV"];
-       if (this.isValid && ctrctFormData.valid) {
+        if (this.isValid && ctrctFormData.valid) {
             if (this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && this.contractData.CUST_ACCNT_DIV == "") {
                 this.isDivBlankPopupOpen = true;
             }
             else {
-                if (this.isCopyContract) this.copyContract(); 
-                else this.saveContract(); 
+                if (this.isCopyContract) this.copyContract();
+                else this.saveContract();
             }
         }
     }
 
     public blankDivisionPopupClose(status: string): void {
         if (status == "yes") {
-            if (this.isCopyContract)  this.copyContract(); 
-            else this.saveContract(); 
+            if (this.isCopyContract)  this.copyContract();
+            else this.saveContract();
         }
         this.isDivBlankPopupOpen = false;
     }
@@ -346,20 +379,26 @@ export class contractDetailsComponent {
         const ct = this.contractData;
         //this.custId = this.contractData["CUST_SID"];
         this.contractId = -100;
+        if (this.contractData["DC_ID"]) {
+            this.contractId = this.contractData["DC_ID"];
+        }
         if (ct["DC_ID"] <= 0)  ct["DC_ID"] = this.uid;
         this.contractDetailsSvc
             .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct)
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
                     // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                    this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
+                    this.contractData["DC_ID"] = response.CNTRCT[0].DC_ID;
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
                     }
                     else {
-                        window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+                        window.location.href = '/Dashboard#/portal';
                     }
-                    }
+                } else {
+                    window.location.href = '/Dashboard#/portal';
+
+                }
             });
     }
 
@@ -401,6 +440,63 @@ export class contractDetailsComponent {
     //backdatePopupClose() {
     //    this.isBackdatepopupopend = false;
     //}
+    getTimeLineDetails(){
+        let contractDetailId = null;
+        let objTypeIds = [1, 2, 3];
+        let objTypeSId = 1;
+        if(this.C_ID){
+            contractDetailId = this.C_ID;
+
+        this.contractDetailsSvc.GetObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId).subscribe((response: Array<any>) => {
+            this.TimeLineDetails = response;
+            if(response.length > 5){
+                this.isShowBtn = true;
+            }
+            console.log(response);
+
+        }, error => {
+            this.loggerSvc.error("Unable to get Details.", error);
+        });
+    }
+
+
+    }
+    getContractQuaterDetails(changeEvent){
+        let isValidDataPresent = false;
+
+        let isDate, customerMemberSid = null;
+        let yearValue = null;
+        let qtrValue = null;
+        isDate = this.contractData.START_DT;
+        customerMemberSid = this.contractData.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
+        if (changeEvent == "START_DT") {
+            isDate = this.contractData.START_DT;
+            if (isDate != "" || isDate != null || isDate != undefined) {
+                isValidDataPresent = true;
+            }
+        }
+        if (changeEvent == "END_DT") {
+            isDate = this.contractData.END_DT;
+            if (isDate != "" || isDate != null || isDate != undefined) {
+                isValidDataPresent = true;
+            }
+        }
+        if (isValidDataPresent) {
+            this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
+                .subscribe((response: Array<any>) => {
+                    if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
+                        this.START_QTR = response["QTR_NBR"];
+                        this.START_YR = response["YR_NBR"];
+                        this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(moment(response["QTR_STRT"]).format("l"));
+                    }
+                    if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
+                        this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(moment(response["QTR_END"]).format("l"));
+                        this.END_QTR = response["QTR_NBR"];
+                        this.END_YR = response["YR_NBR"];
+                    }
+                });
+        }
+    }
 
     getCurrentQuarterDetails(changeEvent = "") {
         let isValidDataPresent = true;
@@ -426,12 +522,12 @@ export class contractDetailsComponent {
             qtrValue = this.START_QTR;
             yearValue = this.START_YR;
             isValidDataPresent = (yearValue != null && yearValue >= this.contractData.MinDate.split('/').at(-1)) ? true : false;
-       }
+        }
         else if (changeEvent == "END_YR" || changeEvent == "END_QTR") {
             qtrValue = this.END_QTR;
             yearValue = this.END_YR;
             isValidDataPresent = (yearValue != null && yearValue <= this.contractData.MaxDate.split('/').at(-1)) ? true : false;
-            }
+        }
         if (isValidDataPresent) {
             this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                 .subscribe((response: Array<any>) => {
@@ -465,11 +561,11 @@ export class contractDetailsComponent {
                             this.END_QTR = response["QTR_NBR"];
                             this.END_YR = response["YR_NBR"];
                         }
-                }
+                    }
                     if (this.END_DT != undefined && this.START_DT != undefined) {
                         this.validateDate(changeEvent);
                     }
-         });
+                });
         }
     }
 
@@ -482,15 +578,15 @@ export class contractDetailsComponent {
             if (moment(startDate).isAfter(endDate) || moment(startDate).isBefore(this.contractData.MinDate)) {
                 this.contractData._behaviors.isError['START_DT'] = true;
                 this.contractData._behaviors.validMsg['START_DT'] = moment(startDate).isBefore(this.contractData.MinDate)
-                        ? "Start date cannot be less than - " + this.contractData.MinDate
-                        : "Start date cannot be greater than End Date";
+                    ? "Start date cannot be less than - " + this.contractData.MinDate
+                    : "Start date cannot be greater than End Date";
             }
         } else {
             if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(this.contractData.MaxDate)) {
                 this.contractData._behaviors.isError['END_DT'] = true;
                 this.contractData._behaviors.validMsg['END_DT'] = moment(endDate).isAfter(this.contractData.MaxDate)
-                        ? "End date cannot be greater than - " + this.contractData.MaxDate
-                        : "End date cannot be less than Start Date";
+                    ? "End date cannot be greater than - " + this.contractData.MaxDate
+                    : "End date cannot be less than Start Date";
             }
             if (this.existingMinEndDate !== null && this.contractData.PRC_ST != null && this.contractData.PRC_ST.length != 0) {
                 if (moment(endDate).isBefore(this.existingMinEndDate)) {
@@ -512,20 +608,21 @@ export class contractDetailsComponent {
     }
 
     noEndDate() {
-            this.END_DT = new Date(moment().add(20, 'years').format("l"));
-            this.contractData._behaviors.isReadOnly["END_DT"] = this.NO_END_DT;
-            this.contractData._behaviors.isReadOnly["END_QTR"] = this.NO_END_DT;
-            this.contractData._behaviors.isReadOnly["END_YR"] = this.NO_END_DT;
-            this.contractData._behaviors.isHidden["NO_END_DT_RSN"] = !this.NO_END_DT;
-            this.contractData._behaviors.isRequired["NO_END_DT_RSN"] = this.NO_END_DT;
-            this.contractData.NO_END_DT_RSN = this.NO_END_DT ? this.contractData.NO_END_DT_RSN : "";
-            this.NO_END_DT_RSN = undefined;
+        this.END_DT = new Date(moment().add(20, 'years').format("l"));
+        this.contractData._behaviors.isReadOnly["END_DT"] = this.NO_END_DT;
+        this.contractData._behaviors.isReadOnly["END_QTR"] = this.NO_END_DT;
+        this.contractData._behaviors.isReadOnly["END_YR"] = this.NO_END_DT;
+        this.contractData._behaviors.isHidden["NO_END_DT_RSN"] = !this.NO_END_DT;
+        this.contractData._behaviors.isRequired["NO_END_DT_RSN"] = this.NO_END_DT;
+        this.contractData.NO_END_DT_RSN = this.NO_END_DT ? this.contractData.NO_END_DT_RSN : "";
+        this.NO_END_DT_RSN = undefined;
     }
 
     setSaveBtnName() {
         if (this.isCopyContract) {
             this.saveBtnName = "Copy Contract";
         } else {
+            this.c_Id = this.C_ID;
             this.saveBtnName = this.c_Id > 0 ? "Save Contract" : "Create Contract";
         }
     }
@@ -533,7 +630,7 @@ export class contractDetailsComponent {
     // Set customer acceptance rules
     setCustAcceptanceRules(newValue) {
         this.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
-       this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && !this.isTenderContract && this.selectedFileCount==0;
+        this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && !this.isTenderContract && this.selectedFileCount==0;
         if (this.contractData.DC_ID < 0) this.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : this.contractData.C2A_DATA_C2A_ID;
         this.contractData.IsAttachmentRequired = !this.isTenderContract && this.contractData.C2A_DATA_C2A_ID === "" && newValue !== 'Pending';
         this.contractData.AttachmentError = this.contractData.AttachmentError && this.contractData.IsAttachmentRequired;
@@ -542,7 +639,7 @@ export class contractDetailsComponent {
 
     c2aIDchange(inputVal) {
         this.contractData.IsAttachmentRequired = inputVal.length > 0 ? false : true;
-     }
+    }
 
     copyContract() {
         const ct = this.contractData;
@@ -567,11 +664,56 @@ export class contractDetailsComponent {
                     }
                 }
             },error => {
-                    this.loggerSvc.error("Could not create the contract.", error);
-                }
+                this.loggerSvc.error("Could not create the contract.", error);
+            }
             );
     }
-
+    deleteContract(){
+        if (confirm("Are you sure that you want to delete this contract?")) {
+            const custId = this.contractData.CUST_MBR_SID;
+            const contractId = this.contractData.DC_ID;
+            this.contractDetailsSvc.deleteContract(custId, contractId).subscribe((response: any) => {
+                console.log('deleted successfully');
+                window.location.href = '/Dashboard#/portal';
+            }), err => {
+                console.log(err);
+            };
+        }
+    }
+    loadContractDetailsData(){
+        this.Customer = this.contractData.Customer;
+        if(this.Customer){
+            this.disableCustomer = true;
+        }
+        this.showDeleteButton = true;
+        this.contractType = ' Contract';
+        this.TITLE = this.contractData.TITLE;
+        console.log(this.contractData);
+        this.START_DT = new Date(moment(this.contractData.START_DT).format("l"));
+        this.END_DT = new Date(moment(this.contractData.END_DT).format("l"));
+        this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;
+        if (this.contractData.CUST_ACCPT) {
+            this.disableCustAccpt = true;
+        }
+        this.C2A_DATA_C2A_ID = this.contractData.C2A_DATA_C2A_ID;
+        this.NOTES = this.contractData.NOTES;
+        this.getContractQuaterDetails('START_DT');
+        this.getContractQuaterDetails('END_DT');
+    }
+    stripMilliseconds(dateTime) {
+        let date = this.datePipe.transform(new Date(GridUtil.stripMilliseconds(dateTime)), 'M/d/yyyy');
+        return date;
+    }
+    showAll() {
+        if (this.maxCount == 5 && this.TimeLineDetails.length > 5) {
+            this.btnText = "Show Less";
+            this.maxCount = this.TimeLineDetails.length;
+        }
+        else {
+            this.btnText = "Show More";
+            this.maxCount = 5;
+        }
+    }
     ngOnInit() {
         try {
             //loading customer data and dropdowns Data
@@ -583,84 +725,111 @@ export class contractDetailsComponent {
                     CONTRACT_TYPE: this.contractDetailsSvc.getVendorDropDown('CONTRACT_TYPE'),
                     CUST_ACCPT: this.contractDetailsSvc.getVendorDropDown('CUST_ACCPT'),
                 }).subscribe(({ NO_END_DT_RSN, BACK_DATE_RSN, CONTRACT_TYPE, CUST_ACCPT }) => {
-                        this.dropDownsData['NO_END_DT_RSN'] = NO_END_DT_RSN;
-                        this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
-                        this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;
-                        this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
-                        // below lines of code is to set default value for contract type dropdown.
-                        this.CONTRACT_TYPE = CONTRACT_TYPE[0];
-                        const url = window.location.href.split("/");
-                        const qString = url[url.length - 1];
-                        if (qString.indexOf("=") != -1) {
-                            const copyCid = qString.split("=");
-                            this.c_Id = Number(copyCid[copyCid.length - 1]);
-                            this.isCopyContract = true;
-                            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
-                                this.templateData = response;
-                                this.contractData = this.initContract();
-                                this.contractDetailsSvc
-                                    .readCopyContract(this.c_Id)
-                                    .subscribe((response: Array<any>) => {
-                                        this.copyContractData = response[0];
-                                        this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
-                                        this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
-                                        this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l") );
-                                        this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(moment(this.copyContractData.END_DT).format("l"));
-                                        this.Customer = this.copyContractData.Customer;
-                                        this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
-                                        this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
-                                        this.contractData.MinYear = this.MinYear = parseInt(moment().format("YYYY")) - 6;
-                                        this.contractData.MaxYear = this.MaxYear = parseInt(moment("2099").format("YYYY"));
-                                        // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check
-                                        this.getCurrentQuarterDetails('START_DT');
-                                        this.getCurrentQuarterDetails('END_DT');
-                                        this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
-                                        this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
-                                        this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;
-                                        this.contractData.END_YR = this.END_YR = this.copyContractData.END_YR;
-                                        this.contractData.CUST_ACCNT_DIV =this.copyContractData.CUST_ACCNT_DIV;
-                                        this.contractData.IS_TENDER = this.copyContractData.IS_TENDER;
-                                        this.contractData.CONTRACT_TYPE = this.copyContractData.CONTRACT_TYPE;
-                                        this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
-                                      this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
-                                     this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
-                                    });
-                            });
-                        } else {
-                            this.c_Id = Number(url[url.length - 1]);
-                        }
+                    this.dropDownsData['NO_END_DT_RSN'] = NO_END_DT_RSN;
+                    this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
+                    this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;
+                    this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
+                    // below lines of code is to set default value for contract type dropdown.
+                    this.CONTRACT_TYPE = CONTRACT_TYPE[0];
+                    const url = window.location.href.split("/");
+                    const qString = url[url.length - 1];
+                    if (qString.indexOf("=") != -1) {
+                        const copyCid = qString.split("=");
+                        this.c_Id = Number(copyCid[copyCid.length - 1]);
+                        this.isCopyContract = true;
+                        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+                            this.templateData = response;
+                            this.contractData = this.initContract();
+                            this.contractDetailsSvc
+                                .readCopyContract(this.c_Id)
+                                .subscribe((response: Array<any>) => {
+                                    this.copyContractData = response[0];
+                                    this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
+                                    this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
+                                    this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l") );
+                                    this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(moment(this.copyContractData.END_DT).format("l"));
+                                    this.Customer = this.copyContractData.Customer;
+                                    this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
+                                    this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
+                                    this.contractData.MinYear = this.MinYear = parseInt(moment().format("YYYY")) - 6;
+                                    this.contractData.MaxYear = this.MaxYear = parseInt(moment("2099").format("YYYY"));
+                                    // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check
+                                    this.getCurrentQuarterDetails('START_DT');
+                                    this.getCurrentQuarterDetails('END_DT');
+                                    this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
+                                    this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
+                                    this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;
+                                    this.contractData.END_YR = this.END_YR = this.copyContractData.END_YR;
+                                    this.contractData.CUST_ACCNT_DIV =this.copyContractData.CUST_ACCNT_DIV;
+                                    this.contractData.IS_TENDER = this.copyContractData.IS_TENDER;
+                                    this.contractData.CONTRACT_TYPE = this.copyContractData.CONTRACT_TYPE;
+                                    this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
+                                    this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
+                                    this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
+                                });
+                        });
+                    } else {
+                        this.c_Id = Number(url[url.length - 1]);
+                    }
 
-                        if (this.isCopyContract == false) {
-                            //conditions for new contract
-                            if (this.c_Id <= 0) {
-                                this.templatesSvc.readTemplates()
-                                    .subscribe((response: Array<any>) => {
-                                        this.templateData = response;
-                                        this.contractData = this.initContract();
-                                        this.loadContractDetails();
-                                        this.getCurrentQuarterDetails();
-                                    });
-                            }
-                            else { //condition for existing contract
-                                this.contractDetailsSvc
-                                    .readContract(this.c_Id)
-                                    .subscribe((response: Array<any>) => {
-                                        this.contractData = response[0];
-                                        this.isTenderContract = this.contractData["IS_TENDER"];
-                                    });
-                            }
+                    if (this.isCopyContract == false) {
+                        if (url.length > 6) {
+                            this.c_Id = Number(url[6]);
                         }
-                        this.setSaveBtnName();
+                        //conditions for new contract
+                        if (this.c_Id <= 0) {
+                            this.templatesSvc.readTemplates()
+                                .subscribe((response: Array<any>) => {
+                                    this.templateData = response;
+                                    this.contractData = this.initContract();
+                                    this.loadContractDetails();
+                                    this.getCurrentQuarterDetails();
+                                });
+                        }
+                        else { //condition for existing contract
+                            this.contractDetailsSvc
+                                .readContract(this.C_ID)
+                                .subscribe((response: Array<any>) => {
+                                    this.contractData = response[0];
+                                    this.isTenderContract = this.contractData["IS_TENDER"];
+                                    this.loadContractDetailsData();
+                                    this.getTimeLineDetails();
+                                    this.getFileAttachmentDetails(this.c_Id);
+                                });
+                        }
+                    }
+                    this.setSaveBtnName();
                 }, error=> {
-                        this.loggerSvc.error("Unable to getVendorDropDown.", error);
-                    });
+                    this.loggerSvc.error("Unable to getVendorDropDown.", error);
+                });
 
             }, error=> {
                 this.loggerSvc.error("Unable to get Customers.",error);
             });
-
         } catch (e) {
             console.error("Unable to load the data", e);
+        }
+    }
+
+    getFileAttachmentDetails(value){
+        if (value <= 0) {
+            this.isNewContract = true;
+        }
+        else {
+            this.isNewContract = false;
+            this.contractDetailsSvc.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID).subscribe((response: any) => {
+                if (response != undefined && response != null) {
+                    this.attachmentsDataSource = response;
+                    this.gridData = process(this.attachmentsDataSource, this.state);
+                    this.contractData = this.contractData;
+                    this.attachmentCount = response.length;
+                    this.initComplete = true;
+                    this.setCustAcceptanceRules(this.contractData.CUST_ACCPT)
+                }
+            }, error => {
+                this.loggerSvc.error("Unable to get Files.", error);
+                this.initComplete = true;
+            });
         }
     }
     ngOnDestroy() {

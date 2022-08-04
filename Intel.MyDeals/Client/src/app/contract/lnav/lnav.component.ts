@@ -696,11 +696,23 @@ export class lnavComponent {
     removeBlanks(val) {
         return val.replace(/_/g, '');
     }
+    loadContractDetails(){
+        const contractDetails_Map: contractIds = {
+            Model: 'ViewContractDetails',
+            ps_id: 0,
+            pt_id: 0,
+            ps_index:0,
+            pt_index:0,
+            C_ID: this.contractId,
+            contractData: this.contractData           
+        };
+        this.modelChange.emit(contractDetails_Map);
+    }
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newStrategy.IS_HYBRID_PRC_STRAT = false;
-        this.contractData?.PRC_ST.map((x, i) => {
+        this.contractData?.PRC_ST?.map((x, i) => {
             this.isPSExpanded[i] = false
         });
         //code for autofill change to accordingly change values

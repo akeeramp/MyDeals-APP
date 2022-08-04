@@ -682,4 +682,14 @@ export class GridUtil {
         }
         return title;
     }
+    static stripMilliseconds = function (dateTimeStr) {
+        if (typeof dateTimeStr === 'object') {
+            dateTimeStr = dateTimeStr.toDateString('M/d/yyyy hh:mm tt');
+        }
+        let idx = dateTimeStr.search(/\.\d+$/)
+        if (idx != -1) {
+            return dateTimeStr.substring(0, idx);
+        }
+        return dateTimeStr;
+    }
 }
