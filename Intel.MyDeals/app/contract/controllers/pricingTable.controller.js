@@ -1280,7 +1280,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (delIds.length > 0) {
                     stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
                     isDelete = true;
-                    kendo.confirm("Are you sure you want to delete this product and the matching deal?")
+                    kendo.confirm("Are you sure that you want to delete this product and the matching deal(s)?")
                         .then(function () {
                             $timeout(function () {
                                 if (root.spreadDs !== undefined) {
