@@ -8,6 +8,7 @@ on:
         default: 'CIAR'
         type: choice
         options:
+          - 'CIAR'
           - 'DR'
           - 'PROD1'
           - 'PROD2'
@@ -29,7 +30,7 @@ jobs:
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
-       - name: Verify environement 
+       - name: Verify environment 
          run: |
             echo "RUN Verify command for ${{github.event.inputs.ENV}}"
              ./scripts/deploy.ps1 'verifyENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
@@ -65,7 +66,7 @@ jobs:
            ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}' 
        - name:  Copy Publish Site to latest folder
          run: |
-           ./scripts/deploy.ps1 'copy_latest' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
+           ./scripts/deploy.ps1 'copy_latest_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
        - name:  IIS Restart
          run: |
             ./scripts/deploy.ps1 'IIS_Restart' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'
