@@ -1257,7 +1257,7 @@
             window.open(downloadPath, '_blank', '');
         }
 
-        $scope.canDeleteAttachment = function (wf_st_cd) {
+        $scope.C_DELETE_ATTACHMENTS = function (wf_st_cd) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wf_st_cd);
         }
 
