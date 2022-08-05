@@ -2624,7 +2624,7 @@
                     sData = $scope.validateDensityBand(sData);
 
                     rData = contractSaveUtil.validatePTEdata(sData, $scope.curPricingStrategy, $scope.getVendorDropDownResult, $scope.curPricingTable, $scope.wipData, spreadDs,
-                        $scope.restrictGroupFlexOverlap, $scope.templates, curPricingTableData, $scope.ptTitle, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.contractData, forceValidation);                    
+                        $scope.restrictGroupFlexOverlap, $scope.templates, curPricingTableData, $scope.ptTitle, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.contractData, forceValidation, editableArSettlementLevelAfterApproval);                    
                     sData = rData.sData;
                     errs = rData.errs;                    
                     $scope.spreadDsDataCopy = angular.copy(sData);
@@ -2648,7 +2648,7 @@
                     $scope.OVLPFlexPdtPTRUSRPRDError = false;
                     gData = $scope.validateOVLPFlexProduct(gData);
                     rData = contractSaveUtil.validateDEdata(gData, $scope.contractData, $scope.curPricingStrategy, $scope.curPricingTable, $scope.getVendorDropDownResult,
-                        $scope.wipData, spreadDs, $scope.restrictGroupFlexOverlap, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.templates, uData)
+                        $scope.wipData, spreadDs, $scope.restrictGroupFlexOverlap, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.templates, uData, editableArSettlementLevelAfterApproval)
 
                     gData = rData.gData;
                     errs = rData.errs;                    

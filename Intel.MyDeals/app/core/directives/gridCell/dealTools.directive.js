@@ -82,7 +82,7 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
 
             $scope.rootScope = rootScope;
 
-            $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false : rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
+            $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false : rootScope.C_DELETE_ATTACHMENTS($scope.dataItem.PS_WF_STG_CD);
             // NPSG DISABLE QUOTES CODE
             //$scope.disableQuotesForVerticalsList = rootScope.disableQuotesForVerticalsList.split(",");
 

@@ -595,7 +595,7 @@ contractSaveUtil.validateMarketingKIT = function (data, wipData, curPricingTable
 }    
 
 contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendorDropDownResult, curPricingTable, wipData, spreadDs,
-    restrictGroupFlexOverlap, templates, curPricingTableData, ptTitle, hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, contractData, forceValidation) {
+    restrictGroupFlexOverlap, templates, curPricingTableData, ptTitle, hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, contractData, forceValidation, editableArSettlementLevelAfterApproval) {
     var errs = {};
     var rData = {};
     var MarksegValidate = {};
@@ -1002,7 +1002,7 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendo
 }
 
 contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrategy, curPricingTable, getVendorDropDownResult, wipData, spreadDs, restrictGroupFlexOverlap,
-    hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, templates, uData) {
+    hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, templates, uData, editableArSettlementLevelAfterApproval) {
     var isTenderFlag = "0";
     var errs = {};
     var rData = {};
