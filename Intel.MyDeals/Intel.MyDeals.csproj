@@ -343,9 +343,6 @@
     <Content Include="app\admin\adminTools\admintools.html" />
     <Content Include="app\admin\adminTools\admintools.service.js" />
     <Content Include="app\admin\adminTools\testtenders.html" />
-    <Content Include="app\admin\batchTiming\admin.batchTiming.controller.js" />
-    <Content Include="app\admin\batchTiming\batchTiming.html" />
-    <Content Include="app\admin\batchTiming\batchTiming.service.js" />
     <Content Include="app\admin\bulkPriceUpdate\admin.bulkPriceUpdate.controller.js" />
     <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdate.html" />
     <Content Include="app\admin\bulkPriceUpdate\bulkPriceUpdate.service.js" />
