@@ -124,9 +124,8 @@
         $scope.CAN_VIEW_EXPORT = true;
         $scope.CAN_VIEW_EXCLUDE_GROUPS = true;
         $scope.CAN_VIEW_ALL_DEALS = true;  //Removed for DE8996 - (window.isDeveloper || window.isTester);
-        $scope.C_DELETE_ATTACHMENTS = function (wfStage) {
-            return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
-        }
+        $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, 'Incomplete'); // Hard set to Incomplete since we dont have access to stage here
+
         // NPSG DISABLE QUOTES CODE
         // Left off NPSG changes here, need to move below line over to pull data from constants with objsetService.constantsService("CNST_TO_BE_USED") call, then comment in HTML usgaes of disableQuotesForVerticalsList
         //$scope.disableQuotesForVerticalsList = securityService.getQuoteRestrictions();
