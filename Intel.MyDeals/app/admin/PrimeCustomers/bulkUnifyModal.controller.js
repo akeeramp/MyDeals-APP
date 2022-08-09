@@ -358,9 +358,9 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                         var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
                         var res = patt.test(vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
-                        if (!res || vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME.length > 65) {
+                        if (!res) {
                             isInvalidGlobalName = true;
-                            rowMsg = rowMsg + "Unified Customer Name either contains more than 65 characters or invalid characters|";
+                            rowMsg = rowMsg + "Unified Customer Name contains invalid characters|";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
@@ -510,7 +510,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 strAlertMessage += "<li>Unified Country/Region and End Customer Country/Region needs to be same.</li>"
             }
             if (isInvalidGlobalName) {
-                strAlertMessage += "<li>Unified Customer Name either contains more than 65 characters or invalid characters.</li>";
+                strAlertMessage += "<li>Unified Customer Name contains invalid characters.</li>";
             }
             if (vm.duplicateGlobalIds.length > 0) {
                 strAlertMessage += "<li>Same Unified Customer ID cannot be associated with multiple Unified Customer Names.</li>";
@@ -920,9 +920,9 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             }
                             var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
-                            if (!res || vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name.length > 65) {
+                            if (!res) {
                                 isInvalidGlobalName = true;
-                                rowMsg = rowMsg + "Unified Customer Name either contains more than 65 characters or invalid characters|";
+                                rowMsg = rowMsg + "Unified Customer Name contains invalid characters|";
                                 sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                         }
@@ -939,9 +939,9 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             }
                             var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
-                            if (!res || vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.length > 65) {
+                            if (!res) {
                                 isInvalidToBeGlobalName = true;
-                                rowMsg = rowMsg + "'To Be Unified Customer Name' either contains more than 65 characters or invalid characters|";
+                                rowMsg = rowMsg + "'To Be Unified Customer Name' contains invalid characters|";
                                 sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
                         }
@@ -975,7 +975,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                         }
                         if (vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region != "" && vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region != "" &&
                             vm.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region.toLowerCase() != vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region.toLowerCase()) {
-                            rowMsg = rowMsg + "Unified Country/Region and 'To Be Unifief Country/Region' needs to be same|";
+                            rowMsg = rowMsg + "Unified Country/Region and 'To Be Unified Country/Region' needs to be same|";
                             isCtrySame = true;
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             sheet.range("I" + row + ":I" + row).validation($scope.UnifiedDealValidation(true, '', false));
@@ -1113,9 +1113,9 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 if (isToBeGlobalContainsNull)
                     strAlertMessage += "<li style='word-wrap: break-word;'>NULL cannot be used as 'To Be Unified Customer Name'</li>";
                 if (isInvalidGlobalName)
-                    strAlertMessage += "<li style='word-wrap: break-word;'>Unified Customer Name either contains more than 65 characters or invalid characters</li>";
+                    strAlertMessage += "<li style='word-wrap: break-word;'>Unified Customer Name contains invalid characters</li>";
                 if (isInvalidToBeGlobalName)
-                    strAlertMessage += "<li style='word-wrap: break-word;'>'To Be Unified Customer Name' either contains more than 65 characters or invalid characters</li>";
+                    strAlertMessage += "<li style='word-wrap: break-word;'>'To Be Unified Customer' Name contains invalid characters</li>";
                 if (isSameGlobalandCtryId)
                     strAlertMessage += "<li style='word-wrap: break-word;'>Unified Customer ID and Country/Region Customer ID cannot be same</li>";
                 if (isSameToBeGlobalandToBeCtryId)

@@ -590,8 +590,8 @@ namespace Intel.MyDeals.Controllers
                     {
                         validationSummary.inValidRecords.Add(row);
                     }
-                    else if (!Regex.IsMatch(row.Unified_Customer_Name, patt) || row.Unified_Customer_Name.Length > 65
-                        || !Regex.IsMatch(row.To_be_Unified_Customer_Name, patt) || row.To_be_Unified_Customer_Name.Length > 65)
+                    else if (!Regex.IsMatch(row.Unified_Customer_Name, patt) 
+                        || !Regex.IsMatch(row.To_be_Unified_Customer_Name, patt))
                     {
                         validationSummary.inValidRecords.Add(row);
                     }
