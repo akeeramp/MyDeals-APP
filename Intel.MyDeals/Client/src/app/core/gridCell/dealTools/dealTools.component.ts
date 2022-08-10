@@ -16,11 +16,7 @@ import * as _ from 'underscore';
 })
 
 export class dealToolsComponent {
-    constructor(private dataService: dealToolsService, private loggerService: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dataService: dealToolsService, private loggerService: logger) {}
     @Input() dataItem;
     @Input() gridData;
     @Input() isSplitEnabled;
@@ -271,13 +267,8 @@ export class dealToolsComponent {
     }
 
 
-    ngOnInit() {
+    ngOnChanges() {
         this.loadDealTools();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 angular.module("app").directive(

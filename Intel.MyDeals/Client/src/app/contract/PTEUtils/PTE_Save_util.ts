@@ -1,12 +1,7 @@
 import * as _ from 'underscore';
-import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 import { PTE_Common_Util } from './PTE_Common_util';
 
-export class PTE_Save_Util {
-    static saveDeal(data, contractData, curPricingTable, curPricingStrategy, isTenderContract, groups, templates) {
-        DE_Save_Util.saveDealData(data, contractData, curPricingTable, curPricingStrategy, isTenderContract, groups, templates);
-    }
-
+export class PTE_Save_Util {    
     static validatePTE(PTR:Array<any>,curPricingStrategy:any,curPricingTable:any,contractData:any):any{
         //this will make sure the neccessary proprty except _behaviours for Save are added
         this.setPTRBasicPropertyForSave(PTR,curPricingStrategy,curPricingTable,contractData);

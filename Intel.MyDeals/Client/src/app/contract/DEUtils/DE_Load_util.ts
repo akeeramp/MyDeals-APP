@@ -254,4 +254,13 @@ export class DE_Load_Util {
         if (!d) d = "Draft";
         return this.getColor('stage', d);
     }
+    static getLookBackPeriod(data) {
+        let lookBackPeriod: any = [];
+        if (data != undefined) {
+            for (var i = 0; i < data.length; i++) {
+                lookBackPeriod[data[i].DC_ID] = data[i].CONSUMPTION_LOOKBACK_PERIOD;
+            }
+        }
+        return lookBackPeriod;
+    }
 }

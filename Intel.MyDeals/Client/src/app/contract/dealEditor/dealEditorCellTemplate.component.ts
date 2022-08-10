@@ -247,6 +247,10 @@ export class dealEditorCellTemplateComponent {
     isErrorCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             return true;
+        else if (field == "KIT_ECAP" || field == "SUBKIT_ECAP") {
+            if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError["ECAP_PRICE"] != undefined)
+                return true;
+        }
         return false;
     }
     isHiddenCell(passedData, field) {
@@ -264,8 +268,7 @@ export class dealEditorCellTemplateComponent {
             return true;
         return false;
     }
-    ngOnInit() {
-        this.in_DataItem._dirty = false;
+    ngOnChanges() {
         this.in_DataItem.IS_TENDER = this.contract_Data["IS_TENDER"];
         this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
         this.in_DataItem.PRC_ST = this.contract_Data.PRC_ST;

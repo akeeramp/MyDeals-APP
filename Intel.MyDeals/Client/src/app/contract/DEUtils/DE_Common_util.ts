@@ -1,4 +1,6 @@
-﻿export class DE_Common_Util {
+﻿import { PTE_Load_Util } from "../PTEUtils/PTE_Load_util";
+
+export class DE_Common_Util {
     static clearBadegCnt(groups): void {
         for (var g = 0; g < groups.length; g++) {
             groups[g].numErrors = 0;
@@ -14,20 +16,26 @@
             }
         }
     }
-    static checkSoftWarnings(gridResult, dealType): number {
+    static checkSoftWarnings(gridResult, curPricingTable): number {
         var numSoftWarn = 0;
-        for (var w = 0; w < gridResult.length; w++) {
-            if (!!gridResult[w]["CAP"] && dealType == "ECAP") {
-                if (gridResult[w]["CAP"]["20___0"] === "No CAP") {
-                    numSoftWarn++;
+        if (curPricingTable.OBJ_SET_TYPE_CD == "ECAP" || curPricingTable.OBJ_SET_TYPE_CD == "KIT") {
+            for (var w = 0; w < gridResult.length; w++) {
+                if (!!gridResult[w]["CAP"]) {
+                    if (gridResult[w]["CAP"]["20___0"] === "No CAP") {
+                        numSoftWarn++;
+                    }
+                    var numOfPivot = PTE_Load_Util.numOfPivot(gridResult[w], curPricingTable);
+                    for (var i = 0; i < numOfPivot; i++) {
+                        let dim = "20___" + i;
+                        var cap = parseFloat(gridResult[w]["CAP"][dim]);
+                        var ecap = parseFloat(gridResult[w]["ECAP_PRICE"][dim]);
+                        if (ecap > cap) {
+                            numSoftWarn++;
+                        }
+                    }
                 }
-                var cap = parseFloat(gridResult[w]["CAP"]["20___0"]);
-                var ecap = parseFloat(gridResult[w]["ECAP_PRICE"]["20___0"]);
-                if (ecap > cap) {
-                    numSoftWarn++;
-                }
+                gridResult[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;
             }
-            gridResult[w]._behaviors.isReadOnly["TOTAL_CR_DB_PERC"] = true;
         }
         return numSoftWarn;
     }
@@ -94,13 +102,13 @@
             if (dataItem["ECAP_PRICE"]["20___0"] != undefined && dataItem["ECAP_PRICE"]["20___0"] != null && dataItem["ECAP_PRICE"]["20___0"] != "")
                 dataItem["ECAP_PRICE"]["20___0"] = dataItem["ECAP_PRICE"]["20___0"].toString();
             else
-                dataItem["ECAP_PRICE"]["20___0"] = "";
+                dataItem["ECAP_PRICE"]["20___0"] = "0";
         }
         if (field == "KIT_ECAP") {
             if (dataItem["ECAP_PRICE"]["20_____1"] != undefined && dataItem["ECAP_PRICE"]["20_____1"] != null && dataItem["ECAP_PRICE"]["20_____1"] != "")
                 dataItem["ECAP_PRICE"]["20_____1"] = dataItem["ECAP_PRICE"]["20_____1"].toString();
             else
-                dataItem["ECAP_PRICE"]["20_____1"] = "";
+                dataItem["ECAP_PRICE"]["20_____1"] = "0";
         }
         if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL" ||
             field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "ADJ_ECAP_UNIT"

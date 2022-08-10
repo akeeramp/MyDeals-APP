@@ -97,8 +97,8 @@ export class PTE_Common_Util {
     static increaseBadgeCnt(key, groups, templates) {
         DE_Common_Util.increaseBadgeCnt(key, groups, templates);
     }
-    static checkSoftWarnings(data, objSetTypeCd) {
-        return DE_Common_Util.checkSoftWarnings(data, objSetTypeCd);
+    static checkSoftWarnings(data, curPricingTable) {
+        return DE_Common_Util.checkSoftWarnings(data, curPricingTable);
     }
     static clearEndCustomer(item) {
         if (item._behaviors && item._behaviors.isError && item._behaviors.isRequired && item._behaviors.validMsg) {

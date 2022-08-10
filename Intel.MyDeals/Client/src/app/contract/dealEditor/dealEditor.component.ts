@@ -3,6 +3,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import * as _ from 'underscore';
+import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
@@ -12,7 +13,8 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
-import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
+import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
+import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
 import { forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
@@ -30,9 +32,6 @@ export class dealEditorComponent {
     constructor(private pteService: pricingTableEditorService,
         private loggerService: logger, private datePipe: DatePipe,
         protected dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
 
     @Input() in_Cid: any = '';
@@ -40,6 +39,10 @@ export class dealEditorComponent {
     @Input() in_Pt_Id: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
+    private isWarning: boolean = false;
+    private message: string = "";
+    private dirty = false;
+    private isDatesOverlap = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
     private wipTemplate: any = {};
@@ -61,6 +64,10 @@ export class dealEditorComponent {
     private EndCustDropdownResponses: any = null;
     private enableSelectAll: boolean = false;
     private enableDeselectAll: boolean = false;
+    private isDataLoading: boolean = false;
+    private spinnerMessageDescription: any = "";
+    private spinnerMessageHeader: any = "";
+    private lookBackPeriod: any = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -109,20 +116,12 @@ export class dealEditorComponent {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
                 this.voltLength = response.WIP_DEAL.length
                 this.gridResult = response.WIP_DEAL;
-                PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
-                PTE_Common_Util.clearBadegCnt(this.groups);
-                for (var i = 0; i < this.gridResult.length; i++) {
-                    if (this.gridResult[i] != null) {
-                        var keys = Object.keys(this.gridResult[i]._behaviors.isError);
-                        for (var key in keys) {
-                            PTE_Common_Util.increaseBadgeCnt(keys[key], this.groups, this.templates);
-                        }
-                    }
-                }
-                this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable.OBJ_SET_TYPE_CD);
+                this.setWarningDetails();
                 this.applyHideIfAllRules();
+                this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
                 this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
+                this.isDataLoading = false;
             } else {
                 this.gridResult = [];
             }
@@ -191,7 +190,8 @@ export class dealEditorComponent {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
         if (!args.isEdited && args.column.field !== "CUST_MBR_SID" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
-            args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && !(args.dataItem._behaviors != undefined &&
+            args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
+            args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                 args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
             args.sender.editCell(
                 args.rowIndex,
@@ -223,7 +223,7 @@ export class dealEditorComponent {
             dataItem["_dirty"] = true;
         }
     }
-
+    
     openSystemPriceModal(dataItem) {
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
             width: "900px",
@@ -275,7 +275,7 @@ export class dealEditorComponent {
     }
 
     openMultiSelectModal(dataItem, column) {
-        let source: any  =[];
+        let source: any = [];
         let value = [];
         let url = "";
         if (column.field == "CONSUMPTION_COUNTRY_REGION") {
@@ -287,7 +287,7 @@ export class dealEditorComponent {
                     return item.trim();
                 });
             }
-        }        
+        }
         else {
             if (column.field == "CONSUMPTION_CUST_PLATFORM" || column.field == "CONSUMPTION_CUST_SEGMENT"
                 || column.field == "CONSUMPTION_CUST_RPT_GEO" || column.field == "CONSUMPTION_SYS_CONFIG"
@@ -340,8 +340,7 @@ export class dealEditorComponent {
                     'enableDeselectAll': this.enableDeselectAll,
                     'data': source
                 },
-                colName: column.field,
-                isBlendedGeo: false
+                colName: column.field
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
@@ -358,6 +357,17 @@ export class dealEditorComponent {
                 || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
                 || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
                 args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
+            if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
+                && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
+                && args.dataItem._behaviors.isDirty[args.column.field] != null && args.dataItem._behaviors.isDirty[args.column.field]) {
+                if (args.dataItem.PAYOUT_BASED_ON != undefined && args.dataItem.PAYOUT_BASED_ON != null && args.dataItem.PAYOUT_BASED_ON != "" && args.dataItem.PAYOUT_BASED_ON == "Consumption") {
+                    this.isWarning = true;
+                    this.message = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.\nValidate Billings Start/End Dates with the Contract.";
+                }
+            }
+            if (args.dataItem._dirty != undefined && args.dataItem._dirty != null && args.dataItem._dirty) {
+                this.dirty = true;
+            }
         }
     }
 
@@ -381,14 +391,77 @@ export class dealEditorComponent {
     }
 
     SaveDeal() {
-        PTE_Save_Util.saveDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.groups, this.templates);
-        this.gridData = process(this.gridResult, this.state);
-        console.log(this.gridData);
+        _.each(this.gridResult, (item) => {
+            if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
+                this.isDatesOverlap = true;
+            }
+        });
+        if (!this.isDatesOverlap) {
+            this.SaveDealData();
+        }
+        else {
+            this.isWarning = true;
+            this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
+        }
+    }
+
+    SaveDealData() {
+        this.isWarning = false;
+        this.isDataLoading = true;
+        this.spinnerMessageHeader = "Saving...";
+        this.spinnerMessageDescription = "Saving Deal Information";
+        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+        if (isShowStopError) {
+            this.loggerService.warn("Please fix validation errors before proceeding", "");
+            this.gridData = process(this.gridResult, this.state);
+            this.isDataLoading = false;
+        }
+        else {
+            let data = {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": [this.curPricingTable],
+                "PricingTableRow": [],
+                "WipDeals": this.gridResult != undefined ? this.gridResult.filter(x => x._dirty == true) : [],
+                "EventSource": 'WIP_DEAL',
+                "Errors": {}
+            }
+            this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).subscribe((response: any) => {
+                if (response != undefined && response != null && response.Data != undefined && response.Data != null
+                    && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                    this.gridResult = response.Data.WIP_DEAL;
+                    this.setWarningDetails();
+                    this.gridData = process(this.gridResult, this.state);
+                }
+                this.isDataLoading = false;
+            },
+                (error) => {
+                    this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", error);
+                    this.isDataLoading = false;
+                });
+        }
+    }
+
+    setWarningDetails() {
+        PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
+        PTE_Common_Util.clearBadegCnt(this.groups);
+        for (var i = 0; i < this.gridResult.length; i++) {
+            if (this.gridResult[i] != null) {
+                var keys = Object.keys(this.gridResult[i]._behaviors.isError);
+                for (var key in keys) {
+                    if (PTE_Config_Util.tierAtrbs.indexOf(keys[key]) >= 0 && this.gridResult[i].NUM_OF_TIERS != undefined) {
+                        this.gridResult[i]._behaviors.isError["TIER_NBR"] = true;
+                    }
+                    PTE_Common_Util.increaseBadgeCnt(keys[key], this.groups, this.templates);
+                }
+            }
+        }
+        this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable);
     }
 
     async getAllDrowdownValues() {
         let dropObjs = {};
-        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN","CONSUMPTION_REASON","MRKT_SEG"];
+        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG"];
 
         _.each(atrbs, (item) => {
             let column = this.wipTemplate.columns.filter(x => x.field == item);
@@ -411,8 +484,14 @@ export class dealEditorComponent {
         });
         return result;
     }
+    Close() {
+        this.isWarning = false;
+    }
 
     ngOnInit() {
+        this.isDataLoading = true;
+        this.spinnerMessageDescription = "Loading Deal Editor";
+        this.spinnerMessageHeader = "Loading..."
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
@@ -420,12 +499,6 @@ export class dealEditorComponent {
         this.dropdownResponses = this.getAllDrowdownValues();
         this.selectedTab = "Deal Info";
         this.filterColumnbyGroup(this.selectedTab);
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

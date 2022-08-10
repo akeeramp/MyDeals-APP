@@ -18,15 +18,4 @@ export class DE_Save_Util {
             }
         }
     }
-
-    static saveDealData(data, contractData, curPricingTable, curPricingStrategy, isTenderContract, groups, templates) {
-        PTE_Validation_Util.validateDeal(data, contractData, curPricingTable, curPricingStrategy, isTenderContract);
-        PTE_Common_Util.setWarningFields(data, curPricingTable);
-        if (data != null) {
-            for (var i = 0; i < data.length; i++) {
-                PTE_Common_Util.setBehaviors(data[i], '');
-                this.savedWithWarning(data[i], groups, templates);
-            }
-        }
-    }
 }

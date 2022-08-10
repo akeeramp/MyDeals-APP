@@ -6,7 +6,9 @@ import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from './PTE_Config_util';
-
+import { DE_Validation_Util } from "../DEUtils/DE_Validation_util"
+import { PTE_Save_Util } from './PTE_Save_util';
+import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
@@ -262,26 +264,16 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }    
-    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract): any {
-        _.each(data, (item) => {
-            //defaulting the behaviours object
-            PTE_Common_Util.setBehaviors(item);
-        });
-        if (curPricingTable.OBJ_SET_TYPE_CD == 'ECAP') {
-            data = this.validateECAP(data);
-        }
-        this.ValidateEndCustomer(data, 'SaveAndValidate', curPricingStrategy, curPricingTable);
-    }
-    static validateECAP(data: Array<any>): any {
-        //check for Ecap price 
-        _.each(data, (item) => {
-            //defaulting the behaviours object
-            if (item.ECAP_PRICE["20___0"] == null || item.ECAP_PRICE["20___0"] == 0 || item.ECAP_PRICE["20___0"] == '' || item.ECAP_PRICE["20___0"] < 0) {
-                PTE_Common_Util.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
+        PTE_Common_Util.setWarningFields(data, curPricingTable);
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                DE_Save_Util.savedWithWarning(data[i], groups, templates);
             }
-        });
-        return data;
-    }    
+        }
+        return isShowStopperError;
+    }
     static setToSame(data, elem) {
         _.forEach(data, (item) => {
             if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
@@ -372,6 +364,7 @@ export class PTE_Validation_Util {
             var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
             drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
+            if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (!accrualRule) {
                 _.forEach(filterData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);

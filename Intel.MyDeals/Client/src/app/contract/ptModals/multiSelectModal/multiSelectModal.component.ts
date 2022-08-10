@@ -20,7 +20,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     constructor(private loggerSvc: logger,
         public dialogRef: MatDialogRef<multiSelectModalComponent>,
         @Inject(MAT_DIALOG_DATA) public modalData, private pteService: pricingTableEditorService
-    ) { }
+    ) {
+        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
+    }
 
     private checkedKeys: any[] = [];
     private key = "DROP_DOWN";

@@ -15,6 +15,7 @@ import * as _ from 'underscore';
 export class endCustomerRetailModalComponent {
     constructor(private loggerSvc: logger, private dialogRef: MatDialogRef<endCustomerRetailModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data, private pteService: pricingTableEditorService) {
+        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     private isLoading = false;
     private isError = false;
@@ -139,7 +140,7 @@ export class endCustomerRetailModalComponent {
                 this.END_CUST_OBJ[i].IS_EXCLUDE = 0;
             }
             var ctryExists = this.countries.filter(x => x.CTRY_NM == ctryValues[i]).length > 0;
-            if (ecValues[i] == "" && (ctryValues[i] == "" || (!ctryExists && !(ctryValues[i].toLowerCase() === "any" && i==0)))) {
+            if (ecValues[i] == "" && (ctryValues[i] == "" || (!ctryExists && !(ctryValues[i].toLowerCase() === "any" && i == 0)))) {
                 this.isError = true;
                 rowError = true;
                 if (endCustField != undefined && endCustField != null) {
@@ -372,7 +373,7 @@ export class endCustomerRetailModalComponent {
     showEmbAlert(validationMsg, country, type) {
         if (this.countries != null) {
             var countryVal = this.countries.filter(x => x.CTRY_NM == country);
-            if (countryVal != null && countryVal.CTRY_XPORT_CTRL_CD == 'EC') {
+            if (countryVal != undefined && countryVal != null && countryVal.length > 0 && countryVal[0].CTRY_XPORT_CTRL_CD == 'EC') {
                 if (type == 'ok') {
                     this.isWarning = true;
                     this.message = validationMsg;
@@ -395,7 +396,7 @@ export class endCustomerRetailModalComponent {
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
-        var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem.CTRY_NM, 'ok');
+        var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem[0].CTRY_NM, 'ok');
         var field = document.getElementById("DropdownSelections_" + index).children[0] as HTMLElement;
         if (dataItem === undefined || dataItem === null || dataItem.length <= 0) {
             if (field != undefined && field != null) {

@@ -392,3 +392,23 @@ tr:last-child > td {
     width: 100% !important;
 }
 
+.dirty {
+    font-weight: bolder !important;
+    color: #00AEEF !important;
+}
+
+.notDirty {
+    font-weight: lighter !important;
+    color: #ababab !important;
+}
+
+#warning {
+    width: fit-content !important;
+    left: 20% !important;
+}
+
+.text {
+    font-size: 14px !important;
+    font-weight: 600;
+    line-height: 1em;
+}

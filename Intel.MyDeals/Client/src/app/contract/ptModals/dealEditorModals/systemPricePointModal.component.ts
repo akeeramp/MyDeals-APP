@@ -11,7 +11,8 @@ import { downgradeComponent } from "@angular/upgrade/static";
 })
 export class systemPricePointModalComponent {
     constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<systemPricePointModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data) {        
+        @Inject(MAT_DIALOG_DATA) public data) {
+        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     private operators = [{ id: 1, name: '<=' }];
     private operator: any;

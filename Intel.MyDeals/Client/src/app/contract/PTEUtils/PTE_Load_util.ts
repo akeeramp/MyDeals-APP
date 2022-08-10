@@ -603,4 +603,7 @@ export class PTE_Load_Util {
         });
         return hiddenColumns;
     }
+    static getLookBackPeriod(data) {
+        return DE_Load_Util.getLookBackPeriod(data);
+    }
 }

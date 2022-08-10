@@ -125,6 +125,6 @@
 <kendo-dialog title="Warning" *ngIf="isWarning" (close)="cancelWarning()">
     <p style="margin: 30px; text-align: center;">{{message}}</p>
     <kendo-dialog-actions>
-        <button class='k-button' (click)="cancel()">CANCEL</button>
+        <button class='k-button' (click)="cancelWarning()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>

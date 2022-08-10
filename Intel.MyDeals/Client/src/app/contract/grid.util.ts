@@ -113,9 +113,12 @@ export class GridUtil {
         return tmplt;
     }
     static uiValidationErrorDetail(passedData) {
-        var values = Object.values(passedData._behaviors.validMsg);
+        var values: string[] = Object.values(passedData._behaviors.validMsg);
         var formattedMessage = '';
         values.forEach((msg) => {
+            if (msg.indexOf("\n") < 0) {
+                msg += "\n";
+            }
             formattedMessage += msg.toString().replace(/'/g, "");
         });
         //fixing for validation alert icon issue, while fixing the deal error through admin screen
