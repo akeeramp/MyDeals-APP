@@ -124,7 +124,14 @@
         $scope.CAN_VIEW_EXPORT = true;
         $scope.CAN_VIEW_EXCLUDE_GROUPS = true;
         $scope.CAN_VIEW_ALL_DEALS = true;  //Removed for DE8996 - (window.isDeveloper || window.isTester);
-        $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, 'Incomplete'); // Hard set to Incomplete since we dont have access to stage here
+
+        // canDeleteAttachment sets local deal level C_DELETE_ATTACHMENTS based on WF_STG_CD, however global contract level fails to enter due to not having a wfStage, so set locally after function call
+        $scope.canDeleteAttachment = function (wfStage) {
+                return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
+        }
+        if ($scope.C_DELETE_ATTACHMENTS === undefined) { // For contract local level delete permissions
+            $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, 'Incomplete');
+        }
 
         // NPSG DISABLE QUOTES CODE
         // Left off NPSG changes here, need to move below line over to pull data from constants with objsetService.constantsService("CNST_TO_BE_USED") call, then comment in HTML usgaes of disableQuotesForVerticalsList
@@ -1095,11 +1102,7 @@
 
         $scope.deleteAttachmentActions = [
             {
-                text: 'Cancel',
-                action: function () { }
-            },
-            {
-                text: 'Yes, Delete',
+                text: 'OK',
                 primary: true,
                 action: function () {
                     dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/CNTRCT")
@@ -1116,6 +1119,10 @@
                                 $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
                             });
                 }
+            },
+            {
+                text: 'CANCEL',
+                action: function () { }
             }
         ];
 

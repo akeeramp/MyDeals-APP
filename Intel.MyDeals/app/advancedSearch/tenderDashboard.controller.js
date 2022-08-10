@@ -1257,7 +1257,8 @@
             window.open(downloadPath, '_blank', '');
         }
 
-        $scope.C_DELETE_ATTACHMENTS = function (wf_st_cd) {
+        // Copy of canDeleteAttachment at Contract Controller level to set local C_DELETE_ATTACHMENTS for deal level based on tender WF_STG_CD
+        $scope.canDeleteAttachment = function (wf_st_cd) {
             return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wf_st_cd);
         }
 
