@@ -192,6 +192,12 @@
                             {{dataItem.COMP_OVRRD_FLG}}
                         </div>
                     </ng-template>
+                    <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
+                        <div *ngIf=" !(dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || (dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) && ((usrRole == 'DA') && dataItem.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === 'y')">
+                            <kendo-dropdownlist [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
+                            </kendo-dropdownlist>
+                        </div>
+                    </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
@@ -201,6 +207,12 @@
                     <ng-template kendoGridCellTemplate let-dataItem>
                         <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
                             {{dataItem.COMP_OVRRD_RSN}}
+                        </div>
+                    </ng-template>
+                    <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
+                        <div *ngIf="!((usrRole == 'DA' && dataItem.MEET_COMP_UPD_FLG == 'Y' && (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || dataItem.MEET_COMP_STS.toLowerCase() == 'overridden')) || (dataItem.MEET_COMP_UPD_FLG == 'N')) && dataItem.COMP_OVRRD_FLG !=='Select Override'">
+                            <kendo-textbox placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
+                            </kendo-textbox>
                         </div>
                     </ng-template>
                 </kendo-grid-column>
@@ -340,11 +352,23 @@
                                         {{dataItem.COMP_OVRRD_FLG}}
                                     </div>
                                 </ng-template>
+                                <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
+                                    <div *ngIf=" !(dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || (dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) && ((usrRole == 'DA') && dataItem.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === 'y')">
+                                        <kendo-dropdownlist [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
+                                        </kendo-dropdownlist>
+                                    </div>
+                                </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
                                         {{dataItem.COMP_OVRRD_RSN}}
+                                    </div>
+                                </ng-template>
+                                <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
+                                    <div *ngIf="!(usrRole == 'DA' && dataItem.MEET_COMP_UPD_FLG == 'Y' && (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || dataItem.MEET_COMP_STS.toLowerCase() == 'overridden')) && dataItem.COMP_OVRRD_FLG !=='Select Override'">
+                                        <kendo-textbox placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
+                                        </kendo-textbox>
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>

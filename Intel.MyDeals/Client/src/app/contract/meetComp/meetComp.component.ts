@@ -53,24 +53,33 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         COMP_OVRRD_RSN: 13
     };
 
+    public tempUpdatedList = [];
     public isDataAvaialable = true;
     public errorList = [];
     public validationMessage = "";
     public setUpdateFlag = false;
     public runIfStaleByHours = 3;
     public MC_MODE = "D";
-    // public PAGE_NM = pageNm;
+    public PAGE_NM;
     meetCompMasterResult: any[];
     public meetCompMasterdata;
     public meetCompUnchangedData;
     public meetCompUpdatedList = [];
     public meetCompSkuDropdownData = [];
     public meetCompPrcDropdownData = [];
+    public compOverrideDropdownData = [
+        {
+            "COMP_OVRRD_FLG": "Yes"
+        },
+        {
+            "COMP_OVRRD_FLG": "No"
+        }
+    ];
+    public defaultCompOverrideItem = {"COMP_OVRRD_FLG": "Select Override"}
     public totalApiEntries = 0;
     public isMeetCompRun = false;
     public isGridEditable = true;
     public isEditableGrid = "True";
-    public mySelection = [];
     public selectAllState: SelectAllCheckboxState = "unchecked";
 
     public selectedCust = '';
@@ -117,6 +126,13 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
             value: 100,
         }
     ];
+    //Setting DICT for Confrim box
+    public msgDescDict = {
+        'COMP_SKU_NEW': 'You have entered a new Meet Comp SKU and price. Please make sure to store the Meet Comp SKU and price source in My Deals or in a legal approved repository as required by the MCA guidelines. Also, work with your Division Approver so they can update the necessary documentation.',
+        'COMP_SKU_UPD': 'You have overwritten the pre-populated Meet Comp Price. Please make sure to store the Meet Comp price source in My Deals or in a legal approved repository as required by the MCA guidelines.',
+        'IA_COMP_BNCH': 'You have overwritten the pre-populated or entered a new IA Bench / Comp Bench.Please make sure to store the IA Bench / Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.Also, work with your Division Approver so they can update the necessary documentation.',
+        'SKU_BNCH': 'You have entered or overwritten the Meet Comp and IA Bench / Comp Bench data.Please make sure to store the Meet Comp and IA Bench / Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.Also, work with your Division Approver so they can update the necessary documentation.'
+    };
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -156,11 +172,100 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         return this.childGridData;
     }
 
+    isModelValid(data) {
+        this.errorList = [];
+        for (let i = 0; i < data.length; i++) {
+            let isError = false;
+            const errorObj = {
+                'COMP_SKU': false,
+                'COMP_PRC': false,
+                'COMP_BNCH': false,
+                'IA_BNCH': false,
+                'COMP_OVRRD_FLG': false,
+                'COMP_OVRRD_RSN': false,
+                'RW_NM': ""
+            };
+
+            //COMP_SKU Checking.....
+            const isCompSkuZero = false;
+            // per DE36513 removed this check... but left it here in case the request comes back
+            //if (!isNaN(Math.abs(data[i].COMP_SKU))) {
+            //    isCompSkuZero = true;
+            //}
+
+            if (isCompSkuZero && this.canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
+                errorObj.COMP_SKU = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            if (data[i].COMP_SKU.trim().length == 0 && this.canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                errorObj.COMP_SKU = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            //COMP_PRC checking.....
+            if (data[i].COMP_PRC <= 0 && this.canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                errorObj.COMP_PRC = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            //COMP_BNCH checking....
+            if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (this.usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                errorObj.COMP_BNCH = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            //IA_BNCH checking....
+            if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (this.usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
+                errorObj.IA_BNCH = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            //COMP_OVRRD_FLG checking....
+            if (data[i].COMP_OVRRD_FLG <= 0 && (this.usrRole == "DA")) {
+                errorObj.COMP_OVRRD_FLG = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            //COMP_OVRRD_RSN checking....
+            if (data[i].COMP_OVRRD_RSN <= 0 && (this.usrRole == "DA")) {
+                errorObj.COMP_OVRRD_RSN = true;
+                errorObj.RW_NM = data[i].RW_NM;
+                isError = true;
+            }
+
+            if (isError)
+                this.errorList.push(errorObj);
+        }
+
+        if (this.errorList.length > 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public cellClickHandler(args: CellClickEvent): void {
         if(args.column.field == "COMP_SKU") {
             this.generateMeetCompSkuDropdownData(args.dataItem);
         }else if (args.column.field == "COMP_PRC"){
             this.generateMeetCompPrcDropdownData(args.dataItem);
+        }else if(args.column.field == "COMP_OVRRD_FLG"){
+            if(!(args.dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || (args.dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && args.dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) && !((this.usrRole == 'DA') && args.dataItem.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === 'y')){
+                if (this.usrRole == "DA") {
+                    this.loggerSvc.warn("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is already Passed or you do not have access to for this stage.","Warning");
+                }
+                else {
+                    this.loggerSvc.warn("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status","Warning");
+                }
+                return;
+            }
         }
         if (!args.isEdited) {
             args.sender.editCell(
@@ -772,6 +877,152 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         }
     }
 
+    onCompOverrideFlagChange(val:any,dataItem:any){
+
+        if(val == "Select Override"){
+            val = "Yes";
+        }
+
+        this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_OVRRD_FLG = val.trim();
+        this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+        let isUpdated = false;
+        if (dataItem.GRP == "PRD") {
+            let selData = [];
+            if (dataItem.IS_SELECTED) {
+                selData = this.getProductLineData();
+            }
+            if (selData.length > 0) {
+                isUpdated = true;
+                for (let cntData = 0; selData.length > cntData; cntData++) {
+                    const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                    //Updating Product Line
+                    if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                        this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_OVRRD_FLG = dataItem.COMP_OVRRD_FLG;
+                        this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                    }
+
+                    //Updating Deal line
+                    const tempData = this.meetCompUnchangedData
+                        .Where(function (x) {
+                            return (
+                                x.GRP_PRD_SID == temp_grp_prd &&
+                                x.GRP == "DEAL" &&
+                                x.MEET_COMP_UPD_FLG == "Y" &&
+                                x.MEET_COMP_STS.toLowerCase() != "pass");
+                        })
+                        .ToArray();
+
+                    for (let i = 0; i < tempData.length; i++) {
+                        if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = dataItem.COMP_OVRRD_FLG;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+                    }
+                }
+            }
+            else {
+                //Updating Deal line
+                const tempData = this.meetCompUnchangedData
+                    .Where(function (x) {
+                        return (
+                            x.GRP_PRD_SID == dataItem.GRP_PRD_SID &&
+                            x.GRP == "DEAL" &&
+                            x.MEET_COMP_UPD_FLG == "Y" &&
+                            x.MEET_COMP_STS.toLowerCase() != "pass");
+                    })
+                    .ToArray();
+
+                for (let i = 0; i < tempData.length; i++) {
+                    if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                        this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = dataItem.COMP_OVRRD_FLG;
+                        this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                    }
+                }
+
+                if (tempData.length > 0) {
+                    isUpdated = true;
+                }
+            }
+
+            //Retaining the same expand
+            if (isUpdated) {
+                // expandSelected("COMP_OVRRD_FLG", options.model.RW_NM);
+            }
+        }
+    }
+
+    onCompOverrideCommentChange(value:any,dataItem:any){
+        
+        dataItem.COMP_OVRRD_RSN = value.trim();
+        this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
+        this.addToUpdateList(dataItem);
+        let isUpdated = false;
+        if (dataItem.GRP == "PRD") {
+            let selData = [];
+            if (dataItem.IS_SELECTED) {
+                selData = this.getProductLineData();
+            }
+            if (selData.length > 0) {
+                isUpdated = true;
+                for (let cntData = 0; selData.length > cntData; cntData++) {
+                    const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+
+                    //Updating Product Line
+                    if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+                        this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_OVRRD_RSN = dataItem.COMP_OVRRD_RSN;
+                        this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                    }
+
+                    //Updating Deal line
+                    const tempData = this.meetCompUnchangedData
+                        .Where(function (x) {
+                            return (
+                                x.GRP_PRD_SID == temp_grp_prd &&
+                                x.GRP == "DEAL" &&
+                                x.MEET_COMP_UPD_FLG == "Y" &&
+                                x.MEET_COMP_STS.toLowerCase() != "pass"
+                            );
+                        })
+                        .ToArray();
+
+                    for (let i = 0; i < tempData.length; i++) {
+                        if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                            this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = dataItem.COMP_OVRRD_RSN;
+                            this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                        }
+                    }
+                }
+            }
+            else {
+                const tempData = this.meetCompUnchangedData
+                    .Where(function (x) {
+                        return (
+                            x.GRP_PRD_SID == dataItem.GRP_PRD_SID &&
+                            x.GRP == "DEAL" &&
+                            x.MEET_COMP_UPD_FLG == "Y" &&
+                            x.MEET_COMP_STS.toLowerCase() != "pass"
+                        );
+                    })
+                    .ToArray();
+
+                for (let i = 0; i < tempData.length; i++) {
+                    if (tempData[i].MEET_COMP_STS.toLowerCase() == "fail" || tempData[i].MEET_COMP_STS.toLowerCase() == "incomplete") {
+                        this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = dataItem.COMP_OVRRD_RSN;
+                        this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
+                    }
+                }
+                if (tempData.length > 0) {
+                    isUpdated = true;
+                }
+            }
+            //Retaining the same expand
+            if (isUpdated) {
+                // expandSelected("COMP_OVRRD_RSN", editedROW.RW_NM);
+            }
+        }
+    }
+
     setBusy(msg, detail) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -798,12 +1049,137 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         return "Meet Comp Last Run: 2 hrs ago";
     }
 
+    getMeetCompPopupMessage() {
+        let isSKUChanged = false;
+        let isPriceChanged = false;
+        let isIACompBenchChanged = false;
+        for (let i = 0; i < this.tempUpdatedList.length; i++) {
+            const ChangedSKUCount = this.meetCompUnchangedData
+                .Where(function (x) {
+                    return (
+                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
+                        x.COMP_SKU == this.tempUpdatedList[i].COMP_SKU
+                    )
+                }).ToArray();
+
+            const ChangedPRCCount = this.meetCompUnchangedData
+                .Where(function (x) {
+                    return (
+                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
+                        x.COMP_SKU == this.tempUpdatedList[i].COMP_SKU &&
+                        x.COMP_PRC == this.tempUpdatedList[i].COMP_PRC
+                    )
+                }).ToArray();
+
+            const changedIACMPBenchCount =this.meetCompUnchangedData
+                .Where(function (x) {
+                    return (
+                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
+                        x.IA_BNCH == this.tempUpdatedList[i].IA_BNCH &&
+                        x.COMP_BNCH == this.tempUpdatedList[i].COMP_BNCH
+                    )
+                }).ToArray();
+
+
+            if (isSKUChanged == false && ChangedSKUCount.length == 0) {
+                isSKUChanged = true;
+            }
+            if (isPriceChanged == false && ChangedPRCCount.length == 0) {
+                isPriceChanged = true;
+            }
+            if (isIACompBenchChanged == false && changedIACMPBenchCount.length == 0) {
+                isIACompBenchChanged = true;
+            }
+
+        }
+
+        if ((isSKUChanged || isPriceChanged) && isIACompBenchChanged) {
+            return this.msgDescDict['SKU_BNCH'];
+        }
+        else if (isIACompBenchChanged) {
+            return this.msgDescDict['IA_COMP_BNCH'];
+        }
+        else if (isSKUChanged) {
+            return this.msgDescDict['COMP_SKU_NEW'];
+        }
+        else if (isPriceChanged) {
+            return this.msgDescDict['COMP_SKU_UPD'];
+        }
+        else {
+            return null;
+        }
+    }
+
     saveAndRunMeetComp() {
-        //kujoih
+        console.log("Griddata :" , this.gridData);
+        console.log("Meet comp updated list", this.meetCompUpdatedList);
+        
+        let tempUpdatedList = [];
+        const unChangedMeetComp = this.meetCompUnchangedData;
+        const isValid = this.isModelValid(this.meetCompUpdatedList);
+        if (isValid) {
+            tempUpdatedList = this.meetCompUpdatedList.map(function (x) {
+                return {
+                    GRP: x.GRP,
+                    CUST_NM_SID: x.CUST_NM_SID,
+                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    PRD_CAT_NM: x.PRD_CAT_NM,
+                    GRP_PRD_NM: x.GRP_PRD_NM,
+                    GRP_PRD_SID: x.GRP_PRD_SID,
+                    DEAL_OBJ_SID: x.DEAL_OBJ_SID,
+                    DEAL_DESC: x.DEAL_DESC,
+                    COMP_SKU: x.COMP_SKU,
+                    COMP_PRC: x.COMP_PRC,
+                    COMP_BNCH: x.COMP_BNCH,
+                    IA_BNCH: x.IA_BNCH,
+                    COMP_OVRRD_RSN: x.COMP_OVRRD_RSN,
+                    COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Yes' ? true : false,
+                    MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG,
+                    MEET_COMP_OVERRIDE_UPD_FLG: x.MEET_COMP_OVERRIDE_UPD_FLG
+                }
+
+            });
+
+            if (tempUpdatedList.length > 0) {
+                const popUpMessage = this.getMeetCompPopupMessage();
+                if (popUpMessage != null) {
+                    // kendo.confirm(popUpMessage)
+                    //     .done(function () {
+                    //         $scope.updateMeetComp();
+                    //     }).fail(function () {
+                    //         $scope.tempUpdatedList = [];
+                    //         $scope.meetCompUpdatedList = [];
+                    //         $scope.meetCompMasterdata = unChangedMeetComp;
+                    //         $scope.meetCompUnchangedData = angular.copy(unChangedMeetComp);
+                    //         $scope.dataSourceParent.read();
+                    //     });
+                }
+                else {
+                    this.updateMeetComp();
+                }
+            }
+            else if (tempUpdatedList.length == 0 && this.isAdhoc == 0) {
+                this.forceRunMeetComp();                                        
+            }
+        }
+        else {
+            if (this.usrRole == "DA") {
+                // kendo.alert("Analysis Override Status OR Analysis Override Comments can't be Blank.");
+            }
+            else {
+                // kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
+            }
+            // $scope.dataSourceParent.read();
+        }
+    
     }
 
     forceRunMeetComp() {
-        //sjcvacv
+        //to complete
+    }
+
+    updateMeetComp(){
+        //to complete
     }
 
     showHelpTopic() {
@@ -838,7 +1214,10 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         );
 
     ngOnInit(): void {
-        this.loadMeetCompData();
+        this.PAGE_NM = this.pageNm;
+        if(!!this.objSid){
+            this.loadMeetCompData();
+        }
     }
 
     ngOnDestroy() {
