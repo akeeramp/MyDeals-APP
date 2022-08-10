@@ -32,7 +32,7 @@
             <div class="clearboth"></div>
         </div>
         <div id="grid" class="opUiContainer md dashboard" [ngClass]="{'op-grid': isAdhoc !=1}">
-            <kendo-grid [data]="gridData" [skip]="state.skip" [height]="600" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+            <kendo-grid [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
                 [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
                 <kendo-grid-column width="70px" [columnMenu]="false">
                     <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">

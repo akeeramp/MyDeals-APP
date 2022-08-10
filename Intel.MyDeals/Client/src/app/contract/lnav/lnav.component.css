@@ -142,6 +142,16 @@
 .k-tabstrip-items .k-item {
     color: #ffffff !important;
     background-color: #00AEEF !important;
+    font-size: 15px !important;
+}
+.k-tabstrip .k-tabstrip-items-wrapper .k-tabstrip-items .k-state-default .k-link:hover {
+    background-color: #0071c5 !important;
+    color: #FFFFFF !important;
+}
+
+.k-tabstrip .k-tabstrip-items-wrapper .k-tabstrip-items .k-state-active .k-link:hover {
+    background-color: #003c71 !important;
+    color: #FFFFFF !important;
 }
 
 .k-tabstrip-items .k-item:hover,
@@ -275,7 +285,7 @@
     font-family: 'Intel Clear';
     font-weight: 200;
     font-style: normal;
-    padding: 2px 10px 0 33px;
+    padding: 2px 10px 0 36px;
     display: inline-flex;
 }
 
@@ -389,13 +399,14 @@
     border: 1px solid #ED1C24;
 }
 
-.contractIdBtn{
-    background: white;
-    border-color: white;
-    padding-left: 0px; 
+.contractIdBtn {
+    background: transparent;
+    border-color: transparent;
+    padding-left: 0px;
+    color: #003c71;
 }
-.contractIdBtn:hover{
-    color:black;
+.contractIdBtn:hover {
+    color: #00aeef;
 }
 
 .k-link:hover {
@@ -407,6 +418,8 @@
     position: absolute;
     margin-left: 1px;
     overflow: auto;
+    overflow-x: hidden;
+    height: 73vh;
 }
 
 ::-webkit-scrollbar-button {

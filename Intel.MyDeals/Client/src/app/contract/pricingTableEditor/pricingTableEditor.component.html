@@ -15,25 +15,39 @@
             <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()">
                 <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                 <span class="text"
-                    style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
+                      style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
                     Save & Validate
                 </span>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="undoPTE()">
+            <button class="btn btn-sm ssToolbarBtn" title="Undo" (click)="undoPTE()">
                 <i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}"
-                    style="font-size: 23px; margin-top: 2px;"></i>
+                   style="font-size: 23px; margin-top: 2px;"></i>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="redoPTE()">
+            <button class="btn btn-sm ssToolbarBtn" title="Redo" (click)="redoPTE()">
                 <i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}"
-                    style="font-size: 23px; margin-top: 2px;"></i>
+                   style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <!-- Product Validator Button -->
-            <button class="btn btn-sm ssToolbarBtn" (click)="validateOnlyProducts('onLoad')"
-                title="Validate the products entered in the web sheet">
+            <button class="btn btn-sm ssToolbarBtn"
+                    title="Use Product Selector to search for Product(s)">
                 <table>
                     <tr>
                         <td>
-                            <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+                            <i class="fa intelicon-search skyBlue" aria-hidden="true" style="font-size:30px"></i>
+                        </td>
+                        <td class="hidden-sm hidden-xs"
+                            style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
+                            Product <br />Selector
+                        </td>
+                    </tr>
+                </table>
+            </button>
+            <button class="btn btn-sm ssToolbarBtn" (click)="validateOnlyProducts('onLoad')"
+                    title="Validate the products entered in the web sheet">
+                <table>
+                    <tr>
+                        <td>
+                            <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                         </td>
                         <td class="hidden-sm hidden-xs"
                             style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
@@ -42,12 +56,39 @@
                     </tr>
                 </table>
             </button>
+            <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals">
+                <table>
+                    <tr>
+                        <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
+                        <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                            Overlapping<br />Deals Check
+                        </td>
+                    </tr>
+                </table>
+            </button>
+            <button class="btn btn-sm ssToolbarBtn" title="Show/Hide Additional Discounts and Requirements.">
+                <table>
+                    <tr>
+                        <td>
+                            <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                        </td>
+                        <td class="hidden-sm hidden-xs" style="padding-left: 5px; font-size: 11px; text-align: left; color: #00AEEF;">
+                            Show/Hide<br />Additional Discounts
+                        </td>
+                    </tr>
+                </table>
+            </button>
             <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()"
-                style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">
+                    style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">
                 <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                 Autofill Defaults
             </button>
             <!-- <button (click)="openAutofill()">autofill</button> -->
+            <button class="fr btn ssToolbarBtn" title="Help">
+                <table>
+                    <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size:30px;background:none !important"></i></td></tr>
+                </table>
+            </button>
         </div>
     </div>
     <div class="row">

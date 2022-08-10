@@ -18,7 +18,7 @@ import { map } from "rxjs/operators";
     styleUrls: ["Client/src/app/contract/meetComp/meetComp.component.css"],
     encapsulation: ViewEncapsulation.None,
 })
-export class meetCompContractComponent implements OnInit, OnDestroy {
+export class meetCompContractComponent implements OnInit {
 
     @Input() private objSid;
     @Input() private isAdhoc;
@@ -1218,12 +1218,6 @@ export class meetCompContractComponent implements OnInit, OnDestroy {
         if(!!this.objSid){
             this.loadMeetCompData();
         }
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

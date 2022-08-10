@@ -27,14 +27,14 @@
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')" [innerHTML]="uiControlScheduleWrapperDensity(in_DataItem)" class="breakoutColumn dealCell"></div>
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyControlWrapper')" [innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TRKR_NBR'" [innerHTML]="uiDimTrkrControlWrapper(in_DataItem)" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)"></div>
+<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" style="height: 100% !important;" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)"></div>
 <div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)"></div>
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell vert-center" [innerHTML]="getFormatedDim(in_DataItem)"></div>
 <div *ngIf="in_Field_Name == 'EXPIRE_FLG'" [innerHTML]="uiBoolControlWrapper(in_DataItem, in_Field_Name)" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'WF_STG_CD'" [innerHTML]="uiParentControlWrapper(in_DataItem)"></div>
+<div *ngIf="in_Field_Name == 'WF_STG_CD'" style="height: 100% !important;" [innerHTML]="uiParentControlWrapper(in_DataItem)"></div>
 <div *ngIf="in_Field_Name == 'PRD_BCKT'" [innerHTML]="uiProductDimControlWrapper(in_DataItem, 'kit')" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'PRD_BCKT_SUBKIT'" [innerHTML]="uiProductDimControlWrapper(in_DataItem, 'subkit')" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TITLE'" [innerHTML]="uiProductControlWrapper(in_DataItem)"></div>
+<div *ngIf="in_Field_Name == 'TITLE'" style="height: 100% !important;" [innerHTML]="uiProductControlWrapper(in_DataItem)"></div>
 <div *ngIf="in_Field_Name == 'DEAL_SOLD_TO_ID'" [innerHTML]="uiMultiselectArrayControlWrapper(in_DataItem, in_Field_Name)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'PRIMARY_OR_SECONDARY'" [innerHTML]="uiPrimarySecondaryDimControlWrapper(in_DataItem)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'KIT_REBATE_BUNDLE_DISCOUNT'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'rebateBundle')" class="dealCell"></div>

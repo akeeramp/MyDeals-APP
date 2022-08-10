@@ -3,20 +3,99 @@
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
-            <span><i class="intelicon-pin-outlined " title="Pin tab so it always shows in the grid"></i></span>&nbsp;
-            {{data.name}} &nbsp;
-            <span class="badge error ng-binding" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
-            <span class="badge warning" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
-            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
-        </ng-template>
+            <span><i class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
+            <span class="colorChg">{{data.name}} &nbsp;</span>
+                <span class="badge error ng-binding" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
+                <span class="badge warning" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
+                <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color:#00aeef; border-radius:15px" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
+</ng-template>
         <ng-template kendoTabContent>
-            <div class="fl">
+            <div class="flex-container" style="display:flex">
                 <button id="SaveDeBtn" class="btn btn-sm btn-save" style="font-size:25px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     <span class="text hidden-sm hidden-xs" style="padding-left: 5px; text-align: left;">
                         Save & Validate
                     </span>
                 </button>
+                <div class="fr" style="margin-top: 2px;">
+                    <button class="btn btn-sm ssToolbarBtn" title="Toggle Word Wrap">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-align-left skyBlue" style="font-size: 30px"></i></td>
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Word <br /> Wrap
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+
+                <div class="fr" style="margin-top: 2px; margin-left:8px">
+                    <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Overlapping<br />Deals Check
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+
+                <div class="fr" style="margin-top: 2px; margin-left:8px">
+                    <button class="btn btn-sm ssToolbarBtn" title="Manage Columns">
+                        <table>
+                            <tr>
+                                <td> <i class="intelicon-view-by-columns skyBlue" style="font-size: 30px"></i></td>
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Columns<br /> Options
+                                </td>
+                                <td>
+                                    <span class="k-icon k-i-arrow-60-down" style="padding-top:13px;color: #00AEEF"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+
+                <div class="fr" style="margin-top: 2px; margin-left:8px">
+                    <button class="btn btn-sm ssToolbarBtn" title="Manage Columns">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-settings-solid skyBlue" style="font-size: 30px"></i></td>
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF; ">
+                                    Grid<br /> Settings
+                                </td>
+                                <td>
+                                    <span class="k-icon k-i-arrow-60-down" style="padding-top:13px;color: #00AEEF"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr" style="margin-top: 2px; margin-left:8px">
+                    <button class="btn btn-sm ssToolbarBtn">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-ms-excel-outlined skyBlue" style="font-size: 30px"></i></td>
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear';font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">Excel<br /> Exports</td>
+                                <td><span class="caret" style="color: #00AEEF"></span></td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>&nbsp;&nbsp;
+                <button class="btn ssToolbarBtn" title="Help">
+                    <table>
+                        <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size: 30px"></i></td></tr>
+                    </table>
+                </button>&nbsp;&nbsp;
+
+                <span class="k-textbox" style="width:240px;margin-top:4px">
+                    <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
+                    &nbsp;&nbsp;
+                    <input style="width:270px;border:none" placeholder="search... (press enter to search)" />
+                </span>
             </div>
             <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                         [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
@@ -29,10 +108,10 @@
                     <ng-template kendoGridHeaderTemplate>
                         <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" (selectAllData)="clkAllItems($event)"></deal-editor-header>
                     </ng-template>
-                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate class="uiControlDiv isReadOnlyCell" style="color: #0071C5; cursor: pointer; width: 1062.67px;">
+                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                         <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
                     </ng-template>
-                    <ng-template kendoGridEditTemplate let-dataItem="dataItem" class="uiControlDiv isReadOnlyCell" style="font:10px;">
+                    <ng-template kendoGridEditTemplate let-dataItem="dataItem">
                         <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses"></deal-editor-edit>
                     </ng-template>
                 </kendo-grid-column>
@@ -47,11 +126,10 @@
             </kendo-dialog>
         </ng-template>
     </kendo-tabstrip-tab>
-    <kendo-tabstrip-tab [disabled]="true" width="100"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab [disabled]="true">
         <ng-template kendoTabTitle>
-            <div class="fr dealTag ng-binding" style=" font-weight:bold; top: 0; right: 0; z-index: 100; font-size: 16px;">
-                {{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals
+            <div style="font-weight:bold;font-size: 16px; width:562px; text-align:right;">
+                <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
         </ng-template>
     </kendo-tabstrip-tab>

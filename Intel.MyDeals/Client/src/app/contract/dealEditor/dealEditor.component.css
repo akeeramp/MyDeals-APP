@@ -11,7 +11,9 @@
 }
 
 .vert-center {
-    transform: translateY(-5%) !important;
+    position: relative;
+    top: 0% !important;
+    transform: translateY(0) !important;
 }
 
 #chkDealTools label {
@@ -134,7 +136,7 @@ tr:last-child > td {
     background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%);
     background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
     color: #003C71 !important;
-    padding: 0.8em !important;
+    /*padding: 0.8em !important;*/
     text-transform: none !important;
     background-color: #fff;
     border-bottom-width: 0;
@@ -240,7 +242,7 @@ tr:last-child > td {
 }
 
 .bigIcon {
-    font-size: 26px;
+    font-size: 20px;
 }
 .k-hstack {
     height: 37px;
@@ -296,9 +298,9 @@ tr:last-child > td {
     min-width: 60px;
 }*/
 
-.op-grid.k-grid .k-grid-header, .op-grid.k-grid .k-grid-content {
+/*.op-grid.k-grid .k-grid-header, .op-grid.k-grid .k-grid-content {
     border-right: 1px solid #e6e6e6;
-}
+}*/
 
 .k-grid-content-locked + .k-grid-content {
     display: inline-block;
@@ -319,10 +321,10 @@ tr:last-child > td {
 }
 
 .uiControlDiv {
-    border: 1px solid transparent;
+    padding-top: 23px !important;
 }
 
-.isReadOnlyCell {
+/*.isReadOnlyCell {
     color: #000 !important;
     background-color: rgba(0,0,0,.05) !important;
 }
@@ -333,7 +335,7 @@ tr:last-child > td {
 
 .k-header, .headerClass, .k-touch-action-none, .k-filterable, .k-grid-draggable-header {
     background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
-}
+}*/
 
 .k-grid table {
     height: 100% !important;
@@ -348,18 +350,32 @@ tr:last-child > td {
     color: #00AEEF;
 }
 
-.opUiContainer.md.k-grid td {
+/*.opUiContainer.md.k-grid td {
     font-size: 12px !important;
     height: 33px !important;
+}*/
+.k-grid td.k-state-focused, .k-grid th.k-state-focused,
+.k-grid th:focus, .k-grid .k-master-row > td:focus,
+.k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus,
+.k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
+    box-shadow: inset 0 0 0 1px #00aeef !important;
 }
 
+.k-grid td.k-state-focused, .k-grid th.k-state-focused,
+.k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover,
+.k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover,
+.k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
+    box-shadow: inset 0 0 0 1px #003C71 !important;
+}
 .dealTools {
-    margin-top: 38px;
+    margin-top: 0px !important;
+    padding-top: 23px !important;
 }
 
 .k-label {
     padding: 1px;
     min-width: 7px;
+    width: 90px !important;
     display: inline-block;
 }
 
@@ -411,4 +427,53 @@ tr:last-child > td {
     font-size: 14px !important;
     font-weight: 600;
     line-height: 1em;
+}
+.k-tabstrip-items .k-item {
+    margin-right: 0 !important;
+}
+
+.intelicon-pin-outlined:hover {
+    background-color: #00aeef;
+    color: #fff !important;
+}
+
+.intelicon-close:hover {
+    color: #ff0000 !important;
+}
+
+tr:last-child > td {
+    border-bottom-width: 0px !important;
+}
+/*.k-link:hover {
+    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+}*/
+.k-grid-header .headerClass {
+    color: #1a3e6f;
+    font-size: 12px;
+    font-family: 'Intel Clear';
+    font-weight: bold;
+    background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
+}
+
+.k-cell-inner > .k-link:hover {
+    background: none !important;
+    color: #1a3e6f !important;
+}
+
+#dealEditorTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link:hover {
+    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+}
+
+
+#dealEditorTab .k-tabstrip-items .k-state-active .colorChg {
+    color: #00aeef !important;
+}
+
+.colorChg {
+    color: #003c71 !important;
+}
+
+.k-grid .k-detail-row .k-detail-cell {
+    padding-top: 0;
+    padding-bottom: 5px;
 }
