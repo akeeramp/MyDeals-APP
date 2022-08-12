@@ -173,6 +173,9 @@ export class pricingTableEditorComponent implements OnChanges {
             //using => operator to-call-parent-function-from-callback-function
             this.afterCellChange(changes, source);
         },
+        afterDocumentKeyDown:(event) =>{
+            this.afterDocumentKeyDown(event);
+        },
         licenseKey: "8cab5-12f1d-9a900-04238-a4819",
     };
     private columns: Array<Handsontable.ColumnSettings> = [];
@@ -197,7 +200,14 @@ export class pricingTableEditorComponent implements OnChanges {
 
     //this will help to have a custom cell validation which allow only alphabets
     private newPricingTable: any = {};
+    private isDeletePTR:boolean=false;
 
+    afterDocumentKeyDown(evt:any){
+        //befor change hook afterDocumentKeyDown triggers so we can double confirm delete based on values equal to empty and explicity clicking delete
+       if(evt.key && evt.key=='Delete'){
+        this.isDeletePTR=true;
+       }
+    }
     closeDialog(act:string){
      if(act=='No'){
        //setting back the values back to handsonetables
@@ -211,6 +221,7 @@ export class pricingTableEditorComponent implements OnChanges {
        this.deletePTR();
      }
      this.multiRowDelete=[];
+     this.isDeletePTR=false;
     }
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
@@ -301,8 +312,12 @@ export class pricingTableEditorComponent implements OnChanges {
                 cellProperties['readOnly'] = true;
             }
         }
+        //voltier deal making start vol disable for tier except 1
+        else if(prop=='STRT_VOL' && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') !=1){
+            cellProperties['readOnly'] = true;
+        }
         else {
-            //column config hasr eadonly property for certain column persisting that assigning for other
+            //column config has readonly property for certain column persisting that assigning for other
             if (_.findWhere(this.ColumnConfig, { data: prop }).readOnly) {
                 cellProperties['readOnly'] = true;
             }
@@ -388,16 +403,32 @@ export class pricingTableEditorComponent implements OnChanges {
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
             setTimeout(() => {
                 changes = this.identfyUniqChanges(changes, source);
+                console.log(changes);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
+                //KIT On change events
+                let KIT_ECAP = _.filter(changes, item =>{return item.prop=='ECAP_PRICE_____20_____1' || item.prop=='ECAP_PRICE'});
+                let KIT_DSCNT = _.filter(changes, item =>{return item.prop=='DSCNT_PER_LN' || item.prop=='QTY'});
+                //Voltier Changes
+                let End_Vol = _.filter(changes, item =>{return item.prop=='END_VOL'});
+                //here we are using if conditions because at a time multiple changes can happen
                 if (PTR && PTR.length > 0) {
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns);
                 }
                 if (AR && AR.length > 0) {
                     PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
                 }
-                //for multi tier there can be more tiers to delete so moving the logc after all change
-                if (this.multiRowDelete && this.multiRowDelete.length > 0) {
+                if (KIT_ECAP && KIT_ECAP.length > 0) {
+                    PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP,this.columns,this.curPricingTable);
+                }
+                if (KIT_DSCNT && KIT_DSCNT.length > 0) {
+                    PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT,this.columns,this.curPricingTable);
+                }
+                if (End_Vol && End_Vol.length > 0) {
+                    PTE_CellChange_Util.endVolChange(End_Vol,this.columns,this.curPricingTable);
+                }
+                //for multi tier there can be more tiers to delete so moving the logc after all change 
+                if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
                     this.deleteRow(this.multiRowDelete);
                 }
                 this.isLoading = false;
@@ -451,6 +482,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.hotTable.alter('remove_row', delRows[0].row,delRows.length, 'no-edit');
             this.getMergeCellsOnDelete();
             this.multiRowDelete = [];
+            this.isDeletePTR=false;
             //setting the value to empty to avoid extra delete
         }
         //this condition for all rows are saved DC_ID rows so hit API

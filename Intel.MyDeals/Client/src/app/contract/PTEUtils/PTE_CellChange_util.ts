@@ -4,6 +4,7 @@ import { logger } from '../../shared/logger/logger';
 import Handsontable from 'handsontable';
 import { CellSettings } from 'handsontable/settings';
 import { PTE_Common_Util } from './PTE_Common_util';
+import { PTE_Load_Util } from './PTE_Load_util';
 
 export class PTE_CellChange_Util {
     constructor(hotTable:Handsontable){
@@ -35,7 +36,7 @@ export class PTE_CellChange_Util {
         return condition;
       }
   
-      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,tier?:number,){
+      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,numoftier:number,tier?:number,){
         //make the selected row PTR_USER_PRD empty if its not the empty row
       _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
         let currentstring='';
@@ -58,6 +59,30 @@ export class PTE_CellChange_Util {
            updateRows.push(currentstring.split(','));
           //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
         }
+        else if(val.prop=='STRT_VOL'){
+          if(tier==1){
+            currentstring =row+','+val.prop+','+1+','+'no-edit';
+            updateRows.push(currentstring.split(','));
+          }
+          else{
+            currentstring =row+','+val.prop+','+0+','+'no-edit';
+            updateRows.push(currentstring.split(','));
+          }
+        }
+        else if(val.prop=='END_VOL'){
+          if(tier==numoftier){
+            currentstring =row+','+val.prop+','+'Unlimited'+','+'no-edit';
+            updateRows.push(currentstring.split(','));
+          }
+          else{
+            currentstring =row+','+val.prop+','+0+','+'no-edit';
+            updateRows.push(currentstring.split(','));
+          }
+        }
+        else if(val.prop=='RATE'){
+           currentstring =row+','+val.prop+','+0+','+'no-edit';
+           updateRows.push(currentstring.split(','));
+        }
         else{
           this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData);
         }
@@ -67,7 +92,7 @@ export class PTE_CellChange_Util {
       static addUpdateRowOnchangeCommon(row:number,val:any,updateRows:Array<any>,curPricingTable:any,contractData:any,rowData?:any){
         //make the selected row PTR_USER_PRD empty if its not the empty row
           let currentstring='';
-          //rowdata scenario is for KIT
+          //rowdata scenario is for KIT and except kit rebate we can assign all other values
           if(rowData){
             currentstring =row+','+val.prop+','+rowData[`${val.prop}`]+','+'no-edit';
             updateRows.push(currentstring.split(','));
@@ -136,24 +161,29 @@ export class PTE_CellChange_Util {
         if(val.prop=='PTR_SYS_PRD'){
           hotTable.setDataAtRowProp(row,'PTR_SYS_PRD','','no-edit');
         }
-        if(val.prop=='PTR_USER_PRD'){
-          //update PTR_USER_PRD with entered value
-          //currentstring =row+','+val.prop+','+cellItem.new+','+'no-edit';
-          //updateRows.push(currentstring.split(','));
-          //this exclussivlt because for  products can be with comma seperate values
+        else if(val.prop=='PTR_USER_PRD'){
           hotTable.setDataAtRowProp(row,'PTR_USER_PRD', cellItem.new,'no-edit');
         }
         else if(val.prop=='DC_ID'){
-          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-          // currentstring =row+','+val.prop+','+ROW_ID+','+'no-edit';
-          // updateRows.push(currentstring.split(','));
           hotTable.setDataAtRowProp(row,val.prop, ROW_ID,'no-edit');
+        }
+        else if(val.prop=='PRD_BCKT'){
+          currentstring =row+','+val.prop+','+product+','+'no-edit';
+          updateRows.push(currentstring.split(','));
         }
         else if(val.prop=='PRD_BCKT'){
           //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
           currentstring =row+','+val.prop+','+product+','+'no-edit';
           updateRows.push(currentstring.split(','));
-          //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
+        }
+        else if(val.prop=='QTY' && rowData ==null){
+          //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+          currentstring =row+','+val.prop+','+'1'+','+'no-edit';
+          updateRows.push(currentstring.split(','));
+        }
+        else if((val.prop=='ECAP_PRICE' || val.prop=='ECAP_PRICE_____20_____1' || val.prop=='TEMP_KIT_REBATE' || val.prop=='DSCNT_PER_LN' || val.prop=='TEMP_TOTAL_DSCNT_PER_LN') && rowData ==null){
+          currentstring =row+','+val.prop+','+'0'+','+'no-edit';
+          updateRows.push(currentstring.split(','));
         }
         else{
           this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData,rowData);
@@ -210,13 +240,14 @@ export class PTE_CellChange_Util {
           //get the DC_ID of selected row
           let ROW_ID=this.hotTable.getDataAtRowProp(selrow,'DC_ID');
           //the row can be insert or delete to get that we are removing and adding the rows
-          let DataOfRow= PTE_Common_Util.getPTEGenerate(columns,curPricingTable,selrow);
+          let DataOfRow=_.filter(PTE_Common_Util.getPTEGenerate(columns,curPricingTable),itm=>{return itm.DC_ID==ROW_ID});
+           //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
+          DataOfRow[0]['TEMP_KIT_REBATE']=this.kitEcapChangeOnProd(items[0],DataOfRow.slice(0,items[0].new.split(',').length));
           this.hotTable.alter('remove_row',selrow, items[0].old.split(',').length,'no-edit');
           this.hotTable.alter('insert_row',selrow, items[0].new.split(',').length,'no-edit');
-
           let prodIndex=0;
           for (let i=selrow;i<parseInt(prods.length)+selrow;i++){
-            this.addUpdateRowOnchangeKIT(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,prods[prodIndex],DataOfRow[0]);
+            this.addUpdateRowOnchangeKIT(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,prods[prodIndex],DataOfRow[prodIndex]);
             prodIndex++;
           }
           let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
@@ -252,6 +283,7 @@ export class PTE_CellChange_Util {
       }
       //appending everything togather
       this.hotTable.setDataAtRowProp(updateRows,'no-edit');
+    
     }
     static autoFillCellonProdVol(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any){
       let updateRows=[];
@@ -270,7 +302,7 @@ export class PTE_CellChange_Util {
           //add num of tier rows the logic will be based on autofill value
           let tier=1;
           for (let i=empRow;i<parseInt(NUM_OF_TIERS)+empRow;i++){
-            this.addUpdateRowOnchange(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,tier);
+            this.addUpdateRowOnchange(this.hotTable,i,items[0],ROW_ID,updateRows,curPricingTable,contractData,NUM_OF_TIERS,tier);
             tier++;
           }
           //calling the merge cells option only where tier
@@ -291,7 +323,7 @@ export class PTE_CellChange_Util {
             //add num of tier rows the logic will be based on autofill value
             let tier=1;
             for (let i=empRow;i<parseInt(curPricingTable.NUM_OF_TIERS)+empRow;i++){
-              this.addUpdateRowOnchange(this.hotTable,i,cellItem,ROW_ID,updateRows,curPricingTable,contractData,tier);
+              this.addUpdateRowOnchange(this.hotTable,i,cellItem,ROW_ID,updateRows,curPricingTable,contractData,NUM_OF_TIERS,tier);
               tier++;
             }
             //calling the merge cells optionfor tier 
@@ -326,7 +358,7 @@ export class PTE_CellChange_Util {
             let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
             //first deleting the row this will help if the empty row and selected row doest match
             this.hotTable.alter('remove_row',selrow,1,'no-edit');
-            this.addUpdateRowOnchange(this.hotTable,empRow,items[0],ROW_ID,updateRows,curPricingTable,contractData,1);
+            this.addUpdateRowOnchange(this.hotTable,empRow,items[0],ROW_ID,updateRows,curPricingTable,contractData,0,1);
           }
           else{
             //This will make sure to hit translate API
@@ -346,7 +378,7 @@ export class PTE_CellChange_Util {
           let empRow=this.returnEmptyRow();
           _.each(items,(cellItem)=>{
               let ROW_ID=this.rowDCID();//_.random(250); // will be replace with some other logic
-              this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,ROW_ID,updateRows,curPricingTable,contractData,1);
+              this.addUpdateRowOnchange(this.hotTable,empRow,cellItem,ROW_ID,updateRows,curPricingTable,contractData,0,1);
               empRow++;
           });
         }
@@ -355,12 +387,58 @@ export class PTE_CellChange_Util {
       }
      }
    /* Prod selector autofill changes functions ends here */
-
+   static kitEcapChangeOnProd(item:any,PTR:any[]):number {
+        let DCID=this.hotTable.getDataAtRowProp(item.row,'DC_ID');
+        let numOfTiers= _.where(PTR,{DC_ID:DCID}).length;
+        let firstTierRowInd=_.findIndex(PTR,x=>{return x.DC_ID==DCID})
+        let val=PTE_Load_Util.calculateKitRebate(PTR,firstTierRowInd,numOfTiers,false)
+        return val
+   }
+   static kitEcapPriceChange(items:Array<any>,columns:any[],curPricingTable:any) {
+    let OBJ_SET_TYPE_CD=curPricingTable.OBJ_SET_TYPE_CD;
+    if(OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD=='KIT'){
+      let PTR =PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
+      _.each(items,item=>{
+        let DCID=this.hotTable.getDataAtRowProp(item.row,'DC_ID');
+        let numOfTiers= _.where(PTR,{DC_ID:DCID}).length;
+        let firstTierRowInd=_.findIndex(PTR,x=>{return x.DC_ID==DCID})
+        let val=PTE_Load_Util.calculateKitRebate(PTR,firstTierRowInd,numOfTiers,false)
+        this.hotTable.setDataAtRowProp(firstTierRowInd,'TEMP_KIT_REBATE',val,'no-edit');
+      });
+    }
+   }
+   static kitDSCNTChange(items:Array<any>,columns:any[],curPricingTable:any) {
+    let OBJ_SET_TYPE_CD=curPricingTable.OBJ_SET_TYPE_CD;
+    if(OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD=='KIT'){
+      _.each(items,item=>{
+        let val=PTE_Load_Util.calculateTotalDsctPerLine(this.hotTable.getDataAtRowProp(item.row,'DSCNT_PER_LN'),this.hotTable.getDataAtRowProp(item.row,'QTY'))
+        this.hotTable.setDataAtRowProp(item.row,'TEMP_TOTAL_DSCNT_PER_LN',val,'no-edit');
+        if(item.prop && item.prop=='QTY'){
+          this.kitEcapPriceChange([item],columns,curPricingTable);
+        }
+      })
+    }
+   }
+   static endVolChange(items:Array<any>,columns:any[],curPricingTable:any) {
+    let OBJ_SET_TYPE_CD=curPricingTable.OBJ_SET_TYPE_CD;
+    if(OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD=='VOL_TIER'){
+      let PTR =PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
+      _.each(items,item=>{
+        let DCID=this.hotTable.getDataAtRowProp(item.row,'DC_ID');
+        let Tier=this.hotTable.getDataAtRowProp(item.row,'TIER_NBR');
+        let numOfTiers= _.where(PTR,{DC_ID:DCID}).length;
+        //only in this case we need to update the start vol
+        if(Tier !=numOfTiers){
+          this.hotTable.setDataAtRowProp(item.row+1,'STRT_VOL',parseInt(item.new)+1,'no-edit');
+        }
+      })
+    }
+   }
    /* AR settlement change where functions starts here */
     static autoFillARSet(items:Array<any>,contractData:any){
         _.each(items,(item) =>{
         let colSPIdx=_.findWhere(this.hotTable.getCellMetaAtRow(item.row),{prop:'SETTLEMENT_PARTNER'}).col;
-        let selCell:CellSettings= {row:item.row,col:colSPIdx,editor:'text',className:'',comment:{value:'',readOnly:true}};
+        let selCell:CellSettings= {row:item.row,col:colSPIdx,editor:'dropdown',className:'',comment:{value:'',readOnly:true}};
         let cells=this.hotTable.getSettings().cell;
         if(item.new && item.new !='' && item.new.toLowerCase() !='cash'){
             this.hotTable.setDataAtRowProp(item.row,'SETTLEMENT_PARTNER', '','no-edit');
@@ -384,7 +462,7 @@ export class PTE_CellChange_Util {
             //check object present 
             let obj=_.findWhere(cells,{row:item.row,col:colSPIdx})
             if(obj){
-            obj.editor='text';
+            obj.editor='dropdown';
             obj.className='';
             obj.comment.value='';
             }
