@@ -115,7 +115,18 @@ try {
         $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
         $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
         & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock {
-             Restart-WebAppPool -Name $args[0]
+             if ((Get-WebAppPoolState -Name $args[0]).Value -eq "Stopped" )
+                {
+                     Write-Host "AppPool already stopped: So starting and recyling it again" +  $args[0];
+                     Start-WebAppPool -Name $args[0];
+                     Restart-WebAppPool -Name $args[0];
+                }
+                else
+                {
+                   Write-Host "AppPool already running: So recycling " +  $args[0]
+                   Restart-WebAppPool -Name $args[0];
+                }
+             
         } -ArgumentList $AppPool
      }
     }
