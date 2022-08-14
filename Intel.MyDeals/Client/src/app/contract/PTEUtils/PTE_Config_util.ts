@@ -30,5 +30,7 @@ export class PTE_Config_Util {
         { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
-    static maxKITproducts:number=10;
+    static maxKITproducts: number = 10;
+    static tenderDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "QLTR_BID_GEO"];
+    static contractDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG"];
 }

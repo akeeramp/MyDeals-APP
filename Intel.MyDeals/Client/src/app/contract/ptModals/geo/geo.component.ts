@@ -20,7 +20,7 @@ export interface DialogData {
     private listItems:Array<string>=[];
     private value:Array<string>=[];
     private isBlend:boolean=false;
-
+    private isBidGeo: boolean = false;
     constructor(
       public dialogRef: MatDialogRef<GeoSelectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -42,7 +42,8 @@ export interface DialogData {
       }
       this.dialogRef.close(result);
     }
-    ngOnInit(){
+    ngOnInit() {
+        this.isBidGeo = this.data.name.includes("Bid");
         this.listItems=this.data.source;
         //identifying blend is enabled or no if yes enable the flag and remove the scquare bracket
         this.isBlend=(this.data.selVal?.indexOf("[") >= 0);

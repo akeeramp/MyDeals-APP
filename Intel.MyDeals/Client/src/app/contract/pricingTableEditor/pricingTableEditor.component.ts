@@ -111,6 +111,11 @@ export class pricingTableEditorComponent implements OnChanges {
                     name = "Geo Selector";
                     data={ name: name, source: this.source, selVal: selVal};
                 }
+                else if (this.field && this.field == 'QLTR_BID_GEO') {
+                    modalComponent = GeoSelectorComponent
+                    name = "Select Bid Geo";
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
                 else {                    
                     modalComponent = multiSelectModalComponent;
                     height = "500px"
@@ -270,7 +275,7 @@ export class pricingTableEditorComponent implements OnChanges {
             let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
-            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG') {
+            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO') {
                 currentColumnConfig.editor = this.custCellEditor;
             }
             this.columns.push(currentColumnConfig);
@@ -312,10 +317,6 @@ export class pricingTableEditorComponent implements OnChanges {
                 cellProperties['readOnly'] = true;
             }
         }
-        //voltier deal making start vol disable for tier except 1
-        else if(prop=='STRT_VOL' && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') !=1){
-            cellProperties['readOnly'] = true;
-        }
         else {
             //column config has readonly property for certain column persisting that assigning for other
             if (_.findWhere(this.ColumnConfig, { data: prop }).readOnly) {
@@ -325,25 +326,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 cellProperties['readOnly'] = false;
             }
         }
-        return cellProperties;
-    }
-    disableCells_new(hotTable: Handsontable, row: number, col: number, prop: any) {
-        //logic for making by defaul all the cell except PTR_USER_PRD readonly
-        const cellProperties = {};
-        //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
-        if (this.hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || this.hotTable.getDataAtRowProp(row, 'DC_ID') == null || this.hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
-            if (prop != 'PTR_USER_PRD') {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        if (this.hotTable.getDataAtRowProp(row, 'DC_ID') !== undefined && this.hotTable.getDataAtRowProp(row, 'DC_ID') !== null && this.hotTable.getDataAtRowProp(row, 'DC_ID') !== '' && this.hotTable.getDataAtRowProp(row, 'DC_ID') < 0) {
-            //column config hasr eadonly property for certain column persisting that assigning for other
-            if (_.findWhere(this.ColumnConfig, { data: prop }).readOnly) {
-                cellProperties['readOnly'] = true;
-            }
-            else {
-                cellProperties['readOnly'] = false;
-            }
+        //voltier deal making start vol disable for tier except 1
+        if (prop == 'STRT_VOL' && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+            cellProperties['readOnly'] = true;
         }
         if (this.hotTable.getDataAtRowProp(row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(row, '_behaviors') != null) {
             var behaviors = this.hotTable.getDataAtRowProp(row, '_behaviors');
@@ -360,7 +345,17 @@ export class pricingTableEditorComponent implements OnChanges {
             if (prop == 'SETTLEMENT_PARTNER') {
                 cellProperties['readOnly'] = true;
             }
-        }        
+        }
+        if (this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
+            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        if (this.curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || this.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+            if (prop == "RESET_VOLS_ON_PERIOD") {
+                cellProperties['readOnly'] = true;
+            }
+        }
         return cellProperties;
     }
     //functions to identify cell change
@@ -504,7 +499,14 @@ export class pricingTableEditorComponent implements OnChanges {
         _.each(this.pricingTableTemplates.defaultAtrbs, (val, key) => {
             
             dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(val.opLookupUrl);
-         });
+        });
+        if (this.isTenderContract) {
+            let key = "QLTR_BID_GEO";
+            let val = this.pricingTableTemplates.columns.filter(x => x.field == "QLTR_BID_GEO");
+            if (val != undefined && val != null && val.length > 0) {
+                dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(val[0].lookupUrl);
+            } 
+        }
          _.each(this.pricingTableTemplates.model.fields,(item,key)=>{
             if(item && item.uiType && item.uiType=='DROPDOWN' && item.opLookupUrl && item.opLookupUrl !='' && (dropObjs[`${key}`] ==null || dropObjs[`${key}`]==undefined)){
                if(key=='SETTLEMENT_PARTNER'){

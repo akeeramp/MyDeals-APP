@@ -461,7 +461,7 @@ export class dealEditorComponent {
 
     async getAllDrowdownValues() {
         let dropObjs = {};
-        let atrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG"];
+        let atrbs = this.isTenderContract ? PTE_Config_Util.tenderDropDownAtrbs : PTE_Config_Util.contractDropDownAtrbs;
 
         _.each(atrbs, (item) => {
             let column = this.wipTemplate.columns.filter(x => x.field == item);

@@ -133,7 +133,7 @@ export class GridUtil {
         else
             classNm = "intelicon-alert-solid";
         var titleMsg = "Validation: ";
-        if (passedData.PASSED_VALIDATION === "Dirty" || passedData.PASSED_VALIDATION === "0")
+        if (passedData.PASSED_VALIDATION === "Dirty" || passedData.PASSED_VALIDATION == "0")
             titleMsg += formattedMessage;
         else
             titleMsg += passedData.PASSED_VALIDATION;

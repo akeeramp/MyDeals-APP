@@ -95,6 +95,11 @@ export class DE_Common_Util {
                 dataItem[field][key] = parseInt(dataItem[field][key] || 0);
             }
         }
+        if (field == "QLTR_BID_GEO") {
+            dataItem[field] = dataItem[field].split(",").map(function (item) {
+                return item.trim();
+            });
+        }
     }
 
     static cellCloseValues(field, dataItem) {
@@ -115,6 +120,8 @@ export class DE_Common_Util {
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
             if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "")
                 dataItem[field] = dataItem[field].toString();
+            else if (dataItem[field] == 0)
+                dataItem[field] = "0";
             else
                 dataItem[field] = "";
         }      

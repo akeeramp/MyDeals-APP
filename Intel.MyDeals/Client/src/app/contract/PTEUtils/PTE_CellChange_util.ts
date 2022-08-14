@@ -100,7 +100,8 @@ export class PTE_CellChange_Util {
           else{
             if(val.prop=='SETTLEMENT_PARTNER'){
               //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-              if(curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase()=='cash'){
+                if ((curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase() == 'cash')
+                    || (contractData.IS_TENDER == "1" && contractData.Customer.DFLT_TNDR_AR_SETL_LVL.toLowerCase() == 'cash')) {
                 currentstring =row+','+val.prop+','+contractData.Customer.DFLT_SETTLEMENT_PARTNER+','+'no-edit';
               }
               else{
@@ -108,7 +109,7 @@ export class PTE_CellChange_Util {
               }
               updateRows.push(currentstring.split(','));
               //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-            }
+            }            
             else if(val.prop=='START_DT'){
               //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
               currentstring =row+','+val.prop+','+contractData.START_DT+','+'no-edit';
@@ -128,10 +129,15 @@ export class PTE_CellChange_Util {
               //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if(val.prop){
-              //this will be autofill defaults value 
-              let cellVal=curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`]:'';
-              currentstring =row+','+val.prop+','+cellVal+','+'no-edit';
-              updateRows.push(currentstring.split(','));
+                //this will be autofill defaults value 
+                if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
+                    currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                } else {
+                    let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
+                    currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                }
               //hotTable.setDataAtRowProp(row,val.prop.toString(), cellVal,'no-edit');
             }
             else{

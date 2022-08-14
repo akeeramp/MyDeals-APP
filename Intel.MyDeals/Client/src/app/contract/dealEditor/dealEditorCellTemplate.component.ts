@@ -70,7 +70,7 @@ export class dealEditorCellTemplateComponent {
             if (data.ECAP_PRICE[this.kitEcapdim] !== undefined && data.ECAP_PRICE[this.kitEcapdim] !== null && data.ECAP_PRICE[this.kitEcapdim] !== "")
                 data.ECAP_PRICE[this.kitEcapdim] = this.currencyPipe.transform(data.ECAP_PRICE[this.kitEcapdim], 'USD', 'symbol', '1.2-2');
             dim = this.kitEcapdim;
-            field = "ECAP_PRICE";
+            field = field == "CAP_KIT" ? "CAP" : field == "YCS2_KIT" ? "YCS2_PRC_IRBT" : "ECAP_PRICE";
         }
         if (field == "SUBKIT_ECAP") {
             if (data.ECAP_PRICE[this.subKitEcapDim] !== undefined && data.ECAP_PRICE[this.subKitEcapDim] !== null && data.ECAP_PRICE[this.subKitEcapDim] !== "")
