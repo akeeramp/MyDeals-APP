@@ -131,3 +131,8 @@ b {
     margin-left: 6px;
     margin-top: -23px;
 }
+.k-tabstrip-items .k-item {
+    margin-right: 0px !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+}

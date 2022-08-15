@@ -363,7 +363,30 @@ tr:last-child > td {
     border-bottom: none !important;
 }
 .k-tabstrip-items .k-item {
-    margin-right: 4px !important;
-    font-size: 12px !important;
+    margin-right: 0px !important;
+    font-size: 15px !important;
     font-weight: 400 !important;
+}
+.k-grid .k-detail-row .k-detail-cell { /*child table padding*/
+    padding-top: 0;
+    padding-bottom: 5px;
+}
+
+.opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] {
+    font-size: 20px !important;
+}
+
+.k-grid-header th.k-header {
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+.k-grid .k-detail-row .k-detail-cell {
+    padding-top: 0;
+    padding-bottom: 5px;
+}
+
+.k-cell-inner {
+    margin: 0 !important;
+    width: 100%;
 }

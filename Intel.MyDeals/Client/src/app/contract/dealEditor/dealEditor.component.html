@@ -91,7 +91,7 @@
                     </table>
                 </button>&nbsp;&nbsp;
 
-                <span class="k-textbox" style="width:240px;margin-top:4px">
+                <span class="k-textbox" style="width:248px !important;margin-top:4px">
                     <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
                     &nbsp;&nbsp;
                     <input style="width:270px;border:none" placeholder="search... (press enter to search)" />
@@ -128,7 +128,10 @@
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab [disabled]="true">
         <ng-template kendoTabTitle>
-            <div style="font-weight:bold;font-size: 16px; width:562px; text-align:right;">
+            <div ngClass="fl volView contractView" *ngIf="!isTenderContract">
+                <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
+            </div>
+            <div class="fl volView tenderView" *ngIf="isTenderContract">
                 <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
         </ng-template>

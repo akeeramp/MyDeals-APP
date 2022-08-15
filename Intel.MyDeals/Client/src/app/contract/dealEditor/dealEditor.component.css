@@ -45,19 +45,22 @@
     vertical-align: top !important;
 }
 
-    .badge.warning {
-        background-color: #f3D54E;
-    }
+.badge.warning {
+    background-color: #f3D54E;
+}
 
 .rowHeight {
-    height: 25px;
+    height: 36px !important;
     padding: 2px 0px 0px 1px;
+    border-bottom: 0.01px solid rgba(0,0,0,.05);
+    /*line-height: 3;*/
 }
 
 .rowDetailHeight {
-    height: 40px !important;
-    border: 0.1px solid lightgrey;
+    height: 36px !important;
+    border-bottom: 0.01px solid rgba(0,0,0,.05);
     padding: 2px 0px 0px 1px;
+    /*line-height: 3;*/
 }
 
 .densityRow {
@@ -90,7 +93,7 @@
 }
 
 .kitRowValue {
-    height: 37px !important;
+    height: 25px !important;
     font-size: 12px !important;
     text-align: right !important;
     overflow: hidden;
@@ -103,7 +106,7 @@
     font-size: 10px;
     background: #eeeeee;
     text-align: center;
-    height: 25px;
+    height: 100%;
     white-space: nowrap;
     border-right: 0.1px solid lightgrey;
 }
@@ -124,6 +127,7 @@ tr:last-child > td {
     border-bottom: 1px solid lightgrey !important;
     padding: 0px !important;
     white-space: nowrap;
+    border: 0.01px !important;
 }
 
 .k-grid-edit-row .k-textbox, .k-widget {
@@ -312,24 +316,25 @@ tr:last-child > td {
 }
 
 .op-grid.k-grid .uiControlDiv {
-    height: 100%;
+    line-height: 6 !important;
 }
 
 .op-grid .uiControlDiv {
-    padding: 4px 8px;
+    padding: 0px !important;
     min-height: 20px;
 }
 
-.uiControlDiv {
+/*.uiControlDiv {
     padding-top: 23px !important;
-}
+}*/
 
-/*.isReadOnlyCell {
+.isReadOnlyCell {
     color: #000 !important;
     background-color: rgba(0,0,0,.05) !important;
+    height: 100% !important;
 }
 
-.k-link:active {
+/*.k-link:active {
     color: white !important;
 }
 
@@ -349,11 +354,14 @@ tr:last-child > td {
 .gradTab.k-tabstrip .k-tabstrip-items .k-state-active .k-link {
     color: #00AEEF;
 }
+.ng-binding {
+    padding-left: 4px;
+}
 
-/*.opUiContainer.md.k-grid td {
-    font-size: 12px !important;
-    height: 33px !important;
-}*/
+.opUiContainer.md.k-grid td {
+    border-right: .5px solid lightgrey !important;
+    border-bottom: .5px solid lightgrey !important;
+}
 .k-grid td.k-state-focused, .k-grid th.k-state-focused,
 .k-grid th:focus, .k-grid .k-master-row > td:focus,
 .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus,
@@ -369,8 +377,32 @@ tr:last-child > td {
 }
 .dealTools {
     margin-top: 0px !important;
-    padding-top: 23px !important;
+    /*padding-top: 23px !important;*/
+    /*line-height: 3.2em !important;*/
 }
+.gridStatusMarker {
+    height: 35px !important;
+    width: 20px !important;
+    padding: 0 !important;
+}
+
+.gridStatusMarker.Active {
+    line-height: 2;
+}
+
+.dealDetail .dealDetailContainer {
+    line-height: 2;
+}
+
+.dealDetail {
+    background-color: #fff !important;
+    height: 35px !important;
+}
+
+k-state-focused .k-touch-action-auto .k-grid-edit-cell {
+    background-color: rgba(0, 0,0, 0) !important;
+}
+
 
 .k-label {
     padding: 1px;
@@ -447,14 +479,32 @@ tr:last-child > td {
 /*.k-link:hover {
     background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
 }*/
-.k-grid-header .headerClass {
+#dealEditor .k-grid-header .headerClass {
     color: #1a3e6f;
     font-size: 12px;
     font-family: 'Intel Clear';
     font-weight: bold;
     background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
+    padding: 7.5px !important;
+}
+.k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+    border-color: rgba(33, 37, 41, 0.125) !important;
+}
+/*.k-grid tbody tr:hover {
+    background: #ecf8fb !important;
+}*/
+
+.k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+    border-color: rgba(33, 37, 41, 0.125) !important;
 }
 
+#dealEditor.op-grid.k-grid tr:hover {
+    background-color: #ecf8fb !important;
+}
+
+.k-grid .k-grid-content-locked .k-state-hover td, .k-grid .k-grid-content-locked tr:hover td {
+    background-color: #ecf8fb !important;
+}
 .k-cell-inner > .k-link:hover {
     background: none !important;
     color: #1a3e6f !important;
@@ -476,4 +526,36 @@ tr:last-child > td {
 .k-grid .k-detail-row .k-detail-cell {
     padding-top: 0;
     padding-bottom: 5px;
+}
+.opUiContainer.md [class^="intelicon-"] {
+    font-size: 14px !important;
+    color: #00AEEF !important;
+}
+
+.opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class*=" intelicon-"] {
+    font-size: 20px !important;
+}
+
+.k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover, .k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover, .k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
+    box-shadow: inset 0 0 0 1px #00aeef !important;
+}
+
+.k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus, .k-grid .k-master-row > td:focus, .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus, .k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
+    box-shadow: inset 0 0 0 1px #00aeef !important;
+}
+.volView {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: right;
+}
+
+.contractView {
+    width: 528px;
+}
+
+.tenderView {
+    width: 803px;
+}
+label {
+    line-height: 1.5;
 }

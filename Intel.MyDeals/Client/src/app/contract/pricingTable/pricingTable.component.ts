@@ -88,16 +88,15 @@ export class pricingTableComponent {
             }
         }
         else if (this.selLnav == 'MeetComp') {
-            console.log('Enable Meetcomp');
+            this.isDETab = false; this.isPTETab = false;
         }
         else {
-            console.log('Manage');
+            this.isDETab = false; this.isPTETab = false;
         }
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
     onTabSelect(e: SelectEvent) {
         //window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + this.c_Id + "/0/0/0";
-        console.log("onTabSelect  ***********", e);
         if (e.title == "Deal Editor") {
             this.isDETab = true; this.isPTETab = false
         }

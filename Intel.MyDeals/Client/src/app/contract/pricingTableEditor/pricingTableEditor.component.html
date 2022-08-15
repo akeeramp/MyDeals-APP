@@ -78,10 +78,17 @@
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()"
-                    style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">
-                <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                Autofill Defaults
+            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
+                <table>
+                    <tr>
+                        <td>
+                            <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                        </td>
+                        <td class="hidden-sm hidden-xs" style="padding-left: 5px; font-size: 11px; text-align: left; color: #00AEEF;">
+                            Autofill <br /> Defaults
+                        </td>
+                    </tr>
+                </table>
             </button>
             <!-- <button (click)="openAutofill()">autofill</button> -->
             <button class="fr btn ssToolbarBtn" title="Help">

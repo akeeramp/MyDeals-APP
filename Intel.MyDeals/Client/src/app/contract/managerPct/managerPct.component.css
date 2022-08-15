@@ -12,21 +12,21 @@
 
 .k-grid th,
 .k-grid td {
-    font-size: 12px !important
+    font-size: 12px !important;
 }
 
 #contractContainerWrapper {
     height: 614px !important;
-    overflow: auto
+    overflow: auto;
 }
 
 #sum-wrapper {
     height: 75vh;
-    overflow: scroll;
+    overflow: hidden;
     padding: 100px 0 0 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 
 #sum-header {
@@ -40,21 +40,21 @@
     padding-right: 10px;
     padding-top: 10px;
     margin-left: 0;
-    margin-right: 0
+    margin-right: 0;
 }
 
 #sum-container {
     height: 100%;
-    overflow: auto
+    overflow: auto;
 }
 
 .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter {
     color: #00AEEF;
-    opacity: 1
+    opacity: 1;
 }
 
 .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
-    color: #0071C5 !important
+    color: #0071C5 !important;
 }
 
 .md-icon {
@@ -124,22 +124,24 @@
 
 .k-dialog .k-dialog-title,
 .k-dialog .k-window-title {
-    display: none !important
+    display: none !important;
 }
 
 .k-dialog .k-content {
-    margin-top: -30px
+    margin-top: -30px;
 }
 
 #sum-container .k-textbox.k-space-left {
-    padding-left: 2.1em
+    padding-left: 2.1em;
 }
 
 .btn-skyblue {
     background-color: #00AEEF;
-    border: 1px solid #00AEEF;
+    border: 1px solid #00AEEF !important;
     color: #ffffff;
-    border-radius: 4px
+    border-radius: 4px !important;
+    font-size: 15px;
+    text-transform: capitalize;
 }
 
 .btn-skyblue:hover {
@@ -150,7 +152,7 @@
 
 .btn-skyblue i {
     font-size: 20px;
-    margin-right: 6px
+    margin-right: 6px;
 }
 
 .btn-skyblue-sm {
@@ -162,9 +164,7 @@
 }
 
 .btn-skyblue-sm:hover {
-    background-color: #0071C5;
-    border: 1px solid #0071C5;
-    color: #ffffff
+    background-color: #0071C5 !important;
 }
 
 .btn-skyblue-sm i {
@@ -174,7 +174,7 @@
 }
 
 .btn-grey {
-    background-color: #e4e9ea;
+    background-color: #e4e4e4;
     border: 1px solid #e4e9ea;
     color: #70706e;
     border-radius: 4px
@@ -315,8 +315,8 @@ input[type=checkbox].with-font {
     width: 1px
 }
 
-input[type=radio].with-font+label:before,
-input[type=checkbox].with-font+label:before {
+input[type=radio].with-font + label:before,
+input[type=checkbox].with-font + label:before {
     font-family: FontAwesome;
     display: inline-block;
     content: "\f096";
@@ -326,20 +326,20 @@ input[type=checkbox].with-font+label:before {
     margin-left: 10px
 }
 
-input[type=radio].with-font:hover+label:before,
-input[type=checkbox].with-font:hover+label:before {
+input[type=radio].with-font:hover + label:before,
+input[type=checkbox].with-font:hover + label:before {
     color: #003C71;
     cursor: pointer
 }
 
-input[type=radio].with-font.disabled+label:before,
-input[type=checkbox].with-font.disabled+label:before {
+input[type=radio].with-font.disabled + label:before,
+input[type=checkbox].with-font.disabled + label:before {
     color: #cccccc;
     cursor: default
 }
 
-input[type=radio].with-font:checked+label:before,
-input[type=checkbox].with-font:checked+label:before {
+input[type=radio].with-font:checked + label:before,
+input[type=checkbox].with-font:checked + label:before {
     content: "\f046";
     font-size: 20px;
     letter-spacing: 5px;
@@ -347,8 +347,8 @@ input[type=checkbox].with-font:checked+label:before {
     margin-left: 10px
 }
 
-input[type=radio].with-font:focus+label:before,
-input[type=checkbox].with-font:focus+label:before {
+input[type=radio].with-font:focus + label:before,
+input[type=checkbox].with-font:focus + label:before {
     font-weight: bold;
     color: #C4D600
 }
@@ -386,7 +386,7 @@ a.lnkIcon {
     font-size: 18px
 }
 
-.sumGridOptionsExpand>.k-grid-content-locked {
+.sumGridOptionsExpand > .k-grid-content-locked {
     height: auto !important
 }
 
@@ -396,14 +396,16 @@ a.lnkIcon {
     border-left: 0 solid transparent;
     border-right: 0 solid transparent
 }
-
+#pctTab {
+    margin-top: 20px;
+}
 #pctTab .k-tabstrip-items .k-item {
     background: #fdfdfd;
     background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
     background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
     background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
     color: #003C71 !important;
-    padding: .6em !important;
+    padding: 0 !important;
     text-transform: none !important;
     background-color: #fff;
     border-bottom-width: 0
@@ -420,4 +422,13 @@ a.lnkIcon {
     border-right-width: 1px;
     border-bottom-width: 0;
     border-radius: 4px 4px 0 0
+}
+
+#pctTab .k-tabstrip-items .k-item .k-link:hover {
+    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+    color: #00AEEF !important;
+}
+
+input:focus-visible {
+    outline: none !important;
 }

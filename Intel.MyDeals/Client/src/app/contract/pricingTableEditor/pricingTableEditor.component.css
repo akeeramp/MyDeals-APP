@@ -35,7 +35,7 @@ td:not(.error-cell).readonly-cell {
 }
 
 .k-tabstrip-items .k-item {
-    /*margin-right: 4px !important;*/
+    margin-right: 0px !important;
     font-size: 15px !important;
     font-weight: 400 !important;
 }
@@ -68,4 +68,18 @@ td:not(.error-cell).readonly-cell {
 }
 .handsontable .htCommentCell:after {
     border-top-color: red;
+}
+.ssToolbarBtn {
+    background-color: #ffffff;
+    border-radius: 0px;
+    color: #1A3E6F;
+    font-size: 11px;
+    line-height: normal;
+    margin: 1px 0px;
+    padding: 3px 10px;
+}
+
+.ssToolbarBtn:hover {
+    background-color: #f2f2f2;
+    color: #0071c5;
 }
