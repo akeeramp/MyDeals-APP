@@ -240,13 +240,13 @@ namespace Intel.MyDeals.Entities
             public List<AccountComplianceDetails> accountComplianceDetails { get; set; }
             [JsonProperty("AccountAddressInformation")]
             public List<AccountAddressInformation> accountAddressInformation { get; set; }
-            public class ParentAccountInfomation { 
-
+            public class ParentAccountInfomation
+            {
                 public string BusinessPartyIdentifier { get; set; }
                 public string AcocuntId { get; set; }
                 public string AccountName { get; set; }
-
-            }                      
+                public string SimplifiedAccountName { get; set; }
+            }
             public class AccountMasteredDetails
             {
 
