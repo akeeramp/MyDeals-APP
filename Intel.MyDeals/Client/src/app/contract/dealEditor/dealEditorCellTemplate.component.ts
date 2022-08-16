@@ -269,9 +269,7 @@ export class dealEditorCellTemplateComponent {
         return false;
     }
     ngOnChanges() {
-        this.in_DataItem.IS_TENDER = this.contract_Data["IS_TENDER"];
         this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
-        this.in_DataItem.PRC_ST = this.contract_Data.PRC_ST;
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
     }
 }

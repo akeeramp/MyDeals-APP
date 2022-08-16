@@ -9,8 +9,6 @@ import { SecurityService } from "../../../shared/services/security.service";
 })
 
 export class dealToolsService {
-    public apiBaseContractUrl = "/api/Contracts/v1/";
-    public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
 
     constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
@@ -18,19 +16,25 @@ export class dealToolsService {
     public chkDealRules(action, role, itemType, itemSetType, stage): boolean {
         return this.securityService.chkDealRules(action, role, itemType, itemSetType, stage);
     }
-    public readContract(id): Observable<any>  {
-        // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
-        const apiUrl: string = this.apiBaseContractUrl + 'GetUpperContract/' + id;
+    public actionWipDeal(custId, contractId, wip, actn): Observable<any> {
+        return this.httpClient.post(this.apiBasePricingTableUrl + 'actionWipDeal/' + custId + '/' + contractId + '/' + actn, [wip]);
+    }
+    public unGroupPricingTableRow(custId, contractId, ptrId): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId
         return this.httpClient.get(apiUrl);
     }
-    public copyPricingStrategy(custId, contractId, srcId, ps): Observable<any> {
-        return this.httpClient.post(this.apiBasePricingStrategyUrl + 'CopyPricingStrategy/' + custId + '/' + contractId + '/' + srcId, [ps]);
+    public deletePricingTableRow(custId, contractId, ptrId): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId
+        return this.httpClient.get(apiUrl);
+    }
+    public rollbackPricingTableRow(custId, contractId, dcId): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'RollBackPricingTableRow/' + custId + '/' + contractId + '/' + dcId
+        return this.httpClient.get(apiUrl);
     }
     public actionWipDeals(custId, contractId, data): Observable<any> {
         return this.httpClient.post(this.apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
     }
-    public unGroupPricingTableRow(custId, contractId, ptrId) {
-        const apiUrl: string = this.apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId
-        return this.httpClient.get(apiUrl);
+    public getTimlelineDs(dataObj): Observable<any> {
+        return this.httpClient.post("api/Timeline/GetObjTimelineDetails", dataObj);
     }
 }

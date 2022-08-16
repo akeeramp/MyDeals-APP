@@ -50,7 +50,6 @@ export class dealEditorComponent {
     public columns: any = [];
     public templates: any;
     public selectedTab: any;
-    private isDealToolsChecked: boolean = false;
     public voltLength;
     private numSoftWarn = 0;
     private ecapDimKey = "20___0";
@@ -128,14 +127,6 @@ export class dealEditorComponent {
         }, error => {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', error);
         });
-    }
-
-    clkAllItems(): void {
-        for (var i = 0; i < this.gridResult.length; i++) {
-            if (!(this.gridResult[i].SALESFORCE_ID != "" && this.gridResult[i].WF_STG_CD == 'Offer'))
-                this.gridResult[i].isLinked = this.isDealToolsChecked;
-        }
-        this.gridData = process(this.gridResult, this.state);
     }
 
     onTabSelect(e: SelectEvent) {

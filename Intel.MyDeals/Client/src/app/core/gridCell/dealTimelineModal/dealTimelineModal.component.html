@@ -1,0 +1,29 @@
+﻿<div class="modal-header modalBlueBody">
+    <h5 class="modal-title" id="modal-title">
+        Timeline for deal {{dcId}}
+        <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" />
+    </h5>
+    <i id="btnClose" class="intelicon-close-max" (click)="close()" title="Click to Close"></i>
+    <i id="btnAnchordisable" class="intelicon-locked-outlined" title="Click to Enable dragging"></i>
+    <i id="btnEnlargeText" class="intelicon-increase-text-outlined" title="Click to Decrease Text"></i>
+
+</div>
+
+<div class="modal-body modalBlueBody hresize" id="modal-body">
+    <div class="k-header k-grid-toolbar">
+        <a role="button" class="k-button k-button-icontext k-grid-excel" (click)="exportToExcelTimeline()">
+            <span class="k-icon k-i-file-excel"></span>
+            <div class="excelText"><span>Excel Export</span></div>
+        </a>
+    </div>
+    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" 
+                [sort]="state.sort" [sortable]="true" [resizable]="true" [scrollable]="true" filterable="menu" (dataStateChange)="dataStateChange($event)"
+                class="historyModal opUiContainer md" style="height: calc(100% - 100px); margin-bottom: 20px;">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_VAL" title="Comment Detail" encoded="true">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="user" title="Changed By" width="240px" [filterable]="true">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIST_EFF_FR_DTM" title="Date Changed" width="160px">
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
