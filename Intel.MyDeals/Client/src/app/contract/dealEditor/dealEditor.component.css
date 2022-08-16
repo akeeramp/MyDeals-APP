@@ -59,8 +59,8 @@
 .rowDetailHeight {
     height: 36px !important;
     border-bottom: 0.01px solid rgba(0,0,0,.05);
-    padding: 2px 0px 0px 1px;
-    /*line-height: 3;*/
+    padding: 2px 0px 0px 1px !important;
+    line-height: 3;
 }
 
 .densityRow {
@@ -96,7 +96,7 @@
     height: 25px !important;
     font-size: 12px !important;
     text-align: right !important;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .tierHeader {
@@ -116,7 +116,7 @@
 }
 
 .err-bit {
-    margin: 0px 0 0 -10px !important;
+    margin: 1px 0px 0px 1px !important;
 }
 
 tr:last-child > td {
@@ -528,8 +528,8 @@ tr:last-child > td {
     padding-bottom: 5px;
 }
 .opUiContainer.md [class^="intelicon-"] {
-    font-size: 14px !important;
-    color: #00AEEF !important;
+    font-size: 14px;
+    color: #00AEEF;
 }
 
 .opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class*=" intelicon-"] {

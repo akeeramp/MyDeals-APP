@@ -10,3 +10,7 @@
     right: 10px !important;
     background: linear-gradient(to bottom, transparent 0%, transparent 100%) !important
 }
+.k-grid .k-grid-aria-root {
+    overflow: auto !important;
+    width: 47% !important;
+}

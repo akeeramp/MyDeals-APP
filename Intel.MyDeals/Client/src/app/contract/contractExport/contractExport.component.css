@@ -1,4 +1,4 @@
-    .titlePage {
+.titlePage {
     text-align: center;
     font-family: "Intel Clear";
     font-weight: 200;
@@ -138,7 +138,7 @@
     }
 
 .addScrollbar {
-    max-height: 500px;
+    max-height: 600px;
     max-width: 1400px;
     overflow: auto;
 

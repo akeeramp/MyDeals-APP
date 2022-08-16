@@ -432,3 +432,9 @@ a.lnkIcon {
 input:focus-visible {
     outline: none !important;
 }
+.intelicon-protection-solid {
+    font-size: 20px;
+}
+.intelicon-protection-outlined {
+    font-size: 20px;
+}

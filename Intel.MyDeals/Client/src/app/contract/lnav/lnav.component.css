@@ -447,3 +447,15 @@
     background-color: #0071C5;
     filter: brightness(100%) !important;
 }
+.chevron {
+    color: #ffffff;
+    font-size: 15px;
+}
+.psContainer .chevron {
+    color: #ffff;
+    font-size: 15px;
+    font-weight:bolder;
+}
+.psContainer .chevron:hover{
+    color:#ffffff;
+}

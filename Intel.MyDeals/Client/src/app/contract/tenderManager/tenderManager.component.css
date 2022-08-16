@@ -37,3 +37,6 @@
 .intelicon-search {
     width: 248px !important;
 }
+.k-tabstrip .k-tabstrip-items .k-link {
+    padding: 0px !important;
+}

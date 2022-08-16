@@ -55,7 +55,7 @@ export class contractHistoryComponent {
     ];
 
     loadContractHistory() {
-        let objTypeSid = 5;
+        let objTypeSid = 1;
         let contractId = this.contractData.DC_ID;
         let objTypeIds = [1, 2, 3, 4, 5];
         this.contractHistorySvc.getTimelineDetails(contractId,objTypeIds, objTypeSid).subscribe((result: Array<any>) => {
