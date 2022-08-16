@@ -92,12 +92,13 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             openPopUp() {
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
-                let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px',data={};
+                let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
                 if (this.field && this.field == 'PTR_USER_PRD') {
                     modalComponent = ProductSelectorComponent;
                     name = "Product Selector";
-                    height = "850px"
-                    width = "1700px";
+                    height = "80vh"
+                    width = "5500px";
+                    panelClass = "product-selector-dialog";
                     let obj={},curRow=[];
                     _.each(this.hot.getCellMetaAtRow(this.selRow), (val) => {
                         if (val.prop) {
@@ -128,6 +129,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     height: height,
                     width: width,
                     data: data,
+                    panelClass: panelClass
                 });
                 dialogRef.afterClosed().subscribe(result => {
                     if (result) {

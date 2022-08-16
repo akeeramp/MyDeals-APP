@@ -2,104 +2,104 @@
 import * as _ from "underscore";
 
 export interface gridCol {
-    title:string,
-    field:string,
-    hidden:boolean,
-    width?:string,
-    filterable?:any,
-    type?:string,
-    template?:string
-  }
+    title: string,
+    field: string,
+    hidden: boolean,
+    width?: string,
+    filterable?: any,
+    type?: string,
+    template?: string
+}
 
 export class ProdSel_Util {
 
-    static gridColsSuggestion:Array<gridCol>=[{
-        field:'USR_INPUT',
-        title:'User Entered',
-        hidden:false
-    },{
-        field:'HIER_VAL_NM',
-        title:'Product',
-        hidden:false
-    },{
-        field:'PRD_CAT_NM',
-        title:'Product Vertical',
-        hidden:false
-    },{
-        field:'FMLY_NM',
-        title:'Family Name',
-        hidden:false
-    },{
-        field:'PRD_STRT_DTM',
-        title:'Product Effective Date',
-        hidden:false
-    },{
-        field:'CAP',
-        title:'CAP Info',
-        hidden:false
-    },{
-        field:'YCS2',
-        title:'YCS2',
-        hidden:false
-    },{
-        field:'CPU_PROCESSOR_NUMBER',
-        title:'CPU Processor number',
-        hidden:false
-    },{
-        field:'HAS_L1',
-        title:'Legal Classification',
-        hidden:false
-    },{
-        field:'MM_CUST_CUSTOMER',
-        title:'MM Customer Name',
-        hidden:false
-    },{
-        field:'FMLY_NM_MM',
-        title:'EDW Family Name',
-        hidden:false
-    },{
-        field:'EPM_NM',
-        title:'EPM Name',
-        hidden:false
-    },{
-        field:'SKU_NM',
-        title:'SKU Name',
-        hidden:false
-    },{
-        field:'NAND_FAMILY',
-        title:'NAND FAMILY',
-        hidden:false
-    },{
-        field:'CPU_CACHE',
-        title:'CPU CACHE',
-        hidden:false
-    },{
-        field:'CPU_PACKAGE',
-        title:'CPU PACKAGE',
-        hidden:false
-    },{
-        field:'CPU_WATTAGE',
-        title:'CPU WATTAGE',
-        hidden:false
-    },{
-        field:'CPU_VOLTAGE_SEGMENT',
-        title:'Voltage Segment',
-        hidden:false
-    },{
-        field:'PRICE_SEGMENT',
-        title:'Price Segment',
-        hidden:false
-    },{
-        field:'SBS_NM',
-        title:'SBS Name',
-        hidden:false
+    static gridColsSuggestion: Array<gridCol> = [{
+        field: 'USR_INPUT',
+        title: 'User Entered',
+        hidden: false
+    }, {
+        field: 'HIER_VAL_NM',
+        title: 'Product',
+        hidden: false
+    }, {
+        field: 'PRD_CAT_NM',
+        title: 'Product Vertical',
+        hidden: false
+    }, {
+        field: 'FMLY_NM',
+        title: 'Family Name',
+        hidden: false
+    }, {
+        field: 'PRD_STRT_DTM',
+        title: 'Product Effective Date',
+        hidden: false
+    }, {
+        field: 'CAP',
+        title: 'CAP Info',
+        hidden: false
+    }, {
+        field: 'YCS2',
+        title: 'YCS2',
+        hidden: false
+    }, {
+        field: 'CPU_PROCESSOR_NUMBER',
+        title: 'CPU Processor number',
+        hidden: false
+    }, {
+        field: 'HAS_L1',
+        title: 'Legal Classification',
+        hidden: false
+    }, {
+        field: 'MM_CUST_CUSTOMER',
+        title: 'MM Customer Name',
+        hidden: false
+    }, {
+        field: 'FMLY_NM_MM',
+        title: 'EDW Family Name',
+        hidden: false
+    }, {
+        field: 'EPM_NM',
+        title: 'EPM Name',
+        hidden: false
+    }, {
+        field: 'SKU_NM',
+        title: 'SKU Name',
+        hidden: false
+    }, {
+        field: 'NAND_FAMILY',
+        title: 'NAND FAMILY',
+        hidden: false
+    }, {
+        field: 'CPU_CACHE',
+        title: 'CPU CACHE',
+        hidden: false
+    }, {
+        field: 'CPU_PACKAGE',
+        title: 'CPU PACKAGE',
+        hidden: false
+    }, {
+        field: 'CPU_WATTAGE',
+        title: 'CPU WATTAGE',
+        hidden: false
+    }, {
+        field: 'CPU_VOLTAGE_SEGMENT',
+        title: 'Voltage Segment',
+        hidden: false
+    }, {
+        field: 'PRICE_SEGMENT',
+        title: 'Price Segment',
+        hidden: false
+    }, {
+        field: 'SBS_NM',
+        title: 'SBS Name',
+        hidden: false
     }]
-    static gridColProduct:Array<gridCol>=[
+    static gridColProduct: Array<gridCol> = [
         {
             field: "PCSR_NBR",
             title: "Processor Number",
             width: "150px",
-            hidden:false,
+            hidden: false,
         },
         {
             field: "DEAL_PRD_NM",
@@ -107,7 +107,7 @@ export class ProdSel_Util {
             template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
             width: "180px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "GDM_FMLY_NM",
@@ -115,14 +115,14 @@ export class ProdSel_Util {
             template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "MTRL_ID",
             title: "Material Id",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "PRD_STRT_DTM",
@@ -130,7 +130,7 @@ export class ProdSel_Util {
             type: "date",
             template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
             width: "150px",
-            hidden:false
+            hidden: false
         },
         {
             field: "PRD_END_DTM",
@@ -138,7 +138,7 @@ export class ProdSel_Util {
             type: "date",
             template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
             width: "150px",
-            hidden:false
+            hidden: false
         },
         {
             field: "CAP",
@@ -146,7 +146,7 @@ export class ProdSel_Util {
             template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "YCS2",
@@ -154,14 +154,14 @@ export class ProdSel_Util {
             width: "150px",
             template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "CPU_PROCESSOR_NUMBER",
             title: "CPU Processor number",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "HAS_L1",
@@ -169,21 +169,21 @@ export class ProdSel_Util {
             width: "150px",
             filterable: { multi: true, search: true },
             template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
-            hidden:false
+            hidden: false
         },
         {
             field: "MM_MEDIA_CD",
             title: "Media Code",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "MM_CUST_CUSTOMER",
             title: "MM Customer Name",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "FMLY_NM_MM",
@@ -191,14 +191,14 @@ export class ProdSel_Util {
             template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "EPM_NM",
             title: "EPM Name",
             template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
             width: "180px",
-            hidden:false
+            hidden: false
         },
         {
             field: "SKU_NM",
@@ -206,66 +206,66 @@ export class ProdSel_Util {
             template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
             width: "180px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "NAND_FAMILY",
             title: "NAND FAMILY",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "NAND_Density",
             title: "Nand Density",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "CPU_CACHE",
             title: "CPU CACHE",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "CPU_PACKAGE",
             title: "CPU PACKAGE",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "CPU_WATTAGE",
             title: "CPU WATTAGE",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "CPU_VOLTAGE_SEGMENT",
             title: "Voltage Segment",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "PRICE_SEGMENT",
             title: "Price Segment",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
         {
             field: "SBS_NM",
             title: "SBS Name",
             width: "150px",
             filterable: { multi: true, search: true },
-            hidden:false
+            hidden: false
         },
     ]
-    static sortBySelectionLevelColumn(gridResult:any, selectionLevel:number) {
+    static sortBySelectionLevelColumn(gridResult: any, selectionLevel: number) {
         var column = "";
         switch (selectionLevel) {
             case 7007:
@@ -281,23 +281,23 @@ export class ProdSel_Util {
     }
     static newItem = function () {
         return {
-            'text':'Select',
+            'text': 'Select',
             'name': 'Select',
             'path': '',
             'drillDownFilter4': '',
             'drillDownFilter5': '',
-            'selected':null,
-            'parentSelected':null
+            'selected': null,
+            'parentSelected': null
         }
     }
-          // TODO: Move this to util.js
-    static arrayContainsString(array:Array<any>, string:string) {
-    var newArr = array.filter(function (el) {
-        return el.toString().trim().toUpperCase() === string.toString().trim().toUpperCase();
-    });
-    return newArr.length > 0;
+    // TODO: Move this to util.js
+    static arrayContainsString(array: Array<any>, string: string) {
+        var newArr = array.filter(function (el) {
+            return el.toString().trim().toUpperCase() === string.toString().trim().toUpperCase();
+        });
+        return newArr.length > 0;
     }
-    static getFormatedGeos = function (geos:any) {
+    static getFormatedGeos = function (geos: any) {
         if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
@@ -307,34 +307,34 @@ export class ProdSel_Util {
         }
         return geos;
     }
-    static getVerticalSelection(markLevelName:any,selectedPathParts:Array<any>,productSelectionLevels:Array<any>) {
+    static getVerticalSelection(markLevelName: any, selectedPathParts: Array<any>, productSelectionLevels: Array<any>) {
         var markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
-        var verticals = productSelectionLevels.filter((x)=> {
+        var verticals = productSelectionLevels.filter((x) => {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
         });
-    
+
         verticals = _.uniq(verticals, 'PRD_CAT_NM_SID');
-        if(verticals.length>0){
-          return verticals;
+        if (verticals.length > 0) {
+            return verticals;
         }
-        else{
-          return [{PRD_MBR_SID:null}];
+        else {
+            return [{ PRD_MBR_SID: null }];
         }
-       
+
     }
-    static productExists(item:any, id:any,excludeMode:boolean,excludedProducts:Array<any>,addedProducts:Array<any>,enableMultipleSelection:boolean) {
+    static productExists(item: any, id: any, excludeMode: boolean, excludedProducts: Array<any>, addedProducts: Array<any>, enableMultipleSelection: boolean) {
         if (excludeMode) {
             return productExists = excludedProducts.filter(function (x) {
                 return x.PRD_MBR_SID == id;
             }).length > 0;
         }
-    
-        if (item === undefined) {
+
+        if (item === undefined || item == null) {
             return productExists = addedProducts.filter(function (x) {
                 return x.PRD_MBR_SID == id;
             }).length > 0;
         }
-        var productExists = item!=null? item.selected:false;
+        var productExists = item != null ? item.selected : false;
         if (item && !item.selected) {
             productExists = addedProducts.filter(function (x) {
                 return x.PRD_MBR_SID == id;
@@ -346,17 +346,18 @@ export class ProdSel_Util {
         }
         return productExists;
     }
-    static getVerticalsUnderMarkLevel(markLevelName:string,selectedPathParts:Array<any>,productSelectionLevels:Array<any>) {
+
+    static getVerticalsUnderMarkLevel(markLevelName: string, selectedPathParts: Array<any>, productSelectionLevels: Array<any>) {
         let markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
-        let verticals:any =null;
-        verticals = productSelectionLevels.filter( (x)=> {
+        let verticals: any = null;
+        verticals = productSelectionLevels.filter((x) => {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
         });
-        verticals =_.uniq(verticals, 'PRD_CAT_NM');
-        verticals = verticals.map((elem) =>{
+        verticals = _.uniq(verticals, 'PRD_CAT_NM');
+        verticals = verticals.map((elem) => {
             return elem.PRD_CAT_NM;
         }).join(" | ");
         return verticals;
-      }
-   
+    }
+
 }

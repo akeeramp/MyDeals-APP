@@ -390,3 +390,13 @@ tr:last-child > td {
     margin: 0 !important;
     width: 100%;
 }
+<!-- css fixes for twc3167-1939-- >
+.k-grid {
+    border-color: #ffffff !important;
+}
+
+.k-grid-pager {
+    border-color: #ffffff !important;
+    color: #212529;
+    background-color: #ffffff !important;
+}
