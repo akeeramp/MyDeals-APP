@@ -56,19 +56,18 @@
                 </div>
                 <div class="clearboth"></div>
 
-                <!-- <table class="extract">
+                <table class="extract">
                     <tr>
-                        <th *ngFor="let td of tableHeaderData.PRC_TBL_ROW[${pt.OBJ_SET_TYPE_CD}].columns | filter:{ hidden: false }">
-                            <span>{{showTitle(td.title)}}</span>
+                        <th *ngFor="let td of tableHeaderData.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns">
+                            <span *ngIf="!td.hidden">{{showTitle(td.title)}}</span>
                         </th>
                     </tr>
-                    <tr class="ptrPage" *ngFor="let ptrofn of pt.PRC_TBL_ROW">
-                        <td *ngFor="let td of tableHeaderData.PRC_TBL_ROW[${pt.OBJ_SET_TYPE_CD}].columns | filter:{ hidden: false }">
-                            <span>abcd</span>
-                            <span>{{showField(ptr, td.field, td, pt.OBJ_SET_TYPE_CD)}}</span>
+                    <tr class="ptrPage" *ngFor="let ptr of pt.PRC_TBL_ROW">
+                        <td *ngFor="let td of tableHeaderData.PRC_TBL_ROW[pt.OBJ_SET_TYPE_CD].columns">
+                            <span *ngIf="!td.hidden">{{showField(ptr, td.field, td, pt.OBJ_SET_TYPE_CD)}}</span>
                         </td>
                     </tr>
-                </table> -->
+                </table>
 
             </div>
 
