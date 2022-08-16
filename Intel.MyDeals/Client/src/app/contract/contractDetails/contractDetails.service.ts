@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import 'rxjs/add/operator/toPromise';
+import { SecurityService } from "../../shared/services/security.service"
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class contractDetailsService {
     public dropDownApiUrl = "/api/Dropdown/";
     public timeLineApiUrl = "api/Timeline/";
     private fileApiUrl = "/api/FileAttachments/";
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
 
     public readContract(id) {
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
@@ -59,11 +60,11 @@ export class contractDetailsService {
     }
 
     copyContract(custId, contractId, srcContractId, ct) {
-        const apiUrl : string = this.apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId;
+        const apiUrl: string = this.apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId;
         return this.httpClient.post(apiUrl, [ct]);
     }
 
-    public GetObjTimelineDetails(contractDetailId,objTypeIds,objTypeSId): Observable<any> {
+    public GetObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId): Observable<any> {
         const rbody = { 'objSid': contractDetailId, "objTypeIds": objTypeIds, "objTypeSid": objTypeSId };
         const apiTimeLineUrl: string = this.timeLineApiUrl + "GetObjTimelineDetails";
         return this.httpClient.post(apiTimeLineUrl, rbody);
@@ -79,6 +80,10 @@ export class contractDetailsService {
 
     deleteAttachment(custId, objTypeSid, objSid, fileSid) {
         const url = this.fileApiUrl + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
-        return this.httpClient.get(url);
+        return this.httpClient.post(url, objTypeSid);
+    }
+
+    chkDealRules(action, role, itemType, itemSetType, stage): boolean {
+        return this.securityService.chkDealRules(action, role, itemType, itemSetType, stage);
     }
 }

@@ -117,6 +117,12 @@
         </button>
     </kendo-dialog-actions>
 </kendo-dialog>
-
+<kendo-dialog title="Confirmation" *ngIf="isCustDivNull" (close)="custdivnull(false)">
+    <p style="margin: 30px; text-align: center;">The division is blank. Do you intend for this deal to apply to all divisions ?</p>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="custdivnull(true)">Yes</button>
+        <button class='k-button' (click)="custdivnull(false)">No</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
 <loading-panel-angular id="PTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
     [description]="spinnerMessageDescription"></loading-panel-angular>

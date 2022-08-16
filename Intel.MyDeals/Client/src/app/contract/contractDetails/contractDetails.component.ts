@@ -7,7 +7,7 @@ import { FormGroup } from "@angular/forms";
 import { templatesService } from "../../shared/services/templates.service";
 import * as _moment from "moment";
 import { forkJoin } from "rxjs";
-import {  FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
+import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { GridUtil } from "../grid.util";
@@ -34,7 +34,7 @@ export class contractDetailsComponent {
     @Input() C_ID: number;
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
-    BACK_DATE_RSN;CONTRACT_TYPE;
+    BACK_DATE_RSN; CONTRACT_TYPE;
     public c_Id: number;
     public templateData;
     public Customers: Array<any>;
@@ -48,25 +48,27 @@ export class contractDetailsComponent {
     public contractId: number;
     public renameMapping = {};
     public curPricingTable = {};
-    public isCustomerSelected:boolean;
+    public isCustomerSelected: boolean;
     public initialEndDateReadOnly = false;
-    public isTitleError =false;hasUnSavedFiles = false;
+    public isTitleError = false; hasUnSavedFiles = false;
     public isCustomerDivHidden = true;
-    public custAccptData;selectedFileCount = 0;
+    public custAccptData; selectedFileCount = 0;
     public dropDownsData = {};
     public titleErrorMsg: string;
     public isTender = false;
     public today: string = moment().format("l");
-    public MinYear: number;public MaxYear: number;public MinDate: string;
+    public MinYear: number; public MaxYear: number; public MinDate: string;
     public MaxDate: string;
     public saveBtnName: string; isTenderContract = false;
     public format = "#"; public selectedCUST_ACCPT = "Pending"; uploadSuccess = false;
-    public isendDTReasonReq = false; public isCopyContract = false; public isBackdatepopupopend = false;public isBackDate = false;
+    public isendDTReasonReq = false; public isCopyContract = false; public isBackdatepopupopend = false; public isBackDate = false;
     isDivBlankPopupOpen = false; isMissingGrpCode = false; isValid = false;
     public stDate: Date; isRequiredMsg = "* field is required"; existingMinEndDate: Date = null;
-    public copyContractData: any;public uploadSaveUrl = "/FileAttachments/Save";
+    public copyContractData: any; public uploadSaveUrl = "/FileAttachments/Save";
     public TimeLineDetails: Array<any>;
     public showDeleteButton = false;
+    public C_DELETE_ATTACHMENTS: boolean = false;
+    public isDeleteAttachment: boolean = false;
     private isNewContract = false;
     private attachmentCount = 0;
     private initComplete = false;
@@ -75,6 +77,7 @@ export class contractDetailsComponent {
     private btnText = "Show More";
     private isShowBtn = false;
     private maxCount = 5;
+    private deleteAttachmentParams: any = {};
     private state: State = {
         skip: 0,
         take: 25,
@@ -188,7 +191,7 @@ export class contractDetailsComponent {
         this.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
     }
 
-    onKeySearch(event: any,inputField) {
+    onKeySearch(event: any, inputField) {
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
             if (inputField == "START_YR" || inputField == "END_YR") {
@@ -208,7 +211,7 @@ export class contractDetailsComponent {
             .subscribe((response: Array<any>) => {
                 if (response) {
                     this.isTitleError = true;
-                    this.titleErrorMsg ="This contract name already exists in another contract.";
+                    this.titleErrorMsg = "This contract name already exists in another contract.";
                 } else {
                     this.isTitleError = false;
                     this.titleErrorMsg = "";
@@ -224,7 +227,7 @@ export class contractDetailsComponent {
         this.contractDetailsSvc.getMyCustomerDivsByCustNmSid(custID).subscribe(
             (response: Array<any>) => {
                 this.Customer_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
-                if (this.isCopyContract && this.contractData.CUST_ACCNT_DIV_UI.length>0) {
+                if (this.isCopyContract && this.contractData.CUST_ACCNT_DIV_UI.length > 0) {
                     this.contractData.CUST_ACCNT_DIV_UI.forEach((cust) => {
                         const selectedCustDiv = this.Customer_Divs.filter(x => x.CUST_DIV_NM == cust)
                         if (selectedCustDiv.length > 0) this.CUST_NM_DIV.push(selectedCustDiv[0]);
@@ -250,7 +253,7 @@ export class contractDetailsComponent {
     }
 
     onDateChange(evt) {//Below function is to show/hide the backdate reason based on the start date change
-        const strtDate =  new Date(this.stDate);
+        const strtDate = new Date(this.stDate);
         const selectedDate = new Date(evt);
         if (strtDate > selectedDate) {
             this.isBackDate = true;
@@ -284,7 +287,7 @@ export class contractDetailsComponent {
 
     applyTodayDate() { //apply today's date on cancel click event of back date reason popup
         const today = moment().format("l");
-        this.START_DT = new Date(moment(this.contractData.START_DT).isBefore(today)? today: this.contractData.START_DT);
+        this.START_DT = new Date(moment(this.contractData.START_DT).isBefore(today) ? today : this.contractData.START_DT);
         this.isBackdatepopupopend = false;
         this.isBackDate = false;
         this.contractData._behaviors.isHidden["BACK_DATE_RSN"] = true;
@@ -314,10 +317,10 @@ export class contractDetailsComponent {
         this.contractData["START_QTR"] = 1;
         this.contractData["START_YR"] = this.START_YR;
         this.contractData["C2A_DATA_C2A_ID"] = this.C2A_DATA_C2A_ID;
-        this.contractData["BACK_DATE_RSN"] = (this.BACK_DATE_RSN?.DROP_DOWN != "" && this.BACK_DATE_RSN!=undefined) ? this.BACK_DATE_RSN?.DROP_DOWN:"";
+        this.contractData["BACK_DATE_RSN"] = (this.BACK_DATE_RSN?.DROP_DOWN != "" && this.BACK_DATE_RSN != undefined) ? this.BACK_DATE_RSN?.DROP_DOWN : "";
         this.contractData["CUST_ACCPT"] = this.selectedCUST_ACCPT;
         this.contractData["NOTES"] = this.NOTES;
-        if (this.CUST_NM_DIV.length>0 && this.CUST_NM_DIV != undefined) {
+        if (this.CUST_NM_DIV.length > 0 && this.CUST_NM_DIV != undefined) {
             this.contractData["CUST_ACCNT_DIV_UI"] = this.CUST_NM_DIV.map((x) => (x.CUST_DIV_NM));
             this.contractData["CUST_ACCNT_DIV"] = this.contractData["CUST_ACCNT_DIV_UI"].join('/');
         }
@@ -364,7 +367,7 @@ export class contractDetailsComponent {
 
     public blankDivisionPopupClose(status: string): void {
         if (status == "yes") {
-            if (this.isCopyContract)  this.copyContract();
+            if (this.isCopyContract) this.copyContract();
             else this.saveContract();
         }
         this.isDivBlankPopupOpen = false;
@@ -382,22 +385,26 @@ export class contractDetailsComponent {
         if (this.contractData["DC_ID"]) {
             this.contractId = this.contractData["DC_ID"];
         }
-        if (ct["DC_ID"] <= 0)  ct["DC_ID"] = this.uid;
+        if (ct["DC_ID"] <= 0) ct["DC_ID"] = this.uid;
         this.contractDetailsSvc
             .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct)
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
                     // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                    this.contractData["DC_ID"] = response.CNTRCT[0].DC_ID;
+                    this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
                     }
                     else {
-                        window.location.href = '/Dashboard#/portal';
+                        window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                     }
                 } else {
-                    window.location.href = '/Dashboard#/portal';
-
+                    if (this.hasUnSavedFiles) {
+                        this.uploadFile();
+                        //window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+                    } else {
+                        window.location.href = '/Dashboard#/portal';
+                    }
                 }
             });
     }
@@ -412,10 +419,10 @@ export class contractDetailsComponent {
             else if (this.contractData._behaviors.validMsg[type] == "" || this.isCopyContract) {
                 if (type == "START_DT") {
                     isValid = newDate > new Date(this.contractData.MinDate) ? true : false;
-                    if (!isValid) {this.validateDate("START_DT");}
+                    if (!isValid) { this.validateDate("START_DT"); }
                 } else if (type == "END_DT") {
                     isValid = newDate < new Date(this.contractData.MaxDate) ? true : false;
-                    if (!isValid) {this.validateDate("END_DT");}
+                    if (!isValid) { this.validateDate("END_DT"); }
                 }
             }
         }
@@ -440,28 +447,28 @@ export class contractDetailsComponent {
     //backdatePopupClose() {
     //    this.isBackdatepopupopend = false;
     //}
-    getTimeLineDetails(){
+    getTimeLineDetails() {
         let contractDetailId = null;
         let objTypeIds = [1, 2, 3];
         let objTypeSId = 1;
-        if(this.C_ID){
+        if (this.C_ID) {
             contractDetailId = this.C_ID;
 
-        this.contractDetailsSvc.GetObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId).subscribe((response: Array<any>) => {
-            this.TimeLineDetails = response;
-            if(response.length > 5){
-                this.isShowBtn = true;
-            }
-            console.log(response);
+            this.contractDetailsSvc.GetObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId).subscribe((response: Array<any>) => {
+                this.TimeLineDetails = response;
+                if (response.length > 5) {
+                    this.isShowBtn = true;
+                }
+                console.log(response);
 
-        }, error => {
-            this.loggerSvc.error("Unable to get Details.", error);
-        });
+            }, error => {
+                this.loggerSvc.error("Unable to get Details.", error);
+            });
+        }
+
+
     }
-
-
-    }
-    getContractQuaterDetails(changeEvent){
+    getContractQuaterDetails(changeEvent) {
         let isValidDataPresent = false;
 
         let isDate, customerMemberSid = null;
@@ -570,8 +577,8 @@ export class contractDetailsComponent {
     }
 
     validateDate(dateChange) {
-        this.contractData._behaviors.isError['START_DT'] =this.contractData._behaviors.isError['END_DT'] = false;
-        this.contractData._behaviors.validMsg['START_DT'] =this.contractData._behaviors.validMsg['END_DT'] = "";
+        this.contractData._behaviors.isError['START_DT'] = this.contractData._behaviors.isError['END_DT'] = false;
+        this.contractData._behaviors.validMsg['START_DT'] = this.contractData._behaviors.validMsg['END_DT'] = "";
         const startDate = this.START_DT;
         const endDate = this.END_DT;
         if (dateChange == 'START_DT' || dateChange == "START_YR" || dateChange == "START_QTR") {
@@ -602,7 +609,7 @@ export class contractDetailsComponent {
         const c = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
         // contract exists
         if (this.contractData !== null && this.contractData !== undefined) {
-            if (this.contractData.data[0] !== undefined) { return this.contractData.data[0];}
+            if (this.contractData.data[0] !== undefined) { return this.contractData.data[0]; }
         }
         return c;
     }
@@ -630,7 +637,7 @@ export class contractDetailsComponent {
     // Set customer acceptance rules
     setCustAcceptanceRules(newValue) {
         this.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
-        this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && !this.isTenderContract && this.selectedFileCount==0;
+        this.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && !this.isTenderContract && this.selectedFileCount == 0;
         if (this.contractData.DC_ID < 0) this.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : this.contractData.C2A_DATA_C2A_ID;
         this.contractData.IsAttachmentRequired = !this.isTenderContract && this.contractData.C2A_DATA_C2A_ID === "" && newValue !== 'Pending';
         this.contractData.AttachmentError = this.contractData.AttachmentError && this.contractData.IsAttachmentRequired;
@@ -644,10 +651,10 @@ export class contractDetailsComponent {
     copyContract() {
         const ct = this.contractData;
         if (ct.DC_ID <= 0) ct.DC_ID = this.uid--; // check for NEW contract
-        this.contractDetailsSvc.copyContract(this.contractData["CUST_MBR_SID"],this.contractData.DC_ID,this.copyContractData.DC_ID,ct)
+        this.contractDetailsSvc.copyContract(this.contractData["CUST_MBR_SID"], this.contractData.DC_ID, this.copyContractData.DC_ID, ct)
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
-                    let idCheck = response.CNTRCT.length ==2 ? response.CNTRCT[1]?.DC_ID : response.CNTRCT[0]?.DC_ID;
+                    let idCheck = response.CNTRCT.length == 2 ? response.CNTRCT[1]?.DC_ID : response.CNTRCT[0]?.DC_ID;
                     if (idCheck <= 0) {
                         this.isValid = false;
                         this.titleErrorMsg = "Title already exists in system";
@@ -659,16 +666,16 @@ export class contractDetailsComponent {
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {
-                            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"]+"/0/0/0";
+                            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                         }
                     }
                 }
-            },error => {
+            }, error => {
                 this.loggerSvc.error("Could not create the contract.", error);
             }
             );
     }
-    deleteContract(){
+    deleteContract() {
         if (confirm("Are you sure that you want to delete this contract?")) {
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
@@ -680,9 +687,9 @@ export class contractDetailsComponent {
             };
         }
     }
-    loadContractDetailsData(){
+    loadContractDetailsData() {
         this.Customer = this.contractData.Customer;
-        if(this.Customer){
+        if (this.Customer) {
             this.disableCustomer = true;
         }
         this.showDeleteButton = true;
@@ -699,6 +706,8 @@ export class contractDetailsComponent {
         this.NOTES = this.contractData.NOTES;
         this.getContractQuaterDetails('START_DT');
         this.getContractQuaterDetails('END_DT');
+        this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
+        this.updateCorpDivision(this.contractData.CUST_MBR_SID);
     }
     stripMilliseconds(dateTime) {
         let date = this.datePipe.transform(new Date(GridUtil.stripMilliseconds(dateTime)), 'M/d/yyyy');
@@ -746,7 +755,7 @@ export class contractDetailsComponent {
                                     this.copyContractData = response[0];
                                     this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
                                     this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
-                                    this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l") );
+                                    this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l"));
                                     this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(moment(this.copyContractData.END_DT).format("l"));
                                     this.Customer = this.copyContractData.Customer;
                                     this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
@@ -760,7 +769,7 @@ export class contractDetailsComponent {
                                     this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
                                     this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;
                                     this.contractData.END_YR = this.END_YR = this.copyContractData.END_YR;
-                                    this.contractData.CUST_ACCNT_DIV =this.copyContractData.CUST_ACCNT_DIV;
+                                    this.contractData.CUST_ACCNT_DIV = this.copyContractData.CUST_ACCNT_DIV;
                                     this.contractData.IS_TENDER = this.copyContractData.IS_TENDER;
                                     this.contractData.CONTRACT_TYPE = this.copyContractData.CONTRACT_TYPE;
                                     this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
@@ -791,6 +800,7 @@ export class contractDetailsComponent {
                                 .readContract(this.C_ID)
                                 .subscribe((response: Array<any>) => {
                                     this.contractData = response[0];
+                                    this.C_DELETE_ATTACHMENTS = this.contractDetailsSvc.chkDealRules("C_DELETE_ATTACHMENTS", (<any>window).usrRole, null, null, this.contractData.WF_STG_CD);
                                     this.isTenderContract = this.contractData["IS_TENDER"];
                                     this.loadContractDetailsData();
                                     this.getTimeLineDetails();
@@ -799,19 +809,19 @@ export class contractDetailsComponent {
                         }
                     }
                     this.setSaveBtnName();
-                }, error=> {
+                }, error => {
                     this.loggerSvc.error("Unable to getVendorDropDown.", error);
                 });
 
-            }, error=> {
-                this.loggerSvc.error("Unable to get Customers.",error);
+            }, error => {
+                this.loggerSvc.error("Unable to get Customers.", error);
             });
         } catch (e) {
             console.error("Unable to load the data", e);
         }
     }
 
-    getFileAttachmentDetails(value){
+    getFileAttachmentDetails(value) {
         if (value <= 0) {
             this.isNewContract = true;
         }
@@ -830,6 +840,26 @@ export class contractDetailsComponent {
                 this.loggerSvc.error("Unable to get Files.", error);
                 this.initComplete = true;
             });
+        }
+    }
+    deleteFileAttachment(data) {
+        this.deleteAttachmentParams = { custMbrSid: data.CUST_MBR_SID, objTypeSid: data.OBJ_TYPE_SID, objSid: data.OBJ_SID, fileDataSid: data.FILE_DATA_SID };
+        this.isDeleteAttachment = true;
+    }
+
+    deleteAttachmentActions(act: boolean) {
+        if (act == true) {
+            this.contractDetailsSvc.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
+                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
+                    this.isDeleteAttachment = false;
+                    this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
+                    this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
+                }, error => {
+                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed");
+                })
+        }
+        else {
+            this.isDeleteAttachment = false;
         }
     }
     ngOnDestroy() {

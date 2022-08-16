@@ -121,7 +121,7 @@ export class PTE_CellChange_Util {
               currentstring =row+','+val.prop+','+contractData.END_DT+','+'no-edit';
               updateRows.push(currentstring.split(','));
               //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
-            }
+            }            
             else if(val.prop=='RESET_VOLS_ON_PERIOD'){
               //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
               currentstring =row+','+val.prop+','+'No'+','+'no-edit';

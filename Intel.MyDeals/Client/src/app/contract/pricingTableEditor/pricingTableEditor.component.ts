@@ -31,6 +31,7 @@ import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { lnavUtil } from '../lnav.util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
+import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -145,7 +146,8 @@ export class pricingTableEditorComponent implements OnChanges {
     @Input() in_Pt_Id: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
-    private isDialogOpen:boolean=false
+    private isDialogOpen: boolean = false;
+    private isCustDivNull: boolean = false;
     /*For loading variable */
     private isLoading: boolean = false;
     private spinnerMessageHeader: string = "PTE Loading";
@@ -205,6 +207,7 @@ export class pricingTableEditorComponent implements OnChanges {
 
     //this will help to have a custom cell validation which allow only alphabets
     private newPricingTable: any = {};
+    private VendorDropDownResult: any = {};
     private isDeletePTR:boolean=false;
 
     afterDocumentKeyDown(evt:any){
@@ -508,14 +511,18 @@ export class pricingTableEditorComponent implements OnChanges {
             } 
         }
          _.each(this.pricingTableTemplates.model.fields,(item,key)=>{
-            if(item && item.uiType && item.uiType=='DROPDOWN' && item.opLookupUrl && item.opLookupUrl !='' && (dropObjs[`${key}`] ==null || dropObjs[`${key}`]==undefined)){
+             if (item && item.uiType && (item.uiType == 'DROPDOWN' || item.uiType == 'MULTISELECT') && item.opLookupUrl && item.opLookupUrl !='' && (dropObjs[`${key}`] ==null || dropObjs[`${key}`]==undefined)){
                if(key=='SETTLEMENT_PARTNER'){
                 //calling  settlement partner seperatly
-                dropObjs['SETTLEMENT_PARTNER'] = this.pteService.getDropDownResult(item.opLookupUrl+'/'+this.contractData.Customer.CUST_SID);
+                   dropObjs['SETTLEMENT_PARTNER'] = this.pteService.getDropDownResult(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
                }
                else if(key=='PERIOD_PROFILE'){
                  //calling  PERIOD_PROFILE 
                 dropObjs['PERIOD_PROFILE'] = this.pteService.getDropDownResult(item.opLookupUrl+this.contractData.Customer.CUST_SID);
+               }
+               else if (key == 'CUST_ACCNT_DIV') {
+                    //calling  Customer Divisions
+                    dropObjs['CUST_ACCNT_DIV'] = this.pteService.getDropDownResult(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
                }
                else if (key == 'ORIG_ECAP_TRKR_NBR') {
                    console.log('no valid URL Need to check');
@@ -537,11 +544,23 @@ export class pricingTableEditorComponent implements OnChanges {
         this.isLoading = true;
         let PTR = await this.getPTRDetails();
         this.getTemplateDetails();
-        this.dropdownResponses =  await this.getAllDrowdownValues();
+        this.dropdownResponses = await this.getAllDrowdownValues();
+        if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
+            this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
+        }
         //this is only while loading we need , need to modify as progress
         PTR = PTE_Load_Util.pivotData(PTR, false, this.curPricingTable, this.kitDimAtrbs);
         this.generateHandsonTable(PTR);
         this.isLoading = false;
+    }
+    custdivnull(act: boolean) {
+        if (act == true) {
+            this.isCustDivNull = false;
+            this.ValidateAndSavePTE(true);
+        }
+        else {
+            this.isCustDivNull = false;
+        }
     }
     undoPTE() {
         this.hotTable.undo();
@@ -549,9 +568,37 @@ export class pricingTableEditorComponent implements OnChanges {
     redoPTE() {
         this.hotTable.redo();
     }
+    async ValidateAndSavePTE(isValidProd) {
+        if (isValidProd) {
+            this.isLoading = true;
+            this.spinnerMessageHeader = 'PTE Save';
+            this.spinnerMessageDescription = 'PTE Saving please wait';
+            //Handsonetable loading taking some time so putting this logic for loader
+            let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+            //Checking for UI errors
+            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult);
+            //if there is any error bind the result to handsone table
+            let error = _.find(finalPTR, (x) => {
+                if (x._behaviors && x._behaviors.isError) {
+                    return _.contains(_.values(x._behaviors.isError), true)
+                }
+            });
+            if (error) {
+                this.generateHandsonTable(finalPTR);
+            }
+            else {
+                //this.generateHandsonTable(finalPTR);
+                await this.saveEntireContractRoot(finalPTR);
+            }
+            this.isLoading = false;
+        }
+        else {
+            this.loggerService.error('All products are not valid', 'Products are not valid');
+        }
+    }
     async saveEntireContractRoot(finalPTR:Array<any>){
         //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
-        finalPTR=PTE_Helper_Util.deNormalizeData(finalPTR,this.curPricingTable,this.kitDimAtrbs,this.maxKITproducts);
+        finalPTR=PTE_Helper_Util.deNormalizeData(finalPTR,this.curPricingTable);
         //This method will remove all the unwanted property since there are keys with undefined values
         finalPTR = PTE_Common_Util.deepClone(finalPTR);
         //settment partner change for taking only the ID the API will send back us the both
@@ -587,32 +634,27 @@ export class pricingTableEditorComponent implements OnChanges {
         }
     }
     async validatePricingTableProducts() {
-        let isValidProd=await this.validateOnlyProducts('onSave');
-        if(isValidProd){
-            this.isLoading = true;
-            this.spinnerMessageHeader = 'PTE Save';
-            this.spinnerMessageDescription = 'PTE Saving please wait';
-            //Handsonetable loading taking some time so putting this logic for loader
-            let PTR = PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
-            //Checking for UI errors
-            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable,this.contractData);
-            //if there is any error bind the result to handsone table
-            let error=_.find(finalPTR,(x)=>{
-                if(x._behaviors && x._behaviors.isError){
-                    return _.contains(_.values(x._behaviors.isError),true)
-                }
-            });
-            if(error){
-                this.generateHandsonTable(finalPTR);
+        let isValidProd = true;//await this.validateOnlyProducts('onSave');
+        //Handsonetable loading taking some time so putting this logic for loader
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        var multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR);
+        if (multiGeoWithoutBlend != "0") {
+            if (multiGeoWithoutBlend == "1") {
+                this.loggerService.error('Multiple GEO Selection not allowed without BLEND', 'error');
+                isValidProd = false;
             }
-            else{
-                await this.saveEntireContractRoot(finalPTR);
+            else if (multiGeoWithoutBlend == "2") {
+                this.loggerService.error('Duplicate Product(s) are not allowed in same PS.', 'error');
+                isValidProd = false;
             }
-            this.isLoading = false;
         }
-        else{
-           this.loggerService.error('All products are not valid','Products are not valid');
+        else {
+            this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR, this.contractData.CUST_ACCNT_DIV);
+            if (!this.isCustDivNull) {
+               this.ValidateAndSavePTE(isValidProd);
+            }
         }
+        
     }
     async validateOnlyProducts(action:string){
         //loader
@@ -651,8 +693,10 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         }
         else{
-            this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
+            //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
+            //this.isLoading = false;
             this.isLoading = false;
+            return true;
         }
     }
     async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
@@ -686,7 +730,7 @@ export class pricingTableEditorComponent implements OnChanges {
             transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
-                    this.loggerService.error("Product Trans::", error);
+                    this.loggerService.error("Product Traslate API Error::", error);
                 })
         }
 

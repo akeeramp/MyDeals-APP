@@ -199,7 +199,7 @@ export class PTE_Helper_Util {
         return "#aaaaaa";
     }
 
-    static deNormalizeData = function (data, curPricingTable, kitDimAtrbs, maxKITproducts) {      //convert how we keep data in UI to MT consumable format
+    static deNormalizeData = function (data, curPricingTable) {      //convert how we keep data in UI to MT consumable format
         if (!PTE_Load_Util.isPivotable(curPricingTable)) return data;
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
         var a;
@@ -222,7 +222,7 @@ export class PTE_Helper_Util {
         }
         else if (dealType === "KIT") {
             dimKey = prodDimKey;
-            dimAtrbs = kitDimAtrbs;
+            dimAtrbs = PTE_Config_Util.kitDimAtrbs;
             isKit = 1;
         }
 
@@ -287,7 +287,7 @@ export class PTE_Helper_Util {
                             if (dealType === "KIT") {
                                 // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
                                 //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                                for (var i = 0; i < maxKITproducts; i++) {
+                                for (var i = 0; i < PTE_Config_Util.maxKITproducts; i++) {
                                     var tierToDel = (t + 1 + i);
                                     lData[dimAtrbs[a] + dimKey + tierToDel] = "";
                                 }

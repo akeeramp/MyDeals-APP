@@ -3,12 +3,12 @@ import * as moment from "moment";
 import { lnavUtil } from "../lnav.util";
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { PTE_Load_Util } from './PTE_Load_util';
-import { PTE_Helper_Util } from '../PTEUtils/PTE_Helper_util';
-import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 import { DE_Validation_Util } from "../DEUtils/DE_Validation_util"
 import { PTE_Save_Util } from './PTE_Save_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
+import { PTE_Helper_Util } from './PTE_Helper_util';
+import { PTE_Common_Util } from './PTE_Common_util';
 
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
@@ -747,20 +747,9 @@ export class PTE_Validation_Util {
         return data;
     }
 
-    static itemValidationBlock = function (data, key, mode, wipData, spreadDs, curPricingTable) {
-        var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
-        //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
-        //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
-        var spreadData;
-        if (spreadDs != undefined) {
-            spreadData = spreadDs;
-        }
-        else {
-            spreadData = data
-        }
-
+    static itemValidationBlock (data, key, mode, curPricingTable) {        
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+        var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj["DC_ID"] });
 
         var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
         var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
@@ -936,39 +925,27 @@ export class PTE_Validation_Util {
         }
         return data;
     }
-    static validateHybridFields = function (data, curPricingStrategy, curPricingTable, wipData, spreadDs) {
-        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retOAVCond = false, retOADCond = false, retOAVEmptCond = false, retOADEmptCond = false, retZeroOAD = false, retZeroOAV = false;
+    static validateHybridFields = function (data, curPricingStrategy, curPricingTable) {
+        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT;            
         var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         //calling clear overarching in the begening
 
-        if (hybCond == '1' || isFlexDeal) {
-            // Assume cleared, the apply breaks
-            data = this.clearValidation(data, 'REBATE_TYPE');
-            data = this.clearValidation(data, 'PAYOUT_BASED_ON');
-            data = this.clearValidation(data, 'CUST_ACCNT_DIV');
-            data = this.clearValidation(data, 'GEO_COMBINED');
-            data = this.clearValidation(data, 'PERIOD_PROFILE');
-            data = this.clearValidation(data, 'RESET_VOLS_ON_PERIOD');
-            data = this.clearValidation(data, 'PROGRAM_PAYMENT');
-            data = this.clearValidation(data, 'SETTLEMENT_PARTNER');
-            data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
-            data = this.clearValidation(data, 'CONSUMPTION_TYPE');
-
-            this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+        if (hybCond == '1' || isFlexDeal) {           
+            this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], curPricingTable);
             if (hybCond) {
-                this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], wipData, spreadDs, curPricingTable);
+                this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], curPricingTable);
             }
-            this.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "GEO_COMBINED", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "PERIOD_PROFILE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "RESET_VOLS_ON_PERIOD", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "PROGRAM_PAYMENT", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "SETTLEMENT_PARTNER", ["notequal"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
-            this.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"], wipData, spreadDs, curPricingTable);
+            this.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"], curPricingTable);
+            this.itemValidationBlock(data, "GEO_COMBINED", ["notequal", "equalblank"], curPricingTable);
+            this.itemValidationBlock(data, "PERIOD_PROFILE", ["notequal", "equalblank"], curPricingTable);
+            this.itemValidationBlock(data, "RESET_VOLS_ON_PERIOD", ["notequal", "equalblank"], curPricingTable);
+            this.itemValidationBlock(data, "PROGRAM_PAYMENT", ["notequal", "equalblank"], curPricingTable);
+            this.itemValidationBlock(data, "SETTLEMENT_PARTNER", ["notequal"], curPricingTable);
+            this.itemValidationBlock(data, "AR_SETTLEMENT_LVL", ["notequal", "equalblank"], curPricingTable);
+            this.itemValidationBlock(data, "CONSUMPTION_TYPE", ["notequal", "equalblank"], curPricingTable);
             if (isFlexDeal) {
                 data = this.clearValidation(data, 'END_CUSTOMER_RETAIL', curPricingTable);
-                this.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], wipData, spreadDs, curPricingTable);
+                this.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], curPricingTable);
             }
             //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
         }
@@ -989,5 +966,125 @@ export class PTE_Validation_Util {
             }
         }
         return data;
+    }
+
+    static hasDuplicateProduct(pricingTableRows) {
+        var rows = JSON.parse(JSON.stringify(pricingTableRows));
+        var sortedRanges = rows.sort((previous, current) => {
+
+            previous.START_DT = previous.START_DT instanceof Date ? previous.START_DT : new Date(previous.START_DT);
+            current.END_DT = current.END_DT instanceof Date ? current.END_DT : new Date(current.END_DT);
+
+            previous.END_DT = previous.END_DT instanceof Date ? previous.END_DT : new Date(previous.END_DT);
+            current.START_DT = current.START_DT instanceof Date ? current.START_DT : new Date(current.START_DT);
+
+            // get the start date from previous and current
+            var previousTime = previous.START_DT.getTime();
+            var currentTime = current.END_DT.getTime();
+
+            // if the previous is earlier than the current
+            if (previousTime < currentTime) {
+                return -1;
+            }
+
+            // if the previous time is the same as the current time
+            if (previousTime === currentTime) {
+                return 0;
+            }
+
+            // if the previous time is later than the current time
+            return 1;
+        });
+
+        var dictDuplicateProducts = {};
+
+        var result = sortedRanges.reduce((result, current, idx, arr) => {
+            // get the previous range
+            if (idx === 0) { return result; }
+            var previous = arr[idx - 1];
+
+
+            // check for any overlap
+            var previousEnd = previous.END_DT.getTime();
+            var currentStart = current.START_DT.getTime();
+            var overlap = (previousEnd >= currentStart);
+
+            // store the result
+            if (overlap) {
+                if (previous.PTR_SYS_PRD !== "") {
+                    var sysProducts = JSON.parse(previous.PTR_SYS_PRD);
+                    for (var key in sysProducts) {
+                        if (sysProducts.hasOwnProperty(key)) {
+                            _.each(sysProducts[key], function (item) {
+                                if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
+                                    dictDuplicateProducts[item.PRD_MBR_SID] = previous.DC_ID;
+                                } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(previous.DC_ID.toString()) < 0) {
+                                    dictDuplicateProducts[item.PRD_MBR_SID] += "," + previous.DC_ID;
+                                    if (result.duplicateProductDCIds[previous.DC_ID] == undefined) {
+                                        result.duplicateProductDCIds[previous.DC_ID] = {
+                                            "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
+                                            "OverlapProduct": key
+                                        }
+                                    } else {
+                                        result.duplicateProductDCIds[previous.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
+                                        result.duplicateProductDCIds[previous.DC_ID].OverlapProduct += "," + key;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+
+                if (current.PTR_SYS_PRD !== "") {
+                    var sysProducts = JSON.parse(current.PTR_SYS_PRD);
+                    for (var key in sysProducts) {
+                        if (sysProducts.hasOwnProperty(key)) {
+                            _.each(sysProducts[key], function (item) {
+                                if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
+                                    dictDuplicateProducts[item.PRD_MBR_SID] = current.DC_ID;
+                                } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(current.DC_ID.toString()) < 0) {
+                                    dictDuplicateProducts[item.PRD_MBR_SID] += "," + current.DC_ID;
+                                    if (result.duplicateProductDCIds[current.DC_ID] == undefined) {
+                                        result.duplicateProductDCIds[current.DC_ID] = {
+                                            "OverlapDCID": dictDuplicateProducts[item.PRD_MBR_SID],
+                                            "OverlapProduct": key
+                                        }
+                                    } else {
+                                        result.duplicateProductDCIds[current.DC_ID].OverlapDCID += "," + dictDuplicateProducts[item.PRD_MBR_SID];
+                                        result.duplicateProductDCIds[current.DC_ID].OverlapProduct += "," + key;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            return result;
+
+            // seed the reduce  
+        }, { overlap: false, duplicateProductDCIds: {} });
+
+        // return the final results  
+        return result;
+    }
+
+    static validateCustomerDivision(dictCustDivision, baseCustDiv, custDiv) {
+        if (baseCustDiv != null && custDiv != null) {
+            if (Object.keys(dictCustDivision).length == 1 && baseCustDiv.indexOf("/") !== -1 && custDiv.indexOf("/") !== -1
+                && baseCustDiv.split("/").length == custDiv.split("/").length) {
+                var divs = custDiv.split("/");
+                for (var z = 0; z < divs.length; z++) {
+                    if (baseCustDiv.indexOf(divs[z]) == -1) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else { return false }
+        }
+        else {
+            return false;
+        }
     }
 }

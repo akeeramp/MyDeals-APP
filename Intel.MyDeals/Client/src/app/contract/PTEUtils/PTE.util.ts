@@ -44,8 +44,15 @@ export class PTEUtil {
             //if (item.field == 'QLTR_PROJECT') {
             //    currentColumnConfig.validator = this.projectValidator;
             //}
-            if (item.field == "END_VOL" || item.field == "END_PB") {
-                currentColumnConfig.validator = this.EndValueValidator;
+            if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
+                currentColumnConfig.type = 'numeric';
+                currentColumnConfig.numericFormat = {
+                    pattern: '0,0',
+                    culture: 'en-US'
+                }
+                if (item.field == "END_VOL" || item.field == "END_PB") {
+                    currentColumnConfig.validator = this.EndValueValidator;
+                }
             }
             else if (itemField === 'number') {
                 currentColumnConfig.type = 'numeric';
@@ -70,14 +77,7 @@ export class PTEUtil {
                 currentColumnConfig.numericFormat = {
                     pattern: '0,0.00%',
                     culture: 'en-US'
-                }
-            } else if (item.field === 'END_VOL') {
-                currentColumnConfig.type = 'numeric';
-
-                currentColumnConfig.numericFormat = {
-                    pattern: '0,0',
-                    culture: 'en-US'
-                }
+                }            
             } else if (itemField === 'date') {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;

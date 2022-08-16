@@ -196,6 +196,8 @@ export class PTE_Common_Util {
                 });
             }
         }
+        //This function call to add all the missing attributes required for save
+        PTRResult = this.addPTEAttributes(PTRResult, curPricingTable);
         return PTRResult;
     }
 
@@ -205,5 +207,17 @@ export class PTE_Common_Util {
 
     static cellCloseValues(field, dataItem) {
         DE_Common_Util.cellCloseValues(field, dataItem);
+    }
+
+    //This function is to add all missing common attributes with expected values for save 
+    static addPTEAttributes(PTRResult, curPricingTable) {
+        let PTRgenericAttr: Array<any>;
+        PTRgenericAttr = ["IS_HYBRID_PRC_STRAT"];
+        for (var i = 0; i < PTRgenericAttr.length; i++) {
+            for (var j = 0; j < PTRResult.length; j++) {
+                PTRResult[j][PTRgenericAttr[i]] = curPricingTable[PTRgenericAttr[i]] != null ? curPricingTable[PTRgenericAttr[i]] : null;
+            }
+        }
+        return PTRResult;
     }
 }

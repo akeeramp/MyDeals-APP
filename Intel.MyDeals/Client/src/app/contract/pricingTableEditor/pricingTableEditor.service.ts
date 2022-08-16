@@ -11,7 +11,7 @@ export class pricingTableEditorService {
     public autoFillData = new BehaviorSubject({});
     private apiBasePricingTableUrl = "/api/PricingTables/v1/";
     private apiBaseContractUrl = "/api/Contracts/v1/";
-    private apiBasePrimeCustomerUrl = "api/PrimeCustomers/";
+    private apiBasePrimeCustomerUrl = "api/PrimeCustomers/";    
     public readPricingTable(id): Observable<any> {
         const apiUrl: string = this.apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id;
         return this.httpClient.get(apiUrl);
@@ -20,7 +20,6 @@ export class pricingTableEditorService {
         const apiUrl: string = lookupUrl;
         return this.httpClient.get(apiUrl);
     }
-
     public validateEndCustomer(endCustObj: any): Observable<any> {
         const apiUrl: string = this.apiBasePrimeCustomerUrl + "ValidateEndCustomer";
         const headers = { 'content-type': 'application/json' };
@@ -34,10 +33,9 @@ export class pricingTableEditorService {
             return this.httpClient.post(this.apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } 
     }
-
     public UnPrimeDealsLogs(dealId, endCustData): Observable<any> {
         const apiUrl: string = this.apiBasePrimeCustomerUrl + "UnPrimeDealsLogs/" + dealId;
         const headers = { 'content-type': 'application/json' };
         return this.httpClient.post(apiUrl, JSON.stringify(endCustData), { 'headers': headers });
-    }
+    }    
 }

@@ -220,14 +220,16 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         if (this.ismrktSeg) {
             this.multiSelectData = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
             this.multiSelectPopUpModal.opLookupText = "DROP_DOWN";
-            if (typeof this.modalData.cellCurrValues == "string") {
-                this.checkedKeys = this.modalData.cellCurrValues.split(",").map(function (item) {
-                    return item.trim();
-                });
-            } else {
-                this.checkedKeys = this.modalData.cellCurrValues.map(function (item) {
-                    return item.trim();
-                });
+            if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined) {
+                if (typeof this.modalData.cellCurrValues == "string") {
+                    this.checkedKeys = this.modalData.cellCurrValues.split(",").map(function (item) {
+                        return item.trim();
+                    });
+                } else {
+                    this.checkedKeys = this.modalData.cellCurrValues.map(function (item) {
+                        return item.trim();
+                    });
+                }
             }
             _.each(this.multiSelectData, (key) => {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {

@@ -13,7 +13,7 @@ export class DE_Validation_Util {
         this.dataConversion(data, templates);
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
-        data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable, data, undefined);
+        data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
