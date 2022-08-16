@@ -672,10 +672,10 @@ export class pricingTableEditorComponent implements OnChanges {
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
             //Calling to bind the cook result of success or failure
             this.generateHandsonTable(updatedPTRObj.rowData);
-            if(updatedPTRObj.inValidProd && updatedPTRObj.inValidProd.length>0){
+            if((translateResult['Data'].DuplicateProducts && _.keys(translateResult['Data'].DuplicateProducts).length>0) || (translateResult['Data'].InValidProducts && _.keys(translateResult['Data'].InValidProducts).length>0)){
                 // Product corrector if invalid products
                 this.isLoading = false;
-                this.openProductCorrector(updatedPTRObj.inValidProd)
+                this.openProductCorrector(translateResult['Data'])
             }
             else{
                 if(action=='onSave'){
@@ -695,6 +695,7 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         }
         else{
+
             //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
             //this.isLoading = false;
             this.isLoading = false;
@@ -732,17 +733,17 @@ export class pricingTableEditorComponent implements OnChanges {
             transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
-                    this.loggerService.error("Product Traslate API Error::", error);
+                    this.loggerService.error("Product Translator failure::", error);
                 })
         }
 
         return transformResults;
     }
-    openProductCorrector(inValidProd:any){
+    openProductCorrector(products:any){
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
-            height: '650px',
-            width: '1200px',
-            data: inValidProd,
+            height: '850px',
+            width: '1750px',
+            data: products,
         });
 
         dialogRef.afterClosed().subscribe(result => {

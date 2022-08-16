@@ -1,3 +1,7 @@
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+
 <div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;">
     <div style="padding:10px;">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
@@ -7,12 +11,102 @@
                 </div>
             </div>
         </div>
-        <div class="prodCorrector modal-body">
-            <div *ngFor="let item of inValidProd">
-               Product: {{item.Product}}
-               DCID: {{item.DCID}}
+        <div class="row">
+            <div class="col">
+                <div *ngFor="let curRow of curRowIssues;let i = index">
+                    <button (click)="selectRow(curRow.name)">{{curRow.name}}</button>
+                </div>
             </div>
-           
+        </div>
+     
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col">
+                        <p>Filter by product</p>
+                        <div *ngFor="let curRow of selRowIssues;let i = index">
+                            <span>{{curRow.name}}</span>  <span>{{curRow.len}}</span> 
+                       </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="selRowLvl.length>0">
+                    <div class="col">
+                        <p>Filter by product level</p>
+                        <div *ngFor="let curRow of selRowLvl;let i = index">
+                            <span>{{curRow}}</span>
+                       </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="selRowCategories.length>0">
+                    <div class="col">
+                        <p>Filter by product vertical</p>
+                        <div *ngFor="let curRow of selRowCategories;let i = index">
+                            <span>{{curRow}}</span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <kendo-grid [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="true" [group]="state.group"
+                filterable="menu" (dataStateChange)="dataStateChange($event)">
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLUDE" title="">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered">
+                    <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
+                        {{value}} <strong>  Can't find what you are looking for? Use the Product Selector</strong>
+                     </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_SEL" title="Type"></kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="DISP_HIER_VAL_NM" title="Product">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical">
+                </kendo-grid-column>
+                <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand Name">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM" title="Family Name">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Product Effective Date">
+                </kendo-grid-column> -->
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CAP" title="CAP Info">
+                </kendo-grid-column>
+                <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="MM_MEDIA_CD" title="Media Code">
+                </kendo-grid-column> -->
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="YCS2" title="YCS2">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_FMLY_NM" title="GDM Family Name">
+                 </kendo-grid-column>
+                <!--<kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_NM_HASH" title="Product Description">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor number">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="MM_CUST_CUSTOMER" title="MM Customer Name">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM_MM" title="EDW Family Name">
+                </kendo-grid-column> -->
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="EPM_NM" title="EPM Name">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="SKU_NM" title="SKU Name">
+                </kendo-grid-column>
+                <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_FAMILY" title="NAND FAMILY">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_Density" title="Nand Density">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_PACKAGE" title="CPU PACKAGE">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_WATTAGE" title="CPU WATTAGE">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_VOLTAGE_SEGMENT" title="Voltage Segment">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_SEGMENT" title="Price Segment">
+                </kendo-grid-column> -->
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name">
+                </kendo-grid-column>
+              </kendo-grid>
+            </div>
         </div>
         <div class="prodSelector modal-footer">
             <div class="row" style="margin:0px">
