@@ -1,0 +1,30 @@
+import {Injectable} from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root'
+ })
+
+export class contractExportService { 
+    public apiExportContractUrl ='/api/Contracts/v1/getExportContract/';
+    public timeLineApiUrl = "api/Timeline/";
+
+
+    constructor(private httpClient: HttpClient) {
+      }
+
+      public getExportContractData(cId):Observable<any> {
+        const apiUrl: string = this.apiExportContractUrl + cId;
+        return this.httpClient.get(apiUrl);
+    }
+    public GetObjTimelineDetails(contractDetailId,objTypeSId, objTypeIds): Observable<any> {
+        const rbody = { 'objSid': contractDetailId, "objTypeSid": objTypeSId,  "objTypeIds": objTypeIds };
+        const apiTimeLineUrl: string = this.timeLineApiUrl + "GetObjTimelineDetails";
+        return this.httpClient.post(apiTimeLineUrl, rbody);
+    }
+    
+
+}
+

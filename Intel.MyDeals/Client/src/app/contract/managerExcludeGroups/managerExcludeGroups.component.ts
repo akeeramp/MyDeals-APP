@@ -28,7 +28,12 @@ export class managerExcludeGroupsComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     userRole = ""; canEmailIcon = true;
+    dealCnt = 0;
+    elGrid = null;
+    grid = null;
+    wrapEnabled = false;
     isPSExpanded = []; isPTExpanded = {};
+    private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private usrRole;
     private isSuper = true;
     private superPrefix = "";
@@ -87,6 +92,7 @@ export class managerExcludeGroupsComponent {
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
+            this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
         }, (error) => {
             this.loggerSvc.error('Customer service', error);
@@ -155,7 +161,29 @@ export class managerExcludeGroupsComponent {
         //kujoih
     }
     toggleWrap() {
-        //kujoih
+            let gridEl = this.elGrid;
+            this.wrapEnabled = !this.wrapEnabled;
+            let newVal = this.wrapEnabled ? "normal" : "nowrap";
+            let newH = this.wrapEnabled ? "100%" : "auto";
+
+            // $(gridEl).find(".ng-binding").css("white-space", newVal);
+            // $(gridEl).find(".ng-binding").css("height", newH);
+            // setTimeout(function () {
+            //     this.grid.autoFitColumn(2);
+            // }, 0);
+    }
+    displayDealTypes() {
+        let data = this.gridResult;
+        let modDealTypes = [];
+        for (let i = 0; i < data.length; i++) {
+            if(data[i].OBJ_SET_TYPE_CD){
+                let deal= data[i].OBJ_SET_TYPE_CD;
+                modDealTypes.push(deal.replace(/_/g, ' '));
+            }
+        }
+        let dealsTypesArray = Array.from(new Set(modDealTypes));
+        this.dealCnt = modDealTypes.length;
+        return modDealTypes.length > 0 ? this.dealCnt + " " + dealsTypesArray.join() + (this.dealCnt === 1 ? " Deal" : " Deals") : "";
     }
 
     ngOnInit() {

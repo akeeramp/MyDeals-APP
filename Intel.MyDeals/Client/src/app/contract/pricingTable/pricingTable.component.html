@@ -121,25 +121,25 @@
                     </contract-manager>
                 </div>
                 <div *ngIf="selLnav=='overlapDiv'">
-                    <p>Overlapping Deals screen</p>
+                    <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate"></overlapping-deals>
                 </div>
                 <div *ngIf="selLnav=='groupExclusionDiv'">
-                    <p>Grouping Exclusions screen</p>
+                    <manager-exclude-groups [contractData]="contractData" [UItemplate]="UItemplate"></manager-exclude-groups>
                 </div>
                 <div *ngIf="selLnav=='contractDetailsDiv'">
-                    <p>Details screen</p>
+                    <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
                 <div *ngIf="selLnav=='historyDiv'">
-                    <p>History screen</p>
+                    <contract-history [contractData]="contractData" [UItemplate]="UItemplate"></contract-history>
                 </div>
                 <div *ngIf="selLnav=='contractReviewDiv'">
-                    <p>Contract screen</p>
+                    <contract-export [contractData]="contractData" [UItemplate]="UItemplate"></contract-export>
                 </div>
                 <div *ngIf="selLnav=='dealReviewDiv'">
-                    <p>Deals screen</p>
+                    <all-deals [contractData]="contractData" [UItemplate]="UItemplate"></all-deals>
                 </div>
                 <div *ngIf="selLnav=='dealProducts'">
-                    <p>Missing CAP/Cost screen</p>
+                    <missing-cap [contractData]="contractData" [UItemplate]="UItemplate"></missing-cap>
                 </div>
                 <div *ngIf="selLnav=='pctDiv'">
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate"></manager-pct>

@@ -1,0 +1,17 @@
+.isSoftWarnCell {
+    color: #444 !important;
+    background-color: #f3D54E !important;
+}
+.k-grid-excel {
+    font-size: 11px !important;
+}
+
+.excelText {
+    line-height: 1.2em;
+    font-size: 12px;
+    float: right;
+}
+
+.excelText span {
+    text-align: left;
+}

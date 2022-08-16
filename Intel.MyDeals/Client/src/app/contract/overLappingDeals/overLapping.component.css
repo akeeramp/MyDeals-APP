@@ -1,0 +1,38 @@
+.btnSelect {background: #003C71 !important; color: white;}
+.btnSelect:hover{color: black !important; background:#00B1F1 !important;text-decoration:none !important;}
+.btnYes {
+    background: #a49d00 !important;
+    color: black;
+    z-index:999999;
+}
+.btnYes:hover{
+    text-decoration:none !important;
+}
+.btnNo:hover{
+    text-decoration:none !important;
+}
+.btnNo {
+    background: #FC4C02 !important;
+    color: black;
+}
+.lnk {
+    background: #00AEEF;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.undolnk {
+    background: #FC4C02;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+}

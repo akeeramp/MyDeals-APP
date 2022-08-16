@@ -23,6 +23,11 @@ import { RenameTitleComponent } from "../contract/ptModals/renameTitle/renameTit
 import { managerExcludeGroupsComponent } from "../contract/managerExcludeGroups/managerExcludeGroups.component";
 import { excludeDealGroupModalDialog } from "../contract/managerExcludeGroups/excludeDealGroupModal.component";
 import { ProductCorrectorComponent } from "../contract/ptModals/productCorrector/productcorrector.component";
+import { overLappingDealsComponent } from "../contract/overLappingDeals/overLappingDeals.component";
+import { contractHistoryComponent } from "../contract/contractHistory/contractHistory.component";
+import { missingCAPComponent } from "../contract/missingCAP/missingCAP.component";
+import { contractExportComponent } from "../contract/contractExport/contractExport.component";
+import { allDealsComponent } from "../contract/allDeals/allDeals.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -48,5 +53,10 @@ export let contractComponents = [
     RenameTitleComponent,
     managerExcludeGroupsComponent,
     excludeDealGroupModalDialog,
-    ProductCorrectorComponent
+    ProductCorrectorComponent,
+    overLappingDealsComponent,
+    contractHistoryComponent,
+    missingCAPComponent,
+    contractExportComponent,
+    allDealsComponent
 ]

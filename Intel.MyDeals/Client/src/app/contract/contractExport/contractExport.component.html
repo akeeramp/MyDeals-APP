@@ -1,0 +1,81 @@
+<div *ngIf="!isLoading" style="padding: 0 20px;" class="contract-export addScrollbar">
+    <div class="fr">
+        <i class="intelicon-pdf exportBtn" style="font-size:30px !important"  title="Export to PDF"></i>
+        <i class="intelicon-help helpBtn" style="font-size:30px !important" title="Help"></i>
+    </div>
+
+    <div id="pdfContent">
+        <div class="titlePage">
+            <h1><span>Contract #{{exportData.DC_ID}}</span><br />{{exportData.TITLE}}</h1>
+            <h2>
+                {{exportData.Customer.CUST_NM}}
+                <span *ngIf="exportData.Customer.CUST_DIV_NM"> / {{exportData.Customer.CUST_DIV_NM}}</span>
+            </h2>
+
+            <div class="dates">{{exportData.START_DT}} - {{exportData.END_DT}}</div>
+            <div class="confidential">Intel Confidential <span *ngIf="exportData.C2A_DATA_C2A_ID">- #{{exportData.C2A_DATA_C2A_ID}}</span></div>
+        </div>
+
+        <hr class="page-break" />
+
+        <div class="amendmentsPage">
+            <h1>Amendments</h1>
+            <div class="row" *ngFor="let tl of timelineData">
+                <div class="col-md-3 timeDesc">
+                    <div class="content">
+                        <span style="color: #FFA300;">#{{tl.OBJ_SID}}</span> {{tl.OBJ_DESC}}
+                    </div>
+                </div>
+                <div class="col-md-6 timeDesc">
+                    <div class="content">
+                        <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 timeDate">
+                    <div class="content">
+                        {{tl.HIST_EFF_FR_DTM}} | <span style="color: #0071C5;">{{tl.FRST_NM}} {{tl.LST_NM}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="page-break" />
+
+        <div class="psPage" *ngFor="let ps of exportData.PRC_ST">
+            <h1>{{ps.TITLE}}</h1>
+            <div class="subText">#{{ps.DC_ID}}</div>
+
+            <div class="ptPage" *ngFor="let pt of ps.PRC_TBL">
+                <h2>{{pt.TITLE}}</h2>
+                <div class="fl subText">#{{pt.DC_ID}}</div>
+                <div class="fl subObj">{{showObjType(pt.OBJ_SET_TYPE_CD)}}</div>
+                <div class="fr subStatus">
+                    <span class="stat" *ngIf="CAN_VIEW_COST_TEST">Price Cost Test: <span>{{pt.COST_TEST_RESULT}}</span></span>
+                    <span class="stat" *ngIf="CAN_VIEW_MEET_COMP">Meet Comp Test: <span>{{pt.MEETCOMP_TEST_RESULT}}</span></span>
+                    <span class="stat">Status: <span>{{pt.PASSED_VALIDATION}}</span></span>
+                </div>
+                <div class="clearboth"></div>
+
+                <!-- <table class="extract">
+                    <tr>
+                        <th *ngFor="let td of tableHeaderData.PRC_TBL_ROW[${pt.OBJ_SET_TYPE_CD}].columns | filter:{ hidden: false }">
+                            <span>{{showTitle(td.title)}}</span>
+                        </th>
+                    </tr>
+                    <tr class="ptrPage" *ngFor="let ptrofn of pt.PRC_TBL_ROW">
+                        <td *ngFor="let td of tableHeaderData.PRC_TBL_ROW[${pt.OBJ_SET_TYPE_CD}].columns | filter:{ hidden: false }">
+                            <span>abcd</span>
+                            <span>{{showField(ptr, td.field, td, pt.OBJ_SET_TYPE_CD)}}</span>
+                        </td>
+                    </tr>
+                </table> -->
+
+            </div>
+
+            <!-- <div class="terms" [innerHTML]="ps.TERMS"></div> -->
+            <hr class="page-break" />
+        </div>
+    </div>
+
+</div>
+<loading-panel-angular id="ContractExportLoading" style="z-index: 500" [show]="isLoading" [header]="loadMessage"></loading-panel-angular>

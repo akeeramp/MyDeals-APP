@@ -1,0 +1,148 @@
+import * as angular from "angular";
+import { Component, Input } from "@angular/core";
+import { logger } from "../../shared/logger/logger";
+import { downgradeComponent } from "@angular/upgrade/static";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
+import { ThemePalette } from '@angular/material/core';
+import { contractExportService } from "./contractExport.service";
+import { lnavService } from "../lnav/lnav.service";
+
+
+@Component({
+    selector: "contract-export",
+    templateUrl :"Client/src/app/contract/contractExport/contractExport.component.html",
+    styleUrls: ["Client/src/app/contract/contractExport/contractExport.component.css"]
+})
+
+export class contractExportComponent {
+    constructor(private contractExportSvc: contractExportService, private loggerSvc: logger, private lnavSvc: lnavService) {
+    }
+    @Input() contractData: any;
+    @Input() UItemplate: any;
+    timelineData =[];
+    tableHeaderData: any;
+    private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
+    private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
+
+    private isLoading = true;
+    private loadMessage = "Loading Contract History";
+    private type = "numeric";
+    private info = true;
+    public exportData : any;
+    private color: ThemePalette = 'primary';
+    private state: State = {
+        skip: 0,
+        take: 25,
+        group: [],
+        // Initial filter descriptor
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
+    private pageSizes: PageSizeItem[] = [
+        {
+            text: "10",
+            value: 10
+        },
+        {
+            text: "25",
+            value: 25
+        },
+        {
+            text: "50",
+            value: 50
+        },
+        {
+            text: "100",
+            value: 100
+        }
+    ];
+
+    loadContractExportData() {
+        let sId = this.contractData.CUST_MBR_SID;
+        let cId = this.contractData.DC_ID;
+
+        this.contractExportSvc.getExportContractData(cId).subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.exportData = result[0];
+        }, (error) => {
+            this.isLoading = false;
+            this.loggerSvc.error('Contract Export service', error);
+        });
+    }
+    showObjType(objType) {
+        if (objType === "KIT") return "Kit";
+        if (objType === "ECAP") return "ECAP";
+        if (objType === "PROGRAM") return "Program";
+        if (objType === "VOL_TIER") return "Volume Tier";
+        if (objType === "REV_TIER") return "Rev Tier";
+        if (objType === "DENSITY") return "Density Based";
+        if (objType === "FLEX") return "Flex Accruals";
+        return "";
+    }
+    showField(data, field, tmplt, objType) {
+        let val = data[field];
+        if (val === undefined || val === null) val = "";
+        if (typeof val === 'string') val = val.replace(/,/g, ', ');
+
+        if (this.UItemplate["ModelTemplates"].PRC_TBL_ROW[objType].model.fields[field].type === 'number') {
+            let format = this.UItemplate.ModelTemplates.PRC_TBL_ROW[objType].model.fields[field].format;
+            if (format === "{0:c}") format = "c";
+            if (format === "{0:n}") format = "n";
+            if (format === "{0:d}") format = "d";
+            if (val !== "" && !isNaN(val)) {
+                // val = kendo.toString(parseFloat(val), format);
+            }
+        }
+
+        return val;
+    }
+
+    showTitle(title) {
+        return title.replace(/\*/g, '');
+    }
+    loadTimeLineData(){
+        let contractDetailId = null;
+        let objTypeIds = [1, 2, 3];
+        let objTypeSId = 1;
+        if(this.contractData.DC_ID){
+            contractDetailId = this.contractData.DC_ID;
+
+        this.contractExportSvc.GetObjTimelineDetails(contractDetailId,objTypeSId, objTypeIds).subscribe((response: Array<any>) => {
+            this.timelineData = response;
+
+        }, error => {
+            this.loggerSvc.error("Unable to get Contract Export Timeline Details.", error);
+        });
+    }
+    
+    
+    }
+    // getTemplateDetails() {
+    //     // Get the Contract and Current Pricing Strategy Data
+    //     this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+    //     // Get the Current Pricing Table data
+    //     this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+    //     // Get template for the selected PT
+    //     this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
+    //     //Get Refined columns based on contract/Tender
+    //     PTE_Load_Util.PTEColumnSettings(this.pricingTableTemplates, this.isTenderContract, this.curPricingTable);
+    // }
+
+    ngOnInit() {
+        this.tableHeaderData = this.UItemplate.ModelTemplates;
+        this.loadContractExportData();
+        this.loadTimeLineData();
+    }
+
+
+}
+
+angular.module("app").directive(
+    "contractExport",
+    downgradeComponent({
+        component: contractExportComponent,
+    })
+);

@@ -1,0 +1,12 @@
+.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+.dealTag {
+    top: 43px !important;
+    right: 10px !important;
+    background: linear-gradient(to bottom, transparent 0%, transparent 100%) !important
+}
