@@ -36,7 +36,7 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
 
     vm.fileUploadOptions = {
         async: {
-            saveUrl: '/FileAttachments/ExtractBulkUnifyFile',
+            saveUrl: '/FileAttachments/ExtractBulkPriceUpdateFile',
             autoUpload: false
         },
         validation: {
@@ -89,8 +89,9 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
         }
         else (vm.bulkProceUploadValidationSummary.length > 0)
         {
-            alert("Populate sheet and close dialog down");
+            //alert("Populate sheet and close dialog down");
             //vm.ValidateBulkPriceUpdatesSheet();
+            $uibModalInstance.close(vm.bulkProceUploadValidationSummary);
         }
     }
 

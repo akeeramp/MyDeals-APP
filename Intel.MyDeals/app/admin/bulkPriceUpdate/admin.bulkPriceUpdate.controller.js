@@ -11,26 +11,13 @@
 
     function BulkPriceUpdateController(bulkPriceUpdateService, $scope, gridConstants, logger, $timeout, $uibModal, dataService) {
 
-        //$scope.accessAllowed = true;
-        //if (!window.isDeveloper) {
-        //    // Kick not valid users out of the page
-        //    $scope.accessAllowed = false;
-        //    document.location.href = "/Dashboard#/portal";
-        //}
         var vm = this;
+        vm.spinnerMessageDescription = "Please wait while we importing unification deal data..";
         vm.UpdatedResults = [];
         vm.Send_Vstx_Flg = {};
-        //$scope.UpdCnt = { 'all': 0, 'error': 0, 'success': 0 };
-        //$scope.ShowResults = false;
-        //$scope.ShowNumeric = false;
-
-        //animation: true,
-        //    backdrop: 'static',
-        //        templateUrl: 'app/admin/PrimeCustomers/bulkUnifyModal.html',
-        //            controller: 'BulkUnifyModelController',
-        //                controllerAs: 'vm',
-        //                    size: 'lg',
-        //    windowClass: 'prdSelector-modal-window'
+        vm.inValidBulkPriceUpdate = [];
+        vm.SpreadSheetRowsCount = 100;
+        vm.count = 0
 
         vm.OpenBulkPriceUpdateModal = function () {
             var modalInstance = $uibModal.open({
@@ -46,31 +33,172 @@
                 $("#fileUploader").removeAttr("multiple");
             });
             modalInstance.result.then(function (returnData) {
+                if (returnData.length > 0) {
+                    if (returnData.length > 100) {
+                        logger.warning("The excel contains more than 100 records.Only process top 100 records in the excel.", "");
+                    }
+
+                    let existingcount = vm.SpreadSheetRowsCount;
+                    vm.inValidBulkPriceUpdate = returnData;
+                    if (vm.inValidBulkPriceUpdate.length < 100) {
+                        vm.SpreadSheetRowsCount = 100
+                    } else {
+                        if (vm.inValidBulkPriceUpdate.length > 100)
+                            vm.SpreadSheetRowsCount = 100;
+                        else
+                            vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
+                    }
+                    if (existingcount > 0) {
+                        vm.LoadDataToSpreadsheet();
+                        vm.ValidateSheet()
+                    }
+                }
             }, function () { });
         }
 
         vm.uploadFile = function (e) {
-            alert("Hija");
             vm.spinnerMessageDescription = "Please wait while uploading Unification data..";
             $(".k-upload-selected").click();
         }
 
         vm.processData = function () {
-            //var data = {};
-            // Remove this once you get the execution button working.
-            let data = '{ "BulkPriceUpdateRecord" : [' +
-                '{ "DealId": "655425", "DealDesc": "Make a change", "EcapPrice": "95.00" },' +
-                '{ "DealId": "655446", "DealDesc": "Make a change2", "EcapPrice": "99.00" },' +
-                '{ "DealId": "955351", "DealDesc": "Make a change3" } ]}';
+            vm.generateDeals()
+            if (vm.inValidBulkPriceUpdate.length > 0) {
+                vm.ValidateSheet()
 
-            bulkPriceUpdateService.UpdatePriceRecord(data)
-                .then(function (response) {
-                    e.success(response.data);
-                }, function (response) {
-                    logger.error("Unable to execute Price Record Updates.", response, response.statusText);
-                });
+                if (vm.count !== 0)
+                    return;
+
+                let data = "{ 'BulkPriceUpdateRecord' : ["
+                for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
+                    data += '{'
+
+                    if (vm.inValidBulkPriceUpdate[i].DealId > 0) {
+                        data += '"DealId": "' + vm.inValidBulkPriceUpdate[i].DealId.toString() + '",'
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].DealDesc !== "") {
+                        data += '"DealDesc": "' + vm.inValidBulkPriceUpdate[i].DealDesc.toString() + '",'
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].EcapPrice !== "" && vm.inValidBulkPriceUpdate[i].EcapPrice > 0) {
+                        data += '"EcapPrice": "' + vm.inValidBulkPriceUpdate[i].EcapPrice.toString() + '",'
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].Volume !== "") {
+                        data += '"Volume": "' + vm.inValidBulkPriceUpdate[i].Volume.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].DealStartDate !== "") {
+                        data += '"DealStartDate": "' + vm.inValidBulkPriceUpdate[i].DealStartDate.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].DealEndDate !== "") {
+                        data += '"DealEndDate": "' + vm.inValidBulkPriceUpdate[i].DealEndDate.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].ProjectName !== "") {
+                        data += '"ProjectName": "' + vm.inValidBulkPriceUpdate[i].ProjectName.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].BillingsStartDate !== "") {
+                        data += '"BillingsStartDate": "' + vm.inValidBulkPriceUpdate[i].BillingsStartDate.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].BillingsEndDate !== "") {
+                        data += '"BillingsEndDate": "' + vm.inValidBulkPriceUpdate[i].BillingsEndDate.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate !== "") {
+                        data += '"TrackerEffectiveStartDate": "' + vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate.toString() + '",'
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions !== "") {
+                        data += '"AdditionalTermsAndConditions": "' + vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions.toString() + '",'
+                    }
+
+                    data += '},'
+                }
+                data += "]}";
+
+
+                bulkPriceUpdateService.UpdatePriceRecord(data)
+                    .then(function (response) {
+                        vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== null && x.ValidationMessages !== undefined && x.ValidationMessages !== "");
+                        let processrecord = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== undefined && (x.ValidationMessages == null || x.ValidationMessages == ""));
+                        if (processrecord !== undefined && vm.inValidBulkPriceUpdate !== undefined && vm.inValidBulkPriceUpdate.length > 0 && processrecord.length > 0) {
+                            if (vm.inValidBulkPriceUpdate.length < 100) {
+                                vm.SpreadSheetRowsCount = 100
+                            } else {
+                                if (vm.inValidBulkPriceUpdate.length > 100)
+                                    vm.SpreadSheetRowsCount = 100;
+                                else
+                                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
+                            }
+                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.LoadDataToSpreadsheet()
+
+                        }
+                        else if (vm.inValidBulkPriceUpdate !== undefined && vm.inValidBulkPriceUpdate.length > 0) {
+                            if (vm.inValidBulkPriceUpdate.length < 100) {
+                                vm.SpreadSheetRowsCount = 100
+                            } else {
+                                if (vm.inValidBulkPriceUpdate.length > 100)
+                                    vm.SpreadSheetRowsCount = 100;
+                                else
+                                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
+                            }
+                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.LoadDataToSpreadsheet()
+                        }
+                        else {
+                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.LoadDataToSpreadsheet()
+                        }
+
+                    }, function (response) {
+                        logger.error("Unable to execute Price Record Updates.", response, response.statusText);
+                    });
+            } else {
+                kendo.alert("There is no data to Process");
+            }
         }
 
+        vm.generateDeals = function () {
+            var sheet = vm.spreadsheet.activeSheet();
+            var count = 0;
+
+            if (vm.inValidBulkPriceUpdate.length < 100) {
+                count = 100
+            } else {
+                if (vm.inValidBulkPriceUpdate.length > 100)
+                    count = 100
+                else
+                    count = vm.inValidBulkPriceUpdate.length + 1;
+            }
+
+            vm.inValidBulkPriceUpdate = [];
+            var tempRange = sheet.range("A1:K" + count).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null && x[11] == null));
+            if (tempRange.length > 0) {
+                vm.spinnerMessageDescription = "Please wait while reading Unification data..";
+                for (var i = 0; i < tempRange.length; i++) {
+                    var newDeals = {};
+                    newDeals.DealId = tempRange[i][0] != null ? ($.isNumeric(tempRange[i][0]) && parseInt(tempRange[i][0]) > 0 ? tempRange[i][0] : 0) : 0;
+                    newDeals.DealDesc = tempRange[i][1] != null ? tempRange[i][1] : "";
+                    newDeals.EcapPrice = tempRange[i][2] != null ? tempRange[i][2] : "";
+                    newDeals.Volume = tempRange[i][3] != null ? tempRange[i][3] : "";
+                    newDeals.DealStartDate = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
+                    newDeals.DealEndDate = tempRange[i][5] != null ? tempRange[i][5].trimEnd() : "";
+                    newDeals.BillingsStartDate = tempRange[i][6] != null ? tempRange[i][6].trimEnd() : "";
+                    newDeals.BillingsEndDate = tempRange[i][7] != null ? tempRange[i][7].trimEnd() : "";
+                    newDeals.ProjectName = tempRange[i][8] != null ? tempRange[i][8].trimEnd() : "";
+                    newDeals.TrackerEffectiveStartDate = tempRange[i][9] != null ? tempRange[i][9].trimEnd() : "";
+                    newDeals.AdditionalTermsAndConditions = tempRange[i][10] != null ? tempRange[i][10].trimEnd() : "";
+                    vm.inValidBulkPriceUpdate.push(newDeals);
+                }
+            }
+            if (vm.inValidBulkPriceUpdate.length < 100) {
+                vm.SpreadSheetRowsCount = 100
+            } else {
+                if (vm.inValidBulkPriceUpdate.length > 100)
+                    vm.SpreadSheetRowsCount = 100;
+                else
+                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
+            }
+        }
 
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             var newState = msg != undefined && msg !== "";
@@ -100,53 +228,177 @@
             }
         }
 
-        // Add stuff here
+        vm.SpreadSheetOptions = {
+            change: function (arg) {
+                vm.IsSpreadSheetEdited = true;
+            }
+        };
+
+        vm.sheets = [{ name: "Sheet1" }];
+        $scope.$on("kendoWidgetCreated", function (event, widget) {
+            if (widget === vm.spreadsheet) {
+                var sheets = vm.spreadsheet.sheets();
+                var index = 0;
+                vm.spreadsheet.activeSheet(sheets[0]);
+                var sheet = vm.spreadsheet.activeSheet();
+                sheet.columnWidth(0, 100);
+                sheet.columnWidth(1, 130);
+                sheet.columnWidth(2, 100);
+                sheet.columnWidth(3, 100);
+                sheet.columnWidth(4, 100);
+                sheet.columnWidth(5, 100);
+                sheet.columnWidth(6, 100);
+                sheet.columnWidth(7, 100);
+                sheet.columnWidth(8, 100);
+                sheet.columnWidth(9, 130);
+                sheet.columnWidth(10, 100);
+                sheet.columnWidth(11, 100);
+                sheet.columnWidth(12, 100);
+                sheet.columnWidth(13, 240);
+                index = 14;
 
 
+                for (var i = index; i < 50; i++)
+                    sheet.hideColumn(i);
+                vm.LoadDataToSpreadsheet();
+                vm.ValidateSheet();
 
-        //vm.dataSource = new kendo.data.DataSource({
-        //    transport: {
-        //        read: function (e) {
-        //            e.success(vm.UpdatedResults);
-        //        }
-        //    },
-        //    schema: {
-        //        model: {
-        //            id: "DEAL_ID",
-        //            fields: {
-        //                DEAL_ID: { editable: false, nullable: false },
-        //                ATRB_DESC: { editable: false, nullable: false },
-        //                UPD_MSG: { editable: false, nullable: false }
-        //            }
-        //        }
-        //    }
-        //})
+            }
+        });
 
-        //vm.gridOptions = {
-        //    dataSource: vm.dataSource,
-        //    sortable: true,
-        //    scrollable: true,
-        //    resizable: true,
-        //    sort: function (e) { gridUtils.cancelChanges(e); },
-        //    columns: [
-        //        {
-        //            field: "DEAL_ID",
-        //            width: "75px",
-        //            title: "Deal Id"
-        //        },
-        //        {
-        //            field: "ATRB_DESC",
-        //            width: "200px",
-        //            title: "Field"
-        //        },
-        //        {
-        //            field: "UPD_MSG",
-        //            title: "Results"
+        vm.LoadDataToSpreadsheet = function () {
 
-        //        }
-        //    ]
-        //}
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Description");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("ECAP Price");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Ceiling Volume");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Deal Start Date");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("Deal End Date");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("Billings Start Date");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[14]).find("div").html("Billings End Date");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[16]).find("div").html("Project Name");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[18]).find("div").html("Tracker Effective Date");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[20]).find("div").html("Additional Terms");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[22]).find("div").html("Deal stage");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[24]).find("div").html("Update Status");
+            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[26]).find("div").html("Error Messages");
 
 
+            var sheet = vm.spreadsheet.activeSheet();
+            sheet.range(kendo.spreadsheet.SHEETREF).clear();
+            sheet.range("A1:N" + vm.SpreadSheetRowsCount).wrap(true);
+            sheet.setDataSource(vm.inValidBulkPriceUpdate, ["DealId", "DealDesc", "EcapPrice", "Volume", "DealStartDate", "DealEndDate", "BillingsStartDate", "BillingsEndDate", "ProjectName", "TrackerEffectiveStartDate", "AdditionalTermsAndConditions", "DealStage", "UpdateStatus", "ValidationMessages"]);
+            //Auto header will be created as 1st row. This is not actual data
+            sheet.deleteRow(0);
+
+            sheet.batch(function () {
+                for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
+                    if (vm.inValidBulkPriceUpdate[i].ValidationMessages !== undefined && vm.inValidBulkPriceUpdate[i].ValidationMessages !== null && vm.inValidBulkPriceUpdate[i].ValidationMessages !== "") {
+                        var lengthOfMsg = vm.inValidBulkPriceUpdate[i].ValidationMessages.length;
+                        var height = 1;
+                        if (Math.ceil(lengthOfMsg / 40) > 1)
+                            height = height + Math.ceil(lengthOfMsg / 40) - 1;
+                        var rowht = height > 1 ? (height) * 15 : 30;
+                        sheet.rowHeight(i, rowht);
+                        sheet.range("N" + (i + 1)).verticalAlign("top");
+                    }
+                }
+            });
+
+            sheet._rows._count = vm.SpreadSheetRowsCount; 
+
+        }
+
+        vm.ValidateSheet = function (action) {
+            var sheet = vm.spreadsheet.activeSheet();
+            sheet.range("A1:H" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
+            var strAlertMessage = "";
+            var row = "";
+            var mandatory = [];
+            mandatory = [];
+            vm.count = 0
+            sheet.batch(function () {
+                for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
+                    row = i + 1;
+                    var rowMsg = "";
+                    mandatory = [];
+
+
+                    if (vm.inValidBulkPriceUpdate[i].DealId == "0") {
+                        mandatory.push("Deal ID");
+                        sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
+
+                    if ((vm.inValidBulkPriceUpdate[i].DealDesc == null || vm.inValidBulkPriceUpdate[i].DealDesc == "") &&
+                        (vm.inValidBulkPriceUpdate[i].EcapPrice == null || vm.inValidBulkPriceUpdate[i].EcapPrice == "") &&
+                        (vm.inValidBulkPriceUpdate[i].Volume == null || vm.inValidBulkPriceUpdate[i].Volume == "") &&
+                        (vm.inValidBulkPriceUpdate[i].ProjectName == null || vm.inValidBulkPriceUpdate[i].ProjectName == "") &&
+                        (vm.inValidBulkPriceUpdate[i].DealStartDate == null || vm.inValidBulkPriceUpdate[i].DealStartDate == "") &&
+                        (vm.inValidBulkPriceUpdate[i].DealEndDate == null || vm.inValidBulkPriceUpdate[i].DealEndDate == "") &&
+                        (vm.inValidBulkPriceUpdate[i].BillingsStartDate == null || vm.inValidBulkPriceUpdate[i].BillingsStartDate == "") &&
+                        (vm.inValidBulkPriceUpdate[i].BillingsEndDate == null || vm.inValidBulkPriceUpdate[i].BillingsEndDate == "") &&
+                        (vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate == null || vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate == "") &&
+                        (vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions == null || vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions == "")) {
+                        mandatory.push("One of the Deal");
+                        sheet.range("B" + row + ":K" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
+
+
+                    if (mandatory.length > 0) {
+                        rowMsg = rowMsg + mandatory.join(", ") + " is a mandatory field|";
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].DealId !== "0" || vm.inValidBulkPriceUpdate[i].DealId !== "") {
+                        if (typeof (vm.inValidBulkPriceUpdate[i].DealId) !== "number") {
+                            rowMsg = rowMsg + "Deal ID should be number|";
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].EcapPrice !== "0" && vm.inValidBulkPriceUpdate[i].EcapPrice !== '') {
+                        if (typeof (vm.inValidBulkPriceUpdate[i].EcapPrice) !== "number") {
+                            rowMsg = rowMsg + "ECAP Price should be number|";
+                            sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].Volume !== "0" && vm.inValidBulkPriceUpdate[i].Volume !== '') {
+                        if (typeof (vm.inValidBulkPriceUpdate[i].Volume) !== "number") {
+                            rowMsg = rowMsg + "Ceiling Volume should be number|";
+                            sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                    }                    
+
+                    if (rowMsg != '') {
+                        vm.count += 1;
+                        var rowMsg = rowMsg.slice(0, -1);
+                        var arr = rowMsg.split('|');
+                        var height = arr.length + 1;
+                        var index = 1;
+                        var msg = "";
+                        angular.forEach(arr, function (row) {
+                            msg = msg + (index++) + ". " + row + "\n";
+                            if (Math.ceil(row.length / 40) > 1)
+                                height = height + Math.ceil(row.length / 40) - 1;
+                        });
+                        var rowht = height > 1 ? height * 15 : 30;
+                        sheet.rowHeight(i, rowht);
+                        sheet.range("N" + row).value(msg);
+                        sheet.range("N" + row).verticalAlign("top");
+                    }
+                }
+            });
+           
+
+            vm.IsSpreadSheetEdited = false;
+        }
+
+        $scope.UnifiedDealValidation = function (isError, msg, isReq) {
+            return {
+                dataType: "custom",
+                from: !isError,
+                allowNulls: isReq,
+                messageTemplate: msg
+            };
+        };
     }
 })();

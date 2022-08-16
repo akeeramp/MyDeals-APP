@@ -288,7 +288,7 @@ namespace Intel.MyDeals.DataLibrary
             else // (fileType == "BulkPriceUpdate")
             {
                 fileAttachmentData.FILE_NM = "BulkPriceUpdate.xlsx";
-                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Deal Start Date", "Deal End Date", "Billings Start Date", "Billings End Date", "Project Name", "Additional Terms"));
+                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Deal Start Date", "Deal End Date", "Billings Start Date", "Billings End Date", "Project Name", "Tracker Effective Date", "Additional Terms"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
             using (ExcelPackage excelPackage = new ExcelPackage())
@@ -463,12 +463,10 @@ namespace Intel.MyDeals.DataLibrary
                                 string dbDealEndDate = worksheet.Cells[i, 6].Value != null ? worksheet.Cells[i, 6].Value.ToString().TrimEnd() : string.Empty;
                                 string dbBillingsStartDate = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                 string dbBillingsEndDate = worksheet.Cells[i, 8].Value != null ? worksheet.Cells[i, 8].Value.ToString().TrimEnd() : string.Empty;
-                                string dbTrackerStartDate = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
-                                string dbProjectName = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
+                                string dbProjectName = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
+                                string dbTrackerStartDate = worksheet.Cells[i, 10].Value != null ? worksheet.Cells[i, 10].Value.ToString().TrimEnd() : string.Empty;
                                 string dbAdditionalTermsAndConditions = worksheet.Cells[i, 11].Value != null ? worksheet.Cells[i, 11].Value.ToString().TrimEnd() : string.Empty;
 
-                                if (dbDealId != 0)
-                                {
                                     lstRtn.Add(new BulkPriceUpdateRecord
                                     {
                                         DealId = dbDealId,
@@ -478,12 +476,11 @@ namespace Intel.MyDeals.DataLibrary
                                         DealStartDate = dbDealStartDate,
                                         DealEndDate = dbDealEndDate,
                                         BillingsStartDate = dbBillingsStartDate,
-                                        BillingsEndDate = dbBillingsEndDate,
                                         ProjectName = dbProjectName,
+                                        BillingsEndDate = dbBillingsEndDate,
                                         TrackerEffectiveStartDate = dbTrackerStartDate,
                                         AdditionalTermsAndConditions = dbAdditionalTermsAndConditions
                                     });
-                                }
                             }
                         }
 
