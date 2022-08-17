@@ -1,6 +1,7 @@
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
-<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 
 <div class="product-selector modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;">
     <div class="row">
@@ -46,7 +47,7 @@
             <div style="height:80%;padding-top: 15px;">
                 <div class="prodSelector modal-body">
                     <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
-                        <kendo-grid [data]="gridData" [loading]="isGirdLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                        <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                                     (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
                                 <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
@@ -61,7 +62,25 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <ng-template ngFor [ngForOf]="gridColumnsProduct" let-column>
-                                <kendo-grid-column [headerClass]="{'headerClass':true}" field="{{column.field}}" title="{{column.title}}" [hidden]="column.hidden">
+                                <kendo-grid-column [headerClass]="{ 'headerClass': true }" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden">
+                                    <!-- Template for `Cap Info` column -->
+                                    <div *ngIf="column.field == 'CAP'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <!-- Popover Template -->
+                                            <ng-template #popoverContent>
+                                                <div>
+                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                </div>
+                                                <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                            </ng-template>
+
+                                            <!-- Cell Content -->
+                                            <div [ngbPopover]="popoverContent" style="text-align: center; justify-content: center"> 
+                                                <!-- WIP: Insert CAP Info cell design here -->
+                                                {{ dataItem.CAP }}
+                                            </div>
+                                        </ng-template>
+                                    </div>
                                 </kendo-grid-column>
                             </ng-template>
                         </kendo-grid>

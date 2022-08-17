@@ -6,12 +6,10 @@ import { Observable } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-
-export class productSelcorService {
+export class productSelectorService {
     public apiBaseUrl = "api/Products/";
 
-    constructor(private httpClient: HttpClient) {
-    }
+    constructor(private httpClient: HttpClient) { }
 
     public GetProductSelectorWrapper(dto: any): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'GetProductSelectorWrapper';
@@ -26,5 +24,10 @@ export class productSelcorService {
         const apiUrl: string = this.apiBaseUrl + 'SearchProduct/' + CUST_CD + '/' + dealType + '/true';
         return this.httpClient.post(apiUrl, products);
     }
+
+    public GetProductCAPYCS2Data(getAvailable, priceCondition, data): Observable<any> {
+		const apiUrl = `${ this.apiBaseUrl }GetProductCAPYCS2Data/${ getAvailable }/${ priceCondition }`;
+		return this.httpClient.post(apiUrl, data);
+	}
 }
 

@@ -28,6 +28,7 @@ import { contractHistoryComponent } from "../contract/contractHistory/contractHi
 import { missingCAPComponent } from "../contract/missingCAP/missingCAP.component";
 import { contractExportComponent } from "../contract/contractExport/contractExport.component";
 import { allDealsComponent } from "../contract/allDeals/allDeals.component";
+import { GridPopoverComponent } from "../contract/ptModals/productSelector/gridPopover/gridPopover.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -58,5 +59,6 @@ export let contractComponents = [
     contractHistoryComponent,
     missingCAPComponent,
     contractExportComponent,
-    allDealsComponent
+    allDealsComponent,
+    GridPopoverComponent
 ]

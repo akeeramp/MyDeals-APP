@@ -2,35 +2,38 @@ import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { productSelcorService } from "./productselector.service";
-import { PTE_Load_Util } from "../../PTEUtils/PTE_Load_util";
-import { logger } from "../../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import * as _ from "underscore";
 import * as moment from 'moment';
-import { gridCol, ProdSel_Util } from './prodSel_Util';
 import * as lodash from "lodash";
+import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 
+import { productSelectorService } from "./productselector.service";
+import { logger } from "../../../shared/logger/logger";
+import { gridCol, ProdSel_Util } from './prodSel_Util';
 
 @Component({
-    selector: "product-selector",
-    templateUrl: "Client/src/app/contract/ptModals/productSelector/productselector.component.html",
+    selector: 'product-selector',
+    templateUrl: 'Client/src/app/contract/ptModals/productSelector/productselector.component.html',
     encapsulation: ViewEncapsulation.None
 })
-
 export class ProductSelectorComponent {
-    constructor(
-        public dialogRef: MatDialogRef<ProductSelectorComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        private prodSelSVC: productSelcorService,
-        private loggerSvc: logger
-    ) { }
+    constructor(public dialogRef: MatDialogRef<ProductSelectorComponent>,
+            @Inject(MAT_DIALOG_DATA) public data: any,
+            private prodSelSVC: productSelectorService,
+            private loggerSvc: logger,
+            popoverConfig: NgbPopoverConfig) {
+        popoverConfig.triggers = 'mouseenter:mouseleave';   // mouseenter:mouseleave
+        popoverConfig.placement = 'auto';
+        popoverConfig.container = 'body';
+        popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
+    }
 
     private productSelectionLevels: any = {};
     private pricingTableRow: any = {};
     private isLoading: boolean = false;
-    private isGirdLoading: boolean = false;
+    private isGridLoading: boolean = false;
     private spinnerMessageHeader: string = "PTE Loading";
     private spinnerMessageDescription: string = "PTE loading please wait";
     private enableSplitProducts: boolean = false;
@@ -205,7 +208,7 @@ export class ProductSelectorComponent {
 
         if (this.selectedPathParts.length === 2) {
             this.showTree = false;
-            var markLevel2 = _.where(this.productSelectionLevels, {
+            let markLevel2 = _.where(this.productSelectionLevels, {
                 'MRK_LVL1': this.selectedPathParts[0].name,
                 'MRK_LVL2': item.name,
                 'PRD_ATRB_SID': 7003
@@ -274,7 +277,7 @@ export class ProductSelectorComponent {
         }
         if (this.selectedPathParts.length === 4) {
             this.showTree = false;
-            var familyName = this.productSelectionLevels.filter((i) => {
+            let familyName = this.productSelectionLevels.filter((i) => {
                 return i.HIER_NM_HASH.startsWith(item.path) && i.PRD_ATRB_SID == 7005;
             });
 
@@ -291,7 +294,7 @@ export class ProductSelectorComponent {
             });
 
             if (this.items.length == 1 && this.items[0].name == 'NA') {
-                var drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
+                let drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
                 // Check if we have prd_fmly_txt
 
                 if ((drillLevel5.length == 1 && drillLevel5[0].PRD_FMLY_TXT == "") ||
@@ -350,14 +353,14 @@ export class ProductSelectorComponent {
         }
     }
     getProductSelectionResults(item: any, selectionLevel: number) {
-        this.isGirdLoading = true;
+        this.isGridLoading = true;
         this.showTree = true;
         this.items = [];
         //setting empty grid first
         this.gridResult = [];
         this.gridData = process(this.gridResult, this.state);
 
-        var data = {
+        let data = {
             "searchHash": item.path,
             "startDate": moment(this.pricingTableRow.START_DT).format("l"),
             "endDate": moment(this.pricingTableRow.END_DT).format("l"),
@@ -378,7 +381,7 @@ export class ProductSelectorComponent {
                 data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
         }
         this.prodSelSVC.GetProductSelectionResults(data).subscribe((response) => {
-            this.isGirdLoading = false;
+            this.isGridLoading = false;
             if (response.length == 1 && response[0].HIER_VAL_NM == 'NA') {
                 //if the processor number is NA, send GDM values to filter out L4 data
                 response[0]['selected'] = ProdSel_Util.productExists(item, response[0].PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection);
@@ -402,7 +405,7 @@ export class ProductSelectorComponent {
     }
     toggleColumnsWhenEmpty(data: any, prodGrid: any) {
         _.each(this.gridColumnsProduct, (item, key) => {
-            var columnValue = _.uniq(data, item.field);
+            let columnValue = _.uniq(data, item.field);
             if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
                 && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] === "" || columnValue[0][item.field] == null
                     || columnValue[0][item.field] == 'NA')) {
@@ -420,7 +423,7 @@ export class ProductSelectorComponent {
     }
     gridSelectItem(dataItem: any) {
         if (dataItem['noDrillDown'] === true) return;
-        var item = ProdSel_Util.newItem();
+        let item = ProdSel_Util.newItem();
 
         item.name = dataItem.HIER_VAL_NM;
         item.path = dataItem.HIER_NM_HASH,
@@ -438,7 +441,7 @@ export class ProductSelectorComponent {
     }
     //For NAND (SSD)
     addWithCapForFamily(item) {
-        var data = {
+        let data = {
             "searchHash": item.path,
             "startDate": moment(this.pricingTableRow.START_DT).format("l"),
             "endDate": moment(this.pricingTableRow.END_DT).format("l"),
@@ -451,7 +454,7 @@ export class ProductSelectorComponent {
             "dealType": this.dealType
         }
         this.prodSelSVC.GetProductSelectionResults(data).subscribe(response => {
-            var rst = response.map(function (x) {
+            let rst = response.map(function (x) {
                 x['selected'] = ProdSel_Util.productExists(item, x.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection);
                 x['parentSelected'] = item.selected;
                 return x;
@@ -468,12 +471,12 @@ export class ProductSelectorComponent {
         });
     }
     isValidProductCombination(existingProdTypes, newProductType) {
-        var isValid = true;
+        let isValid = true;
         if (this.dealType == 'FLEX') {
             return true;
         }
-        var selfCheck = newProductType == undefined;
-        for (var i = 0; i < existingProdTypes.length; i++) {
+        let selfCheck = newProductType == undefined;
+        for (let i = 0; i < existingProdTypes.length; i++) {
             if (i == existingProdTypes.length - 1 && selfCheck) break;
             newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
             if (this.arrayContainsString(this.crossVertical.productCombination1, existingProdTypes[i])) {
@@ -498,10 +501,10 @@ export class ProductSelectorComponent {
         return newArr.length > 0;
     }
     selectProduct(product) {
-        var item = angular.copy(product);
+        let item = angular.copy(product);
         item.selected = event.target['checked'];
         if (item.id !== undefined && item.id != "") {
-            var products = this.productSelectionLevels.filter(function (x) {
+            let products = this.productSelectionLevels.filter(function (x) {
                 return x.PRD_MBR_SID == item.id;
             })[0];
             item = $.extend({}, item, products);
@@ -595,7 +598,7 @@ export class ProductSelectorComponent {
         //this.getItems(item);
         // // When toggle is level 4 show l4's under the high level products
         if (!this.showDefault && (item.allowMultiple !== undefined && item.allowMultiple) && this.enableMultipleSelection && isDrilldown) {
-            var products = this.productSelectionLevels.filter(function (x) {
+            let products = this.productSelectionLevels.filter(function (x) {
                 return x.PRD_MBR_SID == item.id;
             })[0];
             let product = angular.copy(products);
@@ -630,7 +633,7 @@ export class ProductSelectorComponent {
     }
     showLevel4(product) {
         // To get all the L4's under a higher product hierarchy for a program or voltier deal treat it as Front END YCS2 deal
-        var data = [{
+        let data = [{
             ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
             USR_INPUT: product.HIER_NM_HASH.replace(/\s\s+/g, ' '),
             EXCLUDE: "",
@@ -664,7 +667,7 @@ export class ProductSelectorComponent {
         });
     }
     save() {
-        var noOfValidItem = (this.isTender == true && this.dealType === "ECAP" && this.splitProducts != true) ? 1 : 10; //Added Tender ECAP Rules
+        let noOfValidItem = (this.isTender == true && this.dealType === "ECAP" && this.splitProducts != true) ? 1 : 10; //Added Tender ECAP Rules
         if (this.dealType !== "ECAP" && this.dealType !== "KIT") {
             // Get unique product types
             let existingProdTypes = _.uniq(this.addedProducts, 'PRD_CAT_NM'); //$filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
@@ -748,8 +751,8 @@ export class ProductSelectorComponent {
         });
 
         // For kit deals re arrange the products primary secondary
-        var prdDrawingOrd = "";
-        var contractProduct = "";
+        let prdDrawingOrd = "";
+        let contractProduct = "";
         if (this.dealType === "KIT") {
             this.addedProducts = this.filterProducts(this.addedProducts, 'DEAL_PRD_TYPE') // $filter('kitProducts')(vm.addedProducts, 'DEAL_PRD_TYPE');
             prdDrawingOrd = this.addedProducts.map(function (p) {
@@ -757,7 +760,7 @@ export class ProductSelectorComponent {
             }).join(',');
         }
 
-        var pricingTableSysProducts = {};
+        let pricingTableSysProducts = {};
 
         angular.forEach(this.addedProducts, function (item, key) {
             if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
@@ -787,7 +790,7 @@ export class ProductSelectorComponent {
         }
 
         //Only for kit prdDrawingOrd will be populated
-        var productSelectorOutput = {
+        let productSelectorOutput = {
             'splitProducts': this.splitProducts, 'validateSelectedProducts': pricingTableSysProducts,
             'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
         };
