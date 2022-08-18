@@ -3,8 +3,8 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
 
-<div class="product-selector modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;">
-    <div class="row">
+<div class="product-selector modal-content">
+        <div class="row">
         <div class="col">
             <div class="prodSelector modal-header">
                 <div class="row col-md-12">
@@ -68,16 +68,43 @@
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Popover Template -->
                                             <ng-template #popoverContent>
-                                                <div>
-                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                    </div>
                                                 </div>
-                                                <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
                                             </ng-template>
 
                                             <!-- Cell Content -->
-                                            <div [ngbPopover]="popoverContent" style="text-align: center; justify-content: center"> 
+                                            <div class="CAPYCS2CellContent" #p="ngbPopover" [ngbPopover]="popoverContent"> 
                                                 <!-- WIP: Insert CAP Info cell design here -->
                                                 {{ dataItem.CAP }}
+                                            </div>
+                                        </ng-template>
+                                    </div>
+
+                                    <!-- Template for `YCS2 Info` column -->
+                                    <div *ngIf="column.field == 'YCS2'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <!-- Popover Template -->
+                                            <ng-template #popoverContent>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                    
+                                            <!-- Cell Content -->
+                                            <div class="CAPYCS2CellContent" #p="ngbPopover" [ngbPopover]="popoverContent"> 
+                                                    <!-- WIP: Insert CAP Info cell design here -->
+                                                {{ dataItem.YCS2 }}
                                             </div>
                                         </ng-template>
                                     </div>

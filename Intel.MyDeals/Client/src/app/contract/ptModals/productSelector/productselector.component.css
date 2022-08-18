@@ -146,7 +146,6 @@ a.prdAnchor:hover {
 
 
 /* Add a background color on hover */
-
 .drillDown.btn-group button:hover {
     background-color: #01AEEF;
     color: #1a3e6f;
@@ -328,12 +327,12 @@ a.prdAnchor:hover {
     padding-bottom: 0px;
     min-height: 365px;
     max-height: calc(85vh - 365px);
-    height: calc(85vh - 365px);
+    height: auto;
     overflow-y: auto;
 }
 
 .prodSelector .prodSelector-grid .k-grid-content {
-    height: calc(85vh - 480px);
+    /* height: calc(85vh - 480px); */
     min-height: 270px;
     max-height: calc(85vh - 385px);
 }
@@ -617,4 +616,20 @@ input[type=checkbox].with-sm-font:focus+label:before {
 .modal-content {
     border-radius: 0 !important;
     border: 0px !important;
+}
+
+.CAPYCS2CellContent {
+    background-color: yellow;
+    border-color: yellow;
+    text-align: center;
+    justify-content: center;
+}
+
+.product-selector {
+    height: 100%;
+    background-color: #1a3e6f;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: 1px solid #1a3e6f;
+    border-right: 1px solid #1a3e6f;
 }

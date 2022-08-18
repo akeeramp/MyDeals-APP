@@ -15,6 +15,12 @@ export class GridPopoverComponent implements OnInit{
             private loggerService: logger) { }
 
 
+    @Input() private columnTypes: string;  // Required
+    @Input() private currentPricingTableRow;    // Required
+    @Input() private productMemberSId;  // Required
+    @Input() private priceCondition;    // Required
+    private productData;
+
     private initializeGridOptions() {
         if (!this.columnTypes) {
             this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
@@ -42,12 +48,6 @@ export class GridPopoverComponent implements OnInit{
             }];
         }
     }
-
-    @Input() private columnTypes: string;  // Required
-    @Input() private currentPricingTableRow;    // Required
-    @Input() private productMemberSId;  // Required
-    @Input() private priceCondition;    // Required
-    private productData;
 
     public isLoading = true;
 

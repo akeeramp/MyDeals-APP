@@ -92,11 +92,17 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             openPopUp() {
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
-                let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
+                // let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
+                let modalComponent: any = null,
+                    name: string = '',
+                    height: string = '',
+                    width: string = '650px',
+                    data = {},
+                    panelClass: string = "";
                 if (this.field && this.field == 'PTR_USER_PRD') {
                     modalComponent = ProductSelectorComponent;
                     name = "Product Selector";
-                    height = "80vh"
+                    // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
                     width = "5500px";
                     panelClass = "product-selector-dialog";
                     let obj={},curRow=[];

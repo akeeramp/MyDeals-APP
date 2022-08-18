@@ -24,10 +24,11 @@ export class ProductSelectorComponent {
             private prodSelSVC: productSelectorService,
             private loggerSvc: logger,
             popoverConfig: NgbPopoverConfig) {
-        popoverConfig.triggers = 'mouseenter:mouseleave';   // mouseenter:mouseleave
         popoverConfig.placement = 'auto';
         popoverConfig.container = 'body';
+        popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
+        // popoverConfig.triggers = 'mouseenter:mouseenter';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
     }
 
     private productSelectionLevels: any = {};

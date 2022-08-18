@@ -1,6 +1,8 @@
-<kendo-grid [data]="dataSource" [loading]="isLoading" [skip]="state.skip"
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+
+<kendo-grid class="gridPopover" [data]="dataSource" [loading]="isLoading" [skip]="state.skip"
             [sortable]="false" [sort]="state.sort" [groupable]="false">
     <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
         <kendo-grid-column  [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}"></kendo-grid-column>
     </ng-template>
-</kendo-grid> 
+</kendo-grid>
