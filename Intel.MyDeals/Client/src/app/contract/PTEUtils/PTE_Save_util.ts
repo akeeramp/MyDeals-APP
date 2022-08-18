@@ -142,7 +142,13 @@ export class PTE_Save_Util {
     static settlementPartnerValUpdate(PTR:Array<any>){
      _.each(PTR,item=>{
         if(item.SETTLEMENT_PARTNER && item.SETTLEMENT_PARTNER !=''){
-            item.SETTLEMENT_PARTNER=item.SETTLEMENT_PARTNER.split('-')[1].trim();
+            let items= item.SETTLEMENT_PARTNER.split('-');
+            if(items.length>1){
+                item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER.split('-')[1].trim();
+            }
+            else{
+                item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER;
+            }
         }
      });
      return PTR;

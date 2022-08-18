@@ -113,6 +113,11 @@ export class pricingTableEditorComponent implements OnChanges {
                     name = "Geo Selector";
                     data={ name: name, source: this.source, selVal: selVal};
                 }
+                else if (this.field && this.field == 'CUST_ACCNT_DIV') {
+                    modalComponent = GeoSelectorComponent
+                    name = "Customer Account Divisions";
+                    data={ name: name, source: this.source, selVal: selVal};
+                }
                 else if (this.field && this.field == 'QLTR_BID_GEO') {
                     modalComponent = GeoSelectorComponent
                     name = "Select Bid Geo";
@@ -280,7 +285,7 @@ export class pricingTableEditorComponent implements OnChanges {
             let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
-            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO') {
+            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV') {
                 currentColumnConfig.editor = this.custCellEditor;
             }
             this.columns.push(currentColumnConfig);
@@ -403,7 +408,6 @@ export class pricingTableEditorComponent implements OnChanges {
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
             setTimeout(() => {
                 changes = this.identfyUniqChanges(changes, source);
-                console.log(changes);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
                 //KIT On change events
@@ -636,7 +640,7 @@ export class pricingTableEditorComponent implements OnChanges {
         }
     }
     async validatePricingTableProducts() {
-        let isValidProd = true;//await this.validateOnlyProducts('onSave');
+        let isValidProd = await this.validateOnlyProducts('onSave');
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         var multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR);
@@ -672,7 +676,7 @@ export class pricingTableEditorComponent implements OnChanges {
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
             //Calling to bind the cook result of success or failure
             this.generateHandsonTable(updatedPTRObj.rowData);
-            if((translateResult['Data'].DuplicateProducts && _.keys(translateResult['Data'].DuplicateProducts).length>0) || (translateResult['Data'].InValidProducts && _.keys(translateResult['Data'].InValidProducts).length>0)){
+            if(PTEUtil.isValidForProdCorrector(translateResult['Data'])){
                 // Product corrector if invalid products
                 this.isLoading = false;
                 this.openProductCorrector(translateResult['Data'])
@@ -740,14 +744,21 @@ export class pricingTableEditorComponent implements OnChanges {
         return transformResults;
     }
     openProductCorrector(products:any){
+        let PTR=PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
+        let selRows=[]
+        _.each(products.DuplicateProducts,(val,key) =>{
+            let res=_.findWhere(PTR,{DC_ID:parseInt(key)});
+            selRows.push({name:_.keys(val)[0],row:res});
+        });
+        let data={ProductCorrectorData:products,contractData:this.contractData,curPricingTable:this.curPricingTable,selRows:selRows};
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
             height: '850px',
             width: '1750px',
-            data: products,
+            data: data,
         });
-
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
+               //logic yet to add
                console.log(result);
             }
         });

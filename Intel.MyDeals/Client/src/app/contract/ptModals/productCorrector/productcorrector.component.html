@@ -6,9 +6,15 @@
     <div style="padding:10px;">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
-                <div class="col-md-4 cursorArea" style="padding-left:0px">
+                <div class="col-md-12" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
+                     My Deals needs help with {{curRowIssues.length}} of {{curRowIssues.length}} rows
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span>Please select option(s) below to move into the valid products box or use the Product Selector</span>
             </div>
         </div>
         <div class="row">
@@ -55,7 +61,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered">
                     <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
-                        {{value}} <strong>  Can't find what you are looking for? Use the Product Selector</strong>
+                        {{value}} <strong> ----- Can't find what you are looking for? Use the <button (click)="openProdSel(value)"> Product Selector</button></strong>
                      </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_SEL" title="Type"></kendo-grid-column>

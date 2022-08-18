@@ -73,13 +73,13 @@ export class pricingTableComponent {
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
+                this.contractData = contractModel.contractData;
                 this.ps_title = this.contractData.PRC_ST[contractModel.ps_index].TITLE;
                 this.pt_title = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].TITLE;
                 this.pt_type = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].OBJ_SET_TYPE_CD;
                 this.wf_Stage = this.contractData.PRC_ST[contractModel.ps_index].WF_STG_CD;
                 this.passed_validation = this.contractData.PRC_ST[contractModel.ps_index].PASSED_VALIDATION;
                 this.is_hybrid_ps = this.contractData.PRC_ST[contractModel.ps_index].IS_HYBRID_PRC_STRAT;
-                this.contractData = contractModel.contractData;
                 this.enableDealEditorTab(isRedirect);
             }
             //defaulting the PTE page to load the images
@@ -148,7 +148,19 @@ export class pricingTableComponent {
         this.c_Id = Number(IDS[0]);
         this.loadAllContractDetails(IDS);
     }
-
+    async enableDealEditorTab(isRedirect = false) {
+        let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+        });
+        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
+            this.isDETabEnabled = true;
+            //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
+            if (isRedirect) {
+                if (this.type != "PT") { this.isDETab = true; this.isPTETab = false}
+                else { this.isDETab = false; this.isPTETab = true }
+            }
+        } else { this.isDETabEnabled = false;  }
+    }
 
     ngOnInit() {
         const url = window.location.href.split('/');
@@ -164,19 +176,7 @@ export class pricingTableComponent {
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
-    async enableDealEditorTab(isRedirect = false) {
-        let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-        });
-        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
-            this.isDETabEnabled = true;
-            //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
-            if (isRedirect) {
-                if (this.type != "PT") { this.isDETab = true; this.isPTETab = false}
-                else { this.isDETab = false; this.isPTETab = true }
-            }
-        } else { this.isDETabEnabled = false;  }
-    }
+  
 }
 angular.module("app").directive(
     "pricingTable",

@@ -83,6 +83,7 @@ export class PTE_CellChange_Util {
            currentstring =row+','+val.prop+','+0+','+'no-edit';
            updateRows.push(currentstring.split(','));
         }
+
         else{
           this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData);
         }
@@ -128,6 +129,10 @@ export class PTE_CellChange_Util {
               updateRows.push(currentstring.split(','));
               //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
+            else if(val.prop=='CUST_ACCNT_DIV'){
+              currentstring =row+','+val.prop+','+contractData.CUST_ACCNT_DIV+','+'no-edit';
+              updateRows.push(currentstring.split(','));
+            }
             else if(val.prop){
                 //this will be autofill defaults value 
                 if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
@@ -144,7 +149,6 @@ export class PTE_CellChange_Util {
               console.log('invalid Prop')
             }
           }
-         
       }
     static getMergeCellsOnEdit(empRow:number,NUM_OF_TIERS:number,pricingTableTemplates:any): void {
         let mergCells:any=null;

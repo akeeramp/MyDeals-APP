@@ -14,10 +14,6 @@ export class GridPopoverComponent implements OnInit{
     constructor(private productSelectorService: productSelectorService,
             private loggerService: logger) { }
 
-    ngOnInit(): void {
-        this.initializeGridOptions();
-        this.getData(this.productData);
-    }
 
     private initializeGridOptions() {
         if (!this.columnTypes) {
@@ -101,5 +97,11 @@ export class GridPopoverComponent implements OnInit{
             });
         }
     }
+    
+    ngOnInit(): void {
+        this.initializeGridOptions();
+        this.getData(this.productData);
+    }
+
 
 }

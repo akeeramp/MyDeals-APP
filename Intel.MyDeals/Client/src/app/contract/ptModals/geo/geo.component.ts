@@ -1,6 +1,3 @@
-
-import * as angular from "angular";
-import {downgradeComponent} from "@angular/upgrade/static";
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from "underscore";
@@ -21,6 +18,7 @@ export interface DialogData {
     private value:Array<string>=[];
     private isBlend:boolean=false;
     private isBidGeo: boolean = false;
+    private isCustDiv: boolean = false;
     constructor(
       public dialogRef: MatDialogRef<GeoSelectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -44,6 +42,7 @@ export interface DialogData {
     }
     ngOnInit() {
         this.isBidGeo = this.data.name.includes("Bid");
+        this.isCustDiv = this.data.name.includes("Divisions");
         this.listItems=this.data.source;
         //identifying blend is enabled or no if yes enable the flag and remove the scquare bracket
         this.isBlend=(this.data.selVal?.indexOf("[") >= 0);
@@ -58,11 +57,3 @@ export interface DialogData {
       this.dialogRef.close();
     }
   }
-  
-  angular.module("app").directive(
-    "geoSelector",
-    downgradeComponent({
-      component: GeoSelectorComponent,
-    })
-  );
-  

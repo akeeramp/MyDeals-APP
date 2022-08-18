@@ -7,6 +7,7 @@ import Handsontable from 'handsontable';
 import { IntlService } from "@progress/kendo-angular-intl";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import * as moment from 'moment';
+import { isError } from 'underscore';
 
 export class PTEUtil {
 
@@ -195,6 +196,16 @@ export class PTEUtil {
          });
       
          return {rowData};
+    }
+    static isValidForProdCorrector(transformResults:any){
+         let isError=[];
+           //setting PTR_SYS_PRD for DuplicateProducts
+          _.each(transformResults.DuplicateProducts,(val,key)=>{
+                if(_.keys(val).length>0){
+                    isError.push('1');
+                }
+            });
+        return _.contains(isError,'1');
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
        //this code will help us to identify uniq entry in case of tier

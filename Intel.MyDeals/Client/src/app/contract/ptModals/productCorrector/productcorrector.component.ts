@@ -1,6 +1,3 @@
-
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { logger } from "../../../shared/logger/logger";
@@ -8,7 +5,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
-
+import { ProductSelectorComponent } from "../productSelector/productselector.component";
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -20,10 +18,14 @@ import * as _ from "underscore";
 export class ProductCorrectorComponent {
   constructor(
     public dialogRef: MatDialogRef<ProductCorrectorComponent>,
-      @Inject(MAT_DIALOG_DATA) public ProductCorrectorData: any,
-    private loggerSvc: logger
+      @Inject(MAT_DIALOG_DATA) public data: any,
+    private loggerSvc: logger,
+    private dialog:MatDialog
   ) { }
-
+  private ProductCorrectorData:any=null;
+  private contractData:any=null;
+  private curPricingTable:any=null;
+  private selRows:any=null;
   private isLoading:boolean = false;
   private type = "numeric";
   private info = true;
@@ -96,15 +98,27 @@ export class ProductCorrectorComponent {
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.selGridData = process(this.selGridResult, this.state);
-}
+  }
+  openProdSel(key:string){
+    this.dialogRef.close();
+    let data={ name: 'Product Selector', source: '', selVal: key,contractData:this.contractData,curPricingTable:this.curPricingTable,curRow:[_.findWhere(this.selRows,{name:key}).row]};
+    const dialogRefe = this.dialog.open(ProductSelectorComponent, {
+      height: "80vh",
+      width: "5500px",
+      data: data,
+      panelClass: 'product-selector-dialog'
+    })
+    dialogRefe.afterClosed().subscribe(result => {
+        if (result) {
+           console.log(result);
+        }
+    });
+  }
   ngOnInit() {
+    this.ProductCorrectorData=this.data.ProductCorrectorData;
+    this.contractData=this.data.contractData;
+    this.curPricingTable=this.data.curPricingTable;
+    this.selRows=this.data.selRows;
     this.loadGrid()
   }
 }
-
-angular.module("app").directive(
-  "productCorrector",
-  downgradeComponent({
-    component: ProductCorrectorComponent,
-  })
-);
