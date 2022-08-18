@@ -342,3 +342,25 @@ input:checked + .slider:before {
 .childGrid > .k-grid-content {
     height: auto !important
 }
+
+tr.blue,
+tr.k-alt.blue {
+    background-color: #B9D6E5 !important
+}
+
+.k-grid tbody tr.blue:hover {
+    background-color: #B9D6E5 !important
+}
+
+tr.grey,
+tr.k-alt.grey {
+    background-color: #AEAEAE !important
+}
+
+.k-grid tbody tr.grey:hover {
+    background-color: #AEAEAE !important
+}
+
+.medIcon {
+    font-size: 18px
+}

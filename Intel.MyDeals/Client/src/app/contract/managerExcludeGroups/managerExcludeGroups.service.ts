@@ -12,6 +12,8 @@ export class managerExcludeGroupsService {
 
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiLookupUrl = "/api/Dropdown/GetDealGroupDropdown/";
+    public apiBasePricingTableUrl = "/api/PricingTables/v1/"
+    public apiBaseCostTestUrl = "/api/CostTest/v1/";
     public loading: boolean;
 
     public readWipExclusionFromContract(id): Observable<any> {
@@ -20,6 +22,16 @@ export class managerExcludeGroupsService {
     }
     public getExcludeGroupDetails(dealId): Observable<any> {
         const apiUrl: string = this.apiLookupUrl + dealId;
+        return this.httpClient.get(apiUrl);
+    }
+
+    public updateWipDeals(custId, contractId, wips): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'UpdateWipDeals/' + custId + '/' + contractId;
+        return this.httpClient.post(apiUrl, wips);
+    }
+
+    public runPctContract(id): Observable<any> {
+        const apiUrl: string = this.apiBaseCostTestUrl + 'RunPctContract/' + id;
         return this.httpClient.get(apiUrl);
     }
 }

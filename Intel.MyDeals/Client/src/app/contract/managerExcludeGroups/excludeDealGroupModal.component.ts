@@ -1,6 +1,6 @@
 ﻿import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Inject, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
 import { logger } from "../../shared/logger/logger";
@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
+import { RowClassArgs } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -32,6 +33,15 @@ export class excludeDealGroupModalDialog {
     private childGridData;
     private childGridResult;
     private color: ThemePalette = 'primary';
+    private GRP_BY = 0;
+    private enabledList = ["Pending", "Approved"];
+    private hasCheckbox: boolean;
+    private enableCheckbox;
+    private hasComment = false;
+    private isDealToolsChecked = false;
+    private DEAL_GRP_CMNT;
+    private OVLP_DEAL_ID: Array<any>;
+    @Output() public selectAllData: EventEmitter<void> = new EventEmitter()
 
     private state: State = {
         skip: 0,
@@ -66,6 +76,13 @@ export class excludeDealGroupModalDialog {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
+    clkAllItems(): void {
+        for (let i = 0; i < this.childGridResult.length; i++) {
+            this.childGridResult[i].selected = !this.isDealToolsChecked;
+        }
+        this.childGridData = process(this.childGridResult, this.state);
+    }
+
     getFormatedDim(dataItem, field, dim, format) {
         const item = dataItem[field];
         if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
@@ -76,12 +93,25 @@ export class excludeDealGroupModalDialog {
         }
         return item[dim];
     }
-
+    public rowCallback = (context: RowClassArgs) => {
+        const exChk = context.dataItem.EXCLD_DEAL_FLAG;
+        const cstChk = context.dataItem.CST_MCP_DEAL_FLAG;
+        if (cstChk === 1 || (cstChk === 0 && exChk === 1)) { return { blue: true } }
+        else if (cstChk === 0) { return { grey: true } }
+        else if (cstChk === 2) { return { blue: true } }
+        else { return { grey: true } }
+    };
     close(): void {
         this.dialogRef.close();
     }
-    ok(): void {
-        this.dialogRef.close();
+    ok() {
+        this.OVLP_DEAL_ID = this.childGridResult.filter(x => x.selected == true).map(y => y.OVLP_DEAL_ID).join();
+        const returnVal: any = [];
+        const value: any = {};
+        value.DEAL_GRP_CMNT = this.DEAL_GRP_CMNT;
+        value.DEAL_GRP_EXCLDS = this.OVLP_DEAL_ID;
+        returnVal.push(value);
+        this.dialogRef.close(returnVal);
     }
     cancel(): void {
         this.dialogRef.close();
@@ -97,10 +127,25 @@ export class excludeDealGroupModalDialog {
         this.gridData = process(this.gridResult, this.state);
         this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).subscribe((result: any) => {
             this.childGridResult = result;
+            if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
+                const selectedDealIds = this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS.split(',');
+                for (let i = 0; i < this.childGridResult.length; i++) {
+                    if (selectedDealIds.indexOf(this.childGridResult[i].OVLP_DEAL_ID.toString()) > -1) {
+                        this.childGridResult[i].selected = true;
+                    }
+
+                }
+            }
+
             this.childGridData = process(this.childGridResult, this.state);
         }, (error) => {
             this.loggerSvc.error('Customer service subgrid', error);
         })
+        this.enableCheckbox = this.enabledList.indexOf(this.dataItem.cellCurrValues.PS_WF_STG_CD);
+        if (this.enableCheckbox < 0 && ((<any>window).usrRole !== "DA")) {
+            this.hasCheckbox = true;
+        }
+        this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
 
     ngOnInit() {

@@ -15,12 +15,14 @@
             <div class="content">
                 <div class="toolbar" style="position: absolute; left: 300px; top: 80px;">
                     <div class="fl">
-                        <button class="btn btn-sm btn-save ssToolbarBtn" [ngClass]="{'notdirty': !_dirty}"
+                        <button class="btn btn-sm btn-save ssToolbarBtn" 
                                 (click)="saveAndRunPct()" title="Save and Run Price Cost Test">
+                            <loading-panel-angular id="ExcludeDealLoading" style="z-index:500;" [show]="isLoading"
+                                                   [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
                             <table>
                                 <tr>
-                                    <td><i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i></td>
-                                    <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    <td><i class="fa fa-floppy-o" style="font-size: 30px"></i></td>
+                                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
                                         <span class="text">Save & Run<br />Price Cost Test </span>
                                     </td>
                                 </tr>
@@ -131,7 +133,10 @@
                             <kendo-grid-column title="Exclude Deal Group" field="DEAL_GRP_EXCLDS" [headerClass]="{'headerClass':true}"
                                                [width]="120">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
+                                    <span *ngIf="dataItem.DEAL_GRP_EXCLDS==''"
+                                          style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
+                                    <span *ngIf="dataItem.DEAL_GRP_EXCLDS!=''"
+                                          style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.DEAL_GRP_EXCLDS}}</span>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column title="Exclusion Reason" field="DEAL_GRP_CMNT" [headerClass]="{'headerClass':true}"
@@ -161,14 +166,14 @@
                             <kendo-grid-column title="ECAP Price" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="120">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <span>
-                                        {{
-                 getFormatedDim(dataItem, 'ECAP_PRICE',
-                                        '20___0','currency')
-                                        }}
+                                        {{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}
                                     </span>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <span>{{getFormatedDim(dataItem,'MAX_RPU','20___0','currency')}}</span>
+                                </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON"
                                                [headerClass]="{'headerClass':true}" [width]="160"></kendo-grid-column>
@@ -180,4 +185,5 @@
             </div>
         </ng-template>
     </kendo-tabstrip-tab>
-</kendo-tabstrip></div>
+</kendo-tabstrip>
+</div>

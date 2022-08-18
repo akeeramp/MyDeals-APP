@@ -11,6 +11,7 @@ import { headerService } from "../../shared/header/header.service";
 import { FormBuilder } from "@angular/forms";
 import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
+import { GridUtil } from "../grid.util"
 @Component({
     selector: "manager-exclude-groups",
     templateUrl: "Client/src/app/contract/managerExcludeGroups/managerExcludeGroups.component.html",
@@ -92,6 +93,13 @@ export class managerExcludeGroupsComponent {
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
+            for (let d = 0; d < this.gridResult.length; d++) {
+                const item = this.gridResult[d];
+                if (item["DEAL_GRP_EXCLDS"] === undefined || item["DEAL_GRP_EXCLDS"] === null) item["DEAL_GRP_EXCLDS"] = "";
+                if (item["DEAL_GRP_CMNT"] === undefined || item["DEAL_GRP_CMNT"] === null) item["DEAL_GRP_CMNT"] = "";
+                item["DSPL_WF_STG_CD"] = GridUtil.stgFullTitleChar(item);
+                item["TITLE"] = item["TITLE"].replace(/,/g, ", ");
+            }
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
         }, (error) => {
@@ -120,15 +128,16 @@ export class managerExcludeGroupsComponent {
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
-            if (returnVal != undefined && returnVal != null && returnVal != "") {
-                this.updateModalDataItem(dataItem, "DEAL_GRP_EXCLDS", returnVal);
+            if (returnVal != undefined && returnVal != null && returnVal.length > 0) {
+                this.updateModalDataItem(dataItem, "DEAL_GRP_CMNT", returnVal[0].DEAL_GRP_CMNT);
+                this.updateModalDataItem(dataItem, "DEAL_GRP_EXCLDS", returnVal[0].DEAL_GRP_EXCLDS);
             }
         });
     }
 
-    updateModalDataItem(dataItem, field, returnVal) {
+    updateModalDataItem(dataItem, field, returnValue) {
         if (dataItem != undefined && dataItem._behaviors != undefined) {
-            dataItem[field] = returnVal;
+            dataItem[field] = returnValue;
             if (dataItem._behaviors.isDirty == undefined)
                 dataItem._behaviors.isDirty = {};
             dataItem._behaviors.isDirty[field] = true;
@@ -146,7 +155,19 @@ export class managerExcludeGroupsComponent {
     }
 
     saveAndRunPct() {
-        //kujoih
+        const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
+        this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(this.gridResult, this.state);
+            this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
+                this.loadExcludeGroups();
+            }, (err) => {
+                this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
+            });
+        }, (error) => {
+            this.loggerSvc.error('Could not update exclude deals', error);
+        });
     }
     togglePctFilter() {
         //kujoih
