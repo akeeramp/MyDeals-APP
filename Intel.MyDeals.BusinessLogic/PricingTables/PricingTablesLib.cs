@@ -444,6 +444,11 @@ namespace Intel.MyDeals.BusinessLogic
                 OpDataElementType.WIP_DEAL
             };
 
+            if (actns.ContainsKey("Cancel")) // If this is a cancel action, then we will need to make potential changes to PTR as well
+            {
+                opDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
+            }
+
             List<int> atrbs = new List<int>
             {
                 Attributes.WF_STG_CD.ATRB_SID,
@@ -452,6 +457,10 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.COST_TEST_RESULT.ATRB_SID, // added for approval blocking at submitted for fails or incompletes
                 Attributes.PASSED_VALIDATION.ATRB_SID,
                 Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                //Attributes.REBATE_BILLING_START.ATRB_SID, // Not needed because pull-ins only require end date
+                Attributes.REBATE_BILLING_END.ATRB_SID,
                 Attributes.OBJ_PATH_HASH.ATRB_SID
             };
 
@@ -479,6 +488,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            bool cancelStageActions = false; // Flag to tell later sections of code if PTR save actions are needed
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(ids, opDataElementTypes, atrbs);
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
             {
@@ -559,10 +569,45 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty.ToString());
                     }
-
                 }
 
-                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Set the stage no matter which way, message is dependant upon direction of move
+                string extraMessage = "";
+                if (targetStage == WorkFlowStages.Cancelled)
+                {
+                    // Assume that you have PTR levels from above if you made it here
+                    cancelStageActions = true;
+                    IOpDataElement deStarDate = dc.GetDataElement(AttributeCodes.START_DT);
+                    IOpDataElement deEndDate = dc.GetDataElement(AttributeCodes.END_DT);
+                    IOpDataElement deBillingEndDate = dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+                    DateTime dtNow = DateTime.Now;
+
+                    string dealBreadcrumbPathJSON = dc.GetDataElementValue(AttributeCodes.OBJ_PATH_HASH);
+                    OpDataCollector ptr_dc = null;
+                    if (!string.IsNullOrEmpty(dealBreadcrumbPathJSON))
+                    {
+                        // Dynamic makes the JSON an mapable object, otherwise need to parse it via dealBreadcrumbPath["PS"].ToString()
+                        dynamic dealBreadcrumbPath = JObject.Parse(dealBreadcrumbPathJSON);
+                        int dealParentPSId = Int32.Parse(dealBreadcrumbPath.PTR.ToString());
+                        ptr_dc = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault(d => d.DcID == dealParentPSId);
+                    }
+
+                    if (deStarDate.IsDateInPast() && !deEndDate.IsDateInPast()) // Deal is presently in flight, collapse end date to today 
+                    {
+                        dc.SetAtrb(AttributeCodes.END_DT, dtNow.ToString("MM/dd/yyyy"));
+                        if (ptr_dc != null) ptr_dc.SetAtrb(AttributeCodes.END_DT, dtNow.ToString("MM/dd/yyyy"));
+                        if (deBillingEndDate != null) dc.SetAtrb(AttributeCodes.REBATE_BILLING_END, dtNow.ToString("MM/dd/yyyy"));
+                    }
+                    else if (!deStarDate.IsDateInPast()) // Deal has not started yet, collapse end date to start date 
+                    {
+                        dc.SetAtrb(AttributeCodes.END_DT, deStarDate.AtrbValue.ToString()); // Complete deal collapse
+                        if (ptr_dc != null) ptr_dc.SetAtrb(AttributeCodes.END_DT, deStarDate.AtrbValue.ToString());
+                        if (deBillingEndDate != null) dc.SetAtrb(AttributeCodes.REBATE_BILLING_END, deStarDate.AtrbValue.ToString());
+                    }
+                    //Else the Deal has already ended, so no changes to end date because you can't shrink a deal in the past
+                    extraMessage = "  Deal End date changed from " + deEndDate.OrigAtrbValue.ToString() + " to " + deEndDate.AtrbValue.ToString() + " due to Cancel Action on " + dtNow.ToString("MM/dd/yyyy") + ".";
+                }
+
+                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage); // Set the stage no matter which way it goes, message is dependant upon direction of move
                 if (!dealsOffHold.Contains(dc.DcID)) // This deal is not coming off of hold, tag it now, tag it later comes below
                 {
                     opMsgQueue.Messages.Add(new OpMsg
@@ -574,7 +619,7 @@ namespace Intel.MyDeals.BusinessLogic
                         KeyIdentifiers = new[] { dc.DcID }
                     });
 
-                    dc.AddTimelineComment($"Deal moved from {psStageIn} to {psTargetStage}.");
+                    dc.AddTimelineComment($"Deal moved from {psStageIn} to {psTargetStage}." + extraMessage);
                 }
                 else
                 {
@@ -603,6 +648,19 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+
+            if (cancelStageActions) // Tack on Price Table "Save" Action to match the PTR elements sent up to save.
+            {
+                myDealsData[OpDataElementType.PRC_TBL_ROW].BatchID = Guid.NewGuid();
+                myDealsData[OpDataElementType.PRC_TBL_ROW].GroupID = -102; // Whatever the real ID of this object is
+
+                // Back to normal operations, clear out the messages and all.
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+                myDealsData[OpDataElementType.PRC_TBL_ROW].Messages.Messages.RemoveAll(r => true);
+
+                // Tack on the save action call now
+                myDealsData[OpDataElementType.PRC_TBL_ROW].AddSaveActions();
+            }
 
             if (dealsOffHold.Any())
             {
@@ -633,7 +691,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (needRedeal)
                 {
                     myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
-                    myDealsData[OpDataElementType.PRC_ST].GroupID = -102; // Whatever the real ID of this object is
+                    myDealsData[OpDataElementType.PRC_ST].GroupID = -103; // Whatever the real ID of this object is
 
                     // Back to normal operations, clear out the messages and all.
                     myDealsData[OpDataElementType.PRC_ST].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
