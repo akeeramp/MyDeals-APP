@@ -20,11 +20,13 @@
             public const string IS_DEVELOPER = "IsDeveloper";
             public const string IS_TESTER = "IsTester";
             public const string IS_CUSTOMERADMIN = "IsCustomerAdmin";
+            public const string IS_BULKPRICEADMIN = "IsBulkPriceAdminAdmin";
 
             public const string SUPER_LIST = "UI_SUPER_ADMINISTRATOR_LIST";
             public const string DEVELOPER_LIST = "UI_Developers_List";
             public const string TESTER_LIST = "UI_Testers_List";
             public const string CUSTOMERADMIN_LIST = "UI_CustomerAdmin_List";
+            public const string BULK_PRICE_ADMIN = "UI_BulkPriceAdmin_List";
         }
 
         public static class OBJDIM

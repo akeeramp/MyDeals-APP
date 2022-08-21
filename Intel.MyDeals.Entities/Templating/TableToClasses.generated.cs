@@ -702,8 +702,12 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.Int32 IS_CUST_ADMIN {set;get;}
-	
-	
+
+
+	[DataMember]
+	public System.Int32 IS_BULKPRICE_ADMIN { set; get; }
+
+
 	[DataMember]
 	public System.Int32 IS_DEVELOPER {set;get;}
 	

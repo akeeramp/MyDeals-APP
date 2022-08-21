@@ -46,6 +46,7 @@
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
     bool isCustomerAdmin = opUserToken.IsCustomerAdmin();
+    bool isBulkPriceAdmin = opUserToken.IsBulkPriceAdmin();
     bool isRealSA = opUserToken.IsRealSA(); // This ensures that user is an SA and not a Customer Admin
 
     if (isSuper)
@@ -57,6 +58,7 @@
     if (isCustomerAdmin) { extraUserPrivsDetail.Add("Accounts Administrator"); }
     if (usrRole == "SA" && !isRealSA) { usrRoleExtension = "Account"; } // Mark neutered SA role because this is a customer admin
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("System Tester"); }
+    if (isDeveloper) { extraUserPrivs += "B"; extraUserPrivsDetail.Add("Bulk Pricing Admin"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("System Developer"); }
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
@@ -330,9 +332,12 @@
                                     <li><a href="Admin#/AdminTools">Support Scripts</a></li>
                                     <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
                                     <li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>
-                                    <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li>
                                     <li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
                                     <li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>
+                                }
+                                @if (isBulkPriceAdmin || isDeveloper)
+                                {
+                                    <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li>
                                 }
                                 @if (isRealSA || isDeveloper)
                                 {
@@ -483,6 +488,7 @@
 
     window.isDeveloper = "@isDeveloper" === "True";
     window.isCustomerAdmin = "@isCustomerAdmin" === "True";
+    window.isBulkPriceAdmin = "@isBulkPriceAdmin" === "True";
     window.isTester = "@isTester" === "True";
 
     window.env = "@env";
