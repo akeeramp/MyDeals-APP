@@ -120,7 +120,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.DealStartDate))
             {
-                DateTime dealStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.DealStartDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                DateTime dealStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.DealStartDate, "MM/dd/yyyy", null); // Assuming that UI sends US formatted dates
                 UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.START_DT), dealStartDate.ToString("MM/dd/yyyy"));
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.ON_ADD_DT), dealStartDate.ToString("MM/dd/yyyy"));
@@ -132,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.DealEndDate))
             {
-                DateTime dealEndDate = DateTime.ParseExact(bulkPriceUpdateRecord.DealEndDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                DateTime dealEndDate = DateTime.ParseExact(bulkPriceUpdateRecord.DealEndDate, "MM/dd/yyyy", null); // Assuming that UI sends US formatted dates
                 UpdateDeValue(myDealsData[OpDataElementType.PRC_TBL_ROW].Data[ptrId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_DT), dealEndDate.ToString("MM/dd/yyyy"));
             }
@@ -143,20 +143,20 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.BillingsStartDate))
             {
-                DateTime billingStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.BillingsStartDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                DateTime billingStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.BillingsStartDate, "MM/dd/yyyy", null); // Assuming that UI sends US formatted dates
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
             }
 
             if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.BillingsEndDate))
             {
-                DateTime billingEndDate = DateTime.ParseExact(bulkPriceUpdateRecord.BillingsEndDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                DateTime billingEndDate = DateTime.ParseExact(bulkPriceUpdateRecord.BillingsEndDate, "MM/dd/yyyy", null); // Assuming that UI sends US formatted dates
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
             }
 
             if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.TrackerEffectiveStartDate)) 
             {
                 // RedealNoEarlierThenPrevious check the date entered by user and raises validation error is needed.  Might wish to put additional safety checks ehre later if needed.
-                DateTime trackerEffectiveStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.TrackerEffectiveStartDate, "yyyy-MM-dd", null); // Assuming that UI sends US formatted dates
+                DateTime trackerEffectiveStartDate = DateTime.ParseExact(bulkPriceUpdateRecord.TrackerEffectiveStartDate, "MM/dd/yyyy", null); // Assuming that UI sends US formatted dates
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_DT), trackerEffectiveStartDate.ToString("MM/dd/yyyy"));
                 UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.LAST_REDEAL_BY), OpUserStack.MyOpUserToken.Usr.WWID.ToString());
             }
@@ -185,15 +185,17 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             myDealsData.ValidationApplyRules(savePacket); //myDealsData.ApplyRules(MyRulesTrigger.OnValidate) - myDealsData.ValidationApplyRules(savePacket)
+
+            bulkPriceUpdateRecord.ValidationMessages = string.Empty;
             foreach (OpDataElementType dpKey in myDealsData.Keys) // dpKey is like OpDataElementType.WIP_DEAL
             {
                 foreach (OpDataCollector dc in myDealsData[dpKey].AllDataCollectors)
                 {
                     foreach (OpMsg opMsg in dc.Message.Messages) // If validation errors, log and skip to next
                     {
-                        if (opMsg.Message != "Validation Errors detected in deal") bulkPriceUpdateRecord.ValidationMessages += bulkPriceUpdateRecord.ValidationMessages.Length == 0 ? 
-                                "[" + dpKey + "] " + opMsg.Message : 
-                                "; " + "[" + dpKey + "] " + opMsg.Message;
+                        if (opMsg.Message != "Validation Errors detected in deal" && !bulkPriceUpdateRecord.ValidationMessages.Contains(opMsg.Message)) bulkPriceUpdateRecord.ValidationMessages +=  string.IsNullOrEmpty(bulkPriceUpdateRecord.ValidationMessages) ? 
+                                opMsg.Message : 
+                                "; " + opMsg.Message;
                     }
                 }
             }

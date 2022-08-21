@@ -6,7 +6,7 @@
             <h3 id="modalTitle">{{vm.screenTitle}}</h3>
         </div>
         <div id="modalBodyDiv" class="modal-body" ng-if="vm.HasBulkUpdateAccess">
-            <div id="extractUnify" ng-if="vm.inValidUnifyDeals.length <= 0 && (vm.bulkProceUploadValidationSummary.inValidRecords == undefined  || vm.bulkProceUploadValidationSummary.inValidRecords.length <=0)">
+            <div id="extractUnify" ng-if="(vm.bulkProceUploadValidationSummary.inValidRecords == undefined  || vm.bulkProceUploadValidationSummary.inValidRecords.length <=0)">
 
                 <div class="col-md-11 notes">
                     <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
@@ -53,16 +53,16 @@
         margin-left: 37%;
     }
 
-    #spreadsheetUnifyDeals {
+    #spreadsheetBulkPriceupdate {
         border: none;
     }
 
-        #spreadsheetUnifyDeals .k-dirty-cell {
+        #spreadsheetBulkPriceupdate .k-dirty-cell {
             border: none !important;
             color: red !important;
         }
 
-        #spreadsheetUnifyDeals .k-spreadsheet-formula-bar, #spreadsheetUnifyDeals .k-spreadsheet-name-editor {
+        #spreadsheetBulkPriceupdate .k-spreadsheet-formula-bar, #spreadsheetBulkPriceupdate .k-spreadsheet-name-editor {
             display: none !important;
         }
 

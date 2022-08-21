@@ -12,11 +12,12 @@
     function BulkPriceUpdateController(bulkPriceUpdateService, $scope, gridConstants, logger, $timeout, $uibModal, dataService) {
 
         var vm = this;
-        vm.spinnerMessageDescription = "Please wait while we importing unification deal data..";
+        vm.spinnerMessageDescription = "Please wait while importing data..";
         vm.UpdatedResults = [];
         vm.Send_Vstx_Flg = {};
         vm.inValidBulkPriceUpdate = [];
         vm.SpreadSheetRowsCount = 100;
+        vm.basedate = moment("12/30/1899").format("MM/DD/YYYY");
         vm.count = 0
 
         vm.OpenBulkPriceUpdateModal = function () {
@@ -39,7 +40,8 @@
                     }
 
                     let existingcount = vm.SpreadSheetRowsCount;
-                    vm.inValidBulkPriceUpdate = returnData;
+                    vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(returnData);
+                    //vm.inValidBulkPriceUpdate = returnData;
                     if (vm.inValidBulkPriceUpdate.length < 100) {
                         vm.SpreadSheetRowsCount = 100
                     } else {
@@ -89,22 +91,22 @@
                         data += '"Volume": "' + vm.inValidBulkPriceUpdate[i].Volume.toString() + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].DealStartDate !== "") {
-                        data += '"DealStartDate": "' + vm.inValidBulkPriceUpdate[i].DealStartDate.toString() + '",'
+                        data += '"DealStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealStartDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].DealEndDate !== "") {
-                        data += '"DealEndDate": "' + vm.inValidBulkPriceUpdate[i].DealEndDate.toString() + '",'
+                        data += '"DealEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealEndDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].ProjectName !== "") {
                         data += '"ProjectName": "' + vm.inValidBulkPriceUpdate[i].ProjectName.toString() + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].BillingsStartDate !== "") {
-                        data += '"BillingsStartDate": "' + vm.inValidBulkPriceUpdate[i].BillingsStartDate.toString() + '",'
+                        data += '"BillingsStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsStartDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].BillingsEndDate !== "") {
-                        data += '"BillingsEndDate": "' + vm.inValidBulkPriceUpdate[i].BillingsEndDate.toString() + '",'
+                        data += '"BillingsEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsEndDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate !== "") {
-                        data += '"TrackerEffectiveStartDate": "' + vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate.toString() + '",'
+                        data += '"TrackerEffectiveStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions !== "") {
                         data += '"AdditionalTermsAndConditions": "' + vm.inValidBulkPriceUpdate[i].AdditionalTermsAndConditions.toString() + '",'
@@ -117,7 +119,7 @@
 
                 bulkPriceUpdateService.UpdatePriceRecord(data)
                     .then(function (response) {
-                        vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== null && x.ValidationMessages !== undefined && x.ValidationMessages !== "");
+                        //vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== null && x.ValidationMessages !== undefined && x.ValidationMessages !== "");
                         let processrecord = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== undefined && (x.ValidationMessages == null || x.ValidationMessages == ""));
                         if (processrecord !== undefined && vm.inValidBulkPriceUpdate !== undefined && vm.inValidBulkPriceUpdate.length > 0 && processrecord.length > 0) {
                             if (vm.inValidBulkPriceUpdate.length < 100) {
@@ -128,7 +130,7 @@
                                 else
                                     vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
                             }
-                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
 
                         }
@@ -141,11 +143,11 @@
                                 else
                                     vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
                             }
-                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
                         }
                         else {
-                            vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord;
+                            vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
                         }
 
@@ -180,12 +182,37 @@
                     newDeals.DealDesc = tempRange[i][1] != null ? tempRange[i][1] : "";
                     newDeals.EcapPrice = tempRange[i][2] != null ? tempRange[i][2] : "";
                     newDeals.Volume = tempRange[i][3] != null ? tempRange[i][3] : "";
-                    newDeals.DealStartDate = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
-                    newDeals.DealEndDate = tempRange[i][5] != null ? tempRange[i][5].trimEnd() : "";
-                    newDeals.BillingsStartDate = tempRange[i][6] != null ? tempRange[i][6].trimEnd() : "";
-                    newDeals.BillingsEndDate = tempRange[i][7] != null ? tempRange[i][7].trimEnd() : "";
+                    if (tempRange[i][4] != null && tempRange[i][4] != "") {
+                        newDeals.DealStartDate = Number(tempRange[i][4]).toString() == 'NaN' ? tempRange[i][4] : moment(vm.basedate).add(parseInt(tempRange[i][4]), 'days').format("MM/DD/YYYY");
+                    } else {
+                        newDeals.DealStartDate = "";
+                    }
+                   
+                    if (tempRange[i][5] != null && tempRange[i][5] != "" ) {
+                        newDeals.DealEndDate = Number(tempRange[i][5]).toString() == 'NaN' ? tempRange[i][5] : moment(vm.basedate).add(parseInt(tempRange[i][5]), 'days').format("MM/DD/YYYY");
+                    } else {
+                        newDeals.DealEndDate = "";
+                    }
+                    
+                    if (tempRange[i][6] != null && tempRange[i][6] != "") {
+                        newDeals.BillingsStartDate = Number(tempRange[i][6]).toString() == 'NaN' ? tempRange[i][6] : moment(vm.basedate).add(parseInt(tempRange[i][6]), 'days').format("MM/DD/YYYY");
+                    } else {
+                        newDeals.BillingsStartDate = "";
+                    }
+
+                    
+                    if (tempRange[i][7] != null && tempRange[i][7]!= "") {
+                        newDeals.BillingsEndDate = Number(tempRange[i][7]).toString() == 'NaN' ? tempRange[i][7] : moment(vm.basedate).add(parseInt(tempRange[i][7]), 'days').format("MM/DD/YYYY");
+                    } else {
+                        newDeals.BillingsEndDate = "";
+                    }
                     newDeals.ProjectName = tempRange[i][8] != null ? tempRange[i][8].trimEnd() : "";
-                    newDeals.TrackerEffectiveStartDate = tempRange[i][9] != null ? tempRange[i][9].trimEnd() : "";
+                    
+                    if (tempRange[i][9] != null && tempRange[i][9] != "") {
+                        newDeals.TrackerEffectiveStartDate = Number(tempRange[i][9]).toString() == 'NaN' ? tempRange[i][9] : moment(vm.basedate).add(parseInt(tempRange[i][9]), 'days').format("MM/DD/YYYY");
+                    } else {
+                        newDeals.TrackerEffectiveStartDate = "";
+                    }
                     newDeals.AdditionalTermsAndConditions = tempRange[i][10] != null ? tempRange[i][10].trimEnd() : "";
                     vm.inValidBulkPriceUpdate.push(newDeals);
                 }
@@ -266,30 +293,61 @@
             }
         });
 
+        vm.ValidateDateColumns = function (returnData) {
+            var DealDate;
+            for (var i = 0; i < returnData.length; i++) {
+                DealDate = moment(returnData[i].DealStartDate).format("MM/DD/YYYY");
+                if (moment(DealDate, "MM/DD/YYYY", true).isValid())
+                    returnData[i].DealStartDate = DealDate;
+
+                DealDate = moment(returnData[i].DealEndDate).format("MM/DD/YYYY");
+                if (moment(DealDate, "MM/DD/YYYY", true).isValid())
+                    returnData[i].DealEndDate = DealDate;
+
+                DealDate = moment(returnData[i].BillingsStartDate).format("MM/DD/YYYY");
+                if (moment(DealDate, "MM/DD/YYYY", true).isValid())
+                    returnData[i].BillingsStartDate = DealDate;
+
+                DealDate = moment(returnData[i].BillingsEndDate).format("MM/DD/YYYY");
+                if (moment(DealDate, "MM/DD/YYYY", true).isValid())
+                    returnData[i].BillingsEndDate = DealDate;
+
+                DealDate = moment(returnData[i].TrackerEffectiveStartDate).format("MM/DD/YYYY");
+                if (moment(DealDate, "MM/DD/YYYY", true).isValid())
+                    returnData[i].TrackerEffectiveStartDate = DealDate;
+            }
+
+            return returnData;
+        }
+
         vm.LoadDataToSpreadsheet = function () {
 
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Description");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[4]).find("div").html("ECAP Price");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[6]).find("div").html("Ceiling Volume");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[8]).find("div").html("Deal Start Date");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[10]).find("div").html("Deal End Date");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[12]).find("div").html("Billings Start Date");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[14]).find("div").html("Billings End Date");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[16]).find("div").html("Project Name");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[18]).find("div").html("Tracker Effective Date");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[20]).find("div").html("Additional Terms");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[22]).find("div").html("Deal stage");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[24]).find("div").html("Update Status");
-            $($("#spreadsheetUnifyDeals .k-spreadsheet-column-header").find("div")[26]).find("div").html("Error Messages");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Description");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[4]).find("div").html("ECAP Price");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[6]).find("div").html("Ceiling Volume");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[8]).find("div").html("Deal Start Date");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[10]).find("div").html("Deal End Date");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[12]).find("div").html("Billings Start Date");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[14]).find("div").html("Billings End Date");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[16]).find("div").html("Project Name");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[18]).find("div").html("Tracker Effective Date");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[20]).find("div").html("Additional Terms");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[22]).find("div").html("Deal stage");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[24]).find("div").html("Update Status");
+            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[26]).find("div").html("Error Messages");
 
 
             var sheet = vm.spreadsheet.activeSheet();
             sheet.range(kendo.spreadsheet.SHEETREF).clear();
-            sheet.range("A1:N" + vm.SpreadSheetRowsCount).wrap(true);
+            sheet.range("L1:N" + vm.SpreadSheetRowsCount).wrap(true);
+            
             sheet.setDataSource(vm.inValidBulkPriceUpdate, ["DealId", "DealDesc", "EcapPrice", "Volume", "DealStartDate", "DealEndDate", "BillingsStartDate", "BillingsEndDate", "ProjectName", "TrackerEffectiveStartDate", "AdditionalTermsAndConditions", "DealStage", "UpdateStatus", "ValidationMessages"]);
+
             //Auto header will be created as 1st row. This is not actual data
             sheet.deleteRow(0);
+            //For Disable column
+            //sheet.range("L1:N").enable(false);
 
             sheet.batch(function () {
                 for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
@@ -301,11 +359,16 @@
                         var rowht = height > 1 ? (height) * 15 : 30;
                         sheet.rowHeight(i, rowht);
                         sheet.range("N" + (i + 1)).verticalAlign("top");
+                        sheet.range("N" + (i + 1)).background("#eeeeee").color("#ff0000"); //red
+                    }
+                    if (vm.inValidBulkPriceUpdate[i].UpdateStatus !== undefined && vm.inValidBulkPriceUpdate[i].UpdateStatus !== null && vm.inValidBulkPriceUpdate[i].UpdateStatus !== "") {
+                        sheet.range("M" + (i + 1)).background("#eeeeee").color("#008000"); //Green
+
                     }
                 }
             });
-
-            sheet._rows._count = vm.SpreadSheetRowsCount; 
+            sheet.range("L:N").background("#eeeeee");
+            sheet._rows._count = vm.SpreadSheetRowsCount;
 
         }
 
@@ -349,24 +412,55 @@
                     }
 
                     if (vm.inValidBulkPriceUpdate[i].DealId !== "0" || vm.inValidBulkPriceUpdate[i].DealId !== "") {
-                        if (typeof (vm.inValidBulkPriceUpdate[i].DealId) !== "number") {
-                            rowMsg = rowMsg + "Deal ID should be number|";
-                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        if (!Number.isInteger(vm.inValidBulkPriceUpdate[i].DealId)) {
+                            rowMsg = rowMsg + "Deal ID must be a valid number|";
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));                            
                         }
                     }
                     if (vm.inValidBulkPriceUpdate[i].EcapPrice !== "0" && vm.inValidBulkPriceUpdate[i].EcapPrice !== '') {
-                        if (typeof (vm.inValidBulkPriceUpdate[i].EcapPrice) !== "number") {
-                            rowMsg = rowMsg + "ECAP Price should be number|";
+                        if (Number(vm.inValidBulkPriceUpdate[i].EcapPrice).toString() == 'NaN') {
+                            rowMsg = rowMsg + "ECAP Price must be valid number|";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
-
                     if (vm.inValidBulkPriceUpdate[i].Volume !== "0" && vm.inValidBulkPriceUpdate[i].Volume !== '') {
-                        if (typeof (vm.inValidBulkPriceUpdate[i].Volume) !== "number") {
-                            rowMsg = rowMsg + "Ceiling Volume should be number|";
+                        if (!Number.isInteger(vm.inValidBulkPriceUpdate[i].Volume)) {
+                            rowMsg = rowMsg + "Volume must be a valid non-decimal number. |";
                             sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
-                    }                    
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].DealStartDate !== '') {
+                        var DealStartDate = moment(vm.inValidBulkPriceUpdate[i].DealStartDate).format("MM/DD/YYYY");
+                        if (!moment(DealStartDate, "MM/DD/YYYY", true).isValid()) {
+                            rowMsg = rowMsg + "Deal Start Date must be in ''MM/DD/YYYY'' format|";
+                            sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].DealEndDate !== '') {
+                        var DealEndDate = moment(vm.inValidBulkPriceUpdate[i].DealEndDate).format("MM/DD/YYYY");
+                        if (!moment(DealEndDate, "MM/DD/YYYY", true).isValid()) {
+                            rowMsg = rowMsg + "Deal End Date must be in ''MM/DD/YYYY'' format|";
+                            sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                    }
+
+
+                    if (vm.inValidBulkPriceUpdate[i].BillingsStartDate !== '' && !moment(vm.inValidBulkPriceUpdate[i].BillingsStartDate, "MM/DD/YYYY", true).isValid()) {
+                        rowMsg = rowMsg + "Billing StartDate must be in ''MM/DD/YYYY'' format|";
+                        sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].BillingsEndDate !== '' && !moment(vm.inValidBulkPriceUpdate[i].BillingsEndDate, "MM/DD/YYYY", true).isValid()) {
+                        rowMsg = rowMsg + "Billing End Date must be in ''MM/DD/YYYY'' format|";
+                        sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
+
+                    if (vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate !== '' && !moment(vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate, "MM/DD/YYYY", true).isValid()) {
+                        rowMsg = rowMsg + "Tracker Effective Start Date must be in ''MM/DD/YYYY'' format|";
+                        sheet.range("J" + row + ":J" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                    }
 
                     if (rowMsg != '') {
                         vm.count += 1;
@@ -384,11 +478,10 @@
                         sheet.rowHeight(i, rowht);
                         sheet.range("N" + row).value(msg);
                         sheet.range("N" + row).verticalAlign("top");
+                        sheet.range("N" + row).color("#ff0000"); //red
                     }
                 }
             });
-           
-
             vm.IsSpreadSheetEdited = false;
         }
 

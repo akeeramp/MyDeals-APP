@@ -13,21 +13,16 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
 
     vm.screenTitle = "Bulk Price Uploads - Deals";
     vm.spinnerMessageHeader = "Bulk Price Uploads Deals";
-    vm.spinnerMessageDescription = "Please wait while bulk pricing deal date is imported..";
+    vm.spinnerMessageDescription = "Please wait while bulk pricing deal data is imported..";
 
     vm.HasBulkUpdateAccess = ((window.usrRole == "SA" && !window.isCustomerAdmin) || window.isDeveloper);
 
     vm.isBusyShowFunFact = true;
-    vm.validUnifyDeals = [];
-    vm.inValidUnifyDeals = [];
-    vm.duplicateGlobalIds = [];
-    vm.duplicateGlobalNames = [];
 
     vm.SpreadSheetRowsCount = 0;
     vm.IsSpreadSheetEdited = true;
     var hasUnSavedFiles = false;
     var hasFiles = false;
-    var uploadSuccessCount = 0;
     var uploadSuccessCount = 0;
     var uploadErrorCount = 0;
     vm.bulkProceUploadValidationSummary = [];
@@ -89,8 +84,6 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
         }
         else (vm.bulkProceUploadValidationSummary.length > 0)
         {
-            //alert("Populate sheet and close dialog down");
-            //vm.ValidateBulkPriceUpdatesSheet();
             $uibModalInstance.close(vm.bulkProceUploadValidationSummary);
         }
     }
@@ -112,7 +105,7 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
     }
 
     vm.uploadFile = function (e) { // Load 1
-        vm.spinnerMessageDescription = "Please wait while the Bulk Price Updates data is loaded..";
+        vm.spinnerMessageDescription = "Please wait while the Deal data is loaded..";
         $(".k-upload-selected").click();
     }
 
@@ -132,83 +125,7 @@ function BulkPriceUpdateModelController($rootScope, $location, PrimeCustomersSer
         }
     };
 
-
-    //vm.sheets = [{ name: "Sheet1" }];
-    //$scope.$on("kendoWidgetCreated", function (event, widget) {
-    //    // the event is emitted for every widget; if we have multiple
-    //    // widgets in this controller, we need to check that the event
-    //    // is for the one we're interested in.
-    //    if (widget === vm.spreadsheet) {
-    //        var sheets = vm.spreadsheet.sheets();
-    //        var index = 0;
-    //        vm.spreadsheet.activeSheet(sheets[0]);
-    //        var sheet = vm.spreadsheet.activeSheet();
-
-    //        sheet.columnWidth(0, 70);
-    //        sheet.columnWidth(1, 100);
-    //        sheet.columnWidth(2, 150);
-    //        sheet.columnWidth(3, 100);
-    //        sheet.columnWidth(4, 150);
-    //        sheet.columnWidth(5, 150);
-    //        sheet.columnWidth(6, 120);
-    //        sheet.columnWidth(7, 150);
-    //        sheet.columnWidth(8, 120);
-    //        sheet.columnWidth(9, 150);
-    //        sheet.columnWidth(10, 260);
-    //        index = 11;
-
-    //        for (var i = index; i < 50; i++)
-    //            sheet.hideColumn(i);
-
-    //        vm.LoadDataToSpreadsheet();
-    //        if (vm.backendValidation) {
-    //            var sheet = vm.spreadsheet.activeSheet();
-    //            sheet.range("A1:K" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
-    //            sheet.range("A1:A" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(true, '', true));
-    //            sheet.batch(function () {
-    //                for (var i = 0; i < vm.bulkProceUploadValidationSummary.inValidRecords.length; i++) {
-    //                    var lengthOfMsg = vm.bulkProceUploadValidationSummary.inValidRecords[i].ERR_MSG.length;
-    //                    var height = 1;
-    //                    if (Math.ceil(lengthOfMsg / 40) > 1)
-    //                        height = height + Math.ceil(lengthOfMsg / 40) - 1;
-    //                    var rowht = height > 1 ? height * 15 : 30;
-    //                    sheet.rowHeight(i, rowht);
-    //                    sheet.range("K" + (i + 1)).verticalAlign("top");
-    //                }
-    //            });
-    //        }
-
-    //        alert("kendoWidgetCreated");
-    //        //vm.ValidateBulkPriceUpdatesSheet();
-    //    }
-    //});
-
-    //vm.LoadDataToSpreadsheet = function () {
-    //    $('.modal-dialog').css("width", "1530px");
-    //    $('#spreadsheetBulkPriceUpdates').css("width", "1500px");
-    //    $('#bulkPriceUpdateModalWindow').css("max-height", "500px");
-
-    //    var sheet = vm.spreadsheet.activeSheet();
-    //    sheet.range(kendo.spreadsheet.SHEETREF).clear();
-    //    sheet.range("A1:J" + vm.SpreadSheetRowsCount).wrap(true);
-    //    sheet.setDataSource(vm.bulkProceUploadValidationSummary, ["DealId", "DealDesc", "EcapPrice", "Volume", "DealStartDate", "DealEndDate", "BillingsStartDate", "BillingsEndDate", "ProjectName", "AdditionalTermsAndConditions"]);
-    //    //Auto header will be created as 1st row. This is not actual data
-    //    sheet.deleteRow(0);
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Description");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[4]).find("div").html("ECAP Price");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[6]).find("div").html("Ceiling Volume");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[8]).find("div").html("Deal Start Date");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[10]).find("div").html("Deal End Date");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[12]).find("div").html("Billings Start Date");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[14]).find("div").html("Billings End Date");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[16]).find("div").html("Project Name");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[18]).find("div").html("Additional Terms");
-    //    $($("#spreadsheetBulkPriceUpdates .k-spreadsheet-column-header").find("div")[20]).find("div").html("Error Messages");
-
-    //    sheet._rows._count = vm.bulkProceUploadValidationSummary.inValidRecords.length;
-    //}
-
+      
     vm.CloseWindow = function () {
         $uibModalInstance.close();
     };
