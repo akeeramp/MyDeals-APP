@@ -20,6 +20,7 @@ import { forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
+import { contractDetailsService } from "../contractDetails/contractDetails.service"
 
 @Component({
     selector: 'deal-editor',
@@ -30,6 +31,7 @@ import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSel
 export class dealEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
+        private contractDetailsSvc: contractDetailsService,
         private loggerService: logger, private datePipe: DatePipe,
         protected dialog: MatDialog) {
     }
@@ -113,7 +115,7 @@ export class dealEditorComponent {
     getWipDealData() {
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
-                this.voltLength = response.WIP_DEAL.length
+                this.voltLength = response.WIP_DEAL.length;
                 this.gridResult = response.WIP_DEAL;
                 this.setWarningDetails();
                 this.applyHideIfAllRules();
@@ -212,6 +214,7 @@ export class dealEditorComponent {
                 dataItem._behaviors.isDirty = {};
             dataItem._behaviors.isDirty[field] = true;
             dataItem["_dirty"] = true;
+            this.dirty = true;
         }
     }
     
@@ -347,6 +350,7 @@ export class dealEditorComponent {
             if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
                 || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
                 || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
+                if (args.dataItem[args.column.field] != undefined && args.dataItem[args.column.field] != null && args.dataItem[args.column.field] != "" && args.dataItem[args.column.field] != "Invalid date")
                 args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
             if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
                 && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
@@ -398,6 +402,7 @@ export class dealEditorComponent {
 
     SaveDealData() {
         this.isWarning = false;
+        this.isDatesOverlap = false;
         this.isDataLoading = true;
         this.spinnerMessageHeader = "Saving...";
         this.spinnerMessageDescription = "Saving Deal Information";
@@ -420,16 +425,15 @@ export class dealEditorComponent {
             this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).subscribe((response: any) => {
                 if (response != undefined && response != null && response.Data != undefined && response.Data != null
                     && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
-                    this.gridResult = response.Data.WIP_DEAL;
-                    this.setWarningDetails();
-                    this.gridData = process(this.gridResult, this.state);
+                    this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
                 }
-                this.isDataLoading = false;
+                this.getWipDealData();
+                this.dirty = false;
             },
-                (error) => {
-                    this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", error);
-                    this.isDataLoading = false;
-                });
+            (error) => {
+                this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", error);
+                this.isDataLoading = false;
+            });
         }
     }
 
@@ -477,6 +481,24 @@ export class dealEditorComponent {
     }
     Close() {
         this.isWarning = false;
+        this.isDatesOverlap = false;
+    }
+
+    refreshContractData(id, ptId) {
+        this.contractDetailsSvc
+            .readContract(this.contractData.DC_ID)
+            .subscribe((response: Array<any>) => {
+                this.contractData = PTE_Common_Util.initContract(this.UItemplate, response[0]);
+                this.contractData.CUST_ACCNT_DIV_UI = "";
+
+                // if the current strategy was changed, update it
+                if (id != undefined && this.in_Ps_Id === id) {
+                    this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], id);
+                    if (id != undefined && this.in_Pt_Id === ptId && this.curPricingStrategy != undefined) {
+                        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], ptId);
+                    }
+                }
+            });
     }
 
     ngOnInit() {

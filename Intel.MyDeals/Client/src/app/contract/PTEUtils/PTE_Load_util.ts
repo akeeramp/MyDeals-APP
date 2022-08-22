@@ -3,6 +3,7 @@ import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PRC_TBL_Model_Column } from '../pricingTableEditor/handsontable.interface';
+import Handsontable from 'handsontable';
 export class PTE_Load_Util {
     static getRulesForDE(objSetTypeCd) {
         return DE_Load_Util.getRules(objSetTypeCd);
@@ -605,5 +606,55 @@ export class PTE_Load_Util {
     }
     static getLookBackPeriod(data) {
         return DE_Load_Util.getLookBackPeriod(data);
+    }
+    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable : any) {
+        //logic for making by defaul all the cell except PTR_USER_PRD readonly
+        const cellProperties = {};
+        //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
+        if (hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
+            if (prop != 'PTR_USER_PRD') {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        else {
+            //column config has readonly property for certain column persisting that assigning for other
+            if (_.findWhere(columnConfig, { data: prop }).readOnly) {
+                cellProperties['readOnly'] = true;
+            }
+            else {
+                cellProperties['readOnly'] = false;
+            }
+        }
+        //voltier deal making start vol disable for tier except 1
+        if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+            cellProperties['readOnly'] = true;
+        }
+        if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
+            var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+            if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+            }
+        }
+        if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() !== 'cash') {
+            if (prop == 'SETTLEMENT_PARTNER') {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
+            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        if (curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+            if (prop == "RESET_VOLS_ON_PERIOD") {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        return cellProperties;
     }
 }

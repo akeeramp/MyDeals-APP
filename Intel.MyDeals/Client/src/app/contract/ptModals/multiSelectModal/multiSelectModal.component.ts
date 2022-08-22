@@ -122,7 +122,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             if (this.ismrktSeg) {
                 var selectedList = this.checkedKeys.join(",");
                 //In Market Segment Modal, selected 'All Direct Market Segments' then checkedKey is only 'All Direct Market Segments'
-                if (_.indexOf(this.checkedKeys, 'All Direct Market Segments') > 0) {
+                if ((_.indexOf(this.checkedKeys, 'All Direct Market Segments') > 0) || (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0 && this.checkedKeys.length == 1)) {
                     this.checkedKeys = ['All Direct Market Segments'];
                 }
                 else {

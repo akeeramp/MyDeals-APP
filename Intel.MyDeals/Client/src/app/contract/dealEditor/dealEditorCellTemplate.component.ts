@@ -44,6 +44,7 @@ export class dealEditorCellTemplateComponent {
         }
         if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
             || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
+            if (data[field] == "Invalid date") data[field] = "";
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
         }
@@ -109,6 +110,8 @@ export class dealEditorCellTemplateComponent {
                 data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
             }
             if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
+                if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
+                if (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")
                 data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
             }
         }
@@ -174,6 +177,7 @@ export class dealEditorCellTemplateComponent {
     uiStartDateWrapper(passedData, field) {
         var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "START_DT" || field == "LAST_REDEAL_DT") {
+            if (data[field] == "Invalid date") data[field] = "";
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
         }
@@ -182,6 +186,7 @@ export class dealEditorCellTemplateComponent {
     uiControlEndDateWrapper(passedData, field) {
         var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "END_DT" || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT") {
+            if (data[field] == "Invalid date") data[field] = "";
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
         }

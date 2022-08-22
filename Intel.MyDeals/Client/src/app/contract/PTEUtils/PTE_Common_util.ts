@@ -220,4 +220,14 @@ export class PTE_Common_Util {
         }
         return PTRResult;
     }
+
+    static initContract(tempalates, contractData) {
+        // New contract template
+        const c = tempalates["ObjectTemplates"].CNTRCT.ALL_TYPES;
+        // contract exists
+        if (contractData !== null && contractData !== undefined) {
+            return contractData;
+        }
+        return c;
+    }
 }

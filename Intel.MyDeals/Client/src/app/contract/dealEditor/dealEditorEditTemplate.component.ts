@@ -86,19 +86,19 @@ export class dealEditorEditTemplateComponent {
     updateTierAttributes(dataItem: any, field: string, row: number) {
         if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
             if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field]["10___" + row] == "9999999999.99")) {
-                dataItem[field]["10___" + row] = "9999999999.99";
+                dataItem[field]["10___" + row] = 9999999999.99;
             }
             else if ((dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
                 dataItem[field]["10___" + row] = "Unlimited";
             }
         }
         if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field]["10___" + row] === null) {
-            dataItem[field]["10___" + row] = "0";
+            dataItem[field]["10___" + row] = 0;
         }
         if (field === "DENSITY_RATE") {
             for (var key in dataItem[field]) {
                 if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
-                    dataItem[field][key] = "0";
+                    dataItem[field][key] = 0;
                 }
             }
         }
@@ -107,7 +107,7 @@ export class dealEditorEditTemplateComponent {
             //if there is a next row/tier
             if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
                 if (dataItem[field]["10___" + row] === "Unlimited") {
-                    dataItem["STRT_VOL"]["10___" + (row + 1)] = "0";
+                    dataItem["STRT_VOL"]["10___" + (row + 1)] = 0;
                 } else {
                     //if end vol is a number, then set next start vol to that number + 1
                     dataItem["STRT_VOL"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + 1;
@@ -121,7 +121,7 @@ export class dealEditorEditTemplateComponent {
             //if there is a next row/tier
             if (!!dataItem["STRT_REV"]["10___" + (row + 1)]) {
                 if (dataItem[field]["10___" + row] === "9999999999.99") { // Was "Unlimited"
-                    dataItem["STRT_REV"]["10___" + (row + 1)] = "0";
+                    dataItem["STRT_REV"]["10___" + (row + 1)] = 0;
                 } else {
                     //if end vol is a number, then set next start vol to that number + .01 (a penny)
                     dataItem["STRT_REV"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .01).toFixed(2);
@@ -135,7 +135,7 @@ export class dealEditorEditTemplateComponent {
             //if there is a next row/tier
             if (!!dataItem["STRT_PB"]["10___" + (row + 1)]) {
                 if (dataItem[field]["10___" + row] === "Unlimited") {
-                    dataItem["STRT_PB"]["10___" + (row + 1)] = "0";
+                    dataItem["STRT_PB"]["10___" + (row + 1)] = 0;
                 } else {
                     //if end pb is a number, then set next start pb to that number + 0.001
                     dataItem["STRT_PB"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .001).toFixed(3);;

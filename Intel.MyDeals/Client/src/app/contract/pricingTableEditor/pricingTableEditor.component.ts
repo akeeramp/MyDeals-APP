@@ -317,63 +317,14 @@ export class pricingTableEditorComponent implements OnChanges {
             },
             mergeCells: mergCells,
             cells: (row: number, col: number, prop: string) => {
-                return this.disableCells(this.hotTable, row, col, prop)
+                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable)
             },
             cell: cellComments,
             readOnlyCellClassName: 'readonly-cell',
             nestedHeaders: nestedHeaders
         });
     }
-    disableCells(hotTable: Handsontable, row: number, col: number, prop: any) {
-        //logic for making by defaul all the cell except PTR_USER_PRD readonly
-        const cellProperties = {};
-        //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
-        if (this.hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || this.hotTable.getDataAtRowProp(row, 'DC_ID') == null || this.hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
-            if (prop != 'PTR_USER_PRD') {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        else {
-            //column config has readonly property for certain column persisting that assigning for other
-            if (_.findWhere(this.ColumnConfig, { data: prop }).readOnly) {
-                cellProperties['readOnly'] = true;
-            }
-            else {
-                cellProperties['readOnly'] = false;
-            }
-        }
-        //voltier deal making start vol disable for tier except 1
-        if (prop == 'STRT_VOL' && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') && this.hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
-            cellProperties['readOnly'] = true;
-        }
-        if (this.hotTable.getDataAtRowProp(row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-            var behaviors = this.hotTable.getDataAtRowProp(row, '_behaviors');
-            if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
-                    cellProperties['readOnly'] = true;
-                }
-                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-                    cellProperties['readOnly'] = true;
-                }
-            }
-        }
-        if (this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || this.hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() !== 'cash') {
-            if (prop == 'SETTLEMENT_PARTNER') {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        if (this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (this.hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
-            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        if (this.curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || this.curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
-            if (prop == "RESET_VOLS_ON_PERIOD") {
-                cellProperties['readOnly'] = true;
-            }
-        }
-        return cellProperties;
-    }
+    
     //functions to identify cell change
     identfyUniqChanges(changes: Array<any>, source: any): Array<any> {
         //for tier when drag/paste PTR_USER_PRD changes are based on num of tier and those many rows will come as changes but we need that as uniq change

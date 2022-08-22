@@ -548,7 +548,7 @@ export class dealToolsComponent{
             });
     }
 
-    ngOnInit(){
+    ngOnChanges(){
         this.loadDealTools();
     }
 }

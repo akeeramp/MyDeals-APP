@@ -147,10 +147,10 @@ export class DE_Validation_Util {
                     }
                 }
             }
-            if (item["ON_ADD_DT"] !== undefined && item["ON_ADD_DT"] !== null && item["ON_ADD_DT"] !== "") item["ON_ADD_DT"] = moment(item["ON_ADD_DT"]).format("MM/DD/YYYY");
-            if (item["REBATE_BILLING_START"] !== undefined && item["REBATE_BILLING_START"] !== null && item["REBATE_BILLING_START"] !== "") item["REBATE_BILLING_START"] = moment(item["REBATE_BILLING_START"]).format("MM/DD/YYYY");
-            if (item["REBATE_BILLING_END"] !== undefined && item["REBATE_BILLING_END"] !== null && item["REBATE_BILLING_END"] !== "") item["REBATE_BILLING_END"] = moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
-            if (item["LAST_REDEAL_DT"] !== undefined && item["LAST_REDEAL_DT"] !== null && item["LAST_REDEAL_DT"] !== "") item["LAST_REDEAL_DT"] = moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
+            if (item["ON_ADD_DT"] !== undefined) item["ON_ADD_DT"] = moment(item["ON_ADD_DT"]).format("MM/DD/YYYY");
+            if (item["REBATE_BILLING_START"] !== undefined) item["REBATE_BILLING_START"] = moment(item["REBATE_BILLING_START"]).format("MM/DD/YYYY");
+            if (item["REBATE_BILLING_END"] !== undefined) item["REBATE_BILLING_END"] = moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
+            if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
     }
 }

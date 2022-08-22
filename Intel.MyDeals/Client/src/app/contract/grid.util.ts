@@ -259,7 +259,7 @@ export class GridUtil {
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
+        tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '"';
         if (passedData[field] != undefined && passedData[field] != null)
             tmplt += '    <div class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
         tmplt += '</div>';

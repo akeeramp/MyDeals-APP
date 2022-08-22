@@ -59,8 +59,12 @@ export class DE_Common_Util {
         }
         if (field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END"
             || field == "START_DT" || field == "LAST_REDEAL_DT" || field == "END_DT"
-            || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT" || field == "ON_ADD_DT")
-            dataItem[field] = new Date(dataItem[field]);
+            || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT" || field == "ON_ADD_DT") {
+            if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "" && dataItem[field] != "Invalid date")
+                dataItem[field] = new Date(dataItem[field]);
+            else if (dataItem[field] == "Invalid date")
+                dataItem[field] = "";
+        }
         if (field == "TIER_NBR") {
             var tiers = dataItem.TIER_NBR;
             for (var key in tiers) {
