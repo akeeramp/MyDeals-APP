@@ -58,7 +58,7 @@
     if (isCustomerAdmin) { extraUserPrivsDetail.Add("Accounts Administrator"); }
     if (usrRole == "SA" && !isRealSA) { usrRoleExtension = "Account"; } // Mark neutered SA role because this is a customer admin
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("System Tester"); }
-    if (isDeveloper) { extraUserPrivs += "B"; extraUserPrivsDetail.Add("Bulk Pricing Admin"); }
+    if (isBulkPriceAdmin) { extraUserPrivs += "B"; extraUserPrivsDetail.Add("Bulk Pricing Admin"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("System Developer"); }
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD"; } // We practice SAFE CODING on this project
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
