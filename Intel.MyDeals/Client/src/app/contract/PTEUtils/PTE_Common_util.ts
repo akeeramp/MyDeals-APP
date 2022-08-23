@@ -4,15 +4,15 @@ import * as _ from 'underscore';
 
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 export class PTE_Common_Util {
-    private static hotTable:Handsontable
-    constructor(hotTable:Handsontable){
-        PTE_Common_Util.hotTable=hotTable;
+    private static hotTable: Handsontable
+    constructor(hotTable: Handsontable) {
+        PTE_Common_Util.hotTable = hotTable;
     }
-    static getFullNameOfProduct (item, prodName) {
+    static getFullNameOfProduct(item, prodName) {
         if (item.PRD_ATRB_SID > 7005) return prodName;
         return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
     }
-    static mapTieredWarnings (dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
+    static mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
         if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
             if (dataItem._behaviors.validMsg[atrbName] != null) {
                 try {
@@ -135,15 +135,15 @@ export class PTE_Common_Util {
         }
         return null;
     }
-    static setBehaviors(item:any, elem?:string) {
+    static setBehaviors(item: any, elem?: string) {
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
         if (!item._behaviors.isError) item._behaviors.isError = {};
         if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
         if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
     }
-    static setBehaviorsValidMessage(item:any, elem:string, elemLabel:string, cond:string){
-        if (elem === 'ECAP_PRICE' && cond=='equal-zero') {
+    static setBehaviorsValidMessage(item: any, elem: string, elemLabel: string, cond: string) {
+        if (elem === 'ECAP_PRICE' && cond == 'equal-zero') {
             item._behaviors.isRequired[elem] = true;
             item._behaviors.isError[elem] = true;
             item._behaviors.validMsg[elem] = `${elemLabel} must be positive number`;
@@ -153,44 +153,44 @@ export class PTE_Common_Util {
         return JSON.parse(JSON.stringify(obj));
     }
 
-    static getPTEGenerate(columns:Array<any>,curPricingTable:any,rownumber?:number): Array<any> {
+    static getPTEGenerate(columns: Array<any>, curPricingTable: any, rownumber?: number): Array<any> {
         let PTRResult: Array<any> = [];
         if(rownumber){
-            let obj={}
-            _.each(columns,(val) => {
+            let obj = {}
+            _.each(columns, (val) => {
                 if (val.data) {
                     obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : null;
                 }
             });
             PTRResult.push(obj);
         }
-        else{
+        else {
             let PTRCount = this.hotTable.countRows();
             for (let i = 0; i < PTRCount; i++) {
                 let obj = {};
                 if (!this.hotTable.isEmptyRow(i)) {
                     //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
-                     _.each(columns,(val) => {
+                    _.each(columns, (val) => {
                         if (val.data) {
                             obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
                         }
                     });
                     PTRResult.push(obj);
                 }
-                else{
-                  //this means after empty row nothing to be added
+                else {
+                    //this means after empty row nothing to be added
                     break;
                 }
             }
             //incase of tier places the NUM_OF_TIERS
-            if(curPricingTable.OBJ_SET_TYPE_CD=='VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD=='FLEX' || curPricingTable.OBJ_SET_TYPE_CD=='REV_TIER'){
-                const uniqDCID=_.uniq(PTRResult,'DC_ID');
-                _.each(uniqDCID,itmsDC=>{
-                    let DCPTR=_.where(PTRResult,{DC_ID:itmsDC.DC_ID});
-                    let selTier=_.max(DCPTR,(itm:any)=>{return itm.TIER_NBR;});
-                    _.each(PTRResult,(item)=>{
-                        if(item.DC_ID==itmsDC.DC_ID){
-                            item.NUM_OF_TIERS=selTier.TIER_NBR;
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
+                const uniqDCID = _.uniq(PTRResult, 'DC_ID');
+                _.each(uniqDCID, itmsDC => {
+                    let DCPTR = _.where(PTRResult, { DC_ID: itmsDC.DC_ID });
+                    let selTier = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                    _.each(PTRResult, (item) => {
+                        if (item.DC_ID == itmsDC.DC_ID) {
+                            item.NUM_OF_TIERS = selTier.TIER_NBR;
                         }
                     });
                 });
@@ -214,8 +214,9 @@ export class PTE_Common_Util {
         let PTRgenericAttr: Array<any>;
         PTRgenericAttr = ["IS_HYBRID_PRC_STRAT"];
         for (var i = 0; i < PTRgenericAttr.length; i++) {
+            var Attr = PTRgenericAttr[i];
             for (var j = 0; j < PTRResult.length; j++) {
-                PTRResult[j][PTRgenericAttr[i]] = curPricingTable[PTRgenericAttr[i]] != null ? curPricingTable[PTRgenericAttr[i]] : null;
+                PTRResult[j][Attr] = curPricingTable[Attr] != null ? curPricingTable[Attr] : null;
             }
         }
         return PTRResult;

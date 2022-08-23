@@ -124,6 +124,24 @@ export class PTE_Save_Util {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
             }
+            if (item["START_DT"] == null && item["TIER_NBR"] == "1" && !isTenderContract) {
+                item["START_DT"] = contractData.START_DT;
+            }
+            if (item["END_DT"] == null && item["TIER_NBR"] == "1" && !isTenderContract) {
+                item["END_DT"] = contractData.END_DT;
+            }
+            if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && item["TIER_NBR"] == "1" ) {
+                item._behaviors.isError['PROD_INCLDS'] = true;
+                item._behaviors.validMsg['PROD_INCLDS'] = "Filed is required";
+            }
+            if ((item["REBATE_TYPE"] == null || item["REBATE_TYPE"] == undefined || item["REBATE_TYPE"] == '') && item["TIER_NBR"] == "1") {
+                item._behaviors.isError['REBATE_TYPE'] = true;
+                item._behaviors.validMsg['REBATE_TYPE'] = "Filed is required";
+            }
+            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && item["TIER_NBR"] == "1") {
+                item._behaviors.isError['GEO_COMBINED'] = true;
+                item._behaviors.validMsg['GEO_COMBINED'] = "Filed is required";
+            }                        
         });
 
         return PTR;

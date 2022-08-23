@@ -446,43 +446,46 @@ export class PTE_CellChange_Util {
    }
    /* AR settlement change where functions starts here */
     static autoFillARSet(items:Array<any>,contractData:any){
-        _.each(items,(item) =>{
-        let colSPIdx=_.findWhere(this.hotTable.getCellMetaAtRow(item.row),{prop:'SETTLEMENT_PARTNER'}).col;
-        let selCell:CellSettings= {row:item.row,col:colSPIdx,editor:'dropdown',className:'',comment:{value:'',readOnly:true}};
-        let cells=this.hotTable.getSettings().cell;
-        if(item.new && item.new !='' && item.new.toLowerCase() !='cash'){
-            this.hotTable.setDataAtRowProp(item.row,'SETTLEMENT_PARTNER', '','no-edit');
-            //check object present 
-            let obj=_.findWhere(cells,{row:item.row,col:colSPIdx})
-            if(obj){
-            obj.editor=false;
-            obj.className='readonly-cell';
-            obj.comment.value='Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
+        _.each(items, (item) => {
+            //For Multitier do following check only on First row of the Deal
+            let hotTableRowAttr = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' });
+            if (hotTableRowAttr != undefined && hotTableRowAttr != null) {
+                let colSPIdx = hotTableRowAttr.col;
+                let selCell: CellSettings = { row: item.row, col: colSPIdx, editor: 'dropdown', className: '', comment: { value: '', readOnly: true } };
+                let cells = this.hotTable.getSettings().cell;
+                if (item.new && item.new != '' && item.new.toLowerCase() != 'cash') {
+                    this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                    //check object present 
+                    let obj = _.findWhere(cells, { row: item.row, col: colSPIdx })
+                    if (obj) {
+                        obj.editor = false;
+                        obj.className = 'readonly-cell';
+                        obj.comment.value = 'Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
+                    }
+                    else {
+                        selCell.editor = false;
+                        selCell.className = 'readonly-cell';
+                        selCell.comment.value = 'Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
+                        cells.push(selCell);
+                    }
+                    this.hotTable.updateSettings({ cell: cells });
+                }
+                else {
+                    this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
+                    //check object present 
+                    let obj = _.findWhere(cells, { row: item.row, col: colSPIdx })
+                    if (obj) {
+                        obj.editor = 'dropdown';
+                        obj.className = '';
+                        obj.comment.value = '';
+                    }
+                    else {
+                        cells.push(selCell);
+                    }
+                    this.hotTable.updateSettings({ cell: cells });
+                }
             }
-            else{
-            selCell.editor=false;
-            selCell.className='readonly-cell';
-            selCell.comment.value='Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
-            cells.push(selCell);
-            }
-            this.hotTable.updateSettings({cell:cells});
-        }
-        else{
-            this.hotTable.setDataAtRowProp(item.row,'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER,'no-edit');
-            //check object present 
-            let obj=_.findWhere(cells,{row:item.row,col:colSPIdx})
-            if(obj){
-            obj.editor='dropdown';
-            obj.className='';
-            obj.comment.value='';
-            }
-            else{
-            cells.push(selCell);
-            }
-            this.hotTable.updateSettings({cell:cells});
-        }
         });
-
     }
     /* AR settlement change ends here */
     static rowDCID():number {
