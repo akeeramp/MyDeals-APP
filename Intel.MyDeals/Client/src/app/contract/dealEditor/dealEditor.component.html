@@ -1,5 +1,5 @@
 ﻿<loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
-                       [description]="spinnerMessageDescription"></loading-panel-angular>
+                       [description]="spinnerMessageDescription" [isShowFunFact]="true" [msgType]="msgType"></loading-panel-angular>
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>

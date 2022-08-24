@@ -12,7 +12,7 @@
                           (ngModelChange)="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] = $event : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] = $event : in_DataItem[in_Field_Name] = $event"
                           [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                           [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
-                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
+                          [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
                           [autoCorrect]="autoCorrect">
     </kendo-numerictextbox>
 </div>

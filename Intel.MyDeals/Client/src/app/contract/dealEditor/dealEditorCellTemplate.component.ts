@@ -131,7 +131,7 @@ export class dealEditorCellTemplateComponent {
                 numTiers++;
                 var dim = "10___" + numTiers;
                 for (var f = 0; f < this.fields.length; f++) {
-                    if (data[this.fields[f].field][dim] != "Unlimited") {
+                    if (data[this.fields[f].field][dim].toLowerCase() != "unlimited") {
                         if (this.fields[f].format == "number")
                             data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
                         else
@@ -157,7 +157,7 @@ export class dealEditorCellTemplateComponent {
                         }
                     }
                     else if (this.fields[f].field == "STRT_PB" || this.fields[f].field == "END_PB") {
-                        if (data[this.fields[f].field][key] != "Unlimited") {
+                        if (data[this.fields[f].field][key].toLowerCase() != "unlimited") {
                             if (this.fields[f].format == "number")
                                 data[this.fields[f].field][key] = this.decimalPipe.transform(data[this.fields[f].field][key], "1.0-3");
                         }

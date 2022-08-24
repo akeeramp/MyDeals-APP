@@ -69,16 +69,16 @@ export class DE_Common_Util {
             var tiers = dataItem.TIER_NBR;
             for (var key in tiers) {
                 if (dataItem.OBJ_SET_TYPE_CD === 'VOL_TIER' || dataItem.OBJ_SET_TYPE_CD === 'FLEX') {
-                    if (dataItem["STRT_VOL"][key] != "Unlimited")
+                    if (dataItem["STRT_VOL"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_VOL"][key] = parseInt(dataItem["STRT_VOL"][key] || 0);
-                    if (dataItem["END_VOL"][key] != "Unlimited")
+                    if (dataItem["END_VOL"][key].toLowerCase() != "unlimited")
                         dataItem["END_VOL"][key] = parseInt(dataItem["END_VOL"][key] || 0);
                     dataItem["RATE"][key] = parseFloat(dataItem["RATE"][key] || 0);
                 }
                 else if (dataItem.OBJ_SET_TYPE_CD === 'REV_TIER') {
-                    if (dataItem["STRT_REV"][key] != "Unlimited")
+                    if (dataItem["STRT_REV"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_REV"][key] = parseFloat(dataItem["STRT_REV"][key] || 0);
-                    if (dataItem["END_REV"][key] != "Unlimited")
+                    if (dataItem["END_REV"][key].toLowerCase() != "unlimited")
                         dataItem["END_REV"][key] = parseFloat(dataItem["END_REV"][key] || 0);
                     dataItem["INCENTIVE_RATE"][key] = parseFloat(dataItem["INCENTIVE_RATE"][key] || 0);
                 }
@@ -86,9 +86,9 @@ export class DE_Common_Util {
                     for (var i = 0; i < dataItem["NUM_OF_DENSITY"]; i++) {
                         dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = parseFloat(dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] || 0);
                     }
-                    if (dataItem["STRT_PB"][key] != "Unlimited")
+                    if (dataItem["STRT_PB"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_PB"][key] = parseFloat(dataItem["STRT_PB"][key] || 0);
-                    if (dataItem["END_PB"][key] != "Unlimited")
+                    if (dataItem["END_PB"][key].toLowerCase() != "unlimited")
                         dataItem["END_PB"][key] = parseFloat(dataItem["END_PB"][key] || 0);
                 }
             }
@@ -133,16 +133,16 @@ export class DE_Common_Util {
             var tiers = dataItem.TIER_NBR;
             for (var key in tiers) {
                 if (dataItem.OBJ_SET_TYPE_CD === 'VOL_TIER' || dataItem.OBJ_SET_TYPE_CD === 'FLEX') {
-                    if (dataItem["STRT_VOL"][key] != "Unlimited")
+                    if (dataItem["STRT_VOL"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_VOL"][key] = dataItem["STRT_VOL"][key].toString();
-                    if (dataItem["END_VOL"][key] != "Unlimited")
+                    if (dataItem["END_VOL"][key].toLowerCase() != "unlimited")
                         dataItem["END_VOL"][key] = dataItem["END_VOL"][key].toString();
                     dataItem["RATE"][key] = dataItem["RATE"][key].toString();
                 }
                 else if (dataItem.OBJ_SET_TYPE_CD === 'REV_TIER') {
-                    if (dataItem["STRT_REV"][key] != "Unlimited")
+                    if (dataItem["STRT_REV"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_REV"][key] = dataItem["STRT_REV"][key].toString();
-                    if (dataItem["END_REV"][key] != "Unlimited")
+                    if (dataItem["END_REV"][key].toLowerCase() != "unlimited")
                         dataItem["END_REV"][key] = dataItem["END_REV"][key].toString();
                     dataItem["INCENTIVE_RATE"][key] = dataItem["INCENTIVE_RATE"][key].toString();
                 }
@@ -150,9 +150,9 @@ export class DE_Common_Util {
                     for (var i = 0; i < dataItem["NUM_OF_DENSITY"]; i++) {
                         dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key] = dataItem["DENSITY_RATE"]["8___" + (i + 1) + "____" + key].toString();
                     }
-                    if (dataItem["STRT_PB"][key] != "Unlimited")
+                    if (dataItem["STRT_PB"][key].toLowerCase() != "unlimited")
                         dataItem["STRT_PB"][key] = dataItem["STRT_PB"][key].toString();
-                    if (dataItem["END_PB"][key] != "Unlimited")
+                    if (dataItem["END_PB"][key].toLowerCase() != "unlimited")
                         dataItem["END_PB"][key] = dataItem["END_PB"][key].toString();
                 }
             }

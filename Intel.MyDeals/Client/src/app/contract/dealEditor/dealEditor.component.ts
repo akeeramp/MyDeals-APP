@@ -69,6 +69,8 @@ export class dealEditorComponent {
     private spinnerMessageDescription: any = "";
     private spinnerMessageHeader: any = "";
     private lookBackPeriod: any = [];
+    private msgType: string = "";
+    private VendorDropDownResult: any = {};
     private state: State = {
         skip: 0,
         take: 25,
@@ -112,7 +114,7 @@ export class dealEditorComponent {
         this.getWipDealData();
     }
 
-    getWipDealData() {
+    getWipDealData() {        
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
                 this.voltLength = response.WIP_DEAL.length;
@@ -404,9 +406,8 @@ export class dealEditorComponent {
         this.isWarning = false;
         this.isDatesOverlap = false;
         this.isDataLoading = true;
-        this.spinnerMessageHeader = "Saving...";
-        this.spinnerMessageDescription = "Saving Deal Information";
-        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+        this.setBusy("Saving...", "Saving Deal Information", "Info");
+        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.VendorDropDownResult);
         if (isShowStopError) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
@@ -426,6 +427,26 @@ export class dealEditorComponent {
                 if (response != undefined && response != null && response.Data != undefined && response.Data != null
                     && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
                     this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+                    let isanyWarnings = false;
+                    if (this.gridResult.length != response.Data.WIP_DEAL) {
+                        _.each(this.gridResult, (item) => {
+                            let isResponse = false;
+                            _.each(response.Data.WIP_DEAL, (wipItem) => {
+                                if (wipItem.DC_ID == item.DC_ID)
+                                    isResponse = true;
+                            });
+                            if (!isResponse) {
+                                isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
+                            }
+                        });
+                    }
+                    isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if (isanyWarnings) {
+                        this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
+                    }
+                    else {
+                        this.setBusy("Save Successful", "Saved the contract", "Success");
+                    }                    
                 }
                 this.getWipDealData();
                 this.dirty = false;
@@ -437,15 +458,42 @@ export class dealEditorComponent {
         }
     }
 
+    setBusy(msg, detail, msgType) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            // if no change in state, simple update the text
+            if (this.isDataLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                return;
+            }
+            this.isDataLoading = newState;
+            if (this.isDataLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                }, 100);
+            }
+        });
+    }
     setWarningDetails() {
         PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
         PTE_Common_Util.clearBadegCnt(this.groups);
         for (var i = 0; i < this.gridResult.length; i++) {
             if (this.gridResult[i] != null) {
                 var keys = Object.keys(this.gridResult[i]._behaviors.isError);
+                let tierAtrbAdded = false;
                 for (var key in keys) {
-                    if (PTE_Config_Util.tierAtrbs.indexOf(keys[key]) >= 0 && this.gridResult[i].NUM_OF_TIERS != undefined) {
+                    if (PTE_Config_Util.tierAtrbs.indexOf(keys[key]) >= 0 && this.gridResult[i].NUM_OF_TIERS != undefined && !tierAtrbAdded) {
                         this.gridResult[i]._behaviors.isError["TIER_NBR"] = true;
+                        PTE_Common_Util.increaseBadgeCnt("TIER_NBR", this.groups, this.templates);
+                        tierAtrbAdded = true;
                     }
                     PTE_Common_Util.increaseBadgeCnt(keys[key], this.groups, this.templates);
                 }
@@ -464,10 +512,10 @@ export class dealEditorComponent {
                 let url = "";
                 if (item == "COUNTRY")
                     url = "/api/PrimeCustomers/GetCountries";
-
                 else if (item == "PERIOD_PROFILE")
                     url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
-
+                else if (item == "SETTLEMENT_PARTNER")
+                    url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
                 else
                     url = column[0].lookupUrl;
 
@@ -477,6 +525,11 @@ export class dealEditorComponent {
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
+        if (result != undefined) {
+            if (result["SETTLEMENT_PARTNER"] != undefined) {
+                this.VendorDropDownResult = result["SETTLEMENT_PARTNER"];
+            }
+        }
         return result;
     }
     Close() {
@@ -503,13 +556,12 @@ export class dealEditorComponent {
 
     ngOnInit() {
         this.isDataLoading = true;
-        this.spinnerMessageDescription = "Loading Deal Editor";
-        this.spinnerMessageHeader = "Loading..."
+        this.setBusy("Loading Deal Editor", "Loading...","Info");
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         this.getGroupsAndTemplates();
-        this.dropdownResponses = this.getAllDrowdownValues();
+        this.dropdownResponses = this.getAllDrowdownValues();        
         this.selectedTab = "Deal Info";
         this.filterColumnbyGroup(this.selectedTab);
     }

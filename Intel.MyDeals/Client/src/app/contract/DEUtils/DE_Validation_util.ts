@@ -5,7 +5,7 @@ import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
-    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates) {
+    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, vendorDropDownResult) {
         let restrictGroupFlexOverlap = false;
         _.each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
@@ -13,6 +13,7 @@ export class DE_Validation_Util {
         this.dataConversion(data, templates);
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
+        PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy, vendorDropDownResult);
         data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
@@ -81,6 +82,18 @@ export class DE_Validation_Util {
                     data.map(function (data, index) {
                         dictGroupType[data["DEAL_COMB_TYPE"]] = index;
                     });
+                }
+
+                if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
+                    //Delete if there is any previous Error  messages
+                    if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                        _.each(invalidFlexDate, (item) => {
+                            if (!restrictGroupFlexOverlap) {
+                                item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                                isShowStopperError = true;
+                            }
+                        });
+                    }
                 }
 
                 if (item["OBJ_SET_TYPE_CD"] == "FLEX" && restrictGroupFlexOverlap) {
@@ -152,5 +165,5 @@ export class DE_Validation_Util {
             if (item["REBATE_BILLING_END"] !== undefined) item["REBATE_BILLING_END"] = moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
             if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
-    }
+    }    
 }

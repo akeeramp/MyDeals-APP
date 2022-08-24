@@ -106,7 +106,7 @@ export class dealEditorEditTemplateComponent {
         if (field === "END_VOL") {
             //if there is a next row/tier
             if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row] === "Unlimited") {
+                if (dataItem[field]["10___" + row].toLowerCase() === "unlimited") {
                     dataItem["STRT_VOL"]["10___" + (row + 1)] = 0;
                 } else {
                     //if end vol is a number, then set next start vol to that number + 1
@@ -134,7 +134,7 @@ export class dealEditorEditTemplateComponent {
         if (field === "END_PB") {
             //if there is a next row/tier
             if (!!dataItem["STRT_PB"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row] === "Unlimited") {
+                if (dataItem[field]["10___" + row].toLowerCase() === "unlimited") {
                     dataItem["STRT_PB"]["10___" + (row + 1)] = 0;
                 } else {
                     //if end pb is a number, then set next start pb to that number + 0.001

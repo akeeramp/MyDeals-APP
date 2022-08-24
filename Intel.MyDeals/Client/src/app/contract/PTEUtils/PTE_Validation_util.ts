@@ -264,8 +264,8 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }    
-    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
-        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups, vendorDropDownResut): any {
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, vendorDropDownResut);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (var i = 0; i < data.length; i++) {
@@ -930,7 +930,17 @@ export class PTE_Validation_Util {
         var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         //calling clear overarching in the begening
 
-        if (hybCond == '1' || isFlexDeal) {           
+        if (hybCond == '1' || isFlexDeal) {
+            data = this.clearValidation(data, 'REBATE_TYPE');
+            data = this.clearValidation(data, 'PAYOUT_BASED_ON');
+            data = this.clearValidation(data, 'CUST_ACCNT_DIV');
+            data = this.clearValidation(data, 'GEO_COMBINED');
+            data = this.clearValidation(data, 'PERIOD_PROFILE');
+            data = this.clearValidation(data, 'RESET_VOLS_ON_PERIOD');
+            data = this.clearValidation(data, 'PROGRAM_PAYMENT');
+            data = this.clearValidation(data, 'SETTLEMENT_PARTNER');
+            data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
+            data = this.clearValidation(data, 'CONSUMPTION_TYPE');
             this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], curPricingTable);
             if (hybCond) {
                 this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], curPricingTable);
