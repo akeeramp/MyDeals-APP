@@ -49,9 +49,9 @@
                     <span class="tierColumn rowValueHeight" *ngIf="fieldDet.title == 'Tier' || (fieldDet.title.includes('Start') && (i != 0 || in_DataItem['HAS_TRACKER'] == 1)) || (fieldDet.title.includes('End') && in_DataItem['HAS_TRACKER'] == 1 && i != (in_DataItem['NUM_OF_TIERS']-1))">{{in_DataItem[fieldDet.field][key]}}</span>
                     <span class="rowValueHeight" *ngIf="(fieldDet.title.includes('Start') && (i == 0 && in_DataItem['HAS_TRACKER'] == 0)) || ((fieldDet.title.includes('End') && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1)))) || fieldDet.title.includes('Rate'))">
                         <kendo-numerictextbox class="rowValueHeight"
-                                              [ngModel]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                              [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
-                                              [value]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                              [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               [min]="fieldDet.field.includes('RATE')? '0' : '1'" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
                                               [autoCorrect]="autoCorrect" [format]="(fieldDet.field.includes('RATE') || in_Deal_Type == 'REV_TIER' )? 'n2' : 'n0'">
                         </kendo-numerictextbox>
@@ -105,10 +105,10 @@
                         </div>
                         <div *ngIf="(fieldDet.field == 'STRT_PB' && i==0 && in_DataItem['HAS_TRACKER'] == '0') || (fieldDet.field =='END_PB' && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1))))">
                             <span>
-                                <kendo-numerictextbox [ngModel]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                <kendo-numerictextbox [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                                       (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                                       [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
-                                                      [value]="in_DataItem[fieldDet.field][key] == 'Unlimited' ? '' : in_DataItem[fieldDet.field][key]"
+                                                      [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                                       [autoCorrect]="autoCorrect" format="n3">
                                 </kendo-numerictextbox>
                             </span>

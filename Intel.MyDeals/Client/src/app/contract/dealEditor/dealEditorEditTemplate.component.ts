@@ -144,6 +144,11 @@ export class dealEditorEditTemplateComponent {
             }
         }
     }
+    convertToLowerCase(value) {
+        if(typeof value == "string")
+            return value.toLowerCase();
+        return value;
+    }
     ngOnInit() {
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
         var keys = Object.keys(this.in_DropDownResponses.__zone_symbol__value);
