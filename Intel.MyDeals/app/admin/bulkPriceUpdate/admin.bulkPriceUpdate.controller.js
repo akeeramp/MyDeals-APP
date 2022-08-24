@@ -412,7 +412,11 @@
                     }
 
                     if (vm.inValidBulkPriceUpdate[i].DealId !== "0" || vm.inValidBulkPriceUpdate[i].DealId !== "") {
-                        if (!Number.isInteger(vm.inValidBulkPriceUpdate[i].DealId)) {
+                        if (Number(vm.inValidBulkPriceUpdate[i].DealId).toString() == 'NaN') {
+                            rowMsg = rowMsg + "Deal ID must be a valid number|";
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        else if (!Number.isInteger(Number(vm.inValidBulkPriceUpdate[i].DealId))) {
                             rowMsg = rowMsg + "Deal ID must be a valid number|";
                             sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));                            
                         }
@@ -424,8 +428,12 @@
                         }
                     }
                     if (vm.inValidBulkPriceUpdate[i].Volume !== "0" && vm.inValidBulkPriceUpdate[i].Volume !== '') {
-                        if (!Number.isInteger(vm.inValidBulkPriceUpdate[i].Volume)) {
-                            rowMsg = rowMsg + "Volume must be a valid non-decimal number. |";
+                        if (Number(vm.inValidBulkPriceUpdate[i].Volume).toString() == 'NaN') {
+                            rowMsg = rowMsg + "Ceiling Volume must be a valid non-decimal number. |";
+                            sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                        }
+                        else if (!Number.isInteger(Number(vm.inValidBulkPriceUpdate[i].Volume))) {
+                            rowMsg = rowMsg + "Ceiling Volume must be a valid non-decimal number. |";
                             sheet.range("D" + row + ":D" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
