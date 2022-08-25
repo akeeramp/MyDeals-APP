@@ -69,6 +69,7 @@ export class dealEditorComponent {
     private spinnerMessageHeader: any = "";
     private lookBackPeriod: any = [];
     private msgType: string = "";
+    private invalidDate: boolean = false;
     private VendorDropDownResult: any = {};
     private state: State = {
         skip: 0,
@@ -180,6 +181,7 @@ export class dealEditorComponent {
     }
 
     cellClickHandler(args: CellClickEvent): void {
+        this.invalidDate = false;
         if (args.dataItem != undefined) {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
@@ -345,24 +347,37 @@ export class dealEditorComponent {
         });
     }
 
+    setInvalidDate(value) {
+        this.invalidDate = value;
+    }
+
     cellCloseHandler(args: CellCloseEvent): void {
         if (args.dataItem != undefined) {
-            PTE_Common_Util.cellCloseValues(args.column.field, args.dataItem);
-            if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
-                || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
-                || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
-                if (args.dataItem[args.column.field] != undefined && args.dataItem[args.column.field] != null && args.dataItem[args.column.field] != "" && args.dataItem[args.column.field] != "Invalid date")
-                args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
-            if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
-                && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
-                && args.dataItem._behaviors.isDirty[args.column.field] != null && args.dataItem._behaviors.isDirty[args.column.field]) {
-                if (args.dataItem.PAYOUT_BASED_ON != undefined && args.dataItem.PAYOUT_BASED_ON != null && args.dataItem.PAYOUT_BASED_ON != "" && args.dataItem.PAYOUT_BASED_ON == "Consumption") {
-                    this.isWarning = true;
-                    this.message = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.\nValidate Billings Start/End Dates with the Contract.";
-                }
+            if (this.invalidDate) {
+                args.sender.cellClick.closed = true;
+                args.sender.cellClick.isStopped = true;
+                args.preventDefault();
             }
-            if (args.dataItem._dirty != undefined && args.dataItem._dirty != null && args.dataItem._dirty) {
-                this.dirty = true;
+            else {
+                args.sender.cellClick.closed = false;
+                args.sender.cellClick.isStopped = false;
+                PTE_Common_Util.cellCloseValues(args.column.field, args.dataItem);
+                if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
+                    || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
+                    || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
+                    if (args.dataItem[args.column.field] != undefined && args.dataItem[args.column.field] != null && args.dataItem[args.column.field] != "" && args.dataItem[args.column.field] != "Invalid date")
+                        args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
+                if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
+                    && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
+                    && args.dataItem._behaviors.isDirty[args.column.field] != null && args.dataItem._behaviors.isDirty[args.column.field]) {
+                    if (args.dataItem.PAYOUT_BASED_ON != undefined && args.dataItem.PAYOUT_BASED_ON != null && args.dataItem.PAYOUT_BASED_ON != "" && args.dataItem.PAYOUT_BASED_ON == "Consumption") {
+                        this.isWarning = true;
+                        this.message = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.\nValidate Billings Start/End Dates with the Contract.";
+                    }
+                }
+                if (args.dataItem._dirty != undefined && args.dataItem._dirty != null && args.dataItem._dirty) {
+                    this.dirty = true;
+                }
             }
         }
     }
@@ -411,6 +426,7 @@ export class dealEditorComponent {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
             this.isDataLoading = false;
+            this.setBusy("", "", "");
         }
         else {
             let data = {

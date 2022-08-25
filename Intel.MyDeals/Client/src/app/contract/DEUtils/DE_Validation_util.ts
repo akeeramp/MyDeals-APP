@@ -46,6 +46,16 @@ export class DE_Validation_Util {
                     isShowStopperError = true;
                 }
             }
+            if (item["START_DT"] == undefined || item["START_DT"] == null || item["START_DT"] == "" || item["START_DT"] == "Invalid date") {
+                item._behaviors.isError['START_DT'] = true;
+                item._behaviors.validMsg['START_DT'] = "Start date is required";
+                isShowStopperError = true;
+            }
+            if (item["END_DT"] == undefined || item["END_DT"] == null || item["END_DT"] == "" || item["END_DT"] == "Invalid date") {
+                item._behaviors.isError['END_DT'] = true;
+                item._behaviors.validMsg['END_DT'] = "End date is required";
+                isShowStopperError = true;
+            }            
             if (moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";

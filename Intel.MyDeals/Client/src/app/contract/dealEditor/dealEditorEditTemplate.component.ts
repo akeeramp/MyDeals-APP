@@ -1,7 +1,8 @@
 ﻿import * as angular from 'angular';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
+import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
     selector: 'deal-editor-edit',
@@ -17,6 +18,9 @@ export class dealEditorEditTemplateComponent {
     @Input() in_Deal_Type: string = '';
     @Input() in_DataItem: any = '';
     @Input() in_DropDownResponses: any;
+    @Output() invalidDate = new EventEmitter<any>();
+    @ViewChild("dealDateToolTip", { static: false }) dealDateToolTip: NgbTooltip;
+    private message = "";
     private dropDowResponse: any = {};
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
@@ -55,6 +59,21 @@ export class dealEditorEditTemplateComponent {
 
     valueChange(dataItem: any, field: any): void {
         this.updateDataItem(dataItem, field);
+    }
+    onKeyDown(event, dealDate) {
+        if (event.keyCode == 13) {
+            this.onBlur(dealDate);
+        }
+    }
+    onBlur(dealDate) {
+        if (dealDate.status == "INVALID") {
+            this.invalidDate.emit(true);
+            this.dealDateToolTip.open();
+        }
+        else {
+            this.invalidDate.emit(false);
+            this.dealDateToolTip.close();
+        }
     }
 
     updateDataItem(dataItem: any, field: string) {
@@ -158,6 +177,7 @@ export class dealEditorEditTemplateComponent {
             else
                 this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.dropdownName);
         }
+        this.message = this.in_Field_Name + " is not a valid date."
     }
 }
 

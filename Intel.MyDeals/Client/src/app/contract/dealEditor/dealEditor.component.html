@@ -112,7 +112,7 @@
                         <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
                     </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                        <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses"></deal-editor-edit>
+                        <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
                     </ng-template>
                 </kendo-grid-column>
             </kendo-grid>
