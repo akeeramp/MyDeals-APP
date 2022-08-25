@@ -2935,7 +2935,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                         else if (rplCheck)
                         {
-                            deEndCust.AddMessage("End Customers needs to be Non Restricted before it can be approved.");
+                            deEndCust.AddMessage("Intel cannot approve a transaction with the specified End Customer.  The activities conducted within My Deals are subject to U.S. and other applicable export control and sanctions laws.");
                         }
                         else if (rplStatusCodeCheck)
                         {
