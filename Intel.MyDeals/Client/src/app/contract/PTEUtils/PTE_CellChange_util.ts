@@ -36,7 +36,7 @@ export class PTE_CellChange_Util {
         return condition;
       }
   
-      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,numoftier:number,tier?:number,operation?:string){
+      static addUpdateRowOnchange(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,numoftier:number,tier?:number,operation?:any){
         //make the selected row PTR_USER_PRD empty if its not the empty row
       _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
         let currentstring='';
@@ -78,31 +78,38 @@ export class PTE_CellChange_Util {
            currentstring =row+','+val.prop+','+0+','+'no-edit';
            updateRows.push(currentstring.split(','));
         }
-
         else{
           this.addUpdateRowOnchangeCommon(row,val,updateRows,curPricingTable,contractData,null,operation);
         }
-       
       });
       }
-      static addUpdateRowOnchangeCommon(row:number,val:any,updateRows:Array<any>,curPricingTable:any,contractData:any,rowData?:any,operation?:string){
+      static addUpdateRowOnchangeCommon(row:number,val:any,updateRows:Array<any>,curPricingTable:any,contractData:any,rowData?:any,operation?:any){
         //make the selected row PTR_USER_PRD empty if its not the empty row
           let currentstring='';
           //rowdata scenario is for KIT and except kit rebate we can assign all other values
           if(rowData){
-            //this helps to avoid comma seperated issue.
-            this.hotTable.setDataAtRowProp(row,val.prop, rowData[`${val.prop}`],'no-edit');
+            //this logic is to add PTR_SYS_PRD in case of produc selector and corrector
+            if(val.prop=='PTR_SYS_PRD'){
+              if(operation && operation.operation && operation.PTR_SYS_PRD){
+                  //this helps to avoid comma seperated issue.
+                  this.hotTable.setDataAtRowProp(row,val.prop, operation.PTR_SYS_PRD,'no-edit');
+              }
+              else{
+                this.hotTable.setDataAtRowProp(row,val.prop, rowData[`${val.prop}`],'no-edit');
+              }
+            }
+            else{
+              this.hotTable.setDataAtRowProp(row,val.prop, rowData[`${val.prop}`],'no-edit');
+            }
           }
           else{
             if(val.prop=='PTR_SYS_PRD'){
-              let PTR_SYS_PRD_val=this.hotTable.getDataAtRowProp(row,val.prop) 
-              if(PTR_SYS_PRD_val && PTR_SYS_PRD_val !='' && PTR_SYS_PRD_val !=null && operation && (operation=='prodsel' || operation=='prodcorr')){
-                currentstring =row+','+val.prop+','+this.hotTable.getDataAtRowProp(row,val.prop)+','+'no-edit';
+              if(operation && operation.operation && operation.PTR_SYS_PRD){
+                  this.hotTable.setDataAtRowProp(row,val.prop, operation.PTR_SYS_PRD,'no-edit');
               }
               else{
-                currentstring =row+','+val.prop+','+''+','+'no-edit';
+                this.hotTable.setDataAtRowProp(row,val.prop,'','no-edit');
               }
-              updateRows.push(currentstring.split(','));
             }
             else if(val.prop=='SETTLEMENT_PARTNER'){
               //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
@@ -138,29 +145,17 @@ export class PTE_CellChange_Util {
               currentstring =row+','+val.prop+','+contractData.CUST_ACCNT_DIV+','+'no-edit';
               updateRows.push(currentstring.split(','));
             }
-            else if(val.prop=='PRD_EXCLDS' || val.prop=='PTR_SYS_PRD'){
-              if(this.hotTable.getDataAtRowProp(row,val.prop) && this.hotTable.getDataAtRowProp(row,val.prop)!=null&& this.hotTable.getDataAtRowProp(row,val.prop)!=''){
-                currentstring =row+','+val.prop+','+this.hotTable.getDataAtRowProp(row,val.prop)+','+'no-edit';
-              }
-              else{
-                currentstring =row+','+val.prop+','+''+','+'no-edit';
-              }
+            else if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
+              currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
               updateRows.push(currentstring.split(','));
             }
-            else if(val.prop){
+            else {
+               if(val.prop){
                 //this will be autofill defaults value 
-                if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
-                    currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
-                } else {
-                    let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
-                    currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
-                }
-              //hotTable.setDataAtRowProp(row,val.prop.toString(), cellVal,'no-edit');
-            }
-            else{
-              console.log('invalid Prop')
+                let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
+                currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+               }
             }
           }
       }
@@ -178,7 +173,7 @@ export class PTE_CellChange_Util {
         this.hotTable.updateSettings({mergeCells:mergCells});
       
     }
-    static  addUpdateRowOnchangeKIT(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,product:number,rowData?:any,operation?:string){
+    static  addUpdateRowOnchangeKIT(hotTable:Handsontable,row:number,cellItem:any,ROW_ID:number,updateRows:Array<any>,curPricingTable:any,contractData:any,product:number,rowData?:any,operation?:any){
       //make the selected row PTR_USER_PRD empty if its not the empty row
       _.each(hotTable.getCellMetaAtRow(0),(val,key)=>{
         let currentstring='';
@@ -243,7 +238,7 @@ export class PTE_CellChange_Util {
         }
       }
     }
-    static autoFillCellonProdKit(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,columns:any[],operation?:string){
+    static autoFillCellonProdKit(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,columns:any[],operation?:any){
       let updateRows=[];
       if(items && items.length==1){
         const selrow = items[0].row;
@@ -311,7 +306,7 @@ export class PTE_CellChange_Util {
       this.hotTable.setDataAtRowProp(updateRows,'no-edit');
     
     }
-    static autoFillCellonProdVol(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,operation?:string){
+    static autoFillCellonProdVol(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,operation?:any){
       let updateRows=[];
       //the numbe of tiers has to take from autofill for now taken from PT
       let NUM_OF_TIERS=curPricingTable.NUM_OF_TIERS;
@@ -335,12 +330,13 @@ export class PTE_CellChange_Util {
           this.getMergeCellsOnEdit(empRow,parseInt(curPricingTable.NUM_OF_TIERS),pricingTableTemplates);
         }
         else{
-           if(operation && (operation=='prodsel'|| operation=='prodcorr')){
+           if(operation && operation.operation && operation.PTR_SYS_PRD){
             this.hotTable.setDataAtRowProp(selrow,'PTR_USER_PRD', items[0].new,'no-edit');
+            this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD',operation.PTR_SYS_PRD,'no-edit');
            }
           else{
-          //This will make sure to hit translate API
-          this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
+            //This will make sure to hit translate API
+            this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
           }
         }
       }
@@ -367,7 +363,7 @@ export class PTE_CellChange_Util {
        //appending everything togather
       this.hotTable.setDataAtRowProp(updateRows,'no-edit');
     }
-    static autoFillCellOnProd(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,columns:any[],operation?:string) {
+    static autoFillCellOnProd(items:Array<any>,curPricingTable:any,contractData:any,pricingTableTemplates:any,columns:any[],operation?:any) {
         try {
           let OBJ_SET_TYPE_CD=curPricingTable.OBJ_SET_TYPE_CD;
           if(OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD=='KIT'){
@@ -393,8 +389,14 @@ export class PTE_CellChange_Util {
                 this.addUpdateRowOnchange(this.hotTable,empRow,items[0],ROW_ID,updateRows,curPricingTable,contractData,0,1,operation);
               }
               else{
-                //This will make sure to hit translate API
-                this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
+                 if(operation && operation.operation && operation.PTR_SYS_PRD){
+                  this.hotTable.setDataAtRowProp(selrow,'PTR_USER_PRD', items[0].new,'no-edit');
+                  this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD',operation.PTR_SYS_PRD,'no-edit');
+                 }
+                 else{
+                  //This will make sure to hit translate API
+                  this.hotTable.setDataAtRowProp(selrow,'PTR_SYS_PRD', '','no-edit');
+                 }
               }
             }
             else{

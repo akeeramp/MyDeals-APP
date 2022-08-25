@@ -721,24 +721,20 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.isLoading = true;
                 this.spinnerMessageHeader = 'PTE Reloading';
                 this.spinnerMessageDescription = 'PTE Reloading please wait';
-                _.each(selProds,selProd =>{
-                    let PTR_SYS_PRD={};
-                    PTR_SYS_PRD[`${selProd.name}`]=_.pluck(selProd.items,'prodObj');
-                    //here the order of seting the preoperty is important and must not change
-                    this.hotTable.setDataAtRowProp(selProd.indx,'PTR_SYS_PRD',JSON.stringify(PTR_SYS_PRD),'no-edit');
-                });
                 //logic to bind the selected product and PTR_SYS_PRD to PTR
                 //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
                 _.each(selProds,(selProd,idx) =>{
                    //logic to bind the selected product and PTR_SYS_PRD to PTR
-                    let PTR=[]
                     if(this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD=='KIT'){
                     if(idx!=0){
-                            selProds[idx].indx=selProds[idx-1].indx+selProds[idx-1].items.length;
+                          selProds[idx].indx=selProds[idx-1].indx+selProds[idx-1].items.length;
                         }
                     }
-                    PTR.push({row:selProds[idx].indx , prop: 'PTR_USER_PRD', old:selProd.name,new:_.pluck(selProd.items,'prod').toString()})
-                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns,'prodcorr');
+                    let PTR=[{row:selProds[idx].indx , prop: 'PTR_USER_PRD', old:selProd.name,new:_.pluck(selProd.items,'prod').toString()}]
+                    let PTR_SYS_PRD={};
+                    PTR_SYS_PRD[`${selProd.name}`]=_.pluck(selProd.items,'prodObj');
+                    let operation={operation:'prodcorr',PTR_SYS_PRD:JSON.stringify(PTR_SYS_PRD)};
+                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns,operation);
                     if(idx==selProds.length-1){
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(()=>{
