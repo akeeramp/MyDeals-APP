@@ -29,6 +29,7 @@ import { missingCAPComponent } from "../contract/missingCAP/missingCAP.component
 import { contractExportComponent } from "../contract/contractExport/contractExport.component";
 import { allDealsComponent } from "../contract/allDeals/allDeals.component";
 import { GridPopoverComponent } from "../contract/ptModals/productSelector/gridPopover/gridPopover.component";
+import { ProductBreakoutComponent } from "../contract/ptModals/productSelector/productBreakout/productBreakout.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -60,5 +61,6 @@ export let contractComponents = [
     missingCAPComponent,
     contractExportComponent,
     allDealsComponent,
-    GridPopoverComponent
+    GridPopoverComponent,
+    ProductBreakoutComponent
 ]

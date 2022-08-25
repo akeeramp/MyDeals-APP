@@ -11,6 +11,7 @@ import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 
 import { productSelectorService } from "./productselector.service";
 import { logger } from "../../../shared/logger/logger";
+
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 
 @Component({

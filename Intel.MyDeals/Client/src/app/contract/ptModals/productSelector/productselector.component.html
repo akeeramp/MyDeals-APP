@@ -70,16 +70,16 @@
                                             <ng-template #popoverContent>
                                                 <div class="container">
                                                     <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
                                                     </div>
                                                     <div class="row">
-                                                        <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
                                                     </div>
                                                 </div>
                                             </ng-template>
 
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #p="ngbPopover" [ngbPopover]="popoverContent"> 
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent"> 
                                                 <!-- WIP: Insert CAP Info cell design here -->
                                                 {{ dataItem.CAP }}
                                             </div>
@@ -93,16 +93,16 @@
                                             <ng-template #popoverContent>
                                                 <div class="container">
                                                     <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="p.close()">❌</button>
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
                                                     </div>
                                                     <div class="row">
-                                                        <grid-popover [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
                                                     </div>
                                                 </div>
                                             </ng-template>
                                     
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #p="ngbPopover" [ngbPopover]="popoverContent"> 
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent"> 
                                                     <!-- WIP: Insert CAP Info cell design here -->
                                                 {{ dataItem.YCS2 }}
                                             </div>

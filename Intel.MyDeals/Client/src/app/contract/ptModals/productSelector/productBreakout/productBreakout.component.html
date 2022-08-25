@@ -1,0 +1,32 @@
+<div class="modal-content" moveablemodal>
+    <div class="capbreakout modal-header">
+        <div class="row">
+            <div class="col-8">
+                <div class="cursorArea capProdHeader">
+                    <p>Product {{ priceCondition }} Breakout</p>
+                </div>
+                <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="padding-top: 15px;"/>
+            </div>
+            <div class="col-4">
+                <span class="capModalCloseIcon fr">
+                    <i role="button" title="Close" class="intelicon-close-max" (click)="cancel()"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="capbreakout modal-body">
+        <kendo-grid class="md capbreakout kendoGridHeight" [data]="dataSource" [loading]="isLoading"
+                    [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
+            <ng-template kendoGridToolbarTemplate>
+                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">Export to Excel</button>
+            </ng-template>
+
+            <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
+                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}"></kendo-grid-column>
+            </ng-template>
+
+            <kendo-grid-excel fileName="{{ gridOptions.excel.fileName }}"></kendo-grid-excel>
+        </kendo-grid>
+    </div>
+</div>

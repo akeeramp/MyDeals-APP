@@ -1,19 +1,31 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { process, State } from "@progress/kendo-data-query";
 
 import { logger } from "../../../../shared/logger/logger";
 import { productSelectorService } from '../productselector.service';
 
+import { ProductBreakoutComponent } from '../productBreakout/productBreakout.component';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
-    selector: 'grid-popover [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
+    // selector: 'grid-popover [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
+    selector: 'grid-popover [popOver] [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.html',
-    styleUrls: ['Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.css']
+    styleUrls: [
+        'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
+        'Client/src/app/admin/kendo_grid.css',
+        'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
+        'Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.css'
+    ]
 })
-export class GridPopoverComponent implements OnInit{
+export class GridPopoverComponent implements OnInit {
 
-    constructor(private productSelectorService: productSelectorService,
-            private loggerService: logger) { }
+    constructor(public dialogService: MatDialog,
+        private productSelectorService: productSelectorService,
+        private loggerService: logger) { }
 
+    @Input() private popOver: NgbPopover;   // Required (for Breakout modal)
 
     @Input() private columnTypes: string;  // Required
     @Input() private currentPricingTableRow;    // Required
@@ -21,8 +33,25 @@ export class GridPopoverComponent implements OnInit{
     @Input() private priceCondition;    // Required
     private productData;
 
+    private openModal() {
+        // Close Popover
+        if (this.popOver.isOpen()) {
+            this.popOver.close();
+        }
+
+        // Open Modal with data
+        this.dialogService.open(ProductBreakoutComponent, {
+            data: {
+                columnTypes: this.columnTypes,
+                productData: this.productData
+            }
+        });
+    }
+
     private initializeGridOptions() {
-        if (!this.columnTypes) {
+        if (!this.popOver) {
+            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `popOver` is required"));
+        } else if (!this.columnTypes) {
             this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
         } else if (!this.currentPricingTableRow) {
             this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `currentPricingTableRow` is required"));
@@ -102,6 +131,5 @@ export class GridPopoverComponent implements OnInit{
         this.initializeGridOptions();
         this.getData(this.productData);
     }
-
 
 }
