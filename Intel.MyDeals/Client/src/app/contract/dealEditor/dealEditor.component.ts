@@ -1,7 +1,6 @@
-﻿import * as angular from 'angular';
+﻿
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
-import { downgradeComponent } from '@angular/upgrade/static';
 import * as _ from 'underscore';
 import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
@@ -566,10 +565,3 @@ export class dealEditorComponent {
         this.filterColumnbyGroup(this.selectedTab);
     }
 }
-
-angular.module("app").directive(
-    "dealEditor",
-    downgradeComponent({
-        component: dealEditorComponent,
-    })
-);

@@ -275,7 +275,7 @@ export class PTE_Validation_Util {
         return isShowStopperError;
     }
     static setToSame(data, elem) {
-        _.forEach(data, (item) => {
+        _.each(data, (item) => {
             if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
                 item[elem] = null;
             }
@@ -284,7 +284,7 @@ export class PTE_Validation_Util {
     }
 
     static clearValidation(data, elem) {
-        _.forEach(data, (item) => {
+        _.each(data, (item) => {
             if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                 delete item._behaviors.isRequired[elem];
                 delete item._behaviors.isError[elem];
@@ -295,7 +295,7 @@ export class PTE_Validation_Util {
     }
 
     static clearSettlementPartner = function (data) {
-        _.forEach(data, (item) => {
+        _.each(data, (item) => {
             if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                 if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                     item.SETTLEMENT_PARTNER = null;
@@ -366,22 +366,22 @@ export class PTE_Validation_Util {
             drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
             if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (!accrualRule) {
-                _.forEach(filterData, (item) => {
+                _.each(filterData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
                 });
             }
             if (!drainingRule) {
-                _.forEach(drainingEntries, (item) => {
+                _.each(drainingEntries, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
                 });
             }
             if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
                 var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
                 var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
-                _.forEach(restrictedAccrualData, (item) => {
+                _.each(restrictedAccrualData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
-                _.forEach(restrictedDraininngData, (item) => {
+                _.each(restrictedDraininngData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
             }
@@ -554,7 +554,7 @@ export class PTE_Validation_Util {
         var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
         var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
         if (isMarketSegment) {
-            _.forEach(data, (item) => {
+            _.each(data, (item) => {
                 if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -572,7 +572,7 @@ export class PTE_Validation_Util {
 
      static ValidateEndCustomer(data, actionName, curPricingStrategy, curPricingTable) {
         if (actionName !== "OnLoad") {
-            _.forEach(data, (item) => {
+            _.each(data, (item) => {
                 if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
                     item = this.clearEndCustomer(item);
                 }
@@ -586,26 +586,26 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.forEach(data, (item) => {
+                    _.each(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.forEach(data, (item) => {
+                                _.each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.forEach(endCustObj, (item) => {
+                                    _.each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.forEach(data, (item) => {
+                                        _.each(data, (item) => {
                                             item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
@@ -615,7 +615,7 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.forEach(data, (item) => {
+                                _.each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
@@ -630,26 +630,26 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.forEach(data, (item) => {
+                    _.each(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.forEach(data, (item) => {
+                                _.each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.forEach(endCustObj, (item) => {
+                                    _.each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.forEach(data, (item) => {
+                                        _.each(data, (item) => {
                                             item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
@@ -659,7 +659,7 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.forEach(data, (item) => {
+                                _.each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
@@ -703,7 +703,7 @@ export class PTE_Validation_Util {
         if (cashObj && cashObj.length > 0) {
             if (getVendorDropDownResult != null && getVendorDropDownResult != undefined && getVendorDropDownResult.length > 0) {
                 var customerVendor = getVendorDropDownResult;
-                _.forEach(data, (item) => {
+                _.each(data, (item) => {
                     var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
                     if (partnerID && partnerID.length == 1) {
                         item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
@@ -713,7 +713,7 @@ export class PTE_Validation_Util {
             else if (hybCond == '1') {
                 retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                 if (!retCond) {
-                    _.forEach(data, (item) => {
+                    _.each(data, (item) => {
                         item = this.setSettlementPartner(item, '1');
                     });
                 }
@@ -724,7 +724,7 @@ export class PTE_Validation_Util {
             else {
                 retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                 if (!retCond) {
-                    _.forEach(data, (item) => {
+                    _.each(data, (item) => {
                         if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                             if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                 item.SETTLEMENT_PARTNER = null;

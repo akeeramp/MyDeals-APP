@@ -7,12 +7,7 @@ export class PTE_Save_Util {
     static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any):any{
         //this will make sure the neccessary proprty except _behaviours for Save are added
         this.setPTRBasicPropertyForSave(PTR,curPricingStrategy,curPricingTable,contractData);
-        if(curPricingTable.OBJ_SET_TYPE_CD=='ECAP'){
-            return this.validatePTEECAP(PTR);
-        }
-        else{
-            return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData);
-        }
+        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData);
     }
     static setPTRBasicPropertyForSave(PTR:Array<any>,curPricingStrategy:any,curPricingTable:any,contractData:any){
      _.each(PTR, item=>{

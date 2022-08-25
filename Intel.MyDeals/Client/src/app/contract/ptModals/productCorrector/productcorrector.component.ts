@@ -62,38 +62,59 @@ export class ProductCorrectorComponent {
           value: 100
       }
   ];
+  private rowDCId:string='';
+  private curRowIndx:number=0;
+  private numIssueRows:number=0;
+  private totRows:number=0;
   private curRowIssues:any[]=[];
   private curRowLvl:any[]=[];
   private curRowCategories:any[]=[];
   private selRowLvl:any[]=[];
   private selRowCategories:any[]=[];
   private selRowIssues:any[]=[];
+  private curProd:string='';
+  private selectedProducts:any[]=[];
+  private curSelProducts:any[]=[];
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
   loadGrid(){
     if(this.ProductCorrectorData.DuplicateProducts)
     _.each(this.ProductCorrectorData.DuplicateProducts,(val,key)=>{
-      this.curRowIssues.push({name:_.keys(val)[0],len:_.values(val)[0].length});
-      this.curRowLvl.push({name:_.keys(val)[0],items:_.uniq(_.pluck(_.values(val)[0],'PRD_ATRB_SID'))});
-      this.curRowCategories.push({name:_.keys(val)[0],items:_.uniq(_.pluck(_.values(val)[0],'PRD_CAT_NM'))});
-      this.gridResult.push({name:_.keys(val)[0],data:_.values(val)[0]});
-      this.gridData.push({name:_.keys(val)[0],data:process(_.values(val)[0], this.state)});
+      this.curRowIssues.push({DCID:parseInt(key),name:_.keys(val).toString(),len:_.flatten(_.values(val)).length});
+      this.curRowLvl.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_ATRB_SID'))});
+      this.curRowCategories.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_CAT_NM'))});
+      this.gridResult.push({DCID:parseInt(key),name:_.keys(val).toString(),data:_.flatten(_.values(val))});
+      this.gridData.push({DCID:parseInt(key),name:_.keys(val).toString(),data:process(_.flatten(_.values(val)), this.state)});
+      this.selectedProducts.push({DCID:parseInt(key),name:_.keys(val).toString(),items:[],indx:_.findWhere(this.selRows,{name:_.keys(val).toString()}).indx});
     });
+    //sorting the data based on DCID, since its negative we need to reverse
+    this.selectedProducts=_.sortBy(this.selectedProducts,'DCID').reverse();
+    this.curRowIssues=_.sortBy(this.curRowIssues,'DCID').reverse();
+    this.curRowLvl=_.sortBy(this.curRowLvl,'DCID').reverse();
+    this.curRowCategories=_.sortBy(this.curRowCategories,'DCID').reverse();
+    this.gridResult=_.sortBy(this.gridResult,'DCID').reverse();
+    this.gridData=_.sortBy(this.gridData,'DCID').reverse();
     //default selecting to first row
+    this.curSelProducts=this.selectedProducts[0];
+    this.curProd=this.curRowIssues[0].name;
+    this.rowDCId=this.curRowIssues[0].DCID;
+    this.numIssueRows=this.curRowIssues.length;
     this.selGridResult=this.gridResult[0].data;
     this.selGridData=this.gridData[0].data;
     this.selRowLvl=this.curRowLvl[0].items;
     this.selRowCategories=this.curRowCategories[0].items;
     this.selRowIssues=[this.curRowIssues[0]];
+    this.totRows=_.keys(this.ProductCorrectorData.ProdctTransformResults).length;
   }
   selectRow(key:string){
+    let selItem=_.findWhere(this.curRowIssues,{name:key});
+    this.curProd=selItem.name;
+    this.selRowIssues=[selItem];
+    this.rowDCId=selItem.DCID;
     this.selGridResult=_.findWhere(this.gridResult,{name:key}).data;
     this.selGridData=_.findWhere(this.gridData,{name:key}).data;
     this.selRowLvl=_.findWhere(this.curRowLvl,{name:key}).items;
     this.selRowCategories=_.findWhere(this.curRowCategories,{name:key}).items
-    this.selRowIssues=[_.findWhere(this.curRowIssues,{name:key})];
+    this.curSelProducts=_.findWhere(this.selectedProducts,{name:key});
   }
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
@@ -114,11 +135,39 @@ export class ProductCorrectorComponent {
         }
     });
   }
+  nextRow() {
+    this.curRowIndx = this.curRowIndx + 1;
+    this.selectRow(this.curRowIssues[this.curRowIndx ].name);
+  }
+  prevRow() {
+     this.curRowIndx = this.curRowIndx - 1;
+     this.selectRow(this.curRowIssues[this.curRowIndx].name);
+  }
+  prodSelect(item:any,evt:any){
+    item['IS_SEL']=evt.target.checked;
+    if(evt.target.checked){
+      let prd={prod:item.HIER_VAL_NM,prodObj:item};
+      this.curSelProducts['items'].push(prd);
+    }
+    else{
+      let idx=_.findIndex( this.selectedProducts, item.HIER_VAL_NM);
+      this.curSelProducts['items'].splice(idx,1);
+    }
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  onSave(): void {
+    this.dialogRef.close(this.selectedProducts);
+  }
   ngOnInit() {
     this.ProductCorrectorData=this.data.ProductCorrectorData;
     this.contractData=this.data.contractData;
     this.curPricingTable=this.data.curPricingTable;
     this.selRows=this.data.selRows;
+    this.selectedProducts=[];
+    this.curSelProducts=null;
+
     this.loadGrid()
   }
 }

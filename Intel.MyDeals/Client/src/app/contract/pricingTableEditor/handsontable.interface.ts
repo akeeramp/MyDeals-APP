@@ -115,3 +115,9 @@ export interface PRC_TBL_Model_Attributes {
     validMsg?: string;  // Validation messages attatched to attribute
     helpMsg?: string;   // Help popup text from attribute
 }
+export interface ProdCorrectObj {
+    DCID:number,
+    name:string,
+    items:any[],
+    indx:number
+}

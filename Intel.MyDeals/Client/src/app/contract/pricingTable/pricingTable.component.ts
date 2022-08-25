@@ -109,7 +109,7 @@ export class pricingTableComponent {
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
             this.contractData = response[0];
             //if it is Tender deal redirect to Tender manager
-            if (response[0].IS_TENDER == 1) window.location.href = "/Dashboard#/tendermanager/" + this.c_Id;
+            if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "/Dashboard#/tendermanager/" + this.c_Id;
             else {
                 this.loadTemplateDetails(IDS, this.contractData );
             }

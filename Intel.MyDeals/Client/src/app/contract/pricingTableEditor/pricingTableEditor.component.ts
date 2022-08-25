@@ -1,21 +1,18 @@
 ﻿/* eslint-disable prefer-const */
-import * as angular from 'angular';
 import { Component, Input, OnChanges } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
-import { downgradeComponent } from '@angular/upgrade/static';
 import { pricingTableEditorService } from './pricingTableEditor.service'
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as _ from 'underscore';
 import { templatesService } from '../../shared/services/templates.service';
-import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj } from './handsontable.interface';
+import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj,ProdCorrectObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { ProductCorrectorComponent } from '../ptModals/productCorrector/productcorrector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
 import { multiSelectModalComponent } from '../ptModals/multiSelectModal/multiSelectModal.component';
-
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
@@ -222,7 +219,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private newPricingTable: any = {};
     private VendorDropDownResult: any = {};
     private isDeletePTR:boolean=false;
-
+    
     afterDocumentKeyDown(evt:any){
         //befor change hook afterDocumentKeyDown triggers so we can double confirm delete based on values equal to empty and explicity clicking delete
        if(evt.key && evt.key=='Delete'){
@@ -363,7 +360,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.spinnerMessageHeader = 'PTE Reloading';
             this.spinnerMessageDescription = 'PTE Reloading please wait';
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
-            setTimeout(() => {
+            setTimeout( () => {
                 changes = this.identfyUniqChanges(changes, source);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
@@ -374,19 +371,19 @@ export class pricingTableEditorComponent implements OnChanges {
                 let End_Vol = _.filter(changes, item =>{return item.prop=='END_VOL'});
                 //here we are using if conditions because at a time multiple changes can happen
                 if (PTR && PTR.length > 0) {
-                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns);
+                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns);
                 }
                 if (AR && AR.length > 0) {
-                    PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
+                     PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
                 }
                 if (KIT_ECAP && KIT_ECAP.length > 0) {
-                    PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP,this.columns,this.curPricingTable);
+                     PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP,this.columns,this.curPricingTable);
                 }
                 if (KIT_DSCNT && KIT_DSCNT.length > 0) {
-                    PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT,this.columns,this.curPricingTable);
+                     PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT,this.columns,this.curPricingTable);
                 }
                 if (End_Vol && End_Vol.length > 0) {
-                    PTE_CellChange_Util.endVolChange(End_Vol,this.columns,this.curPricingTable);
+                     PTE_CellChange_Util.endVolChange(End_Vol,this.columns,this.curPricingTable);
                 }
                 //for multi tier there can be more tiers to delete so moving the logc after all change 
                 if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
@@ -426,38 +423,43 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loggerService.error("pricingTableEditorComponent::deletePTR::", 'error');
         }
     }
-    deleteRow(rows: Array<any>): void {
-        let delRows=[]
-        //delete can be either simple row delete for PTR not saved or can be PTR which are saved
-        _.each(rows,row=>{
-            let DCID=this.hotTable.getDataAtRowProp(row.row,'DC_ID');
-            if(DCID){
-                delRows.push({row:row.row,DC_ID:this.hotTable.getDataAtRowProp(row.row,'DC_ID')})
+    deleteRow(rows: Array<any>):void {
+        try {
+            let delRows=[]
+            //delete can be either simple row delete for PTR not saved or can be PTR which are saved
+            _.each(rows,row=>{
+                let DCID=this.hotTable.getDataAtRowProp(row.row,'DC_ID');
+                if(DCID){
+                    delRows.push({row:row.row,DC_ID:this.hotTable.getDataAtRowProp(row.row,'DC_ID')})
+                }
+            })
+            let savedRows=_.filter(delRows,row=>{return row.DC_ID>0});
+            let nonSavedRows=_.filter(delRows,row=>{return row.DC_ID<0});
+            //this condition means all rows are non DC_ID rows so that no need to hit API
+            if(nonSavedRows.length>0 && nonSavedRows.length==delRows.length){
+                //multiple delete at the sametime this will avoid issues of deleting one by one
+                this.hotTable.alter('remove_row', delRows[0].row,delRows.length, 'no-edit');
+                this.getMergeCellsOnDelete();
+                this.multiRowDelete = [];
+                this.isDeletePTR=false;
+                //setting the value to empty to avoid extra delete
             }
-        })
-        let savedRows=_.filter(delRows,row=>{return row.DC_ID>0});
-        let nonSavedRows=_.filter(delRows,row=>{return row.DC_ID<0});
-        //this condition means all rows are non DC_ID rows so that no need to hit API
-        if(nonSavedRows.length>0 && nonSavedRows.length==delRows.length){
-            //multiple delete at the sametime this will avoid issues of deleting one by one
-            this.hotTable.alter('remove_row', delRows[0].row,delRows.length, 'no-edit');
-            this.getMergeCellsOnDelete();
-            this.multiRowDelete = [];
-            this.isDeletePTR=false;
-            //setting the value to empty to avoid extra delete
+            //this condition for all rows are saved DC_ID rows so hit API
+            if(savedRows.length>0 && delRows.length==savedRows.length){
+                //this will openup dialog box and call closeDialog function
+                this.isDialogOpen=true;
+            }
+                //this condition for both case
+            if(nonSavedRows.length>0 && savedRows.length>0){
+                this.hotTable.alter('remove_row', nonSavedRows[0].row, nonSavedRows.length, 'no-edit');
+                this.getMergeCellsOnDelete();
+                //this step will move all the deleted records which matched nonSavedRows records
+                this.multiRowDelete=_.reject(this.multiRowDelete,itm=>{return _.contains(_.pluck(nonSavedRows,'row'),itm.row)});
+                this.isDialogOpen=true;
+            }
         }
-        //this condition for all rows are saved DC_ID rows so hit API
-        if(savedRows.length>0 && delRows.length==savedRows.length){
-            //this will openup dialog box and call closeDialog function
-            this.isDialogOpen=true;
-        }
-         //this condition for both case
-        if(nonSavedRows.length>0 && savedRows.length>0){
-            this.hotTable.alter('remove_row', nonSavedRows[0].row, nonSavedRows.length, 'no-edit');
-            this.getMergeCellsOnDelete();
-            //this step will move all the deleted records which matched nonSavedRows records
-            this.multiRowDelete=_.reject(this.multiRowDelete,itm=>{return _.contains(_.pluck(nonSavedRows,'row'),itm.row)});
-            this.isDialogOpen=true;
+        catch(ex){
+            this.loggerService.error('deleteRow::',ex);
         }
     }
     async getAllDrowdownValues() {
@@ -705,7 +707,8 @@ export class pricingTableEditorComponent implements OnChanges {
         let selRows=[]
         _.each(products.DuplicateProducts,(val,key) =>{
             let res=_.findWhere(PTR,{DC_ID:parseInt(key)});
-            selRows.push({name:_.keys(val)[0],row:res});
+            let idx=_.findIndex(PTR,{DC_ID:parseInt(key)});
+            selRows.push({name:_.keys(val).toString(),row:res,indx:idx});
         });
         let data={ProductCorrectorData:products,contractData:this.contractData,curPricingTable:this.curPricingTable,selRows:selRows};
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
@@ -713,10 +716,36 @@ export class pricingTableEditorComponent implements OnChanges {
             width: '1750px',
             data: data,
         });
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-               //logic yet to add
-               console.log(result);
+        dialogRef.afterClosed().subscribe((selProds:Array<ProdCorrectObj>)=> {
+            if (selProds) {
+                this.isLoading = true;
+                this.spinnerMessageHeader = 'PTE Reloading';
+                this.spinnerMessageDescription = 'PTE Reloading please wait';
+                _.each(selProds,selProd =>{
+                    let PTR_SYS_PRD={};
+                    PTR_SYS_PRD[`${selProd.name}`]=_.pluck(selProd.items,'prodObj');
+                    //here the order of seting the preoperty is important and must not change
+                    this.hotTable.setDataAtRowProp(selProd.indx,'PTR_SYS_PRD',JSON.stringify(PTR_SYS_PRD),'no-edit');
+                });
+                //logic to bind the selected product and PTR_SYS_PRD to PTR
+                //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
+                _.each(selProds,(selProd,idx) =>{
+                   //logic to bind the selected product and PTR_SYS_PRD to PTR
+                    let PTR=[]
+                    if(this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD=='KIT'){
+                    if(idx!=0){
+                            selProds[idx].indx=selProds[idx-1].indx+selProds[idx-1].items.length;
+                        }
+                    }
+                    PTR.push({row:selProds[idx].indx , prop: 'PTR_USER_PRD', old:selProd.name,new:_.pluck(selProd.items,'prod').toString()})
+                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates,this.columns,'prodcorr');
+                    if(idx==selProds.length-1){
+                        //handonsontable takes time to bind the data to the so putting this logic.
+                        setTimeout(()=>{
+                            this.isLoading = false;
+                        },2000);
+                    }
+                 });
             }
         });
     }
@@ -790,10 +819,3 @@ export class pricingTableEditorComponent implements OnChanges {
         new PTE_Common_Util(this.hotTable);
     }
 }
-
-angular.module("app").directive(
-    "pricingTableEditor",
-    downgradeComponent({
-        component: pricingTableEditorComponent,
-    })
-);
