@@ -1,16 +1,17 @@
-import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation, } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+import { Component, Input, OnInit, ViewEncapsulation, } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { meetCompContractService } from "../meetComp/meetComp.component.service";
+import { meetCompContractService } from "./meetComp.service";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Keys } from "@progress/kendo-angular-common";
 import { List } from "linqts";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import {GridUtil} from "../grid.util"
+import {MeetCompContractUtil} from "./meetComp_util"
+import * as moment from "moment";
 
 @Component({
     selector: "meet-comp-contract",
@@ -30,11 +31,7 @@ export class meetCompContractComponent implements OnInit {
         private loggerSvc: logger,
         private meetCompSvc: meetCompContractService,
         private formBuilder: FormBuilder
-    ) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    ) {}
 
     public spinnerMessageHeader = "";
     public isLoading = false;
@@ -81,6 +78,8 @@ export class meetCompContractComponent implements OnInit {
     public isGridEditable = true;
     public isEditableGrid = "True";
     public selectAllState: SelectAllCheckboxState = "unchecked";
+    public showPopup = false;
+    public lastMeetCompRunValue = "";
 
     public selectedCust = '';
     public selectedCustomerText = '';
@@ -126,13 +125,6 @@ export class meetCompContractComponent implements OnInit {
             value: 100,
         }
     ];
-    //Setting DICT for Confrim box
-    public msgDescDict = {
-        'COMP_SKU_NEW': 'You have entered a new Meet Comp SKU and price. Please make sure to store the Meet Comp SKU and price source in My Deals or in a legal approved repository as required by the MCA guidelines. Also, work with your Division Approver so they can update the necessary documentation.',
-        'COMP_SKU_UPD': 'You have overwritten the pre-populated Meet Comp Price. Please make sure to store the Meet Comp price source in My Deals or in a legal approved repository as required by the MCA guidelines.',
-        'IA_COMP_BNCH': 'You have overwritten the pre-populated or entered a new IA Bench / Comp Bench.Please make sure to store the IA Bench / Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.Also, work with your Division Approver so they can update the necessary documentation.',
-        'SKU_BNCH': 'You have entered or overwritten the Meet Comp and IA Bench / Comp Bench data.Please make sure to store the Meet Comp and IA Bench / Comp Bench source in My Deals or in a legal approved repository as required by the MCA guidelines.Also, work with your Division Approver so they can update the necessary documentation.'
-    };
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -174,81 +166,7 @@ export class meetCompContractComponent implements OnInit {
 
     isModelValid(data) {
         this.errorList = [];
-        for (let i = 0; i < data.length; i++) {
-            let isError = false;
-            const errorObj = {
-                'COMP_SKU': false,
-                'COMP_PRC': false,
-                'COMP_BNCH': false,
-                'IA_BNCH': false,
-                'COMP_OVRRD_FLG': false,
-                'COMP_OVRRD_RSN': false,
-                'RW_NM': ""
-            };
-
-            //COMP_SKU Checking.....
-            const isCompSkuZero = false;
-            // per DE36513 removed this check... but left it here in case the request comes back
-            //if (!isNaN(Math.abs(data[i].COMP_SKU))) {
-            //    isCompSkuZero = true;
-            //}
-
-            if (isCompSkuZero && this.canUpdateMeetCompSKUPriceBench && data[i].MEET_COMP_STS.toLowerCase() != "na") {
-                errorObj.COMP_SKU = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            if (data[i].COMP_SKU.trim().length == 0 && this.canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                errorObj.COMP_SKU = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            //COMP_PRC checking.....
-            if (data[i].COMP_PRC <= 0 && this.canUpdateMeetCompSKUPriceBench && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                errorObj.COMP_PRC = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            //COMP_BNCH checking....
-            if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (this.usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                errorObj.COMP_BNCH = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            //IA_BNCH checking....
-            if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && (this.usrRole === "GA") && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" || data[i].MEET_COMP_STS.toLowerCase() == "not run yet")) {
-                errorObj.IA_BNCH = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            //COMP_OVRRD_FLG checking....
-            if (data[i].COMP_OVRRD_FLG <= 0 && (this.usrRole == "DA")) {
-                errorObj.COMP_OVRRD_FLG = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            //COMP_OVRRD_RSN checking....
-            if (data[i].COMP_OVRRD_RSN <= 0 && (this.usrRole == "DA")) {
-                errorObj.COMP_OVRRD_RSN = true;
-                errorObj.RW_NM = data[i].RW_NM;
-                isError = true;
-            }
-
-            if (isError)
-                this.errorList.push(errorObj);
-        }
-
-        if (this.errorList.length > 0){
-            return false;
-        }else{
-            return true;
-        }
+        return MeetCompContractUtil.isModelValid(data,this.errorList,this.canUpdateMeetCompSKUPriceBench,this.usrRole);  
     }
 
     public cellClickHandler(args: CellClickEvent): void {
@@ -356,8 +274,7 @@ export class meetCompContractComponent implements OnInit {
                     })
                     .GroupBy( (x) =>{
                         return (x.COMP_PRC);
-                    })
-                    
+                    })   
             }
             const resultMeetCompPrcArray = [];
             for (const key in resultObj) {
@@ -369,8 +286,7 @@ export class meetCompContractComponent implements OnInit {
                 resultMeetCompPrcArray.push(newEntry);
             }
             this.meetCompPrcDropdownData = resultMeetCompPrcArray;
-        }
-        
+        } 
     }
 
     //Triggered on click of checkbox on grid
@@ -423,10 +339,6 @@ export class meetCompContractComponent implements OnInit {
                 this.resetDealItems(this.meetCompMasterdata._elements[selectedID - 1].GRP_PRD_SID, this.meetCompMasterdata,isSelected); // Reset All the Deals not copied from Peers
             }
         }
-        //Holding expanded column
-        if (selectedID == 'all') {
-            // expandSelected();
-        }
     }
 
     resetDealItems(GRP_PRD_SID, data,isSelected) {
@@ -458,19 +370,7 @@ export class meetCompContractComponent implements OnInit {
 
     //Returns all selected rows from grid
     getProductLineData() {
-        let filterData;
-        if (this.state.filter.filters.length > 0) {
-            filterData = this.gridData.data;
-        }
-        else {
-            filterData = this.meetCompMasterdata.ToArray();
-        }
-        //UPDATE Selected Product ROWS
-        const selectedData = filterData
-            .filter( (x)=> {
-                return (x.IS_SELECTED == true);
-            })
-        return selectedData;
+       return MeetCompContractUtil.getProductLineData(this.state,this.gridData,this.meetCompMasterdata);
     }
 
     addSKUForCustomer(mode, isSelected) {
@@ -483,7 +383,6 @@ export class meetCompContractComponent implements OnInit {
                 this.meetCompMasterdata._elements[this.curentRow - 1].CUST_NM_SID = 1;
             }
             this.addToUpdateList(this.meetCompMasterdata._elements[this.curentRow - 1]);
-            let isUpdated = false;
             //Update child
             if (this.meetCompMasterdata._elements[this.curentRow - 1].GRP == "PRD") {
                 let selData = [];
@@ -491,7 +390,6 @@ export class meetCompContractComponent implements OnInit {
                     selData = this.getProductLineData();
                 }
                 if (selData.length > 0) {
-                    isUpdated = true;
                     for (let cntData = 0; selData.length > cntData; cntData++) {
                         const temp_grp_prd = selData[cntData].GRP_PRD_SID;
                         //Updating Product Line
@@ -523,58 +421,53 @@ export class meetCompContractComponent implements OnInit {
                         this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_SKU = this.selectedCustomerText;
                         this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                     }
-                    if (tempData.length > 0) {
-                        isUpdated = true;
-                    }
-                }
-                if (isUpdated) {
-                    // expandSelected("COMP_SKU", $scope.curentRow);
                 }
             }
         }
     }
 
     loadMeetCompData() {
-        this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-        this.MC_MODE = "A";
         this.meetCompSvc.getMeetCompProductDetails(this.objSid, this.MC_MODE, this.objTypeId).subscribe(
             (response: Array<any>) => {
-                response.forEach( (obj) => {
-                    obj.IS_SELECTED = false;
-                    //Setting COMP_PRC to null. Its nullable Int
-                    if (obj.COMP_PRC == 0) {
-                        obj.COMP_PRC = null;
+                if (response.length == 0 && this.isAdhoc == 1) {
+                    this.loggerSvc.error("Meet comp is not applicable for the Products selected in the Tender Table editor","Alert");                                     
+                }
+                if(response.length > 0){
+                    response.forEach( (obj) => {
+                        obj.IS_SELECTED = false;
+                        //Setting COMP_PRC to null. Its nullable Int
+                        if (obj.COMP_PRC == 0) {
+                            obj.COMP_PRC = null;
+                        }
+                        //Setting IA_BNCH to null. Its nullable Int
+                        if (obj.IA_BNCH == 0) {
+                            obj.IA_BNCH = null;
+                        }
+                        //Setting COMP_BNCH to null. Its nullable Int
+                        if (obj.COMP_BNCH == 0) {
+                            obj.COMP_BNCH = null;
+                        }
+                    });
+                    this.meetCompMasterResult = response;
+                    this.totalApiEntries = this.meetCompMasterResult.length;
+                    this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
+                    const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
+                    this.meetCompUnchangedData = new List<any>(tempCopy);
+                    if (this.usrRole == "GA" || (this.usrRole == "FSE" && this.isAdhoc == 1)) {                                
+                        this.isModelValid(this.meetCompMasterdata._elements);
                     }
-                    //Setting IA_BNCH to null. Its nullable Int
-                    if (obj.IA_BNCH == 0) {
-                        obj.IA_BNCH = null;
-                    }
-                    //Setting COMP_BNCH to null. Its nullable Int
-                    if (obj.COMP_BNCH == 0) {
-                        obj.COMP_BNCH = null;
-                    }
-                });
-                this.meetCompMasterResult = response;
-                this.totalApiEntries = this.meetCompMasterResult.length;
-                this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
-                const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
-                this.meetCompUnchangedData = new List<any>(tempCopy);
-                this.gridResult = this.meetCompMasterdata
-                    .Where(function (x) {
-                        return x.GRP == "PRD" && x.DEFAULT_FLAG == "Y";
-                    })
-                    .OrderBy(function (x) {
-                        return x.MEET_COMP_STS;
-                    })
-                    .ToArray();
-                this.gridData = process(this.gridResult, this.state);
+                    this.reBindGridData();
+                    this.isLoading = false;
+                }else{
+                    if (this.isAdhoc == 0) {
+                        this.loggerSvc.error("No Meet Comp data available for product(s) in this Contract","Alert");
+                        this.isLoading = false;
+                        return;
+                    } 
+                }  
+            },(error) => {
+                this.loggerSvc.error("Unable to get GetMeetCompProductDetails data",error);
                 this.isLoading = false;
-            },
-            error => {
-                this.loggerSvc.error(
-                    "Unable to get GetMeetCompProductDetails data",
-                    error
-                );
             }
         );
     }
@@ -591,10 +484,8 @@ export class meetCompContractComponent implements OnInit {
         else if (selectedIndx > -1 && this.selectedCustomerText.trim().length > 0) {
             const selectedValue = val.RW_NM;
             dataItem.COMP_SKU = this.selectedCustomerText.trim();
-
             let tempprcData = [];
             dataItem.COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
-            let isUpdated = false;
             if (dataItem.GRP == "PRD") {
                 let selData = [];
                 if (dataItem.IS_SELECTED) {
@@ -602,16 +493,13 @@ export class meetCompContractComponent implements OnInit {
                 }
                 this.addSKUForCustomer("0", dataItem.IS_SELECTED);
                 if (selData.length > 0) {
-                    isUpdated = true;
                     for (let cntData = 0; selData.length > cntData; cntData++) {
                         const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                         //Updating Product Line
                         if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                             this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                             this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                         }
-
                         //Updating Deal line
                         tempprcData = this.meetCompUnchangedData
                             .Where(function (x) {
@@ -632,14 +520,12 @@ export class meetCompContractComponent implements OnInit {
                         .Where(function (x) {
                             return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
                         }).ToArray();
+
                     for (let i = 0; i < tempprcData.length; i++) {
                         if (dataItem.COMP_PRC) {
                             this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                         }
                         this.addToUpdateList(this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1]);
-                    }
-                    if (tempprcData.length > 0) {
-                        isUpdated = true;
                     }
                 }
             }
@@ -647,11 +533,6 @@ export class meetCompContractComponent implements OnInit {
             // Setting COMP PRC based on Comp SKU if available
             this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
             this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
-
-            //Retaining the same expand
-            if (isUpdated) {
-                // expandSelected("COMP_SKU", options.model.RW_NM);
-            }
         }
     }
 
@@ -664,7 +545,6 @@ export class meetCompContractComponent implements OnInit {
                 x.COMP_SKU == dataItem.COMP_SKU
             );
         }).ToArray();
-
         //Set AMT
         let itm_amt = 0;
         if (objItem.length > 0) {
@@ -680,23 +560,19 @@ export class meetCompContractComponent implements OnInit {
             }
             if (dataItem.COMP_PRC > 0) {
                 let tempData = [];
-                let isUpdated = false;
                 if (dataItem.GRP == "PRD") {
                     let selData = [];
                     if (dataItem.IS_SELECTED) {
                         selData = this.getProductLineData();
                     }
                     if (selData.length > 0) {
-                        isUpdated = true;
                         for (let cntData = 0; selData.length > cntData; cntData++) {
                             const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                             //Updating Product Line
                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
                                 this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                                 this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                             }
-
                             //Updating Deal line
                             tempData = this.meetCompUnchangedData
                                 .Where(function (x) {
@@ -727,19 +603,10 @@ export class meetCompContractComponent implements OnInit {
                             this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                             this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                         }
-
-                        if (tempData.length > 0) {
-                        isUpdated = true;
-                        }
                     }
                 }
                 this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                 this.addToUpdateList(dataItem);
-
-                //Retaining the same expand
-                if (isUpdated) {
-                // expandSelected("COMP_PRC", options.model.RW_NM);
-                }
             } else {
                 return false;
             }
@@ -752,23 +619,19 @@ export class meetCompContractComponent implements OnInit {
             if (val > 0) {
                 this.meetCompMasterdata._elements[dataItem.RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
                 this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
-                let isUpdated = false;
                 if (dataItem.GRP == "PRD") {
                     let selData = [];
                     if (dataItem.IS_SELECTED) {
                         selData = this.getProductLineData();
                     }
                     if (selData.length > 0) {
-                        isUpdated = true;
                         for (let cntData = 0; selData.length > cntData; cntData++) {
                             const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                             //Updating Product Line
                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                 this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
                                 this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                             }
-
                             //Updating Deal line
                             const tempData = this.meetCompUnchangedData
                                 .Where(function (x) {
@@ -792,21 +655,12 @@ export class meetCompContractComponent implements OnInit {
                             this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].IA_BNCH = dataItem.IA_BNCH;
                             this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                         }
-
-                        if (tempData.length > 0) {
-                            isUpdated = true;
-                        }
-                    }
-                    //Retaining the same expand
-                    if (isUpdated) {
-                        // expandSelected("IA_BNCH", options.model.RW_NM);
                     }
                 }
             }
             else {
                 return false;
             }
-
         }
     }
 
@@ -816,24 +670,19 @@ export class meetCompContractComponent implements OnInit {
             if (val > 0) {
                 this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
                 this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
-                let isUpdated = false;
-
                 if (dataItem.GRP == "PRD") {
                     let selData = [];
                     if (dataItem.IS_SELECTED) {
                         selData = this.getProductLineData();
                     }
                     if (selData.length > 0) {
-                        isUpdated = true;
                         for (let cntData = 0; selData.length > cntData; cntData++) {
                             const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                             //Updating Product Line
                             if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && selData[cntData].PRD_CAT_NM.toLowerCase() == "svrws") {
                                 this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
                                 this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                             }
-
                             //Updating Deal line
                             const tempData =this.meetCompUnchangedData
                                 .Where(function (x) {
@@ -858,17 +707,7 @@ export class meetCompContractComponent implements OnInit {
                             this.meetCompMasterdata._elements[tempData[i].RW_NM - 1].COMP_BNCH = dataItem.COMP_BNCH;
                             this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                         }
-
-                        if (tempData.length > 0) {
-                            isUpdated = true;
-                        }
                     }
-
-                    //Retaining the same expand
-                    if (isUpdated) {
-                        // expandSelected("COMP_BNCH", options.model.RW_NM);
-                    }
-
                 }
             }
             else {
@@ -878,30 +717,24 @@ export class meetCompContractComponent implements OnInit {
     }
 
     onCompOverrideFlagChange(val:any,dataItem:any){
-
         if(val == "Select Override"){
             val = "Yes";
         }
-
         this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_OVRRD_FLG = val.trim();
         this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
-        let isUpdated = false;
         if (dataItem.GRP == "PRD") {
             let selData = [];
             if (dataItem.IS_SELECTED) {
                 selData = this.getProductLineData();
             }
             if (selData.length > 0) {
-                isUpdated = true;
                 for (let cntData = 0; selData.length > cntData; cntData++) {
                     const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                     //Updating Product Line
                     if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                         this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_OVRRD_FLG = dataItem.COMP_OVRRD_FLG;
                         this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                     }
-
                     //Updating Deal line
                     const tempData = this.meetCompUnchangedData
                         .Where(function (x) {
@@ -939,41 +772,27 @@ export class meetCompContractComponent implements OnInit {
                         this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                     }
                 }
-
-                if (tempData.length > 0) {
-                    isUpdated = true;
-                }
-            }
-
-            //Retaining the same expand
-            if (isUpdated) {
-                // expandSelected("COMP_OVRRD_FLG", options.model.RW_NM);
             }
         }
     }
 
-    onCompOverrideCommentChange(value:any,dataItem:any){
-        
+    onCompOverrideCommentChange(value:any,dataItem:any){   
         dataItem.COMP_OVRRD_RSN = value.trim();
         this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
         this.addToUpdateList(dataItem);
-        let isUpdated = false;
         if (dataItem.GRP == "PRD") {
             let selData = [];
             if (dataItem.IS_SELECTED) {
                 selData = this.getProductLineData();
             }
             if (selData.length > 0) {
-                isUpdated = true;
                 for (let cntData = 0; selData.length > cntData; cntData++) {
                     const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-
                     //Updating Product Line
                     if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y" && (selData[cntData].MEET_COMP_STS.toLowerCase() == "fail" || selData[cntData].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                         this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_OVRRD_RSN = dataItem.COMP_OVRRD_RSN;
                         this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
                     }
-
                     //Updating Deal line
                     const tempData = this.meetCompUnchangedData
                         .Where(function (x) {
@@ -1012,13 +831,6 @@ export class meetCompContractComponent implements OnInit {
                         this.addToUpdateList(this.meetCompMasterdata._elements[tempData[i].RW_NM - 1]);
                     }
                 }
-                if (tempData.length > 0) {
-                    isUpdated = true;
-                }
-            }
-            //Retaining the same expand
-            if (isUpdated) {
-                // expandSelected("COMP_OVRRD_RSN", editedROW.RW_NM);
             }
         }
     }
@@ -1045,80 +857,95 @@ export class meetCompContractComponent implements OnInit {
         });
     }
 
-    lastMeetCompRunCalc() {
-        return "Meet Comp Last Run: 2 hrs ago";
+    lastMeetCompRunCalc(forceRun?:boolean) { 
+       const LAST_MEET_COMP_RUN = this.lastMeetCompRun;
+       let dsplNum;
+       let dsplMsg;
+        if (!!LAST_MEET_COMP_RUN) {
+            const localTime = GridUtil.convertLocalToPST(new Date());
+            const lastruntime = moment(LAST_MEET_COMP_RUN);                     
+            const serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+            const timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+            const hh = Math.abs(timeDiff.asHours());
+            const mm = Math.abs(timeDiff.asMinutes());
+            const ss = Math.abs(timeDiff.asSeconds());
+            const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
+            this.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")"; //lastruntime.format("MM/DD/YY HH:mm:ss");
+            dsplNum = hh;
+            dsplMsg = " hours ago";
+            const childForceRun = forceRun != undefined ? forceRun : true; 
+            let needToRunPct = childForceRun || (this.runIfStaleByHours > 0 && dsplNum >= this.runIfStaleByHours) ? true : false;
+            if (dsplNum < 1) {
+                dsplNum = mm;
+                dsplMsg = " mins ago";
+                if (!childForceRun){
+                    needToRunPct = false;
+                }
+            }
+            if (dsplNum < 1) {
+                dsplNum = ss;
+                dsplMsg = " secs ago";
+                if (!childForceRun){
+                    needToRunPct = false;
+                }
+            }
+            if (needToRunPct) {
+                this.MC_MODE = "A";
+            }
+        } else {
+            this.MC_MODE = "A";
+        }
+        if (Math.round(dsplNum) > 0) {
+            this.lastMeetCompRunValue = "Meet Comp Last Run: " + Math.round(dsplNum) + dsplMsg;
+        }
+        else {
+            this.lastMeetCompRunValue =  "";
+        }  
+        this.loadMeetCompData();
     }
 
     getMeetCompPopupMessage() {
-        let isSKUChanged = false;
-        let isPriceChanged = false;
-        let isIACompBenchChanged = false;
-        for (let i = 0; i < this.tempUpdatedList.length; i++) {
-            const ChangedSKUCount = this.meetCompUnchangedData
-                .Where(function (x) {
-                    return (
-                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
-                        x.COMP_SKU == this.tempUpdatedList[i].COMP_SKU
-                    )
-                }).ToArray();
+        return MeetCompContractUtil.getMeetCompPopupMessage(this.tempUpdatedList,this.meetCompUnchangedData);
+    }
 
-            const ChangedPRCCount = this.meetCompUnchangedData
-                .Where(function (x) {
-                    return (
-                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
-                        x.COMP_SKU == this.tempUpdatedList[i].COMP_SKU &&
-                        x.COMP_PRC == this.tempUpdatedList[i].COMP_PRC
-                    )
-                }).ToArray();
+    reBindGridData(){
+        this.addErrorClasses(this.meetCompMasterResult);
+        this.gridResult = this.meetCompMasterdata
+        .Where(function (x) {
+            return x.GRP == "PRD" && x.DEFAULT_FLAG == "Y";
+        })
+        .OrderBy(function (x) {
+            return x.MEET_COMP_STS;
+        })
+        .ToArray();
+        this.gridData = process(this.gridResult, this.state);
+    }
 
-            const changedIACMPBenchCount =this.meetCompUnchangedData
-                .Where(function (x) {
-                    return (
-                        x.GRP_PRD_SID == this.tempUpdatedList[i].GRP_PRD_SID &&
-                        x.IA_BNCH == this.tempUpdatedList[i].IA_BNCH &&
-                        x.COMP_BNCH == this.tempUpdatedList[i].COMP_BNCH
-                    )
-                }).ToArray();
+    savePopupAction(){
+        this.showPopup = false;
+        this.updateMeetComp();
+    }
 
+    closePopup(){
+        this.showPopup = false;
+        const unChangedMeetComp = this.meetCompUnchangedData;
+        this.tempUpdatedList = [];
+        this.meetCompUpdatedList = [];
+        this.meetCompMasterdata = unChangedMeetComp;
+        const tempCopy = JSON.parse(JSON.stringify(unChangedMeetComp._elements));
+        this.meetCompUnchangedData = new List<any>(tempCopy);
+        this.reBindGridData();
+    }
 
-            if (isSKUChanged == false && ChangedSKUCount.length == 0) {
-                isSKUChanged = true;
-            }
-            if (isPriceChanged == false && ChangedPRCCount.length == 0) {
-                isPriceChanged = true;
-            }
-            if (isIACompBenchChanged == false && changedIACMPBenchCount.length == 0) {
-                isIACompBenchChanged = true;
-            }
-
-        }
-
-        if ((isSKUChanged || isPriceChanged) && isIACompBenchChanged) {
-            return this.msgDescDict['SKU_BNCH'];
-        }
-        else if (isIACompBenchChanged) {
-            return this.msgDescDict['IA_COMP_BNCH'];
-        }
-        else if (isSKUChanged) {
-            return this.msgDescDict['COMP_SKU_NEW'];
-        }
-        else if (isPriceChanged) {
-            return this.msgDescDict['COMP_SKU_UPD'];
-        }
-        else {
-            return null;
-        }
+    addErrorClasses(dataItems){
+       MeetCompContractUtil.addErrorClasses(dataItems,this.errorList);
     }
 
     saveAndRunMeetComp() {
-        console.log("Griddata :" , this.gridData);
-        console.log("Meet comp updated list", this.meetCompUpdatedList);
-        
-        let tempUpdatedList = [];
-        const unChangedMeetComp = this.meetCompUnchangedData;
+        this.tempUpdatedList = [];
         const isValid = this.isModelValid(this.meetCompUpdatedList);
         if (isValid) {
-            tempUpdatedList = this.meetCompUpdatedList.map(function (x) {
+            this.tempUpdatedList = this.meetCompUpdatedList.map(function (x) {
                 return {
                     GRP: x.GRP,
                     CUST_NM_SID: x.CUST_NM_SID,
@@ -1137,53 +964,73 @@ export class meetCompContractComponent implements OnInit {
                     MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG,
                     MEET_COMP_OVERRIDE_UPD_FLG: x.MEET_COMP_OVERRIDE_UPD_FLG
                 }
-
             });
-
-            if (tempUpdatedList.length > 0) {
+            if (this.tempUpdatedList.length > 0) {
                 const popUpMessage = this.getMeetCompPopupMessage();
                 if (popUpMessage != null) {
-                    // kendo.confirm(popUpMessage)
-                    //     .done(function () {
-                    //         $scope.updateMeetComp();
-                    //     }).fail(function () {
-                    //         $scope.tempUpdatedList = [];
-                    //         $scope.meetCompUpdatedList = [];
-                    //         $scope.meetCompMasterdata = unChangedMeetComp;
-                    //         $scope.meetCompUnchangedData = angular.copy(unChangedMeetComp);
-                    //         $scope.dataSourceParent.read();
-                    //     });
+                    this.showPopup = true;
                 }
                 else {
                     this.updateMeetComp();
                 }
             }
-            else if (tempUpdatedList.length == 0 && this.isAdhoc == 0) {
+            else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 0) {
                 this.forceRunMeetComp();                                        
             }
         }
         else {
             if (this.usrRole == "DA") {
-                // kendo.alert("Analysis Override Status OR Analysis Override Comments can't be Blank.");
+                this.loggerSvc.error("Analysis Override Status OR Analysis Override Comments can't be Blank.","Alert");
             }
             else {
-                // kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
+                this.loggerSvc.error("Meet comp data is missing for some product(s).Please enter the data and save the changes.","Alert");
             }
-            // $scope.dataSourceParent.read();
+            this.reBindGridData();
         }
-    
     }
 
     forceRunMeetComp() {
-        //to complete
+        this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");                        
+        this.meetCompSvc.getMeetCompProductDetails(this.objSid ,'A',this.objTypeId).subscribe( (response:Array<any>)=> {
+           this.meetCompMasterResult = response;
+            this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
+            const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
+            this.meetCompUnchangedData = new List<any>(tempCopy);
+            if (this.usrRole == "GA" || (this.usrRole == "FSE" && this.isAdhoc == 1)) {
+                this.isModelValid(this.meetCompMasterdata._elements);
+            }
+            this.reBindGridData();
+            this.isLoading = false;
+            this.tempUpdatedList = [];
+            this.meetCompUpdatedList = [];
+        },(error)=> {
+                this.loggerSvc.error("Unable to get GetMeetCompProductDetails data", error, error.statusText);
+                this.isLoading = false;
+        });
     }
 
     updateMeetComp(){
-        //to complete
+        this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+        this.meetCompSvc.updateMeetCompProductDetails( this.objSid, this.objTypeId,this.tempUpdatedList).subscribe((response:Array<any>)=> {
+            this.meetCompMasterResult = response;
+            this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
+            const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
+            this.meetCompUnchangedData = new List<any>(tempCopy);
+            if (this.usrRole == "GA" || (this.usrRole == "FSE" && this.isAdhoc == 1)) {
+                this.isModelValid(this.meetCompMasterdata._elements);
+            }
+            this.reBindGridData();
+            this.isLoading = false;
+            this.tempUpdatedList = [];
+            this.meetCompUpdatedList = []; 
+        }, (error)=> {
+                this.loggerSvc.error("Unable to save UpdateMeetCompProductDetails data", error, error.statusText);
+                this.isLoading = false;
+        });
     }
 
     showHelpTopic() {
-        //kyhvkyuv
+        window.open('https://wiki.ith.intel.com/display/Handbook/Auto+Population', '_blank');
     }
 
     public filterSettings: DropDownFilterSettings = {
@@ -1216,14 +1063,8 @@ export class meetCompContractComponent implements OnInit {
     ngOnInit(): void {
         this.PAGE_NM = this.pageNm;
         if(!!this.objSid){
-            this.loadMeetCompData();
+            this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+            this.lastMeetCompRunCalc();
         }
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "meetCompContract",
-        downgradeComponent({ component: meetCompContractComponent })
-    );

@@ -2,6 +2,7 @@
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DE_Load_Util } from './DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTEUtils/PTE_Config_util';
+import * as moment from 'moment-timezone';
 export class GridUtil {
     static uiControlWrapper(passedData, field, format) {
         var msg = "";
@@ -694,5 +695,9 @@ export class GridUtil {
             return dateTimeStr.substring(0, idx);
         }
         return dateTimeStr;
+    }
+    static convertLocalToPST(strDt) {
+        moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+        return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
     }
 }

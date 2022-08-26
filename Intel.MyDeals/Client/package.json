@@ -10,7 +10,7 @@
     },
     "author": "abhilash.keerampara@intel.com",
     "license": "ISC",
-    "dependencies": { 
+    "dependencies": {
         "@angular/animations": "^12.1.2",
         "@angular/cdk": "^12.1.2",
         "@angular/common": "^12.1.2",
@@ -85,6 +85,7 @@
         "handsontable": "^12.0.1",
         "handsontable-multi-select": "^0.27.26",
         "linqts": "^1.14.4",
+        "moment-timezone": "^0.5.35",
         "ng2-search-filter": "^0.5.1",
         "ngx-order-pipe": "^2.2.0",
         "ngx-pipes": "2.7.6",

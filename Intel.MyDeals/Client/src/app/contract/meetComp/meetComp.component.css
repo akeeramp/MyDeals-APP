@@ -5,6 +5,7 @@
 .k-icon:hover {
     color: #00AEEF !important;
 }
+
 .k-label {
     padding: 1px;
     min-width: 7px;
@@ -12,28 +13,40 @@
     display: inline-block;
     font-size: 12px !important;
 }
-.k-cell-inner > .k-link:hover {
+
+.k-cell-inner>.k-link:hover {
     background: none !important;
     color: #1a3e6f !important;
 }
+
 .k-column-title {
     font-size: 12px !important;
     font-weight: bold !important;
     color: #003C71;
 }
-.k-grid td.k-state-focused, .k-grid th.k-state-focused,
-.k-grid th:focus, .k-grid .k-master-row > td:focus,
-.k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus,
-.k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
+
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus,
+.k-grid .k-master-row>td:focus,
+.k-grid .k-grouping-row>td:focus,
+.k-grid .k-detail-row>td:focus,
+.k-grid .readOnlyCell>td:focus,
+.k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important;
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused,
-.k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover,
-.k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover,
-.k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus:hover,
+.k-grid .k-master-row>td:focus:hover,
+.k-grid .k-grouping-row>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover,
+.k-grid .readOnlyCell>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover {
     box-shadow: inset 0 0 0 1px #003C71 !important;
 }
+
 .k-grid-content {
     overflow-y: overlay;
 }
@@ -42,7 +55,7 @@
     white-space: nowrap !important;
 }
 
-.childGrid > .k-grid-content {
+.childGrid>.k-grid-content {
     height: auto !important
 }
 
@@ -94,7 +107,7 @@
 
 .readOnlyCell {
     color: #000 !important;
-    background-color: rgba(0,0,0,.05) !important;
+    background-color: rgba(0, 0, 0, .05) !important;
     text-align: left;
     padding-top: 8px;
     padding-left: 10px;
@@ -149,7 +162,7 @@
     overflow: hidden !important;
 }
 
-.k-detail-row > .k-detail-cell > div:first-child {
+.k-detail-row>.k-detail-cell>div:first-child {
     margin-top: 0px !important;
     margin-left: -6px !important;
     overflow: hidden !important;
@@ -177,6 +190,7 @@
 }
 
 .errorItemList {
+    height: inherit;
     border-color: rgb(255, 0, 0) !important;
     border: 1px solid rgb(255, 0, 0) !important;
 }
@@ -196,7 +210,7 @@
     color: #c7c7c7;
 }
 
-.k-grid-content > table > tbody > tr > td {
+.k-grid-content>table>tbody>tr>td {
     padding-left: 5px !important;
 }
 
@@ -255,12 +269,12 @@
     display: none;
 }
 
-.k-menu .k-item > .k-link {
+.k-menu .k-item>.k-link {
     padding: 0px;
     color: #00AEEF;
 }
 
-.k-menu .k-item > .k-link:hover {
+.k-menu .k-item>.k-link:hover {
     color: #FFFFFF;
 }
 
@@ -276,8 +290,8 @@
     width: 1px;
 }
 
-.dealTools input[type=radio].with-font + label:before,
-.dealTools input[type=checkbox].with-font + label:before {
+.dealTools input[type=radio].with-font+label:before,
+.dealTools input[type=checkbox].with-font+label:before {
     font-family: FontAwesome;
     display: inline-block;
     content: "\f096";
@@ -287,20 +301,20 @@
     margin-left: 10px;
 }
 
-.dealTools input[type=radio].with-font:hover + label:before,
-.dealTools input[type=checkbox].with-font:hover + label:before {
+.dealTools input[type=radio].with-font:hover+label:before,
+.dealTools input[type=checkbox].with-font:hover+label:before {
     color: #003C71;
     cursor: pointer;
 }
 
-.dealTools input[type=radio].with-font.disabled + label:before,
-.dealTools input[type=checkbox].with-font.disabled + label:before {
+.dealTools input[type=radio].with-font.disabled+label:before,
+.dealTools input[type=checkbox].with-font.disabled+label:before {
     color: #cccccc;
     cursor: default;
 }
 
-.dealTools input[type=radio].with-font:checked + label:before,
-.dealTools input[type=checkbox].with-font:checked + label:before {
+.dealTools input[type=radio].with-font:checked+label:before,
+.dealTools input[type=checkbox].with-font:checked+label:before {
     content: "\f046";
     font-size: 20px;
     letter-spacing: 5px;
@@ -308,14 +322,14 @@
     margin-left: 10px;
 }
 
-.dealTools input[type=radio].with-font:focus + label:before,
-.dealTools input[type=checkbox].with-font:focus + label:before {
+.dealTools input[type=radio].with-font:focus+label:before,
+.dealTools input[type=checkbox].with-font:focus+label:before {
     font-weight: bold;
     color: #00AEEF;
 }
 
-.dealTools input[type=radio].with-font:checked:focus + label:before,
-.dealTools input[type=checkbox].with-font:checked:focus + label:before {
+.dealTools input[type=radio].with-font:checked:focus+label:before,
+.dealTools input[type=checkbox].with-font:checked:focus+label:before {
     font-weight: bold;
     color: #C4D600;
 }
@@ -329,11 +343,15 @@
     text-decoration: none;
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused,
-.k-grid th:focus, .k-grid .k-master-row > td:focus,
-.k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus,
-.k-grid .k-group-footer > td:focus,
-.k-grid .k-grid-pager.k-state-focused, .k-grid .k-grid-pager:focus {
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus,
+.k-grid .k-master-row>td:focus,
+.k-grid .k-grouping-row>td:focus,
+.k-grid .k-detail-row>td:focus,
+.k-grid .k-group-footer>td:focus,
+.k-grid .k-grid-pager.k-state-focused,
+.k-grid .k-grid-pager:focus {
     box-shadow: inset 0 0 0 2px rgb(0 0 0 / 8%);
 }
 
@@ -359,20 +377,25 @@ td.k-touch-action-auto {
     height: 100%;
 }
 
-tr:last-child > td {
+tr:last-child>td {
     border-bottom: none !important;
 }
+
 .k-tabstrip-items .k-item {
     margin-right: 0px !important;
     font-size: 15px !important;
     font-weight: 400 !important;
 }
-.k-grid .k-detail-row .k-detail-cell { /*child table padding*/
+
+.k-grid .k-detail-row .k-detail-cell {
+    /*child table padding*/
     padding-top: 0;
     padding-bottom: 5px;
 }
 
-.opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] {
+.opUiContainer.md .opElementHelpIcon,
+.opUiContainer.md [class^="intelicon-"],
+.opUiContainer.md [class*=" intelicon-"] {
     font-size: 20px !important;
 }
 
@@ -390,8 +413,8 @@ tr:last-child > td {
     margin: 0 !important;
     width: 100%;
 }
-<!-- css fixes for twc3167-1939-- >
-.k-grid {
+
+<!-- css fixes for twc3167-1939-->.k-grid {
     border-color: #ffffff !important;
 }
 

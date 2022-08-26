@@ -25,15 +25,16 @@
                 </table>
             </button>
             <div *ngIf="PAGE_NM !='MCTPOPUP'" class="fr" style="padding: 0 5px; width: auto;">
-                <div [textContent]="lastMeetCompRunCalc()" class="btnLastRun meetCompbtnLastRun" style="font-size: 15px" title="{{lastMetCompRunLocalTime}}">
+                <div class="btnLastRun meetCompbtnLastRun" style="font-size: 15px" title="{{lastMetCompRunLocalTime}}">
+                    {{lastMeetCompRunValue}}
                 </div>
             </div>
             <div class="fr helpBtn" title="Help" (click)="showHelpTopic();"><i class="intelicon-help" style="font-size:30px !important"></i></div>
             <div class="clearboth"></div>
         </div>
         <div id="grid" class="opUiContainer md dashboard" [ngClass]="{'op-grid': isAdhoc !=1}">
-            <kendo-grid [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
-                [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
+            <kendo-grid [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}" [groupable]="false"
+                [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
                 <kendo-grid-column width="70px" [columnMenu]="false">
                     <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                         <div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk_header' (click)="selectProdIDS('all', $event)"><label for='lnkChk_header' style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label>
@@ -89,7 +90,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div style="padding-left: 5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
+                        <div style="padding-left: 5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_SKU) }">{{dataItem.COMP_SKU}}</div>
                     </ng-template>
                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
                         <kendo-combobox #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
@@ -103,7 +104,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">
+                        <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_PRC)}">
                             <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc"></div>
                             <ng-template #comp_prc>
                                 <div style="padding-left: 5px;">${{dataItem.COMP_PRC}} </div>
@@ -133,7 +134,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA') }">
+                        <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.IA_BNCH) }">
                             <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch"></div>
                             <ng-template #Ia_Bnch>
                                 <div>{{dataItem.IA_BNCH}}</div>
@@ -150,7 +151,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA') }">
+                        <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_BNCH) }">
                             <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch"></div>
                             <ng-template #Comp_Bnch>
                                 <div>{{dataItem.COMP_BNCH}}</div>
@@ -188,7 +189,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
+                        <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_OVRRD_FLG) }">
                             {{dataItem.COMP_OVRRD_FLG}}
                         </div>
                     </ng-template>
@@ -205,7 +206,7 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
+                        <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_OVRRD_RSN) }">
                             {{dataItem.COMP_OVRRD_RSN}}
                         </div>
                     </ng-template>
@@ -255,28 +256,48 @@
                         <kendo-grid [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
                             (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
                             <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.OBJ_SET_TYPE}}">{{dataItem.OBJ_SET_TYPE}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell'>{{dataItem.DEAL_OBJ_SID}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.DEAL_DESC}}">{{dataItem.DEAL_DESC}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="END_CUST_RETAIL" title="End Customer/Retail" width="170" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.END_CUST_RETAIL}}">{{dataItem.END_CUST_RETAIL}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div style="padding-left:5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">{{dataItem.COMP_SKU}}</div>
+                                    <div style="padding-left:5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_SKU)}">{{dataItem.COMP_SKU}}</div>
                                 </ng-template>
                                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
                                     <kendo-combobox #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
@@ -284,8 +305,12 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False')}">
+                                    <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_PRC)}">
                                         <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc_c"></div>
                                         <ng-template #comp_prc_c>
                                             <div style="padding-left:5px;">${{dataItem.COMP_PRC}} </div>
@@ -298,6 +323,10 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="CAP" title="CAP" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.CAP==0;else cap_c" class="readOnlyCell" title="0"></div>
                                     <ng-template #cap_c>
@@ -307,8 +336,12 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="IA_BNCH" title="IA Bench" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) )}">
+                                    <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) ),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.IA_BNCH)}">
                                         <div *ngIf="(dataItem.IA_BNCH==0 || dataItem.IA_BNCH==null );else Ia_Bnch">
                                         </div>
                                         <ng-template #Ia_Bnch>
@@ -321,8 +354,12 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) )}">
+                                    <div [ngClass]="{'readOnlyCell' : (dataItem.PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA' || (usrRole == 'FSE' && dataItem.PS_STATUS.toLowerCase() != 'draft') || (usrRole == 'GA' && (dataItem.PS_STATUS.toLowerCase() != 'draft' && dataItem.PS_STATUS.toLowerCase() != 'requested') ) ),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_BNCH)}">
                                         <div *ngIf="(dataItem.COMP_BNCH==0 || dataItem.COMP_BNCH==null );else Comp_Bnch">
                                         </div>
                                         <ng-template #Comp_Bnch>
@@ -335,6 +372,10 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompResult" [headerClass]="{'headerClass':true}" field="MEET_COMP_STS" title="Test Results" width="120">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class='readOnlyCell'>
                                         <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon"></icon-mct-pct-angular>
@@ -342,13 +383,21 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="MC_AVG_RPU" title="Avg. Net Price" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class='readOnlyCell' title="{{dataItem.MEET_COMP_FRMULA}}">{{dataItem.MC_AVG_RPU}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_FLG" title="Analysis Override" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
+                                    <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_OVRRD_FLG) }">
                                         {{dataItem.COMP_OVRRD_FLG}}
                                     </div>
                                 </ng-template>
@@ -360,8 +409,12 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) }">
+                                    <div [ngClass]="{'readOnlyCell' : (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || ( dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_OVRRD_RSN) }">
                                         {{dataItem.COMP_OVRRD_RSN}}
                                     </div>
                                 </ng-template>
@@ -373,6 +426,10 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="BRND_FMLY" title="Brand / Family" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell' title="{{dataItem.BRND_FMLY}}">{{dataItem.BRND_FMLY}}</div>
                                 </ng-template>
@@ -383,11 +440,19 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="150" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell'>{{dataItem.MEET_COMP_ANALYSIS}}</div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="ECAP_PRC" title="ECAP Price" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.ECAP_PRC==0;else ecap_prc" class='readOnlyCell' title="0">
                                     </div>
@@ -398,6 +463,10 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="YCS2" title="YCS2 Price" width="120" [headerClass]="{'headerClass':true}">
+                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    </multicheck-filter>
+                                </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div *ngIf="dataItem.YCS2==0;else ycs2_prc" class='readOnlyCell' title="0">
                                     </div>
@@ -415,4 +484,11 @@
         </div>
         <div id="isGridEditable" value=false></div>
     </div>
+    <kendo-dialog *ngIf="showPopup" (close)="closePopup()" [height]="155" [width]="245">
+        <div class="kendoAlert">{{popUpMessage}}</div>
+        <kendo-dialog-actions>
+            <div kendoButton (click)="closePopup()" class="kendo-alrt-btn">Cancel</div>
+            <div kendoButton (click)="savePopupAction()" class="kendo-alrt-btn">Ok</div>
+        </kendo-dialog-actions>
+    </kendo-dialog>
 </div>
