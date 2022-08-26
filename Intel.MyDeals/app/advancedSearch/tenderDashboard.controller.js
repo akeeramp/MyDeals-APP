@@ -1566,7 +1566,7 @@
                     kendo.alert("End Customers needs to be Unified before it can be set to " + newVal);
                 }
                 else if (isDealRPLed) {
-                    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + newVal);
+                     kendo.alert("Intel cannot approve a transaction with the specified End Customer.  The activities conducted within My Deals are subject to U.S. and other applicable export control and sanctions laws.  End Customer needs to be Non-Restricted before it can be set to " + newVal);
                 }
                 else if (isRPLStatusReviewwip) {
                     kendo.alert("End customer Review in Progress. Deal cannot be set to " + newVal + " till Review is complete. ");

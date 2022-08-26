@@ -988,7 +988,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     return;
                 }
                 else if (args["action"] == "Won" && isEcRPLed.length > 0) {
-                    kendo.alert("End Customers needs to be Non Restricted before it can be set to " + args["action"]);
+                    kendo.alert("Intel cannot approve a transaction with the specified End Customer.  The activities conducted within My Deals are subject to U.S. and other applicable export control and sanctions laws.  End Customer needs to be Non-Restricted before it can be set to " + args["action"]);
                     return;
                 }
                 else if (args["action"] == "Won" && isRPLReviewwip.length > 0) {
