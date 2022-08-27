@@ -99,7 +99,7 @@ export class DE_Common_Util {
                 dataItem[field][key] = parseInt(dataItem[field][key] || 0);
             }
         }
-        if (field == "QLTR_BID_GEO") {
+        if (field == "QLTR_BID_GEO" && dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "") {
             dataItem[field] = dataItem[field].split(",").map(function (item) {
                 return item.trim();
             });

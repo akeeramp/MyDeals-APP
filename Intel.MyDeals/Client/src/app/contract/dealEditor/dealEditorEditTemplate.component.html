@@ -22,9 +22,9 @@
             <div class="dimKey">{{translateDimKey(key)}}</div>
             <kendo-numerictextbox [ngModel]="in_DataItem[in_Field_Name][key]"
                                   (ngModelChange)="in_DataItem[in_Field_Name][key] = $event"
-                                  [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                                  [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name, key)"
                                   [value]="in_DataItem[in_Field_Name][key]"
-                                  [autoCorrect]="autoCorrect">
+                                  autoCorrect="true">
             </kendo-numerictextbox>
         </div>
     </div>

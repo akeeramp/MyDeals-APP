@@ -61,7 +61,7 @@ export class GridUtil {
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+                tmplt += '    <div class="ng-binding">' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -100,16 +100,17 @@ export class GridUtil {
             tmplt += '<div class="vert-center">No Sub KIT</div>';
             tmplt += '</div>';
         } else {
+            tmplt += '<div class="uiControlDiv dealCell ' + this.getClassNm(passedData, field) + '">';
             if ((dim == "20_____2" || dim == "20_____1") && field == "ECAP_PRICE") {
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field + '_____' + dim])
-                    tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_____' + dim] + '"></div>';
+                    tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_____' + dim] + '"></div>';
             } else {
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
-                    tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
+                    tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             }
             if (passedData[field][dim] != undefined && passedData[field][dim] != null)
-                tmplt += '    <div class="ng-binding vert-center">' + passedData[field][dim] + '</div>';
-            tmplt += '</div>';
+                tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
+            tmplt += '</div></div>';
         }
         return tmplt;
     }

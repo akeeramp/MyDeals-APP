@@ -57,9 +57,12 @@ export class dealEditorEditTemplateComponent {
         }
     }
 
-    valueChange(dataItem: any, field: any): void {
+    valueChange(dataItem: any, field: any, key?: any): void {
+        if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT') && key != undefined && key != null && key != "" && dataItem[field][key] == null) {
+            dataItem[field][key] = 0;
+        }
         this.updateDataItem(dataItem, field);
-    }
+    }    
     onKeyDown(event, dealDate) {
         if (event.keyCode == 13) {
             this.onBlur(dealDate);

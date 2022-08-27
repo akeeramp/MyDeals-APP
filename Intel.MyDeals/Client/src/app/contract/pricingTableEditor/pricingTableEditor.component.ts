@@ -140,7 +140,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     panelClass: panelClass
                 });
                 dialogRef.afterClosed().subscribe(result => {
-                    if (result) {
+                    if (result != undefined && result != null) {
                         if (this.field && this.field == 'PTR_USER_PRD')//here there is no handonstable source specify bcz we need to do autofill
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString());
                         else

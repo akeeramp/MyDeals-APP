@@ -559,3 +559,10 @@ tr:last-child > td {
 label {
     line-height: 1.5;
 }
+.k-filterable > .k-cell-inner {
+    margin-right:0rem !important;
+}
+
+kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
+    width: 85% !important;
+}

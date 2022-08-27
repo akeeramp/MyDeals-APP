@@ -24,6 +24,9 @@ export class systemPricePointModalComponent {
     ok() {
         var returnVal = "";
         if ((this.price != null && this.price !== "") && (this.operator.name !== undefined && this.operator !== "")) {
+            if (this.price == 0) {
+                this.price = "0.01";
+            }
             returnVal = this.operator.name + "$" + this.price;
         }
         this.dialogRef.close(returnVal);
