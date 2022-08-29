@@ -873,6 +873,8 @@
     <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.css" />
     <Content Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.css" />
     <Content Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\overLappingCheckDeals\overlappingCheckDeals.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\overLappingCheckDeals\overlappingCheckDeals.component.html" />
     <Content Include="Client\src\app\contract\ptModals\productSelector\productselector.component.html" />
     <Content Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.html" />
     <Content Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.css" />
@@ -2339,6 +2341,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\multiSelectModal\multiSelectModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\overLappingCheckDeals\overlappingCheckDeals.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\overLappingCheckDeals\overlappingCheckDeals.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productselector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\productSelector.component.css" />

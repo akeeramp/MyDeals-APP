@@ -29,6 +29,7 @@ import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { lnavUtil } from '../lnav.util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
+import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -826,6 +827,18 @@ export class pricingTableEditorComponent implements OnChanges {
                 });
             }
         });
+    }
+    openOverLappingDealCheck() {
+        let data = {
+            "contractData": this.contractData,
+            "currPt": this.curPricingTable,
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            height: '530px',
+            width: '800px',
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe(result => {});
     }
     openAutoFill() {
         let ptTemplate, custId, isVistex
