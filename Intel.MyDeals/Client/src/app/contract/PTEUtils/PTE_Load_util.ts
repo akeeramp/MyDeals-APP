@@ -628,37 +628,35 @@ export class PTE_Load_Util {
                 cellProperties['readOnly'] = false;
             }
         }
-        //need to revisit the logic making as commented for now
-        //voltier deal making start vol disable for tier except 1
-        // if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
-        //     cellProperties['readOnly'] = true;
-        // }
-        // if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-        //     var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
-        //     if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-        //         if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
-        //             cellProperties['readOnly'] = true;
-        //         }
-        //         if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-        //             cellProperties['readOnly'] = true;
-        //         }
-        //     }
-        // }
-        // if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() !== 'cash') {
-        //     if (prop == 'SETTLEMENT_PARTNER') {
-        //         cellProperties['readOnly'] = true;
-        //     }
-        // }
-        // if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
-        //     if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
-        //         cellProperties['readOnly'] = true;
-        //     }
-        // }
-        // if (curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
-        //     if (prop == "RESET_VOLS_ON_PERIOD") {
-        //         cellProperties['readOnly'] = true;
-        //     }
-        // }
+        //need to revisit the logic making as commented for now        
+        if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
+            var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+            if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
+                    cellProperties['readOnly'] = true;
+                }
+            }
+        }
+        if (prop == 'SETTLEMENT_PARTNER') {
+            if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != undefined && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != null && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() == 'cash') {
+                cellProperties['readOnly'] = false;
+            } else {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+            if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
+                cellProperties['readOnly'] = true;
+            }
+        }
+        if (curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+            if (prop == "RESET_VOLS_ON_PERIOD") {
+                cellProperties['readOnly'] = true;
+            }
+        }
         return cellProperties;
     }
 }

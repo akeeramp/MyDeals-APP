@@ -92,7 +92,7 @@ export class PTE_Save_Util {
                     el._behaviors.isError["REBATE_TYPE"] = true;
                     el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table.";
                 }
-                if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(dictProgramPayment.includes('Backend'))) {
+                if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).includes("Backend"))) {
                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
                     el._behaviors.validMsg["PROGRAM_PAYMENT"] = "Hybrid Pricing Strategy Deals must be Backend only.";
                 }
@@ -125,15 +125,15 @@ export class PTE_Save_Util {
             if (item["END_DT"] == null && item["TIER_NBR"] == "1" && !isTenderContract) {
                 item["END_DT"] = contractData.END_DT;
             }
-            if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && item["TIER_NBR"] == "1" ) {
+            if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
                 item._behaviors.isError['PROD_INCLDS'] = true;
                 item._behaviors.validMsg['PROD_INCLDS'] = "Filed is required";
             }
-            if ((item["REBATE_TYPE"] == null || item["REBATE_TYPE"] == undefined || item["REBATE_TYPE"] == '') && item["TIER_NBR"] == "1") {
+            if ((item["REBATE_TYPE"] == null || item["REBATE_TYPE"] == undefined || item["REBATE_TYPE"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
                 item._behaviors.isError['REBATE_TYPE'] = true;
                 item._behaviors.validMsg['REBATE_TYPE'] = "Filed is required";
             }
-            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && item["TIER_NBR"] == "1") {
+            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
                 item._behaviors.isError['GEO_COMBINED'] = true;
                 item._behaviors.validMsg['GEO_COMBINED'] = "Filed is required";
             }                        
@@ -165,6 +165,14 @@ export class PTE_Save_Util {
         }
      });
      return PTR;
+    }
+    static updateProjectNameCase(PTR: Array<any>) {
+        _.each(PTR, item => {
+            if (item.QLTR_PROJECT != undefined && item.QLTR_PROJECT != null && item.QLTR_PROJECT != "") {
+                item.QLTR_PROJECT = item.QLTR_PROJECT.toUpperCase();
+            }
+        });
+        return PTR;
     }
     //check for all attribue present
     static sanitizePTR(PTR:Array<any>,contractData:any):Array<any>{

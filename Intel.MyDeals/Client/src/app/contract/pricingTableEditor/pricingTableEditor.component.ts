@@ -511,7 +511,9 @@ export class pricingTableEditorComponent implements OnChanges {
     async getAllDrowdownValues() {
         let dropObjs = {};
         _.each(this.pricingTableTemplates.defaultAtrbs, (val, key) => {
-
+            if (key == "REBATE_TYPE") {
+                val.opLookupUrl = val.opLookupUrl.replace('GetDropdowns/REBATE_TYPE', 'GetFilteredRebateTypes/false');
+            }
             dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(val.opLookupUrl);
         });
         if (this.isTenderContract) {
@@ -612,6 +614,8 @@ export class pricingTableEditorComponent implements OnChanges {
         finalPTR = PTE_Helper_Util.deNormalizeData(finalPTR, this.curPricingTable);
         //This method will remove all the unwanted property since there are keys with undefined values
         finalPTR = PTE_Common_Util.deepClone(finalPTR);
+        //Update ProjectName to Uppercase
+        finalPTR = PTE_Save_Util.updateProjectNameCase(finalPTR);
         //settment partner change for taking only the ID the API will send back us the both
         finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
         //sanitize Data before save this will make sure all neccessary attributes are avaialbel

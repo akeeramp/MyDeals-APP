@@ -12,10 +12,9 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()" [disabled]="!dirty">
-                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
-                <span class="text" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
-                      style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
+            <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()">
+                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px" ></i>
+                <span class="text" style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
                     Save & Validate
                 </span>
             </button>
