@@ -252,7 +252,8 @@ export class pricingTableEditorComponent implements OnChanges {
     private ptTitleLbl = "Enter " + this.ptTitle + " Name";
     private pageTitle = this.ptTitle + " Editor";
     private saveDesc = "Save your " + this.ptTitle + ", validate the products, and stay in your " + this.ptTitle + " Editor";
-
+    public C_EDIT_PRODUCT: boolean = false;
+    public C_ADD_PRICING_TABLE: boolean = false;
     private productValidationDependencies = PTE_Config_Util.productValidationDependencies;
     private kitDimAtrbs: Array<string> = PTE_Config_Util.kitDimAtrbs;
     private isTenderContract = false;
@@ -293,6 +294,8 @@ export class pricingTableEditorComponent implements OnChanges {
         this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
         //Get Refined columns based on contract/Tender
         PTE_Load_Util.PTEColumnSettings(this.pricingTableTemplates, this.isTenderContract, this.curPricingTable);
+        this.C_EDIT_PRODUCT = this.curPricingStrategy._settings.C_EDIT_PRODUCT != undefined ? this.curPricingStrategy._settings.C_EDIT_PRODUCT : false;
+        this.C_ADD_PRICING_TABLE = this.curPricingStrategy._settings.C_ADD_PRICING_TABLE != undefined ? this.curPricingStrategy._settings.C_ADD_PRICING_TABLE : false;
     }
     async getPTRDetails() {
         let vm = this;

@@ -25,7 +25,8 @@ export class contractStatusBoardComponent implements OnInit {
     private CAN_VIEW_COST_TEST: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.contractDetailsService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
     private skip = 0;
-    private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
+    //DA - allowing to access contract/Tender manager screen
+    //private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
     private contractId : any;
     public state: State = {
         skip: 0,

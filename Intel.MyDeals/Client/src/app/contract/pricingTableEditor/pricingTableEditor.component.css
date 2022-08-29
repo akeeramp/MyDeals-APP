@@ -83,3 +83,17 @@ td:not(.error-cell).readonly-cell {
     background-color: #f2f2f2;
     color: #0071c5;
 }
+.dirty {
+    font-weight: bolder !important;
+    color: #00AEEF !important;
+}
+
+.notDirty {
+    font-weight: lighter !important;
+    color: #ababab !important;
+    cursor: not-allowed !important;
+}
+
+.ssToolbarBtn.btn-save, .ssToolbarBtn {
+    background-color: transparent;
+}

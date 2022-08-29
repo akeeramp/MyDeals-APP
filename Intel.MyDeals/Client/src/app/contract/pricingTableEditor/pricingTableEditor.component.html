@@ -12,23 +12,23 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()">
-                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                <span class="text"
+            <button class="btn btn-sm btn-save ssToolbarBtn" ssToolbarBtn (click)="validatePricingTableProducts()" [disabled]="!dirty">
+                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
+                <span class="text" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
                       style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
                     Save & Validate
                 </span>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" title="Undo" (click)="undoPTE()">
-                <i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}"
+            <button class="btn btn-sm ssToolbarBtn" title="Undo" (click)="undoPTE()" [disabled]="!dirty">
+                <i class="fa fa-reply skyBlue" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" title="Redo" (click)="redoPTE()">
-                <i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}"
+            <button class="btn btn-sm ssToolbarBtn" title="Redo" (click)="redoPTE()" [disabled]="!dirty">
+                <i class="fa fa-share skyBlue" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <!-- Product Validator Button -->
-            <button class="btn btn-sm ssToolbarBtn"
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT"
                     title="Use Product Selector to search for Product(s)">
                 <table>
                     <tr>
@@ -42,7 +42,7 @@
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="validateOnlyProducts('onLoad')"
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="validateOnlyProducts('onLoad')"
                     title="Validate the products entered in the web sheet">
                 <table>
                     <tr>
@@ -78,7 +78,7 @@
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_ADD_PRICING_TABLE" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
                 <table>
                     <tr>
                         <td>

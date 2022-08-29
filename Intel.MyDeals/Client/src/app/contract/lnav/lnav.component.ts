@@ -58,7 +58,8 @@ export class lnavComponent {
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
     private CAN_VIEW_EXPORT = true;
     private CAN_VIEW_ALL_DEALS = true;
-    private usrRole;
+    private C_ADD_PRICING_STRATEGY: boolean = this.lnavSvc.chkDealRules('C_ADD_PRICING_STRATEGY', (<any>window).usrRole, null, null, null);
+    private usrRole = (<any>window).usrRole;
     private isSuper = true;
     private superPrefix = "";
     private extraUserPrivsDetail: Array<string> = [];

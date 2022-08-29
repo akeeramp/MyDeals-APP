@@ -82,8 +82,8 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     private activeFilter: string = "";
     private toolTipOptions: string = "";
 
-    //verifying the role
-    private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
+    //DA - allowing to access contract/Tender manager screen
+    //private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
 
     private isInitialLoad: boolean = true;
     public state: State = {

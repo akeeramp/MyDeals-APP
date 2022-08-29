@@ -21,7 +21,7 @@
                                 <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" (click)="toggleLnav('PT')" style="border-left: 1px solid #e8eaec !important;">
                                     <i class="intelicon-shrink flip-horizontal"></i>
                                 </div>
-                                <div class="fl navIconLnk" id="navIconAddPs" (click)="toggleAddStrategy()">
+                                <div class="fl navIconLnk" *ngIf="C_ADD_PRICING_STRATEGY" id="navIconAddPs" (click)="toggleAddStrategy()">
                                     <i class="intelicon-plus-max"></i>
                                 </div>
                                 <div class="fl navIconLnk" title="Filter contract" (click)="toggleSearch()" [ngClass]="{'active': isSearchHidden}" *ngIf="isExistingContract()">
@@ -82,10 +82,10 @@
                                     </div>
                                     <div class="clearboth"></div>
                                     <div style="text-align: right;">
-                                        <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="hideAddPricingTable()" style="background-color: #00AEEF;">
+                                        <button class="btn btn-sm btn-primary" (click)="hideAddPricingTable()" style="background-color: #00AEEF;">
                                             Cancel
                                         </button>
-                                        <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" (click)="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">
+                                        <button class="btn btn-sm btn-primary" (click)="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">
                                             Add
                                         </button>
                                     </div>
@@ -113,14 +113,14 @@
                                                 </div>
                                                 <div (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]" data-toggle="collapse" [attr.data-target]="'#sumPSdata_'+ ps.DC_ID" class="w100">{{ ps.TITLE}}</div>
                                             </div>
-                                            <div class="fr col-md-1">
+                                            <div class="fr col-md-1" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'">
                                                 <span #target class="hasMenuPs{{ ps.DC_ID}} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                                                 <kendo-contextmenu [target]="target" showOn="click" (select)="onSelectPsMenu($event,ps)">
-                                                    <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                    <kendo-menu-item icon="k-icon k-i-copy" text="Copy Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                    <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                    <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY" icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                    <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY" icon="k-icon k-i-copy" text="Copy Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                    <kendo-menu-item *ngIf="ps._settings.C_ADD_PRICING_TABLE && (!(ps.PRC_TBL != undefined && ps.PRC_TBL != null && ps.PRC_TBL.length > 0 && ps.PRC_TBL[0].DC_ID > 0) || ps.IS_HYBRID_PRC_STRAT !== '1')" icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                     <kendo-menu-item icon="k-icon k-i-edit" text="Edit Pricing Strategy Name" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                    <kendo-menu-item icon="k-icon k-i-delete" text="Delete Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                    <kendo-menu-item *ngIf="ps._settings.C_DEL_PRICING_STRATEGY && ps.HAS_TRACKER !== '1'" icon="k-icon k-i-delete" text="Delete Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                 </kendo-contextmenu>
                                             </div>
                                         </div>
@@ -140,12 +140,12 @@
                                                         <div class="fr" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'">
                                                             <span #targetPS class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                                                             <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectPtMenu($event,ps,pt)">
-                                                                <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                                <kendo-menu-item icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                                <kendo-menu-item icon="k-icon k-i-copy" text="Copy Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY" icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1'" icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1'" icon="k-icon k-i-copy" text="Copy Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item icon="k-icon k-i-edit" text="Edit Pricing Table Name" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                                <kendo-menu-item icon="k-icon k-i-edit" text="Edit Autofill Defaults" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
-                                                                <kendo-menu-item icon="k-icon k-i-delete" text="Delete Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="ps._settings.C_ADD_PRICING_TABLE" icon="k-icon k-i-edit" text="Edit Autofill Defaults" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
+                                                                <kendo-menu-item *ngIf="ps._settings.C_DEL_PRICING_TABLE && pt.HAS_TRACKER !== '1'" icon="k-icon k-i-delete" text="Delete Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                             </kendo-contextmenu>
                                                         </div>
                                                     </div>
@@ -241,11 +241,40 @@
             <i class="intelicon-expand"></i>
         </div>
 
-        <div class="navIconLnk" title="Add {{psTitle}}" (click)="toggleLnav();toggleAddStrategy()">
+        <div class="navIconLnk" *ngIf="C_ADD_PRICING_STRATEGY" title="Add {{psTitle}}" (click)="toggleLnav();toggleAddStrategy()">
             <i class="intelicon-plus-max"></i>
         </div>
         <div class="navIconLnk" title="Filter Current Contract" (click)="toggleLnav();toggleSearch()">
             <i class="intelicon-search"></i>
+        </div>
+        <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav();gotoDealEntry()">
+            <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk" title="Meet Comp" (click)="gotoCompliance()">
+            <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk dropdown" title="Contract Manager">
+            <a class="dropdown-toggle" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
+                <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
+                <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+                <li role="presentation">
+                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                </li>
+                <li role="presentation">
+                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
+                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
+                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
+                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                </li>
+            </ul>
         </div>
     </div>
 

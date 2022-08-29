@@ -448,6 +448,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
 .notDirty {
     font-weight: lighter !important;
     color: #ababab !important;
+    cursor: not-allowed !important;
 }
 
 #warning {
