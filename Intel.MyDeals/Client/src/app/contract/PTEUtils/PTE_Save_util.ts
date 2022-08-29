@@ -119,24 +119,32 @@ export class PTE_Save_Util {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
             }
-            if (item["START_DT"] == null && item["TIER_NBR"] == "1" && !isTenderContract) {
+            if ((item["START_DT"] == "" || item["START_DT"] == null) && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && !isTenderContract) {
                 item["START_DT"] = contractData.START_DT;
             }
-            if (item["END_DT"] == null && item["TIER_NBR"] == "1" && !isTenderContract) {
+            if ((item["END_DT"] == "" || item["END_DT"] == null) && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && !isTenderContract) {
                 item["END_DT"] = contractData.END_DT;
             }
-            if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
+            if ((item["PROD_INCLDS"] == null || item["PROD_INCLDS"] == undefined || item["PROD_INCLDS"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")) {
                 item._behaviors.isError['PROD_INCLDS'] = true;
-                item._behaviors.validMsg['PROD_INCLDS'] = "Filed is required";
+                item._behaviors.validMsg['PROD_INCLDS'] = "Field is required";
             }
-            if ((item["REBATE_TYPE"] == null || item["REBATE_TYPE"] == undefined || item["REBATE_TYPE"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
+            if ((item["REBATE_TYPE"] == null || item["REBATE_TYPE"] == undefined || item["REBATE_TYPE"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")) {
                 item._behaviors.isError['REBATE_TYPE'] = true;
-                item._behaviors.validMsg['REBATE_TYPE'] = "Filed is required";
+                item._behaviors.validMsg['REBATE_TYPE'] = "Field is required";
             }
-            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1")) {
+            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")) {
                 item._behaviors.isError['GEO_COMBINED'] = true;
-                item._behaviors.validMsg['GEO_COMBINED'] = "Filed is required";
-            }                        
+                item._behaviors.validMsg['GEO_COMBINED'] = "Field is required";
+            }
+            if (item["PAYOUT_BASED_ON"] == null || item["PAYOUT_BASED_ON"] == undefined) {
+                item._behaviors.isError['PAYOUT_BASED_ON'] = true;
+                item._behaviors.validMsg['PAYOUT_BASED_ON'] = "Field is required";
+            }
+            if ((item["PAYMENT_PROGRAM"] == null || item["PAYMENT_PROGRAM"] == undefined) && curPricingStrategy.OBJ_SET_TYPE_CD == "ECAP") {
+                item._behaviors.isError['PAYMENT_PROGRAM'] = true;
+                item._behaviors.validMsg['PAYMENT_PROGRAM'] = "Field is required";
+            }
         });
 
         return PTR;

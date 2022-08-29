@@ -104,7 +104,7 @@
                         class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
                         style="width: 320px; height: 354.788px;" data-role="grid">
                 <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
-                                   [locked]="column.locked == true" width="{{column.width}}">
+                                   [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.field !== 'details' && column.field !== 'tools'">
                     <ng-template kendoGridHeaderTemplate>
                         <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
                     </ng-template>

@@ -640,21 +640,34 @@ export class PTE_Load_Util {
                 }
             }
         }
-        if (prop == 'SETTLEMENT_PARTNER') {
-            if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != undefined && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != null && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL').toLowerCase() == 'cash') {
-                cellProperties['readOnly'] = false;
-            } else {
+        if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') !== 'Cash') {
+            if (prop == 'SETTLEMENT_PARTNER') {
                 cellProperties['readOnly'] = true;
             }
         }
-        if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
-            if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend')) {
+        if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
                 cellProperties['readOnly'] = true;
+            }
+        }
+        else if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() == 'backend') && (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != 'Cash') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL') {
+                cellProperties['readOnly'] = false;
+            }
+        }
+        else if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() == 'backend') && (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+                cellProperties['readOnly'] = false;
             }
         }
         if (curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
             if (prop == "RESET_VOLS_ON_PERIOD") {
                 cellProperties['readOnly'] = true;
+            }
+        }
+        if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && curPricingTable.IS_HYBRID_PRC_STRAT == "1") {
+            if (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) {
+                cellProperties['readOnly'] = false;
             }
         }
         return cellProperties;

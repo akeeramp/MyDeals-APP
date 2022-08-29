@@ -70,6 +70,7 @@ export class pricingTableComponent {
             if (!isRedirect) this.isPTETab = true;
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
                 this.isPTEEnable = true;
+                this.isDETab = false;
                 this.ps_Id = contractModel.ps_id;
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;

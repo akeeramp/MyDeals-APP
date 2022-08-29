@@ -207,6 +207,8 @@ export class pricingTableEditorComponent implements OnChanges {
     private spinnerMessageDescription: string = "PTE loading please wait";
     private isBusyShowFunFact: string = 'false'
     /*For loading variable */
+    public showDiscount = true;
+    public dirty = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
     private pricingTableDet: Array<any> = [];
@@ -285,6 +287,26 @@ export class pricingTableEditorComponent implements OnChanges {
         this.multiRowDelete = [];
         this.isDeletePTR = false;
     }
+    toggleShowHideDiscount() {
+        this.showDiscount = !this.showDiscount;
+    }
+    chgTerms() {
+        var dataItem = this.curPricingStrategy;
+        var data = {
+            objSetType: "PRC_ST",
+            ids: [dataItem["DC_ID"]],
+            attribute: "TERMS",
+            value: dataItem["TERMS"]
+        };
+
+        this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).subscribe((response: any) => {
+            this.loggerService.success("Done", "Save Complete.");
+
+        }), err => {
+            this.loggerService.error("Error", "Could not save the value.");
+        };
+    }
+
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -402,6 +424,7 @@ export class pricingTableEditorComponent implements OnChanges {
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             // Changes will track all the cells changing if we are doing copy paste of multiple cells
+            this.dirty = true;
             this.isLoading = true;
             this.spinnerMessageHeader = 'PTE Reloading';
             this.spinnerMessageDescription = 'PTE Reloading please wait';
@@ -414,7 +437,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
                 let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
                 //Voltier Changes
-                let End_Vol = _.filter(changes, item => { return item.prop == 'END_VOL' });
+                let tierChg = _.filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
+                let rateChg = _.filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
+                let pgChg = _.filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
                 //here we are using if conditions because at a time multiple changes can happen
                 if (PTR && PTR.length > 0) {
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
@@ -428,8 +453,14 @@ export class pricingTableEditorComponent implements OnChanges {
                 if (KIT_DSCNT && KIT_DSCNT.length > 0) {
                     PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
                 }
-                if (End_Vol && End_Vol.length > 0) {
-                    PTE_CellChange_Util.endVolChange(End_Vol, this.columns, this.curPricingTable);
+                if (tierChg && tierChg.length > 0) {
+                    PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
+                }
+                if (rateChg && rateChg.length > 0) {
+                    PTE_CellChange_Util.RateChgfn(rateChg, this.columns, this.curPricingTable);
+                }
+                if (pgChg && pgChg.length > 0) {
+                    PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
                 }
                 //for multi tier there can be more tiers to delete so moving the logic after all change 
                 if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
@@ -601,6 +632,7 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             else {
                 //this.generateHandsonTable(finalPTR);
+                this.dirty = false;
                 await this.saveEntireContractRoot(finalPTR);
             }
             this.isLoading = false;

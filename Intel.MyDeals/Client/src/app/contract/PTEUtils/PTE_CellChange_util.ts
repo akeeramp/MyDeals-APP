@@ -487,24 +487,154 @@ export class PTE_CellChange_Util {
         }
 
     }
-    static endVolChange(items: Array<any>, columns: any[], curPricingTable: any) {
-        try {
-            let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
-            if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'VOL_TIER') {
-                let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
-                _.each(items, item => {
+    static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
+        _.each(items, item => {
+            if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {
+                let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
+                if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
+                    if (item.prop == 'INCENTIVE_RATE') {
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val) / 100, 'no-edit');
+                    } else
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
+                } else {
+                    this.hotTable.setDataAtRowProp(item.row, item.prop, 0, 'no-edit');
+                }
+            }
+        });
+    }
+
+    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
+        let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
+        if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
+            _.each(items, item => {
+                if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
+                    if (val != undefined && val != null && val.toLowerCase() !== 'backend') {
+                        this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                    } else {
+                        this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"], 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
+                    }
+                }
+            });
+        }
+    }
+
+    static tierChange(items: Array<any>, columns: any[], curPricingTable: any) {
+        let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
+        let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+        if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'DENSITY') {
+            _.each(items, item => {
+                if (item.prop && item.prop == 'END_PB') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'END_PB');
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
                     let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
-                    //only in this case we need to update the start vol
-                    if (Tier != numOfTiers) {
-                        this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_VOL', parseInt(item.new) + 1, 'no-edit');
+                    if (Tier < numOfTiers) {
+                        if (val > 0 || val === 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_PB', val + 0.001, 'no-edit');
+
+                        } else if (val < 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_PB', (-val) + 0.001, 'no-edit');
+                        }
+                        else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', 0, 'no-edit');
+                        }
+                    } else if (Tier == numOfTiers) {
+                        if (val >= 0 || val < 0 || val.toLowerCase() == 'unlimited') {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
+                        } else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_PB', 0, 'no-edit');
+                        }
                     }
-                })
-            }
-        }
-        catch (ex) {
-            console.error(ex);
+                }
+                else if (item.prop && item.prop == 'STRT_PB') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_PB');
+                    if (val >= 0 || val < 0) {
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_PB', val, 'no-edit');
+                    }
+                    else
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_PB', 0, 'no-edit');
+                }
+            });
+        } else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'REV_TIER') {
+            _.each(items, item => {
+                if (item.prop && item.prop == 'END_REV') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'END_REV');
+                    let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
+                    let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
+                    let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                    if (Tier < numOfTiers) {
+                        if (val > 0 || val === 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_REV', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_REV', val + 0.01, 'no-edit');
+
+                        } else if (val < 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_REV', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_REV', (-val) + 0.01, 'no-edit');
+                        }
+                        else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_REV', 0, 'no-edit');
+                        }
+                    } else if (Tier == numOfTiers) {
+                        if (val >= 0 || val < 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_REV', val, 'no-edit');
+                        } else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_REV', 0, 'no-edit');
+                        }
+                    }
+                }
+                else if (item.prop && item.prop == 'STRT_REV') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_REV');
+                    if (val >= 0 || val < 0) {
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_REV', val, 'no-edit');
+                    }
+                    else
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_REV', 0, 'no-edit');
+                }
+            });
+        } else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'FLEX' || OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'VOL_TIER') {
+            _.each(items, item => {
+                if (item.prop && item.prop == 'END_VOL') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'END_VOL');
+                    let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
+                    let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
+                    let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                    if (Tier < numOfTiers) {
+                        if (val > 0 || val === 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_VOL', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_VOL', val + 1, 'no-edit');
+
+                        } else if (val < 0) {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_VOL', val, 'no-edit');
+                            this.hotTable.setDataAtRowProp(item.row + 1, 'STRT_VOL', (-val) + 1, 'no-edit');
+                        }
+                        else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_VOL', 0, 'no-edit');
+                        }
+                    } else if (Tier == numOfTiers) {
+                        if (val >= 0 || val < 0 || val.toLowerCase() == 'unlimited') {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_VOL', val, 'no-edit');
+                        } else {
+                            this.hotTable.setDataAtRowProp(item.row, 'END_VOL', 0, 'no-edit');
+                        }
+                    }
+                }
+                else if (item.prop && item.prop == 'STRT_VOL') {
+                    let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_VOL');
+                    if (val >= 0 || val < 0) {
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_VOL', val, 'no-edit');
+                    }
+                    else
+                        this.hotTable.setDataAtRowProp(item.row, 'STRT_VOL', 0, 'no-edit');
+                }
+            });
         }
     }
     /* AR settlement change where functions starts here */

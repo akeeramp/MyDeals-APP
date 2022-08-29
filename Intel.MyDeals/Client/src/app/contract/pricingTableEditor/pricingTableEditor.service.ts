@@ -37,5 +37,9 @@ export class pricingTableEditorService {
         const apiUrl: string = this.apiBasePrimeCustomerUrl + "UnPrimeDealsLogs/" + dealId;
         const headers = { 'content-type': 'application/json' };
         return this.httpClient.post(apiUrl, JSON.stringify(endCustData), { 'headers': headers });
-    }    
+    }
+    public updateAtrbValue(custId, contractId, data): Observable<any> {
+        const apiUrl: string = this.apiBaseContractUrl + 'UpdateAtrbValue/' + custId + '/' + contractId;
+        return this.httpClient.post(apiUrl, data);
+    }
 }

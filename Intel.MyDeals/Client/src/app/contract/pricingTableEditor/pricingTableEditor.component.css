@@ -97,3 +97,63 @@ td:not(.error-cell).readonly-cell {
 .ssToolbarBtn.btn-save, .ssToolbarBtn {
     background-color: transparent;
 }
+
+kendo-editor .k-editor-content {
+    z-index: 1;
+    height: 220px;
+}
+
+kendo-toolbar-renderer {
+    border-color: inherit;
+    margin-right: -945px;
+}
+
+.k-i-indent-decrease::before {
+    content: "\e616";
+    color: #00AEEF;
+}
+
+.k-i-indent-increase::before {
+    content: "\e615";
+    color: #00AEEF;
+}
+
+.k-i-list-ordered::before {
+    content: "\e613";
+    color: #00AEEF;
+}
+
+.k-i-list-unordered::before {
+    content: "\e614";
+    color: #00AEEF;
+}
+
+.k-i-align-right::before {
+    content: "\e61f";
+    color: #00AEEF;
+}
+
+.k-i-align-center::before {
+    content: "\e61e";
+    color: #00AEEF;
+}
+
+.k-i-align-left::before {
+    content: "\e61d";
+    color: #00AEEF;
+}
+
+.k-i-underline::before {
+    content: "\e603";
+    color: #00AEEF;
+}
+
+.k-i-italic::before {
+    content: "\e602";
+    color: #00AEEF;
+}
+
+.k-i-bold::before {
+    content: "\e601";
+    color: #00AEEF;
+}
