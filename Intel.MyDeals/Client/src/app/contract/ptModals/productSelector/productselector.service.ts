@@ -20,14 +20,14 @@ export class productSelectorService {
         return this.httpClient.post(apiUrl, prodSelectionLevels);
     }
     // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database
-    public GetProductDetails(products, CUST_CD, dealType) {
+    public GetProductDetails(products, CUST_CD, dealType): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'SearchProduct/' + CUST_CD + '/' + dealType + '/true';
         return this.httpClient.post(apiUrl, products);
     }
 
     public GetProductCAPYCS2Data(getAvailable, priceCondition, data): Observable<any> {
-		const apiUrl = `${ this.apiBaseUrl }GetProductCAPYCS2Data/${ getAvailable }/${ priceCondition }`;
-		return this.httpClient.post(apiUrl, data);
-	}
+        const apiUrl = `${this.apiBaseUrl}GetProductCAPYCS2Data/${getAvailable}/${priceCondition}`;
+        return this.httpClient.post(apiUrl, data);
+    }
 }
 

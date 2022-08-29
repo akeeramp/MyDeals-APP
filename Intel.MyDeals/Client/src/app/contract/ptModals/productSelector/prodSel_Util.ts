@@ -4,7 +4,7 @@ import * as _ from "underscore";
 export interface gridCol {
     title: string,
     field: string,
-    hidden: boolean,
+    hidden?: boolean,
     width?: string,
     filterable?: any,
     type?: string,
@@ -94,177 +94,159 @@ export class ProdSel_Util {
         title: 'SBS Name',
         hidden: false
     }]
-    static gridColProduct: Array<gridCol> = [
-        {
-            field: "PCSR_NBR",
-            title: "Processor Number",
-            width: "150px",
-            hidden: false,
-        },
-        {
-            field: "DEAL_PRD_NM",
-            title: "Deal Product Name",
-            template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
-            width: "180px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "GDM_FMLY_NM",
-            title: "GDM Family Name",
-            template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "MTRL_ID",
-            title: "Material Id",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "PRD_STRT_DTM",
-            title: "Product Start Date",
-            type: "date",
-            template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
-            width: "150px",
-            hidden: false
-        },
-        {
-            field: "PRD_END_DTM",
-            title: "Product End Date",
-            type: "date",
-            template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
-            width: "150px",
-            hidden: false
-        },
-        {
-            field: "CAP",
-            title: "CAP Info",
-            template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "YCS2",
-            title: "YCS2",
-            width: "150px",
-            template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "CPU_PROCESSOR_NUMBER",
-            title: "CPU Processor number",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "HAS_L1",
-            title: "Legal Classification",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
-            hidden: false
-        },
-        {
-            field: "MM_MEDIA_CD",
-            title: "Media Code",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "MM_CUST_CUSTOMER",
-            title: "MM Customer Name",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "FMLY_NM_MM",
-            title: "EDW Family Name",
-            template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "EPM_NM",
-            title: "EPM Name",
-            template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
-            width: "180px",
-            hidden: false
-        },
-        {
-            field: "SKU_NM",
-            title: "SKU Name",
-            template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
-            width: "180px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "NAND_FAMILY",
-            title: "NAND FAMILY",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "NAND_Density",
-            title: "Nand Density",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "CPU_CACHE",
-            title: "CPU CACHE",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "CPU_PACKAGE",
-            title: "CPU PACKAGE",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "CPU_WATTAGE",
-            title: "CPU WATTAGE",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "CPU_VOLTAGE_SEGMENT",
-            title: "Voltage Segment",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "PRICE_SEGMENT",
-            title: "Price Segment",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-        {
-            field: "SBS_NM",
-            title: "SBS Name",
-            width: "150px",
-            filterable: { multi: true, search: true },
-            hidden: false
-        },
-    ]
+    static gridColProduct(isGA): Array<gridCol> {
+        return [
+            {
+                field: "PCSR_NBR",
+                title: "Processor Number",
+                template: "<a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>#= PCSR_NBR #</a><div *ngIf='dataItem.PRD_ATRB_SID != 7006'>#= PCSR_NBR #</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "DEAL_PRD_NM",
+                title: "Deal Product Name",
+                template: "<a *ngIf='allowMMSelection(dataItem)' (click)='gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div *ngIf='!allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
+                width: "180px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "GDM_FMLY_NM",
+                title: "GDM Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "MTRL_ID",
+                title: "Material Id",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "PRD_STRT_DTM",
+                title: "Product Start Date",
+                type: "date",
+                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
+                width: "150px"
+            },
+            {
+                field: "PRD_END_DTM",
+                title: "Product End Date",
+                type: "date",
+                template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
+                width: "150px"
+            },
+            {
+                field: "CAP",
+                title: "CAP Info",
+                template: "<op-popover (click)='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "YCS2",
+                title: "YCS2",
+                width: "150px",
+                template: "<op-popover (click)='openCAPBreakOut(dataItem, \"YCS2\")' op-options='YCS2' op-data='getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_PROCESSOR_NUMBER",
+                title: "CPU Processor number",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "HAS_L1",
+                title: "Legal Classification",
+                width: "150px",
+                filterable: { multi: true, search: true },
+                template: "<div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>",
+                hidden: !isGA
+            },
+            {
+                field: "MM_MEDIA_CD",
+                title: "Media Code",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "MM_CUST_CUSTOMER",
+                title: "MM Customer Name",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "FMLY_NM_MM",
+                title: "EDW Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "EPM_NM",
+                title: "EPM Name",
+                template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
+                width: "180px"
+            },
+            {
+                field: "SKU_NM",
+                title: "SKU Name",
+                template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
+                width: "180px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "NAND_FAMILY",
+                title: "NAND FAMILY",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "NAND_Density",
+                title: "Nand Density",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_CACHE",
+                title: "CPU CACHE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_PACKAGE",
+                title: "CPU PACKAGE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_WATTAGE",
+                title: "CPU WATTAGE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_VOLTAGE_SEGMENT",
+                title: "Voltage Segment",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "PRICE_SEGMENT",
+                title: "Price Segment",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "SBS_NM",
+                title: "SBS Name",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            }
+        ]
+    }
     static sortBySelectionLevelColumn(gridResult: any, selectionLevel: number) {
         var column = "";
         switch (selectionLevel) {
@@ -290,9 +272,8 @@ export class ProdSel_Util {
             'parentSelected': null
         }
     }
-    // TODO: Move this to util.js
     static arrayContainsString(array: Array<any>, string: string) {
-        var newArr = array.filter(function (el) {
+        let newArr = array.filter(function (el) {
             return el.toString().trim().toUpperCase() === string.toString().trim().toUpperCase();
         });
         return newArr.length > 0;
