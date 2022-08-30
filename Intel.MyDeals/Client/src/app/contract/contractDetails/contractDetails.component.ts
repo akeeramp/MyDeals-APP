@@ -78,6 +78,11 @@ export class contractDetailsComponent {
     private isShowBtn = false;
     private maxCount = 5;
     private deleteAttachmentParams: any = {};
+    private isLoading: boolean = false;
+    private msgType: string = "";
+    private spinnerMessageHeader: string = "";
+    private spinnerMessageDescription: string = "";
+    private isBusyShowFunFact: boolean = true;
     private state: State = {
         skip: 0,
         take: 25,
@@ -379,6 +384,8 @@ export class contractDetailsComponent {
 
     saveContract() {
         // Contract Data
+        this.isLoading = true;
+        this.setBusy("Saving Contract", "Saving the Contract Information", "info", true);
         const ct = this.contractData;
         //this.custId = this.contractData["CUST_SID"];
         this.contractId = -100;
@@ -391,13 +398,15 @@ export class contractDetailsComponent {
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
                     // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                    this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
+                    this.contractData["DC_ID"] = response.CNTRCT[0].DC_ID;
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
                     }
                     else {
                         window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                     }
+                    this.isLoading = true;
+                    this.setBusy("Save Successful", "Saved the contract", "Success", true);
                 } else {
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
@@ -406,6 +415,8 @@ export class contractDetailsComponent {
                         window.location.href = '/Dashboard#/portal';
                     }
                 }
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             });
     }
 
@@ -649,6 +660,8 @@ export class contractDetailsComponent {
     }
 
     copyContract() {
+        this.isLoading = true;
+        this.setBusy("Copy Contract", "Copying the Contract Information","info",false);
         const ct = this.contractData;
         if (ct.DC_ID <= 0) ct.DC_ID = this.uid--; // check for NEW contract
         this.contractDetailsSvc.copyContract(this.contractData["CUST_MBR_SID"], this.contractData.DC_ID, this.copyContractData.DC_ID, ct)
@@ -659,10 +672,12 @@ export class contractDetailsComponent {
                         this.isValid = false;
                         this.titleErrorMsg = "Title already exists in system";
                         this.isTitleError = true;
+                        this.isLoading = false;
                     }
                     else {
+                        this.setBusy("Copy Successful", "Copied the contract", "Success",false);
                         // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                        this.contractData.DC_ID = response.CNTRCT[1].DC_ID;
+                        this.contractData.DC_ID = response.CNTRCT[0].DC_ID;
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {
@@ -672,6 +687,8 @@ export class contractDetailsComponent {
                 }
             }, error => {
                 this.loggerSvc.error("Could not create the contract.", error);
+                this.isLoading = false;
+                this.setBusy("", "","",false);
             }
             );
     }
@@ -679,11 +696,15 @@ export class contractDetailsComponent {
         if (confirm("Are you sure that you want to delete this contract?")) {
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
+            this.isLoading = true;
+            this.setBusy("Deleting...", "Deleting the Contract", "Info", false);
             this.contractDetailsSvc.deleteContract(custId, contractId).subscribe((response: any) => {
-                console.log('deleted successfully');
+                this.setBusy("Delete Successful", "Deleted the Contract","Success",false);
                 window.location.href = '/Dashboard#/portal';
             }), err => {
                 console.log(err);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             };
         }
     }
@@ -867,6 +888,38 @@ export class contractDetailsComponent {
         $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
+
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            
+            // if no change in state, simple update the text
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+
+            // if no change in state, simple update the text
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
+
 }
 angular.module("app").directive(
     "contractDetails",

@@ -204,9 +204,10 @@ export class pricingTableEditorComponent implements OnChanges {
     private isCustDivNull: boolean = false;
     /*For loading variable */
     private isLoading: boolean = false;
-    private spinnerMessageHeader: string = "PTE Loading";
-    private spinnerMessageDescription: string = "PTE loading please wait";
-    private isBusyShowFunFact: string = 'false'
+    private msgType: string = "";
+    private spinnerMessageHeader: string = "";
+    private spinnerMessageDescription: string = "";
+    private isBusyShowFunFact: boolean = true;
     /*For loading variable */
     public showDiscount = true;
     public dirty = false;
@@ -267,6 +268,36 @@ export class pricingTableEditorComponent implements OnChanges {
     private VendorDropDownResult: any = {};
     private isDeletePTR: boolean = false;
 
+
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+
+            // if no change in state, simple update the text            
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
+
     afterDocumentKeyDown(evt: any) {
         //befor change hook afterDocumentKeyDown triggers so we can double confirm delete based on values equal to empty and explicity clicking delete
         if (evt.key && evt.key == 'Delete') {
@@ -292,6 +323,8 @@ export class pricingTableEditorComponent implements OnChanges {
         this.showDiscount = !this.showDiscount;
     }
     chgTerms() {
+        this.isLoading = true;
+        this.setBusy("Saving...", "Saving your data", "Info", true);
         var dataItem = this.curPricingStrategy;
         var data = {
             objSetType: "PRC_ST",
@@ -302,9 +335,13 @@ export class pricingTableEditorComponent implements OnChanges {
 
         this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).subscribe((response: any) => {
             this.loggerService.success("Done", "Save Complete.");
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
 
         }), err => {
             this.loggerService.error("Error", "Could not save the value.");
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
         };
     }
 
@@ -427,8 +464,8 @@ export class pricingTableEditorComponent implements OnChanges {
             // Changes will track all the cells changing if we are doing copy paste of multiple cells
             this.dirty = true;
             this.isLoading = true;
-            this.spinnerMessageHeader = 'PTE Reloading';
-            this.spinnerMessageDescription = 'PTE Reloading please wait';
+            
+            this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
             setTimeout(() => {
                 changes = this.identfyUniqChanges(changes, source);
@@ -468,13 +505,13 @@ export class pricingTableEditorComponent implements OnChanges {
                     this.deleteRow(this.multiRowDelete);
                 }
                 this.isLoading = false;
+                this.setBusy("", "", "", false);
             }, 0);
         }
     }
     async deletePTR() {
-        this.spinnerMessageHeader = 'PTE Deleting';
-        this.spinnerMessageDescription = 'PTE Deleting please wait';
         this.isLoading = true;
+        this.setBusy("Deleting...", "Deleting the Pricing table row", "Info", true);
 
         let delDCIDs = [];
         _.each(this.multiRowDelete, item => {
@@ -584,9 +621,8 @@ export class pricingTableEditorComponent implements OnChanges {
         return result;
     }
     async loadPTE() {
-        this.spinnerMessageHeader = 'PTE loading';
-        this.spinnerMessageDescription = 'PTE loading please wait';
         this.isLoading = true;
+        this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
         let PTR = await this.getPTRDetails();
         this.getTemplateDetails();
         this.dropdownResponses = await this.getAllDrowdownValues();
@@ -614,10 +650,9 @@ export class pricingTableEditorComponent implements OnChanges {
         this.hotTable.redo();
     }
     async ValidateAndSavePTE(isValidProd) {
-        if (isValidProd) {
+        if (isValidProd) {            
             this.isLoading = true;
-            this.spinnerMessageHeader = 'PTE Save';
-            this.spinnerMessageDescription = 'PTE Saving please wait';
+            this.setBusy("Saving your Data...", "Please wait as we save your information", "Info", true);
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //Checking for UI errors
@@ -708,8 +743,7 @@ export class pricingTableEditorComponent implements OnChanges {
         //loader
         let isPrdValid: any = null;
         this.isLoading = true;
-        this.spinnerMessageHeader = 'Validating your data...';
-        this.spinnerMessageDescription = 'Please wait wile we validate your information!';
+        this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
@@ -757,12 +791,10 @@ export class pricingTableEditorComponent implements OnChanges {
             //root.syncCellValidationsOnAllRows(currentPricingTableRowData);
             // Tell user to fix errors
             this.isLoading = true;
-            this.spinnerMessageHeader = 'Not saved. Please fix errors.';
-            this.spinnerMessageDescription = 'Please fix the errors so we can properly validate your products';
+            this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
             setTimeout(() => {
                 this.isLoading = false;
-                this.spinnerMessageHeader = '';
-                this.spinnerMessageDescription = '';
+                this.setBusy("", "", "", false);
             }, 1300);
             return;
         }
@@ -802,8 +834,7 @@ export class pricingTableEditorComponent implements OnChanges {
         dialogRef.afterClosed().subscribe((selProds: Array<ProdCorrectObj>) => {
             if (selProds) {
                 this.isLoading = true;
-                this.spinnerMessageHeader = 'PTE Reloading';
-                this.spinnerMessageDescription = 'PTE Reloading please wait';
+                this.setBusy("PTE Reloading", "PTE Reloading please wait", "Info", true);
                 //logic to bind the selected product and PTR_SYS_PRD to PTR
                 //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
                 _.each(selProds, (selProd, idx) => {
@@ -822,6 +853,7 @@ export class pricingTableEditorComponent implements OnChanges {
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(() => {
                             this.isLoading = false;
+                            this.setBusy("", "", "", false);
                         }, 2000);
                     }
                 });

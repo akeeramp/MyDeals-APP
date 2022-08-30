@@ -3,6 +3,8 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /><br />
 
+<loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
+                       [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 
 <div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">

@@ -77,7 +77,40 @@ export class lnavComponent {
     public objTypeCdMessage;
     public uid: number = -100;
 
+    private isLoading: boolean = false;
+    private msgType: string = "";
+    private spinnerMessageHeader: string = "";
+    private spinnerMessageDescription: string = "";
+    private isBusyShowFunFact: boolean = true;
 
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+
+            // if no change in state, simple update the text            
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
     //Output Emitter to load the Pricing table data
     loadPTE(psId, ptId, ps_index: number, pt_index: number) {
         const contractId_Map: contractIds = {
@@ -158,8 +191,9 @@ export class lnavComponent {
             this.isAddStrategyBtnHidden = false;
         }
     }
-    addPricingStrategy() {
-        this.loggerSvc.info("Saving...", "Saving the Pricing Strategy");
+    addPricingStrategy() {        
+        this.isLoading = true;
+        this.setBusy("Saving...", "Saving the Pricing Strategy", "Info", true);
         const ct = this.contractData;
         const custId = this.contractData.CUST_MBR_SID;
         const contractId = this.contractData.DC_ID
@@ -182,8 +216,11 @@ export class lnavComponent {
             this.curPricingStrategyId = ps.DC_ID;
             this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             });
-
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
         })
     }
     refreshContractData(cId) {
@@ -264,9 +301,13 @@ export class lnavComponent {
         return isValid;
     }
     addPricingTable() {
+        this.isLoading = true;
+        this.setBusy("Adding...", "Adding the Pricing Table", "Info", true);
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
             this.loggerSvc.error("Could not create the Pricing Table.", "Error");
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             return;
         }
         pt.DC_ID = -100;
@@ -293,7 +334,11 @@ export class lnavComponent {
             this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             });
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
         })
     }
     clearNptTemplate() {
@@ -351,12 +396,16 @@ export class lnavComponent {
     }
 
     copyObj(objType, objTypes, id, isPs) {
-        this.loggerSvc.info("Copying", "Copying the " + objType);
+        
+        this.isLoading = true;
+        this.setBusy("Copying...", "Copying the " + objType, "Info", true);
 
         var selectedItems = objTypes.filter(x => x.DC_ID === id);
         var titles = objTypes.map(x => x.TITLE);
         if (selectedItems.length === 0) {
             alert("Unable to locate the " + objType);
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             return;
         }
         if (selectedItems.length > 0) {
@@ -364,6 +413,8 @@ export class lnavComponent {
         }
         if (!item) {
             alert("Unable to copy the " + objType);
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             return;
         }
         item.DC_ID = this.uid--;
@@ -380,17 +431,27 @@ export class lnavComponent {
             this.lnavSvc.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
                 this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             }), err => {
                 this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
-            };
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+                };
+
         }
         else {
             this.lnavSvc.copyPricingTable(custId, contractId, id, item).subscribe((response: any) => {
                 this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             }), err => {
                 this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
-            };
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+                };
+
         }
     }
     editPricingTableName(pt) {
@@ -418,9 +479,10 @@ export class lnavComponent {
         });
     }
     
-    deletePricingStrategy(ps) {        
+    deletePricingStrategy(ps) {
         if (confirm("Are you sure that you want to delete this Pricing Strategy ?")) {
-            this.loggerSvc.info("Deleting...", "Deleting the Pricing Strategy");
+            this.isLoading = true;
+            this.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
             this.lnavSvc.deletePricingStrategy(custId, contractId, ps).subscribe((response: any) => {
@@ -428,24 +490,33 @@ export class lnavComponent {
                 this.unmarkCurPricingTableIf(ps.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(ps), 1);
                 this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             }), err => {
                 this.loggerSvc.error("Could not delete Pricing Strategy" + ps.DC_ID, err, err.statusText);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             };
         }
     }
 
     deletePricingTable(ps, pt) {
         if (confirm("Are you sure that you want to delete this Pricing Table ?")) {
-            this.loggerSvc.info("Deleting...", "Deleting the Pricing Table");
+            this.isLoading = true;
+            this.setBusy("Deleting...", "Deleting the Pricing Table", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
             this.lnavSvc.deletePricingTable(custId, contractId, pt).subscribe((response: any) => {
                 this.unmarkCurPricingTableIf(ps.DC_ID);
                 ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
                 this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table");
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             }), err => {
                 this.loggerSvc.error("Could not delete Pricing Table" + pt.DC_ID, err, err.statusText);
-            };
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+                };
         }
     }
     onSelectPtMenu(event: any, ps: any, pt: any): void {

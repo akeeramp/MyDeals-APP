@@ -51,6 +51,12 @@ export class pricingTableComponent {
     public UItemplate = null;
     private isDETabEnabled = false;
     public isLnavHidden: boolean;
+    private isLoading: boolean = false;
+    private msgType: string = "";
+    private spinnerMessageHeader: string = "";
+    private spinnerMessageDescription: string = "";
+    private isBusyShowFunFact: boolean = true;
+
     public searchedContractData = {
         Model: "",
         C_ID:0,
@@ -61,6 +67,28 @@ export class pricingTableComponent {
         contractData: "",
     }
     //public isLnavHidden: any = {};
+
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            if (showFunFact == null) { showFunFact = false; }
+            // if no change in state, simple update the text
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
 
     loadModel(contractModel: contractIds, isRedirect:boolean=false) {
         this.selLnav = contractModel.Model
@@ -107,6 +135,8 @@ export class pricingTableComponent {
     }
 
     loadAllContractDetails(IDS=[]) {
+        this.isLoading = true;
+        this.setBusy("Loading...", "Loading data please wait", "Info", true);
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
             this.contractData = response[0];
             //if it is Tender deal redirect to Tender manager
@@ -114,13 +144,17 @@ export class pricingTableComponent {
             else {
                 this.loadTemplateDetails(IDS, this.contractData );
             }
-        },(error) => {
+            this.isLoading = false;
+        }, (error) => {
+            this.isLoading = false;
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
         })
      
     }
 
     loadTemplateDetails(IDS, contractData) {
+        this.isLoading = true;
+        this.setBusy("Loading...", "Loading data please wait", "Info", true);
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.UItemplate = response;
             this.isLNavEnable = true;
@@ -134,9 +168,10 @@ export class pricingTableComponent {
                     this.searchedContractData.contractData = contractData;
                     this.loadModel(this.searchedContractData, true);
                 }
-
+                this.isLoading = false;
             }
         }, (error) => {
+            this.isLoading = true;
             this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
         })
     }

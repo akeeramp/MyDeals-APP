@@ -18,9 +18,10 @@ import { CheckedState } from "@progress/kendo-angular-treeview";
 export class AutoFillComponent {
     private dropdownResponses: any = null;
     private isLoading: boolean = false;
-    private spinnerMessageHeader: string = "AutoFillSetting Loading";
+    private spinnerMessageHeader: string = "";
     private rebateTypeTitle: string = "";
-    private spinnerMessageDescription: string = "AutoFillSetting loading please wait";
+    private spinnerMessageDescription: string = "";
+    private msgType: string = "";
     private geoValues: Array<string> = [];
     private geos: Array<string> = [];
     private isBlend: boolean = false;
@@ -44,6 +45,32 @@ export class AutoFillComponent {
         public dialogRef: MatDialogRef<AutoFillComponent>,
         @Inject(MAT_DIALOG_DATA) public autofillData: any
     ) { }
+
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+
+            // if no change in state, simple update the text            
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                }, 100);
+            }
+        });
+    }
 
     public isChecked = (dataItem: any, index: string): CheckedState => {
         if (this.containsItem(dataItem)) { return 'checked'; }
@@ -174,6 +201,8 @@ export class AutoFillComponent {
         this.dialogRef.close();
     }
     onSave() {
+        this.isLoading = true;
+        this.setBusy("Saving...", "Saving your data...", "Info", false);
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
         this.opValidMsg = "";
@@ -200,7 +229,6 @@ export class AutoFillComponent {
     editPricingTable() {
         var isValid = true;
         var pt = this.currPricingTable;
-
         for (var atrb in this.autofillData["DEFAULT"]) {
             if (this.autofillData["DEFAULT"].hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {  //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
                 if (Array.isArray(this.autofillData["DEFAULT"][atrb].value)) {
@@ -217,14 +245,21 @@ export class AutoFillComponent {
 
         this.autoSvc.updatePricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
             var res = response;
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             this.dialogRef.close(this.autofillData);
         })
+        this.isLoading = false;
+        this.setBusy("", "", "", false);
     }
 
     addPricingTable() {
+
         let pt = this.ptTemplate;
         if (!pt) {
             this.loggerSvc.error("Could not create the Pricing Table.", "Error");
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             return;
         }
         pt.DC_ID = -100;
@@ -249,6 +284,8 @@ export class AutoFillComponent {
         this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
             pt = response.PRC_TBL[1];
             this.autofillData.newPt = pt;
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             this.dialogRef.close(this.autofillData);            
         })
     }
@@ -312,6 +349,7 @@ export class AutoFillComponent {
 
     async loadAutoFill() {
         this.isLoading = true;
+        this.setBusy("Loading...", "Loading data, please wait..", "Info", true);
         this.currPricingTable = this.autofillData.currPt;
         this.contractData = this.autofillData.contractData;
         this.CurrPricingStrategy = this.autofillData.currPs;
@@ -346,6 +384,7 @@ export class AutoFillComponent {
             this.mkgvalues = mkgvalue;
         }        
         this.isLoading = false;
+        this.setBusy("", "", "", false);
     }
     onAutoChange(elem: string, val: string) {
         if (elem == "PAYOUT_BASED_ON" && val == "Consumption") {
