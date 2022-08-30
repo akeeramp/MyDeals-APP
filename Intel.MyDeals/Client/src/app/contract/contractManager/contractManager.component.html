@@ -1,8 +1,6 @@
-<div style="font-size: 14px; line-height:2.9em; text-align: center; position: absolute; top: 16px; right:60px;">
+<div style="margin-bottom:10px;font-size: 14px; line-height:2.9em; text-align: center; position: absolute; top: 16px; right:60px;">    
     <span style="color: #0071C5; padding-right:22px">Customer Acceptance</span><span id="toggle-container" title="Click to Change Contract Acceptance Criteria">
-        <kendo-switch [(ngModel)]="checked" onLabel="Accepted" offLabel="Pending" style="width:100px;"></kendo-switch>
-        <!--<mat-slide-toggle [color]="color" [checked]="checked" ></mat-slide-toggle>-->
-    </span>
+        <kendo-switch [(ngModel)]="checked" onLabel="Accepted" offLabel="Pending" style="width:140px;"></kendo-switch></span>        
 </div>
 
 <div id="sum-wrapper" style="overflow:hidden">
@@ -29,7 +27,7 @@
                                 <span class="caret"></span><span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
-                                <div *ngFor="let ps of contractData.PRC_ST | unique:'WF_STG_CD' | orderBy:'WF_STG_CD'">
+                                <div *ngFor="let ps of contractData?.PRC_ST | unique:'WF_STG_CD' | orderBy:'WF_STG_CD'">
                                     <input type="checkbox" class="with-font" id="item{{ps.DC_ID}}" [(ngModel)]="ps.filtered" /><label for="item{{ps.DC_ID}}">{{ps.WF_STG_CD}}</label>
                                 </div>
                             </div>
@@ -81,26 +79,31 @@
                             Missing Cost/CAP
                         </div>
                     </td>
-                    <td style="width: 160px; text-align: center; ">
-                        <div title='Execute Price Cost Test and Meet Comp Test'
-                             class="btn btn-skyblue-sm" style="padding-left:100px">
-                            <i class="fa fa-refresh fa-fw iconRunPct" style="color:#fff; font-size:20px;"></i>
-                        </div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <td *ngIf="CAN_VIEW_COST_TEST" style="width: 160px; text-align: center; ">
+                                         <button class="btn btn-sm btn-skyblue-sm fl"
+                                                (click)="executePctViaBtn()"
+                                                title="Execute Price Cost Test and Meet Comp Test"
+                                                style="padding-left:100px" >
+                                            <i class="fa fa-refresh fa-fw iconRunPct" aria-hidden="true" style="font-size: 20px"></i>
+                                        </button>
+                        &nbsp;&nbsp;
                         Price Cost Test
                         <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height: 0.01em; margin-left: 54px">
-                            Last Run: 33 mins ago
+                            {{lastRunDisplay('Price Cost Test')}}
                         </div>
                     </td>
 
-                    <td style="width: 160px; text-align: center;">
-                        <div title='Execute Price Cost Test and Meet Comp Test ' class="btn btn-skyblue-sm">
-                            <i class="fa fa-refresh fa-fw iconRunPct" style="color:#fff; font-size:20px"></i>
-                        </div>
-                        &nbsp;&nbsp;&nbsp;
+                    <td *ngIf="CAN_VIEW_MEET_COMP" style="width: 160px; text-align: center;">
+                        <button class="btn btn-sm btn-skyblue-sm fl"
+                        (click)="executePctViaBtn()"
+                        title="Execute Price Cost Test and Meet Comp Test"
+                        style="padding-left:100px" >
+                    <i class="fa fa-refresh fa-fw iconRunPct" aria-hidden="true" style="font-size: 20px"></i>
+                        </button>
+                        &nbsp;&nbsp;
                         Meet Comp Test
                         <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height:0.01em;margin-left:48px;">
-                            Last Run: 33 mins ago
+                            {{lastRunDisplay('Meet Comp Test')}}
                         </div>
 
                     </td>
@@ -121,17 +124,17 @@
                             <td style="width: 60px; text-align: center;" *ngIf="canEdit">
                                 <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [hidden]="!(ps.WF_STG_CD !=='Pending')">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
-                                           id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
+                                    id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event,ps)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" *ngIf="canEdit">
                                 <div *ngIf="canAction('Revise', ps, true) && canActionIcon && hasVertical(ps)" title="{{actionReason('Revise', ps)}}">
-                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)" class="with-font psCheck psCheck-Revise"
-                                           id="rad_revise_{{ps.DC_ID}}" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}" (click)="onCheckboxChange('reviseCheckBox',$event)"></label>
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="reviseCheck[ps.DC_ID]" [ngClass]="{'disabled': !canAction('Revise', ps, false)}" [disabled]="!canAction('Revise', ps, false)"  class="with-font psCheck psCheck-Revise"
+                                          id="rad_revise_{{ps.DC_ID}}"  (click)="onCheckboxChange('reviseCheckBox',$event,ps)" kendoCheckBox /><label for="rad_revise_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <div *ngIf="canEmailIcon && hasVertical(ps)" title="email pricing strategy"><input type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="emailCheck[ps.DC_ID]" class="with-font psCheck psCheck-Email" id="rad_email_{{ps.DC_ID}}" (click)="onCheckboxChange('emailCheckBox',$event)" /><label for="rad_email_{{ps.DC_ID}}"></label></div>
+                                <div *ngIf="canEmailIcon && hasVertical(ps)" title="email pricing strategy"><input  type="checkbox" name="radGrp{{ps.DC_ID}}" [(ngModel)]="emailCheck[ps.DC_ID]" class="with-font psCheck psCheck-Email"  id="rad_email_{{ps.DC_ID}}" (click)="onCheckboxChange('emailCheckBox',$event,ps)" /><label for="rad_email_{{ps.DC_ID}}"></label></div>
                             </td>
                             <td style="width: 100px; text-align: center;">
                                 <div class="stage">
@@ -295,3 +298,5 @@
         </div>
     </div>
 </div>
+<loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
+</loading-panel-angular>

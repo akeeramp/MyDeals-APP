@@ -27,6 +27,7 @@ export class managerPctComponent {
     PCTResultView = false;
     @Input() contractData: any;
     @Input() UItemplate: any;
+    @Input() tab: any;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -216,6 +217,9 @@ export class managerPctComponent {
     }
 
     ngOnInit() {
+        if(this.tab === 'groupExclusionDiv'){
+            this.selectedTab = 5;
+        }
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
         this.contractData?.PRC_ST.map((x, i) => {

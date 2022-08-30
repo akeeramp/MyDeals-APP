@@ -12,12 +12,15 @@ export class allDealsService {
 
     constructor(private httpClient: HttpClient) {
       }
-
-      public readWipFromContract(id):Observable<any> {
-        const apiUrl: string = this.apiBaseContractUrl + 'GetWipFromContract/' + + id;
+    public readWipExclusionFromContract(id): Observable<any> {
+        const apiUrl: string = this.apiBaseContractUrl + 'GetWipExclusionFromContract/' + id;
         return this.httpClient.get(apiUrl);
     }
+
+    public readWipFromContract(id):Observable<any> {
+      const apiUrl: string = this.apiBaseContractUrl + 'GetWipFromContract/' + + id;
+      return this.httpClient.get(apiUrl);
+  }
     
 
 }
-

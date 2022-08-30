@@ -9,10 +9,8 @@
             {{displayDealTypes()}}
         </div>
     </div>
-    <kendo-tabstrip style="background-color: #ffffff !important;">
-    <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="true">
-        <ng-template kendoTabContent>
-            <div class="content">
+
+    <div class="content">
                 <div class="toolbar" style="position: absolute; left: 300px; top: 80px;">
                     <div class="fl">
                         <button class="btn btn-sm btn-save ssToolbarBtn" 
@@ -29,7 +27,7 @@
                             </table>
                         </button>
                     </div>
-                    <div *ngIf="CAN_VIEW_COST_TEST" class="fl" style="margin-left: 8px;">
+                    <div *ngIf="CAN_VIEW_COST_TEST && showPCT" class="fl" style="margin-left: 8px;">
                         <button class="btn btn-sm ssToolbarBtn"
                                 (click)="togglePctFilter()" [ngClass]="{'toggleSelect': pctFilterEnabled}"
                                 title="Show/Hide Only Price Cost Test Failures.">
@@ -182,8 +180,7 @@
                         </kendo-grid>
                     </div>
                 </div>
-            </div>
-        </ng-template>
-    </kendo-tabstrip-tab>
-</kendo-tabstrip>
+    </div>
+      
+
 </div>

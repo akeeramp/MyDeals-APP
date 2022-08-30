@@ -1,7 +1,7 @@
 <div *ngIf="!isLoading" style="padding: 0 20px;" class="contract-export addScrollbar">
     <div class="fr">
-        <i class="intelicon-pdf exportBtn" style="font-size:30px !important"  title="Export to PDF"></i>
-        <i class="intelicon-help helpBtn" style="font-size:30px !important" title="Help"></i>
+        <i class="intelicon-pdf exportBtn" style="font-size:30px !important" (click)="exportToPDF()" title="Export to PDF"></i>
+        <i class="intelicon-help helpBtn" style="font-size:30px !important" (click)="showHelpTopic()" title="Help"></i>
     </div>
 
     <div id="pdfContent">

@@ -208,9 +208,9 @@
                                     <div id="approvalDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'approvalDiv'}" (click)="loadModel('approvalDiv')">Approvals</div>
                                     <div id="overlapDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'overlapDiv'}" (click)="loadModel('overlapDiv')">Overlapping Deals</div>
                                     <div *ngIf="!CAN_VIEW_COST_TEST" id="groupExclusionDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'groupExclusionDiv'}" (click)="loadModel('groupExclusionDiv')">Grouping Exclusions</div>
-                                    <div *ngIf="usrRole=='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="loadModel('contractDetailsDiv')">Details</div>
+                                    <div *ngIf="usrRole=='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="openDealEntryTab()">Details</div>
                                     <div id="historyDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'historyDiv'}" (click)="loadModel('historyDiv')">History</div>
-                                    <div *ngIf="usrRole !='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="loadModel('contractDetailsDiv')">Details</div>
+                                    <div *ngIf="usrRole !='RA'" id="contractDetailsDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractDetailsDiv'}" (click)="openDealEntryTab()">Details</div>
                                     <div *ngIf="CAN_VIEW_EXPORT" id="contractReviewDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'contractReviewDiv'}" (click)="loadModel('contractReviewDiv')">{{contractType}}</div>
                                     <div *ngIf="CAN_VIEW_ALL_DEALS" id="dealReviewDiv" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'dealReviewDiv'}" (click)="loadModel('dealReviewDiv')">Deals</div>
                                     <div *ngIf="usrRole=='GA' || usrRole=='DA' || usrRole=='SA'" id="dealProducts" [ngClass]="{'lnav-sum-menu-item-active': selectedModel === 'dealProducts'}" (click)="loadModel('dealProducts')">Missing CAP/Cost</div>

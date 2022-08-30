@@ -20,6 +20,7 @@ import { GridUtil } from "../grid.util"
 })
 
 export class managerExcludeGroupsComponent {
+    showPCT: boolean = true;
     constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder, protected dialog: MatDialog) {
 
     }
@@ -28,6 +29,7 @@ export class managerExcludeGroupsComponent {
     PCTResultView = false;
     @Input() contractData: any;
     @Input() UItemplate: any;
+    @Input() groupTab: any;
     userRole = ""; canEmailIcon = true;
     dealCnt = 0;
     elGrid = null;
@@ -186,12 +188,6 @@ export class managerExcludeGroupsComponent {
             this.wrapEnabled = !this.wrapEnabled;
             let newVal = this.wrapEnabled ? "normal" : "nowrap";
             let newH = this.wrapEnabled ? "100%" : "auto";
-
-            // $(gridEl).find(".ng-binding").css("white-space", newVal);
-            // $(gridEl).find(".ng-binding").css("height", newH);
-            // setTimeout(function () {
-            //     this.grid.autoFitColumn(2);
-            // }, 0);
     }
     displayDealTypes() {
         let data = this.gridResult;
@@ -208,6 +204,9 @@ export class managerExcludeGroupsComponent {
     }
 
     ngOnInit() {
+        if(this.groupTab  === 'groupExclusionDiv'){
+            this.showPCT = false;
+        }
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();
     }

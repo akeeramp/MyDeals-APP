@@ -120,17 +120,32 @@ export class contractExportComponent {
     
     
     }
-    // getTemplateDetails() {
-    //     // Get the Contract and Current Pricing Strategy Data
-    //     this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
-    //     // Get the Current Pricing Table data
-    //     this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
-    //     // Get template for the selected PT
-    //     this.pricingTableTemplates = this.UItemplate["ModelTemplates"]["PRC_TBL_ROW"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
-    //     //Get Refined columns based on contract/Tender
-    //     PTE_Load_Util.PTEColumnSettings(this.pricingTableTemplates, this.isTenderContract, this.curPricingTable);
-    // }
+    exportToPDF(){
+        let htmlBody = [];
+        let fname ='#'+this.exportData.DC_ID+"-"+ this.exportData.TITLE + ".pdf";
+        htmlBody.push(document.getElementById('pdfContent').innerHTML); 
+        let blah = this.contractExportSvc.exportAsPDF(htmlBody).subscribe(response => {
+        let file = new Blob([response], { type: 'application/pdf' });
+        let fileURL = URL.createObjectURL(file);
+        let a = document.createElement("a");
+        document.body.appendChild(a);
+        a.href = fileURL;
+        a.download = fname; //"Test.pdf";
+        a.click();
+        }, error => {
+            this.loggerSvc.error("Unable to generate contract PDF.", error);
+        });
 
+
+    }
+showHelpTopic() {
+    const helpTopic = "Contract+and+Deals+Views";
+    if (helpTopic && String(helpTopic).length > 0) {
+        window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+    } else {
+        window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+    }
+}
     ngOnInit() {
         this.tableHeaderData = this.UItemplate.ModelTemplates;
         this.loadContractExportData();

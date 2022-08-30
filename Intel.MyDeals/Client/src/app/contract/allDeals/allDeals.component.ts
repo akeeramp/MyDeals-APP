@@ -2,18 +2,17 @@ import * as angular from "angular";
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { allDealsService } from "./allDeals.service";
-import { PTE_Load_Util } from "../PTEUtils/PTE_Load_util";
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
-import { Tender_Util } from "../PTEUtils/Tender_util";
-
-
+import { lnavService } from "../lnav/lnav.service";
+import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
+import { MatDialog } from "@angular/material/dialog";
+import { GridUtil } from "../grid.util";
 
 
 @Component({
@@ -23,14 +22,14 @@ import { Tender_Util } from "../PTEUtils/Tender_util";
 })
 
 export class allDealsComponent {
-    in_Ps_Id: any;
-    in_Pt_Id: any;
-    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger) {
+    allColumns: any[];
+    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
     dealCnt = 0;
+    private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
 
     private isLoading = true;
     private spinnerMessageHeader: string = "Loading Deals";
@@ -48,7 +47,8 @@ export class allDealsComponent {
     public exportFileName: string;
     private color: ThemePalette = 'primary';
     private curPricingTable: any = {};
-    public dealTypes = [
+    wrapEnabled = false;
+    public dealTypes: any = [
         { dealType: "ECAP", name: "ECAP" },
         { dealType: "FLEX", name: "FLEX" },
         { dealType: "VOL_TIER", name: "Volume Tier" },
@@ -57,7 +57,6 @@ export class allDealsComponent {
         { dealType: "KIT", name: "Kit" },
         { dealType: "PROGRAM", name: "Program" }
     ];
-    private currentDealTypesArray = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -118,7 +117,7 @@ export class allDealsComponent {
         textAlign: "left",
         wrap: true
     };
-    
+
 
     getFormatedDim(dataItem, field, dim, format) {
         const item = dataItem[field];
@@ -137,19 +136,32 @@ export class allDealsComponent {
         if (group[0].isTabHidden) {
             let tabs = this.groups.filter(x => x.isTabHidden === false);
             this.selectedTab = tabs[0].name;
-            // this.filterColumnbyGroup(this.selectedTab);
+            this.filterColumnbyGroup(this.selectedTab);
         }
-        // else
-            // this.filterColumnbyGroup(this.selectedTab);
+        else
+            this.filterColumnbyGroup(this.selectedTab);
+    }
+    getCustomerName(dataItem){
+        let value =''
+        if(dataItem?.Customer?.CUST_NM){
+            value = dataItem.Customer.CUST_NM;
+        }
+        return value;
+    }
+    getStageValue(dataItem){
+        let value = '';
+        if(dataItem?.PS_WF_STG_CD){
+            value =dataItem.PS_WF_STG_CD;
+        }
+        return value;
     }
     displayDealTypes() {
         let data = this.gridResult;
         let modDealTypes = [];
-        for (let i = 0; i < data.length; i++) {
-            // if(data[i].OBJ_SET_TYPE_CD){
-                let deal= data[i].OBJ_SET_TYPE_CD;
-                modDealTypes.push(deal.replace(/_/g, ' '));
-            // }
+        for (let i = 0; i < data.length; i++) {            
+            let deal= data[i].OBJ_SET_TYPE_CD;
+            modDealTypes.push(deal.replace(/_/g, ' '));
+            
         }
         let dealsTypesArray = Array.from(new Set(modDealTypes));
         this.dealCnt = modDealTypes.length;
@@ -157,11 +169,14 @@ export class allDealsComponent {
     }
     
     loadAllDealsData() {
+        let data: any;
         let cId = this.contractData.DC_ID;
         this.allDealsSvc.readWipFromContract(cId).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
+            data = result.WIP_DEAL;
             this.displayDealTypes();
+            this.loadDealTypestab(data);
             this.gridData = process(this.gridResult, this.state);
         }, (error) => {
             this.isLoading = false;
@@ -197,28 +212,93 @@ export class allDealsComponent {
     }
     filterColumnbyGroup(groupName: string) {
         var group = this.groups.filter(x => x.name == groupName);
+        var show = [
+            "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
+            "WF_STG_CD", "PRODUCT_CATEGORIES", "TITLE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
+            "KIT_ECAP", "VOLUME", "CONSUMPTION_REASON", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "MRKT_SEG", "GEO_COMBINED",
+            "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES"
+        ];
         this.columns = [];
+        this.allColumns =[];
         if (group.length > 0) {
-            for (var i = 0; i < this.wipTemplate.columns.length; i++) {
-                var gptemplate = this.templates[this.wipTemplate.columns[i].field];
-                if (groupName.toLowerCase() == "all") {
-                    if (gptemplate === undefined && (this.wipTemplate.columns[i].width === undefined || this.wipTemplate.columns[i].width == '0')) {
-                        this.wipTemplate.columns[i].width = 1;
-                    }
-                    this.columns.push(this.wipTemplate.columns[i]);
-                }
-                else {
-                    if (gptemplate != undefined && gptemplate.Groups.includes(groupName)) {
-                        this.columns.push(this.wipTemplate.columns[i]);
+            this.wipTemplate = this.UItemplate.ModelTemplates.WIP_DEAL[group[0].dealType];
+                       for (var i = 0; i < this.wipTemplate.columns.length; i++) {
+                if(this.wipTemplate.columns[i].hidden === false){
+                    if((this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
+                        this.allColumns.push(this.wipTemplate.columns[i]);
                     }
                 }
             }
         }
+        if(group[0].name != 'All'){
+            for (var i = 0; i < this.allColumns.length; i++) {
+                if(show.indexOf(this.allColumns[i].field) > -1){
+                    if((group[0].name == "Kit") && (this.allColumns[i].field !== "TITLE")){
+                        this.columns.push(this.allColumns[i]);
+                    } else {
+                        this.columns.push(this.allColumns[i]);
+                    }
+                }
+            }
+        } else {
+            this.columns= this.allColumns;
+        }
+        this.columns.push({
+            bypassExport:false,
+            field:"NOTES",
+            hidden: false,
+            template:'',
+            filterable:true,
+            sortable:true,
+            title:"Notes",
+            width:150
+        });
+        // console.log(this.columns);
+    }
+    cellClickHandler(args: CellClickEvent): void {
+        if (args.column.field == "TITLE") {
+            this.openDealProducts(args.dataItem);
+        }
+    }
+    openDealProducts(dataItem){
+        console.log(dataItem);
+    }
+    showHelpTopicGroup(helpTopic) {
+        // const helpTopic = "Grouping+Exclusions";
+        if (helpTopic && String(helpTopic).length > 0) {
+            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
+        } else {
+            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
+        }
+    }
+    exportToExcel() {
+        //kujoih
+    }
+    exportToExcelCustomColumns() {
+        //kujoih
+    }
+    openOverlappingDealCheck() {
+        //kujoih
+    }
+    
+    toggleWrap() {
+        this.wrapEnabled = !this.wrapEnabled;
+    }
+    loadDealTypestab(data){
+        for (let i = 0; i < data.length; i++) {
+                let deal= data[i].OBJ_SET_TYPE_CD;
+                this.dealTypes.forEach((element, index) => {
+                    if((element.dealType === deal) && ((this.groups.indexOf(element) === -1))){
+                        this.groups.push(element);
+                    }
+                  })
+        }
+        this.groups.push({ dealType:'ALL_TYPES', name: "All" })
+        this.selectedTab =this.groups[0].name;
+        this.filterColumnbyGroup(this.selectedTab);
     }
     ngOnInit() {
-        // this.exportFileName = "Contract " + String(this.contractData.DC_ID) + " Missing CAP/Cost Products.xlsx";
         this.loadAllDealsData();
-        // this.selectedTab = this.dealTypes[0].name;
     }
 
 }

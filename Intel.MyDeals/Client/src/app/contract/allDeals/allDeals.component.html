@@ -4,10 +4,9 @@
             {{displayDealTypes()}}
         </div>
     </div>
-    <kendo-tabstrip style="background-color: #ffffff !important;">
-    <kendo-tabstrip-tab title="ECAP" [selected]="true">
-    <!-- <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" > -->
-        <!-- <ng-template kendoTabTitle>&nbsp;{{data.name}}</ng-template> -->
+ <div>
+    <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="allDealsTab" style="margin-left: 10px">
+        <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
             <ng-template kendoTabContent>
             <div class="content">
                 <div class="toolbar" style="position: absolute; left: 300px; top: 80px; margin-bottom: 10px;">
@@ -64,7 +63,7 @@
                         </button>
                     </div>
                     <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                        <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup()">
+                        <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup('Contract+and+Deals+Views')">
                             <i class="intelicon-help"
                                style="font-size:30px !important"></i>
                         </div>
@@ -75,191 +74,44 @@
                         </span>
                     </div>
                 </div>
-                <div class="row" style="margin-left: -36px; padding-top: 28px;margin-top: 15px;">
+               <div class="row" style="margin-left: -36px; padding-top: 28px;margin-top: 15px;">
                     <div class="col-md-12 kendo-grid-buttons">
                         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
-                                    >
-                            <kendo-grid-column title="Deal Id" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column title="Validation" field="PASSED_VALIDATION" [headerClass]="{'headerClass':true}" [width]="140">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                    let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                </ng-template>
-                                <!-- <i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i> -->
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div class='dealLnk'>
-                                        <i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation:{{ (dataItem.PASSED_VALIDATION==="Dirty" ? "Validation Errors" : dataItem.PASSED_VALIDATION) || "Not validated yet"}}'
-                                           [ngClass]='{ "intelicon-protection-solid": (dataItem.PASSED_VALIDATION===undefined || dataItem.PASSED_VALIDATION===""), "intelicon-protection-checked-verified-solid": (dataItem.PASSED_VALIDATION==="Complete"), "intelicon-protection-solid intelicon-alert-solid": (dataItem.PASSED_VALIDATION==="Dirty")}'></i>
-                                    </div>
-                                </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Customer" field="CUST_MBR_SID" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                                <div>{{dataItem.Customer.CUST_NM}}
-                                </div>
-                            </ng-template>
-                                <!-- <ng-template kendoGridCellTemplate let-dataItem>
-                                    <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
-                                </ng-template> -->
-                            </kendo-grid-column>
-                            <kendo-grid-column title="Tracker Number" field="TRKR_NBR" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Deal Start Date" field="START_DT" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Deal End Date" field="END_DT" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Deal Type" field="OBJ_SET_TYPE_CD" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Product Vertical" field="PRODUCT_CATEGORIES" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column title="My Deals Product" field="TITLE" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Group Type" field="DEAL_COMB_TYPE" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column title="Deal Description" field="DEAL_DESC"
-                                               [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="ECAP Price" field="ECAP_PRICE" [headerClass]="{'headerClass':true}"
-                                               [width]="120">
-                                               <ng-template kendoGridCellTemplate let-dataItem>
-                                                <span>
-                                                    {{
-                             getFormatedDim(dataItem, 'ECAP_PRICE',
-                                                    '20___0','currency')
-                                                    }}
-                                                </span>
-                                            </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}"
-                            [width]="120">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                            let-filterService="filterService">
-                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
+                            <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}"
+                             width="{{column.width}}" [filterable]="column.filterable"  >
+                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                             let-filterService="filterService">
+                             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                 [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                         </ng-template>
+                         <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" kendoGridHeaderTemplate>
+                            <i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>
                         </ng-template>
-                        </kendo-grid-column>
-                            <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON" [headerClass]="{'headerClass':true}"
-                            [width]="120">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                            let-filterService="filterService">
-                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                        </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Payout Based On" field="PAYOUT_BASED_ON" [headerClass]="{'headerClass':true}"
-                            [width]="120">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                            let-filterService="filterService">
-                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                        </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Program Payment" field="MRKT_SEG" [headerClass]="{'headerClass':true}"
-                                               [width]="160">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Program Payment" field="PROGRAM_PAYMENT" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column title="Market Segment" field="MRKT_SEG" [headerClass]="{'headerClass':true}" [width]="120">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column title="Geo" field="GEO_COMBINED"
-                                               [headerClass]="{'headerClass':true}" [width]="160">
-                                               <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                               let-filterService="filterService">
-                                               <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                   [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                           </ng-template></kendo-grid-column>
-                            <kendo-grid-column title="Rebate Type" field="REBATE_TYPE"
-                            [headerClass]="{'headerClass':true}" [width]="160">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                            let-filterService="filterService">
-                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                        </ng-template></kendo-grid-column>
+                        <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
+                            <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
+                        </ng-template>
+                         <ng-template *ngIf="column.field == 'KIT_ECAP'" let-dataItem="dataItem" kendoGridCellTemplate>
+                            <span>{{getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span>
+                        </ng-template>
+                        <ng-template *ngIf="column.field == 'CUST_MBR_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
+                            <span>{{getCustomerName(dataItem)}}</span>
+                        </ng-template>
+                        <ng-template *ngIf="column.field == 'WF_STG_CD'" let-dataItem="dataItem" kendoGridCellTemplate>
+                            <span>{{getStageValue(dataItem)}}</span>
+                        </ng-template>
+                        <ng-template *ngIf="column.field == 'TITLE'" let-dataItem="dataItem" kendoGridCellTemplate>
+                             <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.TITLE}}</span>
+                        </ng-template>
+                        <ng-template  *ngIf="column.field == 'PASSED_VALIDATION'" let-dataItem="dataItem" kendoGridCellTemplate>
+                            <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Complete'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}"
+                            *ngIf="dataItem.PASSED_VALIDATION==='Finalizing'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Valid'" title="{{dataItem.PASSED_VALIDATION}}"></i>
+                            <i class="intelicon-alert-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Dirty'" title="{{ (dataItem.PASSED_VALIDATION==='Dirty' ? 'Validation Errors: Fix in Deal Editor' : dataItem.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+                            <i class="intelicon-protection-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION !=='Valid' && dataItem.PASSED_VALIDATION !=='Dirty' && dataItem.PASSED_VALIDATION !=='Complete' && dataItem.PASSED_VALIDATION !=='Finalizing'" title="{{dataItem.PASSED_VALIDATION || 'Not validated yet'}}"></i>
 
-                            <kendo-grid-column title="Additional Ts And Cs" field="TERMS"
-                            [headerClass]="{'headerClass':true}" [width]="160">
-                            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                            let-filterService="filterService">
-                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                        </ng-template></kendo-grid-column>
-
-                            <kendo-grid-column title="Notes" field="NOTES" [headerClass]="{'headerClass':true}" [width]="160">
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                            </ng-template>
+                        </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
                     </div>
@@ -269,5 +121,5 @@
     </kendo-tabstrip-tab>
 </kendo-tabstrip>
 </div>
+</div>
 <loading-panel-angular id="AllDealsLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader"></loading-panel-angular>
-

@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class contractExportService { 
     public apiExportContractUrl ='/api/Contracts/v1/getExportContract/';
     public timeLineApiUrl = "api/Timeline/";
+    public apiBaseUrl= '/api/Contracts/v1/';
 
 
     constructor(private httpClient: HttpClient) {
@@ -24,7 +25,10 @@ export class contractExportService {
         const apiTimeLineUrl: string = this.timeLineApiUrl + "GetObjTimelineDetails";
         return this.httpClient.post(apiTimeLineUrl, rbody);
     }
+    public exportAsPDF(body):Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'HtmlToPdf';
+        return this.httpClient.post(apiUrl,body, { responseType: 'arraybuffer'});
+    }
     
 
 }
-

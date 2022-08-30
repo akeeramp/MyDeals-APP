@@ -5,12 +5,99 @@
 .visible {
     visibility: visible;
 }
+.intelicon-protection-solid {
+    font-size: 20px;
+}
+.dropdown-menu {
+    box-shadow: none;
+    border-color: #eee;
+}
+.dropdown-menu>li>a {
+    color: #777 !important;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+a {
+    text-decoration: none !important;
+    background-color: transparent !important;
+}
 .dealTag {
     top: 43px !important;
     right: 10px !important;
     background: linear-gradient(to bottom, transparent 0%, transparent 100%) !important
 }
-.k-grid .k-grid-aria-root {
-    overflow: auto !important;
-    width: 47% !important;
+.wrapView{
+    white-space: normal !important;
+    height: 100% !important;
+}
+.normalView{
+    white-space: nowrap !important;
+    height: auto !important;
+}
+
+.k-dialog .k-content {
+    margin-top: 0 !important
+}
+
+.k-grid th,
+.k-grid td {
+    font-size: 12px !important;
+}
+.k-dialog .k-dialog-title,
+.k-dialog .k-window-title {
+    display: none !important;
+}
+
+.k-dialog .k-content {
+    margin-top: -30px;
+}
+table td {
+    border: 0 solid #ccc
+}
+.k-tabstrip-wrapper {
+    border-bottom: 0 solid #eeeeee
+}
+.k-grid-content-locked .k-grouping-row td {
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 0 solid transparent;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent
+}
+#allDealsTab {
+    margin-top: 20px;
+}
+#allDealsTab .k-tabstrip-items .k-item {
+    background: #fdfdfd;
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
+    color: #003C71 !important;
+    padding: 0 !important;
+    text-transform: none !important;
+    background-color: #fff;
+    border-bottom-width: 0
+}
+
+#allDealsTab .k-tabstrip-items .k-state-active {
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+    border-color: #b1babf;
+    border-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    border-radius: 4px 4px 0 0
+}
+
+#allDealsTab .k-tabstrip-items .k-item .k-link:hover {
+    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+    color: #00AEEF !important;
 }

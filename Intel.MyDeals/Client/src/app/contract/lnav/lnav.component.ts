@@ -708,6 +708,10 @@ export class lnavComponent {
             this.loadModel('Manage');
         }
     }
+    openDealEntryTab(){
+        this.selectedTab = 0;
+        this.loadContractDetails();   
+    }
     openMeetCompTab() {
         this.selectedTab = 1;
         this.loadModel('MeetComp');

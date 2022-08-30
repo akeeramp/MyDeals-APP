@@ -126,7 +126,7 @@
                     <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate"></overlapping-deals>
                 </div>
                 <div *ngIf="selLnav=='groupExclusionDiv'">
-                    <manager-exclude-groups [contractData]="contractData" [UItemplate]="UItemplate"></manager-exclude-groups>
+                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
                 </div>
                 <div *ngIf="selLnav=='contractDetailsDiv'">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
@@ -144,7 +144,7 @@
                     <missing-cap [contractData]="contractData" [UItemplate]="UItemplate"></missing-cap>
                 </div>
                 <div *ngIf="selLnav=='pctDiv'">
-                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate"></manager-pct>
+                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
                 </div>
                 <div *ngIf="selLnav=='ViewContractDetails'">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>

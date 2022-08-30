@@ -1,0 +1,36 @@
+
+    <div class="modal-header modalBlueBody">
+        <h5 class="modal-title" id="modal-title">Submission Overview</h5>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+        
+        <div class="errMsg" ng-if="showErrMsg">
+            <i class="intelicon-information-solid"></i> Please make sure you review Meet Comp on the left navigation before proceeding.
+        </div>
+        <div class="draftMsg">
+            Below is an overview of what will be submitted.
+        </div>
+        <kendo-grid id="gridActionSummary" class="opUiContainer md dashboard" [data]="gridData">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="TITLE" title="Strategy Name" width="100px">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTN" title="Approve or Revise" width="200px">
+        </kendo-grid-column>
+        </kendo-grid>
+
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    <button class="btn btn-default full-width" type="button" (click)="cancel()">Close</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <button class="btn btn-primary full-width" type="button" (click)="ok()">Submit</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+

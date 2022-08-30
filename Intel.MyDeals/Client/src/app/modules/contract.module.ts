@@ -31,6 +31,7 @@ import { allDealsComponent } from "../contract/allDeals/allDeals.component";
 import { GridPopoverComponent } from "../contract/ptModals/productSelector/gridPopover/gridPopover.component";
 import { ProductBreakoutComponent } from "../contract/ptModals/productSelector/productBreakout/productBreakout.component";
 import { OverlappingCheckComponent } from "../contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+import { actionSummaryModal } from "../contract/contractManager/actionSummaryModal/actionSummaryModal.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -64,5 +65,6 @@ export let contractComponents = [
     allDealsComponent,
     GridPopoverComponent,
     ProductBreakoutComponent,
-    OverlappingCheckComponent
+    OverlappingCheckComponent,
+    actionSummaryModal
 ]
