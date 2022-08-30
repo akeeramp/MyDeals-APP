@@ -20,6 +20,7 @@ import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/sys
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
+import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 
 @Component({
     selector: 'deal-editor',
@@ -269,6 +270,18 @@ export class dealEditorComponent {
                 this.updateModalDataItem(dataItem, "IS_RPL", returnVal.IS_RPL);
             }
         });
+    }
+    openOverLappingDealCheck() {
+        let data = {
+            "contractData": this.contractData,
+            "currPt": this.curPricingTable,
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            height: '530px',
+            width: '800px',
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe(result => { });
     }
 
     openMultiSelectModal(dataItem, column) {
