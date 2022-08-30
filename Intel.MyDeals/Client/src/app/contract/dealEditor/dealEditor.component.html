@@ -5,10 +5,10 @@
         <ng-template kendoTabTitle>
             <span><i class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             <span class="colorChg">{{data.name}} &nbsp;</span>
-                <span class="badge error ng-binding" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
-                <span class="badge warning" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
-                <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color:#00aeef; border-radius:15px" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
-</ng-template>
+            <span class="badge error ng-binding" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
+            <span class="badge warning" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
+            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color:#00aeef; border-radius:15px" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
+        </ng-template>
         <ng-template kendoTabContent>
             <div class="flex-container" style="display:flex">
                 <button id="SaveDeBtn" class="btn btn-sm btn-save" style="font-size:25px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="fr" style="margin-top: 2px; margin-left:8px">
-                    <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals"  (click)="openOverLappingDealCheck()">
+                    <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                         <table>
                             <tr>
                                 <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
@@ -97,26 +97,28 @@
                     <input style="width:270px;border:none" placeholder="search... (press enter to search)" />
                 </span>
             </div>
-            <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                        [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
-                        [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
-                        filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
-                        class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
-                        style="width: 320px; height: 354.788px;" data-role="grid">
-                <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
-                                   [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.field !== 'details' && column.field !== 'tools'">
-                    <ng-template kendoGridHeaderTemplate>
-                        <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
-                    </ng-template>
-                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
-                        <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data" 
-                                          (iconUpdate)="updateSaveIcon($event)" (reloadGrid)="gridReload($event)" ></deal-editor-cell>
-                    </ng-template>
-                    <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                        <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
-                    </ng-template>
-                </kendo-grid-column>
-            </kendo-grid>
+            <div class="op-grid-container">
+                <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
+                            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
+                            filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
+                            class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
+                            style="width: 320px; height: 465.788px;" data-role="grid">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
+                                       [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.field !== 'details' && column.field !== 'tools'">
+                        <ng-template kendoGridHeaderTemplate>
+                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
+                        </ng-template>
+                        <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                            <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"
+                                              (iconUpdate)="updateSaveIcon($event)" (reloadGrid)="gridReload($event)"></deal-editor-cell>
+                        </ng-template>
+                        <ng-template kendoGridEditTemplate let-dataItem="dataItem">
+                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
             <kendo-dialog *ngIf="isWarning" id="warning" (close)="Close()">
                 <p class="kendo-dialog-message">{{message}}</p>
                 <kendo-dialog-actions>

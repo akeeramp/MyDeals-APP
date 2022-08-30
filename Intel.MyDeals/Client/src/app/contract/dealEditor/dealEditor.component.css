@@ -144,6 +144,7 @@ tr:last-child > td {
     text-transform: none !important;
     background-color: #fff;
     border-bottom-width: 0;
+    border: 3px solid transparent;
 }
 
 #dealEditorTab .k-tabstrip-items .k-state-active {
@@ -378,7 +379,7 @@ tr:last-child > td {
 .dealTools {
     margin-top: 0px !important;
     /*padding-top: 23px !important;*/
-    /*line-height: 3.2em !important;*/
+    line-height: 5.2em !important;
 }
 .gridStatusMarker {
     height: 35px !important;
@@ -433,7 +434,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
 }
 
 .k-cell-inner {
-    font-size: 11px !important;
+    font-size: 12px !important;
 }
 .dealCell {
     height: 100% !important;
@@ -555,7 +556,8 @@ tr:last-child > td {
 }
 
 .tenderView {
-    width: 803px;
+    /* width: 803px;*/
+    width: 851px;
 }
 label {
     line-height: 1.5;
@@ -566,4 +568,12 @@ label {
 
 kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
     width: 85% !important;
+}
+
+.redfont {
+    color: #fc4c02;
+}
+
+.op-grid.k-grid .k-grid-header .k-header {
+    white-space: normal;
 }
