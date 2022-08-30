@@ -2191,9 +2191,9 @@ namespace Intel.MyDeals.BusinessRules
             if (r.Dc.GetAtrbValue(AttributeCodes.WF_STG_CD).ToString() != WorkFlowStages.Draft)
             {
                 r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
-                r.Dc.SetAtrb(AttributeCodes.PS_WF_STG_CD, OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
-                    ? WorkFlowStages.Requested
-                    : WorkFlowStages.Draft);
+                r.Dc.SetAtrb(AttributeCodes.PS_WF_STG_CD, OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.FSE
+                    ? WorkFlowStages.Draft
+                    : WorkFlowStages.Requested);
             }
 
             if (wipStage == WorkFlowStages.Active || wipStage == WorkFlowStages.Won) // WIP Object, Set re-deal date only if this came from active since it will drive the tracker effective from/to date calc.
@@ -2242,9 +2242,9 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (futureStage == null) // This is path where you edited a re-deal item, yet PS is not in re-deal pathing stage, so force the path
                 {
-                    futureStage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
-                        ? WorkFlowStages.Requested
-                        : WorkFlowStages.Draft;
+                    futureStage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.FSE
+                        ? WorkFlowStages.Draft
+                        : WorkFlowStages.Requested;
                 }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 int dcPs = myDealsData.ContainsKey(OpDataElementType.PRC_TBL)

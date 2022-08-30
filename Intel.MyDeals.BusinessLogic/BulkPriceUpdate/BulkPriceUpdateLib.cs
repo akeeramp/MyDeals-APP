@@ -72,17 +72,50 @@ namespace Intel.MyDeals.BusinessLogic
             // fetch objects - if it doesn't find the deal or the deal is an IQR deal, bail out of setting values
             List<int> passedDealIds = new List<int>() { dealId };
             MyDealsData myDealsData = OpDataElementType.WIP_DEAL.GetByIDs(passedDealIds, new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }).FillInHolesFromAtrbTemplate(); // Make the save object .FillInHolesFromAtrbTemplate()
+            bool dataIsNotClear = false;
 
             if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
             {
                 bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " was not found in My Deals.  Please contact My Deals Support.";
-                return false; // Pre-emptive stop for this record attempt
+                dataIsNotClear = true;
             }
 
             if (myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "") // IF SF DEAL - DONT ALLOW EDIT AND BAIL
             {
-                bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " is an IQR deal.  Edits are not allowed for these deals.";
-                return false; // Pre-emptive stop for this record attempt
+                bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " is an IQR deal.  Edits are not allowed.";
+                dataIsNotClear = true;
+            }
+
+            if (myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD) == WorkFlowStages.Cancelled) // IF Cancelled DEAL - DONT ALLOW EDIT AND BAIL
+            {
+                bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " is a Cancelled deal.  Edits are not allowed.";
+                dataIsNotClear = true;
+            }
+
+            if (myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PS_WF_STG_CD) == WorkFlowStages.Submitted) // IF Submitted DEAL - DONT ALLOW EDIT AND BAIL
+            {
+                bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " is at Submitted stage.  Edits are not allowed.  Move it back to an editable stage.";
+                dataIsNotClear = true;
+            }
+
+            if (!string.IsNullOrEmpty(bulkPriceUpdateRecord.DealStartDate) || !string.IsNullOrEmpty(bulkPriceUpdateRecord.DealEndDate)) // Force dates to be in correct order or bail on updates for this record
+            {
+                DateTime passedDealStartDate = string.IsNullOrEmpty(bulkPriceUpdateRecord.DealStartDate) ? DateTime.MinValue: DateTime.ParseExact(bulkPriceUpdateRecord.DealStartDate, "MM/dd/yyyy", null);
+                DateTime passedDealEndDate = string.IsNullOrEmpty(bulkPriceUpdateRecord.DealEndDate) ? DateTime.MinValue : DateTime.ParseExact(bulkPriceUpdateRecord.DealEndDate, "MM/dd/yyyy", null);
+
+                DateTime correctStartDate = passedDealStartDate != DateTime.MinValue ? passedDealStartDate: DateTime.ParseExact(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.START_DT), "MM/dd/yyyy", null);
+                DateTime correctEndDate = passedDealEndDate != DateTime.MinValue ? passedDealEndDate : DateTime.ParseExact(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.START_DT), "MM/dd/yyyy", null);
+
+                if (correctStartDate >= correctEndDate)
+                {
+                    bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " End Date (" + correctEndDate.ToString("MM/dd/yyyy") + ") will fall before Start Date (" + correctStartDate.ToString("MM/dd/yyyy")  + ").  Skipping all updates for this deal until dates are corrected.";
+                    dataIsNotClear = true;
+                }
+            }
+
+            if (dataIsNotClear) // If any unforced errors in data, skip entire save for this record
+            {
+                return false;
             }
 
             int custId = Int32.Parse(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.CUST_MBR_SID));
