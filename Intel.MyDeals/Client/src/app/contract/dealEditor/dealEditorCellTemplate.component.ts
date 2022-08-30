@@ -1,5 +1,5 @@
 ﻿import * as angular from 'angular';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
@@ -23,11 +23,22 @@ export class dealEditorCellTemplateComponent {
     @Input() in_DataItem: any = '';
     @Input() contract_Data: any = '';
     @Input() grid_Data: any = '';
+    @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
+    @Output() reloadGrid: EventEmitter<any> = new EventEmitter<any>();
+
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private subKitEcapDim = "20_____2";
     private dim = "10___";
     private fields: any;
+
+    updateIcon(eventData: boolean) {
+        this.iconUpdate.emit(eventData);
+    }
+
+    gridReload(eventData: boolean) {
+        this.reloadGrid.emit(eventData);
+    }
 
     uiControlWrapper(passedData, field, format) {
         var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;

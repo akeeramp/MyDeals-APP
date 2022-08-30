@@ -1,0 +1,79 @@
+﻿.mat-dialog-container {
+    border-radius: 0px !important;
+}
+
+.k-dropzone {
+    background-color: transparent !important;
+    padding: 0.8em !important;
+}
+
+.k-upload .k-dropzone .k-dropzone-hint {
+    visibility: hidden !important;
+}
+.k-upload .k-upload-selected {
+    color: #0071c5 !important;
+    background-color: #fafafa !important;
+    text-transform: uppercase !important;
+    margin-top: -4px !important;
+    width: 50% !important;
+    line-height: 1em !important;
+    padding: 1.214em 0 !important;
+    border: 0 !important;
+    font-weight: 500 !important;
+    margin-right: 50% !important;
+}
+
+    .k-upload .k-upload-selected:hover {
+        color: #ffffff !important;
+        background-color: #0071c5 !important;
+    }
+
+.k-upload .k-upload-files .k-upload-status .k-icon {
+    position: initial !important;
+}
+
+.k-upload .k-upload-button {
+    min-width: 7em !important;
+    border-radius: 2px !important;
+    color: #444444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    padding: 9px 14px !important;
+}
+
+.k-grid {
+    height: 375px !important;
+}
+
+.k-grid-header .headerClass {
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+    border-style: solid !important;
+}
+
+.k-column-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
+
+.cellCustomClass {
+    height: 50px !important;
+    color: rgb(26, 62, 111) !important;
+    font-weight: 500 !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    padding-left: 5px !important;
+    padding-right: 10px !important;
+}
+
+.fileCell {
+    color: #0071c5 !important;
+    white-space: normal !important;
+}
+
+    .fileCell a:hover, a:focus {
+        color: #004579 !important;
+        text-decoration: underline !important;
+    }

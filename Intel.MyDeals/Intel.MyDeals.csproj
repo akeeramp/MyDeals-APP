@@ -898,6 +898,7 @@
     <Content Include="Client\src\app\core\gridCell\dealTimelineModal\dealTimelineModal.component.html" />
     <Content Include="Client\src\app\core\gridCell\dealTools\dealTools.component.css" />
     <Content Include="Client\src\app\core\gridCell\dealTools\dealTools.component.html" />
+    <Content Include="Client\src\app\core\gridCell\fileAttachmentModal\fileAttachmentModal.component.css" />
     <Content Include="Client\src\app\core\gridCell\fileAttachmentModal\fileAttachmentModal.component.html" />
     <Content Include="Client\src\app\core\gridCell\iconMctPct\iconMctPct.component.html" />
     <Content Include="Client\src\app\core\gridStatusBoard\contractStatusBoard.component.css" />

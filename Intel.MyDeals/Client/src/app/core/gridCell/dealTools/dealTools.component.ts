@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component, Input, ViewEncapsulation} from "@angular/core";
+import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { logger } from '../../../shared/logger/logger';
 import { GridUtil } from "../../../contract/grid.util";
@@ -8,6 +8,7 @@ import { dealToolsService } from '../dealTools/dealTools.service';
 import * as _ from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.component';
+import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
 
 @Component({
     providers: [dealToolsService],
@@ -33,7 +34,9 @@ export class dealToolsComponent{
     @Input() isEditable;
     @Input() isQuoteLetterEnabled;
     @Input() isDeleteEnabled;
-        
+    @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
+    @Output() reloadGrid: EventEmitter<any> = new EventEmitter<any>();
+
     public isSalesForceDeal;
     public isPublishable;
     public isDaUser;  
@@ -72,14 +75,12 @@ export class dealToolsComponent{
         "AddFile": {
             "icon": "intelicon-attach",
             "title": "Click to add an attachment",
-            "style": { color: "#00AEEF", cursor: "pointer" },
-            "onClick": this.openAttachments()
+            "style": { color: "#00AEEF", cursor: "pointer" }
         },
         "HasFile": {
             "icon": "intelicon-attach",
             "title": "Click to view or add attachments",
-            "style": { color: "#003C71", cursor: "pointer" },
-            "onClick": this.openAttachments()
+            "style": { color: "#003C71", cursor: "pointer" }
         }
     }
     private holdItems = {
@@ -137,8 +138,8 @@ export class dealToolsComponent{
         else {
             this.isSalesForceDeal = true;
         }
-        if (!!this.isEditable)
-            this.isEditable = false;
+        //if (!!this.isEditable)
+        //    this.isEditable = false;
                 
         // Swap IF statement to prevent IQR from having access to quote letters
         if (this.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem.OBJ_SET_TYPE_CD !== 'KIT')
@@ -255,11 +256,6 @@ export class dealToolsComponent{
                         }
                     }
                 }
-
-                //$scope.$broadcast('updateGroup', data.data.Messages);
-                // refresh upper contract
-                //if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
-
                 this.setBusy("Split Successful", "Split the Pricing Table Row into single Deals", "Success","");
                 setTimeout(() => {
                     this.setBusy("", "", "","");
@@ -280,15 +276,24 @@ export class dealToolsComponent{
             this.dataItem._behaviors.isDirty = {};
         this.dataItem._behaviors.isDirty[newField] = true;
         this.dataItem._dirty = true;
-        //broadcast
+    }
+    saveFileCell(newField) {
+        if (this.dataItem._behaviors === undefined)
+            this.dataItem._behaviors = {};
+        if (this.dataItem._behaviors.isDirtyFile === undefined)
+            this.dataItem._behaviors.isDirtyFile = {};
+        this.dataItem._behaviors.isDirtyFile[newField] = true;
+        this.dataItem.isDirtyFile = true;
     }
     saveNotes() {
         if (this.dataItem.NOTES !== this.notes) {
             this.dataItem.NOTES = this.notes;
             this.saveCell("NOTES");
+            this.iconSaveUpdate.emit(this.dataItem._dirty);
         }
         this.closeDialogs();
     }
+    //deal timeline
     clkHistoryIcon(dataItem) {
         const dialogRef = this.dialog.open(dealTimelineComponent, {
             data: {
@@ -298,7 +303,9 @@ export class dealToolsComponent{
                     objTypeSid: 5,
                     objTypeIds: [5]
                 }
-            }            
+            },
+            minWidth: '750px',
+            panelClass:'historyModal'
         });
     }
     // FILES Items
@@ -330,14 +337,14 @@ export class dealToolsComponent{
         }
     }
     openAttachments(){
-        //const dialogRef = this.dialog.open(FileAttachmentComponent, {
-        //    width: '900px',
-        //    height: '620px',
-        //    disableClose: false,
-        //    });
-        //dialogRef.afterClosed().subscribe(result => {
-            
-        //});
+        const dialogRef = this.dialog.open(fileAttachmentComponent, {
+            maxWidth: '900px',
+            height: '620px',
+            data: {
+                dataItem: this.dataItem
+            }
+        });
+        this.saveFileCell("HAS_ATTACHED_FILES");
     }
     //Quotes Item
     showQuote(dataItem) {
@@ -388,6 +395,9 @@ export class dealToolsComponent{
                     if (this.gridData[d].DC_PARENT_ID === ptrId)
                         row = this.gridData.splice(d, 1);
                 }
+                if (this.gridData.length == 0) {
+                    //return to pte screen...call loadPTE() from pte component
+                }
                 this.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal", "Success","");
                 setTimeout(() => {
                     this.setBusy("", "", "","");
@@ -409,9 +419,11 @@ export class dealToolsComponent{
         this.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
         this.dataService.actionWipDeal(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem, 'Cancel')
             .subscribe((response: any) => {
-                //this.syncHoldItems(response, { Cancel: [this.dataItem] });
-                //$scope.$broadcast('refreshStage', { Cancel: [this.dataItem] });
-                
+                setTimeout(() => {
+                    //$("#wincontractMessages").data("kendoWindow").open();
+                    this.reloadGrid.emit(true);
+                }, 50);
+
             }, function (response) {
                 this.setBusy("", "","","");
             });
@@ -442,7 +454,7 @@ export class dealToolsComponent{
                     this.setBusy("", "", "","");
                 }, 4000);
 
-                //$scope.reloadPage();$state.reload();
+                this.reloadGrid.emit(true);
 
             }, function (response) {
                 this.loggerSvc.error("Could not Rollback the Pricing Table " + this.contractData.DC_ID, response, response.statusText);
@@ -541,7 +553,10 @@ export class dealToolsComponent{
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
         this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data)
             .subscribe((response: any) => {
-                //this.syncHoldItems(response, data);
+                setTimeout(() => {
+                    //$("#wincontractMessages").data("kendoWindow").open();
+                    this.reloadGrid.emit(true);
+                }, 50);
                 this.setBusy("", "", "", "");
             }, function (response) {
                 this.setBusy("", "", "", "");

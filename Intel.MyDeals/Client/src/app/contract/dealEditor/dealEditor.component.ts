@@ -221,7 +221,11 @@ export class dealEditorComponent {
             this.dirty = true;
         }
     }
-    
+
+    updateSaveIcon(eventData: boolean) {
+        this.dirty = eventData;
+    }
+
     openSystemPriceModal(dataItem) {
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
             width: "900px",
@@ -580,6 +584,11 @@ export class dealEditorComponent {
                     }
                 }
             });
+    }
+
+    gridReload(eventData: boolean) {
+        if (eventData)
+            this.ngOnInit();
     }
 
     ngOnInit() {

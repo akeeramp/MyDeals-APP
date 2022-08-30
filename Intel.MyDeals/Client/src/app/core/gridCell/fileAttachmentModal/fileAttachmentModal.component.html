@@ -1,1 +1,75 @@
-﻿
+﻿<div style="padding: 1.8em 1em 1.8em 1em !important; height: 500px; ">
+    <table style="width:100%; table-layout:fixed">
+        <tbody>
+            <tr>
+                <td style="width:48%; vertical-align:top" *ngIf="C_ADD_ATTACHMENTS">
+                    <div class="panel panel-default ">
+                        <div class="panel-heading">
+                            <div class="fl">
+                                Add Attachments
+                                <span kendoTooltip>
+                                    <a title="Attach multiple files. Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
+                                       class="opElementHelpIcon intelicon-information-outlined"></a>
+                                </span>
+                            </div>
+                            <div class="fr" *ngIf="fileUploading">
+                                <span><img src="/Images/032.gif" /></span>
+                            </div>
+                            <div class="clearboth"></div>
+                        </div>
+                        <div class="panel-body">
+                            <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="errorEventHandler()" (complete)="onFileUploadComplete()"
+                                          (upload)="uploadEventHandler($event)" [autoUpload]="false">
+                            </kendo-upload>
+                        </div>
+                    </div>
+                </td>
+                <td style="width:4%"></td>
+                <td style="width:48%; vertical-align:top">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Attachments <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                        <div class="panel-body">
+                            <div *ngIf="!(attachmentCount <= 0 || !initComplete)" style="height:375px;">
+                                <kendo-grid [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
+                                            [sort]="state.sort" [sortable]="true" [selectable]="true" [resizable]="true" [filterable]="false"
+                                            (dataStateChange)="dataStateChange($event)" [columnMenu]="false">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="" width="10%">
+                                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                            <a class='delete-attach-icon' *ngIf="C_DELETE_ATTACHMENTS" (click)='deleteFileAttachment(dataItem)'>
+                                                <i class='intelicon-trash-outlined' title='Click to delete this attachment'></i>
+                                            </a>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_NM" title="File Name" width="40%" [class]="'cellCustomClass'">
+                                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                            <a class="fileCell" download [href]="'/api/FileAttachments/Open/'+ dataItem.FILE_DATA_SID + '/'">{{dataItem.FILE_NM}}</a>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" width="25%" [class]="'cellCustomClass'">
+                                    </kendo-grid-column>
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" width="25%" [class]="'cellCustomClass'">
+                                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                                            <div [innerHtml]="stripMilliseconds(dataItem.CHG_DTM)"></div>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                </kendo-grid>
+                            </div>
+                            <div *ngIf="!initComplete" style="height:375px;">
+                                <p><i>Retrieving attachments...</i></p>
+                            </div>
+                            <div *ngIf="!(attachmentCount != 0 || !initComplete)" style="height:375px;">
+                                <p>This deal has no attachments.</p>
+                            </div>
+                            <div *ngIf="!(attachmentCount >= 0)" style="height:375px; color:red">
+                                <p>Unable to retrieve attachments!</p>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button kendoButton class="k-button" style="top: 58px; width: 100%;" (click)="close()">CLOSE</button>

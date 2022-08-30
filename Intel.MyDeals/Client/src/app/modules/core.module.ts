@@ -9,6 +9,7 @@ import { AdminBannerComponent } from '../core/adminBanner/adminBanner.component'
 import { dealDetailsComponent } from '../core/gridCell/dealDetail/dealDetail.component';
 import { dealToolsComponent } from '../core/gridCell/dealTools/dealTools.component';
 import { dealTimelineComponent } from '../core/gridCell/dealTimelineModal/dealTimelineModal.component';
+import { fileAttachmentComponent } from '../core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
 
 export let coreComponents = [
     PingComponent,
@@ -21,5 +22,6 @@ export let coreComponents = [
     AdminBannerComponent,
     dealDetailsComponent,
     dealToolsComponent,
-    dealTimelineComponent
+    dealTimelineComponent,
+    fileAttachmentComponent
 ]
