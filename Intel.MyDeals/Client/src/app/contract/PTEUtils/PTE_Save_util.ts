@@ -211,4 +211,16 @@ export class PTE_Save_Util {
         }
         
     }
+    static isPTEError(PTR: Array<any>,curPricingTable:any):boolean{
+       //identify the uniq records by DCID and check for errors. 
+       //the error has to bind first object for tier and uniq will give first uniq record
+       //since we dont have client side tier level error we can use this method. But will revisit if require
+       let uniqPTR=_.uniq(PTR,'DC_ID');
+       let iserror= _.find(uniqPTR, (x) => {
+        if (x._behaviors && x._behaviors.isError) {
+            return _.contains(_.values(x._behaviors.isError), true)
+        }
+        });
+        return iserror !=null ? true:false;
+    }
 }

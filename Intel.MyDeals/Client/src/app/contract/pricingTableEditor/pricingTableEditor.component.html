@@ -102,10 +102,9 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <!--<hot-table [hotId]="hotId" [settings]="hotSettings"></hot-table>-->
             <kendo-splitter orientation="vertical" style="height:600px;">
                 <kendo-splitter-pane><hot-table [hotId]="hotId" [settings]="hotSettings"></hot-table></kendo-splitter-pane>
-                <kendo-splitter-pane [(size)]="sidebarSize" min="10%" [hidden]="showDiscount">
+                <kendo-splitter-pane [(size)]="showDiscount">
                     <div style="overflow: hidden;" class="wide noborder">
                         <div id="subContainerWrapper">
                             <div id="subHeader">

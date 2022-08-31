@@ -26,8 +26,8 @@ export class opLogService {
     }
 
     public getDetailsOpaqueLog(fileName: any): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetDetailsOpaqueLog/' ;
-        return this.httpClient.post(apiUrl, fileName);
+        const apiUrl: string = this.apiBaseUrl + 'GetDetailsOpaqueLog/'+fileName;
+        return this.httpClient.post(apiUrl,{});
     }  
 }
 

@@ -12,7 +12,11 @@ import { templatesService } from "../../shared/services/templates.service";
 })
 
 export class tenderManagerComponent {
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService) { }
+    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService) { 
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
     public c_Id: any = '';
     public ps_Id: any = '';
     public pt_Id: any = '';
@@ -57,6 +61,11 @@ export class tenderManagerComponent {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
         this.loadAllContractDetails();
+    }
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

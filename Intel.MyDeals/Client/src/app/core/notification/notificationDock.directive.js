@@ -53,7 +53,7 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
             padding: 2px;
             font-size: 12px;
         }
-    </style>`,
+        </style>`,
         controller: ['$scope', '$http', '$location', '$window', 'notificationsService', 'logger',
             function ($scope, $http, $location, $window, notificationsService, logger) {
 
@@ -126,7 +126,6 @@ function notificationDock($compile, $timeout, objsetService, $uibModal, $locatio
                 }
 
                 $scope.$on('refreshUnreadCount', function (event, data) {
-                    debugger;
                     getUnreadNotification();
                 });
 

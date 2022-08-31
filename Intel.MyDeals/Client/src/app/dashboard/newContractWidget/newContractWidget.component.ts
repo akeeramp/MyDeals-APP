@@ -29,18 +29,12 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     createTenderFolioText = 'Create Tender Folio';
 
     //To load angular Contract details page change value to true, will be removed once contract details migration is done
-    public readonly angularJSEnabled = this.dynamicEnablementService.isAngularJSEnabled();
+    public angularEnabled:boolean=false;
 
-    constructor(private newContractWidgetService: NewContractWidgetService, private dynamicEnablementService: DynamicEnablementService, protected dialog: MatDialog) {}
-
-    ngOnInit(): void {
-
-        this.resizeSub = this.resizeEvent.subscribe((widget) => {
-            if (widget === this.widget) { // or check id , type or whatever you have there
-                // resize your widget, chart, map , etc.
-            }
-        });
+     constructor(private newContractWidgetService: NewContractWidgetService, private dynamicEnablementService: DynamicEnablementService, protected dialog: MatDialog) {
+        
     }
+
 
     openTenderFolioDialog() {
         //Tender folio component needs to be called and opened from here as a modal
@@ -76,7 +70,26 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    goToCreateContract(){
+        if (this.angularEnabled){
+            window.location.href = "/Dashboard#/contractdetails/0";
+        } 
+        else {
+            window.location.href = "/Contract#/manager/0/details";
+        } 
+    }
+    async getAngularStatus(){
+       this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
+    }
+    ngOnInit(): void {
+        //this code tells where to route  either Angular or AngularJS
+        this.getAngularStatus();
+        this.resizeSub = this.resizeEvent.subscribe((widget) => {
+            if (widget === this.widget) { // or check id , type or whatever you have there
+                // resize your widget, chart, map , etc.
+            }
+        });
+    }
     ngOnDestroy(): void {
         this.resizeSub.unsubscribe();
     }

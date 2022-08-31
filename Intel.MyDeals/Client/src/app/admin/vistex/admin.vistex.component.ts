@@ -28,11 +28,13 @@ export class adminVistexComponent {
     private apiList = [
         { API_ID: 1, API_NM: "Customer ", API_CD: "C" },
         { API_ID: 2, API_NM: "Deal ", API_CD: "D" },
+        { API_ID: 3, API_NM: "Product ", API_CD: "P" },
         { API_ID: 4, API_NM: "Product Vertical", API_CD: "V" },
         { API_ID: 5, API_NM: "Tender Return", API_CD: "R" },
         { API_ID: 6, API_NM: "Deal Failed", API_CD: "E" },
         { API_ID: 7, API_NM: "Prod Vertical Failed", API_CD: "F" },
-        { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" }
+        { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" },
+        { API_ID: 8, API_NM: "Claim Data", API_CD: "L" }
     ];
 
     public defaultItem = { API_ID: null, API_NM: "Select an API..." };
@@ -64,7 +66,6 @@ export class adminVistexComponent {
 
     //run API
     runApi() {
-        console.log(this.selectedApiCD);
         if (this.selectedApiCD == "") {
             this.loggerSvc.info('Please select an API to run Simulator...', "");
         }

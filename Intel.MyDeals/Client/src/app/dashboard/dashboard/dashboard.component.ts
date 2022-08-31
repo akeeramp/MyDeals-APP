@@ -12,7 +12,6 @@ import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
-import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 interface Item {
     text: string;
@@ -26,13 +25,10 @@ interface Item {
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
-    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, private dynamicEnablementService: DynamicEnablementService, protected loggerSvc: logger) {
+    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, protected loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-
-        // This function helps enable AngularJS Dynamic Routing
-        this.dynamicEnablementService.isAngularEnabled();
     }
     options: GridsterConfig;
     dashboard: GridsterItem[];

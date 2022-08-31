@@ -262,7 +262,7 @@ export class PTE_CellChange_Util {
                 //based on the number of products listed we have to iterate the 
                 let prodIndex = 0;
                 for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
-                    this.addUpdateRowOnchangeKIT(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], operation);
+                    this.addUpdateRowOnchangeKIT(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
                     prodIndex++;
                 }
                 //calling the merge cells option based of numb of products
@@ -304,7 +304,7 @@ export class PTE_CellChange_Util {
                 //add num of tier rows the logic will be based on autofill value
                 let prods = cellItem.new.split(','), prodIndex = 0;
                 for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
-                    this.addUpdateRowOnchangeKIT(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], operation);
+                    this.addUpdateRowOnchangeKIT(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
                     prodIndex++;
                 }
                 //calling the merge cells optionfor tier 
@@ -341,7 +341,7 @@ export class PTE_CellChange_Util {
                 this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
             }
             else {
-                if (operation && operation.operation && operation.PRD_EXCLDS.length > 0) {
+                if (operation && operation.operation && operation.PRD_EXCLDS) {
                     this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
                 }
                 if (operation && operation.operation && operation.PTR_SYS_PRD) {
@@ -364,7 +364,7 @@ export class PTE_CellChange_Util {
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
-                    this.addUpdateRowOnchange(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier), operation;
+                    this.addUpdateRowOnchange(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier,operation);
                     tier++;
                 }
                 //calling the merge cells optionfor tier 

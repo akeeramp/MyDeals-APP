@@ -61,12 +61,12 @@
                     </kendo-grid-column>
                     <kendo-grid-column class="gridCell" title="Contract Title" field="TITLE" width="200px" [headerClass]="{'headerClass':true}" [filterable]="true">
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <div class="textDecoratorWrap" title="{{toolTipOptions}}" *ngIf="angularJSEnabled else angularContract">
-                                <a href="/Contract#/manager/{{dataItem.CNTRCT_OBJ_SID}}{{jumptoSummary}}" target="_blank" title="Click to open the Contract in the Contract Editor"><span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span><span style="color: #0071c5;" > {{dataItem.TITLE}}</span></a>
+                            <div class="textDecoratorWrap" title="{{toolTipOptions}}">
+                                <a (click)="goToSelType(dataItem.CNTRCT_OBJ_SID)" title="Click to open the Contract in the Contract Editor" style="cursor:pointer">
+                                    <span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span>
+                                    <span style="color: #0071c5;"> {{dataItem.TITLE}}</span>
+                                </a>
                             </div>
-                            <ng-template #angularContract>
-                                <a href="#contractmanager/CNTRCT/{{dataItem.CNTRCT_OBJ_SID}}{{jumptoSummary}}/0/0/0" title="Click to open the Contract in the Contract Editor"><span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span><span style="color: #0071c5;"> {{dataItem.TITLE}}</span></a>
-                            </ng-template>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column class="gridCell" title="Customer" field="CUST_NM" width="140px" [headerClass]="{'headerClass':true}" [filterable]="true">

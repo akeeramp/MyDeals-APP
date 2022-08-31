@@ -153,6 +153,16 @@ export class KendoControlComponent {
 
   public conditionArray = null;
   public contextItems: any[] = [{text:'one'},{text:'two'},{text:'three'}];
+  public dataset: any[] = [
+    {id: 1, name: 'Ted Right', address: 'Wall Street'},
+    {id: 2, name: 'Frank Honest', address: 'Pennsylvania Avenue'},
+    {id: 3, name: 'Joan Well', address: 'Broadway'},
+    {id: 4, name: 'Gail Polite', address: 'Bourbon Street'},
+    {id: 5, name: 'Michael Fair', address: 'Lombard Street'},
+    {id: 6, name: 'Mia Fair', address: 'Rodeo Drive'},
+    {id: 7, name: 'Cora Fair', address: 'Sunset Boulevard'},
+    {id: 8, name: 'Jack Right', address: 'Michigan Avenue'},
+  ];
 
   onContextSelect(event:any){
     console.log('onContextSelect******************',event);

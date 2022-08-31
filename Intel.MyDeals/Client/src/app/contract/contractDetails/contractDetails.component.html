@@ -250,7 +250,7 @@
                                             </kendo-formerror>
                                         </div>
                                         <div class="col-md-11 row" *ngIf="!isNewContract">
-                                            <div class="panel panel-default">
+                                            <div class="panel panel-default" *ngIf="attachmentCount && attachmentCount>0">
                                                 <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
                                                 <div class="panel-body">
                                                     <div *ngIf="!(attachmentCount <= 0 || !initComplete)">

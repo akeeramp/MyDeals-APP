@@ -231,7 +231,7 @@
     white-space: nowrap!important;
     overflow: hidden!important;
     text-overflow: ellipsis!important;
-    text-decoration: none!important
+    text-decoration: none!important;
 }
 
 .k-grid-content>.k-grid-table-wrap>.k-grid-table {

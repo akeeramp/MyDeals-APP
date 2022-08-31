@@ -208,8 +208,9 @@ export class pricingTableEditorComponent implements OnChanges {
     private spinnerMessageHeader: string = "";
     private spinnerMessageDescription: string = "";
     private isBusyShowFunFact: boolean = true;
+    private timeout:any = null;
     /*For loading variable */
-    public showDiscount = true;
+    public showDiscount:string = "0%";
     public dirty = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
@@ -320,31 +321,36 @@ export class pricingTableEditorComponent implements OnChanges {
         this.isDeletePTR = false;
     }
     toggleShowHideDiscount() {
-        this.showDiscount = !this.showDiscount;
+        this.showDiscount = this.showDiscount=='0%'?'30%':'0%';
     }
     chgTerms() {
-        this.isLoading = true;
-        this.setBusy("Saving...", "Saving your data", "Info", true);
-        var dataItem = this.curPricingStrategy;
-        var data = {
-            objSetType: "PRC_ST",
-            ids: [dataItem["DC_ID"]],
-            attribute: "TERMS",
-            value: dataItem["TERMS"]
-        };
-
-        this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).subscribe((response: any) => {
-            this.loggerService.success("Done", "Save Complete.");
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
-
-        }), err => {
-            this.loggerService.error("Error", "Could not save the value.");
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
-        };
+        //function must trigger only after stop typing
+        let vm=this;
+        clearTimeout(vm.timeout);
+        vm.timeout = setTimeout(function () {
+            vm.isLoading = true;
+            vm.setBusy("Saving...", "Saving your data", "Info", true);
+            var dataItem = vm.curPricingStrategy;
+            var data = {
+                objSetType: "PRC_ST",
+                ids: [dataItem["DC_ID"]],
+                attribute: "TERMS",
+                value: dataItem["TERMS"]
+            };
+    
+            vm.pteService.updateAtrbValue(vm.contractData.CUST_MBR_SID, vm.contractData.DC_ID, data).subscribe((response: any) => {
+                vm.loggerService.success("Done", "Save Complete.");
+                vm.isLoading = false;
+                vm.setBusy("", "", "", false);
+    
+            }), err => {
+                vm.loggerService.error("Error", "Could not save the value.");
+                vm.isLoading = false;
+                vm.setBusy("", "", "", false);
+            };
+        
+        }, 700);
     }
-
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -651,27 +657,21 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     async ValidateAndSavePTE(isValidProd) {
         if (isValidProd) {            
-            this.isLoading = true;
-            this.setBusy("Saving your Data...", "Please wait as we save your information", "Info", true);
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //Checking for UI errors
             let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult);
             //if there is any error bind the result to handsone table
-            let error = _.find(finalPTR, (x) => {
-                if (x._behaviors && x._behaviors.isError) {
-                    return _.contains(_.values(x._behaviors.isError), true)
-                }
-            });
+            let error = PTE_Save_Util.isPTEError(finalPTR,this.curPricingTable);
             if (error) {
                 this.generateHandsonTable(finalPTR);
+                this.loggerService.error('Mandatory validations failure.', 'error');
             }
             else {
                 //this.generateHandsonTable(finalPTR);
                 this.dirty = false;
                 await this.saveEntireContractRoot(finalPTR);
             }
-            this.isLoading = false;
         }
         else {
             this.loggerService.error('All products are not valid', 'Products are not valid');
@@ -697,6 +697,8 @@ export class pricingTableEditorComponent implements OnChanges {
             "EventSource": 'PRC_TBL',
             "Errors": {}
         }
+        this.isLoading = true;
+        this.setBusy("Saving your Data...", "Please wait as we save your information", "Info", true);
         let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
@@ -715,6 +717,8 @@ export class pricingTableEditorComponent implements OnChanges {
         else {
             this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
+        this.isLoading = false;
+
     }
     async validatePricingTableProducts() {
         let isValidProd = await this.validateOnlyProducts('onSave');
@@ -742,8 +746,6 @@ export class pricingTableEditorComponent implements OnChanges {
     async validateOnlyProducts(action: string) {
         //loader
         let isPrdValid: any = null;
-        this.isLoading = true;
-        this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
@@ -785,7 +787,6 @@ export class pricingTableEditorComponent implements OnChanges {
     async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
-
         if (hasProductDependencyErr) {
             // Sync to show errors
             //root.syncCellValidationsOnAllRows(currentPricingTableRowData);
@@ -808,13 +809,15 @@ export class pricingTableEditorComponent implements OnChanges {
             // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             // root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
             // var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
+            this.isLoading = true;
+            this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
             transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
                 })
         }
-
+        this.isLoading = false;
         return transformResults;
     }
     openProductCorrector(products: any) {
@@ -844,7 +847,7 @@ export class pricingTableEditorComponent implements OnChanges {
                             selProds[idx].indx = selProds[idx - 1].indx + selProds[idx - 1].items.length;
                         }
                     }
-                    let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: selProd.name, new: _.pluck(selProd.items, 'prod').toString() }]
+                    let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(selProds[idx].indx,'PTR_USER_PRD'), new: _.pluck(selProd.items, 'prod').toString() }]
                     let PTR_SYS_PRD = {};
                     PTR_SYS_PRD[`${selProd.name}`] = _.pluck(selProd.items, 'prodObj');
                     let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD) };

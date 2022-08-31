@@ -454,7 +454,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/loadingPanel/loadingPanel.directive.js"
                 , "~/app/core/directives/loadingPanel/loadingPanel.service.js"
                 , "~/app/core/directives/messageBoard/messageBoard.directive.js"
-                //, "~/app/core/directives/notification/notificationDock.directive.js"
+                , "~/app/core/directives/notification/notificationDock.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/overlappingDeals/overlappingDeals.directive.js"

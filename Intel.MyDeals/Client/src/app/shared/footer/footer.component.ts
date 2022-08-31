@@ -23,6 +23,14 @@ export class FooterComponent {
            this.loggerSVC.error("FooterComponent::getFooterDetails::",err);
         });
     }
+    eggDd(){
+        console.log('eggDd************************');
+        window.open(
+            "Client/src/egg/dd/DbDug.html",
+            "_blank",
+            "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=623,height=625,top=200,left=200"
+          );
+    }
     ngOnInit() {
         this.loadFooter();
     }

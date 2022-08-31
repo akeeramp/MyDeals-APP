@@ -28,7 +28,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
     //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
-    public readonly angularJSEnabled = this.dynamicEnablementService.isAngularJSEnabled();
+    public angularEnabled:boolean=false;
 
     constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService, private dynamicEnablementService: DynamicEnablementService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
@@ -124,72 +124,6 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         if (this.isLoaded !== value) {
             this.isLoaded = value;
         }
-    }
-
-    public ngOnInit(): void {
-        for (let i = 0; i < this.dashboardParent.dashboard.length; i++) {
-            if (this.dashboardParent.dashboard[i].subConfig) {
-                if (this.dashboardParent.dashboard[i].subConfig.favContractIds !== undefined &&
-                    this.dashboardParent.dashboard[i].subConfig.favContractIds != "") {
-                    this.favContractsMap = this.dashboardParent.dashboard[i].subConfig.favContractIds.split(',');
-                }
-                if (this.dashboardParent.dashboard[i].subConfig.gridFilter !== undefined && this.dashboardParent.dashboard[i].subConfig.gridFilter != "") {
-                    this.gridFilter = this.dashboardParent.dashboard[i].subConfig.gridFilter;
-                }
-            }
-        }
-
-        if (this.gridFilter == "" || this.gridFilter == undefined) {
-            this.activeFilter = "fltr_All";
-            this.activekey = "all";
-        }
-        else {
-            this.activeFilter = this.gridFilter;
-            switch (this.gridFilter) {
-                case "fltr_All":
-                    this.activekey = "all";
-                    break;
-                case "fltr_Favorites":
-                    this.activekey = "fav";
-                    break;
-                case "fltr_HasAlert":
-                    this.activekey = "alert";
-                    break;
-                case "fltr_All_Contract":
-                    this.activekey = "allC";
-                    break;
-                case "fltr_Completed_Contract":
-                    this.activekey = "CC";
-                    break;
-                case "fltr_InCompleted_Contract":
-                    this.activekey = "ICC";
-                    break;
-                case "fltr_All_Tender":
-                    this.activekey = "allT";
-                    break;
-                case "fltr_Complete_Tender":
-                    this.activekey = "CT";
-                    break;
-                case "fltr_InComplete_Tender":
-                    this.activekey = "ICT";
-                    break;
-                case "fltr_Cancelled_Tender":
-                    this.activekey = "CA";
-            }
-        }
-        this.favContractsMap = this.favContractIds == "" ? this.favContractsMap : this.favContractIds.split(',');
-        //Get the contract Data
-        this.loadContractData();
-
-    }
-
-    ngOnChanges() {
-        if (this.isInitialLoad) {
-            this.isInitialLoad = false;
-            return;
-        }
-        //update input values and call loadContractData();
-        this.loadContractData();
     }
 
     loadContractData() {
@@ -425,6 +359,84 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
                 gridFilter: filter
             }
         }
+    }
+    goToSelType(CNTRCT_OBJ_SID:any){
+        if (this.angularEnabled){
+            window.location.href = `/Dashboard#/contractmanager/CNTRCT/${CNTRCT_OBJ_SID}/0/0/0`;
+        } 
+        else {
+            window.location.href = `/Contract#/manager/${CNTRCT_OBJ_SID}`;
+        } 
+    }
+    async getAngularStatus(){
+        this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
+     }
+    public ngOnInit(): void {
+        //this code tells where to route  either Angular or AngularJS
+        this.getAngularStatus();
+        for (let i = 0; i < this.dashboardParent.dashboard.length; i++) {
+            if (this.dashboardParent.dashboard[i].subConfig) {
+                if (this.dashboardParent.dashboard[i].subConfig.favContractIds !== undefined &&
+                    this.dashboardParent.dashboard[i].subConfig.favContractIds != "") {
+                    this.favContractsMap = this.dashboardParent.dashboard[i].subConfig.favContractIds.split(',');
+                }
+                if (this.dashboardParent.dashboard[i].subConfig.gridFilter !== undefined && this.dashboardParent.dashboard[i].subConfig.gridFilter != "") {
+                    this.gridFilter = this.dashboardParent.dashboard[i].subConfig.gridFilter;
+                }
+            }
+        }
+
+        if (this.gridFilter == "" || this.gridFilter == undefined) {
+            this.activeFilter = "fltr_All";
+            this.activekey = "all";
+        }
+        else {
+            this.activeFilter = this.gridFilter;
+            switch (this.gridFilter) {
+                case "fltr_All":
+                    this.activekey = "all";
+                    break;
+                case "fltr_Favorites":
+                    this.activekey = "fav";
+                    break;
+                case "fltr_HasAlert":
+                    this.activekey = "alert";
+                    break;
+                case "fltr_All_Contract":
+                    this.activekey = "allC";
+                    break;
+                case "fltr_Completed_Contract":
+                    this.activekey = "CC";
+                    break;
+                case "fltr_InCompleted_Contract":
+                    this.activekey = "ICC";
+                    break;
+                case "fltr_All_Tender":
+                    this.activekey = "allT";
+                    break;
+                case "fltr_Complete_Tender":
+                    this.activekey = "CT";
+                    break;
+                case "fltr_InComplete_Tender":
+                    this.activekey = "ICT";
+                    break;
+                case "fltr_Cancelled_Tender":
+                    this.activekey = "CA";
+            }
+        }
+        this.favContractsMap = this.favContractIds == "" ? this.favContractsMap : this.favContractIds.split(',');
+        //Get the contract Data
+        this.loadContractData();
+
+    }
+
+    ngOnChanges() {
+        if (this.isInitialLoad) {
+            this.isInitialLoad = false;
+            return;
+        }
+        //update input values and call loadContractData();
+        this.loadContractData();
     }
 
     ngOnDestroy() {

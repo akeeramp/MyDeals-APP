@@ -62,7 +62,7 @@ export class PTEUtil {
                 const cellFormat: string = templateColumnFields[item.field].format;
                 if (cellFormat && cellFormat.toLowerCase().includes('0:d')) { // Decimalized
                     currentColumnConfig.numericFormat = {
-                        pattern: '0,0.00',
+                        pattern: '0,00',
                         culture: 'en-US'
                     }
                 } else if (cellFormat && cellFormat.toLowerCase().includes('0:c')) { // Currency

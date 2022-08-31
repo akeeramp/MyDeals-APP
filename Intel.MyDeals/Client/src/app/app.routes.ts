@@ -11,9 +11,6 @@ angular
                 views: {
                     mainView: {
                         template: '<reporting-dashboard></reporting-dashboard>'
-                        // templateUrl: "Client/src/app/reporting/reporting.component.html",
-                        // controller: "ReportingDashboardController as vm"
-
                     }
                 },
                 resolve: {
@@ -69,8 +66,6 @@ angular
                 views: {
                     mainView: {
                         template: '<employee-dashboard></employee-dashboard>'
-                        // templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
-                        // controller: "ReportingDashboardController as vm"
                     }
                 },
                 resolve: {
@@ -85,9 +80,6 @@ angular
                 views: {
                     mainView: {
                         template: '<cache></cache>'
-                        //templateUrl: "Client/src/app/admin/cache/admin.cache.component.html",
-                        //controller: "CacheController as vm"
-
                     }
                 }
             })
@@ -97,8 +89,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-customer></admin-customer>'
-                        // templateUrl: "Client/src/app/admin/customer/admin.customer.component.html",
-                        // controller: "CustomerController as vm"
                     }
                 }
             })
@@ -108,8 +98,6 @@ angular
                 views: {
                     mainView: { 
                         template: '<admin-vendors-customer></admin-vendors-customer>'
-                        //  templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
-                        //  controller: "CustomerVendorsController as vm"
                     }
                 }
             })
@@ -119,8 +107,6 @@ angular
                 views: {
                     mainView: {
                         template: '<op-log></op-log>'
-                        //  templateUrl: "Client/src/app/admin/oplog/admin.oplog.component.html",
-                        //  controller: "OpLogController as vm"
                     }
                 }
             })
@@ -130,8 +116,6 @@ angular
                 views: {
                     mainView: {
                         template: '<batch-timing></batch-timing>'
-                        //  templateUrl: "Client/src/app/admin/batchTiming/admin.batchTiming.component.html",
-                        //  controller: "batchTimingController as vm"
                     }
                 }
             })
@@ -141,8 +125,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-vistex-customer-mapping></admin-vistex-customer-mapping>'
-                        //  templateUrl: "Client/src/app/admin/VistexCustomerMapping/admin.vistexCustomerMapping.component.html",
-                        //  controller: "VistexCustomerMappingController as vm"
                     }
                 }
             })
@@ -221,8 +203,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-deal-types></admin-deal-types>'
-                        //  templateUrl: "Client/src/app/admin/dealTypes/admin.dealTypes.component.html",
-                        //  controller: "dealTypesController as vm"
                     }
                 }
             })
@@ -241,8 +221,6 @@ angular
                 views: {
                     mainView: {
                         template: '<quote-letter></quote-letter>'
-                        //  templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetter.component.html",
-                        //  controller: "QuoteLetterController as vm"
                     }
                 }
             })
@@ -252,8 +230,6 @@ angular
                 views: {
                     mainView: {
                         template: '<rule-owner></rule-owner>'
-                        //  templateUrl: "Client/src/app/admin/ruleOwner/admin.ruleOwner.component.html",
-                        //  controller: "ruleOwnerController as vm"
                     }
                 }
             })
@@ -272,8 +248,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-work-flow></admin-work-flow>'
-                        //  templateUrl: "Client/src/app/admin/ruleOwner/admin.ruleOwner.component.html",
-                        //  controller: "ruleOwnerController as vm"
                     }
                 }
             })
