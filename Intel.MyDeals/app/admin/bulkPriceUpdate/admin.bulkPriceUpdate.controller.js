@@ -16,7 +16,8 @@
         vm.UpdatedResults = [];
         vm.Send_Vstx_Flg = {};
         vm.inValidBulkPriceUpdate = [];
-        vm.SpreadSheetRowsCount = 100;
+        vm.uploadedData = [];
+        vm.SpreadSheetRowsCount = 101;
         vm.basedate = moment("12/30/1899").format("MM/DD/YYYY");
         vm.count = 0
 
@@ -36,20 +37,17 @@
             modalInstance.result.then(function (returnData) {
                 if (returnData.length > 0) {
                     if (returnData.length > 100) {
-                        logger.warning("The excel contains more than 100 records.Only process top 100 records in the excel.", "");
+                        logger.warning("The excel contains more than 100 records.Only first 100 records will be processed.", "");
+                        vm.uploadedData = returnData.slice(0, 100);
                     }
-
+                    else {
+                        vm.uploadedData = returnData;
+                    }
                     let existingcount = vm.SpreadSheetRowsCount;
-                    vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(returnData);
+                    
+                    vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(vm.uploadedData);
                     //vm.inValidBulkPriceUpdate = returnData;
-                    if (vm.inValidBulkPriceUpdate.length < 100) {
-                        vm.SpreadSheetRowsCount = 100
-                    } else {
-                        if (vm.inValidBulkPriceUpdate.length > 100)
-                            vm.SpreadSheetRowsCount = 100;
-                        else
-                            vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
-                    }
+
                     if (existingcount > 0) {
                         vm.LoadDataToSpreadsheet();
                         vm.ValidateSheet()
@@ -59,7 +57,7 @@
         }
 
         vm.uploadFile = function (e) {
-            vm.spinnerMessageDescription = "Please wait while uploading Unification data..";
+            vm.spinnerMessageDescription = "Please wait while uploading the data..";
             $(".k-upload-selected").click();
         }
 
@@ -122,27 +120,11 @@
                         //vm.inValidBulkPriceUpdate = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== null && x.ValidationMessages !== undefined && x.ValidationMessages !== "");
                         let processrecord = response.data.BulkPriceUpdateRecord.filter(x => x.ValidationMessages !== undefined && (x.ValidationMessages == null || x.ValidationMessages == ""));
                         if (processrecord !== undefined && vm.inValidBulkPriceUpdate !== undefined && vm.inValidBulkPriceUpdate.length > 0 && processrecord.length > 0) {
-                            if (vm.inValidBulkPriceUpdate.length < 100) {
-                                vm.SpreadSheetRowsCount = 100
-                            } else {
-                                if (vm.inValidBulkPriceUpdate.length > 100)
-                                    vm.SpreadSheetRowsCount = 100;
-                                else
-                                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
-                            }
                             vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
 
                         }
                         else if (vm.inValidBulkPriceUpdate !== undefined && vm.inValidBulkPriceUpdate.length > 0) {
-                            if (vm.inValidBulkPriceUpdate.length < 100) {
-                                vm.SpreadSheetRowsCount = 100
-                            } else {
-                                if (vm.inValidBulkPriceUpdate.length > 100)
-                                    vm.SpreadSheetRowsCount = 100;
-                                else
-                                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
-                            }
                             vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
                         }
@@ -163,17 +145,9 @@
             var sheet = vm.spreadsheet.activeSheet();
             var count = 0;
 
-            if (vm.inValidBulkPriceUpdate.length < 100) {
-                count = 100
-            } else {
-                if (vm.inValidBulkPriceUpdate.length > 100)
-                    count = 100
-                else
-                    count = vm.inValidBulkPriceUpdate.length + 1;
-            }
-
+            
             vm.inValidBulkPriceUpdate = [];
-            var tempRange = sheet.range("A1:K" + count).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null && x[11] == null));
+            var tempRange = sheet.range("A1:K" + vm.SpreadSheetRowsCount).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null && x[11] == null));
             if (tempRange.length > 0) {
                 vm.spinnerMessageDescription = "Please wait while reading Unification data..";
                 for (var i = 0; i < tempRange.length; i++) {
@@ -216,14 +190,6 @@
                     newDeals.AdditionalTermsAndConditions = tempRange[i][10] != null ? tempRange[i][10].trimEnd() : "";
                     vm.inValidBulkPriceUpdate.push(newDeals);
                 }
-            }
-            if (vm.inValidBulkPriceUpdate.length < 100) {
-                vm.SpreadSheetRowsCount = 100
-            } else {
-                if (vm.inValidBulkPriceUpdate.length > 100)
-                    vm.SpreadSheetRowsCount = 100;
-                else
-                    vm.SpreadSheetRowsCount = vm.inValidBulkPriceUpdate.length + 1;
             }
         }
 
@@ -346,9 +312,9 @@
 
             //Auto header will be created as 1st row. This is not actual data
             sheet.deleteRow(0);
+            vm.SpreadSheetRowsCount = 100;
             //For Disable column
             //sheet.range("L1:N").enable(false);
-
             sheet.batch(function () {
                 for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
                     if (vm.inValidBulkPriceUpdate[i].ValidationMessages !== undefined && vm.inValidBulkPriceUpdate[i].ValidationMessages !== null && vm.inValidBulkPriceUpdate[i].ValidationMessages !== "") {
