@@ -77,7 +77,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (!myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Any())
             {
                 bulkPriceUpdateRecord.ValidationMessages += "Deal " + dealId + " was not found in My Deals.  Please contact My Deals Support.";
-                dataIsNotClear = true;
+                return false; //skip Further checks as Deal is not present
             }
 
             if (myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "") // IF SF DEAL - DONT ALLOW EDIT AND BAIL
