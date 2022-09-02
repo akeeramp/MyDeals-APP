@@ -12,14 +12,18 @@
     function BulkPriceUpdateController(bulkPriceUpdateService, $scope, gridConstants, logger, $timeout, $uibModal, dataService) {
 
         var vm = this;
-        vm.spinnerMessageDescription = "Please wait while importing data..";
+
         vm.UpdatedResults = [];
         vm.Send_Vstx_Flg = {};
         vm.inValidBulkPriceUpdate = [];
         vm.uploadedData = [];
-        vm.SpreadSheetRowsCount = 101;
+        vm.SpreadSheetRowsCount = 101; // Setting the numner of rows in the spreadsheet to 100 (1st row is  header)
         vm.basedate = moment("12/30/1899").format("MM/DD/YYYY");
         vm.count = 0
+        vm.loading = false;
+        vm.spinnerMessageHeader = "";
+        vm.spinnerMessageDescription = ""
+        vm.isBusyShowFunFact = false;
 
         vm.OpenBulkPriceUpdateModal = function () {
             var modalInstance = $uibModal.open({
@@ -44,9 +48,8 @@
                         vm.uploadedData = returnData;
                     }
                     let existingcount = vm.SpreadSheetRowsCount;
-                    
+
                     vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(vm.uploadedData);
-                    //vm.inValidBulkPriceUpdate = returnData;
 
                     if (existingcount > 0) {
                         vm.LoadDataToSpreadsheet();
@@ -62,6 +65,8 @@
         }
 
         vm.processData = function () {
+            vm.loading = true;
+            $scope.setBusy("Processing...", "Processing deal Updates... ", "info", true);
             vm.generateDeals()
             if (vm.inValidBulkPriceUpdate.length > 0) {
                 vm.ValidateSheet()
@@ -132,24 +137,24 @@
                             vm.inValidBulkPriceUpdate = vm.ValidateDateColumns(response.data.BulkPriceUpdateRecord);
                             vm.LoadDataToSpreadsheet()
                         }
-
+                        vm.loading = false;
                     }, function (response) {
+                        vm.loading = false;
                         logger.error("Unable to execute Price Record Updates.", response, response.statusText);
                     });
             } else {
+                vm.loading = false;
                 kendo.alert("There is no data to Process");
             }
         }
 
         vm.generateDeals = function () {
             var sheet = vm.spreadsheet.activeSheet();
-            var count = 0;
-
             
             vm.inValidBulkPriceUpdate = [];
-            var tempRange = sheet.range("A1:K" + vm.SpreadSheetRowsCount).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null && x[11] == null));
+            var tempRange = sheet.range("A2:K" + vm.SpreadSheetRowsCount).values().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null && x[6] == null && x[7] == null && x[8] == null && x[9] == null && x[10] == null && x[11] == null));
             if (tempRange.length > 0) {
-                vm.spinnerMessageDescription = "Please wait while reading Unification data..";
+
                 for (var i = 0; i < tempRange.length; i++) {
                     var newDeals = {};
                     newDeals.DealId = tempRange[i][0] != null ? ($.isNumeric(tempRange[i][0]) && parseInt(tempRange[i][0]) > 0 ? tempRange[i][0] : 0) : 0;
@@ -161,27 +166,27 @@
                     } else {
                         newDeals.DealStartDate = "";
                     }
-                   
-                    if (tempRange[i][5] != null && tempRange[i][5] != "" ) {
+
+                    if (tempRange[i][5] != null && tempRange[i][5] != "") {
                         newDeals.DealEndDate = Number(tempRange[i][5]).toString() == 'NaN' ? tempRange[i][5] : moment(vm.basedate).add(parseInt(tempRange[i][5]), 'days').format("MM/DD/YYYY");
                     } else {
                         newDeals.DealEndDate = "";
                     }
-                    
+
                     if (tempRange[i][6] != null && tempRange[i][6] != "") {
                         newDeals.BillingsStartDate = Number(tempRange[i][6]).toString() == 'NaN' ? tempRange[i][6] : moment(vm.basedate).add(parseInt(tempRange[i][6]), 'days').format("MM/DD/YYYY");
                     } else {
                         newDeals.BillingsStartDate = "";
                     }
 
-                    
-                    if (tempRange[i][7] != null && tempRange[i][7]!= "") {
+
+                    if (tempRange[i][7] != null && tempRange[i][7] != "") {
                         newDeals.BillingsEndDate = Number(tempRange[i][7]).toString() == 'NaN' ? tempRange[i][7] : moment(vm.basedate).add(parseInt(tempRange[i][7]), 'days').format("MM/DD/YYYY");
                     } else {
                         newDeals.BillingsEndDate = "";
                     }
                     newDeals.ProjectName = tempRange[i][8] != null ? tempRange[i][8].trimEnd() : "";
-                    
+
                     if (tempRange[i][9] != null && tempRange[i][9] != "") {
                         newDeals.TrackerEffectiveStartDate = Number(tempRange[i][9]).toString() == 'NaN' ? tempRange[i][9] : moment(vm.basedate).add(parseInt(tempRange[i][9]), 'days').format("MM/DD/YYYY");
                     } else {
@@ -196,27 +201,25 @@
         $scope.setBusy = function (msg, detail, msgType, isShowFunFact) {
             var newState = msg != undefined && msg !== "";
             isShowFunFact = true; // Always show fun fact
+            
             // if no change in state, simple update the text
-            if ($scope.isBusy === newState) {
-                $scope.isBusyMsgTitle = msg;
-                $scope.isBusyMsgDetail = !detail ? "" : detail;
-                $scope.isBusyType = msgType;
-                $scope.isBusyShowFunFact = isShowFunFact;
+            if (vm.loading === newState) {
+                vm.spinnerMessageHeader = msg;
+                vm.spinnerMessageDescription = !detail ? "" : detail;
+                vm.isBusyShowFunFact = isShowFunFact;
                 return;
             }
 
-            $scope.isBusy = newState;
-            if ($scope.isBusy) {
-                $scope.isBusyMsgTitle = msg;
-                $scope.isBusyMsgDetail = !detail ? "" : detail;
-                $scope.isBusyType = msgType;
-                $scope.isBusyShowFunFact = isShowFunFact;
+            vm.loading = newState;
+            if (vm.loading) {
+                vm.spinnerMessageHeader = msg;
+                vm.spinnerMessageDescription = !detail ? "" : detail;
+                vm.isBusyShowFunFact = isShowFunFact;
             } else {
                 $timeout(function () {
-                    $scope.isBusyMsgTitle = msg;
-                    $scope.isBusyMsgDetail = !detail ? "" : detail;
-                    $scope.isBusyType = msgType;
-                    $scope.isBusyShowFunFact = isShowFunFact;
+                    vm.spinnerMessageHeader = msg;
+                    vm.spinnerMessageDescription = !detail ? "" : detail;
+                    vm.isBusyShowFunFact = isShowFunFact;
                 }, 100);
             }
         }
@@ -226,38 +229,6 @@
                 vm.IsSpreadSheetEdited = true;
             }
         };
-
-        vm.sheets = [{ name: "Sheet1" }];
-        $scope.$on("kendoWidgetCreated", function (event, widget) {
-            if (widget === vm.spreadsheet) {
-                var sheets = vm.spreadsheet.sheets();
-                var index = 0;
-                vm.spreadsheet.activeSheet(sheets[0]);
-                var sheet = vm.spreadsheet.activeSheet();
-                sheet.columnWidth(0, 100);
-                sheet.columnWidth(1, 130);
-                sheet.columnWidth(2, 100);
-                sheet.columnWidth(3, 100);
-                sheet.columnWidth(4, 100);
-                sheet.columnWidth(5, 100);
-                sheet.columnWidth(6, 100);
-                sheet.columnWidth(7, 100);
-                sheet.columnWidth(8, 100);
-                sheet.columnWidth(9, 130);
-                sheet.columnWidth(10, 100);
-                sheet.columnWidth(11, 100);
-                sheet.columnWidth(12, 100);
-                sheet.columnWidth(13, 240);
-                index = 14;
-
-
-                for (var i = index; i < 50; i++)
-                    sheet.hideColumn(i);
-                vm.LoadDataToSpreadsheet();
-                vm.ValidateSheet();
-
-            }
-        });
 
         vm.ValidateDateColumns = function (returnData) {
             var DealDate;
@@ -282,65 +253,107 @@
                 if (moment(DealDate, "MM/DD/YYYY", true).isValid())
                     returnData[i].TrackerEffectiveStartDate = DealDate;
             }
-
             return returnData;
         }
 
+        vm.sheets = [{ name: "Sheet1" }];
+        $scope.$on("kendoWidgetCreated", function (event, widget) {
+            if (widget === vm.spreadsheet) {
+                var sheets = vm.spreadsheet.sheets();
+                var index = 0;
+                vm.spreadsheet.activeSheet(sheets[0]);
+                var sheet = vm.spreadsheet.activeSheet();
+                sheet.columnWidth(0, 80);
+                sheet.columnWidth(1, 130);
+                sheet.columnWidth(2, 90);
+                sheet.columnWidth(3, 100);
+                sheet.columnWidth(4, 100);
+                sheet.columnWidth(5, 100);
+                sheet.columnWidth(6, 100);
+                sheet.columnWidth(7, 100);
+                sheet.columnWidth(8, 100);
+                sheet.columnWidth(9, 130);
+                sheet.columnWidth(10, 100);
+                sheet.columnWidth(11, 80);
+                sheet.columnWidth(12, 120);
+                sheet.columnWidth(13, 260);
+                index = 14;
+
+
+                for (var i = index; i < 50; i++)
+                    sheet.hideColumn(i);
+                vm.LoadDataToSpreadsheet();
+                vm.ValidateSheet();
+
+            }
+        });
+
+
+
         vm.LoadDataToSpreadsheet = function () {
-
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[0]).find("div").html("Deal ID");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[2]).find("div").html("Deal Description");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[4]).find("div").html("ECAP Price");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[6]).find("div").html("Ceiling Volume");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[8]).find("div").html("Deal Start Date");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[10]).find("div").html("Deal End Date");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[12]).find("div").html("Billings Start Date");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[14]).find("div").html("Billings End Date");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[16]).find("div").html("Project Name");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[18]).find("div").html("Tracker Effective Date");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[20]).find("div").html("Additional Terms");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[22]).find("div").html("Deal stage");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[24]).find("div").html("Update Status");
-            $($("#spreadsheetBulkPriceupdate .k-spreadsheet-column-header").find("div")[26]).find("div").html("Error Messages");
-
-
             var sheet = vm.spreadsheet.activeSheet();
             sheet.range(kendo.spreadsheet.SHEETREF).clear();
-            sheet.range("L1:N" + vm.SpreadSheetRowsCount).wrap(true);
-            
-            sheet.setDataSource(vm.inValidBulkPriceUpdate, ["DealId", "DealDesc", "EcapPrice", "Volume", "DealStartDate", "DealEndDate", "BillingsStartDate", "BillingsEndDate", "ProjectName", "TrackerEffectiveStartDate", "AdditionalTermsAndConditions", "DealStage", "UpdateStatus", "ValidationMessages"]);
 
-            //Auto header will be created as 1st row. This is not actual data
-            sheet.deleteRow(0);
-            vm.SpreadSheetRowsCount = 100;
+            sheet.setDataSource(vm.inValidBulkPriceUpdate,
+                [
+                    { field: "DealId", title: "Deal ID" }
+                    , { field: "DealDesc", title: "Deal Description" }
+                    , { field: "EcapPrice", title: "ECAP Price" }
+                    , { field: "Volume", title: "Ceiling Volume" }
+                    , { field: "DealStartDate", title: "Deal Start Date" }
+                    , { field: "DealEndDate", title: "Deal End Date" }
+                    , { field: "BillingsStartDate", title: "Billings Start Date" }
+                    , { field: "BillingsEndDate", title: "Billings End Date" }
+                    , { field: "ProjectName", title: "Project Name" }
+                    , { field: "TrackerEffectiveStartDate", title: "Tracker Effective Date" }
+                    , { field: "AdditionalTermsAndConditions", title: "Additional Terms" }
+                    , { field: "DealStage", title: "Deal stage" }
+                    , { field: "UpdateStatus", title: "Update Status" }
+                    , { field: "ValidationMessages", title: "Error Messages" }
+                ]
+            );
+
             //For Disable column
-            //sheet.range("L1:N").enable(false);
+            sheet.range("L1:N").enable(false);
+            sheet.range("A1:N1").enable(false);
+            sheet.frozenRows(1)
+            //wrap error message , status columns
+            sheet.range("L1:N" + vm.SpreadSheetRowsCount).wrap(true);
+            //Header Styles
+            sheet.range("A1:N1").background("#f5f5f5").color("#001071").fontSize(13);
+            sheet.range("A1:N1").textAlign("center").bold(true).fontFamily("Intel Clear");
+            sheet.rowHeight(0, 30);
+            sheet.range("A2:N" + vm.SpreadSheetRowsCount).fontFamily("Intel Clear").fontSize(13);
+            sheet.range("L:N").background("#f5f5f5");
+
             sheet.batch(function () {
+                var row = 0;
                 for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
+                    row = i + 2;
                     if (vm.inValidBulkPriceUpdate[i].ValidationMessages !== undefined && vm.inValidBulkPriceUpdate[i].ValidationMessages !== null && vm.inValidBulkPriceUpdate[i].ValidationMessages !== "") {
                         var lengthOfMsg = vm.inValidBulkPriceUpdate[i].ValidationMessages.length;
                         var height = 1;
                         if (Math.ceil(lengthOfMsg / 40) > 1)
                             height = height + Math.ceil(lengthOfMsg / 40) - 1;
-                        var rowht = height > 1 ? (height) * 15 : 30;
-                        sheet.rowHeight(i, rowht);
-                        sheet.range("N" + (i + 1)).verticalAlign("top");
-                        sheet.range("N" + (i + 1)).background("#eeeeee").color("#ff0000"); //red
+                        var rowht = height > 1 ? (height) * 20 : 30;
+                        sheet.rowHeight(i + 1, rowht);
+                        sheet.range("N" + row).verticalAlign("top");
+                        sheet.range("N" + row).color("#ff0000"); //red
                     }
                     if (vm.inValidBulkPriceUpdate[i].UpdateStatus !== undefined && vm.inValidBulkPriceUpdate[i].UpdateStatus !== null && vm.inValidBulkPriceUpdate[i].UpdateStatus !== "") {
-                        sheet.range("M" + (i + 1)).background("#eeeeee").color("#008000"); //Green
-
+                        sheet.range("M" + row).color("#008000"); //Green
                     }
                 }
             });
-            sheet.range("L:N").background("#eeeeee");
+            
             sheet._rows._count = vm.SpreadSheetRowsCount;
-
         }
+
+        
 
         vm.ValidateSheet = function (action) {
             var sheet = vm.spreadsheet.activeSheet();
-            sheet.range("A1:H" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
+            sheet.range("A2:H" + vm.SpreadSheetRowsCount).validation($scope.UnifiedDealValidation(false, "", true))
             var strAlertMessage = "";
             var row = "";
             var mandatory = [];
@@ -348,7 +361,7 @@
             vm.count = 0
             sheet.batch(function () {
                 for (var i = 0; i < vm.inValidBulkPriceUpdate.length; i++) {
-                    row = i + 1;
+                    row = i + 2;
                     var rowMsg = "";
                     mandatory = [];
 
@@ -384,7 +397,7 @@
                         }
                         else if (!Number.isInteger(Number(vm.inValidBulkPriceUpdate[i].DealId))) {
                             rowMsg = rowMsg + "Deal ID must be a valid number|";
-                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));                            
+                            sheet.range("A" + row + ":A" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
                     if (vm.inValidBulkPriceUpdate[i].EcapPrice !== "0" && vm.inValidBulkPriceUpdate[i].EcapPrice !== '') {
@@ -449,7 +462,7 @@
                                 height = height + Math.ceil(row.length / 40) - 1;
                         });
                         var rowht = height > 1 ? height * 15 : 30;
-                        sheet.rowHeight(i, rowht);
+                        sheet.rowHeight(i + 1, rowht);
                         sheet.range("N" + row).value(msg);
                         sheet.range("N" + row).verticalAlign("top");
                         sheet.range("N" + row).color("#ff0000"); //red

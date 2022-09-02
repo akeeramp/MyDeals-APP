@@ -333,18 +333,22 @@
         border-color: #367fa9 !important;
     }
 </style>
-<div class="modal-content" id="endCustomerUnifyModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+
+<loading-panel id="UploadLoading" style="z-index:500;" show="vm.loading" header="vm.spinnerMessageHeader"
+               description="vm.spinnerMessageDescription" ng-show="vm.loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>
+
+<div id="endCustomerUnifyModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
     <div class="col-md-12 " style="padding-bottom: 15px">
         <h2>Bulk Price Updates Admin</h2>
     </div>
     <div class="col-md-12" style="padding-bottom: 27px;">
         <button ng-click="vm.OpenBulkPriceUpdateModal()" class="btn btn-primary" style="margin-left: 1px;">Upload Bulk Pricing Data</button>&nbsp;&nbsp;
-        <button ng-click="vm.processData()" class="btn btn-primary" style="margin-left: 75%;">Process Deal Updates</button>
+        <button ng-click="vm.processData()" class="btn btn-primary" style="float: right;">Process Deal Updates</button>
     </div>
-    <div style="mar" class="col-md-12">
-        <span class="redbold">NOTE:</span><span>&nbsp;Please upload maximum of 100 records.    Deal Dates are in the format of MM/DD/YYYY (e.g. 12/31/2022) </span><br /><br />
+    <div class="col-md-12">
+        <span class="redbold">NOTE:</span><span>&nbsp;Please upload maximum of 100 records. Deal Dates are in the format of MM/DD/YYYY (e.g. 12/31/2022) </span><br /><br />
     </div>
-    <div style="mar" class="col-md-12">
+    <div class="col-md-12">
         <kendo-spreadsheet id="spreadsheetBulkPriceupdate" style="width: 100%; height: 450px; float:left;" k-rows="vm.SpreadSheetRowsCount" k-scope-field="vm.spreadsheet" k-sheets="vm.sheets" k-options="vm.SpreadSheetOptions"></kendo-spreadsheet>
     </div>
 </div>
