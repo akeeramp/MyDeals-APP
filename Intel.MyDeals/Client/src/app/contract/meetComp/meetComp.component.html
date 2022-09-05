@@ -168,9 +168,36 @@
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
-                        <div class='readOnlyCell'>
-                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon">
-                            </icon-mct-pct-angular>
+                        <div class='readOnlyCell' [ngSwitch]="dataItem.MEET_COMP_STS.toLowerCase()">
+                            <span *ngSwitchCase="'fail'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Error/Failed'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchCase="'incomplete'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'InComplete'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchCase="'not run yet'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Not run yet'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchCase="'na'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'NA'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchCase="'overridden'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon"
+                                    [title]="'Passed with Override Status'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchCase="'pass'">
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Passed'">
+                                </icon-mct-pct-angular>
+                            </span>
+                            <span *ngSwitchDefault>
+                                <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon">
+                                </icon-mct-pct-angular>
+                            </span>
                         </div>
                     </ng-template>
                 </kendo-grid-column>
@@ -377,8 +404,36 @@
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div class='readOnlyCell'>
-                                        <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon"></icon-mct-pct-angular>
+                                    <div class='readOnlyCell' [ngSwitch]="dataItem.MEET_COMP_STS.toLowerCase()">
+                                        <span *ngSwitchCase="'fail'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Error/Failed'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchCase="'incomplete'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'InComplete'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchCase="'not run yet'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Not run yet'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchCase="'na'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'NA'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchCase="'overridden'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon"
+                                                [title]="'Passed with Override Status'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchCase="'pass'">
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon" [title]="'Passed'">
+                                            </icon-mct-pct-angular>
+                                        </span>
+                                        <span *ngSwitchDefault>
+                                            <icon-mct-pct-angular [dataValue]='dataItem.MEET_COMP_STS' [iconClass]="medIcon">
+                                            </icon-mct-pct-angular>
+                                        </span>
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
@@ -436,7 +491,9 @@
                             </kendo-grid-column>
                             <kendo-grid-column title="Group Deals" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                    <div class='readOnlyCell' title="{{dataItem.DEAL_DESC}}"></div>
+                                    <div class='readOnlyCell' title="{{dataItem.DEAL_DESC}}">
+                                        <a (click)="getDealDeatils(dataItem.DEAL_OBJ_SID,dataItem.GRP_PRD_SID,dataItem.DEAL_PRD_TYPE)" style="cursor: pointer;color: #0071c5;" title="Click to view Deal Details">View</a>
+                                    </div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="150" [headerClass]="{'headerClass':true}">
@@ -484,11 +541,11 @@
         </div>
         <div id="isGridEditable" value=false></div>
     </div>
-    <kendo-dialog *ngIf="showPopup" (close)="closePopup()" [height]="155" [width]="245">
+    <kendo-dialog *ngIf="showPopup" (close)="closePopup()" [height]="180" [width]="1150">
         <div class="kendoAlert">{{popUpMessage}}</div>
-        <kendo-dialog-actions>
-            <div kendoButton (click)="closePopup()" class="kendo-alrt-btn">Cancel</div>
-            <div kendoButton (click)="savePopupAction()" class="kendo-alrt-btn">Ok</div>
+        <kendo-dialog-actions class="dialog-action">
+            <div (click)="savePopupAction()" class="primary-btn">OK</div>
+            <div (click)="closePopup()" class="secondary-btn">CANCEL</div>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

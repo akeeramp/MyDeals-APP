@@ -34,6 +34,7 @@ import { ProductBreakoutComponent } from "../contract/ptModals/productSelector/p
 import { OverlappingCheckComponent } from "../contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { actionSummaryModal } from "../contract/contractManager/actionSummaryModal/actionSummaryModal.component";
 import { dealProductsModalComponent } from "../contract/ptModals/dealProductsModal/dealProductsModal.component"
+import {meetCompDealDetailModalComponent} from "../contract/meetComp/meetCompDealDetailModal.component"
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -70,5 +71,6 @@ export let contractComponents = [
     ProductBreakoutComponent,
     OverlappingCheckComponent,
     actionSummaryModal,
-    dealProductsModalComponent
+    dealProductsModalComponent,
+    meetCompDealDetailModalComponent
 ]

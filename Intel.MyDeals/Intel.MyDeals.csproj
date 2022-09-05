@@ -859,6 +859,8 @@
     <Content Include="Client\src\app\contract\managerPct\pctChildGrid.component.html" />
     <Content Include="Client\src\app\contract\meetComp\meetComp.component.css" />
     <Content Include="Client\src\app\contract\meetComp\meetComp.component.html" />
+    <Content Include="Client\src\app\contract\meetComp\meetCompDealDetailModal.component.css" />
+    <Content Include="Client\src\app\contract\meetComp\meetCompDealDetailModal.component.html" />
     <Content Include="Client\src\app\contract\missingCAP\missingCAP.component.css" />
     <Content Include="Client\src\app\contract\missingCAP\missingCAP.component.html" />
     <Content Include="Client\src\app\contract\overLappingDeals\overLapping.component.css" />
@@ -2325,6 +2327,9 @@
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctChildGrid.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp.component.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetCompDealDetailModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\missingCAP\missingCAP.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\missingCAP\missingCAP.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\overLappingDeals\overLapping.service.ts" />

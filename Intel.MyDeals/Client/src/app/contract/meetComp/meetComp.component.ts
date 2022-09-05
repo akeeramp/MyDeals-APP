@@ -12,6 +12,8 @@ import { map } from "rxjs/operators";
 import {GridUtil} from "../grid.util"
 import {MeetCompContractUtil} from "./meetComp_util"
 import * as moment from "moment";
+import { MatDialog } from "@angular/material/dialog";
+import {meetCompDealDetailModalComponent} from "./meetCompDealDetailModal.component"
 
 @Component({
     selector: "meet-comp-contract",
@@ -30,7 +32,8 @@ export class meetCompContractComponent implements OnInit {
     constructor(
         private loggerSvc: logger,
         private meetCompSvc: meetCompContractService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private dialog: MatDialog
     ) {}
 
     public spinnerMessageHeader = "";
@@ -80,6 +83,7 @@ export class meetCompContractComponent implements OnInit {
     public selectAllState: SelectAllCheckboxState = "unchecked";
     public showPopup = false;
     public lastMeetCompRunValue = "";
+    public popUpMessage = "";
 
     public selectedCust = '';
     public selectedCustomerText = '';
@@ -966,8 +970,8 @@ export class meetCompContractComponent implements OnInit {
                 }
             });
             if (this.tempUpdatedList.length > 0) {
-                const popUpMessage = this.getMeetCompPopupMessage();
-                if (popUpMessage != null) {
+                this.popUpMessage = this.getMeetCompPopupMessage();
+                if (this.popUpMessage != null) {
                     this.showPopup = true;
                 }
                 else {
@@ -1031,6 +1035,18 @@ export class meetCompContractComponent implements OnInit {
 
     showHelpTopic() {
         window.open('https://wiki.ith.intel.com/display/Handbook/Auto+Population', '_blank');
+    }
+
+    getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE){
+        const deal_properties={
+            "DEAL_OBJ_SID" : DEAL_OBJ_SID,
+            "GRP_PRD_SID" : GRP_PRD_SID,
+            "DEAL_PRD_TYPE" : DEAL_PRD_TYPE
+        }
+        const dialogRef = this.dialog.open(meetCompDealDetailModalComponent, {
+            width: "1350px",
+            data: deal_properties
+        });
     }
 
     public filterSettings: DropDownFilterSettings = {
