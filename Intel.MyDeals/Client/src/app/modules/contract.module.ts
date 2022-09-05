@@ -5,6 +5,7 @@ import { pricingTableComponent } from "../contract/pricingTable/pricingTable.com
 import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
 import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
 import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
+import { publishTenderComponent } from "../contract/publishTender/publishTender.component"
 import { ProductSelectorComponent } from "../contract/ptModals/productSelector/productselector.component";
 import { GeoSelectorComponent } from "../contract/ptModals/geo/geo.component";
 import { multiSelectModalComponent } from "../contract/ptModals/multiSelectModal/multiSelectModal.component";
@@ -40,6 +41,7 @@ export let contractComponents = [
     pricingTableEditorComponent,
     TenderFolioComponent,
     tenderManagerComponent,
+    publishTenderComponent,
     ProductSelectorComponent,
     GeoSelectorComponent,
     multiSelectModalComponent,

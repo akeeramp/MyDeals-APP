@@ -11,9 +11,9 @@
 
 <div class="row wizard" style="padding-top: 50px;">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first">
+        <div class="wizard-panel first" [ngClass]="{'complete': selectedTab != 'PTR'}">
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
-                <span class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'PTR'}">1</span>
+                <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
             </a>
         </div>
         <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
@@ -24,8 +24,8 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel">
-            <span id="tenderWidDE" class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'DE'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">2</span>
+        <div class="wizard-panel second" [ngClass]="{'complete': selectedTab != 'DE'  && selectedTab != 'PTR'}">
+            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">2</span>
         </div>
         <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')">
             <div class="wizard-step-text">
@@ -35,8 +35,8 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel">
-            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')">3</span>
+        <div class="wizard-panel third" [ngClass]="{'complete': selectedTab == 'PD'}">
+            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}">3</span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'MC')">
             <div class="wizard-step-text">
@@ -47,7 +47,7 @@
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last">
-            <span id="tenderWidPD" class="badge wizard-step" [ngClass]="{'btnWidgetActive': selectedTAB == 'PD'}" (click)="tenderWidgetPathManager('', 'PD')">4</span>
+            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')">4</span>
             <span kendo-tooltip="" k-content="'Publishing will separate the deals entered in the table below so that they can be individually approved.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'PD')">
@@ -68,4 +68,7 @@
 </div>
 <div *ngIf="selectedTab == 'MC'" class="col-md-12">
     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
+</div>
+<div *ngIf="selectedTab == 'PD'" class="col-md-12">
+    <publish-tender></publish-tender>
 </div>

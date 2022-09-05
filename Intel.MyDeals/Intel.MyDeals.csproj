@@ -882,6 +882,8 @@
     <Content Include="Client\src\app\contract\ptModals\productCorrector\productcorrector.component.css" />
     <Content Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.css" />
     <Content Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.html" />
+    <Content Include="Client\src\app\contract\publishTender\publishTender.component.css" />
+    <Content Include="Client\src\app\contract\publishTender\publishTender.component.html" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.css" />
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.css" />
@@ -2354,6 +2356,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\productSelector\prodSel_Util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\publishTender\publishTender.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderManager\tenderManager.component.ts" />

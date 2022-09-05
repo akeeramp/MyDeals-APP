@@ -40,3 +40,12 @@
 .k-tabstrip .k-tabstrip-items .k-link {
     padding: 0px !important;
 }
+.activeBtn {
+    background-color: #0071c5;
+    color: #FBD737
+}
+
+.complete {
+    color: #fff;
+    border-top-color: #00aeef;
+}

@@ -45,12 +45,8 @@ export class tenderManagerComponent {
     }
 
     tenderWidgetPathManager(data, selectedTab) {
-        if (selectedTab == 'PD') {
-            window.location.href = "/advancedSearch#/tenderDashboard";
-        }
         this.selectedTab = selectedTab;
         this.loadAllContractDetails();
-
     }
 
     isPTRPartiallyComplete(selectedTab) {
