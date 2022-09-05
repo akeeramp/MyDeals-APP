@@ -203,6 +203,7 @@ tr:last-child > td {
     font-family: arial;
     text-align: center;
     color: white;
+    line-height: 6 !important
 }
 
 .capLineStyle {
@@ -213,7 +214,7 @@ tr:last-child > td {
 }
 
 .msgClassStyles {
-    line-height: 1em;
+    line-height: 3 !important;
     font-family: arial;
     text-align: center;
 }
@@ -314,10 +315,6 @@ tr:last-child > td {
 
 .k-grid-content {
     zoom: 1;
-}
-
-.op-grid.k-grid .uiControlDiv {
-    line-height: 6 !important;
 }
 
 .op-grid .uiControlDiv {
@@ -576,4 +573,8 @@ kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-fi
 
 .op-grid.k-grid .k-grid-header .k-header {
     white-space: normal;
+}
+
+#excelDropDownMenu.show {
+    transform: translate3d(1300px, 200px, 0px) !important;
 }

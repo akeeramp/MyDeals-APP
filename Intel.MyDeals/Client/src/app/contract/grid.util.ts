@@ -3,6 +3,9 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { DE_Load_Util } from './DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTEUtils/PTE_Config_util';
 import * as moment from 'moment-timezone';
+import { saveAs } from '@progress/kendo-file-saver';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { ExcelExport } from "../contract/excelExport.util"
 export class GridUtil {
     static uiControlWrapper(passedData, field, format) {
         var msg = "";
@@ -161,7 +164,6 @@ export class GridUtil {
                 var dim = "10___" + numTiers;
                 tmplt += '<div class="col-md-12 rowDetailHeight">';
                 for (var f = 0; f < fields.length; f++) {
-                    //tmplt += ' ng-click="passThoughFunc(root.clickSchedDim, dataItem, \'' + fields[f].field + '\', \'' + dim + '\')"';
                     tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
@@ -189,7 +191,6 @@ export class GridUtil {
             if (typeof (dimkey) != ('function') && data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 tmplt += '<div class="col-md-12 rowDetailHeight">';
                 tmplt += '<div';
-                //tmplt += ' ng-click="passThoughFunc(root.clickCellDim, dataItem, \'' + field + '\', \'' + dimkey + '\')"';
                 tmplt += ' class="kitRowValue' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
@@ -336,7 +337,7 @@ export class GridUtil {
     }
     static getFormatedDim = function (dataItem, field, dim) {
         var item = dataItem[field];
-        if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
+        if (item === undefined || item[dim] === undefined) return ""; // Used to return "undefined" which would show on the UI.
         return item[dim];
     }
     static displayFrontEndDateMessage = function (dataItem) {
@@ -397,7 +398,6 @@ export class GridUtil {
                 tmplt += '<div class="col-md-12 rowHeight">';
                 tmplt += '<div class="textRightAlign isReadOnlyCell">';
                 tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
-                //tmplt += '<span class="ng-binding dataPadding gridCellSpan" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }
@@ -409,7 +409,6 @@ export class GridUtil {
                     tmplt += '<div class="col-md-12 rowHeight">';
                     tmplt += '<div class="textRightAlign isReadOnlyCell">';
                     tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
-                    //tmplt += '<span class="ng-binding dataPadding gridCellSpan" ng-click="openDealProducts(dataItem)" ng-bind="\'' + data[i] + '\'"></span>';
                     tmplt += '</div>';
                     tmplt += '</div>';
                 } else {
@@ -432,7 +431,6 @@ export class GridUtil {
     static uiProductControlWrapper = function (passedData) {
         var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
         tmplt += '     <div class="ng-binding vert-center gridCellSpan" title="' + passedData.TITLE + '">' + passedData.TITLE + '</div>';
-        //tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="{{dataItem.TITLE}}"></div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -505,7 +503,6 @@ export class GridUtil {
                 var value = new CurrencyPipe('en-us').transform(passedData["QTY"][dimkey] * passedData["DSCNT_PER_LN"][dimkey], 'USD', 'symbol', '1.2-2');
                 tmplt += '<div class="col-md-12 rowHeight">';
                 tmplt += '<div class="textRightAlign isReadOnlyCell">';
-                //tmplt += ' ng-click="passThoughFunc(root.clickCellDim, dataItem, \'QTY\', \'' + dimkey + '\')"';
                 tmplt += '<span class="ng-binding dataPadding">' + value + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
@@ -573,9 +570,13 @@ export class GridUtil {
             }
             if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + '" ' + msg;
-            tmplt += '     class="' + this.getClassNm(passedData, field) + '">';
-            tmplt += capText;
+            tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + ' ' + this.getClassNm(passedData, field) + '"';
+            if (msg != "") {
+                tmplt += ' title=' + msg + '" > ';
+            }
+            else
+                tmplt += '>';
+            tmplt += '<div>' +capText + '</div>';
             tmplt += '    <div>';
             tmplt += '    <span class="ng-binding">' + passedData[startDt][dimKey] + '</span> - ';
             tmplt += '    <span class="ng-binding">' + passedData[endDt][dimKey] + '</span>';
@@ -583,47 +584,7 @@ export class GridUtil {
             tmplt += '</div>';
         }
         return tmplt;
-    }
-    static uiDimInfoControlWrapper = function (passedData, field) {
-        var data = passedData["ECAP_PRICE"];    //iterate dim keys with ecap price because it is a guaranteed to exist required field - TODO: replace with TIER_NBR or something that would be better to formally iterate on?
-
-        if (data === undefined || data === null) return "";
-
-        var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
-
-        var YCS2modifier = "";
-        if (field === "YCS2") {
-            YCS2modifier = "_PRC_IRBT";
-        }
-
-        var tmplt = '<div class="col-md-12">';
-        for (var index in sortedKeys) { //only looking for positive dim keys
-            var dimkey = sortedKeys[index];
-            if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                tmplt += '<div class="col-md-12 rowHeight">';
-                tmplt += '<div class="col-md-12 textRightAlign' + this.getClassNm(passedData, field) + '">';
-                //tmplt += "<op-popover ";
-                //if (field === "CAP") {
-                //    tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
-                //}
-                //if (field === "YCS2") {
-                //    tmplt += "ng-click='openCAPBreakOut(dataItem, \"" + field + "\", \"" + dimkey + "\")'";
-                //}
-                //tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
-                //var fieldText = field + '_STRT_DT';
-                //// Special handling for YCS2, naming convention is not followed in defining start date attribute..
-                //if (field === "YCS2") {
-                //    fieldText = field + '_START_DT';
-                //}
-                //tmplt += this.uiMoneyDatesControlWrapper(passedData, field + YCS2modifier, fieldText, field + '_END_DT', dimkey);
-                //tmplt += "</op-popover>";
-                tmplt += '</div>';
-                tmplt += '</div>';
-            }
-        }
-        tmplt += '</div>';
-        return tmplt;
-    }
+    }    
     static uiCrDbPercWrapper = function (passedData) {
         var percData = DE_Load_Util.getTotalDealVolume(passedData);
 
@@ -647,12 +608,10 @@ export class GridUtil {
 
         if (field === 'MEETCOMP_TEST_RESULT') {
             return '<div class="text-center uiControlDiv isReadOnlyCell cursorStyle"><div class="vert-center">' + iconNm + '</div></div>';
-            //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
         }
         else {
             if ((<any>window).usrRole === 'DA' || ((<any>window).usrRole === 'GA' && (<any>window).isSuper || (<any>window).usrRole === 'SA' || (<any>window).usrRole === 'Legal')) { // Cost Test visable by Super GA, DA, and SA
                 return '<div class="text-center uiControlDiv isReadOnlyCell cursorStyle"><div class="vert-center">' + iconNm + '</div></div>';
-                //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openPCTScreen(dataItem)" style="cursor:pointer"><div class="vert-center">' + iconNm + '</div></div>';
             }
             else {
                 return '<div class="text-center uiControlDiv isReadOnlyCell">&nbsp;</div>';
@@ -663,14 +622,12 @@ export class GridUtil {
         var iconNm = DE_Load_Util.getResultMappingIconClass(result);
         var iconTitle = iconNm === "intelicon-help-outlined" ? "Not Run Yet" : result;
         return '<i class="iConFont ' + iconNm + '" title="' + iconTitle + '"></i>';
-        //return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
     }
     static getMissingCostCapIcon = function (data) {
         var title = this.getMissingCostCapTitle(data);
 
         if (title === '') return '<div class="uiControlDiv isReadOnlyCell"></div>';
         return '<div class="text-center uiControlDiv isReadOnlyCell"><div class="vert-center"><i class="intelicon-help-solid bigIcon missingCapStyle" title="' + title + '"></i></div></div>';
-        //return '<div class="text-center uiControlDiv isReadOnlyCell" ng-click="openMissingCapCostScreen(dataItem)"><div class="vert-center"><i class="intelicon-help-solid bigIcon" style="color: rgb(243, 213, 78);font-size:18px !important;" title="' + title + '"></i></div></div>';
     }
     static getMissingCostCapTitle = function (data) {
         var title = '';
@@ -700,5 +657,231 @@ export class GridUtil {
     static convertLocalToPST(strDt) {
         moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
         return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
+    }
+    static getProductMbrSid(dimProduct, dimKey) {
+        let prd_mbr_sid;
+        if (!dimKey) {
+            dimKey = "20___0";
+        }
+        for (var p in dimProduct) {
+            if (dimProduct.hasOwnProperty(p) && p.lastIndexOf(dimKey) > -1) {
+                prd_mbr_sid = dimProduct[p];
+                if (isNaN(prd_mbr_sid)) {
+                    var splitKey = p.split("___");
+                    if (splitKey.length > 1) {
+                        prd_mbr_sid = splitKey[1];
+                    }
+                    else {
+                        prd_mbr_sid = 0;
+                    }
+                }
+                else if (!isNaN(prd_mbr_sid)) {
+                    var splitKey = p.split("___");
+                    if (splitKey.length > 1 && prd_mbr_sid != splitKey[1]) {
+                        prd_mbr_sid = splitKey[1];
+                    }
+                }
+                break;
+            }
+        }
+        return prd_mbr_sid;
+    }
+
+    static dsToExcel(gridColumns, data, title) {
+        var rows = [{ cells: [] }];
+        var rowsProd = [{ cells: [] }];
+        var colWidths = [];
+        var colHidden = false;
+        var hasProds = false;
+        var addAlways = [
+            {
+                field: "NOTES",
+                title: "Notes"
+            }
+        ];
+        var forceHide = [];
+
+        if (!((<any>window).usrRole === "DA" || ((<any>window).usrRole === "GA" && (<any>window).isSuper) || ((<any>window).usrRole === "Legal") || ((<any>window).usrRole === "SA"))) {
+            forceHide.push("COST_TEST_RESULT")
+        }
+
+        if (!((<any>window).usrRole === "DA" || ((<any>window).usrRole === "GA") || ((<any>window).usrRole === "Legal") || ((<any>window).usrRole === "SA"))) {
+            forceHide.push("MEETCOMP_TEST_RESULT")
+        }
+
+        // Create element to generate templates in.
+        var elem = document.createElement('div');
+
+        var colList = [];
+        for (var i = 0; i < gridColumns.length; i++) {
+            colHidden = gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
+            if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
+            if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
+                var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
+                    ? gridColumns[i].excelHeaderLabel
+                    : gridColumns[i].title;
+
+                rows[0].cells.push({
+                    value: colTitle,
+                    textAlign: "center",
+                    background: "#0071C5",
+                    color: "#ffffff",
+                    wrap: true
+                });
+                colList.push(gridColumns[i].field);
+
+                if (gridColumns[i].width !== undefined) {
+                    colWidths.push({ width: parseInt(gridColumns[i].width) });
+                } else {
+                    colWidths.push({ autoWidth: true });
+                }
+            }
+        }
+
+        for (var a = 0; a < addAlways.length; a++) {
+            if (colList.indexOf(addAlways[a].field) < 0) {
+                rows[0].cells.push({
+                    value: addAlways[a].title,
+                    textAlign: "center",
+                    background: "#0071C5",
+                    color: "#ffffff",
+                    wrap: true
+                });
+                colWidths.push({ autoWidth: true });
+            }
+        }
+        // set prod title
+        var titles = ["Deal #", "Deal Product Name", "Product Type", "Product Category", "Brand", "Family", "Processor", "Product Name", "Material ID", "Division", "Op Code", "Prod Start Date", "Prod End Date"];
+        for (var t = 0; t < titles.length; t++) {
+            rowsProd[0].cells.push({
+                value: titles[t],
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true
+            });
+        }
+        for (var i = 0; i < data.length; i++) {
+            //push single row for every record
+            var dataItem = data[i];
+            if (dataItem !== undefined && dataItem !== null) {
+                var cells = [];
+                for (var c = 0; c < gridColumns.length; c++) {
+                    colHidden = gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
+                    if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
+                    if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                        // get default value
+                        if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
+                            dataItem[gridColumns[c].field] = "";
+                        var val = dataItem[gridColumns[c].field];
+                        // now look for templates
+                        if (gridColumns[c].template || gridColumns[c].excelTemplate) {
+                            var templateHtml = gridColumns[c].excelTemplate !== undefined
+                                ? gridColumns[c].excelTemplate
+                                : gridColumns[c].template;
+                            let newHtmlVal;
+                            if (gridColumns[c].excelTemplate === undefined && templateHtml.indexOf("gridUtils") >= 0 && templateHtml.indexOf("ControlWrapper") >= 0) {
+                                templateHtml = "#=" + gridColumns[c].field + "#";
+                            }
+                            if (templateHtml.includes("#=gridUtils.getFormatedDim")) {
+                                newHtmlVal = templateHtml.replace("#=gridUtils.getFormatedDim(data, 'TempCOMP_SKU', '20___0', 'string')#", GridUtil.getFormatedDim(dataItem, 'TempCOMP_SKU', '20___0'));
+                            }
+                            else if (templateHtml.includes("gridUtils")) {
+                                newHtmlVal = ExcelExport.getExportExcelData(templateHtml, dataItem, gridColumns[c].field);
+                            }
+                            else if (templateHtml.includes("Customer.")) {
+                                templateHtml = templateHtml.replace("#=Customer.", "").replace("#", "");
+                                newHtmlVal = dataItem["Customer"][templateHtml];
+                            }
+                            else {
+                                templateHtml = templateHtml.replace("#=", "").replace("#", "");
+                                newHtmlVal = dataItem[templateHtml];                                
+                            }
+
+                            newHtmlVal = newHtmlVal.toString().replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            elem.innerHTML = newHtmlVal;
+
+                            // Output the text content of the templated cell into the exported cell.
+                            val = (elem.textContent || elem.innerText || "").replace(/null/g, '').replace(/undefined/g, '')
+                                .replace(/LINEBREAKTOKEN/g, '\n');
+                        }
+
+                        // Replace special characters that are killers - do it here to catch templated items as well as normal ones.
+                        val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
+
+                        cells.push({
+                            value: val,
+                            wrap: true
+                        });
+                    }
+                }
+
+                for (var a = 0; a < addAlways.length; a++) {
+                    if (colList.indexOf(addAlways[a].field) < 0) {
+                        if (dataItem[addAlways[a].field] === undefined || dataItem[addAlways[a].field] === null)
+                            dataItem[addAlways[a].field] = "";
+
+                        cells.push({
+                            value: dataItem[addAlways[a].field],
+                            wrap: true
+                        });
+                    }
+                }
+
+                rows.push({
+                    cells: cells
+                });
+
+                // Products
+                if (dataItem["products"] !== undefined) {
+                    hasProds = true;
+                    for (var p = 0; p < dataItem["products"].length; p++) {
+                        var prd = dataItem["products"][p];
+                        rowsProd.push({
+                            cells: [
+                                { value: dataItem["DC_ID"], wrap: true },
+                                { value: prd["DEAL_PRD_NM"], wrap: true },
+                                { value: prd["DEAL_PRD_TYPE"], wrap: true },
+                                { value: prd["PRD_CAT_NM"], wrap: true },
+                                { value: prd["FMLY_NM"], wrap: true },
+                                { value: prd["BRND_NM"], wrap: true },
+                                { value: prd["PCSR_NBR"], wrap: true },
+                                { value: prd["PRODUCT_NAME"], wrap: true },
+                                { value: prd["MTRL_ID"], wrap: true },
+                                { value: prd["DIV_NM"], wrap: true },
+                                { value: prd["OP_CD"], wrap: true },
+                                { value: prd["PRD_STRT_DTM"], wrap: true },
+                                { value: prd["PRD_END_DTM"], wrap: true }
+                            ]
+                        });
+                    }
+                }
+            }
+        }
+        // sheets
+        var sheets = [
+            {
+                columns: colWidths,
+                title: title,
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+
+        if (hasProds) {
+            sheets.push({
+                columns: colWidths,
+                title: "Products",
+                frozenRows: 1,
+                rows: rowsProd
+            });
+        }
+        
+        var workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
+        });
     }
 }

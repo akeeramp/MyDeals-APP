@@ -1,0 +1,69 @@
+﻿<div class="modal-header modalBlueBody">
+    <div class="col-md-12">
+        <h5 class="modal-title col-md-7" id="modal-title">Products for deal {{data.dataItem.DC_ID}} <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+        <div *ngIf="showDealProducts" class="dropdown col-md-4">
+            <button class="btn btn-primary dropdown-toggle" id="cpyClpBrd" type="button" data-toggle="dropdown">
+                Copy to clip board
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li role="button" (click)="copyNoCAPProudcts('HIER_VAL_NM')">
+                    <a>L4's (with No CAP)</a>
+                </li>
+                <li role="button" (click)="copyNoCAPProudcts('PCSR_NBR')">
+                    <a>Processor's (with No CAP)</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal-body modalBlueBody" id="modal-body">
+    <kendo-grid id="dealProduct" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
+                [sort]="state.sort" [sortable]="true" [resizable]="true"                
+                (dataStateChange)="dataStateChange($event)"
+                class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
+                data-role="grid">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">Export to Excel</button>
+        </ng-template>
+
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="HIER_VAL_NM" title="Product" width="160px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CAP" title="CAP-YCP1" width="110px" [hidden]="!showDealProducts">
+            <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                <div *ngIf="dataItem.CAP == 'No CAP'" class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">
+                    <div style="font-family: arial; text-align: center;font-weight:600">No CAP</div>
+                </div>
+                <div *ngIf="dataItem.CAP !== 'No CAP'" style="text-align: center;">{{ dataItem.CAP}}</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="DEAL_PRD_TYPE" title="Product Type" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="PRD_CAT_NM" title="Product Vertical" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="BRND_NM" title="Brand" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="FMLY_NM" title="Family" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="PCSR_NBR" title="Processor" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="MTRL_ID" title="Material Id" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="MM_MEDIA_CD" title="Media Code" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="PRD_STRT_DTM" title="Prod Start Date" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="PRD_END_DTM" title="Prod End Date" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="YCS2" title="YCS2" width="110px" [hidden]="!showDealProducts">
+            <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                <div *ngIf="dataItem.YCS2 == 'No YCS2'" class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">
+                    <div style="font-family: arial; text-align: center;font-weight:600">No YCS2</div>
+                </div>
+                <div *ngIf="dataItem.YCS2 !== 'No YCS2'" style="text-align: center;">{{ dataItem.YCS2}}</div>
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="SKU_NM" title="Sku Name" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_CACHE" title="CPU Cache" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_PACKAGE" title="CPU Package" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_VOLTAGE_SEGMENT" title="CPU Voltage" width="110px"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass': true}" field="CPU_WATTAGE" title="CPU Wattage" width="110px"></kendo-grid-column>
+        <kendo-grid-excel fileName="{{ excelFileName }}" filterable="true"></kendo-grid-excel>
+    </kendo-grid>   <br />    
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" style="width: 100%;" (click)="ok()">Close</button>
+        </div>
+    </div>
+</div>

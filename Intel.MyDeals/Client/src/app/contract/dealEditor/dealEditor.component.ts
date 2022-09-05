@@ -1,12 +1,11 @@
-﻿
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, ViewChild } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import * as _ from 'underscore';
 import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
@@ -21,6 +20,8 @@ import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/en
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
+import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component"
+import { GridUtil } from '../grid.util';
 
 @Component({
     selector: 'deal-editor',
@@ -41,6 +42,7 @@ export class dealEditorComponent {
     @Input() in_Pt_Id: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
+    @ViewChild(GridComponent) private grid: GridComponent;
     private isWarning: boolean = false;
     private message: string = "";
     private dirty = false;
@@ -72,6 +74,9 @@ export class dealEditorComponent {
     private msgType: string = "";
     private invalidDate: boolean = false;
     private VendorDropDownResult: any = {};
+    private searchFilter: any;
+    private wrapEnabled: boolean = false;
+    private isExportable: boolean = true;
     private state: State = {
         skip: 0,
         take: 25,
@@ -186,7 +191,7 @@ export class dealEditorComponent {
         if (args.dataItem != undefined) {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
-        if (!args.isEdited && args.column.field !== "CUST_MBR_SID" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
+        if (!args.isEdited && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
             args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
             args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                 args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
@@ -207,7 +212,10 @@ export class dealEditorComponent {
                 || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
                 var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
                 this.openMultiSelectModal(args.dataItem, column[0]);
-            }
+            }            
+        }
+        else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
+            this.openDealProductModal(args.dataItem);
         }
     }
 
@@ -237,6 +245,15 @@ export class dealEditorComponent {
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal != undefined && returnVal != null) {
                 this.updateModalDataItem(dataItem, "SYS_PRICE_POINT", returnVal);
+            }
+        });
+    }
+
+    openDealProductModal(dataItem) {
+        const dialogRef = this.dialog.open(dealProductsModalComponent, {
+            width: "1000px",
+            data: {
+                dataItem: dataItem
             }
         });
     }
@@ -584,6 +601,72 @@ export class dealEditorComponent {
                     }
                 }
             });
+    }
+    filterDealData(event) {
+        if (event.keyCode == 13) {
+            if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
+                if (this.searchFilter.length < 3) {
+                    // This breaks the tab filtering
+                    this.clearSearchGrid();
+                    return;
+                }
+                else {
+                    this.state.filter = {
+                        logic: "or",
+                        filters: [
+                            {
+                                field: "DC_ID",
+                                operator: "eq",
+                                value: this.searchFilter
+                            }, {
+                                field: "WF_STG_CD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "PTR_USER_PRD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "TITLE",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "NOTES",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }
+                        ],
+                    }
+                    this.gridData = process(this.gridResult, this.state);
+                }
+            }
+        }
+    }
+    clearSearchGrid() {
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        }
+        this.gridData = process(this.gridResult, this.state);
+    }
+    toggleWrap = function () {
+        const elements = Array.from(
+            document.getElementsByClassName('ng-binding') as HTMLCollectionOf<HTMLElement>
+        );
+        this.wrapEnabled = !this.wrapEnabled;
+        var newVal = this.wrapEnabled ? "normal" : "nowrap";
+        var newH = this.wrapEnabled ? "100%" : "auto";
+        elements.forEach((item) => {
+            item.style.setProperty('white-space', newVal);
+            item.style.setProperty("height", newH);
+        });
+        this.grid.autoFitColumn(2);
+    }
+    exportToExcel() {
+        GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "Deal Editor Export");
+    }
+    exportToExcelCustomColumns() {
+        GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export");
     }
 
     gridReload(eventData: boolean) {

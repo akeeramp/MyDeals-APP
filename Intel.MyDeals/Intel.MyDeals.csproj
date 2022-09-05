@@ -870,6 +870,8 @@
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\dealEditorModals.component.css" />
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\geo\geo.component.html" />
     <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.html" />
     <Content Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.css" />
@@ -2308,6 +2310,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Load_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Save_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\DEUtils\DE_Validation_util.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\excelExport.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\grid.util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\contractManager.service.ts" />
@@ -2343,6 +2346,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\Tender_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\geo\geo.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\autofillsettings\autofillsetting.service.ts" />

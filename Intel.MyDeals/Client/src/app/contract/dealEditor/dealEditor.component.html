@@ -18,7 +18,7 @@
                     </span>
                 </button>
                 <div class="fr" style="margin-top: 2px;">
-                    <button class="btn btn-sm ssToolbarBtn" title="Toggle Word Wrap">
+                    <button class="btn btn-sm ssToolbarBtn" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}">
                         <table>
                             <tr>
                                 <td><i class="intelicon-align-left skyBlue" style="font-size: 30px"></i></td>
@@ -74,8 +74,8 @@
                         </table>
                     </button>
                 </div>
-                <div class="fr" style="margin-top: 2px; margin-left:8px">
-                    <button class="btn btn-sm ssToolbarBtn">
+                <div class="fr clearfix" style="margin-top: 2px; margin-left:8px">
+                    <button class="btn btn-sm ssToolbarBtn dropdown-toggle" type="button" data-toggle="dropdown">
                         <table>
                             <tr>
                                 <td><i class="intelicon-ms-excel-outlined skyBlue" style="font-size: 30px"></i></td>
@@ -84,6 +84,10 @@
                             </tr>
                         </table>
                     </button>
+                    <ul class="dropdown-menu" id="excelDropDownMenu">
+                        <li (click)="exportToExcel()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+                        <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
+                    </ul>
                 </div>&nbsp;&nbsp;
                 <button class="btn ssToolbarBtn" title="Help">
                     <table>
@@ -94,11 +98,11 @@
                 <span class="k-textbox" style="width:248px !important;margin-top:4px">
                     <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
                     &nbsp;&nbsp;
-                    <input style="width:270px;border:none" placeholder="search... (press enter to search)" />
+                    <input style="width:270px;border:none" (keydown)="filterDealData($event)" [(ngModel)]="searchFilter" placeholder="search... (press enter to search)" />
                 </span>
             </div>
             <div class="op-grid-container">
-                <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                <kendo-grid id="dealEditor" #grid [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"

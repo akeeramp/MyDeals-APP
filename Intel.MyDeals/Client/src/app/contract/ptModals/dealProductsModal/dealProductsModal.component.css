@@ -1,0 +1,22 @@
+﻿.modalBlueBody {
+    background-color: #003C71 !important;
+    color: #ffffff !important;
+}
+
+.excelText {
+    line-height: 1.2em;
+    font-size: 12px;
+    float: right;
+}
+
+.excelText span {
+    text-align: left;
+}
+
+.dropdown{
+    left:160px;
+}
+
+#cpyClpBrd{
+    width:220px;
+}

@@ -6,6 +6,7 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { GridUtil } from '../grid.util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
+import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 @Component({
     selector: 'deal-editor-cell',
     templateUrl: 'Client/src/app/contract/dealEditor/dealEditorCellTemplate.component.html',
@@ -15,7 +16,11 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 export class dealEditorCellTemplateComponent {
 
     constructor(private loggerService: logger, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe,
-        private datePipe: DatePipe) {
+        private datePipe: DatePipe, popoverConfig: NgbPopoverConfig) {
+        popoverConfig.placement = 'auto';
+        popoverConfig.container = 'body';
+        popoverConfig.autoClose = 'outside';
+        popoverConfig.animation = false;
     }
     @Input() in_Field_Name: string = '';
     @Input() in_Template: string = '';
@@ -31,6 +36,9 @@ export class dealEditorCellTemplateComponent {
     private subKitEcapDim = "20_____2";
     private dim = "10___";
     private fields: any;
+    private YCS2modifier:string = "";
+    private fieldModifier: string = "";
+    private fieldText: string = "";
 
     updateIcon(eventData: boolean) {
         this.iconUpdate.emit(eventData);
@@ -70,6 +78,15 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiCustomerControlWrapper(passedData, field);
     }
 
+    keyArray(data: any) {
+        var arr = new Array();
+        var keys = Object.keys(data).sort();
+        for (var i = 0; i < keys.length; i++) {
+            arr.push(keys[i]);
+        }
+        return arr;
+    }
+
     uiDimControlWrapper(passedData, field) {
         var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         var dim = "";
@@ -96,10 +113,6 @@ export class dealEditorCellTemplateComponent {
             dim = this.ecapDimKey;
         }
         return GridUtil.uiDimControlWrapper(data, field, dim);
-    }
-
-    uiDimInfoControlWrapper(passeddata, field) {
-        return GridUtil.uiDimInfoControlWrapper(passeddata, field);
     }
 
     getMissingCostCapIcon(passedData) {
@@ -143,7 +156,9 @@ export class dealEditorCellTemplateComponent {
                 var dim = "10___" + numTiers;
                 for (var f = 0; f < this.fields.length; f++) {
                     if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
-                        if (this.fields[f].format == "number")
+                        if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
+                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-2");
+                        else if (this.fields[f].format == "number")
                             data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
                         else
                             data[this.fields[f].field][dim] = this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2');
@@ -284,9 +299,24 @@ export class dealEditorCellTemplateComponent {
             return true;
         return false;
     }
+    uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {
+        return GridUtil.uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey)
+    }
+    getProductSid(dimProduct, dimKey) {
+        return GridUtil.getProductMbrSid(dimProduct, dimKey);
+    }
     ngOnChanges() {
         this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
+        if (this.in_Field_Name === "CAP_INFO") {
+            this.fieldModifier = "CAP";
+            this.fieldText = this.fieldModifier + "_STRT_DT";
+        }
+        else if (this.in_Field_Name === "YCS2_INFO") {
+            this.fieldModifier = "YCS2";
+            this.YCS2modifier = "_PRC_IRBT";
+            this.fieldText = this.fieldModifier + "_START_DT";
+        }
     }
 }
 
