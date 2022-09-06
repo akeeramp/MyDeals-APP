@@ -21,3 +21,5 @@
 <div *ngIf="!loading && selectedTAB == 'PD'" style="padding: 5px; height: 100%;">
     <div id="pubOpGrid" op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" op-name="PUBLISH" op-is-tender=true op-help="helpTopicContractAndDealViews"></div>
 </div>
+<loading-panel-angular [show]="isDataLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
+                       [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>

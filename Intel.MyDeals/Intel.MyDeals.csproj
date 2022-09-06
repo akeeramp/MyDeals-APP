@@ -2367,6 +2367,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\renameTitle\renameTitle.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\publishTender\publishTender.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\publishTender\publishTender.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderFolio\tenderFolio.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\tenderManager\tenderManager.component.ts" />
