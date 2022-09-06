@@ -42,7 +42,9 @@
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
     padding: 9px 14px !important;
 }
-
+.k-clear-selected {
+    display: none !important;
+}
 .k-grid {
     height: 375px !important;
 }
