@@ -167,10 +167,10 @@ contractSaveUtil.itemValidationBlock = function (data, key, mode, wipData, sprea
     //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
     var spreadData;
     if (spreadDs != undefined) {
-        spreadData = spreadDs;
+        spreadData = spreadDs.filter((item) => item.IS_CANCELLED == "0");
     }
     else {
-        spreadData = data
+        spreadData = data.filter((item) => item.IS_CANCELLED == "0");
     }
 
     //For multi tiers last record will have latest date, skipping duplicate DC_ID
@@ -293,14 +293,13 @@ contractSaveUtil.validateOverArching = function (data, curPricingStrategy, curPr
                 item = contractSaveUtil.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero', curPricingTable);
             }
             // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
-            //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
-            if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
+            if (item.REBATE_OA_MAX_AMT !== null && item.IS_CANCELLED !== '1' && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
                 testMaxAmtCount++;
                 if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
                     testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
                 }
             }
-            if (item.REBATE_OA_MAX_VOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+            if (item.REBATE_OA_MAX_VOL !== null && item.IS_CANCELLED !== '1' && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                 testMaxVolCount++;
                 if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
                     testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
@@ -308,8 +307,7 @@ contractSaveUtil.validateOverArching = function (data, curPricingStrategy, curPr
             }
         });
         // Check if this is a flex, and if it is, only accrual single tier rows count..
-        //var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
-        var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
+        var elementCount = isFlexAccrual != 1 ? data.filter((val) => val.IS_CANCELLED !== '1').length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.IS_CANCELLED !== '1').length;
         if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
             _.each(data, (item) => {
                 item = contractSaveUtil.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal', curPricingTable);
