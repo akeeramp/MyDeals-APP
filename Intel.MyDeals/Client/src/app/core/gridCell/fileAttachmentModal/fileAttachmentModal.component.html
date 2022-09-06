@@ -35,9 +35,9 @@
                                             (dataStateChange)="dataStateChange($event)" [columnMenu]="false">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="" width="10%">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="&nbsp;" width="10%">
                                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
-                                            <a class='delete-attach-icon' *ngIf="C_DELETE_ATTACHMENTS" (click)='deleteFileAttachment(dataItem)'>
+                                            <a class="delete-attach-icon deleteCell" *ngIf="C_DELETE_ATTACHMENTS" (click)='deleteFileAttachment(dataItem)'>
                                                 <i class='intelicon-trash-outlined' title='Click to delete this attachment'></i>
                                             </a>
                                         </ng-template>
@@ -72,4 +72,13 @@
         </tbody>
     </table>
 </div>
+<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [maxWidth]="485">
+    <p class="dialogmsg">
+        Are you sure that you want to Delete this file attachment?
+    </p>
+    <kendo-dialog-actions class="kendoActn">
+        <button kendoButton (click)="deleteAttachmentActions(true)">Yes</button>
+        <button kendoButton (click)="deleteAttachmentActions(false)" class="cancelCell">No</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
 <button kendoButton class="k-button" style="top: 58px; width: 100%;" (click)="close()">CLOSE</button>

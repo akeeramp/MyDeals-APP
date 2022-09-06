@@ -24,7 +24,10 @@ export class fileAttachmentComponent {
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     public dataItem = this.data.dataItem;
-    C_ADD_ATTACHMENTS = this.dataItem._settings.C_ADD_ATTACHMENTS;
+    public C_ADD_ATTACHMENTS: boolean = this.dealToolsSvc.chkDealRules('C_ADD_ATTACHMENTS', (<any>window).usrRole, null, null, null);
+    public C_DELETE_ATTACHMENTS: boolean = ((this.dataItem.HAS_TRACKER === "1") ? false : (this.dealToolsSvc.chkDealRules('C_DELETE_ATTACHMENTS', (<any>window).usrRole, null, null, this.dataItem.PS_WF_STG_CD)));
+    public isDeleteAttachment: boolean = false;
+    private deleteAttachmentParams: any = {};
     private fileUploading= false;
     public attachmentCount = 0;
     public initComplete = false;
@@ -65,9 +68,6 @@ export class fileAttachmentComponent {
     }
     onFileSelect() {
         this.selectedFileCount++;
-        setTimeout(() => {
-            $(".k-clear-selected").hide();
-        });
     }
     onFileRemove() {
         this.selectedFileCount--;
@@ -85,8 +85,25 @@ export class fileAttachmentComponent {
             objTypeSid: 5 // WIP_DEAL
         }
     }
-    deleteFileAttachment() {
-
+    deleteFileAttachment(data) {
+        this.deleteAttachmentParams = { custMbrSid: data.CUST_MBR_SID, objTypeSid: data.OBJ_TYPE_SID, objSid: data.OBJ_SID, fileDataSid: data.FILE_DATA_SID };
+        this.isDeleteAttachment = true;
+    }
+    deleteAttachmentActions(action: boolean) {
+        if (action == true) {
+            this.dealToolsSvc.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
+                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
+                    this.isDeleteAttachment = false;
+                    this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
+                    this.loadAttachments();
+                }, error => {
+                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed");
+                    this.loadAttachments();
+                });
+        }
+        else {
+            this.isDeleteAttachment = false;
+        }
     }
     stripMilliseconds(dateTime) {
         let date = this.datePipe.transform(new Date(GridUtil.stripMilliseconds(dateTime)), 'M/d/yyyy');

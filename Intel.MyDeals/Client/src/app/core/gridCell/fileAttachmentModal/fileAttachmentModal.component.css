@@ -73,7 +73,29 @@
     white-space: normal !important;
 }
 
-    .fileCell a:hover, a:focus {
+    .fileCell:hover, .fileCell:focus {
         color: #004579 !important;
         text-decoration: underline !important;
     }
+
+.dialogmsg {
+    margin: 30px !important;
+    text-align: center !important;
+}
+.kendoActn {
+    padding: 0px !important;
+    gap: 0px !important;
+}
+.cancelCell {
+    color: #444444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+}
+    .cancelCell:hover {
+        color: #444444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important;
+    }
+.deleteCell {
+    color: #0071c5 !important;
+}
