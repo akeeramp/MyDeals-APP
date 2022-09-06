@@ -200,10 +200,10 @@ tr:last-child > td {
 }
 
 .capInfoWrapper {
+    line-height: 3 !important;
     font-family: arial;
     text-align: center;
     color: white;
-    line-height: 6 !important
 }
 
 .capLineStyle {
@@ -214,7 +214,6 @@ tr:last-child > td {
 }
 
 .msgClassStyles {
-    line-height: 3 !important;
     font-family: arial;
     text-align: center;
 }
@@ -376,7 +375,7 @@ tr:last-child > td {
 .dealTools {
     margin-top: 0px !important;
     /*padding-top: 23px !important;*/
-    line-height: 5.2em !important;
+    /*line-height: 5.2em !important;*/
 }
 .gridStatusMarker {
     height: 35px !important;
@@ -526,7 +525,7 @@ tr:last-child > td {
     padding-top: 0;
     padding-bottom: 5px;
 }
-.opUiContainer.md [class^="intelicon-"] {
+.opUiContainer.md [class^="intelicon-"] :not(intelicon-protection-solid) {
     font-size: 14px;
     color: #00AEEF;
 }

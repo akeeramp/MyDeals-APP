@@ -1,11 +1,11 @@
-﻿import { Component, Input, ViewEncapsulation, ViewChild } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import * as _ from 'underscore';
 import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent} from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
@@ -43,6 +43,7 @@ export class dealEditorComponent {
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
     @ViewChild(GridComponent) private grid: GridComponent;
+    @Output() refreshedContractData = new EventEmitter;
     private isWarning: boolean = false;
     private message: string = "";
     private dirty = false;
@@ -108,7 +109,7 @@ export class dealEditorComponent {
             value: 100
         }
     ];
-
+    
     getGroupsAndTemplates() {
         //Get Groups for corresponding deal type
         this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
@@ -118,7 +119,7 @@ export class dealEditorComponent {
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD);
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
         this.getWipDealData();
-    }
+    }    
 
     getWipDealData() {        
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
@@ -191,7 +192,7 @@ export class dealEditorComponent {
         if (args.dataItem != undefined) {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
-        if (!args.isEdited && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
+        if (!args.isEdited && args.column.field !=='MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
             args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
             args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                 args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
@@ -570,6 +571,11 @@ export class dealEditorComponent {
 
                 dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
             }
+            else if (item == 'EXPIRE_FLG')
+                dropObjs[`${item}`] = [
+                    { text: "Yes", value: "1" },
+                    { text: "No", value: "0" }
+                ]
         });
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
@@ -600,6 +606,7 @@ export class dealEditorComponent {
                         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], ptId);
                     }
                 }
+                this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
             });
     }
     filterDealData(event) {
@@ -639,6 +646,9 @@ export class dealEditorComponent {
                     }
                     this.gridData = process(this.gridResult, this.state);
                 }
+            }
+            else {
+                this.clearSearchGrid();
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿import { opGridTemplate } from "../../core/angular.constants"
 import { colorDictionary } from "../../core/angular.constants";
+import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 export class DE_Load_Util {
     static assignColSettings(wipTemplate, objSetTypeCd) {
         var cnt = 0;
@@ -9,6 +10,12 @@ export class DE_Load_Util {
             indxs[columnKeys[i]] = cnt++;
         }
         for (var i = 0; i < wipTemplate.columns.length; i++) {
+            let col = wipTemplate.columns[i];
+            if (col.field === "CUST_MBR_SID") {
+                col.filterable = false;
+            } else if (PTE_Config_Util.dimPrdBktFields.indexOf(col.field) >= 0) {
+                col.sortable = false;
+            }
             wipTemplate.columns[i].indx = indxs[wipTemplate.columns[i].field] === undefined ? 0 : indxs[wipTemplate.columns[i].field];
             wipTemplate.columns[i].hidden = false;
         }

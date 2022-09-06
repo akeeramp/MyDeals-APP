@@ -194,7 +194,7 @@ export class GridUtil {
                 tmplt += ' class="kitRowValue' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
-                if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null)
+                if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null && passedData[field][dimkey] != 'No YCS2' && passedData[field][dimkey] != 'No CAP')
                     tmplt += '<span class="ng-binding dataPadding">' + passedData[field][dimkey] + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
@@ -557,7 +557,7 @@ export class GridUtil {
                 if (ecap > cap) {
                     var dsplCap = cap === "" ? "No CAP" : cap;
                     var dsplEcap = ecap === "" ? "No ECAP" : ecap;
-                    msg = "title = 'ECAP ($" + dsplEcap + ") is greater than the CAP ($" + dsplCap + ")'";
+                    msg = "ECAP ($" + dsplEcap + ") is greater than the CAP ($" + dsplCap + ")";
                     msgClass = "isSoftWarnCell";
                 }
             }
@@ -570,9 +570,12 @@ export class GridUtil {
             }
             if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + ' ' + this.getClassNm(passedData, field) + '"';
+            if (msgClass == "isSoftWarnCell")
+                tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + '"';
+            else
+                tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + ' ' + this.getClassNm(passedData, field) + '"';
             if (msg != "") {
-                tmplt += ' title=' + msg + '" > ';
+                tmplt += ' title="' + msg + '" > ';
             }
             else
                 tmplt += '>';

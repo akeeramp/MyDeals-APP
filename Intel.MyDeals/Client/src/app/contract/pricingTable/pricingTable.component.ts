@@ -41,7 +41,7 @@ export class pricingTableComponent {
     public pt_Id: number;
     public PRC_ST: any;
     public ps_title: any; pt_title: any; pt_type: any; is_hybrid_ps: any;
-    passed_validation: any; wf_Stage: string;
+    ps_passed_validation: any; wf_Stage: string; pt_passed_validation: any;
     private isPTETab = false;
     private isDETab = false;
     private selLnav = 'PTE';
@@ -107,8 +107,9 @@ export class pricingTableComponent {
                 this.pt_title = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].TITLE;
                 this.pt_type = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].OBJ_SET_TYPE_CD;
                 this.wf_Stage = this.contractData.PRC_ST[contractModel.ps_index].WF_STG_CD;
-                this.passed_validation = this.contractData.PRC_ST[contractModel.ps_index].PASSED_VALIDATION;
+                this.ps_passed_validation = this.contractData.PRC_ST[contractModel.ps_index].PASSED_VALIDATION;
                 this.is_hybrid_ps = this.contractData.PRC_ST[contractModel.ps_index].IS_HYBRID_PRC_STRAT;
+                this.pt_passed_validation = this.contractData?.PRC_ST[contractModel.ps_index]?.PRC_TBL[contractModel.pt_index].PASSED_VALIDATION
                 this.enableDealEditorTab(isRedirect);
             }
             //defaulting the PTE page to load the images
@@ -196,6 +197,16 @@ export class pricingTableComponent {
                 else { this.isDETab = false; this.isPTETab = true }
             }
         } else { this.isDETabEnabled = false;  }
+    }
+
+    refreshContractData(data: any) {
+        if (data != null && data != undefined) {
+            if (data.contractData != null && data.contractData != undefined) {
+                this.contractData = data.contractData;
+            }
+            this.ps_passed_validation = data.PS_Passed_validation;
+            this.pt_passed_validation = data.PT_Passed_validation;
+        }
     }
 
     ngOnInit() {

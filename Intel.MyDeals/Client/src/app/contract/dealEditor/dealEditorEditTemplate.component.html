@@ -47,7 +47,9 @@
                           placement="bottom"
                           container="body"
                           name="dealDate"
-                          #dealDate="ngModel">
+                          #dealDate="ngModel"
+                         calendarType="classic"
+                      >
         </kendo-datepicker>
 </div>
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
@@ -139,6 +141,14 @@
                         [ngModel]="in_DataItem[in_Field_Name]"
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"
                         (valueChange)="valueChange(in_DataItem, in_Field_Name)">
+    </kendo-dropdownlist>
+</div>
+<div *ngIf="in_Field_Name == 'EXPIRE_FLG'">
+    <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
+                        [(ngModel)]="in_DataItem[in_Field_Name]"
+                        (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                        textField="text"
+                        valueField="value">
     </kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'QLTR_BID_GEO'">

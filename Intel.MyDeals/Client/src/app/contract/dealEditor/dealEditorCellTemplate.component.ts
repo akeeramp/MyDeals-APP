@@ -300,7 +300,10 @@ export class dealEditorCellTemplateComponent {
         return false;
     }
     uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {
-        return GridUtil.uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey)
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        if (data[field][dimKey] != undefined && data[field] != null && data[field][dimKey] != "" && data[field][dimKey] != "No YCS2" && data[field][dimKey] != "No CAP")
+            data[field][dimKey] = this.currencyPipe.transform(parseFloat(data[field][dimKey]), 'USD', 'symbol', '1.2-2')
+        return GridUtil.uiMoneyDatesControlWrapper(data, field, startDt, endDt, dimKey)
     }
     getProductSid(dimProduct, dimKey) {
         return GridUtil.getProductMbrSid(dimProduct, dimKey);

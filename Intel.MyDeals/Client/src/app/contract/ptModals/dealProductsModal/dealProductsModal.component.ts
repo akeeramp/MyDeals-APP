@@ -65,7 +65,7 @@ export class dealProductsModalComponent {
             return;
         };
         var noCAPProducts = this.copyOfData.filter(function (x) {
-            return x.CAP === null || x.CAP == "No CAP";
+            return x.CAP === null || x.CAP == "No CAP" || x.CAP === "";
         });
         if (noCAPProducts.length == 0) {
             this.clipboard.copy("No prodcuts were found without CAP");
@@ -112,9 +112,3 @@ export class dealProductsModalComponent {
         }
     }
 }
-angular
-    .module("app")
-    .directive(
-        "dealProducts",
-        downgradeComponent({ component: dealProductsModalComponent })
-    );
