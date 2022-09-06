@@ -52,24 +52,36 @@
                         <div class="col">
                             <p>Filter by product</p>
                             <div *ngFor="let curRow of selRowIssues;let i = index">
-                                <span>{{curRow.name}}</span>  <span>{{curRow.len}}</span> 
+                                <span>{{curRow.name}}</span> -- <span>{{curRow.len}}</span> 
                            </div>
                         </div>
                     </div>
                     <div class="row" *ngIf="selRowLvl.length>0">
                         <div class="col">
                             <p>Filter by product level</p>
-                            <div *ngFor="let curRow of selRowLvl;let i = index">
-                                <span>{{curRow}}</span>
-                           </div>
+                            <kendo-treeview [nodes]="selRowLvl"
+                            [(selectedKeys)]="selPrdLvlKeys"
+                            textField="name"
+                            [hasChildren]="false"
+                            selectBy="value"
+                            [kendoTreeViewSelectable]="selection"
+                            (selectedKeysChange)="onPrdChange($event,'PRD_ATRB_SID')"
+                             >
+                            </kendo-treeview>
                         </div>
                     </div>
                     <div class="row" *ngIf="selRowCategories.length>0">
                         <div class="col">
                             <p>Filter by product vertical</p>
-                            <div *ngFor="let curRow of selRowCategories;let i = index">
-                                <span>{{curRow}}</span>
-                           </div>
+                            <kendo-treeview [nodes]="selRowCategories"
+                            [(selectedKeys)]="selPrdVerKeys"
+                            textField="name"
+                            [hasChildren]="false"
+                            selectBy="value"
+                            [kendoTreeViewSelectable]="selection"
+                            (selectedKeysChange)="onPrdChange($event,'PRD_CAT_NM')"
+                             >
+                            </kendo-treeview>
                         </div>
                     </div>
                 </div>
@@ -82,7 +94,11 @@
                     </kendo-grid-column> -->
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered">
                         <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
-                            {{value}} <strong> <i class='intelicon-arrow-back-left skyblue pl10'></i> Can't find what you are looking for? Use the <button (click)="openProdSel(value)"> Product Selector</button></strong>
+                            {{value}}
+                                <!-- this logic is yet to build dont uncomment  -->
+                                <!--  <strong> <i class='intelicon-arrow-back-left skyblue pl10'></i> 
+                                Can't find what you are looking for? Use the <button (click)="openProdSel(value)">
+                                     Product Selector</button></strong> -->
                          </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" >

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { distinct, filterBy, FilterDescriptor } from '@progress/kendo-data-query';
 import { FilterService } from '@progress/kendo-angular-grid';
+import * as _ from 'underscore';
 
 @Component({
     selector: 'multicheck-filter',
@@ -81,21 +82,30 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     }
 
     public onSelectionChange(item, li) {
+      let filter=[];
         if (this.value.some(x => x === item)) {
             this.value = this.value.filter(x => x !== item);
         } else {
             this.value.push(item);
         }
-
+        _.each(this.value,itm=>{
+         let operator='eq'
+          if(itm.length==0){
+            operator='isempty'
+          }
+          else if (itm==null)(
+            operator='isnull'
+          )
+          filter.push({
+            field: this.field,
+            operator: operator,
+            value: itm
+          })
+        });
         this.filterService.filter({
-            filters: this.value.map(value => ({
-                field: this.field,
-                operator: this.operator ? this.operator : "eq",
-                value
-            })),
+            filters: filter,
             logic: 'or'
         });
-
         this.onFocus(li);
     }
 

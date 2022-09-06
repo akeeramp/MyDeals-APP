@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { logger } from "../../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -7,6 +7,7 @@ import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { MatDialog } from '@angular/material/dialog';
+import { SelectableSettings } from '@progress/kendo-angular-treeview';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class ProductCorrectorComponent {
       group: [{ field: "USR_INPUT" }],
       // Initial filter descriptor
       filter: {
-          logic: "and",
+          logic: "or",
           filters: [],
       },
   };
@@ -75,7 +76,19 @@ export class ProductCorrectorComponent {
   private curProd:string='';
   private selectedProducts:any[]=[];
   private curSelProducts:any[]=[];
+  private selection: SelectableSettings = { mode: "multiple" };
+  private selPrdLvlKeys:any[]=[];
+  private selPrdVerKeys:any[]=[];
 
+  prdLvlDecoder(indx:any) {
+    if (indx === 7003) return "Product Vertical";
+    if (indx === 7004) return "Brand";
+    if (indx === 7005) return "Family";
+    if (indx === 7006) return "Processor #";
+    if (indx === 7007) return "L4";
+    if (indx === 7008) return "Material Id";
+    return indx;
+  }
   loadGrid(){
     if(this.ProductCorrectorData.DuplicateProducts)
     _.each(this.ProductCorrectorData.DuplicateProducts,(val,key)=>{
@@ -100,20 +113,37 @@ export class ProductCorrectorComponent {
     this.numIssueRows=this.curRowIssues.length;
     this.selGridResult=this.gridResult[0].data;
     this.selGridData=this.gridData[0].data;
-    this.selRowLvl=this.curRowLvl[0].items;
-    this.selRowCategories=this.curRowCategories[0].items;
+    this.selRowLvl=this.getSelRowTree(this.curRowLvl[0].items);
+    this.selRowCategories=this.getSelRowTree(this.curRowCategories[0].items);
     this.selRowIssues=[this.curRowIssues[0]];
     this.totRows=_.keys(this.ProductCorrectorData.ProdctTransformResults).length;
   }
+  getSelRowTree(items:any[]){
+    let curLvl=[];
+    _.each(items,(val,key)=>{
+      curLvl.push({
+        id:key,
+        name:this.prdLvlDecoder(val),
+        value:val,
+        selected:false
+      })
+    })
+    return curLvl;
+  }
   selectRow(key:string){
+    //clearing the gid and prod filter incase if we searched any
+    this.state.filter.filters=[];
+    this.selPrdLvlKeys=[];
+    this.selPrdVerKeys=[];
+
     let selItem=_.findWhere(this.curRowIssues,{name:key});
     this.curProd=selItem.name;
     this.selRowIssues=[selItem];
     this.rowDCId=selItem.DCID;
     this.selGridResult=_.findWhere(this.gridResult,{name:key}).data;
     this.selGridData=_.findWhere(this.gridData,{name:key}).data;
-    this.selRowLvl=_.findWhere(this.curRowLvl,{name:key}).items;
-    this.selRowCategories=_.findWhere(this.curRowCategories,{name:key}).items
+    this.selRowLvl=this.getSelRowTree(_.findWhere(this.curRowLvl,{name:key}).items);
+    this.selRowCategories=this.getSelRowTree(_.findWhere(this.curRowCategories,{name:key}).items);
     this.curSelProducts=_.findWhere(this.selectedProducts,{name:key});
   }
   dataStateChange(state: DataStateChangeEvent): void {
@@ -159,6 +189,19 @@ export class ProductCorrectorComponent {
   }
   onSave(): void {
     this.dialogRef.close(this.selectedProducts);
+  }
+  onPrdChange(evt:any,field:string){
+    this.state.filter.filters=[];
+    if(evt && evt.length && evt.length >0 && field){
+      _.each(evt,itm=>{
+        this.state.filter.filters.push({
+          field: field,
+          operator: 'eq',
+          value: itm
+        })
+      });
+    }
+    this.selGridData = process(this.selGridResult, this.state);
   }
   ngOnInit() {
     this.ProductCorrectorData=this.data.ProductCorrectorData;

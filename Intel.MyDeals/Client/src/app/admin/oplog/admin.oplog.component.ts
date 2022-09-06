@@ -50,7 +50,6 @@ export class OpLogComponent {
             this.opLogSvc.getOpaqueLog(logDate)
                 .subscribe(response => {
                     this.opLogData = response;
-                    this.logDetails = '';
                 }, err => {
                     this.loggerSvc.error("Error in getting Opaque Log", err);
                 });
@@ -69,10 +68,10 @@ export class OpLogComponent {
                     "'": '&#39;',
                     "/": '&#x2F;'
                 };
-                response.data = String(response.data).replace(/[&<>"'\/]/g, function (s) {
+                response = String(response).replace(/[&<>"'\/]/g, function (s) {
                     return entityMap[s];
                 });
-                this.logDetails = response.data;
+                this.logDetails = response;
             }, err => {
                     this.loggerSvc.error("Error in getting Opaque Log.", err);
             });
