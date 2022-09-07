@@ -164,6 +164,8 @@ export class MeetCompContractUtil {
                 });
                 if (indx > -1) {
                     dataItems[j]["errObj"] = errorList[indx]
+                }else{
+                    dataItems[j]["errObj"] = {};
                 }
             }
         }

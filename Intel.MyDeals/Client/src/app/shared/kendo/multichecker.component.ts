@@ -89,13 +89,12 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             this.value.push(item);
         }
         _.each(this.value,itm=>{
-         let operator='eq'
-          if(itm.length==0){
-            operator='isempty'
-          }
-          else if (itm==null)(
-            operator='isnull'
-          )
+         let operator='eq';
+         if (itm == null) {
+           operator = "isnull";
+         } else if (itm != undefined && itm.length == 0) {
+           operator = "isempty";
+         } 
           filter.push({
             field: this.field,
             operator: operator,
