@@ -561,7 +561,7 @@ export class GridUtil {
                     msgClass = "isSoftWarnCell";
                 }
             }
-            var capText = '<span class="ng-binding boldFont">' + passedData[field][dimKey] + '</span>';
+            var capText = '<span class="ng-binding boldFont">' + new CurrencyPipe('en-us').transform(parseFloat(passedData[field][dimKey]), 'USD', 'symbol', '1.2-2') + '</span>';
 
             if (fieldVal !== "" && fieldVal.indexOf("-") > -1) {
                 msg = "CAP price " + fieldVal + " cannot be a range.";

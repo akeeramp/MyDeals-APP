@@ -129,7 +129,7 @@ export class PTE_CellChange_Util {
                     currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_SETTLEMENT_PARTNER + ',' + 'no-edit';
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + ' ' + ',' + 'no-edit';
+                    currentstring = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
                 }
                 updateRows.push(currentstring.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');

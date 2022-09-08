@@ -44,7 +44,7 @@
                 <span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>&nbsp;
                 <button class='btn btn-sm btn-primary lnk btnSelect' *ngIf="isSelectAll" (click)="selectAllOvlp(true)">Select All</button>&nbsp;
                 <button class='btn btn-sm btn-primary lnk btnSelect' *ngIf="!isSelectAll" (click)="selectAllOvlp(false)">Clear All</button>&nbsp;
-                <button class='btn btn-sm  btn-primary lnk btnYes btnselectAccept'><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </button>
+                <button class='btn btn-sm  btn-primary lnk btnYes btnselectAccept' (click)="acceptSelectAll(false)"><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </button>
             </div>
         </ng-template>
     </kendo-grid-column>
@@ -52,7 +52,7 @@
         <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
             <div *ngIf="getUIelement(value)">
                 <div *ngIf="isdealEndDateNeedChange">
-                    <!--<input type='checkbox' (click)="selectCheckBox(value)" class='check with-font' id='chkGrp" +value+ "'/>-->
+                    <input type='checkbox' (click)="selectCheckBox(value)" [checked]="is_selected" class='check with-font' id='chkGrp" +value+ "' />
                     <span class="grpTitle" style='font-weight:bold'>{{value}}</span><i class='intelicon-arrow-back-left skyblue pl10'></i>
                     <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;
                     <button class='btn btn-sm btn-primary' (click)="acceptOvlp(value,'Y')">Yes</button>
@@ -69,7 +69,7 @@
                     <span class="grpTitle" style='font-weight:bold'>{{value}} </span>
                     <i class='intelicon-arrow-back-left skyblue pl10'></i>
                     <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;
-                    <button class='btn btn-sm btn-primary' (click)="acceptOvlp(value,'Y')">Undo</button>
+                    <button class='btn btn-sm btn-primary' (click)="acceptOvlp(value,'N')">Undo</button>
                 </div>
                 <div *ngIf="isReqChange">
                     <span class="grpTitle" style='font-weight:bold'>{{value}}</span>

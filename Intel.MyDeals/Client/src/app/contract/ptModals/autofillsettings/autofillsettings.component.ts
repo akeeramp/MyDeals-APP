@@ -201,8 +201,7 @@ export class AutoFillComponent {
         this.dialogRef.close();
     }
     onSave() {
-        this.isLoading = true;
-        this.setBusy("Saving...", "Saving your data...", "Info", false);
+        
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
         this.opValidMsg = "";
@@ -212,12 +211,20 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
             this.opValidMsg =
                 "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be filled out.  Pick only one.";
-        } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
+        }else if (this.autofillData.isVistexHybrid != null &&
+            this.autofillData.isVistexHybrid === true &&
+            (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "") ||
+            (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null)) {
+            this.opValidMsg =
+                "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
+        }else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
             this.opValidMsg = "Overarching Maximum Dollars must be blank or > 0";
         } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
             this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
         } else {
+            this.isLoading = true;
+            this.setBusy("Saving...", "Saving your data...", "Info", false);
             if (this.currPricingTable == null) {
                 this.addPricingTable();
             } else {                

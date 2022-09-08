@@ -837,6 +837,8 @@ export class PTE_Validation_Util {
             var testMaxAmtCount = 0;
             var testMaxVolValues = [];
             var testMaxVolCount = 0;
+            var rebateMaxAmt;
+            var rabateMaxVOL;
             _.each(data, (item) => {
                 // Are both values populated on this item?
                 if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") &&
@@ -867,18 +869,30 @@ export class PTE_Validation_Util {
                 if (item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL === "0") {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero', curPricingTable);
                 }
+                if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) > 1) {
+                    rebateMaxAmt = item.REBATE_OA_MAX_AMT
+                }
+                else if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) == 1) {
+                    rebateMaxAmt = item.REBATE_OA_MAX_AMT
+                }
                 // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
                 //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
-                if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
+                if (rebateMaxAmt !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
                     testMaxAmtCount++;
-                    if (item.REBATE_OA_MAX_AMT !== undefined && testMaxAmtValues.indexOf(item.REBATE_OA_MAX_AMT.toString()) < 0) {
-                        testMaxAmtValues.push(item.REBATE_OA_MAX_AMT.toString());
+                    if (rebateMaxAmt !== undefined && testMaxAmtValues.indexOf(rebateMaxAmt.toString()) < 0) {
+                        testMaxAmtValues.push(rebateMaxAmt.toString());
                     }
                 }
-                if (item.REBATE_OA_MAX_VOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
+                if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) > 1) {
+                    rabateMaxVOL = item.REBATE_OA_MAX_VOL
+                }
+                else if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) == 1) {
+                    rabateMaxVOL = item.REBATE_OA_MAX_VOL
+                }
+                if (rabateMaxVOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                     testMaxVolCount++;
-                    if (item.REBATE_OA_MAX_VOL !== undefined && testMaxVolValues.indexOf(item.REBATE_OA_MAX_VOL.toString()) < 0) {
-                        testMaxVolValues.push(item.REBATE_OA_MAX_VOL.toString());
+                    if (rabateMaxVOL !== undefined && testMaxVolValues.indexOf(rabateMaxVOL.toString()) < 0) {
+                        testMaxVolValues.push(rabateMaxVOL.toString());
                     }
                 }
             });

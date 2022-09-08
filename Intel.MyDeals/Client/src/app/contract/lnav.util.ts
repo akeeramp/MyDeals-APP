@@ -89,10 +89,20 @@ export class lnavUtil {
         if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
         if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
         if (!!nptDefaults["REBATE_OA_MAX_VOL"] && pt["REBATE_OA_MAX_VOL"] != "") {
-            nptDefaults["REBATE_OA_MAX_VOL"].value = Number(pt["REBATE_OA_MAX_VOL"]);
+            if (pt["REBATE_OA_MAX_VOL"] == null) {
+                nptDefaults["REBATE_OA_MAX_VOL"].value = null;
+            }
+            else {
+                nptDefaults["REBATE_OA_MAX_VOL"].value = Number(pt["REBATE_OA_MAX_VOL"]);
+            }
         }
         if (!!nptDefaults["REBATE_OA_MAX_AMT"] && pt["REBATE_OA_MAX_AMT"] != "") {
-            nptDefaults["REBATE_OA_MAX_AMT"].value = Number(pt["REBATE_OA_MAX_AMT"]);
+            if (pt["REBATE_OA_MAX_AMT"] == null) {
+                nptDefaults["REBATE_OA_MAX_AMT"].value = null;
+            }
+            else {
+                nptDefaults["REBATE_OA_MAX_AMT"].value = Number(pt["REBATE_OA_MAX_AMT"]);
+            }
         }
         if (!!nptDefaults["FLEX_ROW_TYPE"]) nptDefaults["FLEX_ROW_TYPE"].value = pt["FLEX_ROW_TYPE"];
         //not sure if necessary, javascript pass by value/reference always throwing me off. :(

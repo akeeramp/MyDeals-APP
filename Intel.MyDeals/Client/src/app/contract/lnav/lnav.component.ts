@@ -593,7 +593,12 @@ export class lnavComponent {
             this.custId = this.contractData.CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
         }
         if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT) {
-            isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+            if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === true) {
+                isVistexHybrid = this.curPricingStrategy.IS_HYBRID_PRC_STRAT
+            }
+            else {
+                isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
+            }
         }
         else {
             isVistexHybrid = (ps.IS_HYBRID_PRC_STRAT === "1" ? true : false);

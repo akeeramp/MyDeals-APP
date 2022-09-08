@@ -29,5 +29,9 @@ export class overLappingcheckDealService {
         return this.httpClient.get(apiUrl);
     }
 
+    public updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + YCS2_OVERLAP_OVERRIDE;
+        return this.httpClient.post(apiUrl, PRICING_TABLES_ID);
+    }
 
 }
