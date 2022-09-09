@@ -8,12 +8,11 @@ import * as _ from "underscore";
 import * as moment from 'moment';
 import * as lodash from "lodash";
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
-
 import { productSelectorService } from "./productselector.service";
 import { logger } from "../../../shared/logger/logger";
-
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
+import List from "linqts/dist/src/list";
 
 @Component({
     selector: 'product-selector',
@@ -71,6 +70,7 @@ export class ProductSelectorComponent {
     private showSearchResults: boolean = false;
     private searchItems = [];
     private searchProcessed = false;
+    private excludeProductMessage = "";
     private state: State = {
         skip: 0,
         take: 25,
@@ -108,7 +108,7 @@ export class ProductSelectorComponent {
     private excludeMode: boolean = false;
     private suggestedProduct: any = { 'mode': 'manual', 'prodname': "" };
     private showTree: boolean = false;
-    private gridColumnsSuggestion: Array<gridCol> = ProdSel_Util.gridColsSuggestion;
+    private gridColumnsSuggestion: Array<gridCol> = ProdSel_Util.gridColsSuggestion(this.isGA);
     private gridColumnsProduct: Array<gridCol> = ProdSel_Util.gridColProduct(this.isGA);
     private selectAllState: SelectAllCheckboxState = 'unchecked';
     private prdSelection: Array<any> = [];
@@ -118,9 +118,12 @@ export class ProductSelectorComponent {
     private showSuggestions = false;
     private suggestionText = "";
     private suggestedProducts = [];
-    private suggestList = this.searchProduct();
+    private productOptions;
+    private curRowIssues = [];
+    private curRowCategories = [];
+    private curRowLvl = [];
 
-    onNoClick(): void {
+    cancel(): void {
         this.dialogRef.close();
     }
     getProductSelection() {
@@ -133,6 +136,15 @@ export class ProductSelectorComponent {
         };
         this.prodSelSVC.GetProductSelectorWrapper(dtoDateRange).subscribe((result: any) => {
             this.isLoading = false;
+            if (this.pricingTableRow.OBJ_SET_TYPE_CD == "DENSITY") {
+                var res = [];
+                for (var i = 0; i < result.ProductSelectionLevels.length; i++) {
+                    if (result.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('NAND') > -1 || result.ProductSelectionLevels[i].DEAL_PRD_TYPE.indexOf('SSD') > -1) {
+                        res.push(result.ProductSelectionLevels[i]);
+                    }
+                }
+                result.ProductSelectionLevels = res;
+            }
             this.productSelectionLevels = result.ProductSelectionLevels;
             this.productSelectionLevelsAttributes = result.ProductSelectionLevelsAttributes;
             this.getItems(null);
@@ -142,7 +154,8 @@ export class ProductSelectorComponent {
     }
     loadPTSelctor() {
         //setting up to a dealtype variable since using in multiple places
-        this.dealType = this.data.curPricingTable.OBJ_SET_TYPE_CD
+        this.dealType = this.data.curPricingTable.OBJ_SET_TYPE_CD;
+        this.isTender = this.data.contractData.IS_TENDER;
         this.splitProducts = (this.isTender == true && this.dealType === "ECAP") ? true : false;
         this.enableSplitProducts = (this.dealType != "KIT");
         //condition for empty row, directly clicking prodselector
@@ -184,11 +197,10 @@ export class ProductSelectorComponent {
     }
     getItems(item: any) {
         this.selectedItems = []; // Clear the selected items, when user moves around drill levels
-
         if (this.selectedPathParts.length === 0) {
             this.showTree = false;
             let markLevel1 = _.uniq(this.productSelectionLevels, 'MRK_LVL1');
-            //filter the items to remove emty level
+            //filter the items to remove empty level
             markLevel1 = _.filter(markLevel1, (i) => {
                 return i.MRK_LVL1 != null
                     && i.MRK_LVL1 != ""
@@ -526,6 +538,26 @@ export class ProductSelectorComponent {
         };
         return isValid
     }
+
+    // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
+    isValidCapDetails(productJson, showErrorMesssage?) {
+        if (this.enableMultipleSelection) {
+            return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
+        }
+        let errorMessage = "";
+        let cap = (productJson.CAP != null) ? productJson.CAP.toString() : 'NO CAP';
+        if (cap.toUpperCase() == "NO CAP") {
+            errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+        }
+        if (cap.indexOf('-') > -1) {
+            errorMessage = "CAP price " + cap + " cannot be a range.";
+        }
+        if (!showErrorMesssage) {
+            return errorMessage == "" ? false : true;
+        } else {
+            return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
+        }
+    }
     selectProduct(product) {
         let item = angular.copy(product);
         item.selected = event.target['checked'];
@@ -568,10 +600,13 @@ export class ProductSelectorComponent {
             }
         }
     }
-    searchProduct() {
+    async searchProduct(isSuggestProduct?) {
         let columnType;
         if (this.userInput == "") return [];
-
+        if (isSuggestProduct) {
+            this.drillDownPrd = this.userInput;
+            this.userInput = this.userInput;
+        }
         if (this.userInput.indexOf('"') >= 0) {
             columnType = "EPM_NM";
             this.userInput = this.userInput.replace(/["]/g, "");
@@ -590,8 +625,8 @@ export class ProductSelectorComponent {
             // Send 1 if EPM_NM
         }];
 
-        this.prodSelSVC.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, this.dealType)
-            .subscribe((response) => {
+        await this.prodSelSVC.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, this.dealType)
+            .subscribe(response => {
                 this.selectPath(0, true);
                 this.disableSelection = (!!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; //"Nand (SSD)", "DCG Client SSD", "DCG DC SSD"
                 if (this.enableMultipleSelection || (((response[0].PRD_CAT_NM == 'NAND (SSD)'
@@ -601,14 +636,14 @@ export class ProductSelectorComponent {
                     this.suggestionText = response.length === 0 ? "No products found." : "Product(s) found for \"" + this.userInput + "\"";
                     this.suggestedProducts = response;
                     this.showSuggestions = true;
-                    //this.initSuggestionGrid();
+                    this.initSuggestionGrid();
                     return;
                 }
                 if (this.disableSelection) {
                     this.suggestionText = "No product found for \"" + this.userInput + "\". Search resulted following products:"
                     this.suggestedProducts = response;
                     this.showSuggestions = true;
-                    //this.initSuggestionGrid();
+                    this.initSuggestionGrid();
                 } else {
                     this.showSuggestions = false;
                     this.processProducts(response);
@@ -670,12 +705,27 @@ export class ProductSelectorComponent {
         }
         return;
     }
+    changeProductOption(userInput) {
+        if (userInput === "") {
+            return [];
+        } else {
+            userInput = userInput.replace(/["]/g, "");
+            var dto = {
+                filter: userInput,
+                mediaCode: this.pricingTableRow.PROD_INCLDS,
+                startDate: this.pricingTableRow.START_DT,
+                endDate: this.pricingTableRow.END_DT,
+                getWithFilters: true
+            };
+            this.prodSelSVC.GetSearchString(dto).subscribe(response => {
+                this.productOptions = response;
+            }, error => {
+                this.loggerSvc.error("Unable to get product suggestions.", '', error);
+            });
+        }
+    }
     selectsearchItem(item) {
         if (item.level == "VERTICAL") {
-            //let markLevel = $filter('where')(vm.productSelectionLevels, {
-            //    PRD_CAT_NM: item.name,
-            //    PRD_ATRB_SID: 7003,
-            //});
             let markLevel = _.where(this.productSelectionLevels, {
                 PRD_CAT_NM: item.name,
                 PRD_ATRB_SID: 7003,
@@ -791,7 +841,6 @@ export class ProductSelectorComponent {
 
             this.gridData = process(products, this.state);
             this.searchProcessed = true;
-            //dataSourceProduct.read();
             this.searchItems = [];
             this.showSearchResults = true;
             setTimeout(() => {
@@ -845,7 +894,6 @@ export class ProductSelectorComponent {
         }
         else if (mode == 'exclude') {
             this.excludedProducts = this.excludedProducts.filter(product => product.HIER_VAL_NM != item.HIER_VAL_NM);
-            //this.addedProducts.push(item);
         }
     }
     checkForBlank(val: string) {
@@ -887,10 +935,90 @@ export class ProductSelectorComponent {
             this.items = [];
             this.gridResult = [];
             this.showLevel4(product);
-            //dataSourceProduct.read();
         } else {
             this.getItems(item);
         }
+    }
+    initSuggestionGrid() {
+        this.curRowIssues = [];
+        this.curRowCategories = [];
+        this.curRowLvl = [];
+        let suggestions = _.unique(this.suggestedProducts, 'USR_INPUT');
+        for (let x = 0; x < suggestions.length; x++) {
+            let prods = _.where(this.suggestedProducts, { 'USR_INPUT': suggestions[x].USR_INPUT });
+            let cnt = prods.length;
+            this.curRowIssues.push({
+                "id": x,
+                "name": suggestions[x].USR_INPUT,
+                "value": suggestions[x].USR_INPUT,
+                "selected": false,
+                "status": 'Issue',
+                "cnt": cnt
+            });
+        }
+        let curRowCategories = _.unique(this.suggestedProducts, 'PRD_CAT_NM');
+        for (let x = 0; x < curRowCategories.length; x++) {
+            this.curRowCategories.push({
+                "id": x,
+                "name": curRowCategories[x].PRD_CAT_NM,
+                "value": curRowCategories[x].PRD_CAT_NM,
+                "selected": false
+            });
+        }
+        var curRowLvl = _.unique(this.suggestedProducts, 'PRD_ATRB_SID');
+        for (let x = 0; x < curRowLvl.length; x++) {
+            this.curRowLvl.push({
+                "id": x,
+                "name": this.prdLvlDecoder(curRowLvl[x].PRD_ATRB_SID),
+                "value": curRowLvl[x].PRD_ATRB_SID,
+                "selected": false
+            });
+        }
+        this.applyFilterAndGrouping();
+    }
+    prdLvlDecoder(indx) {
+        if (indx === 7003) return "Product Vertical";
+        if (indx === 7004) return "Brand";
+        if (indx === 7005) return "Family";
+        if (indx === 7006) return "Processor #";
+        if (indx === 7007) return "L4";
+        if (indx === 7008) return "Material Id";
+        return "";
+    }
+    applyFilterAndGrouping() {
+        // Now apply grouping
+        let group = [];
+        group.push({ field: "USR_INPUT", dir: "asc" });
+
+        // Now apply filtering
+        let filters = [];
+        this.buildFilterGroup("USR_INPUT", filters, this.curRowIssues);
+        this.buildFilterGroup("PRD_CAT_NM", filters, this.curRowCategories);
+        this.buildFilterGroup("PRD_ATRB_SID", filters, this.curRowLvl);
+
+        setTimeout(() => {
+            this.toggleColumnsWhenEmpty(this.suggestedProducts, 'prodSuggestions');
+        });
+    }
+    buildFilterGroup(field, masterFilters, data) {
+        let filters = [];
+        const dataList = new List<any>(data);
+        let filterItem = dataList.Where(x => { return (x.selected); }).ToArray();
+        for (let f = 0; f < filterItem.length; f++) {
+            filters.push({ field: field, operator: "eq", value: filterItem[f].value });
+        }
+        if (filters.length === 0) return;
+
+        masterFilters.push({
+            logic: "or",
+            filters: filters
+        });
+    }
+    clickFilter() {
+        this.applyFilterAndGrouping();
+    }
+    clearSearch() {
+        this.selectPath(0, false);
     }
     // When user clicks on the breadcrumb
     selectPath(index: number, dontClearSearch?) {
@@ -912,6 +1040,21 @@ export class ProductSelectorComponent {
             this.drillDownPrd = "Select";
             this.showSuggestions = true;
         }
+    }
+
+    // Toggle the show Tree
+    toggleShowTree(showSelectMenu) {
+        this.selectPath(0);
+        if (showSelectMenu) {
+            this.showTree = false;
+            return;
+        }
+        this.showTree = !this.showTree;
+        this.gridResult = [];
+        this.resetexcludeProductMessage();
+    }
+    resetexcludeProductMessage() {
+        this.excludeProductMessage = "< click on selected products to see Deal Products (L4's) >"
     }
     showLevel4(product) {
         // To get all the L4's under a higher product hierarchy for a program or voltier deal treat it as Front END YCS2 deal
@@ -940,7 +1083,6 @@ export class ProductSelectorComponent {
                 return x;
             });
             //this.searchProcessed = true;
-            //dataSourceProduct.read();
             setTimeout(() => {
                 this.toggleColumnsWhenEmpty(this.gridData, 'prodGrid');
             });
@@ -952,7 +1094,7 @@ export class ProductSelectorComponent {
         let noOfValidItem = (this.isTender == true && this.dealType === "ECAP" && this.splitProducts != true) ? 1 : 10; //Added Tender ECAP Rules
         if (this.dealType !== "ECAP" && this.dealType !== "KIT") {
             // Get unique product types
-            let existingProdTypes = _.uniq(this.addedProducts, 'PRD_CAT_NM'); //$filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
+            let existingProdTypes = _.uniq(this.addedProducts, 'PRD_CAT_NM');
             existingProdTypes = existingProdTypes.map(function (elem) {
                 return elem.PRD_CAT_NM;
             });
@@ -1076,7 +1218,6 @@ export class ProductSelectorComponent {
             'splitProducts': this.splitProducts, 'validateSelectedProducts': pricingTableSysProducts,
             'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
         };
-        //$uibModalInstance.close(productSelectorOutput);
         this.dialogRef.close(productSelectorOutput);
     }
 
@@ -1088,7 +1229,6 @@ export class ProductSelectorComponent {
 
         let filtered = items;
         // L1 products will be primary irrespective of CAP and CPU/CS. Within L1 products with highest CAP will be primary. This applies to L2 as well.
-        //filtered = $filter('orderBy')(filtered, ['-HAS_L1', '-HAS_L2', parseFloat]);
         filtered = lodash.orderBy(filtered, ['-HAS_L1', '-HAS_L2', parseFloat(items)]);
         return filtered;
     }

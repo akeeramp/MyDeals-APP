@@ -4,237 +4,362 @@
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
 
 <div class="product-selector modal-content">
-    <div class="row">
-        <div class="col">
-            <div class="prodSelector modal-header">
-                <div class="row col-md-12">
-                    <div class="col-md-4 col-sm-4 col-xs-4">
-                        <p class="prodHeader cursorArea">
-                            Product Selector
-                            <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
-                        </p>
-                    </div>
-                    <div class="col-md-2 col-sm-2 col-xs-2"></div>
-                    <div class="col-md-6 col-sm-6 col-xs-6 prodSelectorSearch">
-                        <div class="modalCloseIcon fr">
-                            <i role="button" title="Close" class="intelicon-close-max" style="position:relative" (click)="onNoClick()"></i>
-                        </div>
-                        <button class="btn btn-default prdBtn fr" (click)="clearSearch()" style="margin: 0 0 0 8px;">
-                            Clear
-                        </button>
-                        <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
-                            Search
-                        </button>
-                        <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput"
-                                            [data]="suggestList">
-                        </kendo-autocomplete>
-
-                    </div>
+    <div class="prodSelector modal-header">
+        <div class="row" style="width:100%">
+            <div class="col-md-4 col-sm-4 col-xs-4">
+                <p class="prodHeader cursorArea">
+                    Product Selector
+                    <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
+                </p>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="padding-top:8px;"></div>
+            <div class="col-md-6 col-sm-6 col-xs-6 prodSelectorSearch">
+                <div class="modalCloseIcon fr">
+                    <i role="button" title="Close" class="intelicon-close-max" style="position:relative" (click)="cancel()"></i>
                 </div>
+                <button class="btn btn-default prdBtn fr" (click)="clearSearch()" style="margin: 0 0 0 8px;">
+                    Clear
+                </button>
+                <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
+                    Search
+                </button>
+                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput"
+                                    [suggest]="true" [data]="productOptions" (ngModelChange)="changeProductOption(userInput)"
+                                    valueField="Name">
+                </kendo-autocomplete>
 
-                <!-- kendo breadcrumb implementation this is not exact breadcrumb but making in the similar way -->
-                <div class="row breadCrumbWrapper" style="position:absolute; padding-top:100px; width:1255px">
-                    <ul class="productSelectorpath breadcrumb">
-                        <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
-                        <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
-                            <li *ngIf="p.name != 'NA'"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
-                        </ng-container>
-                    </ul>
-                </div>
             </div>
         </div>
+
+        <!-- kendo breadcrumb implementation this is not exact breadcrumb but making in the similar way -->
+        <div class="row breadCrumbWrapper" style="position: absolute; margin-top: 100px; width: 1255px">
+            <ul class="productSelectorpath breadcrumb">
+                <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
+                <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
+                    <li *ngIf="p.name != 'NA'"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
+                </ng-container>
+            </ul>
+        </div>
+        <!--<div *ngIf="showTree" class="textProdSelector" style="margin-bottom:17px;margin-top:4px;">
+            <i class="fa fa-arrow-circle-left" role="button" (click)="ToggleShowTree(true)" title="Go to Select menu"></i> Exclude Products under : {{excludeProductMessage}}
+        </div>-->
     </div>
-    <div class="row">
-        <div class="col">
-            <div style="height:80%;padding-top: 15px;">
-                <div class="prodSelector modal-body">
-                    <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
-                        <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                                    [resizable]="true" (dataStateChange)="dataStateChange($event)">
-                            <kendo-grid-column width="65px" [columnMenu]="false">
-                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-                                    <div class='dealTools'>
-                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
-                                    </div>
-                                </ng-template>
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div class='dealTools'>
-                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
-                                    </div>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <ng-template ngFor [ngForOf]="gridColumnsProduct" let-column>
-                                <kendo-grid-column [headerClass]="{ 'headerClass': true }" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden" [width]="column.width">
-                                    <!-- Link for processor number -->
-                                    <div *ngIf="column.field == 'PCSR_NBR'">
-                                        <ng-template kendoGridCellTemplate let-dataItem>
-                                            <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
-                                            <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
-                                        </ng-template>
-                                    </div>
-                                    <!-- Link for deal product name -->
-                                    <div *ngIf="column.field == 'DEAL_PRD_NM'">
-                                        <ng-template kendoGridCellTemplate let-dataItem>
-                                            <a *ngIf='allowMMSelection(dataItem)' (click)='gridSelectItem(dataItem)'>{{dataItem.DEAL_PRD_NM}}</a>
-                                            <div *ngIf='!allowMMSelection(dataItem)'>{{dataItem.DEAL_PRD_NM}}</div>
-                                        </ng-template>
-                                    </div>
-                                    <div *ngIf="column.field == 'PCSR_NBR'">
-                                        <ng-template kendoGridCellTemplate let-dataItem>
-                                            <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
-                                            <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
-                                        </ng-template>
-                                    </div>
-                                    <!-- Template for `Cap Info` column -->
-                                    <div *ngIf="column.field == 'CAP'">
-                                        <ng-template kendoGridCellTemplate let-dataItem>
-                                            <!-- Popover Template -->
-                                            <ng-template #popoverContent>
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
-                                                    </div>
-                                                    <div class="row">
-                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+    <div style="height:80%;padding-top: 15px;">
+        <div class="prodSelector modal-body">
+            <div *ngIf="showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
+                <div *ngIf="!(errorMessage.length > 0)">
+                    <div *ngIf="!disableSelection">{{suggestionText}}</div>
+                    <div class="productSelector Issue" *ngIf="disableSelection">Product(s) does not match the global filter criteria (Media Code in Autofill defaults for instance) or is not active within the deal date range.</div>
+                    <div style="padding-top:5px;">
+                        <table *ngIf="suggestedProducts.length !== 0" style="width: 100%; height: 100%;table-layout:fixed">
+                            <tr>
+                                <td style="width:20%;min-width:20px;max-width:200px">
+                                    <div class="leftNavFilter">
+                                        <div class="filterTitleUnderline" *ngIf="curRowIssues.length > 0">Products Found</div>
+                                        <div class="filterGrp">
+                                            <div class="filterContainer" uib-collapse="isPrdCollapsed">
+                                                <div *ngFor="let item of curRowIssues | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
+                                                    <div *ngIf="item.cnt > 0">
+                                                        <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrPrdChk{{item.id}}" />
+                                                        <label for="fltrPrdChk{{item.id}}" class="lblFilterProd">
+                                                            <span ng-bind-html="item.name">{{item.name}}</span>
+                                                            <span class="badge upperBadge" *ngIf="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
+                                                        </label>
                                                     </div>
                                                 </div>
-                                            </ng-template>
-
-                                            <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
-                                                <!-- WIP: Insert CAP Info cell design here -->
-                                                {{ dataItem.CAP }}
                                             </div>
-                                        </ng-template>
-                                    </div>
-
-                                    <!-- Template for `YCS2 Info` column -->
-                                    <div *ngIf="column.field == 'YCS2'">
-                                        <ng-template kendoGridCellTemplate let-dataItem>
-                                            <!-- Popover Template -->
-                                            <ng-template #popoverContent>
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
-                                                    </div>
-                                                    <div class="row">
-                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
-                                                    </div>
+                                        </div>
+                                        <div class="filterTitleUnderline" *ngIf="curRowLvl.length > 1">Product Level</div>
+                                        <div class="filterGrp" *ngIf="curRowLvl.length > 1">
+                                            <div class="filterContainer" uib-collapse="isLvlCollapsed">
+                                                <div *ngFor="let item of curRowLvl | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
+                                                    <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrLvlChk{{item.id}}" />
+                                                    <label for="fltrLvlChk{{item.id}}" class="lblFilterProd">
+                                                        <span ng-bind-html="item.name"></span>
+                                                    </label>
                                                 </div>
-                                            </ng-template>
-
-                                            <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
-                                                <!-- WIP: Insert CAP Info cell design here -->
-                                                {{ dataItem.YCS2 }}
                                             </div>
-                                        </ng-template>
-                                    </div>
-                                </kendo-grid-column>
-                            </ng-template>
-                        </kendo-grid>
-                    </div>
-                    <div *ngIf="!showTree && !showSuggestions">
-                        <div>
-                            <div class="row" style="margin:2px; margin-top: 40px">
-                                <ng-container *ngFor="let p of items | orderBy:'name'; let last = last; let index=index">
-                                    <div class="clearfix" *ngIf="index % 4 == 0"></div>
-                                    <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
-                                        <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">
-                                            <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}">
-                                                <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p)" [(ngModel)]="p.selected" type="checkbox">
-                                                <label style="margin-bottom:0px;" for="{{p.name}}"></label>
-                                            </span>
-                                            <p role="button" (click)="selectItem(p, true)">{{checkForBlank(p.name)}}</p>
+                                        </div>
+                                        <div class="filterTitleUnderline" *ngIf="curRowCategories.length > 1">Product Vertical</div>
+                                        <div class="filterGrp" *ngIf="curRowCategories.length > 1">
+                                            <div class="filterContainer" uib-collapse="isCatCollapsed">
+                                                <div *ngFor="let item of curRowCategories | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
+                                                    <!-- checked='checked' ng-click="onColumnChange(item)" -->
+                                                    <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrCatChk{{item.id}}" />
+                                                    <label for="fltrCatChk{{item.id}}" class="lblFilterProd">
+                                                        <span ng-bind-html="item.name"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </ng-container>
-                            </div>
+                                </td>
+                                <td>
+                                    <!--<div id="prodSuggestions" kendo-grid-check-box k-grid-checkbox="vm" kendo-grid="prodSuggestions" class="productSuggestion opUiContainer md kendoGridHeight productSuggestion-grid k-grid" k-options="vm.gridOptionsSuggestions"></div>-->
+                                    <kendo-grid [data]="suggestedProducts" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                                                [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                                        <kendo-grid-column width="65px" [columnMenu]="false">
+                                            <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                                <div class='dealTools'>
+                                                    <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
+                                                </div>
+                                            </ng-template>
+                                            <ng-template kendoGridCellTemplate let-dataItem>
+                                                <div class='dealTools'>
+                                                    <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                                </div>
+                                            </ng-template>
+                                        </kendo-grid-column>
+                                        <ng-template ngFor [ngForOf]="gridColumnsSuggestion" let-column>
+                                            <kendo-grid-column [headerClass]="{ 'headerClass': true }" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}">
+                                                <!-- Template for `Cap Info` column -->
+                                                <div *ngIf="column.field == 'CAP'">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <!-- Popover Template -->
+                                                        <ng-template #popoverContent>
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+
+                                                        <!-- Cell Content -->
+                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                                            <!-- WIP: Insert CAP Info cell design here -->
+                                                            {{ dataItem.CAP }}
+                                                        </div>
+                                                    </ng-template>
+                                                </div>
+
+                                                <!-- Template for `YCS2 Info` column -->
+                                                <div *ngIf="column.field == 'YCS2'">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <!-- Popover Template -->
+                                                        <ng-template #popoverContent>
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+
+                                                        <!-- Cell Content -->
+                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                                            <!-- WIP: Insert CAP Info cell design here -->
+                                                            {{ dataItem.YCS2 }}
+                                                        </div>
+                                                    </ng-template>
+                                                </div>
+                                            </kendo-grid-column>
+                                        </ng-template>
+                                    </kendo-grid>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="productSelector Warning" *ngIf="suggestedProducts.length === 0">
+                            Unable to find any products for "{{userInput}}."
                         </div>
                     </div>
                 </div>
-                <div style="padding:15px; height:inherit">
-                    <div *ngIf="excludeMode">
-                        <span>
-                            <span class="text-left textProdSelector">
-                                Excluded Products
-                                <span class="arcAnimate">
-                                    <small role="button">&nbsp;({{excludedProducts.length}})</small>
-                                </span>
-                            </span>
-                        </span>
-                        <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
-                    </div>
-                    <div *ngIf="!excludeMode" class="row">
-                        <div>
-                            <span>
-                                <span class="text-left textProdSelector">
-                                    Selected Products
-                                    <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
-                                        <small role="button">&nbsp;({{addedProducts.length}})</small>
-                                        <!-- <i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i> -->
-                                    </span>
-                                </span>
-                            </span>
-                            <trashcan title="Clear products" class="fr" (click)="clearProducts()"></trashcan>
-                        </div>
-                        <div *ngIf="enableMultipleSelection" class="col-md-6">
-                            <span>
-                                <span class="paddingRightNone text-left textProdSelector">
-                                    Excluded Products
-                                    <span class="arcAnimate">
-                                        <small role="button">&nbsp;({{excludedProducts.length}})</small>
-                                    </span>
-                                </span>
-                            </span>
-                            <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
-                        </div>
-                    </div>
-                    <div *ngIf="!excludeMode" class="row">
-                        <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
-                            <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:75px; width:100%">
-                                <!--<span *ngFor="let item of addedProducts">{{item.HIER_VAL_NM}} &nbsp;</span>-->
-                                <span *ngFor="let item of addedProducts">
-                                    <span (click)="showSingleProductHierarchy(item)" class="product-list">
-                                        {{item.HIER_VAL_NM}} &nbsp;
-                                        <button (click)="removeProduct(item, 'add')" style="border:none;padding:0;height:0"> ×</button>
-                                    </span>
-                                </span>
+                <div class="productSelector Issue" *ngIf="errorMessage.length > 0">
+                    {{errorMessage}}
+                </div>
+            </div>
+            <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
+                <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                            [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column width="65px" [columnMenu]="false">
+                        <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                            <div class='dealTools'>
+                                <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
                             </div>
-                        </div>
-                        <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
-                            <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:75px; width:100%">
-                                <span *ngFor="let item of excludedProducts">
-                                    <span class="product-list">
-                                        {{item.HIER_VAL_NM}}  &nbsp;
-                                        <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
-                                    </span>
-                                </span>
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class='dealTools'>
+                                <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                             </div>
-                        </div>
-                    </div>
-                    <div *ngIf="excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
-                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:75px; width:100%">
-                            <span *ngFor="let item of excludedProducts">
-                                <span class="product-list">
-                                    {{item.HIER_VAL_NM}} &nbsp;
-                                    <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-inline insertAtRowsText" style="margin-top:-30px">
-                        <span *ngIf="enableSplitProducts">
-                            <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
-                            <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
-                        </span>
-                        <button class="btn btn-primary fr prdBtn" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
-                        <button class="btn btn-default fr prdBtn" (click)="onNoClick()" style="margin-right:4px;">Cancel</button>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <ng-template ngFor [ngForOf]="gridColumnsProduct" let-column>
+                        <kendo-grid-column [headerClass]="{ 'headerClass': true }" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden" [width]="column.width">
+                            <!-- Link for processor number -->
+                            <div *ngIf="column.field == 'PCSR_NBR'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
+                                    <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
+                                </ng-template>
+                            </div>
+                            <!-- Link for deal product name -->
+                            <div *ngIf="column.field == 'DEAL_PRD_NM'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a *ngIf='allowMMSelection(dataItem)' (click)='gridSelectItem(dataItem)'>{{dataItem.DEAL_PRD_NM}}</a>
+                                    <div *ngIf='!allowMMSelection(dataItem)'>{{dataItem.DEAL_PRD_NM}}</div>
+                                </ng-template>
+                            </div>
+                            <div *ngIf="column.field == 'PCSR_NBR'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
+                                    <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
+                                </ng-template>
+                            </div>
+                            <!-- Template for `Cap Info` column -->
+                            <div *ngIf="column.field == 'CAP'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <!-- Popover Template -->
+                                    <ng-template #popoverContent>
+                                        <div class="container">
+                                            <div class="row">
+                                                <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                            </div>
+                                            <div class="row">
+                                                <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <!-- Cell Content -->
+                                    <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                        <!-- WIP: Insert CAP Info cell design here -->
+                                        {{ dataItem.CAP }}
+                                    </div>
+                                </ng-template>
+                            </div>
+
+                            <!-- Template for `YCS2 Info` column -->
+                            <div *ngIf="column.field == 'YCS2'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <!-- Popover Template -->
+                                    <ng-template #popoverContent>
+                                        <div class="container">
+                                            <div class="row">
+                                                <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                            </div>
+                                            <div class="row">
+                                                <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <!-- Cell Content -->
+                                    <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                        <!-- WIP: Insert CAP Info cell design here -->
+                                        {{ dataItem.YCS2 }}
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </kendo-grid-column>
+                    </ng-template>
+                </kendo-grid>
+            </div>
+            <div *ngIf="!showTree && !showSuggestions">
+                <div>
+                    <div class="row" style="margin:2px; margin-top: 40px">
+                        <ng-container *ngFor="let p of items | orderBy:'name'; let last = last; let index=index">
+                            <div class="clearfix" *ngIf="index % 4 == 0"></div>
+                            <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
+                                <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <p role="button" (click)="selectItem(p, true)">{{checkForBlank(p.name)}}</p>
+                                </div>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
         </div>
+        <div style="padding:15px;">
+            <div *ngIf="excludeMode">
+                <span>
+                    <span class="text-left textProdSelector">
+                        Excluded Products
+                        <span class="arcAnimate">
+                            <small role="button">&nbsp;({{excludedProducts.length}})</small>
+                        </span>
+                    </span>
+                </span>
+                <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
+            </div>
+            <div *ngIf="!excludeMode" class="row">
+                <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}">
+                    <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
+                        <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
+                            Selected Products
+                            <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
+                                <small role="button">&nbsp;({{addedProducts.length}})</small>
+                                <!-- <i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i> -->
+                            </span>
+                        </span>
+                    </span>
+                    <trashcan title="Clear products" class="fr" (click)="clearProducts()" style="padding-right:5%"></trashcan>
+                </div>
+                <div *ngIf="enableMultipleSelection" class="col-md-6">
+                    <span>
+                        <span class="paddingRightNone text-left textProdSelector">
+                            Excluded Products
+                            <span class="arcAnimate">
+                                <small role="button">&nbsp;({{excludedProducts.length}})</small>
+                            </span>
+                        </span>
+                    </span>
+                    <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
+                </div>
+            </div>
+            <div *ngIf="!excludeMode" class="row">
+                <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
+                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
+                        <!--<span *ngFor="let item of addedProducts">{{item.HIER_VAL_NM}} &nbsp;</span>-->
+                        <span *ngFor="let item of addedProducts">
+                            <span (click)="showSingleProductHierarchy(item)" class="product-list"
+                                  [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                                {{item.HIER_VAL_NM}} &nbsp;
+                                <button (click)="removeProduct(item, 'add')" style="border:none;padding:0;height:0"> ×</button>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
+                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
+                        <span *ngFor="let item of excludedProducts">
+                            <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                                {{item.HIER_VAL_NM}}  &nbsp;
+                                <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
+                <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
+                    <span *ngFor="let item of excludedProducts">
+                        <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                            {{item.HIER_VAL_NM}} &nbsp;
+                            <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div class="form-inline insertAtRowsText" style="margin-top:-30px">
+                <span *ngIf="enableSplitProducts">
+                    <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
+                    <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
+                </span>
+                <button class="btn btn-primary fr prdBtn" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
+                <button class="btn btn-default fr prdBtn" (click)="cancel()" style="margin-right:4px;">Cancel</button>
+            </div>
+        </div>
     </div>
+    <!--</div>-->
+    <!--</div>-->
 </div>
 <loading-panel-angular id="PTRLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>

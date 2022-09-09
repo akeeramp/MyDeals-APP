@@ -29,5 +29,10 @@ export class productSelectorService {
         const apiUrl = `${this.apiBaseUrl}GetProductCAPYCS2Data/${getAvailable}/${priceCondition}`;
         return this.httpClient.post(apiUrl, data);
     }
+
+    public GetSearchString(dto) {
+        const apiUrl = this.apiBaseUrl + 'GetSearchString';
+        return this.httpClient.post(apiUrl, dto);
+    }
 }
 

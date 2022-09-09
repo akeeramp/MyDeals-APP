@@ -265,7 +265,7 @@ export class PTE_CellChange_Util {
                     this.addUpdateRowOnchangeKIT(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
                     prodIndex++;
                 }
-                //calling the merge cells option based of numb of products
+                //calling the merge cells option based of number of products
                 this.getMergeCellsOnEditKit(false, empRow, prods.length, pricingTableTemplates);
             }
             else {
@@ -295,7 +295,7 @@ export class PTE_CellChange_Util {
         }
         //in case of copy paste or autofill
         else {
-            //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds since its prod the length can be predicted so deleting full
+            //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
             this.hotTable.alter('remove_row', items[0].row, 150, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
@@ -313,7 +313,7 @@ export class PTE_CellChange_Util {
                 empRow = empRow + parseInt(prods.length);
             });
         }
-        //appending everything togather
+        //appending everything together
         this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
 
     }

@@ -53,7 +53,7 @@ export class pricingTableEditorComponent implements OnChanges {
             public TEXTAREA_PARENT: any;
             public textareaStyle: any
             public textareaParentStyle: any
-            public hot: Handsontable.Core;
+            public hot: Handsontable.Core;    
             public instance: any;
             public selectOptions: any;
             private selRow = 0;
@@ -110,6 +110,10 @@ export class pricingTableEditorComponent implements OnChanges {
                         }
                     });
                     curRow.push(obj);
+                    if (curRow[0]['PTR_SYS_PRD'] == "") {
+                        VM.validateOnlyProducts('onLoad');
+                        return;
+                    }
                     data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: curRow };
                 }
                 else if (this.field && this.field == 'GEO_COMBINED') {
@@ -143,6 +147,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 dialogRef.afterClosed().subscribe(result => {
                     if (result) {
                         if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
+                            VM.isLoading = true;
                             let cntrctPrdct = [];
                             let excludedPrdct = [];
                             let sysPrd = {};

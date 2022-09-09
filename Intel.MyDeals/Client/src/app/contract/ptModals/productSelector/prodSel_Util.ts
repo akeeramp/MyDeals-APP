@@ -13,87 +13,107 @@ export interface gridCol {
 
 export class ProdSel_Util {
 
-    static gridColsSuggestion: Array<gridCol> = [{
-        field: 'USR_INPUT',
-        title: 'User Entered',
-        hidden: false
-    }, {
-        field: 'HIER_VAL_NM',
-        title: 'Product',
-        hidden: false
-    }, {
-        field: 'PRD_CAT_NM',
-        title: 'Product Vertical',
-        hidden: false
-    }, {
-        field: 'FMLY_NM',
-        title: 'Family Name',
-        hidden: false
-    }, {
-        field: 'PRD_STRT_DTM',
-        title: 'Product Effective Date',
-        hidden: false
-    }, {
-        field: 'CAP',
-        title: 'CAP Info',
-        hidden: false
-    }, {
-        field: 'YCS2',
-        title: 'YCS2',
-        hidden: false
-    }, {
-        field: 'CPU_PROCESSOR_NUMBER',
-        title: 'CPU Processor number',
-        hidden: false
-    }, {
-        field: 'HAS_L1',
-        title: 'Legal Classification',
-        hidden: false
-    }, {
-        field: 'MM_CUST_CUSTOMER',
-        title: 'MM Customer Name',
-        hidden: false
-    }, {
-        field: 'FMLY_NM_MM',
-        title: 'EDW Family Name',
-        hidden: false
-    }, {
-        field: 'EPM_NM',
-        title: 'EPM Name',
-        hidden: false
-    }, {
-        field: 'SKU_NM',
-        title: 'SKU Name',
-        hidden: false
-    }, {
-        field: 'NAND_FAMILY',
-        title: 'NAND FAMILY',
-        hidden: false
-    }, {
-        field: 'CPU_CACHE',
-        title: 'CPU CACHE',
-        hidden: false
-    }, {
-        field: 'CPU_PACKAGE',
-        title: 'CPU PACKAGE',
-        hidden: false
-    }, {
-        field: 'CPU_WATTAGE',
-        title: 'CPU WATTAGE',
-        hidden: false
-    }, {
-        field: 'CPU_VOLTAGE_SEGMENT',
-        title: 'Voltage Segment',
-        hidden: false
-    }, {
-        field: 'PRICE_SEGMENT',
-        title: 'Price Segment',
-        hidden: false
-    }, {
-        field: 'SBS_NM',
-        title: 'SBS Name',
-        hidden: false
-    }]
+    static gridColsSuggestion(isGA): Array<gridCol> {
+        return [{
+            field: 'USR_INPUT',
+            title: 'User Entered',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'HIER_VAL_NM',
+            title: 'Product',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'PRD_CAT_NM',
+            title: 'Product Vertical',
+            width: "80px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'FMLY_NM',
+            title: 'Family Name',
+            width: "80px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'PRD_STRT_DTM',
+            title: 'Product Effective Date',
+            width: "120px"
+        }, {
+            field: 'CAP',
+            title: 'CAP Info',
+            width: "150px",
+            filterable: { multi: true, search: true },
+        }, {
+            field: 'YCS2',
+            title: 'YCS2',
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'CPU_PROCESSOR_NUMBER',
+            title: 'CPU Processor number',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'HAS_L1',
+            title: 'Legal Classification',
+            width: "150px",
+            filterable: { multi: true, search: true },
+            hidden: !isGA
+        }, {
+            field: 'MM_CUST_CUSTOMER',
+            title: 'MM Customer Name',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'FMLY_NM_MM',
+            title: 'EDW Family Name',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'EPM_NM',
+            title: 'EPM Name',
+            width: "180px"
+        }, {
+            field: 'SKU_NM',
+            title: 'SKU Name',
+            width: "180px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'NAND_FAMILY',
+            title: 'NAND FAMILY',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'CPU_CACHE',
+            title: 'CPU CACHE',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'CPU_PACKAGE',
+            title: 'CPU PACKAGE',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'CPU_WATTAGE',
+            title: 'CPU WATTAGE',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'CPU_VOLTAGE_SEGMENT',
+            title: 'Voltage Segment',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'PRICE_SEGMENT',
+            title: 'Price Segment',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }, {
+            field: 'SBS_NM',
+            title: 'SBS Name',
+            width: "150px",
+            filterable: { multi: true, search: true }
+        }]
+    }
     static gridColProduct(isGA): Array<gridCol> {
         return [
             {
