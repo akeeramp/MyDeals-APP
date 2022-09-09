@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-8">
                 <div class="cursorArea capProdHeader">
-                    <p>Product {{ priceCondition }} Breakout</p>
+                    <p>Product {{ productData[0].priceCondition }} Breakout</p>
                 </div>
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="padding-top: 15px;"/>
             </div>
@@ -23,7 +23,27 @@
             </ng-template>
 
             <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
-                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}"></kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}">
+                    <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                        <div *ngIf="column.field == 'CAP_PRC_COND'">
+                            <input type="checkbox" style="margin-top:2px;" disabled [checked]="dataItem.CAP_PRC_COND == 'YCP1'" />
+                        </div>
+                        <div *ngIf="column.field == 'CAP_START'">
+                            {{dataItem[column.field] | date:'M/d/yyyy'}} - {{dataItem['CAP_END'] | date:'M/d/yyyy'}}
+                        </div>
+                        <div *ngIf="column.field === 'CAP' || column.field === 'YCS2'">
+                            <span *ngIf="dataItem[column.field] != undefined && dataItem[column.field] != null && dataItem[column.field] !='' && dataItem[column.field] !='No CAP' && dataItem[column.field] != 'No YCS2'">
+                                {{dataItem[column.field] | currency}}
+                            </span>
+                            <span *ngIf="dataItem[column.field] != undefined && dataItem[column.field] != null && (dataItem[column.field] ==='No CAP' || dataItem[column.field] === 'No YCS2')">
+                                {{dataItem[column.field]}}
+                            </span>
+                        </div>
+                        <div *ngIf="column.field !== 'CAP_PRC_COND' && column.field !== 'CAP_START' && column.field !== 'CAP' && column.field !== 'YCS2'">
+                            {{dataItem[column.field]}}
+                        </div>
+                    </ng-template>
+                </kendo-grid-column>                
             </ng-template>
 
             <kendo-grid-excel fileName="{{ gridOptions.excel.fileName }}"></kendo-grid-excel>

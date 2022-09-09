@@ -5,8 +5,8 @@ import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent} from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, FilterService} from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
@@ -22,6 +22,7 @@ import { contractDetailsService } from "../contractDetails/contractDetails.servi
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component"
 import { GridUtil } from '../grid.util';
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 @Component({
     selector: 'deal-editor',
@@ -78,6 +79,7 @@ export class dealEditorComponent {
     private searchFilter: any;
     private wrapEnabled: boolean = false;
     private isExportable: boolean = true;
+    private dropdownFilterColumns = PTE_Config_Util.dropdownFilterColumns
     private state: State = {
         skip: 0,
         take: 25,
@@ -109,7 +111,105 @@ export class dealEditorComponent {
             value: 100
         }
     ];
-    
+    private filteredValue: any[] = [];
+    private filteringData: any[] = [];
+    private isFilterEnabled: boolean = false;
+    private filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "contains",
+    };
+
+    filterChange(filter: any): void {
+        this.isFilterEnabled = false;
+        this.state.filter = filter;
+        this.gridData = process(this.gridResult, this.state);
+        _.each(this.dropdownFilterColumns, (column) => {
+            if (this.filteredValue[column] != undefined && this.filteredValue[column] != null && this.filteredValue[column].Value != undefined && this.filteredValue[column].Value != null) {
+                let arrayData = [];
+                _.each(this.gridData.data, (eachData) => {
+                    let keys = Object.keys(eachData[column]);
+                    let isexists = false;
+                    for (var key in keys) {
+                        if (eachData[column][keys[key]] == this.filteredValue[column].Value)
+                            isexists = true;
+                    }
+                    if (isexists)
+                        arrayData.push(eachData);
+                })
+                this.gridData = process(arrayData, this.state);
+            }
+        });
+    }
+
+    valueChange(values, field, filterService: FilterService): void {
+        if (this.dropdownFilterColumns.includes(field)) {
+            this.isFilterEnabled = true;
+            this.filteredValue[field] = values;
+            let array = [];
+            array.push(values)
+            filterService.filter({
+                filters: array.map(value => ({
+                    field: field,
+                    operator: 'isnotnull',
+                    value: value
+                })),
+                logic: 'or'
+            });
+        } else {
+            if (this.filteredValue[field] != undefined && this.filteredValue[field].filter(x => x.Value == 'Select All').length > 0 && values.filter(x => x.Value == 'Select All').length == 0) {
+                this.filteredValue[field] = [];
+            }
+            else {
+                this.filteredValue[field] = values;
+            }
+            this.isFilterEnabled = this.filteredValue[field].length > 0 ? true : false;
+            if (this.filteredValue[field].filter(x => x.Value == 'Select All').length > 0) {
+                this.filteredValue[field] = this.filteringData[field];
+            }
+            filterService.filter({
+                filters: this.filteredValue[field].map(value => ({
+                    field: field,
+                    operator: 'eq',
+                    value: value.Value
+                })),
+                logic: 'or'
+            });
+        }
+    }
+
+    clear(field: string) {
+        this.filteredValue[field] = [];
+        this.isFilterEnabled = false;
+    }
+
+    distinctPrimitive(): any {
+        _.each(this.wipTemplate.columns, (col) => {
+            if (col.filterable == true) {
+                let distinctData: any[] = [];
+                if (this.dropdownFilterColumns.includes(col.field)) {
+                    _.each(this.gridResult, (item) => {
+                        let keys = Object.keys(item[col.field]);
+                        for (var key in keys) {
+                            if (item[col.field][keys[key]] != undefined && item[col.field][keys[key]] != null && !distinctData.includes(item[col.field][keys[key]]))
+                                distinctData.push({ Text: item[col.field][keys[key]], Value: item[col.field][keys[key]] });
+                        }
+                    });
+                }
+                else {                    
+                    distinctData = distinct(this.gridResult, col.field).map(item => {
+                        if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
+                            return { Text: new Date(item[col.field]).toUTCString(), Value: item[col.field] };
+                        }
+                        else
+                            return { Text: item[col.field], Value: item[col.field]}
+                    });
+                    distinctData.unshift({ Text: 'Select All', Value: 'Select All' });
+                }
+                this.filteringData[col.field] = distinctData;
+            }
+        });       
+    }
+        
     getGroupsAndTemplates() {
         //Get Groups for corresponding deal type
         this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
@@ -119,8 +219,8 @@ export class dealEditorComponent {
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD);
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
         this.getWipDealData();
-    }    
-
+    }
+    
     getWipDealData() {        
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
@@ -130,6 +230,7 @@ export class dealEditorComponent {
                 this.applyHideIfAllRules();
                 this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
                 this.gridData = process(this.gridResult, this.state);
+                this.distinctPrimitive();
                 this.isLoading = false;
                 this.isDataLoading = false;
             } else {

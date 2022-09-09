@@ -577,3 +577,21 @@ kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-fi
 #excelDropDownMenu.show {
     transform: translate3d(1300px, 200px, 0px) !important;
 }
+
+.k-filter-menu .k-multiselect-wrap, .k-filter-menu .k-dropdown .k-dropdown-wrap {
+    width: 90% !important;
+    left: -15px !important
+}
+
+.k-filter-menu .k-multiselect li {
+    padding: 1px !important;
+}
+
+.btnFltr{
+    margin-left: 10px;
+    line-height:10px !important;
+}
+
+#btnFilter ~ .k-action-buttons.k-button-group {
+    display: none !important;
+}

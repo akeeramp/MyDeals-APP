@@ -105,11 +105,35 @@
                 <kendo-grid id="dealEditor" #grid [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
-                            filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)"
+                            filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
                             class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
                             style="width: 320px; height: 465.788px;" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
-                                       [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.filterable" [sortable]="column.sortable">                        
+                                       [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.filterable" [sortable]="column.sortable">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                            <div *ngIf="!dropdownFilterColumns.includes(column.field)">
+                                <kendo-multiselect placeholder="Click to search"
+                                                   [data]="filteringData[column.field]"
+                                                   [checkboxes]="true"
+                                                   textField="Text"
+                                                   valueField="Value"
+                                                   [value]="filteredValue[column.field]"
+                                                   [autoClose]="true"
+                                                   [kendoDropDownFilter]="filterSettings"
+                                                   kendoMultiSelectSummaryTag
+                                                   (valueChange)="valueChange($event, column.field, filterService)">
+                                </kendo-multiselect><br />
+                            </div>
+                            <div *ngIf="dropdownFilterColumns.includes(column.field)">
+                                <kendo-dropdownlist [filterable]="true" textField="Text"
+                                                   valueField="Value" [data]="filteringData[column.field]" [value]="filteredValue[column.field]" (valueChange)="valueChange($event, column.field ,filterService)"> </kendo-dropdownlist>
+                                <br />
+                            </div>
+                            <div class="col-md-12" id="btnFilter">
+                                <button class="col-md-5 k-button btnFltr" type="reset" (click)="clear(column.field)">clear</button>&nbsp;
+                                <button class="col-md-5 k-button btnFltr" type="submit" (click)="valueChange(filteredValue[column.field], column.field, filterService)" [disabled]="!isFilterEnabled">Filter</button>
+                            </div>
+                        </ng-template>
                         <ng-template kendoGridHeaderTemplate>
                             <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
                         </ng-template>

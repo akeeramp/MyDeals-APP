@@ -29,8 +29,9 @@
         <div class="row">
             <div class="col">
                 <div mat-dialog-content>
-                    <kendo-multiselect [(ngModel)]="checkedKeys" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
+                    <kendo-multiselect [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
                         <kendo-treeview [nodes]="multiSelectData"
+                                        filterInputPlaceholder="Type here to filter the values.."
                                         kendoTreeViewHierarchyBinding
                                         childrenField="items"
                                         [textField]="multiSelectPopUpModal.opLookupText"
