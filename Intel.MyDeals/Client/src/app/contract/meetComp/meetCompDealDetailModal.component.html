@@ -1,60 +1,64 @@
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="product-selector modal-content" moveablemodal style="height:auto;width:100%;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:1px solid #1a3e6f;border-right:1px solid #1a3e6f;;">
     <div class="prodSelector modal-header">
-        <div class="row">
+        <div class="row" style="width: 100%;height: 40px;">
             <div class="col-md-10">
                 <p style="color:#ffffff; font-size:20px">Deal Group Details</p>
             </div>
-            <span class="modalCloseIcon" style="float: right;margin-right: 10px;color: white;">
-                <i role="button" title="Close" class="intelicon-close-max" (click)="close()"></i>
-            </span>
+            <div class="col-md-2 modalCloseIcon" style="color: white;">
+                <i role="button" title="Close" class="intelicon-close-max" (click)="close()" style="float: right;margin-top: 5px;"></i>
+            </div>
         </div>
     </div>
     <div class="prodSelector modal-body">
         <kendo-grid [data]="gridData" [loading]="isLoading" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true,buttonCount:5}"
-            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu">
+            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" style="margin-bottom: 22px;height: auto;">
             <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.DEAL_OBJ_SID}}">{{dataItem.DEAL_OBJ_SID}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.DEAL_OBJ_SID}}">{{dataItem.DEAL_OBJ_SID}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.OBJ_SET_TYPE}}">{{dataItem.OBJ_SET_TYPE}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.OBJ_SET_TYPE}}">{{dataItem.OBJ_SET_TYPE}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="REBT_TYPE" title="Rebate Type" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.REBT_TYPE}}">{{dataItem.REBT_TYPE}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.REBT_TYPE}}">{{dataItem.REBT_TYPE}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="CTRCT_NM" title="Contract Name" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.CTRCT_NM}}">{{dataItem.CTRCT_NM}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.CTRCT_NM}}">{{dataItem.CTRCT_NM}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="WF_STG_CD" title="Workflow Stage" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.WF_STG_CD}}">{{dataItem.WF_STG_CD}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.WF_STG_CD}}">{{dataItem.WF_STG_CD}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="STRT_DT" title="Start Date" width="170" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.STRT_DT}}">{{dataItem.STRT_DT}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.STRT_DT}}">{{dataItem.STRT_DT}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="END_DT" title="End Date" width="170" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.END_DT}}">{{dataItem.END_DT}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.END_DT}}">{{dataItem.END_DT}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DEAL_CMBN_TYPE" title="Additive" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.DEAL_CMBN_TYPE}}">{{dataItem.DEAL_CMBN_TYPE}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.DEAL_CMBN_TYPE}}">{{dataItem.DEAL_CMBN_TYPE}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="CNSMPTN_RSN" title="Consumption Reason" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell' title="{{dataItem.CNSMPTN_RSN}}">{{dataItem.CNSMPTN_RSN}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.CNSMPTN_RSN}}">{{dataItem.CNSMPTN_RSN}}</div>
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>

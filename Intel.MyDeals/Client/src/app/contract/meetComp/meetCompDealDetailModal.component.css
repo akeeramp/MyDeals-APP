@@ -280,3 +280,22 @@
 .delete-attach-icon:hover {
     text-decoration: none;
 }
+
+.mat-dialog-container {
+    padding: 0px !important;
+}
+
+.modal-header {
+    padding: 15px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    min-height: 16.5px !important;
+    border-bottom-color: #f4f4f4 !important;
+}
+
+.modal-body {
+    padding: 15px !important;
+}
+
+.dealDetailCell {
+    padding: 12px !important;
+}
