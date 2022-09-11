@@ -650,37 +650,39 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendo
         || curPricingTableData[0].OBJ_SET_TYPE_CD === "FLEX" || curPricingTableData[0].OBJ_SET_TYPE_CD === "REV_TIER"
         || curPricingTableData[0].OBJ_SET_TYPE_CD === "DENSITY") {
         for (var s = 0; s < sData.length; s++) {
-            if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
-            if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
-            if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "FLEX") || sData[s].TIER_NBR === 1) {
-                if (sData[s]["REBATE_TYPE"] === "TENDER") {
-                    hasTender = true;
-                } else {
-                    hasNonTender = true;
-                }
-                if (isHybridPS) {
-                    dictRebateType[sData[s]["REBATE_TYPE"]] = s;
-                    dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
-                    var isCustDivValid = contractutil.validateCustomerDivision(dictCustDivision, sData[0]["CUST_ACCNT_DIV"], sData[s]["CUST_ACCNT_DIV"]);
-                    if (isCustDivValid) {
-                        dictCustDivision[sData[0]["CUST_ACCNT_DIV"]] = s;
+            if (sData[s]["IS_CANCELLED"] === undefined || sData[s]["IS_CANCELLED"] !== "1") {
+                if (sData[s]["_dirty"] !== undefined && sData[s]["_dirty"] === true) errDeals.push(s);
+                if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[sData[s].DC_ID] !== undefined) errDeals.push(s);
+                if ((curPricingTableData[0].OBJ_SET_TYPE_CD !== "KIT" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "VOL_TIER" && curPricingTableData[0].OBJ_SET_TYPE_CD !== "FLEX") || sData[s].TIER_NBR === 1) {
+                    if (sData[s]["REBATE_TYPE"] === "TENDER") {
+                        hasTender = true;
+                    } else {
+                        hasNonTender = true;
                     }
-                    else {
-                        dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
-                    }
-                    dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
-                    if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
-                        dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
-                    }
-                    dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
-                    dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
+                    if (isHybridPS) {
+                        dictRebateType[sData[s]["REBATE_TYPE"]] = s;
+                        dictPayoutBasedon[sData[s]["PAYOUT_BASED_ON"]] = s;
+                        var isCustDivValid = contractutil.validateCustomerDivision(dictCustDivision, sData[0]["CUST_ACCNT_DIV"], sData[s]["CUST_ACCNT_DIV"]);
+                        if (isCustDivValid) {
+                            dictCustDivision[sData[0]["CUST_ACCNT_DIV"]] = s;
+                        }
+                        else {
+                            dictCustDivision[sData[s]["CUST_ACCNT_DIV"]] = s;
+                        }
+                        dictGeoCombined[sData[s]["GEO_COMBINED"]] = s;
+                        if (curPricingTableData[0].OBJ_SET_TYPE_CD !== "PROGRAM") {
+                            dictPeriodProfile[sData[s]["PERIOD_PROFILE"]] = s;
+                        }
+                        dictResetPerPeriod[sData[s]["RESET_VOLS_ON_PERIOD"]] = s;
+                        dictProgramPayment[sData[s]["PROGRAM_PAYMENT"]] = s;
 
-                    // The next two values if left blank can come in as either null or "", make them one pattern.
-                    if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
-                    else dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
+                        // The next two values if left blank can come in as either null or "", make them one pattern.
+                        if (sData[s]["REBATE_OA_MAX_AMT"] == null) dictOverarchingDollar[""] = s;
+                        else dictOverarchingDollar[sData[s]["REBATE_OA_MAX_AMT"]] = s;
 
-                    if (sData[s]["REBATE_OA_MAX_VOL"] == null) dictOverarchingVolume[""] = s;
-                    else dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
+                        if (sData[s]["REBATE_OA_MAX_VOL"] == null) dictOverarchingVolume[""] = s;
+                        else dictOverarchingVolume[sData[s]["REBATE_OA_MAX_VOL"]] = s;
+                    }
                 }
             }
         }
@@ -1248,7 +1250,7 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
 // the array is first sorted, and then checked for any overlap
 
 function hasDuplicateProduct(pricingTableRows) {
-    var rows = JSON.parse(JSON.stringify(pricingTableRows));
+    var rows = JSON.parse(JSON.stringify(pricingTableRows.filter((val) => val.IS_CANCELLED == undefined || val.IS_CANCELLED != '1')));
     var sortedRanges = rows.sort((previous, current) => {
 
         previous.START_DT = previous.START_DT instanceof Date ? previous.START_DT : new Date(previous.START_DT);

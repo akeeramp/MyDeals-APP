@@ -151,21 +151,23 @@ pricingtableutil.validateMultiGeoForHybrid = function (data) {
     //This is Comma Separated GEOS
     var prod_used = [];
     for (var i = 0; i < data.length; i++) {
+        if (data[i].IS_CANCELLED !== "1") {
         //Add Products
-        if (data[i].IS_HYBRID_PRC_STRAT == "1") {
-            var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-            for (var j = 0; j < temp_split.length; j++) {
-                prod_used.push(temp_split[j]);
+            if (data[i].IS_HYBRID_PRC_STRAT == "1") {
+                var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+                for (var j = 0; j < temp_split.length; j++) {
+                    prod_used.push(temp_split[j]);
+                }
             }
-        }
-        //Checking GEO
-        //Added a check to check for Geo_Combined only if it exists.
-        if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
-            var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-            var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-            var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
-            if (lastComma > lastBracesPos) {
-                return "1";
+            //Checking GEO
+            //Added a check to check for Geo_Combined only if it exists.
+            if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 && data[i].IS_HYBRID_PRC_STRAT == "1") {
+                var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
+                var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                if (lastComma > lastBracesPos) {
+                    return "1";
+                }
             }
         }
     }

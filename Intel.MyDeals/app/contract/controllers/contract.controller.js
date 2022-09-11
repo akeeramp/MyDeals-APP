@@ -4958,8 +4958,8 @@
             $scope.overlapFlexResult = null;
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 var data = $scope.pricingTableData.PRC_TBL_ROW;
-                var AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
-                var DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
+                var AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual' && (ob.IS_CANCELLED == undefined || ob.IS_CANCELLED != "1"));
+                var DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining' && (ob.IS_CANCELLED == undefined || ob.IS_CANCELLED != "1"));
                 var AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
 
                 //getting Accrual include and exclude product
