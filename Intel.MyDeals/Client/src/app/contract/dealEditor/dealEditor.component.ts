@@ -190,6 +190,17 @@ export class dealEditorComponent {
         this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
             if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
                 this.voltLength = response.WIP_DEAL.length;
+                if (this.gridResult) {
+                    let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
+                    if (linkedIds.length > 0) {
+                        _.each(linkedIds, id => {
+                            _.each(response.WIP_DEAL, item => {
+                                if (item.DC_ID == id)
+                                    item.isLinked = true;
+                            })
+                        })
+                    }
+                }
                 this.gridResult = response.WIP_DEAL;
                 this.setWarningDetails();
                 this.applyHideIfAllRules();
@@ -756,11 +767,13 @@ export class dealEditorComponent {
         GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export");
     }
 
-    gridReload(eventData: boolean) {
-        if (eventData)
-            this.ngOnInit();
+    refreshContract(eventData: boolean) {
+        if (eventData) {
+            this.getWipDealData();
+            this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+        }
     }
-
+        
     ngOnInit() {
         this.isDataLoading = true;
         this.setBusy("Loading Deal Editor", "Loading...","Info");

@@ -29,7 +29,7 @@ export class dealEditorCellTemplateComponent {
     @Input() contract_Data: any = '';
     @Input() grid_Data: any = '';
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
-    @Output() reloadGrid: EventEmitter<any> = new EventEmitter<any>();
+    @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
 
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
@@ -39,13 +39,13 @@ export class dealEditorCellTemplateComponent {
     private YCS2modifier:string = "";
     private fieldModifier: string = "";
     private fieldText: string = "";
-
+        
     updateIcon(eventData: boolean) {
         this.iconUpdate.emit(eventData);
     }
 
-    gridReload(eventData: boolean) {
-        this.reloadGrid.emit(eventData);
+    refreshContractData(eventData: boolean) {
+        this.refresh_Contract_Data.emit(eventData);
     }
 
     uiControlWrapper(passedData, field, format) {

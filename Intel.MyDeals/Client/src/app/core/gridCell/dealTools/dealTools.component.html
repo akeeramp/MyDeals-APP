@@ -166,7 +166,7 @@
                     <p>This will keep the {{dealTxt}} in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
-                    <div kendoButton class="k-button" style="width: 50% !important;" (click)="actionHoldWipDeals({Hold: getLinkedHoldIds(dataItem)})">OK</div>
+                    <div kendoButton class="k-button" style="width: 50% !important;" (click)="actionHoldWipDeals(dataItem,'Hold')">OK</div>
                     <div kendoButton class="k-button cancelDelete" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
@@ -176,7 +176,7 @@
                     <p>This will enable the {{dealTxt}} in the Pricing Table and will enable it to get approved.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
-                    <div kendoButton class="k-button" style="width: 50% !important;" (click)="actionHoldWipDeals({Approve: getLinkedHoldIds(dataItem)})">OK</div>
+                    <div kendoButton class="k-button" style="width: 50% !important;" (click)="actionHoldWipDeals(dataItem,'Approve')">OK</div>
                     <div kendoButton class="k-button cancelDelete" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</div>
                 </kendo-dialog-actions>
             </kendo-dialog>

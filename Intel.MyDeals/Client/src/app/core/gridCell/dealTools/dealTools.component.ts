@@ -35,7 +35,7 @@ export class dealToolsComponent{
     @Input() isQuoteLetterEnabled;
     @Input() isDeleteEnabled;
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
-    @Output() reloadGrid: EventEmitter<any> = new EventEmitter<any>();
+    @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
 
     public isSalesForceDeal;
     public isPublishable;
@@ -111,7 +111,7 @@ export class dealToolsComponent{
         }
     }
 
-    loadDealTools() {        
+    loadDealTools() {
         let childParent = _.countBy(this.gridData, 'DC_PARENT_ID');
         _.each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
@@ -162,7 +162,7 @@ export class dealToolsComponent{
             }
         }
         this.dealTxt = this.getLinkedHoldIds(this.dataItem).length > 1 ? "deals" : "deal";
-    }
+    }   
 
     setBusy(msg, detail, msgType, isShowFunFact) {
         setTimeout(() => {
@@ -256,6 +256,7 @@ export class dealToolsComponent{
                         }
                     }
                 }
+                this.refreshContract.emit(true);
                 this.setBusy("Split Successful", "Split the Pricing Table Row into single Deals", "Success","");
                 setTimeout(() => {
                     this.setBusy("", "", "","");
@@ -398,6 +399,7 @@ export class dealToolsComponent{
                 if (this.gridData.length == 0) {
                     //return to pte screen...call loadPTE() from pte component
                 }
+                this.refreshContract.emit(true);
                 this.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal", "Success","");
                 setTimeout(() => {
                     this.setBusy("", "", "","");
@@ -420,8 +422,9 @@ export class dealToolsComponent{
         this.dataService.actionWipDeal(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem, 'Cancel')
             .subscribe((response: any) => {
                 setTimeout(() => {
-                    //$("#wincontractMessages").data("kendoWindow").open();
-                    this.reloadGrid.emit(true);
+                    //yet to migrate message board 
+                    this.refreshContract.emit(true);
+                    this.setBusy("", "", "", "");
                 }, 50);
 
             }, function (response) {
@@ -453,9 +456,7 @@ export class dealToolsComponent{
                 setTimeout(() => {
                     this.setBusy("", "", "","");
                 }, 4000);
-
-                this.reloadGrid.emit(true);
-
+                this.refreshContract.emit(true);
             }, function (response) {
                 this.loggerSvc.error("Could not Rollback the Pricing Table " + this.contractData.DC_ID, response, response.statusText);
                 this.setBusy("", "", "","");
@@ -513,15 +514,16 @@ export class dealToolsComponent{
             return this.holdItems[this.getHoldValue(this.dataItem)].title;
         }
     }
-    getLinkedHoldIds(dataItem){
+    getLinkedHoldIds(model){
         let ids = [];
-        if (dataItem.isLinked !== undefined && dataItem.isLinked) {
-            let curHoldStatus = dataItem._actionsPS.Hold === undefined ? false : dataItem._actionsPS.Hold;
+        if (model.isLinked !== undefined && model.isLinked) {
+            let curHoldStatus = model._actionsPS.Hold === undefined ? false : model._actionsPS.Hold;
             for (let v = 0; v < this.gridData.length; v++) {
-                if (this.gridData[v].isLinked !== undefined && this.gridData[v].isLinked) {
-                    if (this.gridData[v]._actionsPS === undefined)
-                        this.gridData[v]._actionsPS = {};
-                    if (this.gridData[v]._actionsPS.Hold !== undefined && this.gridData[v]._actionsPS.Hold === curHoldStatus && (this.gridData[v].WF_STG_CD === dataItem.WF_STG_CD)) {
+                let dataItem = this.gridData[v];
+                if (dataItem.isLinked !== undefined && dataItem.isLinked) {
+                    if (dataItem._actionsPS === undefined)
+                        dataItem._actionsPS = {};
+                    if (dataItem._actionsPS.Hold !== undefined && dataItem._actionsPS.Hold === curHoldStatus && (dataItem.WF_STG_CD === model.WF_STG_CD)) {
                         ids.push({
                             DC_ID: dataItem["DC_ID"],
                             WF_STG_CD: dataItem["WF_STG_CD"]
@@ -532,8 +534,8 @@ export class dealToolsComponent{
         }
         else {
             ids.push({
-                DC_ID: dataItem["DC_ID"],
-                WF_STG_CD: dataItem["WF_STG_CD"]
+                DC_ID: model["DC_ID"],
+                WF_STG_CD: model["WF_STG_CD"]
             });
         }
         return ids;
@@ -547,15 +549,18 @@ export class dealToolsComponent{
         if (hVal === "TakeOffHold")
             this.openUnHoldDialog = true;
     }
-    actionHoldWipDeals(data) {
+    actionHoldWipDeals(dataItem, stage: string) {
+        const selectedDealIds = this.getLinkedHoldIds(dataItem);
+        let dealIdsObj = {}
+        dealIdsObj[stage] = selectedDealIds;
         this.openHoldDialog = false;
         this.openUnHoldDialog = false;
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
-        this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data)
+        this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj)
             .subscribe((response: any) => {
                 setTimeout(() => {
-                    //$("#wincontractMessages").data("kendoWindow").open();
-                    this.reloadGrid.emit(true);
+                    //yet to migrate message board 
+                    this.refreshContract.emit(true);
                 }, 50);
                 this.setBusy("", "", "", "");
             }, function (response) {
@@ -563,7 +568,7 @@ export class dealToolsComponent{
             });
     }
 
-    ngOnChanges(){
+    ngOnChanges() {
         this.loadDealTools();
     }
 }
