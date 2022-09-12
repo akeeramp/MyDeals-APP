@@ -1191,6 +1191,18 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
             if (gData[i]["REBATE_BILLING_END"] !== undefined) gData[i]["REBATE_BILLING_END"] = moment(gData[i]["REBATE_BILLING_END"]).format("MM/DD/YYYY");
             if (gData[i]["LAST_REDEAL_DT"] !== undefined) gData[i]["LAST_REDEAL_DT"] = moment(gData[i]["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
 
+            //Check Billing Dates.
+            if (gData[i]["REBATE_BILLING_START"] !== undefined && gData[i]["REBATE_BILLING_END"] !== undefined) {
+                if (moment(gData[i]["REBATE_BILLING_START"]).isAfter(moment(gData[i]["REBATE_BILLING_END"]))) {
+                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                    gData[i]._behaviors.isError['REBATE_BILLING_START'] = true;
+                    gData[i]._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
+                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                    errs.PRC_TBL_ROW.push("Billing Start date cannot be greater than the Billing End Date");
+                }
+            }
+
             // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
             if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
                 if (Object.keys(dictGroupType).length == 0) {
