@@ -112,27 +112,13 @@
                                        [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.filterable" [sortable]="column.sortable">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                             <div *ngIf="!dropdownFilterColumns.includes(column.field)">
-                                <kendo-multiselect placeholder="Click to search"
-                                                   [data]="filteringData[column.field]"
-                                                   [checkboxes]="true"
-                                                   textField="Text"
-                                                   valueField="Value"
-                                                   [value]="filteredValue[column.field]"
-                                                   [autoClose]="true"
-                                                   [kendoDropDownFilter]="filterSettings"
-                                                   kendoMultiSelectSummaryTag
-                                                   (valueChange)="valueChange($event, column.field, filterService)">
-                                </kendo-multiselect><br />
+                                <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
+                                                   [filterService]="filterService" [data]="filteringData[column.field]"></multicheck-filter>
                             </div>
                             <div *ngIf="dropdownFilterColumns.includes(column.field)">
-                                <kendo-dropdownlist [filterable]="true" textField="Text"
-                                                   valueField="Value" [data]="filteringData[column.field]" [value]="filteredValue[column.field]" (valueChange)="valueChange($event, column.field ,filterService)"> </kendo-dropdownlist>
-                                <br />
-                            </div>
-                            <div class="col-md-12" id="btnFilter">
-                                <button class="col-md-5 k-button btnFltr" type="reset" (click)="clear(column.field)">clear</button>&nbsp;
-                                <button class="col-md-5 k-button btnFltr" type="submit" (click)="valueChange(filteredValue[column.field], column.field, filterService)" [disabled]="!isFilterEnabled">Filter</button>
-                            </div>
+                                <dropDown-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
+                                                   [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
+                            </div>                            
                         </ng-template>
                         <ng-template kendoGridHeaderTemplate>
                             <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
@@ -142,7 +128,7 @@
                                               (iconUpdate)="updateSaveIcon($event)" (reloadGrid)="gridReload($event)"></deal-editor-cell>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
+                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridData.data" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
                         </ng-template>
                     </kendo-grid-column>
                 </kendo-grid>

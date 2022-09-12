@@ -21,6 +21,13 @@ export class systemPricePointModalComponent {
     cancel() {
         this.dialogRef.close();
     }
+    onKeyDown(event) {
+        if (event.keyCode == 13) {
+            if (parseFloat(this.price) <= 0.00) {
+                this.price = 0.01;
+            }
+        }
+    }
     ok() {
         var returnVal = "";
         if ((this.price != null && this.price !== "") && (this.operator.name !== undefined && this.operator !== "")) {

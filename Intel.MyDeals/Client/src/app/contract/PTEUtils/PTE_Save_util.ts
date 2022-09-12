@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import * as moment from 'moment';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
+import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 
 export class PTE_Save_Util {    
     static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any):any{
@@ -222,5 +223,9 @@ export class PTE_Save_Util {
         }
         });
         return iserror !=null ? true:false;
+    }
+
+    static setDataItem(dataItem: any, field: any, value, key?: any) {
+        DE_Save_Util.setDataItem(dataItem, field, value, key);        
     }
 }

@@ -18,4 +18,25 @@ export class DE_Save_Util {
             }
         }
     }
+
+    static setDataItem(dataItem: any, field: any, value: any, key?: any) {
+        if ((dataItem._behaviors != undefined && dataItem._behaviors.isReadOnly != undefined
+            && (dataItem._behaviors.isReadOnly[field] === undefined || !dataItem._behaviors.isReadOnly[field]))
+            || field == "IS_PRIME" || field == "PRIMED_CUST_CNTRY" || field == "PRIMED_CUST_NM" || field == "PRIMED_CUST_ID"
+            || field == "IS_RPL" || field == "END_CUST_OBJ") {
+            if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
+            if (dataItem._behaviors.isHidden[field] === undefined || dataItem._behaviors.isHidden[field] === false) {
+                if (key != undefined && key != null && key != "") {
+                    if (dataItem[field][key] != undefined && dataItem[field][key] != null)
+                        dataItem[field][key] = value;
+                }
+                else
+                    dataItem[field] = value;
+                if (dataItem._behaviors.isDirty == undefined)
+                    dataItem._behaviors.isDirty = {};
+                dataItem._behaviors.isDirty[field] = true;
+                dataItem["_dirty"] = true;
+            }
+        }
+    }    
 }

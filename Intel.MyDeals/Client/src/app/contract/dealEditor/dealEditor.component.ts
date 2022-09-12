@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, FilterService} from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query";
+import { process, State, distinct, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
@@ -22,7 +22,7 @@ import { contractDetailsService } from "../contractDetails/contractDetails.servi
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component"
 import { GridUtil } from '../grid.util';
-import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 
 @Component({
     selector: 'deal-editor',
@@ -111,75 +111,29 @@ export class dealEditorComponent {
             value: 100
         }
     ];
-    private filteredValue: any[] = [];
     private filteringData: any[] = [];
-    private isFilterEnabled: boolean = false;
-    private filterSettings: DropDownFilterSettings = {
-        caseSensitive: false,
-        operator: "contains",
-    };
-
     filterChange(filter: any): void {
-        this.isFilterEnabled = false;
         this.state.filter = filter;
         this.gridData = process(this.gridResult, this.state);
-        _.each(this.dropdownFilterColumns, (column) => {
-            if (this.filteredValue[column] != undefined && this.filteredValue[column] != null && this.filteredValue[column].Value != undefined && this.filteredValue[column].Value != null) {
-                let arrayData = [];
-                _.each(this.gridData.data, (eachData) => {
-                    let keys = Object.keys(eachData[column]);
-                    let isexists = false;
-                    for (var key in keys) {
-                        if (eachData[column][keys[key]] == this.filteredValue[column].Value)
-                            isexists = true;
-                    }
-                    if (isexists)
-                        arrayData.push(eachData);
-                })
-                this.gridData = process(arrayData, this.state);
-            }
-        });
-    }
-
-    valueChange(values, field, filterService: FilterService): void {
-        if (this.dropdownFilterColumns.includes(field)) {
-            this.isFilterEnabled = true;
-            this.filteredValue[field] = values;
-            let array = [];
-            array.push(values)
-            filterService.filter({
-                filters: array.map(value => ({
-                    field: field,
-                    operator: 'isnotnull',
-                    value: value
-                })),
-                logic: 'or'
-            });
-        } else {
-            if (this.filteredValue[field] != undefined && this.filteredValue[field].filter(x => x.Value == 'Select All').length > 0 && values.filter(x => x.Value == 'Select All').length == 0) {
-                this.filteredValue[field] = [];
-            }
-            else {
-                this.filteredValue[field] = values;
-            }
-            this.isFilterEnabled = this.filteredValue[field].length > 0 ? true : false;
-            if (this.filteredValue[field].filter(x => x.Value == 'Select All').length > 0) {
-                this.filteredValue[field] = this.filteringData[field];
-            }
-            filterService.filter({
-                filters: this.filteredValue[field].map(value => ({
-                    field: field,
-                    operator: 'eq',
-                    value: value.Value
-                })),
-                logic: 'or'
-            });
-        }
-    }
-
-    clear(field: string) {
-        this.filteredValue[field] = [];
-        this.isFilterEnabled = false;
+        filter.filters.forEach((item: CompositeFilterDescriptor) => {
+            let arrayData = [];
+            item.filters.forEach((fltrItem: FilterDescriptor) => {
+                let column = fltrItem.field.toString();
+                if (this.dropdownFilterColumns.includes(column)) {                    
+                    _.each(this.gridData.data, (eachData) => {
+                        let keys = Object.keys(eachData[column]);
+                        let isexists = false;
+                        for (var key in keys) {
+                            if (eachData[column][keys[key]] == fltrItem.value.toString())
+                                isexists = true;
+                        }
+                        if (isexists)
+                            arrayData.push(eachData);
+                    })
+                }
+            })
+            this.gridData = process(arrayData, this.state);
+        });        
     }
 
     distinctPrimitive(): any {
@@ -187,27 +141,38 @@ export class dealEditorComponent {
             if (col.filterable == true) {
                 let distinctData: any[] = [];
                 if (this.dropdownFilterColumns.includes(col.field)) {
-                    _.each(this.gridResult, (item) => {
-                        let keys = Object.keys(item[col.field]);
-                        for (var key in keys) {
-                            if (item[col.field][keys[key]] != undefined && item[col.field][keys[key]] != null && !distinctData.includes(item[col.field][keys[key]]))
-                                distinctData.push({ Text: item[col.field][keys[key]], Value: item[col.field][keys[key]] });
-                        }
-                    });
+                    if (col.field == "EXPIRE_FLG") {
+                        distinctData = distinct(this.gridResult, col.field).map(item => {
+                            if (item[col.field]== "1") {
+                                return { Text: "Yes", Value: item[col.field] };
+                            }
+                            else if (item[col.field] == "0")
+                                return { Text: "No", Value: item[col.field] }
+                        });
+                    }
+                    else {
+                        _.each(this.gridResult, (item) => {
+                            let keys = Object.keys(item[col.field]);
+                            for (var key in keys) {
+                                if (item[col.field][keys[key]] != undefined && item[col.field][keys[key]] != null && distinctData.filter(x => x.Text == item[col.field][keys[key]].toString()).length == 0)
+                                    distinctData.push({ Text: item[col.field][keys[key]].toString(), Value: item[col.field][keys[key]] });
+                            }
+                        });
+                    }
                 }
-                else {                    
+                else {
                     distinctData = distinct(this.gridResult, col.field).map(item => {
                         if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
                             return { Text: new Date(item[col.field]).toUTCString(), Value: item[col.field] };
                         }
-                        else
-                            return { Text: item[col.field], Value: item[col.field]}
+                        else if (item[col.field] != undefined && item[col.field] != null)
+                            return { Text: item[col.field].toString(), Value: item[col.field] }
                     });
                     distinctData.unshift({ Text: 'Select All', Value: 'Select All' });
                 }
                 this.filteringData[col.field] = distinctData;
             }
-        });       
+        });
     }
         
     getGroupsAndTemplates() {
@@ -322,15 +287,20 @@ export class dealEditorComponent {
     }
 
     updateModalDataItem(dataItem, field, returnVal) {
-        if (dataItem != undefined && dataItem._behaviors != undefined) {
-            dataItem[field] = returnVal;
-            if (dataItem._behaviors.isDirty == undefined)
-                dataItem._behaviors.isDirty = {};
-            dataItem._behaviors.isDirty[field] = true;
-            dataItem["_dirty"] = true;
-            this.dirty = true;
+        if (dataItem.isLinked != undefined && dataItem.isLinked && this.gridResult.filter(x => x.isLinked).length > 0) {
+            _.each(this.gridResult, (item) => {
+                if (item.isLinked != undefined && item.isLinked)
+                    PTE_Save_Util.setDataItem(item, field, returnVal);
+            })
         }
-    }
+        else {
+            if (dataItem != undefined && dataItem._behaviors != undefined) {
+                PTE_Save_Util.setDataItem(dataItem, field, returnVal);
+                dataItem["_dirty"] = true;
+                this.dirty = true;
+            }
+        }
+    }    
 
     updateSaveIcon(eventData: boolean) {
         this.dirty = eventData;
@@ -385,6 +355,12 @@ export class dealEditorComponent {
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal != undefined) {
                 dataItem.END_CUST_OBJ = returnVal.END_CUST_OBJ;
+                if (dataItem.isLinked != undefined && dataItem.isLinked) {
+                    _.each(this.gridResult, (item) => {
+                        if (item.isLinked != undefined && item.isLinked)
+                            PTE_Save_Util.setDataItem(item, 'END_CUST_OBJ', returnVal.END_CUST_OBJ);
+                    })
+                }
                 this.updateModalDataItem(dataItem, "END_CUSTOMER_RETAIL", returnVal.END_CUSTOMER_RETAIL);
                 this.updateModalDataItem(dataItem, "IS_PRIME", returnVal.IS_PRIME);
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_CNTRY", returnVal.PRIMED_CUST_CNTRY);

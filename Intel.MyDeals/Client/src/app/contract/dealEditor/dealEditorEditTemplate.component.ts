@@ -3,6 +3,8 @@ import { Component, Input, ViewEncapsulation, Output, EventEmitter, ViewChild, E
 import { downgradeComponent } from '@angular/upgrade/static';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
+import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
+import * as _ from 'underscore';
 
 @Component({
     selector: 'deal-editor-edit',
@@ -18,6 +20,7 @@ export class dealEditorEditTemplateComponent {
     @Input() in_Deal_Type: string = '';
     @Input() in_DataItem: any = '';
     @Input() in_DropDownResponses: any;
+    @Input() in_DataSet: any
     @Output() invalidDate = new EventEmitter<any>();
     @ViewChild("dealDateToolTip", { static: false }) dealDateToolTip: NgbTooltip;
     private message = "";
@@ -61,7 +64,36 @@ export class dealEditorEditTemplateComponent {
         if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT') && key != undefined && key != null && key != "" && dataItem[field][key] == null) {
             dataItem[field][key] = 0;
         }
-        this.updateDataItem(dataItem, field);
+        if (dataItem.isLinked != undefined && dataItem.isLinked) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data 
+            _.each(this.in_DataSet, (item) => {
+                if (item.isLinked != undefined && item.isLinked) {
+                    let value;
+                    if (key != undefined && key != null && key != "" && item[field][key] != undefined && item[field][key] != null) {
+                        if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT')) { // if modified value is KIT deal ECAP_PRICE and DSCNT_PER_LN then all dim keys values needs to be copied
+                            var keys = Object.keys(item[field])
+                            for (var index in keys) {
+                                if (dataItem[field][keys[index]] != undefined && dataItem[field][keys[index]] != null) {
+                                    value = dataItem[field][keys[index]];
+                                }
+                                else // if modified record having less no.of.products than other records, then clearing out values for those products
+                                    value = 0;
+                                PTE_Save_Util.setDataItem(item, field, value, keys[index]);
+                            }
+                        }
+                        else {// copy only modified key column to all other selected records
+                            value = dataItem[field][key];
+                            PTE_Save_Util.setDataItem(item, field, value, key)
+                        }
+                    }
+                    else {// copy only modified column to all other selected records
+                        value = dataItem[field];
+                        PTE_Save_Util.setDataItem(item, field, value);
+                    }
+                }
+            })
+        }
+        else
+            this.updateDataItem(dataItem, field);
     }    
     onKeyDown(event, dealDate) {
         if (event.keyCode == 13) {
@@ -86,7 +118,7 @@ export class dealEditorEditTemplateComponent {
             dataItem._behaviors.isDirty[field] = true;
             dataItem["_dirty"] = true;
         }
-    }
+    }    
 
     tierArray(keys: any) {
         var valueIsNumber = Number.isNaN(Number(keys));
@@ -105,34 +137,64 @@ export class dealEditorEditTemplateComponent {
         return arr;
     }
 
+    saveLinkedDataItem(dataItem: any, field: string, value: any, key: string) { // to modify the linked/selected records if Tier column is modified 
+        if (dataItem.isLinked != undefined && dataItem.isLinked) {
+            _.each(this.in_DataSet, (item) => {
+                if (item.isLinked != undefined && item.isLinked) {
+                    if (field == 'RATE' || field == 'INCENTIVE_RATE' || field == "DENSITY_RATE") {// if modified column is rate, then all dim key values needs to be copied to all other selected records
+                        var keys = Object.keys(item[field])
+                        for (var index in keys) {
+                            if (dataItem[field][keys[index]] != undefined && dataItem[field][keys[index]] != null)
+                                value = dataItem[field][keys[index]];
+                            else// if modified record having less no.of.Tiers than other records, then clearing out values for those tiers
+                                value = 0;
+                            PTE_Save_Util.setDataItem(item, field, value, keys[index])
+                        }
+                    }
+                    else {// copy only modified column to all other selected records
+                        if (item[field][key] != undefined && item[field][key] != null) {
+                            value = dataItem[field][key];
+                            PTE_Save_Util.setDataItem(item, field, value, key)
+                        }
+                    }
+                }
+            })
+        }
+    }
     updateTierAttributes(dataItem: any, field: string, row: number) {
         if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
             if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field]["10___" + row] == "9999999999.99")) {
                 dataItem[field]["10___" + row] = 9999999999.99;
+                this.saveLinkedDataItem(dataItem, field, 9999999999.99, "10___" + row)
             }
             else if ((dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
                 dataItem[field]["10___" + row] = "Unlimited";
+                this.saveLinkedDataItem(dataItem, field, "Unlimited", "10___" + row)
             }
         }
         if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field]["10___" + row] === null) {
-            dataItem[field]["10___" + row] = 0;
+            dataItem[field]["10___" + row] = 0;            
+            this.saveLinkedDataItem(dataItem, field, 0, "10___" + row)
         }
         if (field === "DENSITY_RATE") {
             for (var key in dataItem[field]) {
                 if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
                     dataItem[field][key] = 0;
+                    this.saveLinkedDataItem(dataItem, field, 0, key)
                 }
             }
-        }
+        }        
         this.updateDataItem(dataItem, field);
         if (field === "END_VOL") {
             //if there is a next row/tier
             if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row].toLowerCase() === "unlimited") {
+                if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited") {
                     dataItem["STRT_VOL"]["10___" + (row + 1)] = 0;
+                    this.saveLinkedDataItem(dataItem, "STRT_VOL", 0, "10___" + (row + 1));
                 } else {
                     //if end vol is a number, then set next start vol to that number + 1
                     dataItem["STRT_VOL"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + 1;
+                    this.saveLinkedDataItem(dataItem, "STRT_VOL", parseInt(dataItem[field]["10___" + row]) + 1, "10___" + (row + 1));
                 }
                 this.updateDataItem(dataItem, 'STRT_VOL');
             }
@@ -144,9 +206,11 @@ export class dealEditorEditTemplateComponent {
             if (!!dataItem["STRT_REV"]["10___" + (row + 1)]) {
                 if (dataItem[field]["10___" + row] === "9999999999.99") { // Was "Unlimited"
                     dataItem["STRT_REV"]["10___" + (row + 1)] = 0;
+                    this.saveLinkedDataItem(dataItem, "STRT_REV", 0, "10___" + (row + 1))
                 } else {
                     //if end vol is a number, then set next start vol to that number + .01 (a penny)
                     dataItem["STRT_REV"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .01).toFixed(2);
+                    this.saveLinkedDataItem(dataItem, "STRT_REV", (dataItem[field]["10___" + row] + .01).toFixed(2), "10___" + (row + 1))
                 }
                 this.updateDataItem(dataItem, 'STRT_REV');
             }
@@ -156,15 +220,18 @@ export class dealEditorEditTemplateComponent {
         if (field === "END_PB") {
             //if there is a next row/tier
             if (!!dataItem["STRT_PB"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row].toLowerCase() === "unlimited") {
+                if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited") {
                     dataItem["STRT_PB"]["10___" + (row + 1)] = 0;
+                    this.saveLinkedDataItem(dataItem, "STRT_PB", 0, "10___" + (row + 1))
                 } else {
                     //if end pb is a number, then set next start pb to that number + 0.001
-                    dataItem["STRT_PB"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .001).toFixed(3);;
+                    dataItem["STRT_PB"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .001).toFixed(3);
+                    this.saveLinkedDataItem(dataItem, "STRT_PB", (dataItem[field]["10___" + row] + .001).toFixed(3), "10___" + (row + 1))
                 }
                 this.updateDataItem(dataItem, 'STRT_PB');
             }
         }
+        this.saveLinkedDataItem(dataItem, field, dataItem[field]["10___" + row], "10___" + row)
     }
     convertToLowerCase(value) {
         if(typeof value == "string")
