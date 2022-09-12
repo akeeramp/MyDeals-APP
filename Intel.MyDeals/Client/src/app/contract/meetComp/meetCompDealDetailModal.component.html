@@ -41,14 +41,22 @@
                     <div class='readOnlyCell dealDetailCell' title="{{dataItem.WF_STG_CD}}">{{dataItem.WF_STG_CD}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="STRT_DT" title="Start Date" width="170" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="STRT_DT" title="Start Date" width="170" [headerClass]="{'headerClass':true}" filter="date" format="{0:M/d/yyyy}">
+                <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                    </date-range-filter>
+                </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.STRT_DT}}">{{dataItem.STRT_DT}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.STRT_DT}}">{{dataItem.STRT_DT | date: 'M/d/yyyy'}}</div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="END_DT" title="End Date" width="170" [headerClass]="{'headerClass':true}">
+            <kendo-grid-column field="END_DT" title="End Date" width="170" [headerClass]="{'headerClass':true}" filter="date" format="{0:M/d/yyyy}">
+                <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                    </date-range-filter>
+                </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.END_DT}}">{{dataItem.END_DT}}</div>
+                    <div class='readOnlyCell dealDetailCell' title="{{dataItem.END_DT}}">{{dataItem.END_DT | date: 'M/d/yyyy'}}</div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="DEAL_CMBN_TYPE" title="Additive" width="150" [headerClass]="{'headerClass':true}">

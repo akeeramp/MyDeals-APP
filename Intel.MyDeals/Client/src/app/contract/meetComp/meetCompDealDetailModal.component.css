@@ -296,6 +296,19 @@
     padding: 15px !important;
 }
 
+.modal-body td {
+    border-style: none !important;
+}
+
+.modal-body th {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: capitalize !important;
+    color: #1a3e6f !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+}
+
 .dealDetailCell {
-    padding: 12px !important;
+    padding: 18px !important;
+    font-size: 14px !important;
 }
