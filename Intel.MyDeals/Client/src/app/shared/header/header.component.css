@@ -188,3 +188,7 @@ ul .searchresult-container button {
     padding: 2px;
     font-size: 12px
 }
+
+.header-fixes li.dropdown ul.dropdown-menu {
+    border-radius: 0;
+}

@@ -47,7 +47,7 @@
         [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [height]="400"
         (dataStateChange)="dataStateChange($event)">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                    class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button>
+                    class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span
                     class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
         </ng-template>

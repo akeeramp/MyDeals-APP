@@ -158,7 +158,8 @@
     font-size: 10px;
     margin-left: 5px;
     background-color: #0071C5;
-    margin-bottom: 4px
+    margin-bottom: 4px;
+    border-radius: 10px;
 }
 
 .stgLnk.active .badge {
@@ -243,14 +244,27 @@
     cursor: pointer!important
 }
 
+.k-i-plus, .k-i-minus {
+    opacity: .45;
+    font-size: 20px !important;
+    color: #000 !important;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.k-i-plus:focus, .k-i-minus:focus, .k-i-plus:active, .k-i-minus:active, .k-i-plus:focus-visible, .k-i-minus:focus-visible {
+    outline: 5px auto -webkit-focus-ring-color !important;
+    outline-offset: -10px;
+}
+
 .k-i-plus:before,
 .k-plus:before {
-    content: "\E11E"!important
+    content: "" !important;
 }
 
 .k-i-minus:before,
 .k-minus:before {
-    content: "\E121"!important
+    content: "" !important;
 }
 
 .k-pager-numbers .k-link.k-state-selected {

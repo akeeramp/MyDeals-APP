@@ -3,7 +3,7 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div>
-    <h2>{{title}}</h2>
+    <h2 class="cache-header">{{title}}</h2>
     <p style="font-size: 10px;">
         The Cache Manager will show which cache containers are loaded and display their count.
         You can clear the cache, reload the cache or even view the cache contents.
@@ -12,7 +12,7 @@
 <div id="cacheContainer" (window:resize)="onResize()">
     <div>
         <div id="cacheList" class="fl" [style.height.px]="divCacheListHt">
-            <h5>Cache Status</h5>
+            <h5 class="temp-headers">Cache Status</h5>
             <table class="tblCache" ui-auto="tblCache">
                 <tr>
                     <th class="text-left">Cache Name</th>
@@ -48,7 +48,7 @@
                 </button>
             </div>
             <hr />
-            <h5>Api Cache Status</h5>
+            <h5 class="temp-headers">Api Cache Status</h5>
             <table class="tblCache">
                 <tr>
                     <th class="text-left">Cache Name</th>
@@ -79,7 +79,7 @@
         </div>
         <div id="viewResultsContainer" class="fl" [style.height.px]="divViewResultHt"
              [style.width.px]="divViewResultWidth">
-            <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
+            <h5 class="temp-headers">Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
             <div id="viewResults" ui-auto="divResults">{{currentCacheDetails}}</div>
         </div>
     </div>

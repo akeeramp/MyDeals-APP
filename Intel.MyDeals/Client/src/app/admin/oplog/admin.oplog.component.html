@@ -9,19 +9,19 @@
             <h2>{{title}}</h2>
         </div>
         <div class="col-md-5"></div>
-        <div class="col-md-4"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog"
-                class="k-primary fr margin10" style="margin-left:10px; margin-top:20px;">Reload</button>
+        <div class="col-md-4 flex-arrive"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog"
+                class="k-primary fr margin10 fr-method" style="margin-left:10px; margin-top:20px;">Reload</button>
             <kendo-dialog *ngIf="dateRangeInvalid" [minWidth]="250" [width]="450">
                 <p style="margin: 30px; text-align: center;">Please Check Dates. Log can be fetched for maximum 30
                     days... </p>
                 <kendo-dialog-actions><button kendoButton (click)="close()">OK</button></kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="endDate" type="date" data-role="datepicker"
+            <kendo-datepicker class="fr margin10 fr-method" #picker [(ngModel)]="endDate" type="date" data-role="datepicker"
                 role="combobox" calendarType="classic" style="width: 130px; margin-top: 20px;"></kendo-datepicker>
-            <div class="fr margin10" style="margin-top: 25px;margin-left: 5px;margin-right: 5px;">-</div>
-            <kendo-datepicker class="fr margin10" #picker [(ngModel)]="startDate" type="date" data-role="datepicker"
+            <div class="fr margin10 fr-method" style="margin-top: 25px;margin-left: 5px;margin-right: 5px;">-</div>
+            <kendo-datepicker class="fr margin10 fr-method" #picker [(ngModel)]="startDate" type="date" data-role="datepicker"
                 role="combobox" calendarType="classic" style="width: 130px; margin-top: 20px;"></kendo-datepicker>
-            <h5 class="fr" style="font-size: 16px; margin-top: 28px">Date Range:&nbsp;</h5>
+            <h5 class="fr fr-method append-h5" style="font-size: 16px; margin-top: 28px">Date Range:&nbsp;</h5>
         </div>
     </div>
     <p style="font-size: 10px;">The Log Viewer will show Log captured in temp folder. </p>

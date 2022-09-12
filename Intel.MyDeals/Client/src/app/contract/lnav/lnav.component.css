@@ -459,3 +459,9 @@
 .psContainer .chevron:hover{
     color:#ffffff;
 }
+
+.anarchy-anchor-two .nav-extra {
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+}

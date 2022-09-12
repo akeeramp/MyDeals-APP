@@ -79,3 +79,21 @@
 .margin10 {
     margin-top: 10px;
 }
+
+.fr-method {
+    margin-top: 10px !important;
+}
+
+.flex-arrive {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+}
+
+.append-h5 {
+    font-size: 16px !important;
+    color: #111 !important;
+    font-weight: 400 !important;
+}

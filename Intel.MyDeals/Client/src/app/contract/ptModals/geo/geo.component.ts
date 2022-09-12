@@ -10,7 +10,8 @@ export interface DialogData {
 
 @Component({
     selector: "geo-selector",
-    templateUrl:"Client/src/app/contract/ptModals/geo/geo.component.html"
+    templateUrl: "Client/src/app/contract/ptModals/geo/geo.component.html",
+    styleUrls: ['Client/src/app/contract/ptModals/geo/geo.component.css']
   })
 
   export class GeoSelectorComponent {

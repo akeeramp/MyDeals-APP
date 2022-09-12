@@ -13,13 +13,13 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
         // templateUrl:'Client/src/app/shared/advanceSearch/globalSearchResults.directive.html',
         template:`
         <div class="container-fluid">
-            <div style="margin-bottom: 15px; text-align: center;">
-                <i class="search intelicon-search" style="margin-right: 10px; font-size: 28px; color: #0071C5; vertical-align: sub;"></i>
+            <div class="applied-products">
+                <i class="search intelicon-search" style="margin-right: 10px; font-size: 30px; color: #0071C5; vertical-align: sub;"></i>
                 <input type="text" placeholder="Search for deal #, contract, or pricing strategy"
                        class="k-input searchResultInpt"
                        ng-model="$root.globalSearchResultsData.searchText"
                        ng-keypress="EnterPressed($event)">
-                <div class="btn-group" style="margin-top: -3px;">
+                <div class="btn-group copper-btns" style="margin-top: -6px;">
                     <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'ALL'" uncheckable>All</label>
                     <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'CNTRCT'" uncheckable>Contract</label>
                     <label class="btn btn-primary btn-sm" ng-model="$root.globalSearchResultsData.opTypeModel" uib-btn-radio="'PRC_ST'" uncheckable>Pricing Strategy</label>
@@ -114,6 +114,27 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
         </div>
         
         <style>
+            .copper-btns label {
+                border: 1px solid #ffffffcc!important;
+                padding: 5px 10px;
+                font-size: 13px;
+                line-height: 1.5;
+                height: 33px;
+                margin-right: 1px;
+                position: relative!important;
+                border-radius: 0!important;
+            }
+
+            .copper-btns label:first-child{
+                border-top-left-radius: 3px !important;
+                border-bottom-left-radius: 3px !important;
+            }
+
+            .copper-btns label:last-child{
+                border-top-right-radius: 3px !important;
+                border-bottom-right-radius: 3px !important;
+            }
+
             .k-window-actions .k-i-close {
                 color: #ffffff !important;
             }
@@ -184,11 +205,26 @@ function globalSearchResults($compile, $timeout, dataService, $uibModal) {
                 width: 325px;
                 margin-bottom: 15px;
             }
+            .applied-products {
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                width: 100%;
+            }
+            .applied-products .searchResultInpt {
+                background-color: #fff;
+                color: #444;
+                border: 1px solid #e6e6e6;
+                margin-bottom: 0;
+                height: 33px;
+            }
         </style>`,
         controller: ['$scope', '$http', function ($scope, $http) {
 
            let  kenWindow= $("#winGlobalSearchResults").kendoWindow({
-                title: "About Alvar Aalto",
+                title: "Search Results",
                 visible: false,
                 width:"900px"
             });

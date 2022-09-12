@@ -1,6 +1,6 @@
 ﻿<loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="true" [msgType]="msgType"></loading-panel-angular>
-<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab">
+<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab" class="width-fixes">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
             <span><i class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
@@ -101,8 +101,8 @@
                     <input style="width:270px;border:none" (keydown)="filterDealData($event)" [(ngModel)]="searchFilter" placeholder="search... (press enter to search)" />
                 </span>
             </div>
-            <div class="op-grid-container">
-                <kendo-grid id="dealEditor" #grid [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+            <div class="op-grid-container one-check">
+                <kendo-grid id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
@@ -145,7 +145,7 @@
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab [disabled]="true">
         <ng-template kendoTabTitle>
-            <div ngClass="fl volView contractView" *ngIf="!isTenderContract">
+            <div ngClass="fl volView contractView minimal-fixes" *ngIf="!isTenderContract">
                 <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
             <div class="fl volView tenderView" *ngIf="isTenderContract">

@@ -2,8 +2,14 @@
     margin: 40px;
 }
 
+.role-heading {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    margin-bottom: 11px !important;
+}
+
     .empRole h5, .empRole button {
-        margin-top: 40px;
+        margin-top: 40px!important;
     }
 
     .empRole input[type=radio].with-font, .empRole input[type=checkbox].with-font {

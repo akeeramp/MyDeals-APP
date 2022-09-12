@@ -10,6 +10,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: "adminDataquality",
     templateUrl: "Client/src/app/admin/dataQuality/admin.dataQuality.component.html",
+    styleUrls: ['Client/src/app/admin/dataQuality/admin.dataQuality.component.css']
 })
 
 export class admindataQualityComponent {

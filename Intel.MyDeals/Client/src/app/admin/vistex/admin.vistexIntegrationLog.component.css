@@ -62,3 +62,7 @@
 .ss-loading-panel.ss-Info {
     margin-top: 200px!important
 }
+
+kendo-popup * {
+    font-size: 12px!important
+}

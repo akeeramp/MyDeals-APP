@@ -31,7 +31,7 @@
         <div class="col-md-2"><button (click)="getData()" class="btn btn-primary" style="float: left;width:97px;">Get
                 Data</button></div>
     </div>
-    <div style="margin-left: 20px;display:inline-block">
+    <div class="another-press" style="margin-left: 20px;display:inline-block">
         <kendo-combobox class="fr opUiContainer md" [data]="requestTypeList" [kendoDropDownFilter]="filterSettings" textField="RQST_NAME" valueField="RQST_TYPE" [(ngModel)]="selectedRequestType" (valueChange)="onRequestTypeChange($event)" style="width: 220px;height:33px;font-size: 5px;"></kendo-combobox>
         <div class="fr mrgn-txt-color" style="width: 100px;">
             Request Type:
@@ -50,7 +50,7 @@
     <kendo-grid [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
         [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="{sort:true}" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                    class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button>
+                    class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
         </ng-template>
         <kendo-grid-command-column title=" " width="100" [headerClass]="{'headerClass':true}" [columnMenu]="false">

@@ -141,7 +141,7 @@
         @*<security-loader></security-loader>*@
     </div>
     <div class="menu-bar">
-        <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
+        <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes" id="myTab" role="tablist">
             @*<li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -183,7 +183,7 @@
                     }
                     <li class="dropdown-submenu">
                         <a tabindex="-1">TroubleShooting</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
+                        <ul class="dropdown-menu header-methods" style="width: 250px;">
                             <li class="menu-detailed">
                                 <a href="/error/ResetMyCache" onclick="clearSessionData('/error/ResetMyCache');return false;">
                                     <i class="fl fa fa-user-md"></i>
@@ -491,6 +491,9 @@
         color: #ffffff;
         line-height: 12px;
         height: 50px;
+    }
+    .header-fixes li.dropdown ul.dropdown-menu {
+        border-radius: 0;
     }
 </style>
 

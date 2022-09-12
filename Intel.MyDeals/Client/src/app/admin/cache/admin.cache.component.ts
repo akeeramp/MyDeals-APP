@@ -148,7 +148,7 @@ export class CacheComponent {
         const divCacheListWidth = document.getElementById("cacheList").clientWidth;
         this.divCacheListHt = window.innerHeight - 200;
         this.divViewResultHt = window.innerHeight - 200;
-        this.divViewResultWidth = window.innerWidth - divCacheListWidth - 120;
+        this.divViewResultWidth = window.innerWidth - divCacheListWidth - 150;
     }
 
     ngOnInit() {

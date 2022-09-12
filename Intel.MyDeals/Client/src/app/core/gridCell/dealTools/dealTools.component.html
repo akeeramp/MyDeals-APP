@@ -3,13 +3,13 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
-<div class="dealTools">
-    <div *ngIf="isPublishable != true">
+<div class="dealTools custom-deal-tools">
+    <div *ngIf="isPublishable != true" class="tools-parent">
         <div class="dirtyTip" *ngIf="dataItem._dirty || dataItem.isDirtyFile" title="This deal has been modified"></div>
-        <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
+        <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
 
         <!-- Checkbox -->
-        <div class='fl' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (!(isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'))">
+        <div class='fl check-parent' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (!(isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'))">
             <!-- ng-disabled="dataItem.SALESFORCE_ID !== ''" was another option, but visually couldn't change it from normal looking check box, so... -->
             <input type="checkbox" [(ngModel)]="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" />
             <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>

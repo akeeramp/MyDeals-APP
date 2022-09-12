@@ -20,8 +20,8 @@ function globalSearch($timeout, logger, objsetService, dataService, $rootScope, 
                ng-keypress="enterPressed($event)">
         
         <div class="btn-group" style="margin-right: 4px;">
-            <button class="btn btn-xs btn-default" type="button" ng-click="executeOnly('ALL')">in <b>All</b></button>
-            <button class="btn btn-xs btn-default dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown">
+            <button class="btn btn-xs btn-default custom-xs-btn" type="button" ng-click="executeOnly('ALL')">in <b>All</b></button>
+            <button class="btn btn-xs btn-default dropdown-toggle need-all-xs" aria-expanded="false" type="button" data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
@@ -36,6 +36,13 @@ function globalSearch($timeout, logger, objsetService, dataService, $rootScope, 
         </div>
         
         <style>
+            .custom-xs-btn{
+                padding: 1px 5px!important;
+            }
+            .need-all-xs .caret:before {
+                position: relative!important;
+                top: -4px!important;
+            }
             .globalSearchInpt {
                 width: 320px; 
                 font-size: 14px; 

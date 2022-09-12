@@ -26,7 +26,7 @@
                 <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RULE
             </button>
             <button *ngIf="toolKitHidden == false && rid != 0" [disabled]="isLoading" class="k-button addButton" (click)="removeFilter()">
-                <span class="k-icon k-i-filter-clear k-icon-md"></span>REMOVE FILTER
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>REMOVE FILTER
             </button>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" class="k-button" kendoGridExcelCommand icon="file-excel">
                 EXPORT TO EXCEL

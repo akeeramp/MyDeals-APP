@@ -81,7 +81,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.BUTTON.id = "btnCustSelctor";
                 this.buttonStyle = this.BUTTON.style;
                 this.BUTTON.className = 'btn btn-sm btn-primary py-0 htCustCellEditor';
-                this.BUTTON.innerText = '🔍';
+                this.BUTTON.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
                 this.BUTTON.addEventListener('mousedown', (event: any) => {
                     event.stopImmediatePropagation();
                     event.preventDefault();

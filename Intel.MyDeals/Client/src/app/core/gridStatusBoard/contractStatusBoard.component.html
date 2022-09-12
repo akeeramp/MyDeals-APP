@@ -11,12 +11,12 @@
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div><a href="/Contract#/manager/{{contractId}}{{jumptoSummary}}" target="_blank"
                             title="Click to open the Contract in the Contract Editor"><span
-                                class="intelicon-frame-template"></span></a></div>
+                                class="intelicon-frame-template new-template-icon" style="font-size: 20px;"></span></a></div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="stage" title="Strategy Stage" width="200" [headerClass]="{'headerClass':true}"
                 [filterable]="true" [sortable]="true">
-                <ng-template kendoGridCellTemplate let-dataItem><span><i class='intelicon-workflow-process-outlined'
+                <ng-template kendoGridCellTemplate let-dataItem><span><i class='intelicon-workflow-process-outlined request-icons'
                             style='font-size: 20px;'></i>{{dataItem.stage}}</span></ng-template>
             </kendo-grid-column>
             <kendo-grid-column title="Strategy Name" field="name" width="200px" [headerClass]="{'headerClass':true}">
@@ -30,7 +30,7 @@
             <kendo-grid-column field="pct" title="Price Cost Test Results" width="200"
                 [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_COST_TEST" [filterable]="true">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <div>
+                    <div class="calc-icons">
                         <icon-mct-pct-angular [dataValue]='dataItem.pct' [iconClass]="medIcon"></icon-mct-pct-angular>
                     </div>
                 </ng-template>
@@ -38,7 +38,7 @@
             <kendo-grid-column field="mct" title="Meet Comp Test Results" width="200"
                 [headerClass]="{'headerClass':true}" [hidden]="!CAN_VIEW_MEET_COMP" [filterable]="true">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <div>
+                    <div class="calc-icons">
                         <icon-mct-pct-angular [dataValue]='dataItem.mct' [iconClass]="medIcon"></icon-mct-pct-angular>
                     </div>
                 </ng-template>

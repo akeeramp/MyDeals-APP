@@ -9,18 +9,22 @@
     border-color: #004280!important
 }
 
+/*
 .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
     font-size: 12px!important;
     line-height: 1.33333!important;
     font-weight: normal!important;
     padding: 0 12px!important
 }
+*/
 
 
 .k-window-title {
     right: 1.143em !important;
     left: 1.143em !important;
-    position: absolute !important;
+    /*position: absolute !important;*/
+    padding: 7px !important;
+    font-size: 1.2em !important;
 }
 
 .k-button-icon {
@@ -31,5 +35,32 @@
 .k-window-titlebar {
     background-color: #0071c5 !important;
     color: #fff !important;
-    padding: 0rem !important;
+    /*padding: 0rem !important;*/
+}
+
+.comp-parent mat-button-toggle-group {
+    border: none;
+}
+
+mat-button-toggle.comp-customize-btn {
+    border-radius: 0 !important;
+    border: none !important;
+    padding: 5px 10px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+mat-button-toggle.comp-customize-btn button span {
+    padding: 0 !important;
+    line-height: 1.33333 !important;
+}
+
+.comp-parent mat-button-toggle.comp-customize-btn:first-child {
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 3px !important;
+}
+
+.comp-parent mat-button-toggle.comp-customize-btn:last-child {
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
 }

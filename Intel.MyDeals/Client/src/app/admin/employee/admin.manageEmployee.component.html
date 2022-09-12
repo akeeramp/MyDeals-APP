@@ -17,7 +17,7 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" filterable="menu"
             (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                        class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button><button
+                        class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button><button
                     [disabled]="isLoading" type="button" kendoGridExcelCommand icon="file-excel">EXPORT TO EXCEL
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"

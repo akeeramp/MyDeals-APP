@@ -57,3 +57,14 @@ h1 {
 .iconLink:hover {
     color: #003C71
 }
+
+h2.cache-header {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 26px;
+}
+
+h5.temp-headers {
+    font-weight: 500 !important;
+    margin-bottom: 11px !important;
+}

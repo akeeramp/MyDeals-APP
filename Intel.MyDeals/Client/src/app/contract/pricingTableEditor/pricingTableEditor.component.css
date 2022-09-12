@@ -50,9 +50,10 @@ td:not(.error-cell).readonly-cell {
     width: 25px;
     z-index: 300;
     margin-left: 0px;
-    height: 25px;
+    height: 100%;
     font-size: 0.8em;
     opacity: 1 !important;
+    padding: 0 !important;
 }
 
 
@@ -156,4 +157,8 @@ kendo-toolbar-renderer {
 .k-i-bold::before {
     content: "\e601";
     color: #00AEEF;
+}
+
+.all-spread #spreadsheet {
+    width: 100% !important;
 }

@@ -24,9 +24,9 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     C_CREATE_CONTRACT = this.newContractWidgetService.chkDealRules('C_CREATE_CONTRACT', (<any>window).usrRole, null, null, null); //this create contract will be implemented after header component is ready
 
     //Need to change these text fields on resize event when width increases & decreases
-    createContractText = 'Create Contract';
-    copyContractText = 'Copy Contract';
-    createTenderFolioText = 'Create Tender Folio';
+    createContractText = 'Create a My Deals Contract';
+    copyContractText = 'Copy a My Deals Contract';
+    createTenderFolioText = 'Create a Customer Tender Folio';
 
     //To load angular Contract details page change value to true, will be removed once contract details migration is done
     public angularEnabled:boolean=false;

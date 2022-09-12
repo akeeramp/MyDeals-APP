@@ -36,7 +36,8 @@
 
 .text-detail {
     text-align: left;
-    margin-left: 40px
+    margin-left: 48px;
+    margin-top: 3px;
 }
 
 .custom-padding {
@@ -49,4 +50,8 @@
 
 .link-color:hover {
     color: #003C71!important
+}
+
+.first-component .fl.icon-parent i {
+    font-size: 40px;
 }

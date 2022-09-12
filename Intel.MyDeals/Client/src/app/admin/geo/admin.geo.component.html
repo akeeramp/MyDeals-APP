@@ -3,14 +3,14 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12" style="height:50px"></div>
+    <div class="col-md-12" style="height:44px"></div>
 </div>
 <div class="row">
     <div class="col-md-12" style="padding-left: 35px;">
         <h3>Geo</h3>
     </div>
     <div class="col-md-12">
-        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;"><b><i
+        <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 35px; padding-top: 0;"><b><i
                     class="intelicon-alert-solid icon-lg"></i>Note:</b>This admin screen is a
             <strong>Read-Only</strong> screen for viewing data. </div>
     </div>
@@ -20,7 +20,7 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
             [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
             <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                        class="k-icon k-i-filter-clear k-icon-md"></span>CLEAR FILTERS </button>
+                        class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>

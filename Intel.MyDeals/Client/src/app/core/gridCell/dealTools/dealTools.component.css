@@ -51,7 +51,7 @@ textarea {
     width: 440px;
     height: 200px;
 }
-.k-button {
+.custom-deal-tools .k-button {
     padding: 1.3em 0 !important;
     border-radius: 0px !important;
     border-bottom: 0px !important;
@@ -347,6 +347,31 @@ textarea {
     cursor: pointer;
 }
 
-    .delete-attach-icon:hover {
-        text-decoration: none;
-    }
+.delete-attach-icon:hover {
+    text-decoration: none;
+}
+
+.tools-parent {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 50px;
+}
+
+.check-parent label {
+    position: relative;
+    top: 3px;
+    left: 6px;
+    margin-bottom: 0;
+}
+
+.grid-status.fl.gridStatusMarker.Draft {
+    padding: 0 !important;
+    min-width: 30px;
+    min-height: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0 !important;
+}

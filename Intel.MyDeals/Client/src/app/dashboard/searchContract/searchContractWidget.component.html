@@ -17,9 +17,9 @@
 </div>
 <div class="row text-center">
     <div class="col-md">
-        <div class="gridster-item-content">
+        <div class="gridster-item-content comp-parent">
             <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                <mat-button-toggle class="btn btn-primary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                <mat-button-toggle class="btn btn-primary comp-customize-btn" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
             </mat-button-toggle-group>
         </div>
     </div>
