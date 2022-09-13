@@ -215,7 +215,7 @@ export class ProductSelectorComponent {
                     id: ProdSel_Util.getVerticalSelection(i.MRK_LVL1, this.selectedPathParts, this.productSelectionLevels)[0].PRD_MBR_SID,
                     selected: ProdSel_Util.productExists(item, ProdSel_Util.getVerticalSelection(i.MRK_LVL1, this.selectedPathParts, this.productSelectionLevels).length > 1 ? undefined : ProdSel_Util.getVerticalSelection(i.MRK_LVL1, this.selectedPathParts, this.productSelectionLevels)[0].PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 };
-            })
+            }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
             return;
         }
 
@@ -237,7 +237,7 @@ export class ProductSelectorComponent {
                     parentSelected: item.selected,
                     selected: ProdSel_Util.productExists(item, ProdSel_Util.getVerticalSelection(i.MRK_LVL2, this.selectedPathParts, this.productSelectionLevels).length > 1 ? undefined : ProdSel_Util.getVerticalSelection(i.MRK_LVL2, this.selectedPathParts, this.productSelectionLevels)[0].PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 }
-            });
+            }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
             //in case of certain selection there will be one child in that case we are hitting the next level to get products
             if (this.items.length == 1) {
                 this.selectItem(this.items[0]);
@@ -262,7 +262,7 @@ export class ProductSelectorComponent {
                     parentSelected: item.selected,
                     selected: ProdSel_Util.productExists(item, i.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 }
-            });
+            }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
             //in case of certain selection there will be one child in that case we are hitting the next level to get products
             if (this.items.length == 1) {
                 this.selectItem(this.items[0]);
@@ -284,7 +284,7 @@ export class ProductSelectorComponent {
                     parentSelected: item.selected,
                     selected: ProdSel_Util.productExists(item, i.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 }
-            });
+            }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
 
             // For non CPU products check for GDM columns
             // All this special handling would go if GDM attributes are populated at hierarchical columns
@@ -304,7 +304,7 @@ export class ProductSelectorComponent {
                             selected: ProdSel_Util.productExists(item, i.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection),
                             id: i.PRD_MRK_MBR_SID
                         }
-                    });
+                    }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
                     if (this.items.length == 1) {
                         this.selectItem(this.items[0])
                     }
@@ -330,7 +330,7 @@ export class ProductSelectorComponent {
                     parentSelected: item.selected,
                     selected: ProdSel_Util.productExists(item, i.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 }
-            });
+            }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
 
             if (this.items.length == 1 && this.items[0].name == 'NA') {
                 let drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
@@ -354,7 +354,7 @@ export class ProductSelectorComponent {
                             parentSelected: item.parentSelected,
                             selected: item.selected
                         }
-                    });
+                    }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
                 } else {
                     if (this.selectedPathParts[3].drillDownFilter4 != undefined && this.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
                         drillLevel5 = drillLevel5.filter((x) => {
@@ -370,7 +370,7 @@ export class ProductSelectorComponent {
                             parentSelected: item.parentSelected,
                             selected: item.selected
                         }
-                    });
+                    }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
                 }
                 if (this.items.length == 1) {
                     this.selectItem(this.items[0]);

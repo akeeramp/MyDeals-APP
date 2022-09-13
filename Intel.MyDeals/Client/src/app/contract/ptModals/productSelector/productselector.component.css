@@ -40,6 +40,7 @@
 .prodHeader {
     color: white;
     font-size: 26px;
+    padding-left: 15px;
 }
 
 @media (max-width: 1100px) {
@@ -81,7 +82,7 @@
     color: white;
     background-color: #1a3e6f;
     padding-left: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 25px;
 }
 
 a.prdAnchor {
@@ -327,7 +328,7 @@ a.prdAnchor {
 }
 
 .prodSelector.modal-body {
-    padding-top: 28px;
+    padding: 20px;
     padding-bottom: 0px;
     min-height: 365px;
     max-height: calc(85vh - 365px);
@@ -622,11 +623,13 @@ input[type=checkbox].with-sm-font {
     border: 0px !important;
 }
 
-.CAPYCS2CellContent {
-    background-color: yellow;
-    border-color: yellow;
+.isSoftWarnCell {
+    background-color: #f3d54e !important;
     text-align: center;
     justify-content: center;
+    font-weight: 600;
+    font-family: arial;
+    color: #444;
 }
 
 .product-selector {
