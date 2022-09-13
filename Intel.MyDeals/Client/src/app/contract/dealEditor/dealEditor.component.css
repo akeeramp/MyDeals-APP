@@ -12,8 +12,8 @@
 
 .vert-center {
     position: relative;
-    top: 0% !important;
-    transform: translateY(0) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
 }
 
 #chkDealTools label {
@@ -109,6 +109,9 @@
     height: 100%;
     white-space: nowrap;
     border-right: 0.1px solid lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tierBorder {
@@ -207,7 +210,7 @@ tr:last-child > td {
 }
 
 .capLineStyle {
-    line-height: 1em;
+    /*line-height: 1em;*/
     font-family: arial;
     text-align: center;
     font-weight: 600
@@ -317,7 +320,7 @@ tr:last-child > td {
 }
 
 .op-grid.k-grid .uiControlDiv {
-    line-height: 4 !important;
+    line-height: 2 !important;
 }
 
 .op-grid .uiControlDiv {
@@ -624,6 +627,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     align-items: flex-start;
 }
 
+/*
 .one-check kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr {
     height: 50px !important;
     max-height: 50px !important;
@@ -637,8 +641,12 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     align-items: center;
     justify-content: flex-start;
 }
-
+*/
 .one-check kendo-pager-page-sizes.k-label {
     display: flex;
     width: auto !important;
+}
+
+.valid-icon {
+    margin-left: 12px;
 }
