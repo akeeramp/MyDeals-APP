@@ -3,7 +3,7 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css" rel="stylesheet" />
 
-<div class="modal-content" moveablemodal style="height:90vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+<div class="modal-content" moveablemodal style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
     <div style="padding-left:10px;padding-right:10px">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
@@ -11,7 +11,7 @@
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-6  text-center headerMsg">
-                    <span *ngIf="curRowIssues.length > 0">
+                    <span *ngIf="curRowIssues.length > 0" style="color: #ffffff; font-size: 22px;">
                         My Deals needs help with <span class="yellow">{{ numIssueRows }}</span> of <span class="yellow">{{ totRows }}</span> rows
                     </span>
                 </div>
@@ -46,20 +46,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3">
+            <div class="row" style="margin-top:10px">
+                <div class="col-md-3 lnavFilter">
                     <div class="row">
                         <div class="col">
-                            <p>Filter by product</p>
+                            <p class='filterTitleUnderline'>Filter by product</p>
                             <div *ngFor="let curRow of selRowIssues;let i = index">
-                                <span>{{curRow.name}}</span> -- <span>{{curRow.len}}</span> 
-                           </div>
+                                <label class="lblFilterProd" style="margin-left:28px">
+                                    <span>{{curRow.name}}</span>  <span class="badge upperBadge"> {{curRow.len == 0 ? "?" : curRow.len }}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row" *ngIf="selRowLvl.length>0">
                         <div class="col">
-                            <p>Filter by product level</p>
-                            <kendo-treeview [nodes]="selRowLvl"
+                            <p class="filterTitleUnderline">Filter by product level</p>
+                            <kendo-treeview class="lblFilterProd" [nodes]="selRowLvl"
                             [(selectedKeys)]="selPrdLvlKeys"
                             textField="name"
                             [hasChildren]="false"
@@ -72,8 +74,8 @@
                     </div>
                     <div class="row" *ngIf="selRowCategories.length>0">
                         <div class="col">
-                            <p>Filter by product vertical</p>
-                            <kendo-treeview [nodes]="selRowCategories"
+                            <p class="filterTitleUnderline">Filter by product vertical</p>
+                            <kendo-treeview class="lblFilterProd" [nodes]="selRowCategories"
                             [(selectedKeys)]="selPrdVerKeys"
                             textField="name"
                             [hasChildren]="false"
@@ -89,27 +91,26 @@
                     <kendo-grid [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="true" [group]="state.group"
-                    filterable="menu" (dataStateChange)="dataStateChange($event)" [height]="750">
+                    filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" [height]="700">
                     <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLUDE" title="">
                     </kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered" [width]="150">
                         <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
                             {{value}}
-                                <!-- this logic is yet to build dont uncomment  -->
-                                <!--  <strong> <i class='intelicon-arrow-back-left skyblue pl10'></i> 
-                                Can't find what you are looking for? Use the <button (click)="openProdSel(value)">
-                                     Product Selector</button></strong> -->
+                                 <!--this logic is yet to build dont uncomment-->  
+                                  <strong> <i class='intelicon-arrow-back-left skyblue pl10'></i> 
+                                Can't find what you are looking for? Use the Product Selector </strong> 
                          </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" >
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50">
                         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                             <input type="checkbox" kendoCheckBox (click)="prodSelect(dataItem,$event)" [(ngModel)]="dataItem.IS_SEL"/>
                          </ng-template>
                     </kendo-grid-column>
                     <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_SEL" title="Type"></kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product" [width]="150">
                     </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical" [width]="80">
                     </kendo-grid-column>
                     <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand Name">
                     </kendo-grid-column>
@@ -117,15 +118,15 @@
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Product Effective Date">
                     </kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CAP" title="CAP Info">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CAP" title="CAP Info" [width]="150">
                     </kendo-grid-column>
                     <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification">
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="MM_MEDIA_CD" title="Media Code">
                     </kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="YCS2" title="YCS2">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="YCS2" title="YCS2" [width]="150">
                     </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_FMLY_NM" title="GDM Family Name">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_FMLY_NM" title="GDM Family Name" [width]="150">
                      </kendo-grid-column>
                     <!--<kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_NM_HASH" title="Product Description">
                     </kendo-grid-column>
@@ -135,9 +136,9 @@
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM_MM" title="EDW Family Name">
                     </kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="EPM_NM" title="EPM Name">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="EPM_NM" title="EPM Name" [width]="150">
                     </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="SKU_NM" title="SKU Name">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="SKU_NM" title="SKU Name" [width]="180">
                     </kendo-grid-column>
                     <!-- <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_FAMILY" title="NAND FAMILY">
                     </kendo-grid-column>
@@ -151,7 +152,7 @@
                     </kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_SEGMENT" title="Price Segment">
                     </kendo-grid-column> -->
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name" [width]="150">
                     </kendo-grid-column>
                   </kendo-grid>
                 </div>
@@ -164,7 +165,7 @@
             <div class="col-md-1 col-md-offset-5">
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" />
             </div>
-            <div class="col-md-6" style="margin-right: -15px;">
+            <div class="col-md-6" style="margin-left: 49%">
                 <button class="btn btn-primary prdBtn" (click)="onSave()" style="float:right;margin-right: -15px;">Save and Close</button>
                 <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:2px;float:right">Cancel</button>
 
