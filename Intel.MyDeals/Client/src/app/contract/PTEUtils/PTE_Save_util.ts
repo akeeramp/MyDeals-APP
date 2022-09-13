@@ -174,20 +174,18 @@ export class PTE_Save_Util {
         }
      });
      return PTR;
-    }
-    static updateProjectNameCase(PTR: Array<any>) {
-        _.each(PTR, item => {
-            if (item.QLTR_PROJECT != undefined && item.QLTR_PROJECT != null && item.QLTR_PROJECT != "") {
-                item.QLTR_PROJECT = item.QLTR_PROJECT.toUpperCase();
-            }
-        });
-        return PTR;
-    }
+    }    
     //check for all attribue present
     static sanitizePTR(PTR:Array<any>,contractData:any):Array<any>{
         _.each(PTR,(item) =>{
             if(item && (item.CUST_MBR_SID ==null || item.CUST_MBR_SID=='' || item.CUST_MBR_SID==undefined)){
                 item.CUST_MBR_SID=contractData.CUST_MBR_SID;
+            }
+            if (item.QLTR_PROJECT != undefined && item.QLTR_PROJECT != null && item.QLTR_PROJECT != "") {
+                item.QLTR_PROJECT = item.QLTR_PROJECT.toUpperCase();
+            }
+            if (item.PRD_EXCLDS && item.PRD_EXCLDS != undefined && item.PRD_EXCLDS != null && item.PRD_EXCLDS.length == 0) {
+                item.PRD_EXCLDS = "";
             }
         });
         return PTR;

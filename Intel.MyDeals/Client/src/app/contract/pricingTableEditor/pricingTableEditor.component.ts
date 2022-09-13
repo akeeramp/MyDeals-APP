@@ -686,9 +686,7 @@ export class pricingTableEditorComponent implements OnChanges {
         //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
         finalPTR = PTE_Helper_Util.deNormalizeData(finalPTR, this.curPricingTable);
         //This method will remove all the unwanted property since there are keys with undefined values
-        finalPTR = PTE_Common_Util.deepClone(finalPTR);
-        //Update ProjectName to Uppercase
-        finalPTR = PTE_Save_Util.updateProjectNameCase(finalPTR);
+        finalPTR = PTE_Common_Util.deepClone(finalPTR);        
         //settment partner change for taking only the ID the API will send back us the both
         finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
         //sanitize Data before save this will make sure all neccessary attributes are avaialbel

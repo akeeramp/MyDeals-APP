@@ -382,7 +382,7 @@ export class PTE_CellChange_Util {
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
                 this.autoFillCellonProdKit(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
             }
-            else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'VOL_TIER') {
+            else if (OBJ_SET_TYPE_CD && (OBJ_SET_TYPE_CD == 'VOL_TIER' || OBJ_SET_TYPE_CD == 'FLEX')) {
                 this.autoFillCellonProdVol(items, curPricingTable, contractData, pricingTableTemplates, operation);
             }
             else {
