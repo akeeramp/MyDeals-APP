@@ -12,6 +12,9 @@ import { lnavService } from "../lnav/lnav.service";
 import { GridUtil } from "../grid.util";
 import { MatDialog } from "@angular/material/dialog";
 import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.component";
+import { messageBoardModal } from "./messageBoard/messageBoard.component";
+import { emailModal } from "./emailModal/emailModal.component";
+
 
 
 @Component({
@@ -28,14 +31,22 @@ export class contractManagerComponent {
     lastRun: any;
     needToRunPct: boolean;
     text: string;
-    contractDetails: any;
     isPending: boolean = false;
-    showApproveCheckBox = true;
-    showReviseCheckBox = true;
-    showEmailCheckBox = true;
     curDataItems = [];
     canBypassEmptyActions: boolean = true;
     needToRunOverlaps = [];
+    isRunning: boolean = false;
+    messages: any;
+    marks: any=[];
+    hideIfNotPending: boolean;
+    pendingWarningActions= false;
+    custAccptButton: any ='';
+    showPendingInfo: boolean= true;
+    showPendingFile: boolean= false;
+    showPendingC2A: boolean= false;
+    showPendingWarning: boolean = false;
+    showData: boolean = false;
+    requestBody: any ={};
     constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {
   
     }
@@ -46,7 +57,7 @@ export class contractManagerComponent {
     PCTResultView = false;
     public submitModal = false;
     OtherType = []; isECAP = []; isKIT = []
-    @Input() contractData:any;
+    @Input() public contractData:any;
     @Input() UItemplate:any;
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
@@ -67,7 +78,20 @@ export class contractManagerComponent {
     public gridData: GridDataResult;
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
     titleFilter = ""; canActionIcon = true; public isAllCollapsed = false; canEdit = true;
-
+    title='';
+    category='';
+    type="block";
+    start = moment();
+    end=null;
+    executionMs= 0;
+    timeFormat="MM/DD/YYYY HH:mm:ss:SSS";
+    lapse=0;
+    private windowOpened= false;
+    private windowTop = 200;windowLeft = 350;windowWidth = 620;windowHeight = 500;windowMinWidth = 100;
+    public filteredData: any;
+    windowClose() {
+        this.windowOpened = false;
+      }
     toggleSum() {
         if (this.isAllCollapsed == true) {
             this.contractData?.PRC_ST.map((x, i) => {
@@ -133,9 +157,7 @@ export class contractManagerComponent {
         if (!event.currentTarget.checked) {
             this[checkBoxType] = false;
         }
-            if (event.target.checked){
-
-        }
+        let checkedList = [];
             if (event.target.id.indexOf("email") > 0) {
                 var anyEmailChecked = false;
                 const isItemChecked = event.target.checked;
@@ -148,7 +170,7 @@ export class contractManagerComponent {
                        this.emailCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
                     }
             });
-                   
+
                 if (event.target.checked || anyEmailChecked) {
                     this.canActionIcon = false;
                     this.canEmailIcon = true;
@@ -183,7 +205,7 @@ export class contractManagerComponent {
             this.reviseCheckBox = false;
             this.emailCheckBox = false;
     }
-    pendingChange(e) {
+    pendingChange() {
         let fromToggle = true;
         this.togglePending(true);
     }
@@ -198,23 +220,59 @@ export class contractManagerComponent {
             if (runActions) this.actionItems(true, true);
         }
     }
+    closeDialog(){
+        this.showPendingWarning = false;
+        if(this.pendingWarningActions == true){
+            this.isPending = !this.isPending;
+            if(this.isPending){
+                this.contractData.CUST_ACCPT = "Pending";
+            } else {
+                this.contractData.CUST_ACCPT = "Accepted";
+            }
+        }
+    }
+    showPending(page) {
+        this.showPendingInfo = false;
+        this.showPendingFile = false;
+        this.showPendingC2A = false;
+        if (page === "showPendingInfo") {
+            this.showPendingInfo = true;
+        } else if (page === "showPendingFile") {
+            this.showPendingFile = true;
+        } else if (page === "showPendingC2A") {
+            this.showPendingC2A = true;
+        }
+
+    }
+
 
     actionItems(fromToggle, checkForRequirements) {
-
-        if (fromToggle === undefined && checkForRequirements === undefined) {
+        if (fromToggle == undefined && checkForRequirements == undefined) {
             var ids = [];
-            var anyEmailChecked = false;            
+            var anyEmailChecked = false;   
+            let items = document.getElementsByClassName('psCheck-Email');
+            for (var i = 0; i < items.length; i++)
+                if ((items[i]  as HTMLInputElement).checked) {
+                    let selectedIdarray = items[i].getAttribute('id').split('_');
+                    ids.push(parseInt(selectedIdarray[2]));
+                    anyEmailChecked = true;
+                }
+
+            if (anyEmailChecked) {
+                this.openEmailMsg(ids);
+                return;
+            }         
         }
 
         if (fromToggle === undefined || fromToggle === null) fromToggle = false;
         if (checkForRequirements === undefined || checkForRequirements === null) checkForRequirements = false;
 
-        var ps = this.contractData.PRC_ST;
+        let ps = this.contractData.PRC_ST;
 
 
         // look for checked ending
         if (ps !== undefined) {
-            for (var p = 0; p < ps.length; p++) {
+            for (let p = 0; p < ps.length; p++) {
                 if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0] != null && ($("#rad_approve_" + ps[p].DC_ID)[0] as HTMLInputElement).checked) {
                     this.isPending = true;
                     this.contractData.CUST_ACCPT = "Accepted";
@@ -224,15 +282,144 @@ export class contractManagerComponent {
         }
 
         if (this.isPending === false && this.contractData.CUST_ACCPT !== "Pending" && (this.contractData.C2A_DATA_C2A_ID === "" && this.contractData.HAS_ATTACHED_FILES === "0")) {
+            this.pendingWarningActions = true;
+            this.showPendingWarning = true
             // this.dialogPendingWarning.open();
         } else if (this.isPending === false && this.contractData.CUST_ACCPT !== "Pending") {
             this.continueAction(fromToggle, false);
         } else if (this.isPending === true && this.contractData.CUST_ACCPT !== "Accepted") {
             this.continueAction(fromToggle, checkForRequirements);
         } else {
-            this.actionItemsBase(null, null);
+            this.actionItemsBase(null, true);
         };
     }
+    openEmailMsg(ids) {
+        let rootUrl = window.location.protocol + "//" + window.location.host;
+        let items = [];
+
+        // Check unique stages as per role
+        var stageToCheck = "";
+        if ((<any>window).usrRole == "DA") {
+            stageToCheck = "Approved"
+        } else if ((<any>window).usrRole == "GA") {
+            stageToCheck = "Submitted"
+        }
+
+        // set this flag to false when stages are not unique as per role
+        let stagesOK = true;
+
+        for (let a = 0; a < this.contractData.PRC_ST.length; a++) {
+            let stItem = this.contractData.PRC_ST[a];
+            if (!!stItem && ids.indexOf(stItem.DC_ID) >= 0) {
+                var item = {
+                    "CUST_NM": this.contractData.Customer.CUST_NM,
+                    "VERTICAL_ROLLUP": stItem.VERTICAL_ROLLUP,
+                    "CNTRCT": "#" + this.contractData.DC_ID + " " + this.contractData.TITLE,
+                    "C2A_ID": this.contractData.C2A_DATA_C2A_ID,
+                    "DC_ID": stItem.DC_ID,
+                    "NEW_STG": stItem.WF_STG_CD,
+                    "TITLE": stItem.TITLE,
+                    "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
+                    "contractUrl": rootUrl + "/Contract#/manager/" + this.contractData.DC_ID
+                };
+
+                if (stageToCheck != "" && stageToCheck != item.NEW_STG) {
+                    stagesOK = false;
+                }
+
+                items.push(item);
+            }
+        }
+
+        if (items.length === 0) {
+            alert("No items were selected to email.");
+            return;
+        }
+
+        let custNames = [];
+        for (var x = 0; x < items.length; x++) {
+            if (custNames.indexOf(items[x].CUST_NM) < 0)
+                custNames.push(items[x].CUST_NM);
+        }
+
+        let subject = "";
+        let eBodyHeader = "";
+
+        if (stagesOK && (<any>window).usrRole === "DA") {
+            subject = "My Deals Deals Approved for ";
+            eBodyHeader = "My Deals Deals Approved!";
+        } else if (stagesOK && (<any>window).usrRole === "GA") {
+            subject = "My Deals Approval Required for "
+            eBodyHeader = "My Deals Approval Required!";
+        } else {
+            subject = "My Deals Action Required for ";
+            eBodyHeader = "My Deals Action Required!";
+        }
+
+        subject = subject + custNames.join(', ') + "!";
+
+        let data = {
+            from: (<any>window).usrEmail,
+            items: items,
+            eBodyHeader: eBodyHeader
+        }
+
+        var itemListRowString=``;
+        for(let i=0; i<data.items.length; i++){
+                itemListRowString =itemListRowString+ `<tr>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span>`+data.items[i].CNTRCT+`</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].C2A_ID+`</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].url}'>`+ data.items[i].DC_ID+`</a>*</span> </td>
+                <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].TITLE+`</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'>`+ data.items[i].VERTICAL_ROLLUP+`</span> </td>
+                <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:#767171;'>Moved to the `+ data.items[i].NEW_STG+` </span> </td>
+                <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].url}'>View Pricing Strategy</a>*</span> </td>
+            </tr>`
+        }
+        let valuemsg = `
+        <div style='font-family:sans-serif;'>
+        <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
+        <p><span style='font-size:18px;'>Pricing Strategies</span></p>
+        <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong style='color:#00AEEF;'>View Pricing Strategy</strong> in order to view details in My Deals.</span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
+                    <th style='text-align: left; width:80px; font-size: 12px; font-family: sans-serif;'><strong>C2A #</strong></th>
+                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy #</strong></th>
+                    <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
+                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>New Stage</strong></th>
+                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
+                </tr>
+            </thead>
+            <tbody>`+itemListRowString+`
+            </tbody>
+        </table>
+        <br />
+        <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}'>`+data.from+`</a>.</span></p>
+        <br />
+        <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
+        </div>
+    `;
+        var dataItem = {
+            from: "mydeals.notification@intel.com",
+            to: "",
+            subject: subject,
+            body: valuemsg
+        };
+        const dialogRef = this.dialog.open(emailModal, {
+            width: "900px",
+            height: "611px",
+            data: {
+                cellCurrValues: dataItem
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+        });
+    }
+
     getItem(items, actn) {
         var allPs = this.contractData.PRC_ST;
         let fullId = items.getAttribute('id')
@@ -249,9 +436,9 @@ export class contractManagerComponent {
     }
 
     getActionItems(data, dataItem, actn, actnText) {
-        var ids = [];
-        var items = $(".psCheck-" + actn);
-
+        let ids = [];
+        let items = $(".psCheck-" + actn);
+        this.requestBody = data;
         for (var i = 0; i < items.length; i++) {
             if ((items[i] as HTMLInputElement).checked) {
                 var item = this.getItem(items[i], actnText);
@@ -337,6 +524,8 @@ export class contractManagerComponent {
                     this.gridData = response;
                     this.gridDataSet[pt.DC_ID] = this.gridData;
                 }
+            }, (error) => {
+                this.loggerSvc.error('Get WIP Summary service', error);
             })
         }
     }
@@ -360,14 +549,14 @@ export class contractManagerComponent {
         this.executePct();
     }
     executePct() {
-        $(".iconRunPct").addClass("fa-spin grn");
+        this.isRunning = true;
         this.contractManagerSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
-            $(".iconRunPct").removeClass("fa-spin grn");
+            this.isRunning = false;
             this.loadContractDetails();
             this.isLoading = false;
 
         }, (err) => {
-            $(".iconRunPct").removeClass("fa-spin grn");
+            this.isRunning = false;
             this.isLoading = false;
             this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
         });
@@ -375,7 +564,7 @@ export class contractManagerComponent {
     }
     lastRunDisplay(value) {
         this.text = value;
-        if ($(".iconRunPct").hasClass("fa-spin grn")) {
+        if (this.isRunning) {
             return "Running " + this.text;
         }
         
@@ -431,24 +620,29 @@ export class contractManagerComponent {
         return false;
     }
     loadContractDetails(){
-        this.contractManagerSvc.readContract(this.contractId).subscribe((response: Array<any>) => {
+        this.contractData ={};
+        this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
             this.contractData = response[0];
+            this.contractId= this.contractData.DC_ID;
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.contractData?.PRC_ST.map((x, i) => {
+                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                this.isPSExpanded[i] = false;
+                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+            })
+            if(this.contractData.CUST_ACCPT === "Pending"){
+                this.isPending = true;
+            } else if(this.contractData.CUST_ACCPT === "Accepted"){
+                this.isPending = false;
+            }
+            this.filteredData = this.contractData?.PRC_ST; 
+            this.showData = true;
+        }, (error) => {
+            this.loggerSvc.error('Get Upper Contract service', error);
         });
-        this.contractId= this.contractData.DC_ID;
-        this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-        this.contractData?.PRC_ST.map((x, i) => {
-            //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-            this.isPSExpanded[i] = false;
-            if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-        })
-        if(this.contractData.CUST_ACCPT === "Pending"){
-            this.isPending = true;
-        } else if(this.contractData.CUST_ACCPT === "Accepted"){
-            this.isPending = false;
-        }
-        
         
     }
+
     actionItemsBase(approvePending, saveCustAcceptance) {
         var data = {};
         var dataItems = [];
@@ -469,19 +663,20 @@ export class contractManagerComponent {
         this.getActionItems(data, dataItems, "Revise", "Send for Revision");
         this.getActionItems(data, dataItems, "Cancel", "Send for Cancelling");
         this.getActionItems(data, dataItems, "Hold", "Send for Holding");
+
         if (Object.keys(data).length === 0) {
             if (!this.canBypassEmptyActions) {
                 this.submitModal = true;
             }
-           this.canBypassEmptyActions = false;
+            this.canBypassEmptyActions = false;
             if (saveCustAcceptance === true) {
-                this.isLoading =true;
-                this.quickSaveContract();
+                this.isLoading = true;
+                this.quickSaveContract('Save');
             }
-            return;
         }
 
-        this.curDataItems = dataItems;
+    this.curDataItems = dataItems;
+    if(this.curDataItems.length > 0){
         const dialogRef = this.dialog.open(actionSummaryModal, {
             width: "600px",
             height: "500px",
@@ -491,39 +686,65 @@ export class contractManagerComponent {
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal == 'success') {
-                // this.quickSaveContract();
                 if (saveCustAcceptance === true) {
                     this.isLoading = true;
-                    this.quickSaveContractFromDialog(this.curDataItems, returnVal);
+                    this.quickSaveContractFromDialog(this.requestBody);
                 } 
-                // else {
-                //     $scope.checkPriorToActioning(data, result);
-                // }
                 this.canBypassEmptyActions = false;
             }
         });
+    }
+            return;
+
+
+
       }
-    quickSaveContractFromDialog(data, result){
-        let rbody:any = {Revise: data};
-        this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],rbody, this.contractData.CUST_ACCPT).subscribe((response: any) => {
-            // this.contractData = response[0];
-            console.log(response);
-            this.quickSaveContract();
-        });       
+    hasFilter() {
+        let tempData = this.contractData.PRC_ST.filter(x=>x.filtered == true).map(item=>item.WF_STG_CD).join(',');
+        if(tempData.length > 0){
+            this.filteredData= this.contractData.PRC_ST.filter(x=> tempData.includes(x.WF_STG_CD));
+        } else {
+            this.filteredData = this.contractData.PRC_ST;
+        }
+    }
+    clearFilter() {
+        let tempData = this.contractData.PRC_ST.filter(x=>x.filtered == false);
+        this.filteredData = this.contractData.PRC_ST;
+    }
+    quickSaveContractFromDialog(value){
+        if(value){
+            this.isLoading= true;
+            this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],this.requestBody, this.contractData.CUST_ACCPT).subscribe((response: any) => {
+            this.messages = response.Data.Messages;
+            this.quickSaveContract('SaveAndLoad');
+            }, (error) => {
+                this.loggerSvc.error('Pricing Stratergy service', error);
+            });  
+        }
+     
         this.canActionIcon = true;
     }
 
-    quickSaveContract(){
+
+    quickSaveContract(action){
         const ct = this.contractData;
+        this.custAccptButton = this.contractData.CUST_ACCPT;
         this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],ct).subscribe((response: Array<any>) => {
               this.isLoading = false;
+        },  (error) => {
+            this.loggerSvc.error('Save Contract service', error);
         });
-        this.loadContractDetails();
+        if(action=== 'SaveAndLoad'){
+            this.windowOpened = true;
+            this.loadContractDetails();
+        }
     }
 
     continueAction(fromToggle, checkForRequirements) {
-        // if (this.isPending === true && this.contractData.CUST_ACCPT === "Accepted" && this.contractData.HAS_ATTACHED_FILES === "0" && this.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+        if (this.isPending === true && this.contractData.CUST_ACCPT === "Accepted" && this.contractData.HAS_ATTACHED_FILES === "0" && this.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         // this.dialogPendingWarning.close();
+        this.pendingWarningActions = false;
+        this.showPendingWarning = false;
 
         if (!checkForRequirements) {
             this.canBypassEmptyActions = fromToggle && this.contractData.CUST_ACCPT === "Accepted";
@@ -535,10 +756,18 @@ export class contractManagerComponent {
     ngOnInit() {
         this.contractId= this.contractData.DC_ID;
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+        this.custAccptButton = this.contractData.CUST_ACCPT;
         this.loadContractDetails();
+        if(this.contractData.CUST_ACCPT === "Pending"){
+            this.isPending = true;
+        } else {
+            this.isPending = false;
+        }
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
     }  
+
+
 }
 angular.module("app").directive(
     "contractManager",

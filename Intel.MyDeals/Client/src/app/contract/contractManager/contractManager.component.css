@@ -30,7 +30,7 @@
 
 #sum-wrapper {
     height: 100vh;
-    overflow: scroll;
+    overflow: auto;
     padding: 100px 0 0 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -405,3 +405,71 @@ a.lnkIcon {
     margin-left: 9px !important;
     margin-top: -22px !important;
 }
+#perfDetails {
+    position: absolute;
+    bottom: 50px;
+    right: 10px;
+    font-family: verdana;
+    font-size: 10px;
+    z-index: 1000;
+    background-color: #ffffff;
+}
+
+    #perfDetails th {
+        padding: 2px 4px;
+        color: #0071C5;
+    }
+
+    #perfDetails td {
+        padding: 2px 4px;
+        color: #333333;
+    }
+    .close-icon {
+        color: black !important;
+    }
+    .k-window-title {
+        right: 1.143em !important;
+        left: 1.143em !important;
+        position: absolute !important;
+    }
+
+    .k-button-icon {
+        left: 63em !important;
+        padding-top: 0.45em !important;
+    }
+
+    .k-window-titlebar {
+        background-color: #0071c5 !important;
+        color: #fff !important;
+        padding: 0rem !important;
+        margin-top: -40px !important;
+    }
+    #toggle-container .btn-success{
+            background-color: #C4D600 !important;
+            color: #ffffff !important;
+            font-size: 14px !important;
+            line-height: 1.2em !important;
+    }
+    #toggle-container .btn-primary {
+        background-color: #00AEEF !important;
+        color: #ffffff !important;
+        font-size: 14px !important;
+        line-height: 1.2em !important;
+    }
+    .dialogPending.k-content {
+        padding: 0 !important;
+        background-color: #003C71 !important;
+        color: #ffffff !important;
+        margin-top: -50px !important;
+        height: 310px !important;
+    }
+
+        .dialogPending.k-content p {
+            font-size: 14px !important;
+        }
+
+    .wrn-red {
+        background-color: #fc3741 !important;
+        color: #ffffff !important;
+        padding: 4px 10px !important;
+    }

@@ -1,0 +1,44 @@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3" style="text-align: right;">
+            <i class="intelicon-alert-solid" style="font-size: 120px; color: #FC4C02;" [hidden]="warnCnt == 0"></i>
+            <i class="intelicon-information-solid" style="font-size: 120px; color: #C4D600;" *ngIf="warnCnt == 0"></i>
+        </div>
+        <div class="col-md-7">
+            <h4>{{title}}</h4>
+            <div [hidden]="infoCnt == 0" style="color: #C4D600; font-size: 18px;"><i class="intelicon-information-solid" style="font-size: 18px; color: #C4D600;"></i> {{infoMsg}}</div>
+            <div [hidden]="warnCnt == 0" style="color: #FC4C02; font-size: 18px;"><i class="intelicon-alert-solid" style="font-size: 18px; color: #FC4C02;"></i> {{warnMsg}}</div>
+            <div style="margin-top: 15px;">
+                <button class="btn btn-secondary btn-sm" type="button" (click)="showHideTable(true)" [hidden]="showDetails">
+                    <i class="intelicon-right-next" style="font-size: 20px;"></i> View details
+                </button>
+                <button class="btn btn-secondary btn-sm" type="button" (click)="showHideTable(false)" *ngIf="showDetails">
+                    <i class="intelicon-down" style="font-size: 20px;"></i> Hide details
+                </button>
+                <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 15px;" [hidden]="disableEmail()" (click)="openEmailMsg()">
+                    <i class="intelicon-email-message-outlined" style="font-size: 20px;"></i> Email details
+                </button>
+                <div class="clearboth"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="msgGrid" class="msgGrid" *ngIf="showDetails" style="margin-top: 20px;">
+    <kendo-grid [data]="gridData">
+    <kendo-grid-column [headerClass]="{'headerClass':true}" field="MsgType" title="&nbsp;" width="50px">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.MsgType === 1"><i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i></span>
+            <span *ngIf="dataItem.MsgType === 2"><i class='intelicon-alert-solid' style='font-size: 16px; color: #FC4C02;'></i></span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column [headerClass]="{'headerClass':true}" field="KeyIdentifiers" title="Pricing Strategy" width="130px;">
+    </kendo-grid-column>
+    <kendo-grid-column [headerClass]="{'headerClass':true}" field="Message" title="Message" width="200px">
+    </kendo-grid-column>
+    </kendo-grid>
+</div>
+

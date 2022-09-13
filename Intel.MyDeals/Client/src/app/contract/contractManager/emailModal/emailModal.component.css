@@ -1,0 +1,59 @@
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff;
+}
+
+.modalBlueBody .lbl {
+    width: 100px;
+    margin-left: 10px;
+}
+.modalBlueBody input {
+    font-size: 12px;
+    padding: 0 6px;
+}
+
+.modalBlueBody div.fl {
+    margin-top: 5px;
+}
+.btn-skyblue{
+    background-color: #00AEEF !important;
+    color: #ffffff !important;  
+}
+.btn-skyblue:hover {
+    background-color: #00AEEF !important;
+    color: #ffffff !important;
+}
+.smTxt {
+    font-size: 10px;
+    line-height: 1em;
+}
+.tmpltItem {
+    width: 100%;
+}
+.tmpltIcn {
+    width: 35px;
+}
+.tmpltIcn i {
+    font-size: 26px;
+}
+.tmpltRole {
+    font-size: 12px;
+}
+.tmpltPrimary {
+    font-size: 14px;
+    line-height: 1.1em;
+}
+.tmpltSecondary {
+    font-size: 12px;
+    line-height: 1.1em;
+    opacity: 0.6;
+}
+kendo-editor .k-editor-content {
+    z-index: 1;
+    height: 220px;
+}
+
+kendo-toolbar-renderer {
+    border-color: inherit;
+    margin: 0px !important;
+}

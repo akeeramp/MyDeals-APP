@@ -1,0 +1,20 @@
+.k-window-actions .k-i-close {
+    color: #ffffff !important;
+}
+
+.msgGrid.k-grid {
+    font-size: 10px;
+    border: 0 solid transparent;
+}
+
+.msgGrid.k-grid td {
+    font-size: 11px;
+}
+.msgGrid.k-grid th {
+    text-transform: uppercase;
+}
+
+.msgGrid.k-grid .k-header, .msgGrid.k-grid .k-grid-header-wrap, .msgGrid.k-grid .k-grid-header {
+    border-right: 0 solid transparent;
+    background-color: #ffffff !important;
+}

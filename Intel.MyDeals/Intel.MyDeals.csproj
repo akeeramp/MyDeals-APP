@@ -842,6 +842,10 @@
     <Content Include="Client\src\app\contract\contractHistory\contractHistory.component.html" />
     <Content Include="Client\src\app\contract\contractManager\actionSummaryModal\actionSummary.component.css" />
     <Content Include="Client\src\app\contract\contractManager\actionSummaryModal\actionSummaryModal.component.html" />
+    <Content Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.css" />
+    <Content Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.html" />
+    <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.css" />
+    <Content Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.html" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.css" />
     <Content Include="Client\src\app\contract\dealEditor\dealEditor.component.html" />
     <Content Include="Client\src\app\contract\contractManager\contractManager.component.css" />
@@ -2304,6 +2308,8 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractHistory\contractHistory.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractHistory\contractHistory.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\actionSummaryModal\actionSummaryModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorCellTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorEditTemplate.component.ts" />

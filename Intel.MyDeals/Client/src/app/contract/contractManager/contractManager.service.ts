@@ -48,5 +48,13 @@ export class contractManagerservice {
         const apiUrl: string = this.apiBasePricingStrategyUrl + 'ActionPricingStrategies/' + custId + '/' + contractId + '/' + contractCustAccpt;
         return this.httpClient.post(apiUrl , data);
     }
+    public getEmployeeProfile(): Observable<any> {
+        const apiUrl: string = '/api/Employees/GetUsrProfileRole';
+        return this.httpClient.get(apiUrl);
+    }
+    public emailNotification(emailInfo): Observable<any> {
+        const apiUrl: string = '/Email/EmailNotification';
+        return this.httpClient.post(apiUrl,emailInfo);
+    }
 
 }
