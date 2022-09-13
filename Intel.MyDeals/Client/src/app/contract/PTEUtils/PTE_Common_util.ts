@@ -1,8 +1,11 @@
 import { DE_Common_Util } from '../DEUtils/DE_Common_util';
 import Handsontable from 'handsontable';
 import * as _ from 'underscore';
-
+import * as moment from 'moment';
+import { extendMoment } from "moment-range";
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
+import { PTE_Validation_Util } from './PTE_Validation_util';
+import { PTE_Load_Util } from './PTE_Load_util';
 export class PTE_Common_Util {
     private static hotTable: Handsontable
     constructor(hotTable: Handsontable) {
@@ -230,5 +233,165 @@ export class PTE_Common_Util {
             return contractData;
         }
         return c;
+    }
+
+    static validateOVLPFlexProduct = function (data, wipdata, mode, curPricingTable, restrictGroupFlexOverlap, overlapFlexResult, OVLPFlexPdtPTRUSRPRDError) {
+        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
+            //Clearing the behaviors for the first time if no error the result will be clean
+            data = PTE_Validation_Util.clearValidation(data, "PTR_USER_PRD");
+
+            //Parent is set for PTE not DE level
+            var objectId = wipdata ? 'DC_PARENT_ID':'DC_ID';
+            
+            //For multi tiers last record will have latest date, skipping duplicate DC_ID
+            var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+
+            var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
+            var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+            var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
+            var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
+            if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length) { restrictGroupFlexOverlap = true; }
+            if (overlapFlexResult && overlapFlexResult.length && overlapFlexResult.length > 0) {
+                //Assigning  validation result to a variable and finally iterate between this result and bind the errors
+                var finalResult = this.checkOVLPDate(filterData, overlapFlexResult, objectId);
+                if (mode) {
+                    return finalResult;
+                }
+                _.each(data, (item) => {
+                    _.each(finalResult, (itm) => {
+                        //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
+                        if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
+                            if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'
+                                && (!(restrictGroupFlexOverlap))) {
+                                OVLPFlexPdtPTRUSRPRDError = true;
+                                item = PTE_Load_Util.setBehaviors(item, "PTR_USER_PRD", "duplicate", curPricingTable);
+                            }
+                            else if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'dateissue') {
+                                OVLPFlexPdtPTRUSRPRDError = true;
+                                item = PTE_Load_Util.setBehaviors(item, "PTR_USER_PRD", "dateissue", curPricingTable);
+                            }
+                            else {
+                                item = PTE_Load_Util.setBehaviors(item, "FLEX", "emptyobject", curPricingTable);
+                            }
+                        }
+                    });
+                });
+
+            }
+        }
+        return data;
+    }
+    static checkOVLPDate = function (data, resp, objectId) {
+        //var momentRange = require('moment-range');
+        const rangemoment =extendMoment(moment);
+        //get uniq duplicate product
+        var uniqOvlpCombination = _.uniq(_.map(resp, (ob) => { return ob.OVLP_ROW_ID }));
+        //iterate through unique product
+        _.each(uniqOvlpCombination, (dup) => {
+            //filtering the uniq prod from response and sort to get correct first and second object
+            var rowID = _.filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
+            _.each(rowID, (dupPro) => {
+                _.each(rowID, (dupPr) => {
+                    //checking the product date overlaps or not
+                    if (dupPro.ROW_ID != dupPr.ROW_ID) {
+                        var firstObj = null, secObj = null;
+
+                        if (objectId == 'DC_PARENT_ID') {
+                            //findWhere will return the first object found 
+                            firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
+                            secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
+                        }
+                        else {
+                            firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
+                            secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
+                        }
+
+                        var firstRange = rangemoment.range(moment(firstObj.START_DT), moment(firstObj.END_DT));
+                        var secRange = rangemoment.range(moment(secObj.START_DT), moment(secObj.END_DT));
+                        //identifying the dates are valid for overlap
+                        if (!moment(firstObj.START_DT).isBefore(firstObj.END_DT)) {
+                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'dateissue';
+                        }
+                        else if (!moment(secObj.START_DT).isBefore(secObj.END_DT)) {
+                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
+                        }
+                        else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) ||
+                            (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
+                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
+                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                        }
+                        //if the dates overlap add key dup as true
+                        else if (firstRange.overlaps(secRange)) {
+                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
+                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                        }
+                    }
+                });
+            });
+        });
+
+        return resp;
+    }
+
+    static getOverlapFLexProducts(curPricingTable, pricingTableRowData) {
+
+        if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+            var data = pricingTableRowData;
+            var AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
+            var DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
+            var AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
+            _.each(AcrObjs, (item) => {
+                //to handle multi tier condition
+                if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
+                    var objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    _.each(objAcr, (itm) => {
+                        var objItm = {};
+                        if (itm[0].EXCLUDE) {
+                            AcrExc.push(itm[0].PRD_MBR_SID);
+                        }
+                        else {
+                            objItm['RowId'] = item.DC_ID;
+                            objItm['PRDMemberSid'] = itm[0].PRD_MBR_SID;
+                            AcrInc.push(objItm);
+                        }
+                    });
+                }
+
+            });
+            _.each(DrnObjs, (item) => {
+                if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
+                    var objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    _.each(objDrn, (itm) => {
+                        var objItm = {};
+                        if (itm[0].EXCLUDE) {
+                            DrnExc.push(itm[0].PRD_MBR_SID);
+                        }
+                        else {
+                            objItm['RowId'] = item.DC_ID;
+                            objItm['PRDMemberSid'] = itm[0].PRD_MBR_SID;
+                            DrnInc.push(objItm);
+                        }
+                    });
+                }
+
+            });
+            var uniqAcrInc = AcrInc.filter(function (a) {
+                var key = a.RowId + '|' + a.PRDMemberSid;
+                if (!this[key]) {
+                    this[key] = true;
+                    return true;
+                }
+            }, Object.create(null));
+
+            var reqBody = {
+                AcrInc: uniqAcrInc,
+                AcrExc: AcrExc,
+                DrnInc: DrnInc,
+                DrnExc: DrnExc
+            };
+            return reqBody;
+        }
+        return;
     }
 }

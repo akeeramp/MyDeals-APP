@@ -162,3 +162,8 @@ kendo-toolbar-renderer {
 .all-spread #spreadsheet {
     width: 100% !important;
 }
+.mat-dialog-container {
+    background: #fff;
+    color: rgba(0,0,0,.87);
+    padding: 0px;
+}

@@ -30,7 +30,8 @@ import { lnavUtil } from '../lnav.util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
-
+import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
+import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -43,6 +44,7 @@ export class pricingTableEditorComponent implements OnChanges {
         private productSelectorSvc: productSelectorService,
         private loggerService: logger,
         private lnavSVC: lnavService,
+        private flexoverLappingCheckDealsSvc: flexoverLappingcheckDealService,
         protected dialog: MatDialog) {
         /*  custom cell editot logic starts here*/
         let VM = this;
@@ -223,6 +225,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private pricingTableTemplates: any = {}; // Contains templates for All Deal Types
     private autoFillData: any = null;
     private ColumnConfig: Array<Handsontable.ColumnSettings> = [];
+    private overlapFlexResult: any;
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -633,6 +636,7 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     async loadPTE() {
         this.isLoading = true;
+        this.overlapFlexResult = [];
         this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
         let PTR = await this.getPTRDetails();
         this.getTemplateDetails();
@@ -664,10 +668,14 @@ export class pricingTableEditorComponent implements OnChanges {
         if (isValidProd) {            
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+            let flexReqData = PTE_Common_Util.getOverlapFLexProducts(this.curPricingTable, PTR);
+            if (flexReqData != undefined) {
+                this.overlapFlexResult = await this.flexoverLappingCheckDealsSvc.GetProductOVLPValidation(flexReqData).toPromise();
+            }
             //Checking for UI errors
-            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult);
+            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult, this.overlapFlexResult);
             //if there is any error bind the result to handsone table
-            let error = PTE_Save_Util.isPTEError(finalPTR,this.curPricingTable);
+            let error = PTE_Save_Util.isPTEError(finalPTR, this.curPricingTable);
             if (error) {
                 this.generateHandsonTable(finalPTR);
                 this.loggerService.error('Mandatory validations failure.', 'error');
@@ -877,6 +885,23 @@ export class pricingTableEditorComponent implements OnChanges {
             data: data,
         });
         dialogRef.afterClosed().subscribe(result => {});
+    }
+    
+
+    flexOverlappingDealCheck() {
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        let data = {
+            "pricingTableData": this.curPricingTable,
+            "PTR": PTR,
+            "overlapFlexResult": this.overlapFlexResult
+        }
+         const dialogRef = this.dialog.open(FlexOverlappingCheckComponent, {
+             height: '300px',
+             width: '800px',
+             data:data,
+             
+            });
+        dialogRef.afterClosed().subscribe(result => { });
     }
     openAutoFill() {
         let ptTemplate, custId, isVistex

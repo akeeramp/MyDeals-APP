@@ -57,6 +57,18 @@
                     </tr>
                 </table>
             </button>
+            <button class="btn btn-sm ssToolbarBtn" (click)="flexOverlappingDealCheck()" *ngIf="curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' && overlapFlexResult != undefined && overlapFlexResult.length > 0" title="check for Flex Overlapping Deals.">
+        <table>
+            <tr>
+                <td>
+                    <i class="intelicon-replace-swap skyBlue" aria-hidden="true" style="font-size: 32px"></i>
+                </td>
+                <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                    Flex<br />Deals Overlap Check
+                </td>
+            </tr>
+        </table>
+    </button>
             <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                 <table>
                     <tr>

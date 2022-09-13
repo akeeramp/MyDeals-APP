@@ -5,10 +5,10 @@ import { PTE_Validation_Util } from './PTE_Validation_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 
 export class PTE_Save_Util {    
-    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any):any{
+    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any, overlapFlexResult: any):any{
         //this will make sure the neccessary proprty except _behaviours for Save are added
         this.setPTRBasicPropertyForSave(PTR,curPricingStrategy,curPricingTable,contractData);
-        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData);
+        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData, overlapFlexResult);
     }
     static setPTRBasicPropertyForSave(PTR:Array<any>,curPricingStrategy:any,curPricingTable:any,contractData:any){
      _.each(PTR, item=>{
@@ -23,7 +23,7 @@ export class PTE_Save_Util {
         item["IS_HYBRID_PRC_STRAT"]=curPricingStrategy.IS_HYBRID_PRC_STRAT;
      });
     }
-    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, VendorDropDownResult: any, curPricingTable: any, contractData: any):any{
+    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, VendorDropDownResult: any, curPricingTable: any, contractData: any, overlapFlexResult: any):any{
         _.each(PTR,(item) =>{
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
@@ -32,6 +32,11 @@ export class PTE_Save_Util {
         PTR = PTE_Validation_Util.validateOverArching(PTR, curPricingStrategy, curPricingTable);
         PTR = PTE_Validation_Util.validateMarketSegment(PTR, undefined, undefined);
         PTR = PTE_Validation_Util.validateHybridFields(PTR, curPricingStrategy, curPricingTable);
+        if (overlapFlexResult != undefined) {
+            let restrictGroupFlexOverlap = false;
+            let OVLPFlexPdtPTRUSRPRDError = false;
+            PTE_Common_Util.validateOVLPFlexProduct(PTR, undefined, false, curPricingTable, restrictGroupFlexOverlap, overlapFlexResult, OVLPFlexPdtPTRUSRPRDError);
+        }
         // Check if the rows have duplicate products
         var isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
         var duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
