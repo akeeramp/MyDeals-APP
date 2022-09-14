@@ -202,7 +202,7 @@ export class lnavComponent {
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = this.newStrategy.TITLE;
-        ps.IS_HYBRID_PRC_STRAT = (this.newStrategy.IS_HYBRID_PRC_STRAT === true ? 1 : 0);
+        ps.IS_HYBRID_PRC_STRAT = (this.newStrategy.IS_HYBRID_PRC_STRAT === true ? "1" : "0");
 
         this.lnavSvc.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
@@ -211,7 +211,7 @@ export class lnavComponent {
             this.showAddPricingTable(ps);
             this.loggerSvc.success("Save Successful", "Added Pricing Strategy");
             this.newStrategy.TITLE = "";
-            this.newStrategy.IS_HYBRID_PRC_STRAT = true;
+            this.newStrategy.IS_HYBRID_PRC_STRAT = false;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
             this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {
@@ -592,7 +592,7 @@ export class lnavComponent {
         if (this.contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
             this.custId = this.contractData.CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
         }
-        if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT) {
+        if (ps == null) {
             if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === true) {
                 isVistexHybrid = this.curPricingStrategy.IS_HYBRID_PRC_STRAT
             }

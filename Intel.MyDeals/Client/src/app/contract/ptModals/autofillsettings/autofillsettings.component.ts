@@ -213,8 +213,8 @@ export class AutoFillComponent {
                 "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be filled out.  Pick only one.";
         }else if (this.autofillData.isVistexHybrid != null &&
             this.autofillData.isVistexHybrid === true &&
-            (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "") ||
-            (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null)) {
+            ((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null)
+            && (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null))) {
             this.opValidMsg =
                 "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
         }else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
