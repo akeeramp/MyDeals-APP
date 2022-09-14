@@ -5,7 +5,7 @@ import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, FilterService} from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, FilterService } from "@progress/kendo-angular-grid";
 import { process, State, distinct, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
@@ -45,6 +45,7 @@ export class dealEditorComponent {
     @Input() UItemplate: any = {};
     @ViewChild(GridComponent) private grid: GridComponent;
     @Output() refreshedContractData = new EventEmitter;
+    @Output() tmDirec = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
     private dirty = false;
@@ -119,7 +120,7 @@ export class dealEditorComponent {
             let arrayData = [];
             item.filters.forEach((fltrItem: FilterDescriptor) => {
                 let column = fltrItem.field.toString();
-                if (this.dropdownFilterColumns.includes(column)) {                    
+                if (this.dropdownFilterColumns.includes(column)) {
                     _.each(this.gridData.data, (eachData) => {
                         let keys = Object.keys(eachData[column]);
                         let isexists = false;
@@ -133,7 +134,7 @@ export class dealEditorComponent {
                 }
             })
             this.gridData = process(arrayData, this.state);
-        });        
+        });
     }
 
     distinctPrimitive(): any {
@@ -143,7 +144,7 @@ export class dealEditorComponent {
                 if (this.dropdownFilterColumns.includes(col.field)) {
                     if (col.field == "EXPIRE_FLG") {
                         distinctData = distinct(this.gridResult, col.field).map(item => {
-                            if (item[col.field]== "1") {
+                            if (item[col.field] == "1") {
                                 return { Text: "Yes", Value: item[col.field] };
                             }
                             else if (item[col.field] == "0")
@@ -174,8 +175,8 @@ export class dealEditorComponent {
             }
         });
     }
-        
-    getGroupsAndTemplates() {
+
+    async getGroupsAndTemplates() {
         //Get Groups for corresponding deal type
         this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
         // Get template for the selected WIP_DEAL
@@ -183,38 +184,37 @@ export class dealEditorComponent {
 
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD);
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
-        this.getWipDealData();
+        await this.getWipDealData();
     }
-    
-    getWipDealData() {        
-        this.pteService.readPricingTable(this.in_Pt_Id).subscribe((response: any) => {
-            if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
-                this.voltLength = response.WIP_DEAL.length;
-                if (this.gridResult) {
-                    let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
-                    if (linkedIds.length > 0) {
-                        _.each(linkedIds, id => {
-                            _.each(response.WIP_DEAL, item => {
-                                if (item.DC_ID == id)
-                                    item.isLinked = true;
-                            })
-                        })
-                    }
-                }
-                this.gridResult = response.WIP_DEAL;
-                this.setWarningDetails();
-                this.applyHideIfAllRules();
-                this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
-                this.gridData = process(this.gridResult, this.state);
-                this.distinctPrimitive();
-                this.isLoading = false;
-                this.isDataLoading = false;
-            } else {
-                this.gridResult = [];
-            }
-        }, error => {
-            this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', error);
+
+    async getWipDealData() {
+        let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
+            this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
+        if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+            this.voltLength = response.WIP_DEAL.length;
+            if (this.gridResult) {
+                let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
+                if (linkedIds.length > 0) {
+                    _.each(linkedIds, id => {
+                        _.each(response.WIP_DEAL, item => {
+                            if (item.DC_ID == id)
+                                item.isLinked = true;
+                        })
+                    })
+                }
+            }
+            this.gridResult = response.WIP_DEAL;
+            this.setWarningDetails();
+            this.applyHideIfAllRules();
+            this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
+            this.gridData = process(this.gridResult, this.state);
+            this.distinctPrimitive();
+            this.isLoading = false;
+            this.isDataLoading = false;
+        } else {
+            this.gridResult = [];
+        }
     }
 
     onTabSelect(e: SelectEvent) {
@@ -269,7 +269,7 @@ export class dealEditorComponent {
         if (args.dataItem != undefined) {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
-        if (!args.isEdited && args.column.field !=='MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
+        if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
             args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
             args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                 args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
@@ -290,7 +290,7 @@ export class dealEditorComponent {
                 || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
                 var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
                 this.openMultiSelectModal(args.dataItem, column[0]);
-            }            
+            }
         }
         else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
             this.openDealProductModal(args.dataItem);
@@ -311,7 +311,7 @@ export class dealEditorComponent {
                 this.dirty = true;
             }
         }
-    }    
+    }
 
     updateSaveIcon(eventData: boolean) {
         this.dirty = eventData;
@@ -524,14 +524,14 @@ export class dealEditorComponent {
         }
     }
 
-    SaveDeal() {
+    async SaveDeal() {
         _.each(this.gridResult, (item) => {
             if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
                 this.isDatesOverlap = true;
             }
         });
         if (!this.isDatesOverlap) {
-            this.SaveDealData();
+            await this.SaveDealData();
         }
         else {
             this.isWarning = true;
@@ -539,7 +539,7 @@ export class dealEditorComponent {
         }
     }
 
-    SaveDealData() {
+    async SaveDealData() {
         this.isWarning = false;
         this.isDatesOverlap = false;
         this.isDataLoading = true;
@@ -561,38 +561,39 @@ export class dealEditorComponent {
                 "EventSource": 'WIP_DEAL',
                 "Errors": {}
             }
-            this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).subscribe((response: any) => {
-                if (response != undefined && response != null && response.Data != undefined && response.Data != null
-                    && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
-                    this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-                    let isanyWarnings = false;
-                    if (this.gridResult.length != response.Data.WIP_DEAL) {
-                        _.each(this.gridResult, (item) => {
-                            let isResponse = false;
-                            _.each(response.Data.WIP_DEAL, (wipItem) => {
-                                if (wipItem.DC_ID == item.DC_ID)
-                                    isResponse = true;
-                            });
-                            if (!isResponse) {
-                                isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
-                            }
-                        });
-                    }
-                    isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                    if (isanyWarnings) {
-                        this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
-                    }
-                    else {
-                        this.setBusy("Save Successful", "Saved the contract", "Success");
-                    }                    
-                }
-                this.getWipDealData();
-                this.dirty = false;
-            },
-            (error) => {
-                this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", error);
+            let response: any = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
+                this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
                 this.isDataLoading = false;
             });
+            if (response != undefined && response != null && response.Data != undefined && response.Data != null
+                && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+                let isanyWarnings = false;
+                if (this.gridResult.length != response.Data.WIP_DEAL) {
+                    _.each(this.gridResult, (item) => {
+                        let isResponse = false;
+                        _.each(response.Data.WIP_DEAL, (wipItem) => {
+                            if (wipItem.DC_ID == item.DC_ID)
+                                isResponse = true;
+                        });
+                        if (!isResponse) {
+                            isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
+                        }
+                    });
+                }
+                isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                if (isanyWarnings) {
+                    this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
+                }
+                else {
+                    this.setBusy("Save Successful", "Saved the contract", "Success");
+                    if (this.isTenderContract) {
+                        this.tmDirec.emit('MC');
+                    } else return;
+                }
+            }
+            await this.getWipDealData();
+            this.dirty = false;
         }
     }
 
@@ -680,23 +681,25 @@ export class dealEditorComponent {
         this.isDatesOverlap = false;
     }
 
-    refreshContractData(id, ptId) {
-        this.contractDetailsSvc
+    async refreshContractData(id, ptId) {
+        let response: any = await this.contractDetailsSvc
             .readContract(this.contractData.DC_ID)
-            .subscribe((response: Array<any>) => {
-                this.contractData = PTE_Common_Util.initContract(this.UItemplate, response[0]);
-                this.contractData.CUST_ACCNT_DIV_UI = "";
-
-                // if the current strategy was changed, update it
-                if (id != undefined && this.in_Ps_Id === id) {
-                    this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], id);
-                    if (id != undefined && this.in_Pt_Id === ptId && this.curPricingStrategy != undefined) {
-                        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], ptId);
-                    }
-                }
-                this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
+            .toPromise().catch((err) => {
+                this.loggerService.error('contract data read error.....', err);
+                this.isLoading = false;
             });
+        this.contractData = PTE_Common_Util.initContract(this.UItemplate, response[0]);
+        this.contractData.CUST_ACCNT_DIV_UI = "";
+        // if the current strategy was changed, update it
+        if (id != undefined && this.in_Ps_Id === id) {
+            this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], id);
+            if (id != undefined && this.in_Pt_Id === ptId && this.curPricingStrategy != undefined) {
+                this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], ptId);
+            }
+        }
+        this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
     }
+
     filterDealData(event) {
         if (event.keyCode == 13) {
             if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
@@ -767,13 +770,13 @@ export class dealEditorComponent {
         GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export");
     }
 
-    refreshContract(eventData: boolean) {
+    async refreshContract(eventData: boolean) {
         if (eventData) {
-            this.getWipDealData();
-            this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            await this.getWipDealData();
+            await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
         }
     }
-        
+
     ngOnInit() {
         this.isDataLoading = true;
         this.setBusy("Loading Deal Editor", "Loading...","Info");
@@ -781,7 +784,7 @@ export class dealEditorComponent {
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         this.getGroupsAndTemplates();
-        this.dropdownResponses = this.getAllDrowdownValues();        
+        this.dropdownResponses = this.getAllDrowdownValues();
         this.selectedTab = "Deal Info";
         this.filterColumnbyGroup(this.selectedTab);
     }

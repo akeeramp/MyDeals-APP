@@ -1,5 +1,5 @@
 ﻿/* eslint-disable prefer-const */
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { pricingTableEditorService } from './pricingTableEditor.service'
 import Handsontable from 'handsontable';
@@ -90,7 +90,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     this.openPopUp();
                 });
             }
-            openPopUp() {
+            async openPopUp() {
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
                 // let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
                 let modalComponent: any = null,
@@ -113,7 +113,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     });
                     curRow.push(obj);
                     if (curRow[0]['PTR_SYS_PRD'] == "") {
-                        VM.validateOnlyProducts('onLoad');
+                        await VM.validateOnlyProducts('onLoad');
                         return;
                     }
                     data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: curRow };
@@ -207,6 +207,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Input() in_Pt_Id: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
+    @Output() tmDirec = new EventEmitter();
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     /*For loading variable */
@@ -276,6 +277,8 @@ export class pricingTableEditorComponent implements OnChanges {
     private newPricingTable: any = {};
     private VendorDropDownResult: any = {};
     private isDeletePTR: boolean = false;
+    private newPTR: any;
+    public warnings: boolean = false;
 
 
     setBusy(msg, detail, msgType, showFunFact) {
@@ -313,7 +316,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.isDeletePTR = true;
         }
     }
-    closeDialog(act: string) {
+    async closeDialog(act: string) {
         if (act == 'No') {
             //setting back the values back to handsonetables
             _.each(this.multiRowDelete, item => {
@@ -323,7 +326,7 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         else {
             this.isDialogOpen = false;
-            this.deletePTR();
+            await this.deletePTR();
         }
         this.multiRowDelete = [];
         this.isDeletePTR = false;
@@ -346,17 +349,15 @@ export class pricingTableEditorComponent implements OnChanges {
                 value: dataItem["TERMS"]
             };
     
-            vm.pteService.updateAtrbValue(vm.contractData.CUST_MBR_SID, vm.contractData.DC_ID, data).subscribe((response: any) => {
-                vm.loggerService.success("Done", "Save Complete.");
+            vm.pteService.updateAtrbValue(vm.contractData.CUST_MBR_SID, vm.contractData.DC_ID, data).toPromise().catch((err) => {
+                vm.loggerService.error("Error", "Could not save the value.", err);
                 vm.isLoading = false;
                 vm.setBusy("", "", "", false);
-    
-            }), err => {
-                vm.loggerService.error("Error", "Could not save the value.");
-                vm.isLoading = false;
-                vm.setBusy("", "", "", false);
-            };
-        
+            });
+            vm.loggerService.success("Done", "Save Complete.");
+            vm.isLoading = false;
+            vm.setBusy("", "", "", false);
+
         }, 700);
     }
     getTemplateDetails() {
@@ -424,6 +425,7 @@ export class pricingTableEditorComponent implements OnChanges {
         // Set the values for hotTable
         PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
         // Loading new data
+        this.newPTR = PTR;
         this.hotTable.loadData(PTR);
         // Update settings  with new commented cells and erge cells
         this.hotTable.updateSettings({
@@ -726,8 +728,17 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             else {
                 //this will help to reload the page with errors when we update
-                this.loadPTE();
+                await this.loadPTE();
             }
+            _.each(this.newPTR, (item) => {
+                if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
+                    this.warnings = true;
+                }
+            })
+            if ((!this.warnings) && this.isTenderContract) {
+                this.tmDirec.emit('DE');
+            }
+            this.warnings = false;
         }
         else {
             this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
@@ -753,7 +764,7 @@ export class pricingTableEditorComponent implements OnChanges {
         else {
             this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR, this.contractData.CUST_ACCNT_DIV);
             if (!this.isCustDivNull) {
-                this.ValidateAndSavePTE(isValidProd);
+                await this.ValidateAndSavePTE(isValidProd);
             }
         }
 
@@ -980,12 +991,10 @@ export class pricingTableEditorComponent implements OnChanges {
     ngOnInit() {
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         //code for autofill change to accordingly change values
-        this.pteService.autoFillData.subscribe(res => {
-            this.autoFillData = res;
-        }, err => {
-            this.loggerService.error("pteService::isAutoFillChange**********", err);
-        }
-        );
+        let res: any = this.pteService.autoFillData.toPromise().catch((err) => {
+            this.loggerService.error('pteService::isAutoFillChange**********', err);
+        });
+        this.autoFillData = res;
     }
     ngOnChanges(): void {
         this.loadPTE();

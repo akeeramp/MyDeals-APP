@@ -49,3 +49,9 @@
     color: #fff;
     border-top-color: #00aeef;
 }
+.isDisabled {
+    pointer-events: none;
+    color: currentColor !important;
+    opacity: 0.5;
+    text-decoration: none;
+}

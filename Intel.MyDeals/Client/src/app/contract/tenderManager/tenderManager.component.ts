@@ -1,9 +1,12 @@
 ﻿import * as angular from "angular";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
+import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { templatesService } from "../../shared/services/templates.service";
+import { dealEditorComponent } from "../dealEditor/dealEditor.component"
+import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 
 @Component({
     selector: "tenderManager",
@@ -12,7 +15,9 @@ import { templatesService } from "../../shared/services/templates.service";
 })
 
 export class tenderManagerComponent {
-    constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService) { 
+    @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
+    @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -24,33 +29,152 @@ export class tenderManagerComponent {
     public selectedTab = "PTR";
     public UItemplate = null;
     public isLoading = true;
+    public currentTAB = 'PTR';
+    public pricingTableData: any;
+    public dirty: boolean = false;
+    public isPTREmpty: boolean;
+    public isPartiallyValid: boolean = true;
+    public mcForceRunReq: boolean;
+    public inCompleteCapMissing: boolean = false;
+    public result: any = null;
 
-    loadAllContractDetails() {
-        this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
-            this.contractData = response[0];
-            this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
-            this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
-            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
-                this.UItemplate = response;
-                this.isLoading = false;
-            }, (error) => {
-                this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
-                this.isLoading = false;
-            })
-        }, (error) => {
-            this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
-            this.isLoading = false;
+    async loadAllContractDetails(): Promise<void> {
+        let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
         })
+        this.contractData = response[0];
+        this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
+        this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
+        let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
+            this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
+        });
+        this.UItemplate = result;
+        this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+        });
+        if (this.contractData.TENDER_PUBLISHED == '1') {
+            window.location.href = "/advancedSearch#/tenderDashboard?DealType=" + this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD + "&FolioId=" + this.pricingTableData.PRC_ST[0].DC_PARENT_ID + "&search";
+        }
+        this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+        this.mcForceRunReq = this.isMCForceRunReq();
+        this.isLoading = false;
+    }
+
+    forDE() {
+        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPTRPartiallyComplete() == true) {
+            return true;
+        } else return false;
+    }
+
+    forMC() {
+        if ((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.inCompleteCapMissing) {
+            return true;
+        } else return false;
+    }
+
+    enableDealEditorTab() {
+        var data = this.pricingTableData;
+        if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.PRC_TBL_ROW.length === 0) return false;
+        return true
+    }
+    async redirectingFn(tab) {
+        this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+        });
+        this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+        this.selectedTab = tab;
+        this.currentTAB = tab;
+    }
+
+    async tenderWidgetPathManager(_actionName, selectedTab) {
+        this.mcForceRunReq = this.isMCForceRunReq();
+        if (this.currentTAB == selectedTab) {
+            if (this.currentTAB == 'PTR') {
+                await this.pteComp.validatePricingTableProducts();
+
+            } else if (this.currentTAB == 'DE') {
+                await this.deComp.SaveDeal();
+            }
+
+            this.selectedTab = selectedTab;
+        }
+
+        if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
+            this.isPartiallyValid = this.isPTRPartiallyComplete();
+        }
+
+        if (selectedTab == 'PTR') {
+            if (this.currentTAB == 'DE') {
+                await this.deComp.SaveDeal();
+                await this.redirectingFn(selectedTab);
+            }
+            else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' || this.isPartiallyValid == true) {
+                await this.redirectingFn(selectedTab);
+            }
+        }
+
+        else if (selectedTab == 'DE') {
+            if (this.currentTAB == 'PTR') {
+                await this.pteComp.validatePricingTableProducts();
+            } else {
+                if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPartiallyValid == true) && this.enableDealEditorTab() === true) {
+                    await this.redirectingFn(selectedTab);
+                }
+                else {
+                    this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
+                }
+            }
+        }
+
+        else if (selectedTab == 'MC') {
+            if (this.currentTAB == 'DE') {
+                await this.deComp.SaveDeal();
+            } else {
+                if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                    await this.redirectingFn(selectedTab);
+                }
+                else {
+                    this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
+                }
+            }
+        }
+
+        else if (selectedTab == 'PD') {
+            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' && !this.mcForceRunReq) {
+                await this.redirectingFn(selectedTab);
+            }
+            else {
+                this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
+            }
+        }
 
     }
 
-    tenderWidgetPathManager(data, selectedTab) {
-        this.selectedTab = selectedTab;
-        this.loadAllContractDetails();
+    isMCForceRunReq() {
+        let mcForceRun = false;
+        if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
+            let dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.MEETCOMP_TEST_RESULT === 'Not Run Yet' || x.MEETCOMP_TEST_RESULT === 'InComplete' || x.DC_ID <= 0);
+            if (dirtyItems.length > 0) mcForceRun = true;
+            return mcForceRun;
+        }
     }
 
-    isPTRPartiallyComplete(selectedTab) {
-        //need to implement validation logic here for progress bar status
+    isPTRPartiallyComplete() {
+        var isPtrDirty = false;
+        var rootScopeDirty = this.dirty;
+        if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
+            var dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.DC_ID <= 0);
+            if (dirtyItems.length > 0) isPtrDirty = true;
+        }
+        else {
+            isPtrDirty = true;
+        }
+        if (!isPtrDirty && !rootScopeDirty) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     ngOnInit() {
@@ -58,6 +182,7 @@ export class tenderManagerComponent {
         this.c_Id = Number(url[url.length - 1]);
         this.loadAllContractDetails();
     }
+
     ngOnDestroy() {
         //The style removed are adding back
         $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
