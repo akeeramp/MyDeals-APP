@@ -28,12 +28,12 @@
                 <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
                    title="You cannot split this group while it is being re-dealed."></i>
             </div>
-            <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [height]="245" [maxWidth]="485">
+            <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [height]="245" [maxWidth]="485" class="artho-css">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4>Would you like to split the group?</h4>
                     <p>This will allow you to make changes in the Deal Editor.<br />Please note a new Row ID will be assigned for your reference.
                 </div>
-                <kendo-dialog-actions class="kendoAction">
+                <kendo-dialog-actions class="kendoAction new-custom-deal-tools">
                     <div kendoButton (click)="split()" class="kendoBtn okBtn">OK</div>
                     <div kendoButton (click)="closeDialogs()" class="kendoBtn cancelBtn">CANCEL</div>
                 </kendo-dialog-actions>
@@ -48,13 +48,13 @@
             <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
                 <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
-            <kendo-dialog *ngIf="openNotesDialog" (close)="closeDialogs()" [maxWidth]="500" [height]="350" >
+            <kendo-dialog class="artho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350" >
                 <div class="notesContent">
                     <div class="notesText">Deal Comments:</div>
                     <textarea [(ngModel)]="notes"></textarea>
                 </div>
                 <kendo-dialog-actions style="padding: 0px;">
-                    <div kendoButton class="k-button" (click)="saveNotes()">OK</div>
+                    <div kendoButton class="k-button supplier-changes" (click)="saveNotes()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
         </div>
@@ -97,7 +97,7 @@
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmDelete" (close)="closeDialogs()" [maxWidth]="572">
+            <kendo-dialog *ngIf="confirmDelete" (close)="closeDialogs()" [maxWidth]="572" class="artho-css">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Are you sure that you want to delete this deal?</h4>
                     <p>This will also remove the deal from the Pricing Editor.</p>
@@ -118,7 +118,7 @@
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmCancel" (close)="closeDialogs()" [maxWidth]="572">
+            <kendo-dialog *ngIf="confirmCancel" (close)="closeDialogs()" [maxWidth]="572" class="artho-css">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Are you sure that you want to cancel this deal?</h4>
                     <p>This will set the deal stage to Cancelled.</p>
@@ -141,7 +141,7 @@
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmRollback" (close)="closeDialogs()" [maxWidth]="685">
+            <kendo-dialog *ngIf="confirmRollback" (close)="closeDialogs()" [maxWidth]="685" class="artho-css">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to undo this deals current re-deal action?</h4>
                     <p>This will remove the deal edits from the Pricing Editor also.</p>

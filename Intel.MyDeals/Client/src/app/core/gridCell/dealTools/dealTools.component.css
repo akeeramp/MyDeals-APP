@@ -39,12 +39,12 @@ h4 {
 }
 .notesContent {
     margin-top: 20px;
-    margin-left: 15px;
-    padding: 0 8px;
+    margin-left: 10px;
+    padding: 0 20px;
 }
 .notesText {
     font-weight: 600;
-    padding: 0 8px;
+    margin-bottom: 5px;
 }
 textarea {
     resize:both !important;
@@ -62,17 +62,33 @@ textarea {
     font-size: 100% !important;
 }
 
-    .k-button:active {
-        color: #444444 !important;
-        background-color: #dbdbdb !important;
-        border-color: #ebebeb !important;
-    }
+.custom-deal-tools .k-button:first-child {
+    background: #00AEEF !important;
+}
 
-    .k-button:hover {
-        color: #ffffff !important;
-        border-color: #0071C5 !important;
-        background-color: #0071C5 !important;
-    }
+.custom-deal-tools .k-button:first-child:hover {
+    background: #0071c5 !important;
+}
+
+.custom-deal-tools .k-button:last-child {
+    background-color: #fafafa !important;
+}
+
+.custom-deal-tools .k-button:last-child:hover {
+    background-color: #ebebeb !important;
+}
+
+.k-button:active {
+    color: #444444 !important;
+    background-color: #dbdbdb !important;
+    border-color: #ebebeb !important;
+}
+
+.k-button:hover {
+    color: #ffffff !important;
+    border-color: #0071C5 !important;
+    background-color: #0071C5 !important;
+}
 .cancelDelete {
     color: #444444 !important;
     border-color: #fafafa !important;
@@ -220,6 +236,7 @@ textarea {
     border-style: solid;
     border-color: #0071C5 transparent transparent #0071C5;
     border-width: 3px;
+    margin-top: -23px;
 }
 
 .dealTools {
@@ -374,4 +391,47 @@ textarea {
     align-items: center;
     justify-content: center;
     margin-top: 0 !important;
+}
+
+.custom-deal-tools .k-button.supplier-changes {
+    background: #00AEEF !important;
+}
+
+.custom-deal-tools .k-button.supplier-changes:hover {
+    background: #0071c5 !important;
+}
+
+kendo-dialog.artho-css .k-window {
+    border: none;
+}
+
+kendo-dialog.artho-css .k-dialog-buttongroup {
+    border-radius: 0!important;
+}
+
+.new-custom-deal-tools .kendoBtn {
+    padding: 1.3em 0 !important;
+    border-radius: 0px !important;
+    border-bottom: 0px !important;
+    font-weight: 500 !important;
+    border-color: #00AEEF !important;
+    font-family: inherit !important;
+    font-size: 100% !important;
+    text-transform: uppercase;
+}
+
+.new-custom-deal-tools .kendoBtn:first-child {
+    background: #00AEEF !important;
+}
+
+.new-custom-deal-tools .kendoBtn:first-child:hover {
+    background-color: #0071c5 !important;
+}
+
+.new-custom-deal-tools .kendoBtn:last-child {
+    background-color: #fafafa !important;
+}
+
+.new-custom-deal-tools .kendoBtn:last-child:hover {
+    background-color: #ebebeb !important;
 }

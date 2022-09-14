@@ -101,3 +101,107 @@
 .deleteCell {
     color: #0071c5 !important;
 }
+
+.new-k-btn {
+    top: 54px;
+    width: 100%;
+    padding: 1.5em 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    font-weight: 400;
+    background-color: #00aeef !important;
+    line-height: 1.143em !important;
+    font-size: 16px !important;
+}
+
+.new-k-btn:hover {
+    background-color: #0071c5;
+}
+
+.fino-css .k-button {
+    border: none!important;
+}
+
+.fino-css .k-button span {
+    line-height: 1.143em;
+    font-size: 17px;
+}
+
+kendo-upload.fino-css kendo-upload-action-buttons {
+    padding: 0 !important;
+}
+
+kendo-upload.fino-css kendo-upload-action-buttons .k-button {
+    font-size: 16px;
+    font-weight: 400 !important;
+    color: #0071c5 !important;
+}
+
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button {
+    border-radius: 50%;
+    padding: 0;
+}
+
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button:hover {
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+    color: #444 !important;
+}
+
+
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button span:hover {
+    color: #444 !important;
+}
+
+kendo-upload.fino-css kendo-upload-action-buttons:hover {
+    color: #fff !important;
+}
+
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button span{
+    padding-top: 0!important;
+}
+
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button:hover {
+    border-color: #ebebeb;
+    background-color: #ebebeb;
+}
+
+kendo-grid.approve-table .k-grid-container .k-grid-content {
+    overflow-y: auto;
+}
+
+kendo-grid.approve-table .k-grid-container .k-grid-content tr td {
+    border-right: none !important;
+    border-left: none !important;
+}
+
+.custom-badge-design{
+    border-radius: 10px!important;
+}
+
+.new-custom-deal-tools button {
+    padding: 1.3em 0 !important;
+    border-radius: 0px !important;
+    border-bottom: 0px !important;
+    font-weight: 500 !important;
+    border-color: #00AEEF !important;
+    font-family: inherit !important;
+    font-size: 100% !important;
+    text-transform:uppercase;
+}
+
+.new-custom-deal-tools button:first-child {
+    background: #00AEEF !important;
+}
+
+.new-custom-deal-tools button:first-child:hover {
+    background-color: #0071c5 !important;
+}
+
+.new-custom-deal-tools button:last-child {
+    background-color: #fafafa !important;
+}
+
+.new-custom-deal-tools button:last-child:hover {
+    background-color: #ebebeb !important;
+}

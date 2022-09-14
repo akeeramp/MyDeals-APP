@@ -274,3 +274,7 @@ h5 {
 .header-methods .menu-detailed a i {
     font-size: 28px !important;
 }
+
+.navbar-fixed-top {
+    z-index: 1000!important;
+}

@@ -18,7 +18,7 @@
                             <div class="clearboth"></div>
                         </div>
                         <div class="panel-body">
-                            <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="errorEventHandler()" (complete)="onFileUploadComplete()"
+                            <kendo-upload class="fino-css" [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="errorEventHandler()" (complete)="onFileUploadComplete()"
                                           (upload)="uploadEventHandler($event)" [autoUpload]="false">
                             </kendo-upload>
                         </div>
@@ -27,12 +27,12 @@
                 <td style="width:4%"></td>
                 <td style="width:48%; vertical-align:top">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Attachments <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                        <div class="panel-heading">Attachments <span *ngIf="attachmentCount > 0 && initComplete" class="badge custom-badge-design">{{attachmentCount}}</span></div>
                         <div class="panel-body">
                             <div *ngIf="!(attachmentCount <= 0 || !initComplete)" style="height:375px;">
                                 <kendo-grid [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
                                             [sort]="state.sort" [sortable]="true" [selectable]="true" [resizable]="true" [filterable]="false"
-                                            (dataStateChange)="dataStateChange($event)" [columnMenu]="false">
+                                            (dataStateChange)="dataStateChange($event)" [columnMenu]="false" class="approve-table">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
                                     </kendo-grid-column>
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="&nbsp;" width="10%">
@@ -72,13 +72,13 @@
         </tbody>
     </table>
 </div>
-<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [maxWidth]="485">
+<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [maxWidth]="485" class="artho-css">
     <p class="dialogmsg">
         Are you sure that you want to Delete this file attachment?
     </p>
-    <kendo-dialog-actions class="kendoActn">
+    <kendo-dialog-actions class="kendoActn new-custom-deal-tools">
         <button kendoButton (click)="deleteAttachmentActions(true)">Yes</button>
         <button kendoButton (click)="deleteAttachmentActions(false)" class="cancelCell">No</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<button kendoButton class="k-button" style="top: 58px; width: 100%;" (click)="close()">CLOSE</button>
+<button kendoButton class="k-button new-k-btn" (click)="close()">CLOSE</button>

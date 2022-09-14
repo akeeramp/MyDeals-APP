@@ -130,3 +130,47 @@
 .cellCustomClass {
     text-align: center !important;
 }
+
+.new-spacing {
+    padding: 15px !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    min-height: 16.5px;
+    background-color: #003C71;
+    color: #ffffff;
+}
+
+.common-messages {
+    position: relative !important;
+    padding: 15px !important;
+    background-color: #003C71;
+    color: #ffffff;
+}
+
+button.excelBtn.metho-comp {
+    height: 25px;
+    border-radius: 2px;
+    color: #444;
+    border-color: #fafafa;
+    background-color: #fafafa;
+    font-size: 15px;
+}
+
+button.excelBtn.metho-comp span {
+    margin-top: -3px;
+}
+
+.common-messages .opUiContainer.md.k-grid kendo-grid-list tbody tr td {
+    border: none !important;
+    border-bottom: 0.5px solid lightgrey !important;
+}
+
+.common-messages .opUiContainer.md.k-grid.k-widget .k-grid-header table thead th .k-column-title {
+    font-size: 12px !important;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+}
+
+.common-messages .opUiContainer.md.k-grid.k-widget .k-grid-header table thead th {
+    background-color: #f9f9f9!important;
+}
