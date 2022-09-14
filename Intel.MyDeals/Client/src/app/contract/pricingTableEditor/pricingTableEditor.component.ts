@@ -777,8 +777,8 @@ export class pricingTableEditorComponent implements OnChanges {
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult) {
-            updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);            
-            //this.generateHandsonTable(updatedPTRObj.rowData);
+            updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);          
+            
             //code to bind the cook result of success or failure
             let PTR_col_ind=_.findIndex(this.columns,{data:'PTR_USER_PRD'});
             _.each(updatedPTRObj.rowData, (data, idx) => {

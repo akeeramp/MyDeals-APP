@@ -1,5 +1,5 @@
 ﻿<loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
-                       [description]="spinnerMessageDescription" [isShowFunFact]="true" [msgType]="msgType"></loading-panel-angular>
+                       [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab" class="width-fixes">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
@@ -43,8 +43,8 @@
                     </button>
                 </div>
 
-                <div class="fr" style="margin-top: 2px; margin-left:8px">
-                    <button class="btn btn-sm ssToolbarBtn" title="Manage Columns">
+                <div class="fr dropdown-col-opt" style="margin-top: 2px; margin-left:8px;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn" (click)="toggleColumnopt()" title="Manage Columns">
                         <table>
                             <tr>
                                 <td> <i class="intelicon-view-by-columns skyBlue" style="font-size: 30px"></i></td>
@@ -57,23 +57,81 @@
                             </tr>
                         </table>
                     </button>
+                    <div id="myDropdown" class="dropdown-content-col">
+                        <div style="width: 298.514px; height: 268.376px; z-index: 10002; top: 36px; left: 0px; box-sizing: content-box;">
+                            <div>
+                                <span class="k-textbox form-control" style="border: none;">
+                                    <input type="search" style="width: 100%; border-color: lightgrey;" [(ngModel)]="columnSearchFilter" />
+                                </span>
+                            </div>
+                            <div style="max-height: 200px; overflow: auto;">
+                                <div *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
+                                    &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
+                                    <label for="colChk{{item.field}}">
+                                        <span [innerHTML]="item.title"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="fr" style="margin-top: 2px; margin-left:8px">
-                    <button class="btn btn-sm ssToolbarBtn" title="Manage Columns">
+                <div class="fr dropdown" style="margin-top: 2px; margin-left:8px;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn" title="Manage Columns" style="color: #00AEEF;">
                         <table>
                             <tr>
-                                <td><i class="intelicon-settings-solid skyBlue" style="font-size: 30px"></i></td>
-                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF; ">
+                                <td><i class="intelicon-settings-solid" style="font-size: 30px"></i></td>
+                                <td class="fl hidden-md hidden-sm hidden-xs" style="font-size: 12px; line-height: 1em; padding: 4px;">
                                     Grid<br /> Settings
                                 </td>
                                 <td>
-                                    <span class="k-icon k-i-arrow-60-down" style="padding-top:13px;color: #00AEEF"></span>
+                                    <span class="k-icon k-i-arrow-60-down" style="padding-top:13px;"></span>
                                 </td>
                             </tr>
                         </table>
                     </button>
+                    <div class="dropdown-content">
+                        <ul>
+                            <li (click)="addTab()">
+                                <i class="intelicon-plus-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer;"></i> ADD TAB
+                            </li>
+                            <li (click)="renameTab()">
+                                <i class="intelicon-plus-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> RENAME TAB
+                            </li>
+                            <li (click)="defaultLayout()">
+                                <i class="intelicon-dashboard-solid" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> DEFAULT LAYOUT
+                            </li>
+                            <li (click)="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
+                                <i class="intelicon-dashboard-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> CUSTOM LAYOUT
+                            </li>
+                            <li (click)="saveLayout()">
+                                <i class="intelicon-save-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> SAVE LAYOUT
+                            </li>
+                            <li (click)="clearCurrentLayout()">
+                                <i class="intelicon-settings-solid" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> CLEAR CURRENT LAYOUT
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
+                <kendo-dialog *ngIf="isAddDialog" id="Adddialog">
+                    <p style="padding-left: 23px; padding-top: 5px; font-size: 18px; ">Tab name:</p>
+                    <input type="text" [(ngModel)]="DeAddtab" style=" margin: 22px;" class="k-textbox" />
+                    <kendo-dialog-actions style="width: 262px;">
+                        <button class='k-button' (click)="Addtabdata()">Ok</button>
+                        <button class='k-button' (click)="CloseAdd()">Cancel</button>
+                    </kendo-dialog-actions>
+                </kendo-dialog>
+
+                <kendo-dialog *ngIf="isrenameDialog" id="renamedialog">
+                    <p style="padding-left: 23px; padding-top: 5px; font-size: 18px; ">Tab name:</p>
+                    <input type="text" [(ngModel)]="Derenametab" style=" margin: 22px;" class="k-textbox" />
+                    <kendo-dialog-actions style="width: 262px;">
+                        <button class='k-button' (click)="renametabdata()">Ok</button>
+                        <button class='k-button' (click)="Closerename()">Cancel</button>
+                    </kendo-dialog-actions>
+                </kendo-dialog>
+
                 <div class="fr clearfix" style="margin-top: 2px; margin-left:8px">
                     <button class="btn btn-sm ssToolbarBtn dropdown-toggle" type="button" data-toggle="dropdown">
                         <table>
@@ -106,7 +164,7 @@
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
-                            class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
+                            class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
                             style="width: 320px; height: 465.788px;" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                        [locked]="column.locked == true" width="{{column.width}}" [filterable]="column.filterable" [sortable]="column.sortable">
@@ -117,8 +175,8 @@
                             </div>
                             <div *ngIf="dropdownFilterColumns.includes(column.field)">
                                 <dropDown-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
-                                                   [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
-                            </div>                            
+                                                 [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
+                            </div>
                         </ng-template>
                         <ng-template kendoGridHeaderTemplate>
                             <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>

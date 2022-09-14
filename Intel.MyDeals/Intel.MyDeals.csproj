@@ -2435,6 +2435,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\emailModal\emailModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\contractManager\messageBoard\messageBoard.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditor.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditor.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorCellTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorEditTemplate.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\dealEditor\dealEditorHeaderTemplate.component.ts" />

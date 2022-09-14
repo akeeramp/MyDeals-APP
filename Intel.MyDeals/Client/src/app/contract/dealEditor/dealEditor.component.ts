@@ -20,9 +20,12 @@ import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/en
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
-import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component"
+import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
 import { GridUtil } from '../grid.util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
+import { dealEditorService } from "../dealEditor/dealEditor.service";
+import * as exp from 'constants';
+import { exit } from 'process';
 
 @Component({
     selector: 'deal-editor',
@@ -35,7 +38,8 @@ export class dealEditorComponent {
     constructor(private pteService: pricingTableEditorService,
         private contractDetailsSvc: contractDetailsService,
         private loggerService: logger, private datePipe: DatePipe,
-        protected dialog: MatDialog) {
+        protected dialog: MatDialog,
+        private DESvc: dealEditorService) {
     }
 
     @Input() in_Cid: any = '';
@@ -49,6 +53,15 @@ export class dealEditorComponent {
     private isWarning: boolean = false;
     private message: string = "";
     private dirty = false;
+    private isAddDialog: boolean = false;
+    private isrenameDialog: boolean = false;
+    public DeAddtab = "";
+    public columnSearchFilter;
+    public defaultColumnOrderArr;
+    public curGroup;
+    public groupsdefault;
+    public opName = "DealEditor";
+    public Derenametab = "";
     private isDatesOverlap = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
@@ -58,6 +71,7 @@ export class dealEditorComponent {
     public templates: any;
     public selectedTab: any;
     public voltLength;
+    private isBusyShowFunFact: boolean = true;
     private numSoftWarn = 0;
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
@@ -131,9 +145,9 @@ export class dealEditorComponent {
                         if (isexists)
                             arrayData.push(eachData);
                     })
+                    this.gridData = process(arrayData, this.state);
                 }
-            })
-            this.gridData = process(arrayData, this.state);
+            })            
         });
     }
 
@@ -179,6 +193,7 @@ export class dealEditorComponent {
     async getGroupsAndTemplates() {
         //Get Groups for corresponding deal type
         this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+        this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
         // Get template for the selected WIP_DEAL
         this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
@@ -474,6 +489,244 @@ export class dealEditorComponent {
         this.invalidDate = value;
     }
 
+    renameTab = function () {
+        this.Derenametab = "";
+        this.Derenametab = this.selectedTab;
+        this.isrenameDialog = true
+    }
+
+    renametabdata() {
+        if (this.Derenametab === "" || this.Derenametab.toLowerCase() == "overlapping") return;
+        for (var g = 0; g < this.groups.length; g++) {
+            if (this.groups[g].name == this.selectedTab) {
+                this.groups[g].name = this.Derenametab;
+            }
+        }
+
+        for (var i = 0; i < this.wipTemplate.columns.length; i++) {
+            var gptemplate = this.templates[this.wipTemplate.columns[i].field];
+            if (gptemplate != undefined && gptemplate.Groups.includes(this.selectedTab)) {
+                for (var g = 0; g < this.templates[this.wipTemplate.columns[i].field].Groups.length; g++) {
+                    if (this.templates[this.wipTemplate.columns[i].field].Groups[g] == this.selectedTab) {
+                        this.templates[this.wipTemplate.columns[i].field].Groups[g] = this.Derenametab;
+                    }
+                }
+            }
+        }
+        this.selectedTab = this.Derenametab;
+        this.isrenameDialog = false;
+    }
+
+    clearCurrentLayout() {
+        if (confirm("Are you sure that you want to clear/reset this layout?")) {
+            this.isDataLoading = true;
+            this.setBusy("Clearing...", "Clearing the current Layout", "Info", false);
+            this.DESvc.clearAction(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).subscribe((response: any) => {
+                this.isDataLoading = false;
+                this.setBusy("", "", "", false);
+            }), err => {
+                this.loggerService.error("Unable to clear Custom Layout.", err, err.statusText);
+                };
+            this.isDataLoading = false;
+            this.setBusy("", "", "", false);
+        }
+        this.isDataLoading = false;
+    }
+    //Default Layout
+    defaultLayout() {
+        this.groups = JSON.parse(JSON.stringify(this.groupsdefault));
+        this.selectedTab = "Deal Info";
+        var group = this.groups.filter(x => x.name == this.selectedTab);
+        if (group[0].isTabHidden) {
+            var tabs = this.groups.filter(x => x.isTabHidden === false);
+            this.selectedTab = tabs[0].name;
+            this.filterColumnbyGroup(this.selectedTab);
+        }
+        else
+            this.filterColumnbyGroup(this.selectedTab);
+    }
+
+    //Default Layout
+
+    //<To Add Tab Data?
+    addTab = function () {
+        this.DeAddtab = "";
+        this.isAddDialog = true
+    }
+
+    Addtabdata() {
+        if (this.DeAddtab === "") this.DeAddtab = "New Tab";
+        // Prevent duplicate tab names.
+        for (var g = 0; g < this.groups.length; g++) {
+            if (this.groups[g].name.trim().toLowerCase() === this.DeAddtab.trim().toLowerCase()) {
+                this.loggerService.error("Tab name already exists.", null, "Add Tab Failed");
+                return;
+            }
+        }
+        this.addToTab(this.DeAddtab.trim());
+        this.isAddDialog = false
+    }
+
+    addToTab(data) {
+        this.groups.push({ "name": data, "order": 50, "numErrors": 0, "isTabHidden": false });
+        this.groups = this.groups.sort((a, b) => (a.order > b.order) ? 1 : -1);
+        // Add Tools
+        if (this.templates.tools.Groups === undefined) this.templates.tools.Groups = [];
+        this.templates.tools.Groups.push(data);
+
+        // Add Deal Details
+        if (this.templates.details.Groups === undefined) this.templates.details.Groups = [];
+        this.templates.details.Groups.push(data);
+
+        if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
+        this.templates.DC_PARENT_ID.Groups.push(data);
+        this.selectedTab = data;
+        this.filterColumnbyGroup(this.selectedTab);
+    }
+    //<To Add Tab Data>
+
+    saveLayout() {
+        this.isDataLoading = true;
+        this.setBusy("Saving...", "Saving the Layout", "Info", true);
+        var groupSettings = PTE_Common_Util.deepClone(this.groups);
+        for (var i = 0; i < groupSettings.length; i++) {
+            groupSettings[i].isPinned = false;
+        }
+
+        forkJoin({
+            request1: this.DESvc.updateActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD, "Groups", JSON.stringify(groupSettings)),
+            request2: this.DESvc.updateActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD, "GroupColumns", JSON.stringify(this.templates)),
+            request3: this.DESvc.updateActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD, "ColumnOrder", JSON.stringify(this.getColumnOrder())),
+            request4: this.DESvc.updateActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD, "PageSize", JSON.stringify(25)),
+        }).toPromise().catch((err) => {
+            this.isDataLoading = false;
+            this.setBusy("", "", "", false);
+            this.loggerService.error("Unable to save Custom Layout.", err, err.statusText);
+        });
+
+        this.isDataLoading = false;
+        this.setBusy("", "", "", false);
+    }
+
+    getColumnOrder() {
+        var grid = this.wipTemplate;
+        var columnOrderArr = [];
+
+        for (var i = 0; i < grid.columns.length; i++) {
+            columnOrderArr.push(grid.columns[i]["field"]);
+        }
+
+        return columnOrderArr;
+    }
+
+    toggleColumnopt() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    customLayout = function (reportError) {
+        this.isDataLoading = true;
+        this.setBusy("Custom...", "Loading the current Layout", "Info", false);
+
+        reportError = typeof reportError === 'undefined' ? true : reportError;
+        this.DESvc.getActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).subscribe((response: any) => {
+            if (response && response.length > 0) {
+                this.applyCustomLayoutToGrid(response);
+                this.isDataLoading = false;
+                this.setBusy("", "", "", false);
+            } else {
+                if (reportError) {
+                    alert("You have not saved a custom layout yet.");
+                    this.isDataLoading = false;
+                    this.setBusy("", "", "", false);
+                }
+            }
+        }), err => {
+            this.loggerService.error("Unable to get Custom Layout.", err, err.statusText);
+        };
+        this.selectedTab = "Deal Info";
+        this.isDataLoading = false;
+        this.setBusy("", "", "", false);
+    }
+
+
+    applyCustomLayoutToGrid(data) {
+        this.defaultColumnOrderArr = this.getColumnOrder();
+
+        var groupsSetting = data.filter(function (obj) {
+            return obj.PRFR_KEY === "Groups";
+        });
+        //if (groupsSetting && groupsSetting.length > 0) {
+        //    this.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+        //}
+
+        var groupColumnsSetting = data.filter(function (obj) {
+            return obj.PRFR_KEY === "GroupColumns";
+        });
+        //if (groupColumnsSetting && groupColumnsSetting.length > 0) {
+        //    this.templates.tools.Groups = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
+        //}
+
+        var customColumnOrderArr = [];
+        var columnOrderSetting = data.filter(function (obj) {
+            return obj.PRFR_KEY === "ColumnOrder";
+        });
+        if (columnOrderSetting && columnOrderSetting.length > 0) {
+            customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
+        }
+
+        var pageSize = 25;
+        var pageSizeArr = data.filter(function (obj) {
+            return obj.PRFR_KEY === "PageSize";
+        });
+        if (pageSizeArr && pageSizeArr.length > 0) {
+            pageSize = Number(pageSizeArr[0].PRFR_VAL);
+        }
+
+        this.filterColumnbyGroup(this.selectedTab);
+    }
+
+
+    iscolumnchecked(field) {
+        if (this.columns.filter(x => x.field == field).length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    onColumnChange(val) {
+
+        var col = this.wipTemplate.columns.filter(x => x.field == val.field);
+
+        if (col == undefined || col == null || col.length == 0) return;
+
+        var colGrp = this.templates[val.field];
+        if (colGrp && colGrp.Groups && !colGrp.Groups.includes(this.selectedTab)) {
+
+            if (colGrp !== undefined && colGrp !== null) {
+                if (colGrp.Groups === undefined) colGrp.Groups = [];
+                colGrp.Groups.push(this.selectedTab);
+            }
+        } else {
+
+            if (colGrp != undefined) {
+                var index = colGrp.Groups.indexOf(this.selectedTab);
+                if (index > -1) {
+                    colGrp.Groups.splice(index, 1);
+                }
+            }
+        }
+        this.filterColumnbyGroup(this.selectedTab)
+    }
+
+    CloseAdd() {
+        this.isAddDialog = false;
+    }
+
+    Closerename() {
+        this.isrenameDialog = false;
+    }
+
     cellCloseHandler(args: CellCloseEvent): void {
         if (args.dataItem != undefined) {
             if (this.invalidDate) {
@@ -543,13 +796,13 @@ export class dealEditorComponent {
         this.isWarning = false;
         this.isDatesOverlap = false;
         this.isDataLoading = true;
-        this.setBusy("Saving...", "Saving Deal Information", "Info");
+        this.setBusy("Saving...", "Saving Deal Information", "Info", true);
         let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.VendorDropDownResult);
         if (isShowStopError) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
             this.isDataLoading = false;
-            this.setBusy("", "", "");
+            this.setBusy("", "", "", false);
         }
         else {
             let data = {
@@ -583,10 +836,10 @@ export class dealEditorComponent {
                 }
                 isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                 if (isanyWarnings) {
-                    this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
+                    this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
                 }
                 else {
-                    this.setBusy("Save Successful", "Saved the contract", "Success");
+                    this.setBusy("Save Successful", "Saved the contract", "Success", true);
                     if (this.isTenderContract) {
                         this.tmDirec.emit('MC');
                     } else return;
@@ -597,7 +850,7 @@ export class dealEditorComponent {
         }
     }
 
-    setBusy(msg, detail, msgType) {
+    setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
             // if no change in state, simple update the text
@@ -605,6 +858,7 @@ export class dealEditorComponent {
                 this.spinnerMessageHeader = msg;
                 this.spinnerMessageDescription = !detail ? "" : detail;
                 this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
                 return;
             }
             this.isDataLoading = newState;
@@ -612,11 +866,13 @@ export class dealEditorComponent {
                 this.spinnerMessageHeader = msg;
                 this.spinnerMessageDescription = !detail ? "" : detail;
                 this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
             } else {
                 setTimeout(() => {
                     this.spinnerMessageHeader = msg;
                     this.spinnerMessageDescription = !detail ? "" : detail;
                     this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
                 }, 100);
             }
         });
@@ -779,7 +1035,7 @@ export class dealEditorComponent {
 
     ngOnInit() {
         this.isDataLoading = true;
-        this.setBusy("Loading Deal Editor", "Loading...","Info");
+        this.setBusy("Loading Deal Editor", "Loading...", "Info", true);
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
         this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);

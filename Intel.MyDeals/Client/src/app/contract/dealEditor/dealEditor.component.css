@@ -45,9 +45,9 @@
     vertical-align: top !important;
 }
 
-.badge.warning {
-    background-color: #f3D54E;
-}
+    .badge.warning {
+        background-color: #f3D54E;
+    }
 
 .rowHeight {
     height: 36px !important;
@@ -133,7 +133,7 @@ tr:last-child > td {
     border: 0.01px !important;
 }
 
-.one-check .k-grid-edit-row .k-textbox, .one-check .k-widget {
+.one-check .k-grid-edit-row .k-textbox, .one-check .k-widgetGr {
     width: 100% !important;
 }
 
@@ -252,6 +252,7 @@ tr:last-child > td {
 .bigIcon {
     font-size: 20px;
 }
+
 .k-hstack {
     height: 37px;
     font-size: 14px;
@@ -358,6 +359,7 @@ tr:last-child > td {
 .gradTab.k-tabstrip .k-tabstrip-items .k-state-active .k-link {
     color: #00AEEF;
 }
+
 .ng-binding {
     padding-left: 4px;
 }
@@ -366,6 +368,7 @@ tr:last-child > td {
     border-right: .5px solid lightgrey !important;
     border-bottom: .5px solid lightgrey !important;
 }
+
 .k-grid td.k-state-focused, .k-grid th.k-state-focused,
 .k-grid th:focus, .k-grid .k-master-row > td:focus,
 .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus,
@@ -373,26 +376,28 @@ tr:last-child > td {
     box-shadow: inset 0 0 0 1px #00aeef !important;
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused,
-.k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover,
-.k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover,
-.k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
-    box-shadow: inset 0 0 0 1px #003C71 !important;
-}
+    .k-grid td.k-state-focused, .k-grid th.k-state-focused,
+    .k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover,
+    .k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover,
+    .k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
+        box-shadow: inset 0 0 0 1px #003C71 !important;
+    }
+
 .dealTools {
     margin-top: 0px !important;
     /*padding-top: 23px !important;*/
     /*line-height: 5.2em !important;*/
 }
+
 .gridStatusMarker {
     height: 35px !important;
     width: 20px !important;
     padding: 0 !important;
 }
 
-.gridStatusMarker.Active {
-    line-height: 2;
-}
+    .gridStatusMarker.Active {
+        line-height: 2;
+    }
 
 .dealDetail .dealDetailContainer {
     line-height: 2;
@@ -439,6 +444,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
 .width-fixes .k-cell-inner {
     font-size: 12px !important;
 }
+
 .dealCell {
     height: 100% !important;
     width: 100% !important;
@@ -465,6 +471,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     font-weight: 600;
     line-height: 1em;
 }
+
 .k-tabstrip-items .k-item {
     margin-right: 0 !important;
 }
@@ -492,16 +499,17 @@ tr:last-child > td {
     background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
     padding: 7.5px !important;
 }
-.k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
-    border-color: rgba(33, 37, 41, 0.125) !important;
-}
-/*.k-grid tbody tr:hover {
-    background: #ecf8fb !important;
-}*/
 
 .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
     border-color: rgba(33, 37, 41, 0.125) !important;
 }
+    /*.k-grid tbody tr:hover {
+    background: #ecf8fb !important;
+}*/
+
+    .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+        border-color: rgba(33, 37, 41, 0.125) !important;
+    }
 
 #dealEditor.op-grid.k-grid tr:hover {
     background-color: #ecf8fb !important;
@@ -510,6 +518,7 @@ tr:last-child > td {
 .k-grid .k-grid-content-locked .k-state-hover td, .k-grid .k-grid-content-locked tr:hover td {
     background-color: #ecf8fb !important;
 }
+
 .k-cell-inner > .k-link:hover {
     background: none !important;
     color: #1a3e6f !important;
@@ -532,6 +541,7 @@ tr:last-child > td {
     padding-top: 0;
     padding-bottom: 5px;
 }
+
 .opUiContainer.md [class^="intelicon-"] :not(intelicon-protection-solid) {
     font-size: 14px;
     color: #00AEEF;
@@ -548,6 +558,7 @@ tr:last-child > td {
 .k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus, .k-grid .k-master-row > td:focus, .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus, .k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important;
 }
+
 .volView {
     font-weight: bold;
     font-size: 16px;
@@ -562,9 +573,11 @@ tr:last-child > td {
     /* width: 803px;*/
     width: 851px;
 }
+
 .width-fixes label {
     line-height: 1.5;
 }
+
 .width-fixes .k-filterable > .k-cell-inner {
     margin-right: 0rem !important;
 }
@@ -594,34 +607,35 @@ kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-fi
     padding: 1px !important;
 }
 
-.btnFltr{
+.btnFltr {
     margin-left: 10px;
-    line-height:10px !important;
+    line-height: 10px !important;
 }
 
 #btnFilter ~ .k-action-buttons.k-button-group {
     display: none !important;
 }
-kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper{
+
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     height: 40px;
 }
 
-kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {
-    position: relative;
-    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
-    border-top: 3px solid #d8d8d8;
-    height: 40px;
-}
+    kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {
+        position: relative;
+        background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
+        border-top: 3px solid #d8d8d8;
+        height: 40px;
+    }
 
-kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li {
-    border-top: none !important;
-    height: 40px;
-}
+        kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li {
+            border-top: none !important;
+            height: 40px;
+        }
 
-kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
-    position: absolute;
-    right: 15px;
-}
+            kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
+                position: absolute;
+                right: 15px;
+            }
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner {
     align-items: flex-start;
@@ -649,4 +663,131 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 
 .valid-icon {
     margin-left: 12px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 213.997px;
+    height: 240.838px;
+    position: absolute;
+    z-index: 10002;
+    top: 42.987px;
+    left: 0px;
+    cursor: pointer;
+}
+
+    .dropdown-content ul li {
+        color: #00AEEF;
+        padding: 8px 0px;
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+
+
+        .dropdown-content ul li:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    color: #00AEEF;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #0071c5;
+    color: none;
+    color: #fdfdfd;
+    cursor: pointer;
+}
+
+
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #0071c5;
+    }
+
+#myInput {
+    box-sizing: border-box;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+}
+
+    #myInput:focus {
+        outline: 3px solid #ddd;
+    }
+
+.dropdown-col-opt {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content-col {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 284px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+    .dropdown-content-col a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+.dropdown-col-opt a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+
+.chkColItem {
+    cursor: pointer;
+}
+
+    .chkColItem:hover {
+        background-color: #efefef;
+    }
+
+.k-textbox.form-control {
+    padding: 1.375rem 0.75rem;
+}
+
+.k-dialog .k-button, .k-dialog .k-toolbar .k-button {
+    padding: 1.375rem 0.75rem;
+    line-height: 1.143em !important;
+    background: #0071c5 !important;
 }
