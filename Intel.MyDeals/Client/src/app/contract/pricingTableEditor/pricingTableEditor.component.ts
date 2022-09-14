@@ -83,7 +83,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.BUTTON.id = "btnCustSelctor";
                 this.buttonStyle = this.BUTTON.style;
                 this.BUTTON.className = 'btn btn-sm btn-primary py-0 htCustCellEditor';
-                this.BUTTON.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
+                this.BUTTON.innerHTML = '🔍';
                 this.BUTTON.addEventListener('mousedown', (event: any) => {
                     event.stopImmediatePropagation();
                     event.preventDefault();
@@ -639,6 +639,8 @@ export class pricingTableEditorComponent implements OnChanges {
         this.overlapFlexResult = [];
         this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
         let PTR = await this.getPTRDetails();
+        //this is to make sure the saved record prod color are success by default
+        PTR=PTE_Load_Util.setPrdColor(PTR);
         this.getTemplateDetails();
         this.dropdownResponses = await this.getAllDrowdownValues();
         if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
@@ -718,6 +720,8 @@ export class pricingTableEditorComponent implements OnChanges {
             let genPTR = PTE_Save_Util.generatePTRAfterSave(result);
             if (genPTR && genPTR.length > 0) {
                 genPTR = PTE_Load_Util.pivotData(genPTR, false, this.curPricingTable, this.kitDimAtrbs);
+                //setting the color of product to success after API
+                genPTR=PTE_Load_Util.setPrdColor(genPTR);
                 this.generateHandsonTable(genPTR);
             }
             else {
@@ -763,12 +767,28 @@ export class pricingTableEditorComponent implements OnChanges {
         let updatedPTRObj: any = null;
         if (translateResult) {
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
-            //Calling to bind the cook result of success or failure
-            this.generateHandsonTable(updatedPTRObj.rowData);
-            if (PTEUtil.isValidForProdCorrector(translateResult['Data'])) {
+            //code to bind the cook result of success or failure
+            let PTR_col_ind=_.findIndex(this.columns,{data:'PTR_USER_PRD'});
+            _.each(updatedPTRObj.rowData,(data,idx)=>{
+                if(data && data._behaviors && data._behaviors.isError){
+                   if(data._behaviors.isError['PTR_USER_PRD']==false){
+                    this.hotTable.setCellMeta(idx,PTR_col_ind,'className','success-product');
+                   }
+                    else{
+                        this.hotTable.setCellMeta(idx,PTR_col_ind,'className','error-product');
+                    }
+                    //setcellmeta will not render the color by default either you should make some proprty change of render
+                    this.hotTable.render();
+                }
+            })
+            let prdValResult=PTEUtil.isValidForProdCorrector(translateResult['Data']);
+            if (_.contains(prdValResult,'1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
                 this.openProductCorrector(translateResult['Data'])
+            }
+            else if(_.contains(prdValResult,'2')){
+                this.loggerService.warn('Please use product selector to choose a valid product',"Use Product Selector");
             }
             else {
                 if (action == 'onSave') {
@@ -863,6 +883,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     PTR_SYS_PRD[`${selProd.name}`] = _.pluck(selProd.items, 'prodObj');
                     let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD) };
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                 
                     if (idx == selProds.length - 1) {
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(() => {
@@ -870,6 +891,7 @@ export class pricingTableEditorComponent implements OnChanges {
                             this.setBusy("", "", "", false);
                         }, 2000);
                     }
+                    
                 });
             }
         });

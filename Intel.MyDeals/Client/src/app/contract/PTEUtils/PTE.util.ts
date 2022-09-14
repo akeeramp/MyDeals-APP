@@ -205,7 +205,12 @@ export class PTEUtil {
                     isError.push('1');
                 }
             });
-        return _.contains(isError,'1');
+            _.each(transformResults.InValidProducts,(val,key)=>{
+                if(val.I && val.I.length>0){
+                    isError.push('2');
+                }
+            });
+        return isError;
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
        //this code will help us to identify uniq entry in case of tier
