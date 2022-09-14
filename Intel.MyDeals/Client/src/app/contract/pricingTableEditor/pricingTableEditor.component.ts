@@ -766,10 +766,12 @@ export class pricingTableEditorComponent implements OnChanges {
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult) {
-            updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
+            updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);            
+            //this.generateHandsonTable(updatedPTRObj.rowData);
             //code to bind the cook result of success or failure
             let PTR_col_ind=_.findIndex(this.columns,{data:'PTR_USER_PRD'});
-            _.each(updatedPTRObj.rowData,(data,idx)=>{
+            _.each(updatedPTRObj.rowData, (data, idx) => {
+                this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit')
                 if(data && data._behaviors && data._behaviors.isError){
                    if(data._behaviors.isError['PTR_USER_PRD']==false){
                     this.hotTable.setCellMeta(idx,PTR_col_ind,'className','success-product');
