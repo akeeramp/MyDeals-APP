@@ -406,7 +406,7 @@ export class pricingTableEditorComponent implements OnChanges {
         const columnAttributes: PRC_TBL_Model_Attributes[] = this.pricingTableTemplates.defaultAtrbs;
         // Iterate through each column from the Pricing Table Template
         _.each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
-            let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
+            let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.isTenderContract,this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
             if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV') {
@@ -436,7 +436,7 @@ export class pricingTableEditorComponent implements OnChanges {
             },
             mergeCells: mergCells,
             cells: (row: number, col: number, prop: string) => {
-                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable)
+                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable,this.isTenderContract)
             },
             cell: cellComments,
             readOnlyCellClassName: 'readonly-cell',
@@ -459,6 +459,7 @@ export class pricingTableEditorComponent implements OnChanges {
                         // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
                         if (source == 'edit') {
                             //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
+                            this.isDeletePTR=true;
                             this.multiRowDelete.push({ row: item[0], old: item[2] })
                         }
                     }
@@ -778,7 +779,6 @@ export class pricingTableEditorComponent implements OnChanges {
         let updatedPTRObj: any = null;
         if (translateResult) {
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);          
-            
             //code to bind the cook result of success or failure
             let PTR_col_ind=_.findIndex(this.columns,{data:'PTR_USER_PRD'});
             _.each(updatedPTRObj.rowData, (data, idx) => {
@@ -870,12 +870,12 @@ export class pricingTableEditorComponent implements OnChanges {
         _.each(products.DuplicateProducts, (val, key) => {
             let res = _.findWhere(PTR, { DC_ID: parseInt(key) });
             let idx = _.findIndex(PTR, { DC_ID: parseInt(key) });
-            selRows.push({ name: _.keys(val).toString(), row: res, indx: idx });
+            selRows.push({DC_ID:res.DC_ID,name: _.keys(val).toString(), row: res, indx: idx });
         });
         let data = { ProductCorrectorData: products, contractData: this.contractData, curPricingTable: this.curPricingTable, selRows: selRows };
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
-            height: '850px',
-            width: '1750px',
+            height: '550px',
+            width: '1650px',
             data: data,
         });
         dialogRef.afterClosed().subscribe((selProds: Array<ProdCorrectObj>) => {
@@ -885,18 +885,20 @@ export class pricingTableEditorComponent implements OnChanges {
                 //logic to bind the selected product and PTR_SYS_PRD to PTR
                 //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
                 _.each(selProds, (selProd, idx) => {
-                    //logic to bind the selected product and PTR_SYS_PRD to PTR
-                    if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
-                        if (idx != 0) {
-                            selProds[idx].indx = selProds[idx - 1].indx + selProds[idx - 1].items.length;
+                    // sometime not all prod corrector rows are slected and user click save in that case we dont need to do any action
+                    if(selProd.items &&selProd.items.length>0 ){
+                        //logic to bind the selected product and PTR_SYS_PRD to PTR
+                        if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                            if (idx != 0) {
+                                //this is to map the current index of prod from last selected prod length
+                                selProds[idx].indx = selProds[idx - 1].indx + this.hotTable.getDataAtRowProp(selProds[idx - 1].indx,'PTR_USER_PRD').split(',').length;
+                            }
                         }
+                        //there can be valid invalid prod so we need to bind prod corrector result to the success
+                        let Curr_PTR=PTE_CellChange_Util.getPTRObjOnProdCorr(selProd,selProds,idx);
+                        let operation =PTE_CellChange_Util.getOperationProdCorr(selProd);
+                        PTE_CellChange_Util.autoFillCellOnProd(Curr_PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
                     }
-                    let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(selProds[idx].indx,'PTR_USER_PRD'), new: _.pluck(selProd.items, 'prod').toString() }]
-                    let PTR_SYS_PRD = {};
-                    PTR_SYS_PRD[`${selProd.name}`] = _.pluck(selProd.items, 'prodObj');
-                    let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD) };
-                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
-                 
                     if (idx == selProds.length - 1) {
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(() => {
@@ -904,7 +906,6 @@ export class pricingTableEditorComponent implements OnChanges {
                             this.setBusy("", "", "", false);
                         }, 2000);
                     }
-                    
                 });
             }
         });
@@ -1005,5 +1006,6 @@ export class pricingTableEditorComponent implements OnChanges {
         // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
         new PTE_CellChange_Util(this.hotTable);
         new PTE_Common_Util(this.hotTable);
+        new PTE_Load_Util(this.hotTable);
     }
 }

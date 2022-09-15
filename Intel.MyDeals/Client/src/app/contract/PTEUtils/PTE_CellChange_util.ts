@@ -5,6 +5,7 @@ import Handsontable from 'handsontable';
 import { CellSettings } from 'handsontable/settings';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Load_Util } from './PTE_Load_util';
+import { ptBR } from 'handsontable/i18n';
 
 export class PTE_CellChange_Util {
     constructor(hotTable: Handsontable) {
@@ -550,7 +551,7 @@ export class PTE_CellChange_Util {
                     } else
                         this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
-                    this.hotTable.setDataAtRowProp(item.row, item.prop, 0, 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, item.prop,'', 'no-edit');
                 }
             }
         });
@@ -765,5 +766,26 @@ export class PTE_CellChange_Util {
         else {
             return ROWID;
         }
+    }
+    static getPTRObjOnProdCorr(selProd:any,selProds:any[],idx:number){
+        let oldVal = this.hotTable.getDataAtRowProp(selProds[idx].indx,'PTR_USER_PRD').toString();
+        let newVal= oldVal.replace(selProd.name,_.pluck(selProd.items, 'prod').toString());
+        let PTR=[{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: oldVal, new: newVal }];
+        return PTR;
+    }
+    static getOperationProdCorr(selProd:any){
+        let PTR_SYS_PRD = this.hotTable.getDataAtRowProp(selProd.indx,'PTR_SYS_PRD');
+        //incase of any valid products already bind, append the prod corr 
+        if(typeof PTR_SYS_PRD =='string' && PTR_SYS_PRD !=''){
+            PTR_SYS_PRD=JSON.parse(PTR_SYS_PRD);
+        }
+        else{
+            PTR_SYS_PRD={};
+        }
+        _.each(selProd.items,selPrdItm=>{
+            PTR_SYS_PRD[`${selPrdItm.prod}`]=[selPrdItm.prodObj];
+        });
+        let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD) };
+        return operation;
     }
 }

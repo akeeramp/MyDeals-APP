@@ -398,7 +398,7 @@ export class contractDetailsComponent {
             .subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
                     // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                    this.contractData["DC_ID"] = response.CNTRCT[0].DC_ID;
+                    this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
                     if (this.hasUnSavedFiles) {
                         this.uploadFile();
                     }

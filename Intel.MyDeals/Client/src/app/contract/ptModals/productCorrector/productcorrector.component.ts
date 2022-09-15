@@ -97,7 +97,7 @@ export class ProductCorrectorComponent {
       this.curRowCategories.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_CAT_NM'))});
       this.gridResult.push({DCID:parseInt(key),name:_.keys(val).toString(),data:_.flatten(_.values(val))});
       this.gridData.push({DCID:parseInt(key),name:_.keys(val).toString(),data:process(_.flatten(_.values(val)), this.state)});
-      this.selectedProducts.push({DCID:parseInt(key),name:_.keys(val).toString(),items:[],indx:_.findWhere(this.selRows,{name:_.keys(val).toString()}).indx});
+      this.selectedProducts.push({DCID:parseInt(key),name:_.keys(val).toString(),items:[],indx:_.findWhere(this.selRows,{DC_ID:parseInt(key)}).indx});
     });
     //sorting the data based on DCID, since its negative we need to reverse
     this.selectedProducts=_.sortBy(this.selectedProducts,'DCID').reverse();
@@ -130,26 +130,27 @@ export class ProductCorrectorComponent {
     })
     return curLvl;
   }
-  selectRow(key:string){
+  selectRow(DCID:string){
     //clearing the gid and prod filter incase if we searched any
     this.state.filter.filters=[];
     this.selPrdLvlKeys=[];
     this.selPrdVerKeys=[];
 
-    let selItem=_.findWhere(this.curRowIssues,{name:key});
+    let selItem=_.findWhere(this.curRowIssues,{DCID:DCID});
     this.curProd=selItem.name;
     this.selRowIssues=[selItem];
     this.rowDCId=selItem.DCID;
-    this.selGridResult=_.findWhere(this.gridResult,{name:key}).data;
-    this.selGridData=_.findWhere(this.gridData,{name:key}).data;
-    this.selRowLvl=this.getSelRowTree(_.findWhere(this.curRowLvl,{name:key}).items);
-    this.selRowCategories=this.getSelRowTree(_.findWhere(this.curRowCategories,{name:key}).items);
-    this.curSelProducts=_.findWhere(this.selectedProducts,{name:key});
+    this.selGridResult=_.findWhere(this.gridResult,{DCID:DCID}).data;
+    this.selGridData=_.findWhere(this.gridData,{DCID:DCID}).data;
+    this.selRowLvl=this.getSelRowTree(_.findWhere(this.curRowLvl,{DCID:DCID}).items);
+    this.selRowCategories=this.getSelRowTree(_.findWhere(this.curRowCategories,{DCID:DCID}).items);
+    this.curSelProducts=_.findWhere(this.selectedProducts,{DCID:DCID});
   }
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.selGridData = process(this.selGridResult, this.state);
   }
+  //ignore openProdSel functiion will revist later
   openProdSel(key:string){
     this.dialogRef.close();
     let data={ name: 'Product Selector', source: '', selVal: key,contractData:this.contractData,curPricingTable:this.curPricingTable,curRow:[_.findWhere(this.selRows,{name:key}).row]};
@@ -167,11 +168,11 @@ export class ProductCorrectorComponent {
   }
   nextRow() {
     this.curRowIndx = this.curRowIndx + 1;
-    this.selectRow(this.curRowIssues[this.curRowIndx ].name);
+    this.selectRow(this.curRowIssues[this.curRowIndx ].DCID);
   }
   prevRow() {
      this.curRowIndx = this.curRowIndx - 1;
-     this.selectRow(this.curRowIssues[this.curRowIndx].name);
+     this.selectRow(this.curRowIssues[this.curRowIndx].DCID);
   }
   prodSelect(item:any,evt:any){
     item['IS_SEL']=evt.target.checked;
@@ -210,7 +211,6 @@ export class ProductCorrectorComponent {
     this.selRows=this.data.selRows;
     this.selectedProducts=[];
     this.curSelProducts=null;
-
     this.loadGrid()
   }
 }

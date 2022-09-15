@@ -25,7 +25,7 @@ export class PTEUtil {
         // }
     };
    
-    static generateHandsontableColumn(pteService: pricingTableEditorService,
+    static generateHandsontableColumn(isTenderContract:any,pteService: pricingTableEditorService,
         loggerService: logger,
         dropdownResponses: any[],
         templateColumnFields: PRC_TBL_Model_Field[],
@@ -87,8 +87,12 @@ export class PTEUtil {
             else if (templateColumnFields[item.field].uiType &&(templateColumnFields[item.field].uiType=='DROPDOWN' ||  templateColumnFields[item.field].uiType=='MULTISELECT' ||  templateColumnFields[item.field].uiType=='EMBEDDEDMULTISELECT')) {
                 currentColumnConfig.type = 'dropdown';
                 if (item.lookupUrl) {
+                    // for tender, PAYOUT_BASED_ON  must not have Billings
+                    if(item.field=='PAYOUT_BASED_ON' && isTenderContract){
+                        currentColumnConfig.source=_.reject(_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`),itm=>{ return itm =='Billings'});
+                    }
                     //market segment has items which has child so we need to pass the full object
-                    if(item.field=='MRKT_SEG'){
+                    else if(item.field=='MRKT_SEG'){
                         currentColumnConfig.source=dropdownResponses[`${item.field}`];
                     }else{
                         currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
@@ -175,6 +179,7 @@ export class PTEUtil {
                     data.PTR_SYS_PRD = JSON.stringify(val)
                     PTE_Common_Util.setBehaviors(data);
                     data._behaviors.isError['PTR_USER_PRD']=false;
+                    data._behaviors.validMsg['PTR_USER_PRD']='Valid Product';
                 }
             });
                //setting PTR_SYS_PRD for InValidProducts
@@ -183,6 +188,7 @@ export class PTEUtil {
                 if(data && data.DC_ID==DCID){
                     PTE_Common_Util.setBehaviors(data);
                     data._behaviors.isError['PTR_USER_PRD']=true;
+                    data._behaviors.validMsg['PTR_USER_PRD']='Invalid product';
                 }
               }
             });
@@ -191,6 +197,7 @@ export class PTEUtil {
                   if(data && data.DC_ID==DCID){
                       PTE_Common_Util.setBehaviors(data);
                       data._behaviors.isError['PTR_USER_PRD']=true;
+                      data._behaviors.validMsg['PTR_USER_PRD']='Invalid product';
                   }
               });
          });

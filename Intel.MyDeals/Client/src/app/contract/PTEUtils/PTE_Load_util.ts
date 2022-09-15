@@ -4,7 +4,12 @@ import { PTE_Config_Util } from './PTE_Config_util';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PRC_TBL_Model_Column } from '../pricingTableEditor/handsontable.interface';
 import Handsontable from 'handsontable';
+
 export class PTE_Load_Util {
+    private static hotTable: Handsontable;
+    constructor(hotTable: Handsontable) {
+        PTE_Load_Util.hotTable = hotTable;
+    }
     static getRulesForDE(objSetTypeCd) {
         return DE_Load_Util.getRules(objSetTypeCd);
     }
@@ -161,31 +166,43 @@ export class PTE_Load_Util {
     static getCellComments(PTR: any, columns: Array<any>): Array<any> {
         let cellComments = [];
         _.each(PTR, (item, rowInd) => {
-            //this piece of code is to bind comments to the cell except PTR_USER_PRD
-            if (item && item._behaviors && item._behaviors.validMsg) {
+            //this piece of code is to bind comments to the cell 
+            if (item && item._behaviors && item._behaviors.validMsg && item._behaviors.isError) {
                 let msg = "";
-                _.each(item._behaviors.validMsg, (val, key) => {
-                    let colInd = _.findIndex(columns, { field: key });
-                    cellComments.push({ row: rowInd, col: colInd, comment: { value: val, readOnly: true }, className: 'error-border' });
-                    msg += columns[colInd].title + ": " + val;
-                });
-                if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined && msg != "") {
-                    cellComments.push({ row: rowInd, col: 0, comment: { value: msg, readOnly: true }, className: 'error-cell' });
-                }
-            }
-            //error binding for PTR USR PRD based on true or false
-            if(item && item._behaviors && item._behaviors.isError){
                 _.each(item._behaviors.isError, (val, key) => {
+                    let colInd = _.findIndex(columns, { field: key });
                     if(key=='PTR_USER_PRD'){
-                        let colInd = _.findIndex(columns, { field: key });
-                        if(val==true){
-                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'error-product' });
+                          if(val==true  && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`]=='Invalid Product'){
+                            cellComments.push({ row: rowInd, col: colInd,comment:{ value:'', readOnly: true }, className: 'error-product' });
+                        }
+                        else if(val==false && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`]=='Valid Product'){
+                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'success-product' });
                         }
                         else{
-                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'success-product' });
+                            //this logic is to handle incase a product is success but still there are error binding but we need to maintain the success color but give message
+                            if(val==true &&  item._behaviors.validMsg[`${key}`] && (item._behaviors.validMsg[`${key}`] !='Invalid Product')){
+                                let cellMeta=this.hotTable.getCellMeta(rowInd,colInd);
+                                if(cellMeta && cellMeta.className && cellMeta.className.toString().match('success-product')){
+                                    cellComments.push({ row: rowInd, col: colInd,comment:{ value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'success-product error-border' });
+                                }
+                                else{
+                                    cellComments.push({ row: rowInd, col: colInd,comment:{ value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
+                                }
+                            }
+                        }   
+                    }
+                    else{
+                        //only if there is error
+                        if(val){
+                            cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
+                            msg += columns[colInd].title + ": " + val;
                         }
                     }
                 });
+                // error cell for consoldate message in first column
+                if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined && msg != "") {
+                    cellComments.push({ row: rowInd, col: 0, comment: { value: msg, readOnly: true }, className: 'error-cell' });
+                }
             }
         });
         return cellComments;
@@ -607,7 +624,7 @@ export class PTE_Load_Util {
     static getLookBackPeriod(data) {
         return DE_Load_Util.getLookBackPeriod(data);
     }
-    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable : any) {
+    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable : any,isTenderContract:boolean) {
         //logic for making by defaul all the cell except PTR_USER_PRD readonly
         const cellProperties = {};
         //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
@@ -650,6 +667,10 @@ export class PTE_Load_Util {
                 cellProperties['readOnly'] = true;
             }
         }
+        //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 
+        else if (isTenderContract && (prop == 'PERIOD_PROFILE' || prop == 'AR_SETTLEMENT_LVL')) {
+            cellProperties['readOnly'] = true;
+        }
         else if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() == 'backend') && (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != 'Cash') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL') {
                 cellProperties['readOnly'] = false;
@@ -676,6 +697,7 @@ export class PTE_Load_Util {
         _.each(PTR,data=>{
             PTE_Common_Util.setBehaviors(data);
             data._behaviors.isError['PTR_USER_PRD']=false;
+            data._behaviors.validMsg['PTR_USER_PRD']='Valid Product';
         })
         return PTR;
     }

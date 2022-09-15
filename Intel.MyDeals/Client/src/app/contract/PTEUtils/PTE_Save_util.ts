@@ -41,7 +41,8 @@ export class PTE_Save_Util {
         var isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
         var duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
         var hasTender, hasNonTender = false;
-        var errDeals = [];
+        //bydefault setting an error can help to avoid any missing scenario bcz of is dirty flag
+        var errDeals = [0];
         var dictRebateType = [];
         var dictPayoutBasedon = [];
         var dictCustDivision = [];
@@ -53,6 +54,8 @@ export class PTE_Save_Util {
         var dictOverarchingVolume = [];
         let isTenderContract = contractData["IS_TENDER"] == "1" ? true : false
         for (var s = 0; s < PTR.length; s++) {
+            if (PTR[s]["_dirty"] !== undefined && PTR[s]["_dirty"] === true) errDeals.push(s);
+            if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[PTR[s].DC_ID] !== undefined) errDeals.push(s);
             if ((curPricingTable.OBJ_SET_TYPE_CD !== "KIT" && curPricingTable.OBJ_SET_TYPE_CD !== "VOL_TIER"
                 && curPricingTable.OBJ_SET_TYPE_CD !== "FLEX") || PTR[s].TIER_NBR == "1") {
                 errDeals.push(s);
