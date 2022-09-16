@@ -267,12 +267,12 @@ function dealTools($timeout, logger, objsetService, dataService, $rootScope, $co
             $scope.holdItems = {
                 "NoShowHold": { // The rest of this item don't really matter since it is bypassing drawing all togeather, but....
                     "icon": "fa fa-hand-paper-o",
-                    "title": "Unable to place a hold on the deal at this stageXX",
+                    "title": "Unable to place a hold on the deal at this stage",
                     "style": { color: "#e7e7e8" }
                 },
                 "NoHold": {
                     "icon": "fa fa-hand-paper-o",
-                    "title": "Unable to place a hold on the deal at this stageXX",
+                    "title": "Unable to place a hold on the deal at this stage",
                     "style": { color: "#e7e7e8" }
                 },
                 "TakeOffHold": {

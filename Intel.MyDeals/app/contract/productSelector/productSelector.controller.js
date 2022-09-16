@@ -249,6 +249,7 @@
                     }
                 });
 
+                if (vm.items.length == 1 && vm.items[0].name == 'NA' && vm.items[0].path.startsWith('CPU SvrWS NA')) { return } // Forced breakout for CPU Q-Spec items forced into products load
                 if (vm.items.length == 1 && vm.items[0].name == 'NA') {
                     var drillLevel5 = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
                     // Check if we have prd_fmly_txt

@@ -38,7 +38,7 @@
         <div ng-if="!vm.showTree" class="row breadCrumbWrapper">
             <ul class="productSelectorpath breadcrumb">
                 <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">{{vm.drillDownPrd}}</a></li>
-                <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA'">
+                <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA' || p.path.startsWith('CPU SvrWS NA')">
                     <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                 </li>
             </ul>
