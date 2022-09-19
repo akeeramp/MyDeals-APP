@@ -724,10 +724,6 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     cursor: pointer;
 }
 
-    .dropbtn:hover, .dropbtn:focus {
-        background-color: #0071c5;
-    }
-
 #myInput {
     box-sizing: border-box;
     background-image: url('searchicon.png');
@@ -746,16 +742,19 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
 .dropdown-col-opt {
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 .dropdown-content-col {
     display: none;
     position: absolute;
-    background-color: #f6f6f6;
+    background-color: #f9f9f9;
     min-width: 284px;
     overflow: auto;
     border: 1px solid #ddd;
     z-index: 1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10002;
 }
 
     .dropdown-content-col a {
@@ -765,12 +764,18 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
         display: block;
     }
 
-.dropdown-col-opt a:hover {
-    background-color: #ddd;
-}
+    .dropdown-content-col div label:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
 
-.show {
+/*.show {
     display: block;
+}*/
+
+.dropdown-col-opt:hover .dropdown-content-col {
+    display: block;
+    cursor: pointer;
 }
 
 .chkColItem {

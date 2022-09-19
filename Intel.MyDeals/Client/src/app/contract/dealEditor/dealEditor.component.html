@@ -43,12 +43,12 @@
                     </button>
                 </div>
 
-                <div class="fr dropdown-col-opt" style="margin-top: 2px; margin-left:8px;">
-                    <button class="btn btn-sm ssToolbarBtn dropbtn" (click)="toggleColumnopt()" title="Manage Columns">
+                <div class="fr clearfix dropdown-col-opt" style="margin-top: 2px; margin-left:8px;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn" title="Manage Columns">
                         <table>
                             <tr>
                                 <td> <i class="intelicon-view-by-columns skyBlue" style="font-size: 30px"></i></td>
-                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left; color: #00AEEF; ">
                                     Columns<br /> Options
                                 </td>
                                 <td>
@@ -57,14 +57,15 @@
                             </tr>
                         </table>
                     </button>
-                    <div id="myDropdown" class="dropdown-content-col">
-                        <div style="width: 298.514px; height: 268.376px; z-index: 10002; top: 36px; left: 0px; box-sizing: content-box;">
+                    <div id="myDropdown" class="dropdown-content-col" style=" background-color: white;">
+                        <div style="width: 316.514px; margin-top: 10px; margin-left: 8px; height: 252.376px; z-index: 10002; top: 36px; left: 0px; box-sizing: content-box; ">
                             <div>
-                                <span class="k-textbox form-control" style="border: none;">
-                                    <input type="search" style="width: 100%; border-color: lightgrey;" [(ngModel)]="columnSearchFilter" />
+                                <span class="k-textbox" style="width: 95%;">
+                                    <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
+                                    <input type="search" style="font: icon; font-family: 'Intel Clear'; border: none; height: 30px; width: 95%; border-color: lightgrey; " [(ngModel)]="columnSearchFilter" />
                                 </span>
                             </div>
-                            <div style="max-height: 200px; overflow: auto;">
+                            <div style="max-height: 200px; overflow: auto; margin-top: 3px;">
                                 <div *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">

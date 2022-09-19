@@ -62,6 +62,7 @@ export class dealEditorComponent {
     public groupsdefault;
     public opName = "DealEditor";
     public Derenametab = "";
+    public renamedefault: any = [];
     private isDatesOverlap = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
@@ -147,7 +148,7 @@ export class dealEditorComponent {
                     })
                     this.gridData = process(arrayData, this.state);
                 }
-            })            
+            })
         });
     }
 
@@ -500,6 +501,7 @@ export class dealEditorComponent {
         for (var g = 0; g < this.groups.length; g++) {
             if (this.groups[g].name == this.selectedTab) {
                 this.groups[g].name = this.Derenametab;
+                this.renamedefault.push({ "key": this.Derenametab, "value": this.selectedTab });
             }
         }
 
@@ -526,7 +528,7 @@ export class dealEditorComponent {
                 this.setBusy("", "", "", false);
             }), err => {
                 this.loggerService.error("Unable to clear Custom Layout.", err, err.statusText);
-                };
+            };
             this.isDataLoading = false;
             this.setBusy("", "", "", false);
         }
@@ -537,6 +539,28 @@ export class dealEditorComponent {
         this.groups = JSON.parse(JSON.stringify(this.groupsdefault));
         this.selectedTab = "Deal Info";
         var group = this.groups.filter(x => x.name == this.selectedTab);
+
+        if (this.renamedefault.length > 0) {
+            for (var i = 0; i < this.wipTemplate.columns.length; i++) {
+                if (this.templates[this.wipTemplate.columns[i].field] != undefined && this.templates[this.wipTemplate.columns[i].field].Groups != undefined) {
+                    for (var g = 0; g < this.templates[this.wipTemplate.columns[i].field].Groups.length; g++) {
+                        for (var j = 0; j < this.renamedefault.length; j++) {
+                            if (this.templates[this.wipTemplate.columns[i].field].Groups.includes(this.renamedefault[j].key)) {
+                                if (this.templates[this.wipTemplate.columns[i].field].Groups[g] == this.renamedefault[j].key) {
+                                    this.templates[this.wipTemplate.columns[i].field].Groups[g] = this.renamedefault[j].value;
+                                }
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.renamedefault = [];
+
         if (group[0].isTabHidden) {
             var tabs = this.groups.filter(x => x.isTabHidden === false);
             this.selectedTab = tabs[0].name;
@@ -604,6 +628,8 @@ export class dealEditorComponent {
             this.loggerService.error("Unable to save Custom Layout.", err, err.statusText);
         });
 
+        this.loggerService.success("Save Successful..", "Saving the Layout");
+
         this.isDataLoading = false;
         this.setBusy("", "", "", false);
     }
@@ -619,9 +645,6 @@ export class dealEditorComponent {
         return columnOrderArr;
     }
 
-    toggleColumnopt() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
 
     customLayout = function (reportError) {
         this.isDataLoading = true;
@@ -650,38 +673,32 @@ export class dealEditorComponent {
 
 
     applyCustomLayoutToGrid(data) {
-        this.defaultColumnOrderArr = this.getColumnOrder();
-
         var groupsSetting = data.filter(function (obj) {
             return obj.PRFR_KEY === "Groups";
         });
-        //if (groupsSetting && groupsSetting.length > 0) {
-        //    this.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
-        //}
+        if (groupsSetting && groupsSetting.length > 0) {
+            this.groups = "";
+            this.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+        }
 
         var groupColumnsSetting = data.filter(function (obj) {
             return obj.PRFR_KEY === "GroupColumns";
         });
-        //if (groupColumnsSetting && groupColumnsSetting.length > 0) {
-        //    this.templates.tools.Groups = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
-        //}
-
-        var customColumnOrderArr = [];
-        var columnOrderSetting = data.filter(function (obj) {
-            return obj.PRFR_KEY === "ColumnOrder";
-        });
-        if (columnOrderSetting && columnOrderSetting.length > 0) {
-            customColumnOrderArr = JSON.parse(columnOrderSetting[0].PRFR_VAL);
+        if (groupColumnsSetting && groupColumnsSetting.length > 0) {
+            this.templates = "";
+            this.templates = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
         }
 
-        var pageSize = 25;
-        var pageSizeArr = data.filter(function (obj) {
-            return obj.PRFR_KEY === "PageSize";
-        });
-        if (pageSizeArr && pageSizeArr.length > 0) {
-            pageSize = Number(pageSizeArr[0].PRFR_VAL);
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.templates.DC_PARENT_ID.Groups != undefined) {
+                if (this.templates.DC_PARENT_ID.Groups.includes(this.groups[i].name) && this.groups[i].name != "Deal Info") {
+                    if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
+                    this.templates.DC_PARENT_ID.Groups.push(this.groups[i].name);
+                }
+            }
         }
 
+        this.selectedTab = "Deal Info"
         this.filterColumnbyGroup(this.selectedTab);
     }
 
