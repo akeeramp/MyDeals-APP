@@ -2,5 +2,9 @@
     <input type='checkbox' (click)="selectAllIDs($event)" class='grid-link-checkbox with-font' id='chkDealTools' [(ngModel)]="is_Deal_Tools_Checked" />&nbsp;
     <label for='chkDealTools'><b>Deal Tools</b></label>
 </div>
-<div *ngIf="in_Field_Name !== 'tools' && in_Header_Template != null" [innerHTML]="in_Header_Template"></div>
+<div *ngIf="in_Field_Name === 'EXCLUDE_AUTOMATION'">
+    <input type='checkbox' class='grid-link-checkbox with-font' (click)="excludeAllItems($event)"/>&nbsp;
+    <label for='chkDealTools'><b>Exclude From Price Rules</b></label>
+</div>
+<div *ngIf="in_Field_Name !== 'tools' && in_Field_Name !== 'EXCLUDE_AUTOMATION' && in_Header_Template != null" [innerHTML]="in_Header_Template"></div>
 <div *ngIf="in_Header_Template == null" [innerHTML]="in_Title"></div>

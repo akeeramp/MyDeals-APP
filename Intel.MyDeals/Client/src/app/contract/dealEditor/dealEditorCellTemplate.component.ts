@@ -120,26 +120,37 @@ export class dealEditorCellTemplateComponent {
     }
 
     uiPositiveDimControlWrapper(passedData, field) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var value = data[field];
-        var sortedKeys = Object.keys(value).sort();
-        for (var index in sortedKeys) {
-            var dimKey = sortedKeys[index];
-            if (data[field][dimKey] !== undefined && data[field][dimKey] !== null && data[field][dimKey] !== "") {
-                if (field == "ECAP_PRICE" || field == "DSCNT_PER_LN" || (field == "CAP" && data[field][dimKey] != "No CAP") || (field == "YCS2_PRC_IRBT" && data[field][dimKey] != "No YCS2")) {
-                    data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
+        try {
+            var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+            var value = data[field];
+            if(value){
+                var sortedKeys = Object.keys(value).sort();
+                for (var index in sortedKeys) {
+                    var dimKey = sortedKeys[index];
+                    if (data[field][dimKey] !== undefined && data[field][dimKey] !== null && data[field][dimKey] !== "") {
+                        if (field == "ECAP_PRICE" || field == "DSCNT_PER_LN" || (field == "CAP" && data[field][dimKey] != "No CAP") || (field == "YCS2_PRC_IRBT" && data[field][dimKey] != "No YCS2")) {
+                            data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
+                        }
+                    }
+                    if (field == "QTY") {
+                        data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
+                    }
+                    if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
+                        if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
+                        if (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")
+                        data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
+                    }
                 }
+                return GridUtil.uiPositiveDimControlWrapper(data, field);
             }
-            if (field == "QTY") {
-                data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
-            }
-            if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
-                if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
-                if (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")
-                data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
+            else{
+                return '';
             }
         }
-        return GridUtil.uiPositiveDimControlWrapper(data, field);
+        catch(ex){
+            console.error('uiPositiveDimControlWrapper::execption',ex);
+        }
+     
     }
 
     uiValidationErrorDetail(passedData) {
@@ -306,17 +317,23 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.getProductMbrSid(dimProduct, dimKey);
     }
     ngOnChanges() {
-        this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
-        this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
-        if (this.in_Field_Name === "CAP_INFO") {
-            this.fieldModifier = "CAP";
-            this.fieldText = this.fieldModifier + "_STRT_DT";
+        try{
+            this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
+            this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
+            if (this.in_Field_Name === "CAP_INFO") {
+                this.fieldModifier = "CAP";
+                this.fieldText = this.fieldModifier + "_STRT_DT";
+            }
+            else if (this.in_Field_Name === "YCS2_INFO") {
+                this.fieldModifier = "YCS2";
+                this.YCS2modifier = "_PRC_IRBT";
+                this.fieldText = this.fieldModifier + "_START_DT";
+            }
         }
-        else if (this.in_Field_Name === "YCS2_INFO") {
-            this.fieldModifier = "YCS2";
-            this.YCS2modifier = "_PRC_IRBT";
-            this.fieldText = this.fieldModifier + "_START_DT";
+        catch(ex){
+            console.error(ex);
         }
+      
     }
 }
 

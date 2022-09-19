@@ -190,12 +190,16 @@ export class TenderFolioComponent {
             "EventSource": "",
             "Errors": {}
         }
-
+        this.isLoading=true;
         this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).subscribe((response) => {
             if (response.CNTRCT && response.CNTRCT.length > 0) {
+                this.isLoading=false;
                   //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
                 this.dialogRef.close(response.CNTRCT[1]["DC_ID"]);
             }
+        },(error) => {
+            this.isLoading=false;
+            this.loggerSvc.error('createTenderContract', error);
         })
     }
 

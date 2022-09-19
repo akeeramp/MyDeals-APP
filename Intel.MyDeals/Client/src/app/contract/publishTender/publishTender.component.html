@@ -1,4 +1,9 @@
-﻿<div class="publishDiv row allDone" style="margin: 10px 0 0 0;padding-right: 17px;">
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div class="publishDiv row allDone" style="margin: 10px 0 0 0;padding-right: 17px;">
     <table style="width: 100%; height: 100%;">
         <tr>
             <td style="width: 100%;">
@@ -18,8 +23,26 @@
         </tr>
     </table>
 </div>
-<div *ngIf="!loading && selectedTAB == 'PD'" style="padding: 5px; height: 100%;">
-    <div id="pubOpGrid" op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" op-name="PUBLISH" op-is-tender=true op-help="helpTopicContractAndDealViews"></div>
+<div *ngIf="!loading" style="padding: 5px; height: 100%;">
+    <div id="pubOpGrid"  style="height: 100%;">
+        <kendo-grid  [data]="gridData"  [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
+                            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" 
+                            filterable="menu" (dataStateChange)="dataStateChange($event)" 
+                >
+        <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of wipOptions.columns" field="{{column.field}}"
+                            [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}">
+            <ng-template kendoGridHeaderTemplate>
+                <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="wipData"></deal-editor-header>
+            </ng-template>
+            <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
+            </ng-template>
+    
+        </kendo-grid-column>
+    </kendo-grid>
+
+    </div>
 </div>
 <loading-panel-angular [show]="isDataLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
                        [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>

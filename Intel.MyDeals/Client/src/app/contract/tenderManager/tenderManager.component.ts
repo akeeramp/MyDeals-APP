@@ -59,9 +59,6 @@ export class tenderManagerComponent {
         this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
         });
-        /*if (this.contractData.TENDER_PUBLISHED == '1') {
-            window.location.href = "/advancedSearch#/tenderDashboard?DealType=" + this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD + "&FolioId=" + this.pricingTableData.PRC_ST[0].DC_PARENT_ID + "&search";
-        }*/
         this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
         this.mcForceRunReq = this.isMCForceRunReq();
         this.isLoading = false;
@@ -169,7 +166,6 @@ export class tenderManagerComponent {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
-
     }
 
     isMCForceRunReq() {

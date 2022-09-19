@@ -25,6 +25,9 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
                 this.grid_Result[i].isLinked = this.is_Deal_Tools_Checked;
         }
     }
+    excludeAllItems(event:any){
+        _.each(this.grid_Result,itm=>{itm['isExclSel']=event.target.checked});
+    }
     checkAllSelected() {
         let gridData = this.grid_Result.filter(item => {
             return !(item.SALESFORCE_ID !== "" && item.WF_STG_CD === 'Offer')
