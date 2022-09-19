@@ -34,6 +34,13 @@
 .valid_Dirty {
     background: #e8eaec;
 }
+.valid_Complete {
+    background: #C4D600;
+}
+.fr {
+    margin-left: auto;
+    height: max-content;
+}
 .intelicon-search {
     width: 248px !important;
 }

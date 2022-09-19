@@ -32,6 +32,7 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
+
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -738,6 +739,8 @@ export class pricingTableEditorComponent implements OnChanges {
             })
             if ((!this.warnings) && this.isTenderContract) {
                 this.tmDirec.emit('DE');
+            } else if (this.warnings && this.isTenderContract) {
+                this.tmDirec.emit('');
             }
             this.warnings = false;
         }

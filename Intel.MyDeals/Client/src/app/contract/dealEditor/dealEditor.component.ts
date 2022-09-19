@@ -837,12 +837,15 @@ export class dealEditorComponent {
                 isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                 if (isanyWarnings) {
                     this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
+                    if (this.isTenderContract) {
+                        this.tmDirec.emit('');
+                    }
                 }
                 else {
                     this.setBusy("Save Successful", "Saved the contract", "Success", true);
                     if (this.isTenderContract) {
                         this.tmDirec.emit('MC');
-                    } else return;
+                    }
                 }
             }
             await this.getWipDealData();

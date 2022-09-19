@@ -2,6 +2,7 @@
 import { logger } from "../../shared/logger/logger";
 import { publishTenderService } from './publishTender.service'
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
+import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 
 @Component({
     selector: "publish-tender",
@@ -10,7 +11,7 @@ import { pricingTableservice } from "../pricingTable/pricingTable.service";
 })
 
 export class publishTenderComponent {
-    constructor(private pricingTableSvc: pricingTableservice, private publishtenderService: publishTenderService, private loggerSvc: logger ) {
+    constructor(private pteService: pricingTableEditorService, private pricingTableSvc: pricingTableservice, private publishtenderService: publishTenderService, private loggerSvc: logger ) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -29,8 +30,10 @@ export class publishTenderComponent {
         this.setBusy("Publishing deals", "Converting into individual deals. Then we will redirect you to Tender Dashboard.", 'Publishing');
         this.publishtenderService.publishTenderDeals(this.contractData.DC_ID, this.exlusionList).subscribe((response) => {
             if (response) {
+                let dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
+                let dealID = this.contractData.DC_ID;
                 this.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
-                window.location.href = "/advancedSearch#/tenderDashboard";
+                document.location.href = "/advancedSearch#/tenderDashboard";
                 return;
             }
             else {
@@ -39,12 +42,11 @@ export class publishTenderComponent {
         })
     }
 
-    getContract() {
-        this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
-            this.contractData = response[0];
-        }, (error) => {
-            this.loggerSvc.error('getContractDetails::readContract:: service', error);
-        })
+    async getContract() {
+        let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
+            this.loggerSvc.error('getContractDetails::readContract:: service', err);
+        });
+        this.contractData = response[0];
     }
     setBusy(msg, detail, msgType) {
         setTimeout(() => {

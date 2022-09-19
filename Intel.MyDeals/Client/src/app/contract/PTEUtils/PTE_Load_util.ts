@@ -649,7 +649,7 @@ export class PTE_Load_Util {
         if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
             var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
             if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
                     cellProperties['readOnly'] = true;
                 }
                 if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {

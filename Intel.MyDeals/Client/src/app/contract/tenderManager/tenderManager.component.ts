@@ -7,6 +7,7 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { templatesService } from "../../shared/services/templates.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
+import * as _ from "underscore";
 
 @Component({
     selector: "tenderManager",
@@ -37,12 +38,18 @@ export class tenderManagerComponent {
     public mcForceRunReq: boolean;
     public inCompleteCapMissing: boolean = false;
     public result: any = null;
+    public isWarning: boolean = false;
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
         })
         this.contractData = response[0];
+        if (this.contractData.TENDER_PUBLISHED == '1') {
+            var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
+            var dealID = this.contractData.DC_ID;
+            document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
+        }
         this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
         this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
         let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
@@ -52,9 +59,9 @@ export class tenderManagerComponent {
         this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
         });
-        if (this.contractData.TENDER_PUBLISHED == '1') {
+        /*if (this.contractData.TENDER_PUBLISHED == '1') {
             window.location.href = "/advancedSearch#/tenderDashboard?DealType=" + this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD + "&FolioId=" + this.pricingTableData.PRC_ST[0].DC_PARENT_ID + "&search";
-        }
+        }*/
         this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
         this.mcForceRunReq = this.isMCForceRunReq();
         this.isLoading = false;
@@ -78,16 +85,32 @@ export class tenderManagerComponent {
         return true
     }
     async redirectingFn(tab) {
-        this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-        });
-        this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-        this.selectedTab = tab;
-        this.currentTAB = tab;
+        if (tab != '') {
+            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            this.selectedTab = tab;
+            this.currentTAB = tab;
+        } else {
+            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            _.each(this.pricingTableData.PRC_TBL_ROW, (item) => {
+                this.isWarning = false;
+                if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
+                    this.isWarning = true;
+                }
+            });
+        }
     }
 
     async tenderWidgetPathManager(_actionName, selectedTab) {
         this.mcForceRunReq = this.isMCForceRunReq();
+        if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
+            this.isPartiallyValid = this.isPTRPartiallyComplete();
+        }
         if (this.currentTAB == selectedTab) {
             if (this.currentTAB == 'PTR') {
                 await this.pteComp.validatePricingTableProducts();
@@ -99,16 +122,15 @@ export class tenderManagerComponent {
             this.selectedTab = selectedTab;
         }
 
-        if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
-            this.isPartiallyValid = this.isPTRPartiallyComplete();
-        }
-
-        if (selectedTab == 'PTR') {
-            if (this.currentTAB == 'DE') {
-                await this.deComp.SaveDeal();
+        else if (selectedTab == 'PTR') {
+            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
             }
-            else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' || this.isPartiallyValid == true) {
+            else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
+                await this.deComp.SaveDeal();
+                this.selectedTab = selectedTab;
+                this.currentTAB = selectedTab;
+            } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
             }
         }
@@ -127,17 +149,17 @@ export class tenderManagerComponent {
         }
 
         else if (selectedTab == 'MC') {
-            if (this.currentTAB == 'DE') {
+            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                await this.redirectingFn(selectedTab);
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
                 await this.deComp.SaveDeal();
-            } else {
-                if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                    await this.redirectingFn(selectedTab);
-                }
+            } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                await this.redirectingFn(selectedTab);
+            }
                 else {
                     this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
                 }
             }
-        }
 
         else if (selectedTab == 'PD') {
             if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' && !this.mcForceRunReq) {
