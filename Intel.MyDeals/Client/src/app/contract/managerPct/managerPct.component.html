@@ -1,4 +1,4 @@
-﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="pctTab" style="margin-left: 10px">
+﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="pctTab" style="margin-left: 10px" class="new-allDeals">
     <kendo-tabstrip-tab title="All" *ngIf="tab === 'pctDiv'" [selected]="selectedTab==0"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Failures" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==1"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Passes" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==2"></kendo-tabstrip-tab>
@@ -10,9 +10,9 @@
         </ng-template>
     </kendo-tabstrip-tab>
 </kendo-tabstrip>
-<div id="sum-wrapper" *ngIf="!isExcludeGroup">
-    <div id="sum-header" style="min-width: 800px;">
-        <div class="sum-filter-bar" style="padding: 0 10px;">
+<div id="sum-wrapper" class="new-view" *ngIf="!isExcludeGroup">
+    <div id="sum-header pt-0" style="min-width: 800px;">
+        <div class="sum-filter-bar pp-style">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()"
@@ -141,7 +141,7 @@
                                 <div style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
-                                             class='opUiContainer md dashboard sumGridOptionsExpand'>
+                                             class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap'>
                                             <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true"
                                                         [sortable]="true" [sort]="state.sort" [skip]="state.skip"
                                                         [group]="state.group" [navigable]="true" [loading]="isLoading"

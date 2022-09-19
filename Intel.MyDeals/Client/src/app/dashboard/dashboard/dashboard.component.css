@@ -278,3 +278,114 @@ h5 {
 .navbar-fixed-top {
     z-index: 1000!important;
 }
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper {
+    padding-left: 10px;
+    margin-top: 4px;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
+    border-radius: 0 !important;
+    margin-left: 1px !important;
+    margin-right: 1px !important;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:first-child {
+    margin-left: 0px !important;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:last-child {
+    margin-right: 0px !important;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
+    background: #f9f9f9;
+    position: relative;
+    width: 100%;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul {
+    background: #f9f9f9 !important;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li {
+    background: #f9f9f9 !important;
+    border-color: #dee2e6;
+    border-bottom: none;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span {
+    color: #003C71!important;
+    font-weight: 500;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
+    background: #fff !important;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span {
+    color: #00AEEF !important
+}
+
+.oppo-grids kendo-grid .k-grid-header table thead tr th {
+    font-size: 12px !important;
+    font-weight: 600;
+}
+
+.oppo-grids kendo-grid .k-grid-header table thead tr th .k-link:hover {
+    color: #1a3e6f !important;
+    background-color: transparent !important;
+}
+
+.new-now-wrap.oppo-grids kendo-grid .k-grid-header table thead tr th span.k-cell-inner .k-link,
+.new-now-wrap.oppo-grids kendo-grid .k-grid-header table thead tr th span.k-cell-inner .k-link .k-column-title {
+    display: block;
+    width: 100%;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
+gridster-item.attr-li-6, gridster-item.attr-li-8 {
+    height: 312px !important;
+}
+
+gridster-item.attr-li-7 {
+    height: 651px !important;
+}
+
+    /*gridster-item.attr-li-8 {
+    top: -53px;
+}*/
+
+gridster-item.attr-li-7 .k-grid-table-wrap {
+    height: 520px;
+}
+
+gridster-item.attr-li-7 .container-fluid.widget-container {
+    height: auto !important;
+}
+
+.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
+    padding-right: 1.5rem;
+    vertical-align: top;
+}
+
+.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner span.k-icon.k-i-filter {
+    font-size: 12px;
+}
+
+.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner .k-grid-filter {
+    position: relative;
+    top: 2px;
+}
+
+.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th span.k-cell-inner .intelicon-protection-solid {
+    font-size: 14px !important;
+    padding-top: 0.275rem;
+}

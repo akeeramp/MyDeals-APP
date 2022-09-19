@@ -164,7 +164,8 @@ a {
 }
 
 .radioButtonGroup {
-    display: inline-flex !important
+    display: inline-flex !important;
+    align-items: flex-start;
 }
 
 .contract-detail-form {
@@ -279,4 +280,14 @@ kendo-upload-action-buttons{
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label:before {
+    content: 'Q';
+}
+
+kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label {
+    position: relative;
+    display: inline-block;
+    padding-top: 10px;
 }

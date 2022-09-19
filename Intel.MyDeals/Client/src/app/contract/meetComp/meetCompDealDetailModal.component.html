@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="prodSelector modal-body">
+    <div class="prodSelector modal-body other-modal-body oppo-grids">
         <kendo-grid [data]="gridData" [loading]="isLoading" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true,buttonCount:5}"
             [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" style="margin-bottom: 22px;height: auto;">
             <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="150" [headerClass]="{'headerClass':true}">

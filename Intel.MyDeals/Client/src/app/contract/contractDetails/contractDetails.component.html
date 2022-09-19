@@ -84,7 +84,7 @@
                                         <div class="col-md-4 slidermbottom">
                                             <kendo-slider [min]="1" [max]="4" [largeStep]="1" [showButtons]="true"
                                                           [vertical]="false" [(ngModel)]="START_QTR" name="START_QTR"
-                                                          (valueChange)="getCurrentQuarterDetails('START_QTR')"></kendo-slider>
+                                                          (valueChange)="getCurrentQuarterDetails('START_QTR')" class="before-ques"></kendo-slider>
                                         </div>
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
@@ -112,7 +112,7 @@
                                         <div class="col-md-4 slidermbottom">
                                             <kendo-slider [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true"
                                                           [vertical]="false" [(ngModel)]="END_QTR" [disabled]="NO_END_DT" name="END_QTR"
-                                                          (valueChange)="getCurrentQuarterDetails('END_QTR')"></kendo-slider>
+                                                          (valueChange)="getCurrentQuarterDetails('END_QTR')" class="before-ques"></kendo-slider>
                                         </div>
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"

@@ -662,6 +662,6 @@ input[type=checkbox].with-sm-font {
 
     .k-grid a:hover, a:focus {
         color: #004579;
-        text-decoration: underline !important;
+        text-decoration: none !important;
         cursor: pointer;
     }

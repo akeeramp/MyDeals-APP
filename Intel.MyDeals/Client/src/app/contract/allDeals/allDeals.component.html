@@ -5,12 +5,42 @@
         </div>
     </div>
  <div>
-    <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="allDealsTab" style="margin-left: 10px">
+    <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="allDealsTab" class="new-allDeals">
         <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
             <ng-template kendoTabContent>
-            <div class="content">
-                <div class="toolbar" style="position: absolute; left: 300px; top: 80px; margin-bottom: 10px;">
-                    <div class="fr dropdown clearfix" style="margin-right: 2px;">
+            <div class="content app-filler">
+                <div class="toolbar new-fixes-poly">
+                    <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                        <button class="btn btn-sm ssToolbarBtn"
+                                (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
+                            <table>
+                                <tr>
+                                    <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                    <td class="hidden-md hidden-sm hidden-xs"
+                                        style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                        Word<br />Wrap
+                                    </td>
+                                </tr>
+                            </table>
+                        </button>
+                    </div>
+
+                    <div class="fr" style="margin-top: 2px; margin-left: 8px;" *ngIf="!opIsTender">
+                        <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
+                                title="check for overlapping Deals.">
+                            <table>
+                                <tr>
+                                    <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                    <td class="hidden-md hidden-sm hidden-xs"
+                                        style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                        Overlapping<br />Deals Check
+                                    </td>
+                                </tr>
+                            </table>
+                        </button>
+                    </div>
+
+                    <div class="fr dropdown clearfix" style="margin-top: 2px; margin-left: 8px;">
                         <button class="btn btn-sm ssToolbarBtn dropdown-toggle"
                                 id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
                             <table>
@@ -21,7 +51,7 @@
                                                aria-hidden="true" style="font-size: 30px !important"></i>
                                         </td>
                                         <td class="hidden-md hidden-sm hidden-xs"
-                                            style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent;">
+                                            style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent; font-size: 11px;">
                                             Excel<br>Export
                                         </td>
                                         <td><span class="caret" style="margin-left: 6px;"></span></td>
@@ -34,48 +64,21 @@
                             <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
                         </ul>
                     </div>
-                    <div class="fr" style="margin-top: 2px; margin-left: 8px;" *ngIf="!opIsTender">
-                        <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
-                                title="check for overlapping Deals.">
-                            <table>
-                                <tr>
-                                    <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                    <td class="hidden-md hidden-sm hidden-xs"
-                                        style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                        Overlapping<br />Deals Check
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
-                    <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                        <button class="btn btn-sm ssToolbarBtn"
-                                (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
-                            <table>
-                                <tr>
-                                    <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                    <td class="hidden-md hidden-sm hidden-xs"
-                                        style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                        Word<br />Wrap
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
+
                     <div class="fr" style="margin-top: 2px; margin-left: 8px;">
                         <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup('Contract+and+Deals+Views')">
                             <i class="intelicon-help"
                                style="font-size:30px !important"></i>
                         </div>
                     </div>
-                    <div class="fr" style="margin-top: 2px; margin-left: 70px;">
-                        <span class="k-textbox k-space-left">
-                            <i class="intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i><input style="width: 290px;" placeholder="Search...(press enter to search)" [(ngModel)]="titleFilter" />
+                    <div class="fr" style="margin-top: 2px; margin-left: 22px;">
+                        <span class="k-textbox k-space-left aligner-inputs">
+                            <i class="intelicon-search"></i><input placeholder="Search...(press enter to search)" [(ngModel)]="titleFilter" />
                         </span>
                     </div>
                 </div>
-               <div class="row" style="margin-left: -36px; padding-top: 28px;margin-top: 15px;">
-                    <div class="col-md-12 kendo-grid-buttons">
+               <div class="row new-rows">
+                    <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css">
                         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"

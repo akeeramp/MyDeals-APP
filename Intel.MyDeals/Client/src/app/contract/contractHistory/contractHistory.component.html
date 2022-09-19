@@ -3,14 +3,14 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12" style="height:50px"></div>
+    <div class="col-md-12" style="height:29px"></div>
 </div>
 <div *ngIf ="!isLoading" class="row">
     <div class="col-md-12" style="padding-left: 35px;">
         <h3>Contract History</h3>
         <hr style="width:97%">
     </div>
-    <div class="col-md-12 kendo-grid-buttons">
+    <div class="col-md-12 kendo-grid-buttons oppo-grids">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false"

@@ -3,29 +3,31 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12" style="height:50px"></div>
+    <div class="col-md-12" style="height: 35px"></div>
 </div>
 <div class="row">
     <div class="col-md-12" style="padding-left: 35px;">
         <div class="row">
-        <div class="col-md-9">
-            <h3>Overlapping Deals</h3>
-        </div>
-            <div class="fr col-md-2" style="margin-right:10px">
-                <button class="btn btn-primary" type="button" >
-                    <i class="fa fa-paste" style="margin-right: 5px;"></i> Open in Window
-                </button>
+            <div class="col-md-9">
+                <h3>Overlapping Deals</h3>
             </div>
-            <span class="fr helpBtn col-md-1" title="Help">
-                <a href="https://wiki.ith.intel.com/display/Handbook/Contract+Details"
-                   target="_blank">
-                    <i class="intelicon-help"
-                       style="font-size:30px !important"></i>
-                </a>
-            </span>
+            <div class="col-md-3">
+                <div class="approve-open">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fa fa-paste" style="margin-right: 5px;"></i> Open in Window
+                    </button>
+                    <span class="helpBtn new-compo" title="Help">
+                        <a href="https://wiki.ith.intel.com/display/Handbook/Contract+Details"
+                           target="_blank">
+                            <i class="intelicon-help"
+                               style="font-size:30px !important"></i>
+                        </a>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-12 kendo-grid-buttons">
+    <div class="col-md-12 kendo-grid-buttons oppo-grids">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"

@@ -9,13 +9,13 @@
 <div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
-            <div id="contractContainer" class="fullHeight">
+            <div id="contractContainer" class="fullHeight new-property">
                 <div *ngIf="selLnav=='PTE'">
                     <div *ngIf="isPTEEnable==true">
                         <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;">
                             <div class="valid_{{ps_passed_validation}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">PRICING STRATEGY:</span> {{ wf_Stage }}</div>
                         </div>
-                        <div id="contractHeader">
+                        <div id="contractHeader" class="variable-plus">
                             <div>
                                 <div class="col-md-10" style="padding-left: 0px;">
                                     <div class="col-md-1" title="{{ ps_passed_validation || 'Not validated yet' }}" style="width: 2.5% !important; line-height: 1em; font-size: 26px; padding-left: 0px;">
@@ -40,7 +40,7 @@
                                 <div class="clearboth"></div>
                             </div>
                         </div>
-                        <kendo-tabstrip (tabSelect)="onTabSelect($event)">
+                        <kendo-tabstrip (tabSelect)="onTabSelect($event)" class="tabs-coll">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isPTETab">

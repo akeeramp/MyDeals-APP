@@ -81,7 +81,7 @@
 .left-pane-widget {
     height: inherit;
     float: left;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 180px;
     margin-left: -180px;
     padding: 0 0 25px 5px

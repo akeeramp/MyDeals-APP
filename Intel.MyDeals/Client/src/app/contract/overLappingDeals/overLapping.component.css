@@ -36,3 +36,16 @@
     border-radius: 3px;
     cursor: pointer;
 }
+
+.approve-open{
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    position: relative;
+}
+
+.new-compo {
+    padding-left: 5px;
+    padding-right: 36px;
+}

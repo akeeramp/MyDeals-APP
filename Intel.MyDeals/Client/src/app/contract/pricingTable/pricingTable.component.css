@@ -136,3 +136,8 @@ b {
     font-size: 15px !important;
     font-weight: 400 !important;
 }
+
+.variable-plus {
+    padding-left: 10px;
+    padding-top: 2px;
+}

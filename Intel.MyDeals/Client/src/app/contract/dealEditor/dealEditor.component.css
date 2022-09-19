@@ -138,22 +138,21 @@ tr:last-child > td {
 }
 
 #dealEditorTab .k-tabstrip-items .k-item {
-    background: #fdfdfd;
-    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
-    background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%);
-    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
     color: #003C71 !important;
-    /*padding: 0.8em !important;*/
     text-transform: none !important;
     background-color: #fff;
     border-bottom-width: 0;
-    border: 3px solid transparent;
+    border: 1px solid #dee2e6;
+    border-top: 1px solid #dee2e6 !important;
+    border-bottom: none;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-top-left-radius: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
 }
 
 #dealEditorTab .k-tabstrip-items .k-state-active {
-    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
-    background: -webkit-linear-gradient(top, #fdfdfd 0%,#fff 100%);
-    background: linear-gradient(to bottom, #fdfdfd 0%,#fff 100%);
+    background: #ffffff !important;
     border-color: #b1babf;
     border-width: 1px;
     border-left-width: 1px;
@@ -496,8 +495,8 @@ tr:last-child > td {
     font-size: 12px;
     font-family: 'Intel Clear';
     font-weight: bold;
-    background: linear-gradient(rgb(253, 253, 253) 0%, rgb(217, 217, 217) 100%) !important;
-    padding: 7.5px !important;
+    background: #e7e7e8 !important;
+    padding: 10px 3.5px !important;
 }
 
 .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
@@ -525,7 +524,7 @@ tr:last-child > td {
 }
 
 #dealEditorTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link:hover {
-    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+    background: #f9f9f9 !important;
 }
 
 
@@ -622,8 +621,8 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
 
     kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {
         position: relative;
-        background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
-        border-top: 3px solid #d8d8d8;
+        background: #f9f9f9 !important;
+        /*border-top: 3px solid #d8d8d8;*/
         height: 40px;
     }
 
@@ -790,4 +789,19 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     padding: 1.375rem 0.75rem;
     line-height: 1.143em !important;
     background: #0071c5 !important;
+}
+
+.width-fixes.new-allDeals .k-tabstrip-items .k-item span {
+    font-weight: 600 !important;
+}
+
+#dealEditor .k-grid-header .headerClass span.k-cell-inner .k-grid-filter {
+    padding-left: 0;
+    padding-right: 0;
+    width: 25px;
+    height: 29px;
+}
+
+#dealEditor .k-grid-header .headerClass span.k-cell-inner .intelicon-protection-solid {
+    color: #00AEEF;
 }

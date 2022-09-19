@@ -44,9 +44,9 @@
 
     <div class=" overFlowWidget">
         <div class="row" style="overflow-x: hidden;">
-            <div style="width: 100vw; height: 100vh;">
+            <div style="width: 100vw; height: 85vh;">
                 <gridster [options]="options" class="another-parent">
-                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li">
+                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li-{{item.id}}">
                         <div class="widgetFull">
                             <div class="row widgetHeader">
                                 <div class="col-md-10">
