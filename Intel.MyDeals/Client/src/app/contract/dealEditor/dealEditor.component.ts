@@ -77,7 +77,7 @@ export class dealEditorComponent {
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private dim = "10___";
-    private gridResult = [];
+    public gridResult = [];
     private gridData: GridDataResult;
     public isLoading = false;
     private isTenderContract = false;

@@ -180,7 +180,7 @@ export class PTE_Common_Util {
             let obj = {}
             _.each(columns, (val) => {
                 if (val.data) {
-                    obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : null;
+                    obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : '';
                 }
             });
             PTRResult.push(obj);
@@ -193,7 +193,7 @@ export class PTE_Common_Util {
                     //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
                     _.each(columns, (val) => {
                         if (val.data) {
-                            obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : null;
+                            obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : '';
                         }
                     });
                     PTRResult.push(obj);

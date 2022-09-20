@@ -159,7 +159,7 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab title="Meet Comp" [selected]="selectedTab == 1">
+            <kendo-tabstrip-tab title="Meet Comp" [selected]="selectedTab == 1" [disabled]="enableFlowBtn()">
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
                         <div>
@@ -187,7 +187,7 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab title="Manage" [selected]="selectedTab == 2">
+            <kendo-tabstrip-tab title="Manage" [selected]="selectedTab == 2" [disabled]="enableFlowBtn()">
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
                         <div>

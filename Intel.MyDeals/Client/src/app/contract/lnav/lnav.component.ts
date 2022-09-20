@@ -789,13 +789,16 @@ export class lnavComponent {
         };
         this.modelChange.emit(contractDetails_Map);
     }
+    enableFlowBtn() {
+        return (lnavUtil.enableFlowBtn(this.contractData) == false) ? true : false;
+    }
     ngOnInit() {
         this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newStrategy.IS_HYBRID_PRC_STRAT = false;
         this.contractData?.PRC_ST?.map((x, i) => {
             this.isPSExpanded[i] = false
-        });
+        });        
         //code for autofill change to accordingly change values
         this.lnavSvc.autoFillData.subscribe(res => {
             this.autoFillData = res;

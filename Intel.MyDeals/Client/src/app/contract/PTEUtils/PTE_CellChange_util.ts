@@ -37,9 +37,10 @@ export class PTE_CellChange_Util {
         return condition;
     }
 
-    static addUpdateRowOnchange(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
+    static addUpdateRowOnchange(hotTable: Handsontable,columns:any[], row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        _.each(hotTable.getCellMetaAtRow(0), (val, key) => {
+        let cols=_.map(columns,col=>{return {prop:col.data}});
+        _.each(cols, (val, key) => {
             let currentstring = '';
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
@@ -127,7 +128,8 @@ export class PTE_CellChange_Util {
                 }
             }
             else {
-                this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`], 'no-edit');
+                //the condition in this logic is to avoid server side issue when sending data as null
+                this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`]==null?'':rowData[`${val.prop}`], 'no-edit');
             }
         }
         else {
@@ -185,6 +187,14 @@ export class PTE_CellChange_Util {
                 currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
                 updateRows.push(currentstring.split(','));
             }
+            else if (val.prop == 'TOTAL_DOLLAR_AMOUNT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
+                currentstring = row + ',' + val.prop + ',' + '0.00' + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+            }
+            else if (val.prop == 'ADJ_ECAP_UNIT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
+                currentstring = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+            }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 
@@ -209,9 +219,10 @@ export class PTE_CellChange_Util {
         this.hotTable.updateSettings({ mergeCells: mergCells });
 
     }
-    static addUpdateRowOnchangeKIT(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, product: number, rowData?: any, operation?: any) {
+    static addUpdateRowOnchangeKIT(hotTable: Handsontable,columns:any[], row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, product: number, rowData?: any, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        _.each(hotTable.getCellMetaAtRow(0), (val, key) => {
+         let cols=_.map(columns,col=>{return {prop:col.data}});
+        _.each(cols, (val, key) => {
             let currentstring = '';
             if (val.prop == 'PTR_USER_PRD') {
                 hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
@@ -292,7 +303,7 @@ export class PTE_CellChange_Util {
                 //based on the number of products listed we have to iterate the 
                 let prodIndex = 0;
                 for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
-                    this.addUpdateRowOnchangeKIT(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
+                    this.addUpdateRowOnchangeKIT(this.hotTable,columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
                     prodIndex++;
                 }
                 //calling the merge cells option based of number of products
@@ -320,7 +331,7 @@ export class PTE_CellChange_Util {
                     }
                     let prodIndex = 0;
                     for (let i = selrow; i < parseInt(prods.length) + selrow; i++) {
-                        this.addUpdateRowOnchangeKIT(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
+                        this.addUpdateRowOnchangeKIT(this.hotTable,columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
                     }
                     let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
@@ -346,7 +357,7 @@ export class PTE_CellChange_Util {
                 //add num of tier rows the logic will be based on autofill value
                 let prods = cellItem.new.split(','), prodIndex = 0;
                 for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
-                    this.addUpdateRowOnchangeKIT(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
+                    this.addUpdateRowOnchangeKIT(this.hotTable,columns,i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex],null,operation);
                     prodIndex++;
                 }
                 //calling the merge cells optionfor tier 
@@ -382,7 +393,7 @@ export class PTE_CellChange_Util {
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < parseInt(NUM_OF_TIERS) + empRow; i++) {
-                    this.addUpdateRowOnchange(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
+                    this.addUpdateRowOnchange(this.hotTable,columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
                     tier++;
                 }
                 //calling the merge cells option only where tier
@@ -422,7 +433,7 @@ export class PTE_CellChange_Util {
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
-                    this.addUpdateRowOnchange(this.hotTable, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier,operation);
+                    this.addUpdateRowOnchange(this.hotTable,columns,i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier,operation);
                     tier++;
                 }
                 //calling the merge cells optionfor tier 
@@ -465,7 +476,7 @@ export class PTE_CellChange_Util {
                             let PTR_col_ind=_.findIndex(columns,{data:'PTR_USER_PRD'});
                             this.hotTable.setCellMeta(items[0].row,PTR_col_ind,'className','success-product');
                         }
-                        this.addUpdateRowOnchange(this.hotTable, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
+                        this.addUpdateRowOnchange(this.hotTable,columns, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
                     }
                     else {
                         //this line of code is to mak sure we modify the product background color to sucess
@@ -506,7 +517,7 @@ export class PTE_CellChange_Util {
                     let empRow = this.returnEmptyRow();
                     _.each(items, (cellItem) => {
                         let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
-                        this.addUpdateRowOnchange(this.hotTable, empRow, cellItem, ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
+                        this.addUpdateRowOnchange(this.hotTable,columns, empRow, cellItem, ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
                         empRow++;
                     });
                 }

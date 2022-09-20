@@ -112,14 +112,13 @@ export class publishTenderComponent {
 
         // Get all WIP
         if (this.contractData && this.contractData[0] && this.contractData[0].DC_ID) {
-            let response = await this.allDealsSvc.readWipFromContract(this.contractData[0].DC_ID).toPromise()
-                .catch(
-                    error => {
-                        this.loggerSvc.error("Could not get deals.", error);
-                    });
-            if (response) {
+            let response = await this.allDealsSvc.readWipFromContract(this.contractData[0].DC_ID).toPromise().catch(error => {this.loggerSvc.error("Could not get deals.", error);});
+            if (response && response.WIP_DEAL) {
                 this.initGrid(response.WIP_DEAL);
                 this.spinnerMessageDescription = "Drawing Grid";
+            }
+            else{
+                this.loggerSvc.error("Error", "Publishing deals failed. Contact Administrator.");
             }
         }
     }
@@ -290,8 +289,11 @@ export class publishTenderComponent {
         this.templatesSvc.readTemplates()
             .subscribe(response => {
                 this.templates = response;
+                this.initTender();
+            },err=>{
+                this.loggerSvc.error("Error", "Publishing deals Loading failed. Contact Administrator.",err);
             });
-        this.initTender();
+       
     }
 
 }

@@ -32,7 +32,7 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
-
+import { contractDetailsService } from "../contractDetails/contractDetails.service"
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -46,7 +46,8 @@ export class pricingTableEditorComponent implements OnChanges {
         private loggerService: logger,
         private lnavSVC: lnavService,
         private flexoverLappingCheckDealsSvc: flexoverLappingcheckDealService,
-        protected dialog: MatDialog) {
+        protected dialog: MatDialog,
+        private contractDetailsSvc: contractDetailsService) {
         /*  custom cell editot logic starts here*/
         let VM = this;
         this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
@@ -209,6 +210,8 @@ export class pricingTableEditorComponent implements OnChanges {
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
     @Output() tmDirec = new EventEmitter();
+    @Output() enableDeTab = new EventEmitter();
+    @Output() refreshedContractData = new EventEmitter;
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     /*For loading variable */
@@ -223,7 +226,7 @@ export class pricingTableEditorComponent implements OnChanges {
     public dirty = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
-    private pricingTableDet: Array<any> = [];
+    public pricingTableDet: Array<any> = [];
     private pricingTableTemplates: any = {}; // Contains templates for All Deal Types
     private autoFillData: any = null;
     private ColumnConfig: Array<Handsontable.ColumnSettings> = [];
@@ -384,9 +387,11 @@ export class pricingTableEditorComponent implements OnChanges {
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
-            vm.pricingTableDet = response;
+            vm.pricingTableDet = response.PRC_TBL_ROW;
+            this.enableDeTab.emit(true);
             return response.PRC_TBL_ROW;
         } else {
+            this.enableDeTab.emit(false);
             return [];
         }
     }
@@ -451,7 +456,7 @@ export class pricingTableEditorComponent implements OnChanges {
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             let uniqchanges = [];
             _.each(changes, (item) => {
-                if (item[2] != undefined && item[3] != undefined) {
+              
                     if (item[1] == 'PTR_USER_PRD') {
                         if (item[3] != null && item[3] != '') {
                             let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
@@ -459,7 +464,7 @@ export class pricingTableEditorComponent implements OnChanges {
                         }
                         else {
                             // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
-                            if (source == 'edit') {
+                            if (source == 'edit' && item[2] !=null) {
                                 //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
                                 this.isDeletePTR = true;
                                 this.multiRowDelete.push({ row: item[0], old: item[2] })
@@ -470,7 +475,7 @@ export class pricingTableEditorComponent implements OnChanges {
                         let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                         uniqchanges.push(obj);
                     }
-                }
+                
             });
             return uniqchanges;
         }
@@ -525,6 +530,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     this.deleteRow(this.multiRowDelete);
                 }
                 this.isLoading = false;
+                this.enableDeTab.emit(true);
                 this.setBusy("", "", "", false);
             }, 0);
         }
@@ -551,6 +557,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::deletePTR", error);
         });
         if (result) {
+            await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
             this.isLoading = false;
             this.loadPTE();
         }
@@ -561,13 +568,16 @@ export class pricingTableEditorComponent implements OnChanges {
     deleteRow(rows: Array<any>): void {
         try {
             let delRows = [];
+            let PTR=PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
             //delete can be either simple row delete for PTR not saved or can be PTR which are saved
-            _.each(rows, row => {
-                let DCID = this.hotTable.getDataAtRowProp(row.row, 'DC_ID');
-                if (DCID) {
-                    delRows.push({ row: row.row, DC_ID: this.hotTable.getDataAtRowProp(row.row, 'DC_ID') });
-                }
-            })
+            _.each(PTR,(PTRow,ind)=>{
+                _.each(rows, row => {
+                    let DCID = this.hotTable.getDataAtRowProp(row.row, 'DC_ID');
+                    if (PTRow.DC_ID==DCID) {
+                        delRows.push({ row: ind, DC_ID: PTRow.DC_ID });
+                    }
+                })
+            });
             let savedRows = _.filter(delRows, row => { return row.DC_ID > 0 });
             let nonSavedRows = _.filter(delRows, row => { return row.DC_ID < 0 });
             //this condition means all rows are non DC_ID rows so that no need to hit API
@@ -643,7 +653,8 @@ export class pricingTableEditorComponent implements OnChanges {
     async loadPTE() {
         this.isLoading = true;
         this.overlapFlexResult = [];
-        this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
+        if (this.spinnerMessageHeader == "")
+            this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
         let PTR = await this.getPTRDetails();
         //this is to make sure the saved record prod color are success by default
         PTR=PTE_Load_Util.setPrdColor(PTR);
@@ -722,18 +733,9 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
         if (result) {
-            //this logic is mainly for add
-            let genPTR = PTE_Save_Util.generatePTRAfterSave(result);
-            if (genPTR && genPTR.length > 0) {
-                genPTR = PTE_Load_Util.pivotData(genPTR, false, this.curPricingTable, this.kitDimAtrbs);
-                //setting the color of product to success after API
-                genPTR=PTE_Load_Util.setPrdColor(genPTR);
-                this.generateHandsonTable(genPTR);
-            }
-            else {
-                //this will help to reload the page with errors when we update
-                await this.loadPTE();
-            }
+            await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            //this will help to reload the page with errors when we update
+            await this.loadPTE();
             _.each(this.newPTR, (item) => {
                 if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
                     this.warnings = true;
@@ -994,7 +996,24 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         });
     }
-
+    async refreshContractData(id, ptId) {
+        let response: any = await this.contractDetailsSvc
+            .readContract(this.contractData.DC_ID)
+            .toPromise().catch((err) => {
+                this.loggerService.error('contract data read error.....', err);
+                this.isLoading = false;
+            });
+        this.contractData = PTE_Common_Util.initContract(this.UItemplate, response[0]);
+        this.contractData.CUST_ACCNT_DIV_UI = "";
+        // if the current strategy was changed, update it
+        if (id != undefined && this.in_Ps_Id === id) {
+            this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], id);
+            if (id != undefined && this.in_Pt_Id === ptId && this.curPricingStrategy != undefined) {
+                this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], ptId);
+            }
+        }
+        this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
+    }
     ngOnInit() {
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         //code for autofill change to accordingly change values

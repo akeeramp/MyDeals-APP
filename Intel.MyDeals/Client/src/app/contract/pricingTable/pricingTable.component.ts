@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableservice } from "./pricingTable.service";
@@ -7,6 +7,8 @@ import { SelectEvent } from "@progress/kendo-angular-layout";
 import { templatesService } from "../../shared/services/templates.service";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { lnavService } from "../lnav/lnav.service";
+import { dealEditorComponent } from "../dealEditor/dealEditor.component"
+import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 
 export interface contractIds {
     Model: string;
@@ -32,7 +34,8 @@ export class pricingTableComponent {
          $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
          $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
      }
-
+    @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
+    @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     public curPricingStrategy = {};
     public pricingTableData = {};
     public c_Id: number;
@@ -125,12 +128,27 @@ export class pricingTableComponent {
         }
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
-    onTabSelect(e: SelectEvent) {
+    async onTabSelect(e: SelectEvent) {
+        e.preventDefault();
         //window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + this.c_Id + "/0/0/0";
         if (e.title == "Deal Editor") {
-            this.isDETab = true; this.isPTETab = false
+            if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
+                if (this.pteComp.dirty)
+                    await this.pteComp.validatePricingTableProducts();
+                let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                if (isAnyWarnings) {
+                    this.isDETab = false; this.isPTETab = true;
+                    return;
+                } 
+            }
+            this.isDETab = true; this.isPTETab = false;
         }
         else {
+            if (this.deComp.gridResult != undefined && this.deComp.gridResult.length > 0) {
+                let saveReqd = this.deComp.gridResult.filter(x => x._dirty).length > 0;
+                if (saveReqd)
+                    await this.deComp.SaveDeal();
+            }
             this.isDETab = false; this.isPTETab = true;
         }
     }
@@ -197,6 +215,10 @@ export class pricingTableComponent {
                 else { this.isDETab = false; this.isPTETab = true }
             }
         } else { this.isDETabEnabled = false;  }
+    }
+
+    enableDETab(isEnabled) {
+        this.isDETabEnabled = isEnabled;
     }
 
     refreshContractData(data: any) {
