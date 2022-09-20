@@ -2,14 +2,15 @@ import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { logger } from "../../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
-
-
+import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
+import { ProdSel_Util } from '../productSelector/prodSel_Util'
+import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
 @Component({
   selector: "product-corrector",
   templateUrl: "Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html",
@@ -21,8 +22,15 @@ export class ProductCorrectorComponent {
     public dialogRef: MatDialogRef<ProductCorrectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
     private loggerSvc: logger,
-    private dialog:MatDialog
-  ) { }
+    private dialog:MatDialog,
+    popoverConfig: NgbPopoverConfig) {
+        popoverConfig.placement = 'auto';
+        popoverConfig.container = 'body';
+        popoverConfig.autoClose = 'outside';
+        popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
+      // popoverConfig.triggers = 'mouseenter:mouseenter';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
+  }
+  private pricingTableRow: any = {};
   private ProductCorrectorData:any=null;
   private contractData:any=null;
   private curPricingTable:any=null;
@@ -31,7 +39,7 @@ export class ProductCorrectorComponent {
   private type = "numeric";
   private info = true;
   private gridResult:any[] =[];
-  private gridData: any[]=[];
+  private gridData: any[] = [];
   private selGridResult:any[] =[];
   private selGridData:GridDataResult=null;
   private color: ThemePalette = 'primary';
@@ -72,13 +80,21 @@ export class ProductCorrectorComponent {
   private curRowCategories:any[]=[];
   private selRowLvl:any[]=[];
   private selRowCategories:any[]=[];
-  private selRowIssues:any[]=[];
   private curProd:string='';
   private selectedProducts:any[]=[];
   private curSelProducts:any[]=[];
   private selection: SelectableSettings = { mode: "multiple" };
   private selPrdLvlKeys:any[]=[];
-  private selPrdVerKeys:any[]=[];
+  private selPrdVerKeys: any[] = [];
+  private selRowIssues: any[] = [];
+  private selRowIssuesKeys: any[] = [];
+  private userEnteredProduct: any[] = [];
+  private currentPTERow: any[] = [];
+  private isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
+  private DEAL_TYPE;
+  private isDuplicate = false;
+  private duplicateMsg = "";
+  private duplicateData: any[] = [];
 
   prdLvlDecoder(indx:any) {
     if (indx === 7003) return "Product Vertical";
@@ -92,20 +108,24 @@ export class ProductCorrectorComponent {
   loadGrid(){
     if(this.ProductCorrectorData.DuplicateProducts)
     _.each(this.ProductCorrectorData.DuplicateProducts,(val,key)=>{
-      this.curRowIssues.push({DCID:parseInt(key),name:_.keys(val).toString(),len:_.flatten(_.values(val)).length});
+      this.curRowIssues.push({ DCID: parseInt(key), name: _.keys(val).toString(), len: _.flatten(_.values(val)).length, items: _.uniq(_.pluck(_.flatten(_.values(val)), 'USR_INPUT'))});
       this.curRowLvl.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_ATRB_SID'))});
       this.curRowCategories.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_CAT_NM'))});
       this.gridResult.push({DCID:parseInt(key),name:_.keys(val).toString(),data:_.flatten(_.values(val))});
       this.gridData.push({DCID:parseInt(key),name:_.keys(val).toString(),data:process(_.flatten(_.values(val)), this.state)});
-      this.selectedProducts.push({DCID:parseInt(key),name:_.keys(val).toString(),items:[],indx:_.findWhere(this.selRows,{DC_ID:parseInt(key)}).indx});
+      this.selectedProducts.push({ DCID: parseInt(key), name: _.keys(val).toString(), items: [], indx: _.findWhere(this.selRows, { name: _.keys(val).toString(), DC_ID: parseInt(key) }).indx });
+    _.each(val, (arr, product) => {
+        this.userEnteredProduct.push({ name: product, length: arr.length, DCID: arr[0].ROW_NM });
+    });      
     });
     //sorting the data based on DCID, since its negative we need to reverse
-    this.selectedProducts=_.sortBy(this.selectedProducts,'DCID').reverse();
-    this.curRowIssues=_.sortBy(this.curRowIssues,'DCID').reverse();
-    this.curRowLvl=_.sortBy(this.curRowLvl,'DCID').reverse();
-    this.curRowCategories=_.sortBy(this.curRowCategories,'DCID').reverse();
-    this.gridResult=_.sortBy(this.gridResult,'DCID').reverse();
-    this.gridData=_.sortBy(this.gridData,'DCID').reverse();
+    this.selectedProducts = _.sortBy(this.selectedProducts, 'DCID').reverse();
+    this.curRowIssues = _.sortBy(this.curRowIssues, 'DCID').reverse();
+    this.curRowLvl = _.sortBy(this.curRowLvl, 'DCID').reverse();
+    this.curRowCategories = _.sortBy(this.curRowCategories, 'DCID').reverse();
+    this.gridResult = _.sortBy(this.gridResult, 'DCID').reverse();
+    this.gridData = _.sortBy(this.gridData, 'DCID').reverse();
+    //this.userEnteredProduct = _.sortBy(this.userEnteredProduct, 'DCID').reverse();
     //default selecting to first row
     this.curSelProducts=this.selectedProducts[0];
     this.curProd=this.curRowIssues[0].name;
@@ -115,8 +135,18 @@ export class ProductCorrectorComponent {
     this.selGridData=this.gridData[0].data;
     this.selRowLvl=this.getSelRowTree(this.curRowLvl[0].items);
     this.selRowCategories=this.getSelRowTree(this.curRowCategories[0].items);
-    this.selRowIssues=[this.curRowIssues[0]];
+    //this.selRowIssues=[this.curRowIssues[0]];
+      this.selRowIssues = this.getselRowIssues(this.curRowIssues[0].items);
+      for (let i = 0; i < this.selRowIssues.length; i++) {
+          for (let j = 0; j < this.userEnteredProduct.length; j++) {
+              if (this.userEnteredProduct[j].name == this.selRowIssues[i].name) {
+                  this.selRowIssues[i].len = this.userEnteredProduct[j].length;
+                  this.selRowIssues[i].name = this.selRowIssues[i].name;
+              }
+          }
+      }
     this.totRows=_.keys(this.ProductCorrectorData.ProdctTransformResults).length;
+    this.getcurPTERowData();
   }
   getSelRowTree(items:any[]){
     let curLvl=[];
@@ -129,22 +159,46 @@ export class ProductCorrectorComponent {
       })
     })
     return curLvl;
-  }
-  selectRow(DCID:string){
+    }
+    getselRowIssues(items: any[]) {
+        let curIssue = [];
+        _.each(items, (val, key) => {
+            curIssue.push({
+                id: key,
+                name: val,
+                value: val,
+                selected: false,
+            })
+        })
+        return curIssue;
+    }
+
+  selectRow(key:string,DCID){
     //clearing the gid and prod filter incase if we searched any
     this.state.filter.filters=[];
     this.selPrdLvlKeys=[];
-    this.selPrdVerKeys=[];
-
-    let selItem=_.findWhere(this.curRowIssues,{DCID:DCID});
+    this.selPrdVerKeys = [];
+    this.selRowIssuesKeys = [];    
+    this.curRowIndx = _.findIndex(this.curRowIssues, { name: key, DCID:DCID });
+    let selItem = _.findWhere(this.curRowIssues, { name: key, DCID: DCID});
     this.curProd=selItem.name;
-    this.selRowIssues=[selItem];
-    this.rowDCId=selItem.DCID;
-    this.selGridResult=_.findWhere(this.gridResult,{DCID:DCID}).data;
-    this.selGridData=_.findWhere(this.gridData,{DCID:DCID}).data;
-    this.selRowLvl=this.getSelRowTree(_.findWhere(this.curRowLvl,{DCID:DCID}).items);
-    this.selRowCategories=this.getSelRowTree(_.findWhere(this.curRowCategories,{DCID:DCID}).items);
-    this.curSelProducts=_.findWhere(this.selectedProducts,{DCID:DCID});
+    //this.selRowIssues=[selItem];
+    this.rowDCId=selItem.DCID; 
+    this.selRowIssues = this.getselRowIssues(_.findWhere(this.curRowIssues, { name: key, DCID: DCID}).items);    
+      for (let i = 0; i < this.selRowIssues.length; i++) {
+          for (let j = 0; j < this.userEnteredProduct.length; j++) {
+              if (this.userEnteredProduct[j].name == this.selRowIssues[i].name) {
+                  this.selRowIssues[i].len = this.userEnteredProduct[j].length;
+                  this.selRowIssues[i].name = this.selRowIssues[i].name;
+              }
+          }
+      }
+    this.selGridResult = _.findWhere(this.gridResult, { name: key, DCID: DCID}).data;
+    this.selGridData = _.findWhere(this.gridData, { name: key, DCID: DCID}).data;
+    this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
+    this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
+    this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID});
+    this.getcurPTERowData();
   }
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
@@ -167,24 +221,78 @@ export class ProductCorrectorComponent {
     });
   }
   nextRow() {
-    this.curRowIndx = this.curRowIndx + 1;
-    this.selectRow(this.curRowIssues[this.curRowIndx ].DCID);
+      let index = this.curRowIndx + 1;
+      if (index > this.numIssueRows)
+          return false;
+      this.selectRow(this.curRowIssues[index].name, this.curRowIssues[index].DCID);
+      return true;
   }
   prevRow() {
-     this.curRowIndx = this.curRowIndx - 1;
-     this.selectRow(this.curRowIssues[this.curRowIndx].DCID);
+      let index = this.curRowIndx - 1;
+      if (index < 0)
+          return false;
+      this.selectRow(this.curRowIssues[index].name, this.curRowIssues[index].DCID);
+      return true;
   }
-  prodSelect(item:any,evt:any){
-    item['IS_SEL']=evt.target.checked;
-    if(evt.target.checked){
-      let prd={prod:item.HIER_VAL_NM,prodObj:item};
-      this.curSelProducts['items'].push(prd);
+    prodSelect(item: any, evt: any) {
+
+        if (evt.target.checked == true && this.checkForDuplicateProducts(item)) {
+            evt.target.checked = false;
+            return;
+        }
+
+        item['IS_SEL'] = evt.target.checked;
+        item['DERIVED_USR_INPUT'] = PTE_Common_Util.fullNameProdCorrector(item)
+        if (evt.target.checked) {
+            let prd = { prod: item.DERIVED_USR_INPUT, prodObj: item };
+            this.curSelProducts['items'].push(prd);
+        }
+        else {
+            let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
+            this.curSelProducts['items'].splice(idx, 1);
+        }
     }
-    else{
-      let idx=_.findIndex( this.selectedProducts, item.HIER_VAL_NM);
-      this.curSelProducts['items'].splice(idx,1);
+    checkForDuplicateProducts(item) {
+  
+        let duplicateProducts = (this.curSelProducts['items']).filter((items) => {
+            return (items['prodObj']['PRD_MBR_SID'] == item['PRD_MBR_SID'])
+        })
+
+        this.isDuplicate = Boolean(duplicateProducts.length);
+        if (this.isDuplicate) {
+            this.duplicateMsg = 'Found duplicate product for ' + item.HIER_VAL_NM + ', would you like to remove one ?';
+            this.duplicateData = item;
+        }
+        return this.isDuplicate;
     }
-  }
+    closeKendoDialog(optionSelected) {
+        if (optionSelected == 'yes') {
+
+            let filteredResult= (this.selGridResult).filter(val => {
+                return val['PRD_MBR_SID'] != this.duplicateData['PRD_MBR_SID'] || val['USR_INPUT'] != this.duplicateData['USR_INPUT'];
+            });
+            this.selGridResult = filteredResult;
+            this.selGridData = process(this.selGridResult, this.state);
+            }
+            this.isDuplicate = false;
+            this.duplicateData = [];
+    }
+   getcurPTERowData() {
+    //curating object to send to grid-popover directive each time
+    this.currentPTERow = (this.data.selRows).filter(obj => {
+        return obj['row']['DC_ID'] === this.rowDCId;
+    });
+
+    this.pricingTableRow.START_DT = this.currentPTERow[0]['row'].START_DT;
+    this.pricingTableRow.END_DT = this.currentPTERow[0]['row'].END_DT;
+    this.pricingTableRow.CUST_MBR_SID = this.data.contractData.CUST_MBR_SID;
+    this.pricingTableRow.IS_HYBRID_PRC_STRAT = this.currentPTERow[0]['row'].IS_HYBRID_PRC_STRAT;
+    this.pricingTableRow.GEO_COMBINED = ProdSel_Util.getFormatedGeos(this.currentPTERow[0]['row'].GEO_COMBINED);
+    this.pricingTableRow.PTR_SYS_PRD = this.currentPTERow[0]['row'].PTR_SYS_PRD;
+    this.pricingTableRow.PROGRAM_PAYMENT = this.currentPTERow[0]['row'].PROGRAM_PAYMENT;
+    this.pricingTableRow.PROD_INCLDS = this.currentPTERow[0]['row'].PROD_INCLDS;
+    this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
+    }
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -204,12 +312,33 @@ export class ProductCorrectorComponent {
     }
     this.selGridData = process(this.selGridResult, this.state);
   }
+  isValidCapDetails(productJson, showErrorMesssage?) {
+    if (this.DEAL_TYPE !== 'ECAP' && this.DEAL_TYPE !== 'KIT') {
+        return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
+    }
+    let errorMessage = "";
+    const cap = productJson.CAP.toString();
+    if (cap.toUpperCase() == "NO CAP") {
+        errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+    }
+    if (cap.indexOf('-') > -1) {
+        errorMessage = "CAP price " + cap + " cannot be a range.";
+    }
+    if (!showErrorMesssage) {
+        return errorMessage == "" ? false : true;
+    } else {
+        return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
+    }
+  }
+  distinctPrimitive(fieldName: string): any {
+    return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
+  }
   ngOnInit() {
     this.ProductCorrectorData=this.data.ProductCorrectorData;
     this.contractData=this.data.contractData;
     this.curPricingTable=this.data.curPricingTable;
     this.selRows=this.data.selRows;
-    this.selectedProducts=[];
+    this.DEAL_TYPE = this.data.curPricingTable['OBJ_SET_TYPE_CD'];
     this.curSelProducts=null;
     this.loadGrid()
   }

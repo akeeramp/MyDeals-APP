@@ -19,6 +19,7 @@ import { GridsterModule } from 'angular-gridster2';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -102,7 +103,8 @@ import { contractComponents } from './modules/contract.module';
         GridsterModule,
         UploadModule,
         NavigationModule,
-        TreeViewModule
+        TreeViewModule,
+        DragDropModule
      ],
      providers: [
         {

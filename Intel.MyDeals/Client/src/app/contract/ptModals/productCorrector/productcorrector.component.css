@@ -1,4 +1,3 @@
-
 .suggestedProd {
     border: 1px solid rgba(190, 163, 163, 0.12);
     padding: 5px;
@@ -12,7 +11,12 @@
     padding: 0px !important;
 }
 
-.k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
+.k-grid tr.k-state-selected,
+.k-grid td.k-state-selected,
+.k-grid td.k-state-selected.k-state-focused,
+.k-grid tr.k-state-selected.k-state-hover,
+.k-grid td.k-state-selected.k-state-hover,
+.k-grid td.k-state-selected.k-state-focused.k-state-hover {
     background-color: transparent;
     background: #00aeef;
 }
@@ -123,9 +127,12 @@ a.prdAnchor {
     border-top: none;
     border-bottom: none;
     border-right: 1px solid white;
-    color: white; /* White text */
-    cursor: pointer; /* Pointer/hand icon */
-    float: left; /* Float the buttons side by side */
+    color: white;
+    /* White text */
+    cursor: pointer;
+    /* Pointer/hand icon */
+    float: left;
+    /* Float the buttons side by side */
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -145,20 +152,24 @@ a.prdAnchor {
         }
 
         .drillDown.btn-group button:not(:last-child) {
-            border-right: none; /* Prevent double borders */
+            border-right: none;
+            /* Prevent double borders */
         }
 
         .drillDown.btn-group button.noborder {
             border-right: none;
         }
 
+
         /* Add a background color on hover */
+
         .drillDown.btn-group button:hover {
             background-color: #01AEEF;
             color: #1a3e6f;
         }
 
-        .drillDown.btn-group button:focus, .button:active {
+        .drillDown.btn-group button:focus,
+        .button:active {
             outline: none !important;
             background-color: #01AEEF;
         }
@@ -193,7 +204,8 @@ a.prdAnchor {
     overflow-x: hidden;
 }
 
-#invalidProdGrid, #suggestionProdGrid {
+#invalidProdGrid,
+#suggestionProdGrid {
     height: calc(85vh - 400px) !important;
     overflow: auto;
 }
@@ -202,11 +214,9 @@ a.prdAnchor {
     min-height: 235px;
 }
 
-
 #prodGrid > .k-auto-scrollable {
     min-height: 235px;
 }
-
 
 .err-Search {
     color: #FF6E77;
@@ -228,7 +238,8 @@ a.prdAnchor {
             color: #1a3e6f;
         }
 
-        .prdBtn.btn-primary:focus, .btn-primary:active {
+        .prdBtn.btn-primary:focus,
+        .btn-primary:active {
             outline: none !important;
             background-color: #01AEEF;
         }
@@ -236,9 +247,7 @@ a.prdAnchor {
 .prodCorrector.modal-body {
     padding-top: 2px;
     padding-bottom: 0px;
-    /*min-height: calc(85vh - 340px);
-        max-height: calc(85vh - 340px);*/
-    overflow-y: auto;
+    overflow: hidden !important;
 }
 
 .prodSelector.modal-footer {
@@ -250,11 +259,8 @@ a.prdAnchor {
     padding-bottom: 0px;
 }
 
-/*.prodCorrector.kendoGridHeight {
-        height: calc(85vh - 400px);
-    }*/
-
-.prdCorrector-modal-window, .modal-dialog {
+.prdCorrector-modal-window,
+.modal-dialog {
     width: 95%;
     margin-left: auto;
     margin-right: auto;
@@ -265,7 +271,8 @@ a.prdAnchor {
     position: absolute;
 }
 
-.checkbox-custom, .checkbox-custom-label {
+.checkbox-custom,
+.checkbox-custom-label {
     display: inline-block;
     vertical-align: middle;
     margin: 5px;
@@ -306,13 +313,9 @@ a.prdAnchor {
     display: block;
 }
 
-
-
 .skyblue {
     color: #00AEEF;
 }
-
-
 
 .subHeaderMsg {
     margin: 0 0 4px 0;
@@ -320,15 +323,11 @@ a.prdAnchor {
     color: #ffffff;
 }
 
-
-
 .miniProdNav {
     padding: 0 15px;
     margin-right: 10px;
     font-weight: 600;
 }
-
-
 
 .subHeaderNavContainer {
     color: #003C71;
@@ -341,8 +340,6 @@ a.prdAnchor {
     height: auto;
 }
 
-
-
 .filterTitleUnderline {
     margin: 5px;
     font-size: 15px;
@@ -351,8 +348,6 @@ a.prdAnchor {
     font-weight: bold;
 }
 
-
-
 .lnavFilter {
     background-color: #e7e7e8;
     padding: 4px;
@@ -360,6 +355,7 @@ a.prdAnchor {
     font-family: 'Intel Clear', 'Arial';
     height: 700px;
 }
+
 .badge.upperBadge {
     font-size: 12px !important;
     padding: 2px 4px;
@@ -370,21 +366,24 @@ a.prdAnchor {
     margin-left: 6px;
     margin-top: 1px !important;
 }
+
 .lblFilterProd {
-    /*font-size: 12px !important;*/
     font-weight: 600 !important;
     color: #00AEEF !important;
     cursor: pointer;
 }
+
 .k-treeview .k-in {
     cursor: pointer;
     font-weight: 700 !important;
     width: 100%;
 }
+
 .mat-dialog-container {
     padding: 0px;
     height: fit-content;
 }
+
 .miniNav {
     padding: 0 15px;
     margin-right: 10px;
@@ -392,29 +391,27 @@ a.prdAnchor {
     font-weight: 600;
     width: 160px;
 }
+
     .miniNav button {
         width: 60px;
         margin-right: 3px;
     }
-        .miniNav button[disabled], .miniNav button[disabled]:hover {
+
+        .miniNav button[disabled],
+        .miniNav button[disabled]:hover {
             color: #00AEEF;
             background-color: #003C71 !important;
         }
-.cdk-overlay-pane {
-    /* max-width: 80vw; */
-    width: 2000px;
-    height: 1500px !important;
-    position: static;
-    margin-top: 250px
+
+.isSoftWarnCell {
+    background-color: #f3d54e !important;
+    text-align: center;
+    justify-content: center;
+    font-weight: 600;
+    font-family: arial;
+    color: #444;
 }
-/*  .lblSelected {
-    background: rgba(2, 173, 255, 1);
-    }
 
-   .lblSelected label span {
-        color: white !important;
-    }
-
-   .lblNotSelected {
-    background: none;
-    }*/
+.k-grid .k-grid-container {
+    overflow: auto !important;
+}

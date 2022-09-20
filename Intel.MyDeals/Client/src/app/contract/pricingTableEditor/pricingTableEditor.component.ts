@@ -879,7 +879,7 @@ export class pricingTableEditorComponent implements OnChanges {
         });
         let data = { ProductCorrectorData: products, contractData: this.contractData, curPricingTable: this.curPricingTable, selRows: selRows };
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
-            height: '550px',
+            height: '850px',
             width: '1650px',
             data: data,
         });
@@ -915,6 +915,7 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         });
     }
+
     openOverLappingDealCheck() {
         let data = {
             "contractData": this.contractData,
