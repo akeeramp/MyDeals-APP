@@ -119,7 +119,7 @@
                     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
                 </div>
                 <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'">
-                    <contract-manager [contractData]="contractData" [UItemplate]="UItemplate">
+                    <contract-manager [contractData]="contractData" [UItemplate]="UItemplate" (modelChange)="loadModel($event)" (refreshedContractData)="refreshContractData($event)">
                     </contract-manager>
                 </div>
                 <div *ngIf="selLnav=='overlapDiv'">

@@ -4,13 +4,13 @@
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
         
-        <div class="errMsg" ng-if="showErrMsg">
+        <div class="errMsg" *ngIf="showErrMsg">
             <i class="intelicon-information-solid"></i> Please make sure you review Meet Comp on the left navigation before proceeding.
         </div>
         <div class="draftMsg">
             Below is an overview of what will be submitted.
         </div>
-        <kendo-grid id="gridActionSummary" class="opUiContainer md dashboard" [data]="gridData">
+        <kendo-grid id="gridActionSummary" style="height:200px !important;overflow:scroll !important;" [data]="gridData">
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="TITLE" title="Strategy Name" width="100px">
         </kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTN" title="Approve or Revise" width="200px">

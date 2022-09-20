@@ -23,10 +23,12 @@ import { logger } from "../../../shared/logger/logger";
 export class actionSummaryModal {
     constructor(public dialogRef: MatDialogRef<actionSummaryModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
     }
-    public gridData: GridDataResult;        
+    public gridData: GridDataResult; 
+    public showErrMsg: boolean;       
         ngOnInit() {
             if (this.data.cellCurrValues !== "" && this.data.cellCurrValues !== undefined) {
                 this.gridData = this.data.cellCurrValues;
+                this.showErrMsg = this.data.showErrMsg;
 
             }
 

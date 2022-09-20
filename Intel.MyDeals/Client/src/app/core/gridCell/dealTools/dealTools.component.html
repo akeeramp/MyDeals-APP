@@ -65,7 +65,7 @@
         </div>
 
         <!-- File Attachments icon -->
-        <div class='fl md-icon' *ngIf="isFileAttachmentEnabled">
+        <div class='fl md-icon' *ngIf="isFileAttachmentEnabled || dataItem._settings.C_ADD_ATTACHMENTS">
             <i [ngClass]="getFileIcon(dataItem)" [ngStyle]="getFileStyle(dataItem)" title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkFileIcon(dataItem)"></i>
         </div>
 
@@ -86,8 +86,10 @@
         <div class='fl md-icon' *ngIf="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
             <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
                title="Unable to delete this deal at this stage"></i>
-            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0') && !alertDelete && !confirmDelete" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+            <span *ngIf="dataItem?.TRKR_NBR">
+                <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0') && !alertDelete && !confirmDelete" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
                title="Click to delete this deal" (click)="openDeleteDialog()"></i>
+            </span>
             <kendo-dialog *ngIf="alertDelete" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Delete</h4>
@@ -107,8 +109,10 @@
                     <div kendoButton class="k-button cancelDelete" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
+            <span *ngIf="dataItem?.TRKR_NBR">
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend' && !alertCancel && !confirmCancel" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
                title="Click to Cancel this deal" (click)="openCancelDialog()"></i>
+            </span>
             <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Cancel</h4>

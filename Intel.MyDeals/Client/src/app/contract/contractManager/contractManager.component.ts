@@ -1,8 +1,8 @@
 import * as angular from "angular";
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { contractManagerservice } from "./contractManager.service";
 import * as moment from "moment";
@@ -14,8 +14,17 @@ import { MatDialog } from "@angular/material/dialog";
 import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.component";
 import { messageBoardModal } from "./messageBoard/messageBoard.component";
 import { emailModal } from "./emailModal/emailModal.component";
+import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 
-
+export interface contractIds {
+    Model: string;
+    C_ID: number;
+    ps_id: number;
+    pt_id: number;
+    ps_index: number;
+    pt_index: number;
+    contractData: any;
+}
 
 @Component({
     selector: "contract-manager",
@@ -47,6 +56,16 @@ export class contractManagerComponent {
     showPendingWarning: boolean = false;
     showData: boolean = false;
     requestBody: any ={};
+    showMeetCompDetails: boolean= false;
+    public uploadSaveUrl = "/FileAttachments/Save";
+    is_Deal_Tools_Checked: any = false;
+    grid_Result: any =[];
+    showMultipleDialog: boolean= false;
+    pteTableData: any;
+    files = [];
+    psId = 0;
+    ptId = 0;
+    parent_dcId: any;
     constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {
   
     }
@@ -59,11 +78,15 @@ export class contractManagerComponent {
     OtherType = []; isECAP = []; isKIT = []
     @Input() public contractData:any;
     @Input() UItemplate:any;
+    @Output() refreshedContractData = new EventEmitter;
+    @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isLoading = false;
+    private dirty = false;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
+    private isCustAcptReadOnly: boolean = false;
     public state: State = {
         skip: 0,
         take: 25,
@@ -89,6 +112,54 @@ export class contractManagerComponent {
     private windowOpened= false;
     private windowTop = 200;windowLeft = 350;windowWidth = 620;windowHeight = 500;windowMinWidth = 100;
     public filteredData: any;
+    uploadSuccess = false;
+    // Allowed extensions for the attachments field
+    myRestrictions: FileRestrictions = {
+        allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
+    };
+    successEventHandler() {
+        this.uploadSuccess = true;
+    }
+    onFileUploadError() {
+        this.loggerSvc.error("Unable to upload " + " attachment(s).", "Upload failed");
+    }
+    uploadEventHandler(e: UploadEvent) {
+        e.data = {
+            custMbrSid: this.contractData.CUST_MBR_SID,
+            objSid: this.contractData.DC_ID,
+            objTypeSid: 1
+        };
+        this.contractData._behaviors.isRequired.C2A_DATA_C2A_ID = false;
+        this.contractData["HAS_ATTACHED_FILES"] = "1";
+    }
+    selectAllIDs(event) {
+        this.is_Deal_Tools_Checked = event.target.checked;
+        for (let i = 0; i < this.grid_Result.length; i++) {
+            if (!(this.grid_Result[i].SALESFORCE_ID !== "" && this.grid_Result[i].WF_STG_CD === 'Offer'))
+                this.grid_Result[i].isLinked = this.is_Deal_Tools_Checked;
+        }
+    }
+    checkAllSelected() {
+        let grid_Data = this.grid_Result.filter(item => {
+            return !(item.SALESFORCE_ID !== "" && item.WF_STG_CD === 'Offer')
+            
+        })
+        if (grid_Data.length == 0) {
+            return false;
+        }
+        for (let i = 0; i < grid_Data.length; i++) {
+            if (grid_Data[i].isLinked === undefined || grid_Data[i].isLinked === false)
+                return false;
+        }
+        return true;
+    }
+    updateSaveIcon(eventData: boolean) {
+        this.dirty = eventData;
+    }
+    gridReload(eventData: boolean) {
+        if (eventData){}
+            // this.ngOnInit();
+    }
     windowClose() {
         this.windowOpened = false;
       }
@@ -158,52 +229,53 @@ export class contractManagerComponent {
             this[checkBoxType] = false;
         }
         let checkedList = [];
-            if (event.target.id.indexOf("email") > 0) {
-                var anyEmailChecked = false;
-                const isItemChecked = event.target.checked;
-                let currentItems =   this.contractData.PRC_ST.map((x) => {
-                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) {
-                         this.apprvCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                    } else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) {
-                         this.reviseCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                    } else if (checkBoxType == "Email" && this.canEmailIcon) {
-                       this.emailCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                    }
-            });
+        if (event.target.id.indexOf("email") > 0) {
+            var anyEmailChecked = false;
+            const isItemChecked = event.target.checked;
+            if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
+                this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
+            } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
+                this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+            } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
+                this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+            }
 
-                if (event.target.checked || anyEmailChecked) {
-                    this.canActionIcon = false;
-                    this.canEmailIcon = true;
-                } else {
-                    this.canActionIcon = true;
-                    this.canEmailIcon = true;
-                }
-    
+            if (event.target.checked || anyEmailChecked) {
+                this.canActionIcon = false;
+                this.canEmailIcon = true;
             } else {
-                var anyActionChecked = false;
-                const isItemChecked = event.target.checked;
-                let currentItems =   this.contractData.PRC_ST.map((x) => {
-                            if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) {
-                                 this.apprvCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                            } else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) {
-                                 this.reviseCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                            } else if (checkBoxType == "Email" && this.canEmailIcon) {
-                               this.emailCheck[x.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
-                            }
-                    });
-                if (event.target.checked || anyActionChecked) {
-                    this.canActionIcon = true;
-                    this.canEmailIcon = false;
-                } else {
-                    this.canActionIcon = true;
-                    this.canEmailIcon = true;
-                }
+                this.canActionIcon = true;
+                this.canEmailIcon = true;
             }
     
-            // clear global check
-            this.approveCheckBox = false;
-            this.reviseCheckBox = false;
-            this.emailCheckBox = false;
+        }
+        else {
+            var anyActionChecked = false;
+            const isItemChecked = event.target.checked;
+            if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
+                this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+                if (this.reviseCheck[data.DC_ID])
+                    this.reviseCheck[data.DC_ID] = false;
+            } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
+                this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+                if (this.apprvCheck[data.DC_ID])
+                    this.apprvCheck[data.DC_ID] = false;
+            } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
+            this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
+            }
+            if (event.target.checked || anyActionChecked) {
+                this.canActionIcon = true;
+                this.canEmailIcon = false;
+            } else {
+                this.canActionIcon = true;
+                this.canEmailIcon = true;
+            }
+        }
+    
+        // clear global check
+        this.approveCheckBox = false;
+        this.reviseCheckBox = false;
+        this.emailCheckBox = false;
     }
     pendingChange() {
         let fromToggle = true;
@@ -460,9 +532,29 @@ export class contractManagerComponent {
         if (this.contractData.PRC_ST !== undefined) {
             this.contractData.PRC_ST.map((x) => {
                 if (this.hasVertical(x)) {
-                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) { this.apprvCheck[x.DC_ID] = isItemChecked ? true : false;  }
-                    else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) { this.reviseCheck[x.DC_ID] = isItemChecked ? true : false; }
-                    else if (checkBoxType == "Email" && this.canEmailIcon) { this.emailCheck[x.DC_ID] = isItemChecked ? true : false;  }
+                    if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) { 
+                        this.reviseCheck[x.DC_ID] = false;
+                        this.emailCheck[x.DC_ID] =  false;
+                        this.apprvCheck[x.DC_ID] = isItemChecked ? true : false;
+                        this.approveCheckBox = true;
+                        this.reviseCheckBox = false;
+                        this.emailCheckBox = false;
+                      }
+                    else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) {
+                        this.apprvCheck[x.DC_ID] = false;
+                        this.emailCheck[x.DC_ID] = false;
+                        this.reviseCheck[x.DC_ID] = isItemChecked ? true : false;
+                        this.approveCheckBox = false;
+                        this.reviseCheckBox = true;
+                        this.emailCheckBox = false;
+                        }
+                    else if (checkBoxType == "Email" && this.canEmailIcon) {
+                        this.apprvCheck[x.DC_ID] = false;
+                        this.reviseCheck[x.DC_ID] = false;
+                        this.emailCheck[x.DC_ID] = isItemChecked ? true : false;                         this.approveCheckBox = false;
+                        this.reviseCheckBox = false;
+                        this.emailCheckBox = true; 
+                     }
                 }
 
             });
@@ -523,11 +615,26 @@ export class contractManagerComponent {
 
                     this.gridData = response;
                     this.gridDataSet[pt.DC_ID] = this.gridData;
+                    this.grid_Result= this.gridDataSet[pt.DC_ID];
                 }
             }, (error) => {
                 this.loggerSvc.error('Get WIP Summary service', error);
             })
         }
+    }
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
+    }
+    needMct() {
+        if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
+
+        for (var m = 0; m < this.contractData.PRC_ST.length; m++) {
+            var item = this.contractData.PRC_ST[m].COMP_MISSING_FLG;
+            if (item !== "" && (item === "1" || item === 1)) {
+                return true;
+            }
+        }
+        return false;
     }
     showingHelpTopicContract() {
         const helpTopic = "Features";
@@ -637,10 +744,44 @@ export class contractManagerComponent {
             }
             this.filteredData = this.contractData?.PRC_ST; 
             this.showData = true;
+            this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;            
         }, (error) => {
             this.loggerSvc.error('Get Upper Contract service', error);
         });
         
+    }
+    openPTEeditor(value){
+        this.parent_dcId = value.DC_PARENT_ID
+        this.psId = value.DC_ID;
+        let prc_tbl= value?.PRC_TBL;
+        if(prc_tbl.length>1){
+            this.showMultipleDialog = true;
+            this.pteTableData = prc_tbl;
+        } else {
+            this.showMultipleDialog = false;
+            this.ptId = prc_tbl[0].DC_ID;
+            window.location.href = "/Dashboard#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+
+        }
+    }
+    pickPt(pte){
+        this.ptId = pte.DC_ID;
+        window.location.href = "/Dashboard#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+    }
+    closeMultiple(){
+        this.showMultipleDialog = false;
+    }
+    loadModel(model: string) {
+        const contractId_Map: contractIds = {
+            Model: model,
+            ps_id: 0,
+            pt_id: 0,
+            ps_index: 0,
+            pt_index: 0,
+            C_ID: this.contractId,
+            contractData: this.contractData
+        };
+        this.modelChange.emit(contractId_Map);
     }
 
     actionItemsBase(approvePending, saveCustAcceptance) {
@@ -679,9 +820,9 @@ export class contractManagerComponent {
     if(this.curDataItems.length > 0){
         const dialogRef = this.dialog.open(actionSummaryModal, {
             width: "600px",
-            height: "500px",
             data: {
-                cellCurrValues: dataItems
+                cellCurrValues: dataItems,
+                showErrMsg: this.needMct()
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
@@ -752,11 +893,14 @@ export class contractManagerComponent {
         } else {
             this.actionItemsBase(true,null);
         }
+        this.refreshedContractData.emit({ contractData: this.contractData });
     }
     ngOnInit() {
+        this.is_Deal_Tools_Checked= false;
         this.contractId= this.contractData.DC_ID;
+        window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-        this.custAccptButton = this.contractData.CUST_ACCPT;
+        this.custAccptButton = this.contractData.CUST_ACCPT;        
         this.loadContractDetails();
         if(this.contractData.CUST_ACCPT === "Pending"){
             this.isPending = true;
@@ -765,6 +909,12 @@ export class contractManagerComponent {
         }
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
+        setTimeout(() => {
+            var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+            var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+            if (isMCForceReq || isPCForceReq)
+                this.executePct();
+        }, 2000);
     }  
 
 

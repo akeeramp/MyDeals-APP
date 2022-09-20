@@ -204,8 +204,10 @@ export class pricingTableComponent {
             if (data.contractData != null && data.contractData != undefined) {
                 this.contractData = data.contractData;
             }
-            this.ps_passed_validation = data.PS_Passed_validation;
-            this.pt_passed_validation = data.PT_Passed_validation;
+            if (data.PS_Passed_validation != undefined && data.PS_Passed_validation != null)
+                this.ps_passed_validation = data.PS_Passed_validation;
+            if (data.PT_Passed_validation != undefined && data.PT_Passed_validation != null)
+                this.pt_passed_validation = data.PT_Passed_validation;
         }
     }
 

@@ -470,7 +470,6 @@ export class contractDetailsComponent {
                 if (response.length > 5) {
                     this.isShowBtn = true;
                 }
-                console.log(response);
 
             }, error => {
                 this.loggerSvc.error("Unable to get Details.", error);
@@ -501,16 +500,16 @@ export class contractDetailsComponent {
         }
         if (isValidDataPresent) {
             this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
-                .subscribe((response: Array<any>) => {
+                .subscribe((response: any) => {
                     if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
-                        this.START_QTR = response["QTR_NBR"];
-                        this.START_YR = response["YR_NBR"];
+                        this.START_QTR = response?.QTR_NBR;
+                        this.START_YR = response?.YR_NBR;
                         this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(moment(response["QTR_STRT"]).format("l"));
                     }
                     if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
                         this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(moment(response["QTR_END"]).format("l"));
-                        this.END_QTR = response["QTR_NBR"];
-                        this.END_YR = response["YR_NBR"];
+                        this.END_QTR = response?.QTR_NBR;
+                        this.END_YR = response?.YR_NBR;
                     }
                 });
         }
@@ -548,7 +547,7 @@ export class contractDetailsComponent {
         }
         if (isValidDataPresent) {
             this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
-                .subscribe((response: Array<any>) => {
+                .subscribe((response: any) => {
                     if (response != null) {
                         if (changeEvent == "") {
                             if (moment(response["QTR_END"]) < moment(new Date())) {
@@ -563,12 +562,12 @@ export class contractDetailsComponent {
                             this.START_DT = new Date(this.contractData.START_DT);
                             this.contractData.END_DT = moment(response["QTR_END"]).format("l");
                             this.END_DT = new Date(this.contractData.END_DT);
-                            this.START_QTR = this.END_QTR = this.contractData.START_QTR = this.contractData.END_QTR = response["QTR_NBR"];
-                            this.END_YR = this.START_YR = this.contractData.START_YR = this.contractData.END_YR = response["YR_NBR"];
+                            this.START_QTR = this.END_QTR = this.contractData.START_QTR = this.contractData.END_QTR = response?.QTR_NBR;
+                            this.END_YR = this.START_YR = this.contractData.START_YR = this.contractData.END_YR = response?.YR_NBR;
                         }
                         if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
-                            this.START_QTR = response["QTR_NBR"];
-                            this.START_YR = response["YR_NBR"];
+                            this.START_QTR = response?.QTR_NBR;
+                            this.START_YR = response?.YR_NBR;
                             this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(moment(response["QTR_STRT"]).format("l"));
                             const strtDate = new Date(this.contractData.START_DT);
                             const selectedDate = this.START_DT;
@@ -576,8 +575,8 @@ export class contractDetailsComponent {
                         }
                         if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
                             this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(moment(response["QTR_END"]).format("l"));
-                            this.END_QTR = response["QTR_NBR"];
-                            this.END_YR = response["YR_NBR"];
+                            this.END_QTR = response?.QTR_NBR;
+                            this.END_YR = response?.YR_NBR;
                         }
                     }
                     if (this.END_DT != undefined && this.START_DT != undefined) {
@@ -702,7 +701,6 @@ export class contractDetailsComponent {
                 this.setBusy("Delete Successful", "Deleted the Contract","Success",false);
                 window.location.href = '/Dashboard#/portal';
             }), err => {
-                console.log(err);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             };
@@ -716,7 +714,6 @@ export class contractDetailsComponent {
         this.showDeleteButton = true;
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
-        console.log(this.contractData);
         this.START_DT = new Date(moment(this.contractData.START_DT).format("l"));
         this.END_DT = new Date(moment(this.contractData.END_DT).format("l"));
         this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;

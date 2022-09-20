@@ -111,7 +111,7 @@ export class dealToolsComponent{
         }
     }
 
-    loadDealTools() {
+    loadDealTools() {        
         let childParent = _.countBy(this.gridData, 'DC_PARENT_ID');
         _.each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
@@ -132,7 +132,7 @@ export class dealToolsComponent{
         else {
             this.editable = true;
         }
-        if (this.dataItem.SALESFORCE_ID === undefined || this.dataItem.SALESFORCE_ID === "") {
+        if (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === "") {
             this.isSalesForceDeal = false;
         }
         else {
@@ -142,15 +142,15 @@ export class dealToolsComponent{
         //    this.isEditable = false;
                 
         // Swap IF statement to prevent IQR from having access to quote letters
-        if (this.dataItem.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem.OBJ_SET_TYPE_CD !== 'KIT')
+        if (this.dataItem?.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem?.OBJ_SET_TYPE_CD !== 'KIT')
             this.isQuoteLetterEnabled = false;
         
         this.isDaUser = ((<any>window).usrRole === "DA");//SalesForce Checkbox Disabled icon except for DA users
 
         this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
-        this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem.SALESFORCE_ID === undefined || this.dataItem.SALESFORCE_ID === ""));
+        this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === ""));
 
-        if (this.dataItem._settings.C_DEL_DEALS === undefined || this.dataItem._settings.C_DEL_DEALS === false) {
+        if (this.dataItem?._settings.C_DEL_DEALS === undefined || this.dataItem?._settings.C_DEL_DEALS === false) {
             // In tenders screen for DA user, this is undefined but skipping over
             this.isDeleteEnabled = false;
         }
@@ -162,7 +162,7 @@ export class dealToolsComponent{
             }
         }
         this.dealTxt = this.getLinkedHoldIds(this.dataItem).length > 1 ? "deals" : "deal";
-    }   
+    }
 
     setBusy(msg, detail, msgType, isShowFunFact) {
         setTimeout(() => {
@@ -268,26 +268,26 @@ export class dealToolsComponent{
     //notes items
     openNotes() {
         this.openNotesDialog = true;
-        this.notes = this.dataItem.NOTES;
+        this.notes = this.dataItem?.NOTES;
     }
     saveCell(newField) {
-        if (this.dataItem._behaviors === undefined)
+        if (this.dataItem?._behaviors === undefined)
             this.dataItem._behaviors = {};
-        if (this.dataItem._behaviors.isDirty === undefined)
+        if (this.dataItem?._behaviors.isDirty === undefined)
             this.dataItem._behaviors.isDirty = {};
         this.dataItem._behaviors.isDirty[newField] = true;
         this.dataItem._dirty = true;
     }
     saveFileCell(newField) {
-        if (this.dataItem._behaviors === undefined)
+        if (this.dataItem?._behaviors === undefined)
             this.dataItem._behaviors = {};
-        if (this.dataItem._behaviors.isDirtyFile === undefined)
+        if (this.dataItem?._behaviors.isDirtyFile === undefined)
             this.dataItem._behaviors.isDirtyFile = {};
         this.dataItem._behaviors.isDirtyFile[newField] = true;
         this.dataItem.isDirtyFile = true;
     }
     saveNotes() {
-        if (this.dataItem.NOTES !== this.notes) {
+        if (this.dataItem?.NOTES !== this.notes) {
             this.dataItem.NOTES = this.notes;
             this.saveCell("NOTES");
             this.iconSaveUpdate.emit(this.dataItem._dirty);
@@ -311,12 +311,12 @@ export class dealToolsComponent{
     }
     // FILES Items
     getFileValue(dataItem) {
-        if (!this.dataItem._settings.C_VIEW_ATTACHMENTS)
+        if (!this.dataItem?._settings.C_VIEW_ATTACHMENTS)
             return "NoPerm";
         if (this.isFileAttachmentEnabled) {
-            if (!this.dataItem.HAS_ATTACHED_FILES || this.dataItem.HAS_ATTACHED_FILES === '0') {
-                if (this.dataItem.PS_WF_STG_CD === 'Cancelled') return "CantAdd";
-                if (this.dataItem.PS_WF_STG_CD !== 'Cancelled') return "AddFile";
+            if (!this.dataItem?.HAS_ATTACHED_FILES || this.dataItem?.HAS_ATTACHED_FILES === '0') {
+                if (this.dataItem?.PS_WF_STG_CD === 'Cancelled') return "CantAdd";
+                if (this.dataItem?.PS_WF_STG_CD !== 'Cancelled') return "AddFile";
             }            
             return "HasFile";
         }
@@ -351,7 +351,7 @@ export class dealToolsComponent{
     showQuote(dataItem) {
         let excludeStages = ['Cancelled', 'Lost'];
         let includeStages = ['Active', 'Pending', 'Offer', 'Won'];
-        return excludeStages.indexOf(this.dataItem.WF_STG_CD) < 0 && (includeStages.indexOf(this.dataItem.WF_STG_CD) >= 0 || this.dataItem.HAS_TRACKER === '1');
+        return excludeStages.indexOf(this.dataItem?.WF_STG_CD) < 0 && (includeStages.indexOf(this.dataItem?.WF_STG_CD) >= 0 || this.dataItem?.HAS_TRACKER === '1');
     }
     downloadQuoteLetter() {
         let downloadPath = "/api/QuoteLetter/GetDealQuoteLetter/" + this.dataItem.CUST_MBR_SID + "/" + this.objTypeSid + "/" + this.dataItem.DC_ID + "/0";
@@ -360,7 +360,7 @@ export class dealToolsComponent{
     //Delete/Rollback/Cancel Item
     getLinkedIds(){
         let ids = [];
-        if (this.dataItem.isLinked !== undefined && this.dataItem.isLinked) {
+        if (this.dataItem?.isLinked !== undefined && this.dataItem?.isLinked) {
             for (let i = 0; i < this.gridData.length; i++) {
                 if (this.gridData[i].isLinked !== undefined && this.gridData[i].isLinked) {
                     ids.push(this.gridData[i]["DC_ID"]);
@@ -465,18 +465,18 @@ export class dealToolsComponent{
     //Hold Items
     //All of hold is broken for Tender dashboard because it is undefined since it has a scoping issue, but for tender deals, we SHOULD NOT HAVE HOLD anyhow..  It is 1:1 with PS.
     getHoldValue(dataItem) {
-        if (this.dataItem.WF_STG_CD === 'Active' || this.dataItem.WF_STG_CD === 'Won')
+        if (this.dataItem?.WF_STG_CD === 'Active' || this.dataItem?.WF_STG_CD === 'Won')
             return 'NoShowHold';
-        if (this.dataItem._actionsPS === undefined)
+        if (this.dataItem?._actionsPS === undefined)
             this.dataItem._actionsPS = {};
-        if (this.dataItem.WF_STG_CD === 'Hold') {
-            if (!!this.dataItem._actionsPS.Hold)
+        if (this.dataItem?.WF_STG_CD === 'Hold') {
+            if (!!this.dataItem?._actionsPS.Hold)
                 return 'TakeOffHold'; // !! = If it exists - If deal is on hold and I can hold from hold stage...
             else
                 return 'CantRemoveHold';
         }
         else {
-            if ((!!this.dataItem._actionsPS.Hold && this.dataItem._actionsPS.Hold === true) && this.dataItem.WF_STG_CD !== 'Cancelled')
+            if ((!!this.dataItem?._actionsPS.Hold && this.dataItem?._actionsPS.Hold === true) && this.dataItem?.WF_STG_CD !== 'Cancelled')
                 return 'CanHold';
             else
                 return 'NoHold';
@@ -521,9 +521,9 @@ export class dealToolsComponent{
             for (let v = 0; v < this.gridData.length; v++) {
                 let dataItem = this.gridData[v];
                 if (dataItem.isLinked !== undefined && dataItem.isLinked) {
-                    if (dataItem._actionsPS === undefined)
+                    if (dataItem?._actionsPS === undefined)
                         dataItem._actionsPS = {};
-                    if (dataItem._actionsPS.Hold !== undefined && dataItem._actionsPS.Hold === curHoldStatus && (dataItem.WF_STG_CD === model.WF_STG_CD)) {
+                    if (dataItem?._actionsPS.Hold !== undefined && dataItem?._actionsPS.Hold === curHoldStatus && (dataItem.WF_STG_CD === model.WF_STG_CD)) {
                         ids.push({
                             DC_ID: dataItem["DC_ID"],
                             WF_STG_CD: dataItem["WF_STG_CD"]

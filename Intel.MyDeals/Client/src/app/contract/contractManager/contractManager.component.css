@@ -535,3 +535,11 @@ button.btn.btn-sm.btn-skyblue.view-complex-two {
     margin-top: -3px;
     margin-left: -9px !important;
 }
+.modalBlueBody {
+    background-color: #003C71 !important;
+    color: #ffffff !important;
+}
+.btn-full {
+    margin: 5px 0 !important;
+    width: 100% !important;
+}
