@@ -26,7 +26,7 @@ env:
 jobs:
   Verify-environement:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
-     runs-on: [self-hosted,mydeals-prdui]
+     runs-on: [self-hosted,mydeals-prd-automation]
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
@@ -37,7 +37,7 @@ jobs:
 
   Restore-packages:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
-     runs-on: [self-hosted,mydeals-prdui]
+     runs-on: [self-hosted,mydeals-prd-automation]
      needs:  Verify-environement
      steps:
        - name: Restore NUGET Packages 
@@ -47,7 +47,7 @@ jobs:
 
   Build:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
-    runs-on: [self-hosted,mydeals-prdui]
+    runs-on: [self-hosted,mydeals-prd-automation]
     needs: Restore-packages
     steps:
        - name: MS build publish
@@ -56,7 +56,7 @@ jobs:
 
   Deploy:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
-    runs-on: [self-hosted, mydeals-prdui]
+    runs-on: [self-hosted, mydeals-prd-automation]
     needs: Build
     environment:
       name: ${{ github.event.inputs.ENV }}
@@ -73,7 +73,7 @@ jobs:
 
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
-    runs-on: [self-hosted, mydeals-prdui]
+    runs-on: [self-hosted, mydeals-prd-automation]
     needs: Verify-environement
     environment:
       name: ${{ github.event.inputs.ENV }}
