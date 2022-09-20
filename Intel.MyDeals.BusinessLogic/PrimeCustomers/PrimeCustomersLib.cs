@@ -178,13 +178,13 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         _primeCustomersDataLib.sendMail(endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY, endCustData.PRIMED_CUST_ID, dealId);
                     }
-                    bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
-                    if (salesForceCheck)
-                    {
-                        string saleForceId = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
-                        _integrationLib.UpdateUnifiedEndCustomer(CntrctId, saleForceId, endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY);
-
-                    }
+                    //TWC3167-2211 - Stop UCD data update to IQR on deal unification
+                    //bool salesForceCheck = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID) != "" ? true : false;
+                    //if (salesForceCheck)
+                    //{
+                    //    string saleForceId = mydealsdata[OpDataElementType.CNTRCT].Data[CntrctId].GetDataElementValue(AttributeCodes.SALESFORCE_ID);
+                    //    _integrationLib.UpdateUnifiedEndCustomer(CntrctId, saleForceId, endCustData.PRIMED_CUST_NM, endCustData.PRIMED_CUST_CNTRY);
+                    //}
                 }
 
 
