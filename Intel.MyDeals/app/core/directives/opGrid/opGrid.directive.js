@@ -1282,9 +1282,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if ($scope.curGroup === "") {
                         var data = $scope.contractDs.data();
                         if (contractutil.ValidateEndCustomer != undefined
-                            && contractutil.ValidateEndCustomer != null && contractutil.ValidateEndCustomer != '') {
+                            && contractutil.ValidateEndCustomer != null && contractutil.ValidateEndCustomer != '' && $scope.$parent.$parent.curPricingStrategy != undefined && $scope.$parent.$parent.curPricingStrategy != null
+                            && $scope.$parent.$parent.curPricingStrategy != '' && $scope.$parent.$parent.curPricingTable != undefined
+                            && $scope.$parent.$parent.curPricingTable != null && $scope.$parent.$parent.curPricingTable != '') {
                             data = contractutil.ValidateEndCustomer(data, "OnLoad", $scope.$parent.$parent.curPricingStrategy, $scope.$parent.$parent.curPricingTable);
                         }
+
                         //This is to check Settlement level column and OverArching Max Volume and OverArching Max Dollar column values for Active & Rollbacked deals if passed validation is dirty, When loading DE page
                         if (data != undefined && data.length > 1 && data[0].IS_HYBRID_PRC_STRAT == '1'
                             && $scope.$parent.$parent.curPricingStrategy != undefined

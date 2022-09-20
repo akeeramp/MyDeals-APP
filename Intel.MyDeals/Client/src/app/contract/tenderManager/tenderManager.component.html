@@ -15,7 +15,7 @@
 
 <div class="row wizard" style="padding-top: 50px;" *ngIf="pricingTableData != undefined">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" [ngClass]="{'complete': selectedTab != 'PTR' || !isWarning}">
+        <div class="wizard-panel first" [ngClass]="{'complete': isPTRPartiallyComplete() == true }"><
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
                 <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
             </a>
