@@ -79,6 +79,30 @@ export class PTE_CellChange_Util {
                 currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
                 updateRows.push(currentstring.split(','));
             }
+            else if (val.prop == 'STRT_REV') {
+                if (tier == 1) {
+                    currentstring = row + ',' + val.prop + ',' + 0.01 + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                }
+                else {
+                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                }
+            }
+            else if (val.prop == 'END_REV') {
+                if (tier == numoftier) {
+                    currentstring = row + ',' + val.prop + ',' + 9999999999.99 + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                }
+                else {
+                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentstring.split(','));
+                }
+            }
+            else if (val.prop == 'INCENTIVE_RATE') {
+                currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+            }
             else {
                 this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation);
             }
@@ -419,7 +443,7 @@ export class PTE_CellChange_Util {
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
                 this.autoFillCellonProdKit(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
             }
-            else if (OBJ_SET_TYPE_CD && (OBJ_SET_TYPE_CD == 'VOL_TIER' || OBJ_SET_TYPE_CD == 'FLEX')) {
+            else if (OBJ_SET_TYPE_CD && (OBJ_SET_TYPE_CD == 'VOL_TIER' || OBJ_SET_TYPE_CD == 'FLEX' || OBJ_SET_TYPE_CD == 'REV_TIER')) {
                 this.autoFillCellonProdVol(items, curPricingTable, contractData, pricingTableTemplates,columns,operation);
             }
             else {

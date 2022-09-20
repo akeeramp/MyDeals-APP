@@ -451,23 +451,25 @@ export class pricingTableEditorComponent implements OnChanges {
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             let uniqchanges = [];
             _.each(changes, (item) => {
-                if (item[1] == 'PTR_USER_PRD') {
-                    if (item[3] != null && item[3] != '') {
+                if (item[2] != undefined && item[3] != undefined) {
+                    if (item[1] == 'PTR_USER_PRD') {
+                        if (item[3] != null && item[3] != '') {
+                            let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
+                            uniqchanges.push(obj);
+                        }
+                        else {
+                            // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
+                            if (source == 'edit') {
+                                //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
+                                this.isDeletePTR = true;
+                                this.multiRowDelete.push({ row: item[0], old: item[2] })
+                            }
+                        }
+                    }
+                    else {
                         let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                         uniqchanges.push(obj);
                     }
-                    else {
-                        // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
-                        if (source == 'edit') {
-                            //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
-                            this.isDeletePTR=true;
-                            this.multiRowDelete.push({ row: item[0], old: item[2] })
-                        }
-                    }
-                }
-                else {
-                    let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
-                    uniqchanges.push(obj);
                 }
             });
             return uniqchanges;
