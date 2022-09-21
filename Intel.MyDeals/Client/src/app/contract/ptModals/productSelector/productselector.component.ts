@@ -159,7 +159,7 @@ export class ProductSelectorComponent {
         this.splitProducts = (this.isTender == true && this.dealType === "ECAP") ? true : false;
         this.enableSplitProducts = (this.dealType != "KIT");
         //condition for empty row, directly clicking prodselector
-        if (this.data && this.data.curRow && this.data.curRow[0].DC_ID == null) {
+        if ((this.data && this.data.curRow && this.data.curRow[0].DC_ID == null) || (this.data.curRow == '' && this.data.selVal == '' && this.data.source == '')) {
             this.pricingTableRow.START_DT = this.data.contractData.START_DT;
             this.pricingTableRow.END_DT = this.data.contractData.END_DT;
             this.pricingTableRow.CUST_MBR_SID = this.data.contractData.CUST_MBR_SID;
@@ -331,6 +331,8 @@ export class ProductSelectorComponent {
                     selected: ProdSel_Util.productExists(item, i.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection)
                 }
             }).sort((a, b) => a['name'].toUpperCase() > b['name'].toUpperCase() ? 1 : a['name'].toUpperCase() === b['name'].toUpperCase() ? 0 : -1);
+
+            if (this.items.length == 1 && this.items[0].name == 'NA' && this.items[0].path.startsWith('CPU SvrWS NA')) { return } // Forced breakout for CPU Q-Spec items forced into products load
 
             if (this.items.length == 1 && this.items[0].name == 'NA') {
                 let drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');

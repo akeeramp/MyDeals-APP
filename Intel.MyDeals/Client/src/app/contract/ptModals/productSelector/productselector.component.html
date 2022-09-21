@@ -36,7 +36,7 @@
             <ul class="productSelectorpath breadcrumb">
                 <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
                 <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
-                    <li *ngIf="p.name != 'NA'"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
+                    <li *ngIf="p.name != 'NA' || p.path.startsWith('CPU SvrWS NA')"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
                 </ng-container>
             </ul>
         </div>

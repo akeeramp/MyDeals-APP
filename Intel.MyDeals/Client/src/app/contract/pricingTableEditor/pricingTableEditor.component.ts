@@ -169,7 +169,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                             }
                                         }
                                         let PTR = [];
-                                        PTR.push({ row: result.validateSelectedProducts[idx].indx, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
+                                        PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                                         let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
                                         PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
                                     }
@@ -870,6 +870,73 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         this.isLoading = false;
         return transformResults;
+    }
+    openProductSelector() {
+        let modalComponent: any = null,
+            name: string = '',
+            height: string = '',
+            width: string = '650px',
+            data = {},
+            panelClass: string = "";
+            modalComponent = ProductSelectorComponent;
+            name = "Product Selector";
+            // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
+            width = "5500px";
+            panelClass = "product-selector-dialog";
+        data = { name: name, source: '', selVal: '', contractData: this.contractData, curPricingTable: this.curPricingTable, curRow: '' };
+        const dialogRef = this.dialog.open(modalComponent, {
+            height: height,
+            width: width,
+            data: data,
+            panelClass: panelClass
+        });
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                    this.isLoading = true;
+                    let cntrctPrdct = [];
+                    let excludedPrdct = [];
+                    let sysPrd = {};
+                    if (result.splitProducts) {
+                        _.each(result.validateSelectedProducts, (item, idx) => {
+                            if (!item[0].EXCLUDE) {
+                                cntrctPrdct = [];
+                                sysPrd = {};
+                                cntrctPrdct.push(item[0].HIER_VAL_NM);
+                                sysPrd[item[0].DERIVED_USR_INPUT] = item;
+                                if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                                    if (idx != 0) {
+                                        result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
+                                            + result.validateSelectedProducts[idx - 1].items.length;
+                                    }
+                                }
+                                let PTR = [];
+                                PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
+                                let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                                PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                            }
+                        });
+                    }
+                    else {
+                        _.each(result.validateSelectedProducts, function (item) {
+                            if (!item[0].EXCLUDE) {
+                                cntrctPrdct.push(item[0].HIER_VAL_NM)
+                            }
+                            else if (item[0].EXCLUDE && !result.splitProducts) {
+                                excludedPrdct.push(item[0].HIER_VAL_NM);
+                            }
+                            sysPrd[item[0].DERIVED_USR_INPUT] = item;
+                        });
+                        let PTR = [];
+                        PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
+                        let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                        PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                    }
+                
+                setTimeout(() => {
+                    this.isLoading = false;
+                }, 2000);
+            }
+        });       
     }
     openProductCorrector(products: any) {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);

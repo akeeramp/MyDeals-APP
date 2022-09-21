@@ -298,7 +298,7 @@ export class PTE_CellChange_Util {
                 //this line of code is only for KIT incase of success product
                 if(operation && operation.operation){
                 let PTR_col_ind=_.findIndex(columns,{data:'PTR_USER_PRD'});
-                this.hotTable.setCellMeta(selrow,PTR_col_ind,'className','success-product');
+                this.hotTable.setCellMeta(empRow,PTR_col_ind,'className','success-product');
                 }
                 //based on the number of products listed we have to iterate the 
                 let prodIndex = 0;
@@ -388,7 +388,7 @@ export class PTE_CellChange_Util {
                  //this line of code is only for KIT incase of success product
                  if(operation && operation.operation){
                     let PTR_col_ind=_.findIndex(columns,{data:'PTR_USER_PRD'});
-                    this.hotTable.setCellMeta(selrow,PTR_col_ind,'className','success-product');
+                    this.hotTable.setCellMeta(empRow,PTR_col_ind,'className','success-product');
                     }
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
@@ -474,7 +474,7 @@ export class PTE_CellChange_Util {
                           //this line of code is to mak sure we modify the product background color to sucess
                         if(operation && operation.operation){
                             let PTR_col_ind=_.findIndex(columns,{data:'PTR_USER_PRD'});
-                            this.hotTable.setCellMeta(items[0].row,PTR_col_ind,'className','success-product');
+                            this.hotTable.setCellMeta(empRow,PTR_col_ind,'className','success-product');
                         }
                         this.addUpdateRowOnchange(this.hotTable,columns, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
                     }
