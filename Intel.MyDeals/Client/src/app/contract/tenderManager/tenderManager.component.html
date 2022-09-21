@@ -1,4 +1,9 @@
-﻿<div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="margin-top: 20px;position: absolute;">
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="margin-top: 20px;position: absolute;">
     <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
         <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
         <span>{{contractData.Customer.CUST_NM}}: </span>
@@ -15,7 +20,7 @@
 
 <div class="row wizard" style="padding-top: 50px;" *ngIf="pricingTableData != undefined">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" [ngClass]="{'complete': isPTRPartiallyComplete() == true }"><
+        <div class="wizard-panel first" [ngClass]="{'complete': isPTRPartiallyComplete() == true }">
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
                 <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
             </a>

@@ -103,18 +103,8 @@ export class tenderManagerComponent {
         if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
             this.isPartiallyValid = this.isPTRPartiallyComplete();
         }
-        if (this.currentTAB == selectedTab) {
-            if (this.currentTAB == 'PTR') {
-                await this.pteComp.validatePricingTableProducts();
 
-            } else if (this.currentTAB == 'DE') {
-                await this.deComp.SaveDeal();
-            }
-
-            this.selectedTab = selectedTab;
-        }
-
-        else if (selectedTab == 'PTR') {
+        if (selectedTab == 'PTR') {
             if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
             }
@@ -197,7 +187,7 @@ export class tenderManagerComponent {
             await this.contractDetailsSvc.deleteContract(custId, contractId).toPromise().catch((err) => {
                 this.loggerSvc.error('Unable to delete the contract.', 'error');
             });
-            this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
+            this.loggerSvc.success("Successfully deleted Contract.", "Delete successful");
             window.location.href = '/Dashboard#/portal';
         }
     }

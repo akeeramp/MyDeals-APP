@@ -132,8 +132,7 @@ export class pricingTableComponent {
         e.preventDefault();
         //window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + this.c_Id + "/0/0/0";
         if (e.title == "Deal Editor") {
-            if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
-                if (this.pteComp.dirty)
+            if (this.pteComp.dirty) {
                     await this.pteComp.validatePricingTableProducts();
                 let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                 if (isAnyWarnings) {
