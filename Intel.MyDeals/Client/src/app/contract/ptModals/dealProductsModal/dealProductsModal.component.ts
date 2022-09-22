@@ -101,6 +101,13 @@ export class dealProductsModalComponent {
                 this.prdIds.push(parseInt(value));
             });
         }
+        if(this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' && !this.showDealProducts){
+            this.prods = this.data.dataItem.products;
+            this.prdIds =[];
+            for(let i=0;i< this.prods.length; i++){
+                this.prdIds.push(this.prods[i].PCSR_NBR);
+            }            
+        }
         this.prdData = {
             "PrdIds": this.prdIds
         }

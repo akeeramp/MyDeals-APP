@@ -13,6 +13,8 @@ import { lnavService } from "../lnav/lnav.service";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
 import { MatDialog } from "@angular/material/dialog";
 import { GridUtil } from "../grid.util";
+import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
 
 
 @Component({
@@ -256,15 +258,19 @@ export class allDealsComponent {
             title:"Notes",
             width:150
         });
-        // console.log(this.columns);
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "TITLE") {
-            this.openDealProducts(args.dataItem);
+            this.openDealProductModal(args.dataItem);
         }
     }
-    openDealProducts(dataItem){
-        console.log(dataItem);
+    openDealProductModal(dataItem) {
+        const dialogRef = this.dialog.open(dealProductsModalComponent, {
+            width: "1000px",
+            data: {
+                dataItem: dataItem
+            }
+        });
     }
     showHelpTopicGroup(helpTopic) {
         // const helpTopic = "Grouping+Exclusions";
@@ -275,17 +281,26 @@ export class allDealsComponent {
         }
     }
     exportToExcel() {
-        //kujoih
+        GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "All Deals Export");
     }
     exportToExcelCustomColumns() {
-        //kujoih
+        GridUtil.dsToExcel(this.columns, this.gridResult, "All Deals Export");
     }
     openOverlappingDealCheck() {
-        //kujoih
+        let data = {
+            "contractData": this.contractData,
+            "currPt": this.contractData,
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            height: '530px',
+            width: '800px',
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe(result => { });
     }
     
     toggleWrap() {
-        this.wrapEnabled = !this.wrapEnabled;
+
     }
     loadDealTypestab(data){
         for (let i = 0; i < data.length; i++) {

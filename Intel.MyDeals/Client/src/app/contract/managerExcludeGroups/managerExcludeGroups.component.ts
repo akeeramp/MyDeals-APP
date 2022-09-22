@@ -12,6 +12,7 @@ import { FormBuilder } from "@angular/forms";
 import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
+import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 @Component({
     selector: "manager-exclude-groups",
     templateUrl: "Client/src/app/contract/managerExcludeGroups/managerExcludeGroups.component.html",
@@ -181,13 +182,19 @@ export class managerExcludeGroupsComponent {
         //kujoih
     }
     openOverlappingDealCheck() {
-        //kujoih
+        let data = {
+            "contractData": this.contractData,
+            "currPt": this.contractData,
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            height: '530px',
+            width: '800px',
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe(result => { });
     }
+
     toggleWrap() {
-            let gridEl = this.elGrid;
-            this.wrapEnabled = !this.wrapEnabled;
-            let newVal = this.wrapEnabled ? "normal" : "nowrap";
-            let newH = this.wrapEnabled ? "100%" : "auto";
     }
     displayDealTypes() {
         let data = this.gridResult;

@@ -6,6 +6,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { overLappingDealsService } from "./overLapping.service";
+import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+import { MatDialog } from "@angular/material/dialog";
 
 
 @Component({
@@ -16,7 +18,7 @@ import { overLappingDealsService } from "./overLapping.service";
 
 export class overLappingDealsComponent {
     S_ID: any;
-    constructor(private overLappingDealsSvc: overLappingDealsService, private loggerSvc: logger) {
+    constructor(private overLappingDealsSvc: overLappingDealsService, protected dialog: MatDialog, private loggerSvc: logger) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -115,6 +117,18 @@ export class overLappingDealsComponent {
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
+    }
+    openOverLappingDealCheck() {
+        let data = {
+            "contractData": this.contractData,
+            "currPt": this.contractData,
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            height: '530px',
+            width: '800px',
+            data: data,
+        });
+        dialogRef.afterClosed().subscribe(result => { });
     }
     ngOnInit() {
         this.getOverlapDetails();

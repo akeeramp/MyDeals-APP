@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
-import { State } from "@progress/kendo-data-query";
+import { distinct,process, State } from "@progress/kendo-data-query";
 import { contractManagerservice } from "./contractManager.service";
 import * as moment from "moment";
 import { colorDictionary } from "../../core/angular.constants";
@@ -59,13 +59,14 @@ export class contractManagerComponent {
     showMeetCompDetails: boolean= false;
     public uploadSaveUrl = "/FileAttachments/Save";
     is_Deal_Tools_Checked: any = false;
-    grid_Result: any =[];
+    grid_Result: any;
     showMultipleDialog: boolean= false;
     pteTableData: any;
     files = [];
     psId = 0;
     ptId = 0;
     parent_dcId: any;
+    allPTEData: any =[];
     constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -87,6 +88,7 @@ export class contractManagerComponent {
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
+    isPTEToolsOpen =[];
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
     private isCustAcptReadOnly: boolean = false;
     public state: State = {
@@ -115,6 +117,7 @@ export class contractManagerComponent {
     private windowTop = 200;windowLeft = 350;windowWidth = 620;windowHeight = 500;windowMinWidth = 100;
     public filteredData: any;
     uploadSuccess = false;
+    private isGridLoading = false;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -230,15 +233,22 @@ export class contractManagerComponent {
         if (!event.currentTarget.checked) {
             this[checkBoxType] = false;
         }
+        // clear global check
+        this.approveCheckBox = false;
+        this.reviseCheckBox = false;
+        this.emailCheckBox = false;
         let checkedList = [];
         if (event.target.id.indexOf("email") > 0) {
             var anyEmailChecked = false;
             const isItemChecked = event.target.checked;
             if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
+                this.emailCheck= {}; this.reviseCheck={};
                 this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : ''; 
             } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
+                this.emailCheck= {}; this.apprvCheck={};
                 this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
+                this.reviseCheck= {}; this.apprvCheck={};
                 this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             }
 
@@ -255,10 +265,12 @@ export class contractManagerComponent {
             var anyActionChecked = false;
             const isItemChecked = event.target.checked;
             if (checkBoxType == "approveCheckBox" && this.canAction('Approve', data, false) && this.canAction('Approve', data, true) && this.canActionIcon) {
+                this.emailCheck= {};
                 this.apprvCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
                 if (this.reviseCheck[data.DC_ID])
                     this.reviseCheck[data.DC_ID] = false;
             } else if (checkBoxType == "reviseCheckBox" && this.canAction('Revise', data, false) && this.canAction('Revise', data, true) && this.canActionIcon) {
+                this.emailCheck= {};
                 this.reviseCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
                 if (this.apprvCheck[data.DC_ID])
                     this.apprvCheck[data.DC_ID] = false;
@@ -274,10 +286,6 @@ export class contractManagerComponent {
             }
         }
     
-        // clear global check
-        this.approveCheckBox = false;
-        this.reviseCheckBox = false;
-        this.emailCheckBox = false;
     }
     pendingChange() {
         let fromToggle = true;
@@ -485,7 +493,6 @@ export class contractManagerComponent {
         };
         const dialogRef = this.dialog.open(emailModal, {
             width: "900px",
-            height: "611px",
             data: {
                 cellCurrValues: dataItem
             }
@@ -527,32 +534,31 @@ export class contractManagerComponent {
         if (ids.length > 0) data[actn] = ids;
     }
 
-
+    distinctPrimitive(fieldName: string) {
+        return distinct(this.grid_Result, fieldName).map(item => item[fieldName]);
+    }
     clkAllRow(e, checkBoxType) {
         const isItemChecked = e.currentTarget.checked;
+        this.emailCheck = {}; 
+        this.reviseCheck = {};
+        this.apprvCheck = {};
         // In the UI based on sone conditions checkboxes will be shown on hidden, so while checking the check boxes on click of All check box we have to check the conditions and then select the check box
         if (this.contractData.PRC_ST !== undefined) {
             this.contractData.PRC_ST.map((x) => {
                 if (this.hasVertical(x)) {
                     if (checkBoxType == "Approve" && this.canAction('Approve', x, false) && this.canAction('Approve', x, true) && this.canActionIcon) { 
-                        this.reviseCheck[x.DC_ID] = false;
-                        this.emailCheck[x.DC_ID] =  false;
                         this.apprvCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = true;
                         this.reviseCheckBox = false;
                         this.emailCheckBox = false;
                       }
                     else if (checkBoxType == "Revise" && this.canAction('Revise', x, false) && this.canAction('Revise', x, true) && this.canActionIcon) {
-                        this.apprvCheck[x.DC_ID] = false;
-                        this.emailCheck[x.DC_ID] = false;
                         this.reviseCheck[x.DC_ID] = isItemChecked ? true : false;
                         this.approveCheckBox = false;
                         this.reviseCheckBox = true;
                         this.emailCheckBox = false;
                         }
                     else if (checkBoxType == "Email" && this.canEmailIcon) {
-                        this.apprvCheck[x.DC_ID] = false;
-                        this.reviseCheck[x.DC_ID] = false;
                         this.emailCheck[x.DC_ID] = isItemChecked ? true : false;                         this.approveCheckBox = false;
                         this.reviseCheckBox = false;
                         this.emailCheckBox = true; 
@@ -601,6 +607,7 @@ export class contractManagerComponent {
 
     togglePt(pt) {
         const ptDcId = pt.DC_ID;
+        this.isGridLoading = true;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
             this.contractManagerSvc.getWipSummary(pt.DC_ID).subscribe((response) => {
@@ -614,18 +621,24 @@ export class contractManagerComponent {
                         else if (response[i].OBJ_SET_TYPE_CD == "KIT") { this.isECAP[ptDcId] = false; this.OtherType[ptDcId] = false; this.isKIT[ptDcId] = true }
                         else { this.OtherType[ptDcId] = true; this.isECAP[ptDcId] = false; this.isKIT[ptDcId] = false }
                     }
-
-                    this.gridData = response;
-                    this.gridDataSet[pt.DC_ID] = this.gridData;
+                    this.allPTEData =response;
+                    this.isPTEToolsOpen.push(this.allPTEData);
+                    this.gridDataSet[pt.DC_ID] = response;
                     this.grid_Result= this.gridDataSet[pt.DC_ID];
+                    this.gridData = process(this.grid_Result, this.state);
+                    this.isGridLoading = false;
                 }
             }, (error) => {
                 this.loggerSvc.error('Get WIP Summary service', error);
             })
+        } else if(!this.isPTExpanded[ptDcId]){
+            this.isGridLoading = false;
+            this.isPTEToolsOpen.pop();
         }
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
+        this.gridData = process(this.grid_Result, this.state);
     }
     needMct() {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
@@ -851,8 +864,10 @@ export class contractManagerComponent {
         }
     }
     clearFilter() {
-        let tempData = this.contractData.PRC_ST.filter(x=>x.filtered == false);
-        this.filteredData = this.contractData.PRC_ST;
+        let tempData = this.contractData.PRC_ST.map(x=>x.filtered = false);
+        if(tempData.length > 0){
+            this.filteredData= this.contractData.PRC_ST;
+        }
     }
     quickSaveContractFromDialog(value){
         if(value){
