@@ -57,18 +57,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0) { $scope.restrictGroupFlexOverlap = true; }
 
-        if ($scope.restrictGroupFlexOverlap) {
-            pricingTableData.data.WIP_DEAL = contractutil.clearValidation(pricingTableData.data.WIP_DEAL, "DEAL_COMB_TYPE");
-            var filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
-            if (filteredGroupTypeRestriction.length > 0) {
-                angular.forEach(filteredGroupTypeRestriction, (item) => {
-                    if (!item._behaviors.isError) item._behaviors.isError = {};
-                    if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-                    item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                    item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
-                });
-            }
-        }
+        
     }
     
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);

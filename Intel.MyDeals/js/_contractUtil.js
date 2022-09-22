@@ -334,7 +334,7 @@ contractutil.validateFlexDate = function (data, curPricingTable, wipData) {
 
         var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
-        var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
+        var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate)));
     }
 
     return drainingInvalidDates;
@@ -352,10 +352,7 @@ contractutil.setFlexBehaviors = function (item, elem, cond, restrictGroupFlexOve
     if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
         item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
     }
-    else if (cond == 'invalidDate' && elem == 'START_DT' && !restrictGroupFlexOverlap) {
-        item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
-    }
-
+    
     else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
         item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
     }

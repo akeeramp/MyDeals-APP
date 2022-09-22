@@ -1008,7 +1008,8 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
     var rData = {};
     if (contractData["IS_TENDER"] !== undefined) isTenderFlag = contractData["IS_TENDER"];
     var isHybridPricingStatergy = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
-    var dictGroupType = {};   
+    var dictGroupTypeAcr = {};
+    var dictGroupTypeDrn = {};
     if (gData !== undefined && gData !== null) {
         gData = contractutil.ValidateEndCustomer(gData, "SaveAndValidate", curPricingStrategy, curPricingTable);
         //validate settlement parter for DE
@@ -1205,36 +1206,45 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
 
             // Hybrid pricing strategy logic and Flex deal type validation error for DEAL_COMB_TYPE
             if (isHybridPricingStatergy || gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
-                if (Object.keys(dictGroupType).length == 0) {
+                //Calculating Accrual Line
+                if (Object.keys(dictGroupTypeAcr).length == 0) {
                     gData.map(function (data, index) {
-                        dictGroupType[data["DEAL_COMB_TYPE"]] = index;
+                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                            dictGroupTypeAcr[data["DEAL_COMB_TYPE"]] = index;
+                        }                        
                     });
                 }
-
-                if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX" && restrictGroupFlexOverlap) {
-                    data = contractutil.clearValidation(gData, "DEAL_COMB_TYPE");
-                    let objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
-                    let filterData = _.uniq(_.sortBy(gData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-
-                    let filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
-                    if (filteredGroupTypeRestriction.length > 0) {
-                        _.each(filteredGroupTypeRestriction, (item) => {
-                            if (!item._behaviors.isError) item._behaviors.isError = {};
-                            if (!item._behaviors.validMsg) item._behaviors.validMsg = {};
-                            item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                            item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push(item._behaviors.validMsg['DEAL_COMB_TYPE']);
-                        });
-                    }
+                //Calculating Draining Line
+                if (Object.keys(dictGroupTypeDrn).length == 0) {
+                    gData.map(function (data, index) {
+                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                            dictGroupTypeDrn[data["DEAL_COMB_TYPE"]] = index;
+                        }
+                    });
                 }
-                else if (Object.keys(dictGroupType).length > 1) {
-                    if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
-                    if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
-                    gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                    gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
-                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                    errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
+                
+                //Accrual Line Check
+                else if (Object.keys(dictGroupTypeAcr).length > 1) {
+                    if (gData[i].FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                        if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                        if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                        gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                        gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within Accrual should have the same 'Group Type' value";
+                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
+                    }
+                    
+                }
+                //Draining Line Check
+                else if (Object.keys(dictGroupTypeDrn).length > 1) {
+                    if (gData[i].FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                        if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
+                        if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
+                        gData[i]._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                        gData[i]._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within Draining should have the same 'Group Type' value";
+                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['DEAL_COMB_TYPE']);
+                    }
                 }
 
             }
