@@ -625,92 +625,83 @@ export class PTE_Load_Util {
         return DE_Load_Util.getLookBackPeriod(data);
     }
     static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable : any,isTenderContract:boolean) {
-        //logic for making by defaul all the cell except PTR_USER_PRD readonly
-        const cellProperties = {};
-        if ((<any>window).usrRole == 'SA' || (<any>window).usrRole == 'DA') {
-            if (hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
-                cellProperties['readOnly'] = true;
-            }
-            else {
-                if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
-                    if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                        if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                        if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
-            if ((hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '') && prop != 'PTR_USER_PRD') {
-                    cellProperties['readOnly'] = true;
-            }
-            else {
-                if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
-                    cellProperties['readOnly'] = true;
-                }
-                //column config has readonly property for certain column persisting that assigning for other
-                if (_.findWhere(columnConfig, { data: prop }).readOnly) {
-                    cellProperties['readOnly'] = true;
-                }
-                if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
-                    if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                        if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                        if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                    }
-                }
-                //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 
-                if (isTenderContract && (prop == 'PERIOD_PROFILE' || prop == 'AR_SETTLEMENT_LVL')) {
-                    cellProperties['readOnly'] = true;
-                }
-                if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') !== 'Cash') {
-                    if (prop == 'SETTLEMENT_PARTNER') {
-                        cellProperties['readOnly'] = true;
-                    }
-                } else {
-                    if (prop == 'SETTLEMENT_PARTNER') {
-                        cellProperties['readOnly'] = false;
-                    }
-                }
-                if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
-                    if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() != 'backend') {
-                        if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
-                            cellProperties['readOnly'] = true;
-                        }
-                    } else {
-                        if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != 'Cash') {
-                            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL') {
-                                cellProperties['readOnly'] = false;
-                            }
-                        } else {
-                            if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
-                                cellProperties['readOnly'] = false;
-                            }
-                        }
-                    }
-                }
-                if ((curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") && prop == "RESET_VOLS_ON_PERIOD") {
-                    cellProperties['readOnly'] = true;
-                }
-                if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && curPricingTable.IS_HYBRID_PRC_STRAT == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null)) {
-                    cellProperties['readOnly'] = false;
-                }
-            }
-            //need to revisit the logic making as commented for now        
-            
-            
-        }
-        return cellProperties;
+      //logic for making by defaul all the cell except PTR_USER_PRD readonly
+      const cellProperties = {};
+      //if(hotTable.isEmptyRow(row)){ //this.hotTable.getDataAtRowProp(i,'DC_ID') ==undefined || this.hotTable.getDataAtRowProp(i,'DC_ID') ==null
+      if (hotTable.getDataAtRowProp(row, 'DC_ID') == undefined || hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
+          if (prop != 'PTR_USER_PRD') {
+              cellProperties['readOnly'] = true;
+          }
+      }
+      else if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+          cellProperties['readOnly'] = true;
+      }
+      else {
+          //column config has readonly property for certain column persisting that assigning for other
+          if (_.findWhere(columnConfig, { data: prop }).readOnly) {
+              cellProperties['readOnly'] = true;
+          }
+          else {
+              cellProperties['readOnly'] = false;
+          }
+      }
+      //need to revisit the logic making as commented for now        
+      if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
+          var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+          if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
+              if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                  cellProperties['readOnly'] = true;
+              }
+              if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
+                  cellProperties['readOnly'] = true;
+              }
+          }
+      }
+      if ((<any>window).usrRole == 'SA' || (<any>window).usrRole == 'DA') {
+          if (prop == 'PTR_USER_PRD') {
+              cellProperties['readOnly'] = true;
+          }
+      } else {
+          if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') !== 'Cash') {
+              if (prop == 'SETTLEMENT_PARTNER') {
+                  cellProperties['readOnly'] = true;
+              }
+          } else {
+              if (prop == 'SETTLEMENT_PARTNER') {
+                  cellProperties['readOnly'] = false;
+              }
+          }
+          if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() !== 'backend') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+              if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+                  cellProperties['readOnly'] = true;
+              }
+          }
+          //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 
+          else if (isTenderContract && (prop == 'PERIOD_PROFILE' || prop == 'AR_SETTLEMENT_LVL')) {
+              cellProperties['readOnly'] = true;
+          }
+          else if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() == 'backend') && (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') != 'Cash') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+              if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL') {
+                  cellProperties['readOnly'] = false;
+              }
+          }
+          else if (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != undefined && hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT') != null && (hotTable.getDataAtRowProp(row, 'PROGRAM_PAYMENT').toLowerCase() == 'backend') && (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
+              if (prop == 'PERIOD_PROFILE' || prop == 'RESET_VOLS_ON_PERIOD' || prop == 'AR_SETTLEMENT_LVL' || prop == 'SETTLEMENT_PARTNER') {
+                  cellProperties['readOnly'] = false;
+              }
+          }
+          if (curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") {
+              if (prop == "RESET_VOLS_ON_PERIOD") {
+                  cellProperties['readOnly'] = true;
+              }
+          }
+          if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && curPricingTable.IS_HYBRID_PRC_STRAT == "1") {
+              if (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) {
+                  cellProperties['readOnly'] = false;
+              }
+          }
+      }
+      return cellProperties;
     }
     static setPrdColor(PTR:any[]):any[]{
         _.each(PTR,data=>{

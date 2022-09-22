@@ -775,13 +775,13 @@ export class contractManagerComponent {
         } else {
             this.showMultipleDialog = false;
             this.ptId = prc_tbl[0].DC_ID;
-            window.location.href = "/Dashboard#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+            window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
 
         }
     }
     pickPt(pte){
         this.ptId = pte.DC_ID;
-        window.location.href = "/Dashboard#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     closeMultiple(){
         this.showMultipleDialog = false;

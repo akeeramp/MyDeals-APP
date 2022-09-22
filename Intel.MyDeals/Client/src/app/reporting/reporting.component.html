@@ -1,4 +1,9 @@
-﻿<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
 <div class="container-fluid overFlowDash" [hidden]="isLoading=='true'">
     <div class="row">
         <div class="col-md-12">

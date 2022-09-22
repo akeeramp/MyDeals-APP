@@ -362,7 +362,7 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     }
     goToSelType(CNTRCT_OBJ_SID:any){
         if (this.angularEnabled){
-            window.location.href = `/Dashboard#/contractmanager/CNTRCT/${CNTRCT_OBJ_SID}/0/0/0`;
+            window.location.href = `#/contractmanager/CNTRCT/${CNTRCT_OBJ_SID}/0/0/0`;
         } 
         else {
             window.location.href = `/Contract#/manager/${CNTRCT_OBJ_SID}`;

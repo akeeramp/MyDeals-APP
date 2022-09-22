@@ -72,7 +72,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     }
     goToCreateContract(){
         if (this.angularEnabled){
-            window.location.href = "/Dashboard#/contractdetails/0";
+            window.location.href = "#/contractdetails/0";
         } 
         else {
             window.location.href = "/Contract#/manager/0/details";

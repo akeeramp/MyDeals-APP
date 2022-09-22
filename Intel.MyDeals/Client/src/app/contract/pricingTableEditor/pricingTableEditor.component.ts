@@ -761,7 +761,7 @@ export class pricingTableEditorComponent implements OnChanges {
         let isValidProd = await this.validateOnlyProducts('onSave');
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        var multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR);
+        var multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR,this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
         if (multiGeoWithoutBlend != "0") {
             if (multiGeoWithoutBlend == "1") {
                 this.loggerService.error('Multiple GEO Selection not allowed without BLEND', 'error');

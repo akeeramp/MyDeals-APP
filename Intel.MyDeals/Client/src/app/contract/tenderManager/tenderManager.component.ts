@@ -50,17 +50,22 @@ export class tenderManagerComponent {
             var dealID = this.contractData.DC_ID;
             document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
         }
-        this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
-        this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
-        let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
-            this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
-        });
-        this.UItemplate = result;
-        this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-        });
-        this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-        this.mcForceRunReq = this.isMCForceRunReq();
+        if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
+            this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
+            this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
+            let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
+                this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
+            });
+            this.UItemplate = result;
+            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            this.mcForceRunReq = this.isMCForceRunReq();
+        }
+        else{
+            this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
+        }
         this.isLoading = false;
     }
 

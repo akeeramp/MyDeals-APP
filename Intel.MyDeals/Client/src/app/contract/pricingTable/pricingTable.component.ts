@@ -130,7 +130,6 @@ export class pricingTableComponent {
     }
     async onTabSelect(e: SelectEvent) {
         e.preventDefault();
-        //window.location.href = "/Dashboard#/contractmanager/CNTRCT/" + this.c_Id + "/0/0/0";
         if (e.title == "Deal Editor") {
             if (this.pteComp.dirty) {
                     await this.pteComp.validatePricingTableProducts();
@@ -158,7 +157,7 @@ export class pricingTableComponent {
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
             this.contractData = response[0];
             //if it is Tender deal redirect to Tender manager
-            if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "/Dashboard#/tendermanager/" + this.c_Id;
+            if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "#/tendermanager/" + this.c_Id;
             else {
                 this.loadTemplateDetails(IDS, this.contractData );
             }
