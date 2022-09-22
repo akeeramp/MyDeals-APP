@@ -208,6 +208,14 @@ export class dealEditorComponent {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+            if (response.WIP_DEAL[0].IS_HYBRID_PRC_STRAT == '1') {
+                response.WIP_DEAL = PTE_Validation_Util.ValidateEndCustomer(response.WIP_DEAL, "OnLoad", this.curPricingStrategy, this.curPricingTable);
+                var isValidationNeeded = response.WIP_DEAL.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
+                if (isValidationNeeded && response.WIP_DEAL.length == isValidationNeeded.length && this.curPricingTable.PASSED_VALIDATION != undefined && this.curPricingTable.PASSED_VALIDATION !=null && this.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
+                    response.WIP_DEAL = PTE_Validation_Util.validateSettlementLevel(response.WIP_DEAL, this.curPricingStrategy);
+                    response.WIP_DEAL = PTE_Validation_Util.validateOverArching(response.WIP_DEAL, this.curPricingStrategy, this.curPricingTable);
+                }
+            }
             this.voltLength = response.WIP_DEAL.length;
             if (this.gridResult) {
                 let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);

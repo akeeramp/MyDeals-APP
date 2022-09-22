@@ -234,4 +234,38 @@ export class PTE_Save_Util {
     static setDataItem(dataItem: any, field: any, value, key?: any) {
         DE_Save_Util.setDataItem(dataItem, field, value, key);        
     }
+
+    static fillingPayLoad(data: any, curPricingTable: any) {
+       _.each(data, (item) => {
+           if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+               item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
+               let obj = JSON.parse(item['PTR_SYS_PRD']);
+               let keys = Object.keys(obj);
+               for (var key in keys) {
+                   if (!Number.isNaN(Number(key))) {
+                       if (obj[keys[key]][0].CAP != undefined && obj[keys[key]][0].CAP != null) {
+                           if ((item['CAP'] == undefined || item['CAP'] == null || item['CAP'] == "" || item['CAP'] == 'No CAP') || (item['CAP'] !== undefined && item['CAP'] != null && item['CAP'] !== "" && parseFloat(item['CAP']) < parseFloat(obj[keys[key]][0].CAP)))
+                               item['CAP'] = obj[keys[key]][0].CAP;
+                       }
+                       if (obj[keys[key]][0].YCS2 != undefined && obj[keys[key]][0].YCS2 != null) {
+                           item['YCS2'] = obj[keys[key]][0].YCS2;
+                       }
+                   }
+               }
+           }
+           if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
+               item["VOLUME"] = null;
+               item["ECAP_PRICE"] = null;
+           }
+           if (item['REBATE_OA_MAX_VOL'] != undefined && item['REBATE_OA_MAX_VOL'] != null && item['REBATE_OA_MAX_VOL'] != "") {
+               item['REBATE_OA_MAX_VOL'] = item['REBATE_OA_MAX_VOL'].toString();
+           }
+           if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
+               item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
+           }
+           if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
+               item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
+           }
+        });
+    }
 }

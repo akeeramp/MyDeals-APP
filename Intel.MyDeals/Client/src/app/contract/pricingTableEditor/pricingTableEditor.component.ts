@@ -718,6 +718,8 @@ export class pricingTableEditorComponent implements OnChanges {
         finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
         //sanitize Data before save this will make sure all neccessary attributes are avaialbel
         finalPTR = PTE_Save_Util.sanitizePTR(finalPTR, this.contractData);
+        //Adding missed fields in SaveAPI payload
+        PTE_Save_Util.fillingPayLoad(finalPTR, this.curPricingTable);
         let data = {
             "Contract": [],
             "PricingStrategy": [],

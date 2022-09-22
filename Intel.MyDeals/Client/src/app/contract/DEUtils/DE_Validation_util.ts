@@ -14,8 +14,9 @@ export class DE_Validation_Util {
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy, vendorDropDownResult);
-        data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
+        data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
+        PTE_Validation_Util.validateSettlementLevel(data, curPricingStrategy);
         PTE_Validation_Util.validateFlexRowType(data, curPricingStrategy, curPricingTable, data, undefined, restrictGroupFlexOverlap);
         PTE_Validation_Util.validateMarketSegment(data, data, undefined);
         return this.ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap);
@@ -72,7 +73,7 @@ export class DE_Validation_Util {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                 isShowStopperError = true;
-            }
+            }            
 
             if (item["END_CUSTOMER_RETAIL"] != undefined && item["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
                 if (item._behaviors.isError['END_CUSTOMER_RETAIL']) {
@@ -86,6 +87,15 @@ export class DE_Validation_Util {
                     item["END_CUSTOMER_RETAIL"] = item["END_CUSTOMER_RETAIL"].toString();
                 }
             }
+
+            if (item["REBATE_BILLING_START"] !== undefined && item["REBATE_BILLING_END"] !== undefined) {
+                if (moment(item["REBATE_BILLING_START"]).isAfter(moment(item["REBATE_BILLING_END"]))) {
+                    item._behaviors.isError['REBATE_BILLING_START'] = true;
+                    item._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
+                    isShowStopperError = true;
+                }
+            }
+
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 let dictGroupType = {};
                 if (Object.keys(dictGroupType).length == 0) {
