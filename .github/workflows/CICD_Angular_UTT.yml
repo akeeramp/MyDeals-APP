@@ -1,0 +1,70 @@
+name: Angular Automation UTT
+on:
+  workflow_dispatch:
+env:
+  SERVER: UTT
+  NUGET_PATH: C:\NuGet\nuget.exe
+  MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+  UTT1_DEPLOY_PATH: \\HF2UTTMYDLW01.amr.corp.intel.com\MyDeals
+  UTT1_DEPLOY_SERVER: HF2UTTMYDLW01.amr.corp.intel.com
+  UTT2_DEPLOY_PATH: \\HF2UTTMYDLW02.amr.corp.intel.com\MyDeals
+  UTT2_DEPLOY_SERVER: HF2UTTMYDLW02.amr.corp.intel.com
+
+jobs:
+  Restore-packages:
+     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+     runs-on: [self-hosted, mydeals-runner01]
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Restore NUGET Packages 
+         run: |
+            echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
+            ./scripts/build.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+
+  Build-Angular:
+    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Restore-packages
+    steps:
+       - name: NPM Install Build
+         run: |
+           ./scripts/build.ps1 'NPMBuild' 'path' '${{github.workspace}}'
+       - name: MS build publish
+         run: |
+            ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
+
+  Angular_deploy:
+    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Build-Angular
+    steps:
+       - name:  Move Publish Site UTT1
+         run: |
+           ./scripts/build.ps1 'MovePublish' '${{env.UTT1_DEPLOY_PATH}}' '${{github.workspace}}'
+       - name:  Move Publish Site UTT2
+         run: |
+           ./scripts/build.ps1 'MovePublish' '${{env.UTT2_DEPLOY_PATH}}' '${{github.workspace}}'
+       - name:  Generate Client Zip Module common 
+         run: |
+           ./scripts/build.ps1 'ClientZip' '${{env.UTT1_DEPLOY_PATH}}' '${{github.workspace}}'
+
+       - name:  Remove Client Zip UTT1
+         run: |
+           ./scripts/deploy.ps1 'RemoveZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT1_DEPLOY_SERVER}}'
+       - name:  Remove Client Zip UTT2
+         run: |
+           ./scripts/deploy.ps1 'RemoveZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT2_DEPLOY_SERVER}}'
+       - name:  Copy Client Zip UTT1
+         run: |
+           ./scripts/deploy.ps1 'CopyZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT1_DEPLOY_PATH}}'
+       - name:  Copy Client Zip UTT2
+         run: |
+           ./scripts/deploy.ps1 'CopyZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT2_DEPLOY_PATH}}'
+       - name:  Deploy Client App UTT1
+         run: |
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT1_DEPLOY_SERVER}}'
+       - name:  Deploy Client App UTT2
+         run: |
+           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.UTT2_DEPLOY_SERVER}}'
+    
