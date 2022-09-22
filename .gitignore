@@ -349,3 +349,6 @@ MigrationBackup/
 Intel.MyDeals/Client/node_modules/
 Intel.MyDeals/dist/
 
+Intel.MyDeals/Client/src/dist/bundle.js
+Intel.MyDeals/Client/src/dist/bundle.js
+Intel.MyDeals/Client/src/dist/vendor.js
